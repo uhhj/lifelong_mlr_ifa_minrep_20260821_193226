@@ -136,6 +136,7 @@ python scripts/compute_object_metrics.py \
 ## Deviations / current execution blockers
 
 - The official pretrained-model Google Drive folder linked by the upstream README is not retrievable from the server and returns a not-found page through an independent browser path. Exhaustive checks of the upstream repository/issues/releases plus Hugging Face and Zenodo found no author-published mirror. No unofficial checkpoint substitute was used.
-- The private GitHub repository was created, but this server has no authenticated GitHub credential, so the local commits are not pushed; `origin` and `upstream` are configured correctly.
+- The private GitHub repository was created with GitHub Importer so the complete upstream revision history and `UPSTREAM_SHA` are preserved. The cloud adaptation is committed on top; server `origin` and `upstream` are configured correctly.
 - Formal experiments have not been reduced; result fields remain pending rather than reporting smoke or fabricated values.
 - The upstream IFA implementation adds one weighted hinge term per selected old-task pair rather than explicitly dividing their sum by `|P|`. This baseline preserves that released behavior and records it instead of silently changing the method.
+
