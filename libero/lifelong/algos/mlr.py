@@ -370,7 +370,7 @@ def _pairwise_cosine_mean(feats_i, feats_j, eps=1e-8):
 
 def collect_current_task_features(
     task_id,
-    current_feat_root="/work/fyu/cl/robot/feature",
+    current_feat_root=".",
     language_idx=0,
     agent_idx=1,
 ):
@@ -407,7 +407,7 @@ def collect_current_task_features(
 
 
 def collect_replay_task_features(
-    replay_dir="/work",
+    replay_dir=".",
     max_old_task_id=None,
     language_idx=0,
     agent_idx=1,
@@ -465,8 +465,8 @@ def collect_replay_task_features(
 
 def build_ifa_similarity_matrix(
     current_task_id,
-    current_feat_root="/work",
-    replay_dir="/work",
+    current_feat_root=".",
+    replay_dir=".",
     language_idx=0,
     agent_idx=1,
     top_ratio=0.5,
@@ -670,14 +670,16 @@ class MLR(Sequential):
 
     def learn_all_tasks(self, datasets, benchmark, result_summary,current_task_id):
 
-        ifa_info = build_ifa_similarity_matrix(
-        current_task_id=current_task_id,
-        current_feat_root=self.cfg.feature_dir,
-        replay_dir=self.cfg.buffer_dir,
-        language_idx=0,
-        agent_idx=1,
-        top_ratio=0.5,
-        )
+        ifa_info = None
+        if getattr(self.cfg, "ifa_enabled", True):
+            ifa_info = build_ifa_similarity_matrix(
+                current_task_id=current_task_id,
+                current_feat_root=self.cfg.feature_dir,
+                replay_dir=self.cfg.buffer_dir,
+                language_idx=0,
+                agent_idx=1,
+                top_ratio=0.5,
+            )
 
         base_dir = self.cfg.feature_dir
         buffer_dir = self.cfg.buffer_dir

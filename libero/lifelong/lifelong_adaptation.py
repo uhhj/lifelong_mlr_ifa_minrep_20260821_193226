@@ -1,9 +1,6 @@
 import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-import sys
-sys.path.insert(0, "/home/fyu/mlr_ifa")
-
 import json
 import multiprocessing
 import pprint

@@ -144,7 +144,18 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
         
         print('loss:{}'.format(loss))
 
-        task_ids = torch.tensor([int(x) for x in data[1]], dtype=torch.long)
+        task_ids = torch.tensor(
+            [int(x) for x in data[1]], dtype=torch.long, device=last_feat.device
+        )
+
+        if not getattr(self.cfg, "ifa_enabled", True) or ifa_info is None:
+            (self.loss_scale * loss).backward()
+            if self.cfg.train.grad_clip is not None:
+                nn.utils.clip_grad_norm_(
+                    self.policy.parameters(), self.cfg.train.grad_clip
+                )
+            self.optimizer.step()
+            return loss.item()
 
         selected_pair_mask = ifa_info["selected_pair_mask"]
         sim_language = ifa_info["sim_language"]
@@ -219,7 +230,9 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                     for i in range(batch_size):
                         true_lan_list.append(sample)
                         false_lan_name = f'{self.cfg.feature_dir}/{item}/0.pt'
-                        flase_lan_list.append(torch.load(false_lan_name, map_location='cuda')['feature'][0,0,0,:])
+                        flase_lan_list.append(
+                            torch.load(false_lan_name, map_location=true_feats.device)["feature"][0, 0, 0, :]
+                        )
 
                     true_lan_list = torch.stack(true_lan_list, dim=0)  # (B,E)
                     false_lan_list = torch.stack(flase_lan_list, dim=0)  # (B, E)
@@ -265,7 +278,8 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
 
                     loss_hinge_angle = torch.relu(theta_pos - theta_neg + gamma * phi).mean()
 
-                    loss = loss + 0.1 * loss_hinge_angle.mean()
+                    ifa_weight = float(getattr(self.cfg, "ifa_weight", 0.1))
+                    loss = loss + ifa_weight * loss_hinge_angle.mean()
 
 
         (self.loss_scale * loss).backward()

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-PYTHON=/home/fyu/miniconda3/envs/libero/bin/python
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$PROJECT_ROOT"
+PYTHON="${PYTHON:-$(command -v python)}"
 PORT=$((29500 + RANDOM % 100))
 
 export CUDA_VISIBLE_DEVICES="0"
@@ -14,7 +16,7 @@ $PYTHON -m torch.distributed.run \
     benchmark_name=LIBERO_GOAL \
     policy=BriefPolicy \
     lifelong=mlr \
-    pretrain=/home/fyu/mlr_ifa/goal_multitask_model_ep96.pth \
+    pretrain="$PROJECT_ROOT/checkpoints/goal_multitask_model_ep96.pth" \
     +start_task=6 \
     +aug=False \
     +end_task=10 \

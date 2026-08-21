@@ -2,7 +2,9 @@
 set -e
 export HYDRA_FULL_ERROR=1
 
-PYTHON=/home/fyu/miniconda3/envs/libero/bin/python
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$PROJECT_ROOT"
+PYTHON="${PYTHON:-$(command -v python)}"
 PORT=$((29500 + RANDOM % 100))
 
 $PYTHON -m torch.distributed.run \
@@ -15,7 +17,7 @@ $PYTHON -m torch.distributed.run \
   policy=complete_policy \
   lifelong=basic \
   train.batch_size=1 \
-  pretrain=./multitask_model_ep96.pth \
+  pretrain="$PROJECT_ROOT/checkpoints/goal_multitask_model_ep96.pth" \
   +start_task=6 \
   +end_task=10 \
   +aug=True \

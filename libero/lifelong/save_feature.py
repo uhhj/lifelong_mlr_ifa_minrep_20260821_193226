@@ -18,7 +18,6 @@ from easydict import EasyDict
 from hydra.utils import to_absolute_path
 from omegaconf import OmegaConf
 from collections import OrderedDict
-sys.path.insert(0, "/home/fyu/mlr_ifa")
 
 
 from libero.libero import get_libero_path

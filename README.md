@@ -87,13 +87,13 @@ The workflow for `LIBERO-OBJECT` is the same. Use the corresponding object scrip
 
 ### Additional Notes
 
-1. Some scripts may manually add the system path, for example:
+1. Add the repository and bundled LIBERO package to the import path:
 
-```python
-sys.path.insert(0, "/work")
+```bash
+export PYTHONPATH="$(pwd):$(pwd)/libero:${PYTHONPATH:-}"
 ```
 
-Please modify this path according to your local project directory before running.
+Run this command from the repository root.
 
 2. The `buffer_dir` is recommended to be used only once for each run. To avoid loading stale replay buffers from previous experiments, please use a new buffer directory when running a new experiment, for example:
 

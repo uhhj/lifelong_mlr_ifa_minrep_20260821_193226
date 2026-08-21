@@ -137,7 +137,7 @@ def create_experiment_dir(cfg):
     if cfg.task_embedding_format == "roberta":
         prefix += f"_roberta"
 
-    experiment_dir = (
+    experiment_dir = getattr(cfg, "experiment_root", None) or (
         f"./{prefix}/{cfg.benchmark_name}/{cfg.lifelong.algo}/"
         + f"{cfg.policy.policy_type}_seed{cfg.seed}"
     )

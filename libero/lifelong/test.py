@@ -8,7 +8,6 @@ mp.set_start_method("spawn", force=True)
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import sys
-sys.path.insert(0, "/work")
 
 import json
 import multiprocessing
@@ -52,7 +51,6 @@ torch.set_grad_enabled(False)
 os.environ["MUJOCO_GL"] = "egl"
 os.environ["MUJOCO_EGL_DEVICE_ID"] = os.getenv("CUDA_VISIBLE_DEVICES","0").split(",")[0]
 os.environ["EGL_PLATFORM"] = "surfaceless"
-sys.path.insert(0, "/home/fyu/mlr_ifa")
 
 # os.environ["PYTHONHASHSEED"] = "0"
 def set_global_seed(seed:int):
@@ -64,7 +62,7 @@ def set_global_seed(seed:int):
 
 
 from pathlib import Path
-def log_succ(S, i, j, pp, logfile="/home/ct_005.txt"):
+def log_succ(S, i, j, pp, logfile="./runs/evaluation.log"):
     if dist.is_available() and dist.is_initialized() and dist.get_rank() != 0:
         return
     line = f"[task {i} epoch {j:02d} and {pp} succ.] " + " | ".join(f"{x:.2f}" for x in S)
@@ -212,7 +210,7 @@ def main(hydra_cfg):
             for pp in range(cfg.start_task,cfg.end_task,1):   # 7 → 0
                 set_global_seed(see)
                 cfg.seed=see
-                for j in range(70,100,5):
+                for j in getattr(cfg, "eval_epochs", [95]):
                     for i in range(cfg.start_task,pp+1):
                         base_dir = cfg.epoch_dir
 
@@ -220,8 +218,8 @@ def main(hydra_cfg):
 
                         fullpath = os.path.join(base_dir, filename)
 
-                        while not os.path.exists(fullpath):
-                            continue
+                        if not os.path.exists(fullpath):
+                            raise FileNotFoundError(fullpath)
                         if os.path.exists(fullpath):
                             print(fullpath)
                             algo = safe_device(get_algo_class(cfg.lifelong.algo)(n_tasks, cfg), cfg.device)

@@ -1,8 +1,6 @@
 import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-import sys
-sys.path.insert(0, "/work/main")
 
 import json
 import multiprocessing
