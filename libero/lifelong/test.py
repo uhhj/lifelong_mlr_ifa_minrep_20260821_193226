@@ -207,11 +207,22 @@ def main(hydra_cfg):
         json.dump(cfg, f, cls=NpEncoder, indent=4)
         a = [cfg.seed]
         for see in a:
-            for pp in range(cfg.start_task,cfg.end_task,1):   # 7 → 0
+            eval_stage = getattr(cfg, "eval_stage", None)
+            stages = [int(eval_stage)] if eval_stage is not None else range(
+                cfg.start_task, cfg.end_task
+            )
+            for pp in stages:
                 set_global_seed(see)
                 cfg.seed=see
                 for j in getattr(cfg, "eval_epochs", [95]):
-                    for i in range(cfg.start_task,pp+1):
+                    requested_tasks = getattr(cfg, "eval_task_ids", None)
+                    if requested_tasks is not None:
+                        task_ids = [int(task_id) for task_id in requested_tasks]
+                    elif getattr(cfg, "eval_current_only", False):
+                        task_ids = [pp]
+                    else:
+                        task_ids = range(cfg.start_task, pp + 1)
+                    for i in task_ids:
                         base_dir = cfg.epoch_dir
 
                         filename = "mlrifa_{}_model_ep{}.pth".format(pp,j)
@@ -250,3 +261,4 @@ if __name__ == "__main__":
     # if multiprocessing.get_start_method(allow_none=True) != "spawn":  
     #     multiprocessing.set_start_method("spawn", force=True)
     main()
+
