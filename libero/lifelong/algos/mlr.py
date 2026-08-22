@@ -730,7 +730,11 @@ class MLR(Sequential):
                 f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} | time: {(t1-t0)/60:4.2f}"
             )
 
-            if epoch % 5 == 0 and epoch > 69:  # evaluate BC loss
+            save_smoke_checkpoint = (
+                getattr(self.cfg, "save_final_checkpoint", False)
+                and epoch == self.cfg.train.n_epochs - 1
+            )
+            if (epoch % 5 == 0 and epoch > 69) or save_smoke_checkpoint:
 
                 self.policy.eval()
 
@@ -765,3 +769,4 @@ class MLR(Sequential):
             capacity=BUFFER_CAPACITY, seed= self.cfg.seed, drop_policy="random",rate=self.cfg.past_data_rate
         )
         return successes.sum() / cumulated_counter, losses.sum() / cumulated_counter
+
