@@ -19,15 +19,17 @@ def load_matrix(path, epochs=EPOCHS):
         if 6 <= task <= stage <= 9:
             records[(stage, epoch, task)] = rate * 100.0
 
-    missing = [
-        (stage, epoch, task)
+    missing_diagonal = [
+        (stage, epoch, stage)
         for stage in range(6, 10)
         for epoch in epochs
-        for task in range(6, stage + 1)
-        if (stage, epoch, task) not in records
+        if (stage, epoch, stage) not in records
     ]
-    if missing:
-        raise ValueError(f"missing (stage, epoch, task) entries in {path}: {missing}")
+    if missing_diagonal:
+        raise ValueError(
+            f"missing current-task checkpoint-selection entries in {path}: "
+            f"{missing_diagonal}"
+        )
 
     matrix = [[None] * 4 for _ in range(4)]
     selected_epochs = {}
@@ -37,6 +39,16 @@ def load_matrix(path, epochs=EPOCHS):
             key=lambda epoch: (records[(stage, epoch, stage)], epoch),
         )
         selected_epochs[str(stage)] = best_epoch
+        missing_selected = [
+            (stage, best_epoch, task)
+            for task in range(6, stage + 1)
+            if (stage, best_epoch, task) not in records
+        ]
+        if missing_selected:
+            raise ValueError(
+                f"missing selected-checkpoint entries in {path}: "
+                f"{missing_selected}"
+            )
         for task in range(6, stage + 1):
             matrix[stage - 6][task - 6] = records[(stage, best_epoch, task)]
     return matrix, selected_epochs
@@ -73,3 +85,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
