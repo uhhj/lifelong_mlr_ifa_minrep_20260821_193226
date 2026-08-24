@@ -3,10 +3,11 @@ set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
 require_object_inputs
 
-METHOD="${1:?usage: scripts/eval_object.sh mlr|mlr_ifa}"
+METHOD="${1:?usage: scripts/eval_object.sh mlr|mlr_ifa|mlr_static_igfa}"
 case "$METHOD" in
   mlr) RUN_NAME="${RUN_PREFIX}_mlr" ;;
   mlr_ifa) RUN_NAME="${RUN_PREFIX}_mlr_ifa" ;;
+  mlr_static_igfa) RUN_NAME="${RUN_PREFIX}_mlr_static_igfa" ;;
   *) echo "Unknown method: $METHOD" >&2; exit 2 ;;
 esac
 
@@ -68,4 +69,3 @@ for SPEC in "7:$E7:[6]" "8:$E8:[6,7]" "9:$E9:[6,7,8]"; do
     +eval_epochs="[$EPOCH]" \
     +experiment_root="$PROJECT_ROOT/runs/${RUN_NAME}_eval_stage${STAGE}"
 done
-
