@@ -1,0 +1,259 @@
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1581.57it/s]
+[dataset] task=6 name=pick up the butter and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_butter_and_place_it_in_the_basket_demo.hdf5 records=1562
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1722.89it/s]
+[dataset] task=7 name=pick up the milk and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_milk_and_place_it_in_the_basket_demo.hdf5 records=1480
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1629.67it/s]
+[dataset] task=8 name=pick up the chocolate pudding and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_chocolate_pudding_and_place_it_in_the_basket_demo.hdf5 records=1560
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1791.76it/s]
+[dataset] task=9 name=pick up the orange juice and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_orange_juice_and_place_it_in_the_basket_demo.hdf5 records=1319
+[alignment] method=mlr_ifa seed=42 task=6 matched=1558/1562 coverage=0.997439
+[alignment] method=mlr_ifa seed=42 task=7 matched=1480/1480 coverage=1.000000
+[alignment] method=mlr_ifa seed=42 task=8 matched=1560/1560 coverage=1.000000
+[alignment] method=mlr_ifa seed=42 task=9 matched=1319/1319 coverage=1.000000
+[checkpoint] method=mlr_ifa seed=42 stage=6 epoch=95 path=runs/object_seed42_mlr_ifa/run_001/mlrifa_6_model_ep95.pth pairs=[(6, 7)]
+[gradient] method=mlr_ifa seed=42 stage=6 task=6 bin=0 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=6 bin=1 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=6 bin=2 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=6 bin=3 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=6 bin=4 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=42 stage=6 task=7 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed42_stage6_task6_vs_7_cosines.csv task_level_cos=0.062587
+[checkpoint] method=mlr_ifa seed=42 stage=7 epoch=95 path=runs/object_seed42_mlr_ifa/run_001/mlrifa_7_model_ep95.pth pairs=[(6, 8), (7, 8)]
+[gradient] method=mlr_ifa seed=42 stage=7 task=6 bin=0 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=6 bin=1 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=6 bin=2 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=6 bin=3 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=6 bin=4 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=7 bin=4 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=8 bin=0 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=8 bin=1 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=8 bin=2 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=8 bin=3 samples=32
+[gradient] method=mlr_ifa seed=42 stage=7 task=8 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed42_stage7_task6_vs_8_cosines.csv task_level_cos=0.222998
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed42_stage7_task7_vs_8_cosines.csv task_level_cos=0.166965
+[checkpoint] method=mlr_ifa seed=42 stage=8 epoch=95 path=runs/object_seed42_mlr_ifa/run_001/mlrifa_8_model_ep95.pth pairs=[(7, 9)]
+[gradient] method=mlr_ifa seed=42 stage=8 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=7 bin=4 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=9 bin=0 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=9 bin=1 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=9 bin=2 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=9 bin=3 samples=32
+[gradient] method=mlr_ifa seed=42 stage=8 task=9 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed42_stage8_task7_vs_9_cosines.csv task_level_cos=0.142775
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1849.68it/s]
+[dataset] task=6 name=pick up the butter and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_butter_and_place_it_in_the_basket_demo.hdf5 records=1562
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1930.94it/s]
+[dataset] task=7 name=pick up the milk and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_milk_and_place_it_in_the_basket_demo.hdf5 records=1480
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1953.13it/s]
+[dataset] task=8 name=pick up the chocolate pudding and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_chocolate_pudding_and_place_it_in_the_basket_demo.hdf5 records=1560
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1854.72it/s]
+[dataset] task=9 name=pick up the orange juice and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_orange_juice_and_place_it_in_the_basket_demo.hdf5 records=1319
+[alignment] method=mlr_ifa seed=43 task=6 matched=1558/1562 coverage=0.997439
+[alignment] method=mlr_ifa seed=43 task=7 matched=1480/1480 coverage=1.000000
+[alignment] method=mlr_ifa seed=43 task=8 matched=1560/1560 coverage=1.000000
+[alignment] method=mlr_ifa seed=43 task=9 matched=1319/1319 coverage=1.000000
+[checkpoint] method=mlr_ifa seed=43 stage=6 epoch=95 path=runs/object_seed43_mlr_ifa/run_001/mlrifa_6_model_ep95.pth pairs=[(6, 7)]
+[gradient] method=mlr_ifa seed=43 stage=6 task=6 bin=0 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=6 bin=1 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=6 bin=2 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=6 bin=3 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=6 bin=4 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=43 stage=6 task=7 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed43_stage6_task6_vs_7_cosines.csv task_level_cos=0.043523
+[checkpoint] method=mlr_ifa seed=43 stage=7 epoch=95 path=runs/object_seed43_mlr_ifa/run_001/mlrifa_7_model_ep95.pth pairs=[(6, 8), (7, 8)]
+[gradient] method=mlr_ifa seed=43 stage=7 task=6 bin=0 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=6 bin=1 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=6 bin=2 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=6 bin=3 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=6 bin=4 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=7 bin=4 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=8 bin=0 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=8 bin=1 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=8 bin=2 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=8 bin=3 samples=32
+[gradient] method=mlr_ifa seed=43 stage=7 task=8 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed43_stage7_task6_vs_8_cosines.csv task_level_cos=0.403246
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed43_stage7_task7_vs_8_cosines.csv task_level_cos=0.242252
+[checkpoint] method=mlr_ifa seed=43 stage=8 epoch=95 path=runs/object_seed43_mlr_ifa/run_001/mlrifa_8_model_ep95.pth pairs=[(7, 9)]
+[gradient] method=mlr_ifa seed=43 stage=8 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=7 bin=4 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=9 bin=0 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=9 bin=1 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=9 bin=2 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=9 bin=3 samples=32
+[gradient] method=mlr_ifa seed=43 stage=8 task=9 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed43_stage8_task7_vs_9_cosines.csv task_level_cos=0.060949
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1628.19it/s]
+[dataset] task=6 name=pick up the butter and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_butter_and_place_it_in_the_basket_demo.hdf5 records=1562
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1897.12it/s]
+[dataset] task=7 name=pick up the milk and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_milk_and_place_it_in_the_basket_demo.hdf5 records=1480
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1808.59it/s]
+[dataset] task=8 name=pick up the chocolate pudding and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_chocolate_pudding_and_place_it_in_the_basket_demo.hdf5 records=1560
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1646.31it/s]
+[dataset] task=9 name=pick up the orange juice and place it in the basket path=/data/lifelong_mlr_ifa_minrep/data/libero_object/pick_up_the_orange_juice_and_place_it_in_the_basket_demo.hdf5 records=1319
+[alignment] method=mlr_ifa seed=44 task=6 matched=1558/1562 coverage=0.997439
+[alignment] method=mlr_ifa seed=44 task=7 matched=1480/1480 coverage=1.000000
+[alignment] method=mlr_ifa seed=44 task=8 matched=1560/1560 coverage=1.000000
+[alignment] method=mlr_ifa seed=44 task=9 matched=1319/1319 coverage=1.000000
+[checkpoint] method=mlr_ifa seed=44 stage=6 epoch=95 path=runs/object_seed44_mlr_ifa/run_001/mlrifa_6_model_ep95.pth pairs=[(6, 7)]
+[gradient] method=mlr_ifa seed=44 stage=6 task=6 bin=0 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=6 bin=1 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=6 bin=2 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=6 bin=3 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=6 bin=4 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=44 stage=6 task=7 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed44_stage6_task6_vs_7_cosines.csv task_level_cos=-0.065158
+[checkpoint] method=mlr_ifa seed=44 stage=7 epoch=95 path=runs/object_seed44_mlr_ifa/run_001/mlrifa_7_model_ep95.pth pairs=[(6, 8), (7, 8)]
+[gradient] method=mlr_ifa seed=44 stage=7 task=6 bin=0 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=6 bin=1 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=6 bin=2 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=6 bin=3 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=6 bin=4 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=7 bin=4 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=8 bin=0 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=8 bin=1 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=8 bin=2 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=8 bin=3 samples=32
+[gradient] method=mlr_ifa seed=44 stage=7 task=8 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed44_stage7_task6_vs_8_cosines.csv task_level_cos=0.266736
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed44_stage7_task7_vs_8_cosines.csv task_level_cos=0.242022
+[checkpoint] method=mlr_ifa seed=44 stage=8 epoch=95 path=runs/object_seed44_mlr_ifa/run_001/mlrifa_8_model_ep95.pth pairs=[(7, 9)]
+[gradient] method=mlr_ifa seed=44 stage=8 task=7 bin=0 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=7 bin=1 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=7 bin=2 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=7 bin=3 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=7 bin=4 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=9 bin=0 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=9 bin=1 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=9 bin=2 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=9 bin=3 samples=32
+[gradient] method=mlr_ifa seed=44 stage=8 task=9 bin=4 samples=32
+[gradient] unused_trainable_parameters=['temporal_transformer.decoder.wte.weight']
+[pair] wrote=reports/temporal_interference_diagnosis/raw/mlr_ifa_seed44_stage8_task7_vs_9_cosines.csv task_level_cos=0.178167
+[complete] output=reports/temporal_interference_diagnosis pairs=12
