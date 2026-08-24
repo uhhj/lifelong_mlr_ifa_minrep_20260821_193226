@@ -681,6 +681,14 @@ class MLR(Sequential):
                 top_ratio=0.5,
             )
 
+        selected_pairs = [] if ifa_info is None else ifa_info["selected_pairs"]
+        gpu_name = torch.cuda.get_device_name(torch.cuda.current_device())
+        print(
+            f"[protocol] seed={self.cfg.seed} gpu={gpu_name} "
+            f"stage={current_task_id} ifa_enabled={getattr(self.cfg, 'ifa_enabled', True)} "
+            f"selected_pairs={selected_pairs}"
+        )
+
         base_dir = self.cfg.feature_dir
         buffer_dir = self.cfg.buffer_dir
 
@@ -726,8 +734,10 @@ class MLR(Sequential):
                 
             t1 = time.time()
 
+            current_lr = self.optimizer.param_groups[0]["lr"]
             print(
-                f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} | time: {(t1-t0)/60:4.2f}"
+                f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} "
+                f"| lr: {current_lr:.8g} | time: {(t1-t0)/60:4.2f}"
             )
 
             save_smoke_checkpoint = (
@@ -744,6 +754,10 @@ class MLR(Sequential):
                 if not dist.is_initialized() or dist.get_rank() == 0:
 
                     torch_save_model(self.policy, model_checkpoint_name_ep, cfg=self.cfg)
+                    print(
+                        f"[checkpoint] seed={self.cfg.seed} stage={current_task_id} "
+                        f"epoch={epoch} path={model_checkpoint_name_ep}"
+                    )
                     losses.append(training_loss)
 
                 # Defaultly, we don't do evaluation during training.

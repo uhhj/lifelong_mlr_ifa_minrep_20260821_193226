@@ -17,9 +17,11 @@ export LIBERO_CONFIG_PATH="$PROJECT_ROOT/data/libero_config"
 export HF_HOME="$PROJECT_ROOT/data/huggingface_cache"
 
 PYTHON="${PYTHON:-$(command -v python)}"
+SEED="${SEED:-42}"
 CHECKPOINT="$PROJECT_ROOT/checkpoints/object_multitask_model_ep99.pth"
 DATA_ROOT="$PROJECT_ROOT/data"
-FEATURE_ROOT="$PROJECT_ROOT/features/object_seed42"
+FEATURE_ROOT="${FEATURE_ROOT:-$PROJECT_ROOT/features/object_seed${SEED}}"
+RUN_PREFIX="object_seed${SEED}"
 
 mkdir -p "$LIBERO_CONFIG_PATH" checkpoints data features buffers runs reports
 printf '%s\n' \
