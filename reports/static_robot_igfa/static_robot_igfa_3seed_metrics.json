@@ -1,0 +1,233 @@
+{
+  "benchmark": "LIBERO_OBJECT",
+  "method": "mlr_static_robot_igfa",
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "standard_deviation": "sample",
+  "per_seed": {
+    "42": {
+      "fwt": 81.25,
+      "nbt": -0.555556,
+      "auc": 81.770833,
+      "delta_vs_mlr": {
+        "fwt": 5.0,
+        "nbt": -11.666556,
+        "auc": 11.041833
+      },
+      "selected_epochs": {
+        "6": 85,
+        "7": 70,
+        "8": 95,
+        "9": 80
+      },
+      "r": [
+        [
+          45.0,
+          null,
+          null,
+          null
+        ],
+        [
+          90.0,
+          90.0,
+          null,
+          null
+        ],
+        [
+          30.0,
+          90.0,
+          100.0,
+          null
+        ],
+        [
+          50.0,
+          70.0,
+          100.0,
+          90.0
+        ]
+      ]
+    },
+    "43": {
+      "fwt": 76.25,
+      "nbt": 8.611111,
+      "auc": 73.645833,
+      "delta_vs_mlr": {
+        "fwt": -1.25,
+        "nbt": 15.833111,
+        "auc": -7.916167
+      },
+      "selected_epochs": {
+        "6": 95,
+        "7": 80,
+        "8": 95,
+        "9": 90
+      },
+      "r": [
+        [
+          20.0,
+          null,
+          null,
+          null
+        ],
+        [
+          65.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          20.0,
+          100.0,
+          100.0,
+          null
+        ],
+        [
+          10.0,
+          95.0,
+          65.0,
+          85.0
+        ]
+      ]
+    },
+    "44": {
+      "fwt": 71.25,
+      "nbt": -4.166667,
+      "auc": 73.4375,
+      "delta_vs_mlr": {
+        "fwt": -7.5,
+        "nbt": -8.610667,
+        "auc": -3.1245
+      },
+      "selected_epochs": {
+        "6": 90,
+        "7": 70,
+        "8": 70,
+        "9": 90
+      },
+      "r": [
+        [
+          55.0,
+          null,
+          null,
+          null
+        ],
+        [
+          70.0,
+          85.0,
+          null,
+          null
+        ],
+        [
+          55.0,
+          90.0,
+          100.0,
+          null
+        ],
+        [
+          55.0,
+          95.0,
+          100.0,
+          45.0
+        ]
+      ]
+    }
+  },
+  "three_seed_summary": {
+    "fwt": {
+      "mean": 76.25,
+      "sample_std": 5.0
+    },
+    "nbt": {
+      "mean": 1.296296,
+      "sample_std": 6.587103
+    },
+    "auc": {
+      "mean": 76.284722,
+      "sample_std": 4.752253
+    }
+  },
+  "delta_vs_frozen_mlr": {
+    "fwt": {
+      "mean": -1.25,
+      "sample_std": 6.25,
+      "positive_seed_count": 1
+    },
+    "nbt": {
+      "mean": -1.481371,
+      "sample_std": 15.072428,
+      "positive_seed_count": 1
+    },
+    "auc": {
+      "mean": 0.000389,
+      "sample_std": 9.857745,
+      "positive_seed_count": 1
+    }
+  },
+  "gate_mechanism_overall": {
+    "total_batches": 316500,
+    "paired_batches": 266438,
+    "paired_batch_fraction": 0.841826,
+    "conflict_batches": 98546,
+    "gate_fire_rate": 0.369865,
+    "mean_conflict_cos": -0.158921,
+    "mean_projection_cost": 0.058779,
+    "zero_anchor_count": 0
+  },
+  "frozen_baseline_summary": {
+    "mlr": {
+      "fwt": {
+        "mean": 77.5,
+        "sample_std": 1.25,
+        "paper_mean": 83.3,
+        "paper_reported_std": 2.6,
+        "our_mean_minus_paper_mean": -5.8,
+        "standardized_descriptive_gap": -2.231
+      },
+      "nbt": {
+        "mean": 2.778,
+        "sample_std": 9.279,
+        "paper_mean": 12.3,
+        "paper_reported_std": 2.4,
+        "our_mean_minus_paper_mean": -9.522,
+        "standardized_descriptive_gap": -3.968
+      },
+      "auc": {
+        "mean": 76.284,
+        "sample_std": 5.422,
+        "paper_mean": 77.6,
+        "paper_reported_std": 3.0,
+        "our_mean_minus_paper_mean": -1.316,
+        "standardized_descriptive_gap": -0.439
+      }
+    },
+    "mlr_ifa": {
+      "fwt": {
+        "mean": 78.333,
+        "sample_std": 0.722,
+        "paper_mean": 84.6,
+        "paper_reported_std": 1.9,
+        "our_mean_minus_paper_mean": -6.267,
+        "standardized_descriptive_gap": -3.298
+      },
+      "nbt": {
+        "mean": 6.852,
+        "sample_std": 8.608,
+        "paper_mean": 11.4,
+        "paper_reported_std": 5.6,
+        "our_mean_minus_paper_mean": -4.548,
+        "standardized_descriptive_gap": -0.812
+      },
+      "auc": {
+        "mean": 74.861,
+        "sample_std": 3.898,
+        "paper_mean": 79.4,
+        "paper_reported_std": 1.5,
+        "our_mean_minus_paper_mean": -4.539,
+        "standardized_descriptive_gap": -3.026
+      }
+    }
+  }
+}
