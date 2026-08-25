@@ -31,11 +31,12 @@ TASK_PREFIX_RE = re.compile(r'^t(\d+)__')
 
 
 class FileTrajectoryDataset(Dataset):
-    def __init__(self, file_paths, map_location="cpu"):
+    def __init__(self, file_paths, map_location="cpu", temporal_bin_map=None):
         self.file_paths = list(file_paths)
         if not self.file_paths:
             raise RuntimeError("No .pt files found.")
         self.map_location = map_location
+        self.temporal_bin_map = temporal_bin_map
 
     def __len__(self):
         return len(self.file_paths)
@@ -64,6 +65,15 @@ class FileTrajectoryDataset(Dataset):
 
         sample = self.detach_to_cpu(sample)
 
+        if self.temporal_bin_map is not None:
+            task_id, record_id = canonical_task_record_id(path)
+            key = f"{task_id}:{record_id}"
+            if key not in self.temporal_bin_map:
+                raise KeyError(f"{path} missing temporal sidecar key {key}")
+            sample["progress_bin"] = torch.tensor(
+                int(self.temporal_bin_map[key]), dtype=torch.long
+            )
+
         return sample, middle
 
 # =========================
@@ -79,6 +89,25 @@ def parse_path(path):
             return match.group(1)
     else:
         return os.path.split(os.path.dirname(path))[-1]  # "0"
+
+
+CURRENT_RECORD_RE = re.compile(r"^(\d+)\.pt$")
+REPLAY_RECORD_RE = re.compile(r"^t(\d+)__(\d+)(?:__.*)?\.pt$")
+
+
+def canonical_task_record_id(path):
+    """Return the source task and feature-record id for current or replay files."""
+    filename = os.path.basename(path)
+    replay = REPLAY_RECORD_RE.fullmatch(filename)
+    if replay:
+        return int(replay.group(1)), int(replay.group(2))
+    current = CURRENT_RECORD_RE.fullmatch(filename)
+    if current:
+        task_name = os.path.basename(os.path.dirname(path))
+        if not task_name.isdigit():
+            raise ValueError(f"cannot infer task id from current feature path: {path}")
+        return int(task_name), int(current.group(1))
+    raise ValueError(f"unsupported feature filename: {path}")
 
 def _list_pt(dir_path: str, patterns: Sequence[str]=("*.pt",)) -> List[str]:
     if not os.path.isdir(dir_path): return []
@@ -125,7 +154,14 @@ def _group_buffer_by_task(buffer_dir: str) -> Dict[int, List[str]]:
     return groups
 
 
-def build_dataset_for_task(base_dir: str, task_id: int, buffer_dir: str, seed: int = 42, start=6) -> FileTrajectoryDataset:
+def build_dataset_for_task(
+    base_dir: str,
+    task_id: int,
+    buffer_dir: str,
+    seed: int = 42,
+    start=6,
+    temporal_bin_map=None,
+) -> FileTrajectoryDataset:
     rng = random.Random(seed)
     task_dir = os.path.join(base_dir, str(task_id))
     task_paths = _list_pt(task_dir)
@@ -137,7 +173,7 @@ def build_dataset_for_task(base_dir: str, task_id: int, buffer_dir: str, seed: i
         buf_paths = _list_pt(buffer_dir)
         mix_paths = (buf_paths if buf_paths else []) + task_paths
     rng.shuffle(mix_paths)
-    return FileTrajectoryDataset(mix_paths)
+    return FileTrajectoryDataset(mix_paths, temporal_bin_map=temporal_bin_map)
 
 def update_buffer_equal_quota_10( 
     base_dir: str,
@@ -668,6 +704,15 @@ class MLR(Sequential):
         super().__init__(n_tasks=n_tasks, cfg=cfg, **policy_kwargs)
         self.cfg = cfg
 
+    def build_training_dataset(self, current_task_id):
+        return build_dataset_for_task(
+            self.cfg.feature_dir,
+            current_task_id,
+            self.cfg.buffer_dir,
+            self.cfg.seed,
+            start=self.cfg.start_task,
+        )
+
     def learn_all_tasks(self, datasets, benchmark, result_summary,current_task_id):
 
         ifa_info = None
@@ -692,7 +737,7 @@ class MLR(Sequential):
         base_dir = self.cfg.feature_dir
         buffer_dir = self.cfg.buffer_dir
 
-        dataset = build_dataset_for_task(base_dir, current_task_id, buffer_dir, self.cfg.seed, start=self.cfg.start_task)
+        dataset = self.build_training_dataset(current_task_id)
         print("Train set size:", len(dataset))
 
         # learn on all tasks, only used in multitask learning
@@ -783,4 +828,3 @@ class MLR(Sequential):
             capacity=BUFFER_CAPACITY, seed= self.cfg.seed, drop_policy="random",rate=self.cfg.past_data_rate
         )
         return successes.sum() / cumulated_counter, losses.sum() / cumulated_counter
-
