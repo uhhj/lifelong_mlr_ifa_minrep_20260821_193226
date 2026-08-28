@@ -118,7 +118,7 @@ class BasePolicy(nn.Module, metaclass=PolicyMeta):
         return img_dict
 
     def preprocess_input(self, data, train_mode=True):
-        if self.cfg.train.use_augmentation:
+        if train_mode and self.cfg.aug and self.cfg.train.use_augmentation:
             img_tuple = self._get_img_tuple(data)
 
             aug_out = self._get_aug_output_dict(self.img_aug(img_tuple))

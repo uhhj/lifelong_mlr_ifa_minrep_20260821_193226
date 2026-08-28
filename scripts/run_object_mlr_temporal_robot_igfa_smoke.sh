@@ -4,10 +4,11 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
 require_object_inputs
 test -d "$FEATURE_ROOT/7" || { echo "Missing seed42 latent features: $FEATURE_ROOT" >&2; exit 1; }
 
+MLR_CONFIG="${MLR_CONFIG:-$PROJECT_ROOT/runs/object_seed${SEED}_mlr/run_001/config.json}"
 TEMPORAL_BIN_MAP="$PROJECT_ROOT/metadata/temporal_bins/object_seed${SEED}.json"
 "$PYTHON" scripts/build_object_temporal_bin_map.py \
   --seed "$SEED" \
-  --config "$PROJECT_ROOT/runs/object_seed${SEED}_mlr/run_001/config.json" \
+  --config "$MLR_CONFIG" \
   --feature-root "$FEATURE_ROOT" \
   --output "$TEMPORAL_BIN_MAP"
 
