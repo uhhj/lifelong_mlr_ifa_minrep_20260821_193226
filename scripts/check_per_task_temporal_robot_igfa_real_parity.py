@@ -30,6 +30,14 @@ def forward_loss(policy, records):
     return losses, task_ids, progress_bins
 
 
+def gradients_or_zero(loss, parameters):
+    gradients = torch.autograd.grad(loss, parameters, allow_unused=True)
+    return tuple(
+        torch.zeros_like(parameter) if gradient is None else gradient
+        for parameter, gradient in zip(parameters, gradients)
+    )
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
@@ -73,7 +81,7 @@ def main():
     ]
 
     losses, task_ids, progress_bins = forward_loss(policy, selected)
-    baseline = torch.autograd.grad(losses.mean(), head + transformer)
+    baseline = gradients_or_zero(losses.mean(), head + transformer)
     baseline_head = baseline[:len(head)]
     baseline_transformer = baseline[len(head):]
 
@@ -81,7 +89,7 @@ def main():
     gate_zero_delta, _ = per_task_temporal_head_corrections(
         losses, task_ids, progress_bins, 7, head, gate_strength=0.0, n_bins=5,
     )
-    full = torch.autograd.grad(losses.mean(), head + transformer)
+    full = gradients_or_zero(losses.mean(), head + transformer)
     gate_zero_head = tuple(
         gradient + delta for gradient, delta in zip(full[:len(head)], gate_zero_delta)
     )
