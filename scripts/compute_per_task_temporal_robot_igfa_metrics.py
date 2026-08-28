@@ -163,6 +163,7 @@ def main():
     parser.add_argument("--baseline-json", type=Path, default=Path("reports/baseline_reconciliation/object_3seed_metrics.json"))
     parser.add_argument("--static-json", type=Path, default=Path("reports/static_robot_igfa/static_robot_igfa_3seed_metrics.json"))
     parser.add_argument("--v1-json", type=Path, default=Path("reports/temporal_robot_igfa_v1/temporal_robot_igfa_3seed_metrics.json"))
+    parser.add_argument("--parity-json", type=Path, default=Path("reports/per_task_temporal_robot_igfa_v2/real_parity.json"))
     parser.add_argument("--output-dir", type=Path, default=Path("reports/per_task_temporal_robot_igfa_v2"))
     parser.add_argument("--seeds", nargs="+", type=int, default=[42, 43, 44])
     args = parser.parse_args()
@@ -170,6 +171,7 @@ def main():
     baseline = json.loads(args.baseline_json.read_text(encoding="utf-8"))
     static = json.loads(args.static_json.read_text(encoding="utf-8"))
     v1 = json.loads(args.v1_json.read_text(encoding="utf-8"))
+    parity = json.loads(args.parity_json.read_text(encoding="utf-8"))
 
     per_seed = {}
     metric_rows = []
@@ -301,6 +303,7 @@ def main():
         "delta_vs_mlr": delta_summary["mlr"],
         "mechanism": mechanism,
         "seed44_task7": seed44_task7,
+        "real_batch_parity": parity,
         "frozen_references": {
             "mlr": baseline["three_seed_summary"]["mlr"],
             "mlr_ifa": baseline["three_seed_summary"]["mlr_ifa"],
@@ -332,7 +335,11 @@ def main():
         "", "## Method", "",
         "Policy-head only; five progress bins; one constraint per present old task; order-independent minimum-change projection by active-set enumeration (at most three constraints); alpha 1; Temporal V1 delta correction; transformer unchanged; IFA disabled; replay and historical scheduler semantics unchanged.",
         "", "## Tests and smoke", "",
-        "Focused solver, gate=0 parity, single-old Temporal V1 parity, order-invariance, masked-conflict, feasibility, minimum-change, and no-anchor tests passed. The formal runs were admitted only after the tasks 6-8 smoke observed multi-old constraints with zero post-projection violations.",
+        "Focused solver, order-invariance, masked-conflict, feasibility, minimum-change, and no-anchor tests passed. The formal runs were admitted only after the tasks 6-8 smoke observed multi-old constraints with zero post-projection violations.",
+        "", "## Real-batch parity", "",
+        f"- Gate=0 head max abs / relative L2: {parity['gate_zero']['head_max_abs']:.9g} / {parity['gate_zero']['head_relative_l2']:.9g}",
+        f"- Gate=0 transformer max abs / relative L2: {parity['gate_zero']['transformer_max_abs']:.9g} / {parity['gate_zero']['transformer_relative_l2']:.9g}",
+        f"- Single-old V1 max abs / relative L2: {parity['single_old_v1_parity']['max_abs']:.9g} / {parity['single_old_v1_parity']['relative_l2']:.9g}",
         "", "## Per-seed metrics (FWT / NBT / AUC)", "",
     ]
     lines.extend(f"- seed{seed}: {metric_text(per_seed[str(seed)])}" for seed in args.seeds)
