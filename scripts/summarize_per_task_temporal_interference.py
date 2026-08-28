@@ -61,7 +61,11 @@ def ratio(numerator, denominator):
 
 
 def display(value):
-    return "" if value is None or not math.isfinite(value) else value
+    if value is None:
+        return ""
+    if isinstance(value, (int, float)) and not math.isfinite(value):
+        return ""
+    return value
 
 
 def write_rows(path, fields, rows):
