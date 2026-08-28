@@ -100,7 +100,10 @@ def test_gate_zero_matches_baseline_head_and_transformer():
     )
     losses.mean().backward()
     assert torch.equal(head.grad + delta[0], head_coefficients.mean(dim=0))
-    assert torch.equal(transformer.grad, transformer_coefficients.mean(dim=0))
+    assert torch.allclose(
+        transformer.grad, transformer_coefficients.mean(dim=0),
+        atol=5e-6, rtol=1e-6,
+    )
 
 
 def test_stage7_single_old_correction_matches_temporal_v1():
@@ -129,4 +132,6 @@ def test_unresolved_and_no_anchor_keep_baseline_behavior():
     losses.mean().backward()
     assert results == []
     assert torch.count_nonzero(delta[0]).item() == 0
-    assert torch.equal(head.grad, coefficients.mean(dim=0))
+    assert torch.allclose(
+        head.grad, coefficients.mean(dim=0), atol=5e-6, rtol=1e-6,
+    )

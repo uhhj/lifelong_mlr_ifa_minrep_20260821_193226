@@ -21,7 +21,8 @@ BIN_FIELDS = [
     "mean_initial_conflicts", "mean_active_constraints",
     "mean_projection_cost", "mean_worst_pre_cos", "mean_worst_post_cos",
     "post_constraint_violation_count", "zero_old_gradient_count",
-    "compatible_became_active_count",
+    "compatible_became_active_count", "active_count_0", "active_count_1",
+    "active_count_2", "active_count_3",
 ]
 OVERALL_FIELDS = [
     "seed", "stage", "epoch", "total_batches", "resolved_current_fraction",
@@ -307,6 +308,7 @@ class MLRPerTaskTemporalRobotIGFA(MLR):
             item["present"] += n_old
             item["conflicts"] += n_conflict
             item["active"] += n_active
+            item[f"active_count_{min(n_active, 3)}"] += 1
             item["fired"] += int(result["projection_fired"])
             item["projection_cost"] += result["projection_cost"]
             if math.isfinite(result["worst_pre_cos"]):
@@ -352,6 +354,10 @@ class MLRPerTaskTemporalRobotIGFA(MLR):
                     "post_constraint_violation_count": int(item["violations"]),
                     "zero_old_gradient_count": int(item["zero_old"]),
                     "compatible_became_active_count": int(item["compatible_active"]),
+                    "active_count_0": int(item["active_count_0"]),
+                    "active_count_1": int(item["active_count_1"]),
+                    "active_count_2": int(item["active_count_2"]),
+                    "active_count_3": int(item["active_count_3"]),
                 })
         overall_rows = []
         for epoch in range(int(self.cfg.train.n_epochs)):
