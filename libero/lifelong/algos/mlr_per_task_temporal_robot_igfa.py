@@ -31,6 +31,7 @@ OVERALL_FIELDS = [
     "constraint_count_0", "constraint_count_1", "constraint_count_2",
     "constraint_count_3",
 ]
+RELATIVE_TOLERANCE = 1e-6
 
 
 def gradient_dot(first, second):
@@ -87,7 +88,9 @@ def project_gradient_to_task_halfspaces(
         float(torch.max(torch.abs(d)).detach().item()),
         float(torch.max(torch.abs(gram)).detach().item()),
     )
-    tol = 1e-8 * scale
+    # The scalar solve is float64, but the correction is applied to float32
+    # parameter tensors. One shared scale-relative tolerance covers both steps.
+    tol = RELATIVE_TOLERANCE * scale
     initial_conflicting = [
         task_ids[index] for index, value in enumerate(d) if float(value.item()) < 0.0
     ]
@@ -131,7 +134,7 @@ def project_gradient_to_task_halfspaces(
     pre_dots = d
     post_dots = torch.stack([gradient_dot(projected, gradient) for gradient in old])
     post_scale = max(scale, float(torch.max(torch.abs(post_dots)).detach().item()))
-    post_tol = 1e-8 * post_scale
+    post_tol = RELATIVE_TOLERANCE * post_scale
     post_violation_count = int((post_dots < -post_tol).sum().item())
     if float(gate_strength) == 1.0 and post_violation_count:
         raise RuntimeError(
