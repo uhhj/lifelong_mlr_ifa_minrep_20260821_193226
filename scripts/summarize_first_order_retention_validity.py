@@ -25,8 +25,17 @@ def mean(rows, field):
     return statistics.mean(float(row[field]) for row in rows)
 
 
+def parse_flag(value):
+    text = str(value).strip().lower()
+    if text in ("1", "true"):
+        return 1
+    if text in ("0", "false"):
+        return 0
+    raise ValueError(f"invalid boolean value: {value!r}")
+
+
 def rate(rows, field):
-    return statistics.mean(int(row[field]) for row in rows)
+    return statistics.mean(parse_flag(row[field]) for row in rows)
 
 
 def ranks(values):
@@ -81,7 +90,7 @@ def summarize_layer_a(rows):
 def checkpoint_summary_row(method, seed, interval_type, rows):
     predicted = [float(row["pred_all"]) for row in rows]
     actual = [float(row["actual_delta"]) for row in rows]
-    material = [row for row in rows if int(row["material_change"])]
+    material = [row for row in rows if parse_flag(row["material_change"])]
     return {
         "method": method,
         "seed": seed,
