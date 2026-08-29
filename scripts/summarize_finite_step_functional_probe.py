@@ -224,6 +224,10 @@ def main():
     write_csv(args.report_dir / "seed44_task7_case.csv", seed44_task7)
 
     primary = summary_row(summary, "ALL", "ALL", 0.10)
+    earliest_primary = next(
+        row for row in earliest_summary
+        if row["method"] == "ALL" and row["seed"] == "ALL"
+    )
     seed_primary = {
         seed: summary_row(summary, "ALL", seed, 0.10)
         for seed in ("42", "43", "44")
@@ -329,6 +333,8 @@ def main():
         "|---|---:|---:|---:|---:|---:|",
         *method_lines,
         f"| Pooled | {pct(primary['first_order_false_safe_rate'])} | {pct(primary['finite_false_safe_rate'])} | {pct(primary['balanced_accuracy'])} | {pct(primary['finite_sign_agreement_rate'])} | {pct(primary['rescue_rate'])} |", "",
+        "## Material-change subset", "",
+        f"The fixed `abs(relative_actual_delta) >= 0.005` subset contains {primary['material_cases']} cases at rho=0.10. First-order versus finite false-safe is {pct(primary['material_first_order_false_safe_rate'])} versus {pct(primary['material_finite_false_safe_rate'])}; finite false-alarm is {pct(primary['material_finite_false_alarm_rate'])}, balanced accuracy is {pct(primary['material_balanced_accuracy'])}, and sign agreement is {pct(primary['material_finite_sign_agreement_rate'])}.", "",
         "## Horizon table", "",
         "| rho | Finite false-safe | Reduction | Balanced accuracy | BA gain | Sign agreement |",
         "|---:|---:|---:|---:|---:|---:|",
@@ -338,7 +344,7 @@ def main():
         "|---:|---:|---:|---:|---:|",
         *seed_lines, "",
         "## Rescue analysis", "",
-        f"At rho=0.10, the pooled rescue rate among committed first-order false-safe cases is {pct(primary['rescue_rate'])}. The all-case false-safe reduction is {pp(primary['false_safe_reduction_pp'])}.", "",
+        f"At rho=0.10, the pooled rescue rate among committed first-order false-safe cases is {pct(primary['rescue_rate'])}. The all-case false-safe reduction is {pp(primary['false_safe_reduction_pp'])}. Among {earliest_primary['endpoint_harmful_cases']} endpoint-harmful cases, {pct(earliest_primary['detected_by_0.10'])} were detected by rho=0.10 and {pct(earliest_primary['detected_by_0.50'])} by rho=0.50; {pct(earliest_primary['not_detected_by_0.50'])} remained late harmful reversals through rho=0.50.", "",
         "## Nonlinearity residual", "",
         f"At rho=0.10, mean signed residual `probe_delta - rho*pred_all` is {float(primary['mean_nonlinearity_residual']):.6f}; mean absolute residual is {float(primary['mean_absolute_nonlinearity_residual']):.6f}. This is descriptive nonlinearity evidence, not an identified Hessian term.", "",
         "## Long horizon", "",
