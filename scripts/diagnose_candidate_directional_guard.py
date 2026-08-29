@@ -18,7 +18,7 @@ from libero.lifelong.analysis.candidate_directional_guard import (
     capture_branch_state,
     directional_guard_step,
     evaluate_guard_probes,
-    load_h100_cosine_thresholds,
+    resolve_guard_threshold,
     restore_branch_state,
     select_current_probe,
 )
@@ -42,7 +42,7 @@ from scripts.diagnose_per_task_temporal_interference import load_config
 
 
 STEP_FIELDS = [
-    "seed", "stage", "arm", "epoch", "update", "threshold", "guard_scale",
+    "seed", "stage", "arm", "epoch", "update", "threshold_mode", "threshold", "guard_scale",
     "training_loss", "candidate_step_score", "candidate_step_cosine",
     "candidate_delta_norm", "old_grad_norm", "would_fire", "guard_fire",
     "applied_scale", "predicted_applied_score",
@@ -50,9 +50,11 @@ STEP_FIELDS = [
 ]
 PROBE_FIELDS = [
     "seed", "stage", "arm", "update", "old_mean_loss", "current_loss",
-    "threshold", "guard_scale",
+    "threshold_mode", "threshold", "guard_scale",
 ]
-OLD_TASK_FIELDS = ["seed", "stage", "arm", "update", "old_task", "loss"]
+OLD_TASK_FIELDS = [
+    "seed", "stage", "arm", "update", "old_task", "loss", "threshold_mode"
+]
 
 
 def reset_logging_state(algo, stage):
@@ -88,7 +90,7 @@ def build_probes(root, seed, stage, label_size, score_size, current_size):
     return label_probes, score_probes, current_probe
 
 
-def record_probe(seed, stage, arm, update, threshold, scale, result):
+def record_probe(seed, stage, arm, update, threshold_mode, threshold, scale, result):
     aggregate = {
         "seed": seed,
         "stage": stage,
@@ -96,6 +98,7 @@ def record_probe(seed, stage, arm, update, threshold, scale, result):
         "update": update,
         "old_mean_loss": result["old_mean_loss"],
         "current_loss": result["current_loss"],
+        "threshold_mode": threshold_mode,
         "threshold": threshold,
         "guard_scale": scale,
     }
@@ -107,6 +110,7 @@ def record_probe(seed, stage, arm, update, threshold, scale, result):
             "update": update,
             "old_task": task,
             "loss": loss,
+            "threshold_mode": threshold_mode,
         }
         for task, loss in sorted(result["old_task_losses"].items())
     ]
@@ -123,6 +127,7 @@ def run_arm(
     epoch,
     updates,
     threshold,
+    threshold_mode,
     scale,
     enabled,
     old_label_probes,
@@ -144,7 +149,7 @@ def run_arm(
         algo.policy, old_label_probes, current_probe, batch_size=probe_batch_size
     )
     row, old_rows = record_probe(
-        seed, stage, arm, 0, threshold, scale, initial
+        seed, stage, arm, 0, threshold_mode, threshold, scale, initial
     )
     probe_rows.append(row)
     task_rows.extend(old_rows)
@@ -184,6 +189,7 @@ def run_arm(
                 "arm": arm,
                 "epoch": epoch,
                 "update": update,
+                "threshold_mode": threshold_mode,
                 "threshold": threshold,
                 "guard_scale": scale,
                 "training_loss": training_loss,
@@ -200,7 +206,7 @@ def run_arm(
                 batch_size=probe_batch_size,
             )
             row, old_rows = record_probe(
-                seed, stage, arm, update, threshold, scale, result
+                seed, stage, arm, update, threshold_mode, threshold, scale, result
             )
             probe_rows.append(row)
             task_rows.extend(old_rows)
@@ -218,10 +224,13 @@ def run_arm(
     return step_rows, probe_rows, task_rows
 
 
-def main():
+def build_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--seed", type=int, choices=(42, 43), required=True)
+    parser.add_argument("--seed", type=int, choices=(42, 43, 44), required=True)
     parser.add_argument("--stage", type=int, choices=(8, 9), required=True)
+    parser.add_argument(
+        "--threshold-mode", choices=("loso", "zero"), default="loso"
+    )
     parser.add_argument("--warmup-epochs", type=int, default=10)
     parser.add_argument("--intervention-updates", type=int, default=300)
     parser.add_argument("--guard-scale", type=float, default=0.5)
@@ -243,7 +252,11 @@ def main():
         type=Path,
         default=Path("reports/candidate_directional_guard_smoke/raw"),
     )
-    args = parser.parse_args()
+    return parser
+
+
+def main():
+    args = build_parser().parse_args()
     root = args.project_root.resolve()
     if int(args.intervention_updates) > 300:
         raise ValueError("directional guard smoke does not permit more than 300 updates")
@@ -279,20 +292,21 @@ def main():
         args.score_probe_size,
         args.current_probe_size,
     )
-    thresholds = load_h100_cosine_thresholds(
-        root / args.threshold_path, seeds=(42, 43)
+    threshold = resolve_guard_threshold(
+        args.threshold_mode,
+        args.seed,
+        root / args.threshold_path if args.threshold_mode == "loso" else None,
     )
-    threshold = thresholds[int(args.seed)]
     print(
-        f"[thresholds] seed42={thresholds[42]:.17g} "
-        f"seed43={thresholds[43]:.17g}",
+        f"[threshold] mode={args.threshold_mode} value={threshold:.17g}",
         flush=True,
     )
     print(
         f"[protocol] seed={args.seed} stage={args.stage} entry={entry} "
         f"warmup_epochs={args.warmup_epochs} loader_batches={len(loader)} "
         f"intervention_updates={args.intervention_updates} guard_scale={args.guard_scale} "
-        f"threshold={threshold:.17g} current={current_count} replay={replay_counts} "
+        f"threshold_mode={args.threshold_mode} threshold={threshold:.17g} "
+        f"current={current_count} replay={replay_counts} "
         f"label_probe={args.label_probe_size}/task "
         f"score_probe={args.score_probe_size}/task current_probe={args.current_probe_size} "
         f"total_steps={total_steps}",
@@ -334,6 +348,7 @@ def main():
             args.warmup_epochs,
             args.intervention_updates,
             threshold,
+            args.threshold_mode,
             args.guard_scale,
             enabled,
             label_probes,

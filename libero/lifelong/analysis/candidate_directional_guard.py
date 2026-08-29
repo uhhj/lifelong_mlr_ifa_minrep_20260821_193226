@@ -49,6 +49,23 @@ def load_h100_cosine_thresholds(path, seeds=(42, 43)):
     return {seed: selected[seed] for seed in sorted(selected)}
 
 
+def resolve_guard_threshold(mode, seed, threshold_path=None):
+    mode = str(mode)
+    if mode == "zero":
+        return 0.0
+    if mode == "loso":
+        if threshold_path is None:
+            raise ValueError("LOSO threshold mode requires threshold_path")
+        return load_h100_cosine_thresholds(
+            threshold_path, seeds=(int(seed),)
+        )[int(seed)]
+    raise ValueError(f"unknown threshold mode: {mode}")
+
+
+def guard_would_fire(cosine, threshold):
+    return bool(float(cosine) > float(threshold))
+
+
 def numeric_path_key(path):
     path = Path(path)
     try:
@@ -129,7 +146,7 @@ def guarded_optimizer_step(
     if not candidate:
         raise RuntimeError("AdamW candidate displacement is empty")
     risk = old_gradient_risk(old_gradient_by_name, candidate)
-    would_fire = bool(risk["cosine"] > float(threshold))
+    would_fire = guard_would_fire(risk["cosine"], threshold)
     guard_fire = bool(enabled and would_fire)
     applied_scale = float(scale) if guard_fire else 1.0
     if step_fn is None:
