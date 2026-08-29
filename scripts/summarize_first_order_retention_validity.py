@@ -155,6 +155,17 @@ def main():
     ]
     write_csv(args.report_dir / "seed44_task7_case.csv", seed44_task7)
 
+    seed44_task7_summary = {}
+    for method in ("V1", "V2"):
+        for stage in ("8", "9"):
+            selected = [
+                row for row in seed44_task7
+                if row["method"] == method and row["stage"] == stage
+            ]
+            seed44_task7_summary[(method, stage)] = checkpoint_summary_row(
+                method, "44", f"stage{stage}_old7", selected
+            )
+
     all_short = [row for row in short_raw]
     overall_false_safe = rate(all_short, "full_first_order_false_safe")
     seed_false_safe = {
@@ -260,7 +271,14 @@ def main():
         "## V1 vs V2", "",
         "V1 and V2 use identical probes and checkpoint intervals. Differences therefore describe their realized local geometry and checkpoint trajectories rather than probe resampling.", "",
         "## Seed44 task7", "",
-        f"The dedicated CSV contains {len(seed44_task7)} short transition cases for stage8/9 old task7 across V1/V2.", "",
+        f"The dedicated CSV contains {len(seed44_task7)} short transition cases; each method/stage subset contains five preregistered intervals.",
+        *[
+            f"- {method} stage{stage} old7: full false-safe "
+            f"{format_rate(seed44_task7_summary[(method, stage)]['full_first_order_false_safe_rate'])}, "
+            f"transformer flip {format_rate(seed44_task7_summary[(method, stage)]['checkpoint_transformer_flip_rate'])}, "
+            f"sign agreement {format_rate(seed44_task7_summary[(method, stage)]['sign_agreement_rate'])}"
+            for method in ("V1", "V2") for stage in ("8", "9")
+        ], "",
         "## Observed", "",
         "Layer-A signs, checkpoint predictions, actual BC-loss changes, and displacement norms are direct outputs of the frozen formal artifacts.", "",
         "## Inferred", "",
