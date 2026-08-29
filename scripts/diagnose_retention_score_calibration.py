@@ -198,6 +198,8 @@ def calibration_rows(specs):
                     "test_specificity": fold["test_specificity"],
                     "test_false_safe_rate_all": fold["test_false_safe_rate_all"],
                     "test_false_alarm_rate_all": fold["test_false_alarm_rate_all"],
+                    "test_false_safe_rate_among_harmful": fold["test_false_safe_rate_among_harmful"],
+                    "test_false_alarm_rate_among_safe": fold["test_false_alarm_rate_among_safe"],
                 }
             )
         summaries.append(
@@ -378,7 +380,8 @@ def write_report(output_dir, summaries, folds, rankings, distributions, stages, 
     fold_lines = [
         f"| {row['heldout_seed']} | {row['train_seeds']} | {float(row['threshold']):.6f} | "
         f"{pct(row['test_balanced_accuracy'])} | {pct(row['test_sensitivity'])} | "
-        f"{pct(row['test_specificity'])} | {pct(row['test_false_safe_rate_all'])} |"
+        f"{pct(row['test_specificity'])} | {pct(row['test_false_safe_rate_all'])} | "
+        f"{pct(row['test_false_safe_rate_among_harmful'])} |"
         for row in primary_folds
     ]
     horizon_lines = []
@@ -430,7 +433,9 @@ def write_report(output_dir, summaries, folds, rankings, distributions, stages, 
         "- Unique short cases: 180",
         "- V1/V2 cases: 90/90", "",
         "## Primary", "",
-        "Method V1, finite-step rho=0.10, short transitions, leave-one-seed-out threshold calibration.", "",
+        "Method V1, finite-step rho=0.10, short transitions, leave-one-seed-out threshold calibration.",
+        f"Endpoint-harmful prevalence is {pct(primary['harmful_prevalence'])}; AP is {primary['average_precision']:.4f}, or {primary['ap_gain_over_prevalence']:+.4f} above prevalence.",
+        f"LOSO all-case false-safe is {pct(primary['loso_false_safe_rate_all'])}; harmful-conditional miss rate is {pct(1.0 - primary['loso_sensitivity'])}. These denominators are not interchangeable.", "",
         "## Ranking and calibration", "",
         "| Method | Score | rho | ROC-AUC | AP | Zero BA | LOSO BA | Zero FS | LOSO FS |",
         "|---|---|---:|---:|---:|---:|---:|---:|---:|",
@@ -440,8 +445,8 @@ def write_report(output_dir, summaries, folds, rankings, distributions, stages, 
         "|---:|---:|---:|---:|---:|",
         *horizon_lines, "",
         "## Calibration held-out folds", "",
-        "| Held-out seed | Threshold learned from | tau | Test BA | Sensitivity | Specificity | All-case false-safe |",
-        "|---:|---|---:|---:|---:|---:|---:|",
+        "| Held-out seed | Threshold learned from | tau | Test BA | Sensitivity | Specificity | All-case false-safe | Harmful miss |",
+        "|---:|---|---:|---:|---:|---:|---:|---:|",
         *fold_lines, "",
         "## First-order vs finite", "",
         f"- ROC-AUC: {first_order['roc_auc']:.4f} vs {primary['roc_auc']:.4f} (delta {primary['roc_auc'] - first_order['roc_auc']:+.4f}).",
