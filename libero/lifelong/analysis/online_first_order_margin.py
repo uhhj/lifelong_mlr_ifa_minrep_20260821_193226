@@ -246,8 +246,7 @@ def build_future_cases(anchor_rows, horizon):
             continue
         loss_start = float(row["aggregate_old_loss"])
         actual_delta = float(future["aggregate_old_loss"]) - loss_start
-        output.append(
-            {
+        case = {
                 "seed": row["seed"],
                 "stage": row["stage"],
                 "epoch": row["epoch"],
@@ -256,17 +255,18 @@ def build_future_cases(anchor_rows, horizon):
                 "actual_delta": actual_delta,
                 "relative_actual_delta": actual_delta / max(abs(loss_start), 1e-12),
                 "endpoint_harmful": int(actual_delta > 0.0),
-                "native_candidate_bins": row["native_candidate_bins"],
-                "native_raw_max": row["native_raw_max"],
-                "native_raw_mean": row["native_raw_mean"],
-                "native_cos_max": row["native_cos_max"],
-                "native_cos_mean": row["native_cos_mean"],
-                "actual_step_score": row["actual_step_score"],
-                "actual_step_cosine": row["actual_step_cosine"],
-                "actual_step_relative": row["actual_step_relative"],
-                "native_v1_would_gate": row["native_v1_would_gate"],
-            }
-        )
+        }
+        for field in (
+            "native_candidate_bins", "native_raw_max", "native_raw_mean",
+            "native_cos_max", "native_cos_mean", "native_v1_would_gate",
+            "actual_step_score", "actual_step_cosine", "actual_step_relative",
+            "candidate_step_score", "candidate_step_cosine",
+            "candidate_actual_delta_cosine", "relative_l2_error",
+            "risk_cosine_abs_error",
+        ):
+            if field in row:
+                case[field] = row[field]
+        output.append(case)
     return output
 
 
