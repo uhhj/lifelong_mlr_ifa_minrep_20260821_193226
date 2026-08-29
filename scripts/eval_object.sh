@@ -3,13 +3,14 @@ set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
 require_object_inputs
 
-METHOD="${1:?usage: scripts/eval_object.sh mlr|mlr_ifa|mlr_static_igfa|mlr_temporal_igfa|mlr_per_task_temporal_igfa}"
+METHOD="${1:?usage: scripts/eval_object.sh mlr|mlr_ifa|mlr_static_igfa|mlr_temporal_igfa|mlr_per_task_temporal_igfa|mlr_zero_directional_guard}"
 case "$METHOD" in
   mlr) RUN_NAME="${RUN_PREFIX}_mlr" ;;
   mlr_ifa) RUN_NAME="${RUN_PREFIX}_mlr_ifa" ;;
   mlr_static_igfa) RUN_NAME="${RUN_PREFIX}_mlr_static_igfa" ;;
   mlr_temporal_igfa) RUN_NAME="${RUN_PREFIX}_mlr_temporal_igfa" ;;
   mlr_per_task_temporal_igfa) RUN_NAME="${RUN_PREFIX}_mlr_per_task_temporal_igfa" ;;
+  mlr_zero_directional_guard) RUN_NAME="${RUN_PREFIX}_mlr_zero_directional_guard" ;;
   *) echo "Unknown method: $METHOD" >&2; exit 2 ;;
 esac
 
