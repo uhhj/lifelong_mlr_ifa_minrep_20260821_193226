@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
+ALIGNMENT_CUDA_DEVICE="${CUDA_VISIBLE_DEVICES:-0}"
+ALIGNMENT_EGL_DEVICE="${MUJOCO_EGL_DEVICE_ID:-$ALIGNMENT_CUDA_DEVICE}"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
+export CUDA_VISIBLE_DEVICES="$ALIGNMENT_CUDA_DEVICE"
+export MUJOCO_EGL_DEVICE_ID="$ALIGNMENT_EGL_DEVICE"
 require_object_inputs
 
 METHOD="${1:?usage: scripts/eval_old_task_checkpoint_grid.sh temporal_v1|zero_guard}"
