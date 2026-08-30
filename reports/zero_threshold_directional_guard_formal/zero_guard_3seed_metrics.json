@@ -1,0 +1,257 @@
+{
+  "benchmark": "LIBERO_OBJECT",
+  "method": "zero_threshold_optimizer_aware_directional_guard",
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "standard_deviation": "sample",
+  "verdict": "ZERO_THRESHOLD_DIRECTIONAL_GUARD_FORMAL_NOT_SUPPORTED",
+  "flags": [],
+  "per_seed": {
+    "42": {
+      "fwt": 70.0,
+      "nbt": 13.888889,
+      "auc": 63.333333,
+      "delta_vs_temporal_v1": {
+        "fwt": -10.0,
+        "nbt": 6.666667,
+        "auc": -13.541667
+      },
+      "delta_vs_mlr": {
+        "fwt": -6.25,
+        "nbt": 2.777889,
+        "auc": -7.395667
+      },
+      "selected_epochs": {
+        "6": 80,
+        "7": 85,
+        "8": 75,
+        "9": 80
+      },
+      "r": [
+        [
+          45.0,
+          null,
+          null,
+          null
+        ],
+        [
+          85.0,
+          90.0,
+          null,
+          null
+        ],
+        [
+          5.0,
+          40.0,
+          95.0,
+          null
+        ],
+        [
+          25.0,
+          90.0,
+          85.0,
+          50.0
+        ]
+      ]
+    },
+    "43": {
+      "fwt": 75.0,
+      "nbt": 5.0,
+      "auc": 73.333333,
+      "delta_vs_temporal_v1": {
+        "fwt": -3.75,
+        "nbt": 11.944444,
+        "auc": -9.375
+      },
+      "delta_vs_mlr": {
+        "fwt": -2.5,
+        "nbt": 12.222,
+        "auc": -8.228667
+      },
+      "selected_epochs": {
+        "6": 90,
+        "7": 95,
+        "8": 95,
+        "9": 85
+      },
+      "r": [
+        [
+          40.0,
+          null,
+          null,
+          null
+        ],
+        [
+          60.0,
+          95.0,
+          null,
+          null
+        ],
+        [
+          30.0,
+          100.0,
+          100.0,
+          null
+        ],
+        [
+          30.0,
+          100.0,
+          80.0,
+          65.0
+        ]
+      ]
+    },
+    "44": {
+      "fwt": 82.5,
+      "nbt": 6.944444,
+      "auc": 78.75,
+      "delta_vs_temporal_v1": {
+        "fwt": -1.25,
+        "nbt": -10.0,
+        "auc": 2.916667
+      },
+      "delta_vs_mlr": {
+        "fwt": 3.75,
+        "nbt": 2.500444,
+        "auc": 2.188
+      },
+      "selected_epochs": {
+        "6": 95,
+        "7": 80,
+        "8": 95,
+        "9": 90
+      },
+      "r": [
+        [
+          75.0,
+          null,
+          null,
+          null
+        ],
+        [
+          75.0,
+          95.0,
+          null,
+          null
+        ],
+        [
+          65.0,
+          85.0,
+          100.0,
+          null
+        ],
+        [
+          45.0,
+          90.0,
+          100.0,
+          60.0
+        ]
+      ]
+    }
+  },
+  "three_seed_summary": {
+    "fwt": {
+      "mean": 75.833333,
+      "sample_std": 6.291529
+    },
+    "nbt": {
+      "mean": 8.611111,
+      "sample_std": 4.672946
+    },
+    "auc": {
+      "mean": 71.805555,
+      "sample_std": 7.82106
+    }
+  },
+  "delta_vs_temporal_v1": {
+    "fwt": {
+      "mean": -5.0,
+      "sample_std": 4.506939,
+      "improved_seed_count": 0
+    },
+    "nbt": {
+      "mean": 2.87037,
+      "sample_std": 11.454194,
+      "improved_seed_count": 1
+    },
+    "auc": {
+      "mean": -6.666667,
+      "sample_std": 8.556897,
+      "improved_seed_count": 1
+    }
+  },
+  "delta_vs_mlr": {
+    "fwt": {
+      "mean": -1.666667,
+      "sample_std": 5.051815,
+      "improved_seed_count": 1
+    },
+    "nbt": {
+      "mean": 5.833444,
+      "sample_std": 5.53439,
+      "improved_seed_count": 0
+    },
+    "auc": {
+      "mean": -4.478778,
+      "sample_std": 5.788603,
+      "improved_seed_count": 1
+    }
+  },
+  "guard_mechanism": {
+    "eligible_batches": 269400,
+    "fire_count": 101748,
+    "fire_rate": 0.377684,
+    "mean_candidate_cosine": -0.002433,
+    "mean_fired_cosine": 0.008194
+  },
+  "frozen_references": {
+    "temporal_v1": {
+      "fwt": {
+        "mean": 80.833333,
+        "sample_std": 2.602082
+      },
+      "nbt": {
+        "mean": 5.740741,
+        "sample_std": 12.013152
+      },
+      "auc": {
+        "mean": 78.472222,
+        "sample_std": 3.705367
+      }
+    },
+    "mlr": {
+      "fwt": {
+        "mean": 77.5,
+        "sample_std": 1.25,
+        "paper_mean": 83.3,
+        "paper_reported_std": 2.6,
+        "our_mean_minus_paper_mean": -5.8,
+        "standardized_descriptive_gap": -2.231
+      },
+      "nbt": {
+        "mean": 2.778,
+        "sample_std": 9.279,
+        "paper_mean": 12.3,
+        "paper_reported_std": 2.4,
+        "our_mean_minus_paper_mean": -9.522,
+        "standardized_descriptive_gap": -3.968
+      },
+      "auc": {
+        "mean": 76.284,
+        "sample_std": 5.422,
+        "paper_mean": 77.6,
+        "paper_reported_std": 3.0,
+        "our_mean_minus_paper_mean": -1.316,
+        "standardized_descriptive_gap": -0.439
+      }
+    }
+  },
+  "identity": {
+    "branch": "research/zero-threshold-directional-guard-formal",
+    "starting_sha": "e2ed8e38e21c0f904516046c2b9be6bbd1efb249",
+    "formal_experiment_source_sha": "fb39a8fb3831cab22dcb6c2bb51f0a7ca6228098"
+  }
+}
