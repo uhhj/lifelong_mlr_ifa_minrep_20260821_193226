@@ -77,7 +77,7 @@ def compare(left, right, sample_size=64):
     return result
 
 
-def task_summary(seed, task, records, sample_size=64):
+def task_summary(seed, task, records, file_count, sample_size=64):
     paths = sorted(records.values())[:sample_size]
     shapes, dtypes, finite = set(), set(), True
     norms = {name: [] for name in MODALITIES}
@@ -90,7 +90,8 @@ def task_summary(seed, task, records, sample_size=64):
         for index, name in enumerate(MODALITIES):
             values = feature[..., index, :].reshape(-1, feature.shape[-1])
             norms[name].append(float(torch.linalg.vector_norm(values, dim=-1).mean()))
-    row = {"seed": seed, "task": task, "records": len(records), "audited_records": len(paths),
+    row = {"seed": seed, "task": task, "records": file_count,
+           "unique_action_records": len(records), "audited_records": len(paths),
            "feature_shapes": ";".join(sorted(shapes)), "dtypes": ";".join(sorted(dtypes)),
            "finite": finite}
     row.update({f"{name}_mean_norm": sum(values) / len(values) for name, values in norms.items()})
@@ -107,12 +108,17 @@ def write_csv(path, rows):
 def main():
     roots = {seed: ROOT / "features" / f"object_seed{seed}" for seed in SEEDS}
     indices = {seed: cache_index(path) for seed, path in roots.items()}
+    file_counts = {
+        seed: {task: len(list((path / str(task)).glob("*.pt"))) for task in range(6, 10)}
+        for seed, path in roots.items()
+    }
     payload = {
         "source_behavior": "save_feature uses seeded shuffle and enabled stochastic image augmentation",
-        "counts": {str(seed): {str(task): len(indices[seed][task]) for task in range(6, 10)} for seed in SEEDS},
+        "counts": {str(seed): {str(task): file_counts[seed][task] for task in range(6, 10)} for seed in SEEDS},
+        "unique_action_records": {str(seed): {str(task): len(indices[seed][task]) for task in range(6, 10)} for seed in SEEDS},
         "cross_seed": {},
     }
-    task_rows = [task_summary(seed, task, indices[seed][task]) for seed in SEEDS for task in range(6, 10)]
+    task_rows = [task_summary(seed, task, indices[seed][task], file_counts[seed][task]) for seed in SEEDS for task in range(6, 10)]
     pair_rows = []
     for left, right in ((42, 43), (42, 44), (43, 44)):
         aggregate = compare(indices[left], indices[right])
