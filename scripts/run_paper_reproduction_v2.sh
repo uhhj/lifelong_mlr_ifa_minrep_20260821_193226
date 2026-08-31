@@ -7,6 +7,7 @@ case "$MODE" in
   audit)
     test -f reports/paper_reproduction_v2/protocol_audit.md
     test -f reports/paper_reproduction_v2/scheduler_semantics.md
+    "$PYTHON" scripts/audit_object_evaluation_protocol.py
     echo "Paper/release/runner audit documents are present."
     ;;
   test)

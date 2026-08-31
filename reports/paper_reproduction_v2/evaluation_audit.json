@@ -1,0 +1,20 @@
+{
+  "benchmark": "LIBERO_OBJECT",
+  "trials_per_cell": 20,
+  "init_state_source": "bundled LIBERO task init_states_file",
+  "action_protocol": "highest-logit GMM component, then sample selected Normal",
+  "checks": {
+    "twenty_trials_runner": true,
+    "saved_init_states": true,
+    "first_twenty_states_in_two_ten_env_groups": true,
+    "environment_seed_propagation": true,
+    "environment_reset": true,
+    "policy_reset_each_rollout_group": true,
+    "success_from_done": true,
+    "ddp_prefix_stripped_on_checkpoint_load": true,
+    "highest_logit_component": true,
+    "stochastic_selected_normal_sample": true,
+    "formal_checkpoint_grid": true
+  },
+  "pass": true
+}
