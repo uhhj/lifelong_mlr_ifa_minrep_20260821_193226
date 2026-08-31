@@ -15,6 +15,8 @@ export TOKENIZERS_PARALLELISM=false
 export PYTHONPATH="$PROJECT_ROOT${PYTHONPATH:+:$PYTHONPATH}"
 export LIBERO_CONFIG_PATH="$PROJECT_ROOT/data/libero_config"
 export HF_HOME="$PROJECT_ROOT/data/huggingface_cache"
+export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
+export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
 
 PYTHON="${PYTHON:-$(command -v python)}"
 SEED="${SEED:-42}"

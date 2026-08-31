@@ -15,7 +15,7 @@ import torch.distributed as dist
 import itertools
 
 
-import os, glob, random, shutil, hashlib, re
+import os, glob, random, shutil, hashlib, re, csv
 from pathlib import Path
 from typing import List, Sequence, Dict, Tuple
 
@@ -26,6 +26,25 @@ import glob
 from torch.utils.data import Dataset, DataLoader, DistributedSampler
 
 BUFFER_CAPACITY = 59660000  #A buffer big enough
+
+FORMAL_CHECKPOINT_EPOCHS = (70, 75, 80, 85, 90, 95)
+LR_PROTOCOL_FIELDS = (
+    "seed", "arm", "stage", "epoch", "batches", "optimizer_step_start",
+    "optimizer_step_end", "lr_start", "lr_end", "lr_min", "lr_max",
+    "scheduler_mode", "batch_size", "warmup_steps", "total_steps",
+)
+TRAIN_CURVE_FIELDS = (
+    "seed", "arm", "stage", "epoch", "batches", "mean_bc_loss",
+    "optimizer_step_end", "lr_end", "scheduler_mode", "batch_size",
+)
+
+
+def should_save_mlr_checkpoint(epoch, n_epochs, diagnostic_epochs=(), save_final=False):
+    return (
+        epoch in FORMAL_CHECKPOINT_EPOCHS
+        or epoch in set(int(item) for item in diagnostic_epochs)
+        or (save_final and epoch == n_epochs - 1)
+    )
 
 TASK_PREFIX_RE = re.compile(r'^t(\d+)__')
 
@@ -668,6 +687,15 @@ class MLR(Sequential):
         super().__init__(n_tasks=n_tasks, cfg=cfg, **policy_kwargs)
         self.cfg = cfg
 
+    @staticmethod
+    def _append_csv(path, fieldnames, row):
+        exists = os.path.exists(path)
+        with open(path, "a", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            if not exists:
+                writer.writeheader()
+            writer.writerow(row)
+
     def learn_all_tasks(self, datasets, benchmark, result_summary,current_task_id):
 
         ifa_info = None
@@ -724,27 +752,56 @@ class MLR(Sequential):
             t0 = time.time()
             self.policy.train()
             training_loss = 0.0
+            epoch_loss_sum = 0.0
+            epoch_batch_count = 0
+            optimizer_step_start = self._optimizer_step_count
+            lr_start = float(self.optimizer.param_groups[0]["lr"])
+            lr_values = [lr_start]
             for (idx, data) in enumerate(pbar):
                 loss = self.observe(data,current_task_id,epoch,ifa_info=ifa_info)
+                epoch_loss_sum += float(loss)
+                epoch_batch_count += 1
                 training_loss += loss
                 avg_loss = training_loss / (idx + 1)
                 pbar.set_postfix(loss=f"{avg_loss:.4f}")
+                lr_values.append(float(self.optimizer.param_groups[0]["lr"]))
 
                 training_loss /= len(train_dataloader)
+
+                max_updates = getattr(self.cfg, "max_optimizer_updates", None)
+                if (
+                    max_updates is not None
+                    and self._optimizer_step_count >= int(max_updates)
+                ):
+                    break
                 
             t1 = time.time()
 
             current_lr = self.optimizer.param_groups[0]["lr"]
+            mean_bc_loss = epoch_loss_sum / epoch_batch_count
             print(
                 f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} "
                 f"| lr: {current_lr:.8g} | time: {(t1-t0)/60:4.2f}"
             )
 
-            save_smoke_checkpoint = (
-                getattr(self.cfg, "save_final_checkpoint", False)
-                and epoch == self.cfg.train.n_epochs - 1
+            reached_max_updates = (
+                getattr(self.cfg, "max_optimizer_updates", None) is not None
+                and self._optimizer_step_count >= int(self.cfg.max_optimizer_updates)
             )
-            if (epoch % 5 == 0 and epoch > 69) or save_smoke_checkpoint:
+            save_final_checkpoint = getattr(self.cfg, "save_final_checkpoint", False)
+            diagnostic_epochs = set(
+                int(item)
+                for item in getattr(self.cfg, "diagnostic_checkpoint_epochs", [])
+            )
+            if (
+                should_save_mlr_checkpoint(
+                    epoch,
+                    self.cfg.train.n_epochs,
+                    diagnostic_epochs,
+                    save_final_checkpoint,
+                )
+                or (save_final_checkpoint and reached_max_updates)
+            ):
 
                 self.policy.eval()
 
@@ -771,8 +828,54 @@ class MLR(Sequential):
                 successes.append(success_rate)
                 cumulated_counter += 1.0
 
-            if self.scheduler is not None and epoch > 0:
-                self.scheduler.step()
+            self.epoch_schedule_step(epoch)
+
+            arm = str(getattr(self.cfg, "repro_arm", "unspecified"))
+            self._append_csv(
+                os.path.join(self.experiment_dir, "lr_protocol.csv"),
+                LR_PROTOCOL_FIELDS,
+                {
+                    "seed": self.cfg.seed,
+                    "arm": arm,
+                    "stage": current_task_id,
+                    "epoch": epoch,
+                    "batches": epoch_batch_count,
+                    "optimizer_step_start": optimizer_step_start,
+                    "optimizer_step_end": self._optimizer_step_count,
+                    "lr_start": lr_start,
+                    "lr_end": float(self.optimizer.param_groups[0]["lr"]),
+                    "lr_min": min(lr_values),
+                    "lr_max": max(lr_values),
+                    "scheduler_mode": self.repro_scheduler_mode,
+                    "batch_size": self.cfg.train.batch_size,
+                    "warmup_steps": self.scheduler_warmup_steps,
+                    "total_steps": self.scheduler_total_steps,
+                },
+            )
+
+            self._append_csv(
+                os.path.join(self.experiment_dir, "paper_repro_train_curve.csv"),
+                TRAIN_CURVE_FIELDS,
+                {
+                    "seed": self.cfg.seed,
+                    "arm": arm,
+                    "stage": current_task_id,
+                    "epoch": epoch,
+                    "batches": epoch_batch_count,
+                    "mean_bc_loss": mean_bc_loss,
+                    "optimizer_step_end": self._optimizer_step_count,
+                    "lr_end": float(self.optimizer.param_groups[0]["lr"]),
+                    "scheduler_mode": self.repro_scheduler_mode,
+                    "batch_size": self.cfg.train.batch_size,
+                },
+            )
+
+            max_updates = getattr(self.cfg, "max_optimizer_updates", None)
+            if (
+                max_updates is not None
+                and self._optimizer_step_count >= int(max_updates)
+            ):
+                break
 
         # return the metrics regarding forward transfer
         losses = np.array(losses)
@@ -783,4 +886,3 @@ class MLR(Sequential):
             capacity=BUFFER_CAPACITY, seed= self.cfg.seed, drop_policy="random",rate=self.cfg.past_data_rate
         )
         return successes.sum() / cumulated_counter, losses.sum() / cumulated_counter
-

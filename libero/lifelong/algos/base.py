@@ -101,14 +101,31 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
             self.policy.parameters(),
             **self.cfg.train.optimizer.kwargs
         )
-        for name, param in self.policy.module.named_parameters():
+        self.repro_scheduler_mode = str(
+            getattr(self.cfg, "repro_scheduler_mode", "legacy_epoch")
+        )
+        valid_scheduler_modes = {"legacy_epoch", "batch_step", "constant"}
+        if self.repro_scheduler_mode not in valid_scheduler_modes:
+            raise ValueError(
+                f"Unknown repro_scheduler_mode={self.repro_scheduler_mode!r}; "
+                f"expected one of {sorted(valid_scheduler_modes)}"
+            )
+        self._optimizer_step_count = 0
+        self._scheduler_step_count = 0
+        policy_module = self.policy.module if isinstance(self.policy, DDP) else self.policy
+        for name, param in policy_module.named_parameters():
             if param.requires_grad:
                 print(name)
 
         # build scheduler
-        sched_cfg = self.cfg.train.scheduler.kwargs
-
-        if self.cfg.train.scheduler is not None:
+        self.scheduler = None
+        self.scheduler_warmup_steps = None
+        self.scheduler_total_steps = None
+        if (
+            self.cfg.train.scheduler is not None
+            and self.repro_scheduler_mode != "constant"
+        ):
+            sched_cfg = self.cfg.train.scheduler.kwargs
             warmup_steps = sched_cfg.get("warmup_steps", 500)
 
             total_steps  = getattr(self, "total_steps", None)
@@ -122,8 +139,29 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                 lr_lambda=lr_lambda,
                 last_epoch=sched_cfg.get("last_epoch", -1),
             )
-        else:
-            self.scheduler = None
+            self.scheduler_warmup_steps = int(warmup_steps)
+            self.scheduler_total_steps = int(total_steps)
+
+    def optimizer_step_and_maybe_schedule(self):
+        """Apply one optimizer update and, for batch mode, one scheduler update."""
+        self.optimizer.step()
+        self._optimizer_step_count += 1
+        if (
+            self.scheduler is not None
+            and self.repro_scheduler_mode == "batch_step"
+        ):
+            self.scheduler.step()
+            self._scheduler_step_count += 1
+
+    def epoch_schedule_step(self, epoch):
+        """Preserve the release's epoch stepping only in legacy mode."""
+        if (
+            self.scheduler is not None
+            and self.repro_scheduler_mode == "legacy_epoch"
+            and epoch > 0
+        ):
+            self.scheduler.step()
+            self._scheduler_step_count += 1
 
     def map_tensor_to_device(self, data):
         """Move data to the device specified by self.cfg.device."""
@@ -154,7 +192,7 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                 nn.utils.clip_grad_norm_(
                     self.policy.parameters(), self.cfg.train.grad_clip
                 )
-            self.optimizer.step()
+            self.optimizer_step_and_maybe_schedule()
             return loss.item()
 
         selected_pair_mask = ifa_info["selected_pair_mask"]
@@ -288,7 +326,7 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                 self.policy.parameters(), self.cfg.train.grad_clip
             )
 
-        self.optimizer.step()
+        self.optimizer_step_and_maybe_schedule()
         return loss.item()
 
     def eval_observe(self, data):
@@ -341,8 +379,7 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                     
                     torch_save_model(self.policy, model_checkpoint_name, cfg=self.cfg)
 
-            if self.scheduler is not None and epoch > 0:
-                self.scheduler.step()
+            self.epoch_schedule_step(epoch)
 
     def reset(self):
         self.policy.reset()
