@@ -357,6 +357,14 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                 training_loss = 0.0
                 for (idx, data) in enumerate(train_dataloader):
                     self.observe(data,task_id,idx, save_feature, saving_dir)
+                    max_feature_batches = getattr(
+                        self.cfg, "max_feature_batches", None
+                    )
+                    if (
+                        max_feature_batches is not None
+                        and idx + 1 >= int(max_feature_batches)
+                    ):
+                        break
                 break
 
             self.policy.train()
