@@ -28,8 +28,11 @@ case "$MODE" in
   feature-audit)
     "$PYTHON" scripts/audit_object_feature_cache.py
     ;;
-  seed42-mlr|mlr-formal|ifa-formal)
-    echo "$MODE is gate-controlled and is not enabled before the Task6 verdict." >&2
+  seed42-mlr)
+    bash scripts/run_object_seed42_mlr_paper_candidate_all.sh
+    ;;
+  mlr-formal|ifa-formal)
+    echo "$MODE remains gate-controlled pending the Seed42 candidate result." >&2
     exit 3
     ;;
   summarize)
