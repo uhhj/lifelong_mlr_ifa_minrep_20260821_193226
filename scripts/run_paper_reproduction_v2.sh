@@ -32,8 +32,7 @@ case "$MODE" in
     bash scripts/run_object_seed42_mlr_paper_candidate_all.sh
     ;;
   mlr-formal|ifa-formal)
-    echo "$MODE remains gate-controlled pending the Seed42 candidate result." >&2
-    exit 3
+    bash scripts/continue_paper_v2_after_seed42.sh
     ;;
   summarize)
     "$PYTHON" scripts/summarize_object_task6_reconciliation.py

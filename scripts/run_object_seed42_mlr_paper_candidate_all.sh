@@ -17,6 +17,9 @@ raise SystemExit(0 if json.load(open(sys.argv[1]))["promotion_gate"]["pass"] els
 PY
 then
   printf 'COMPLETE_PROMOTED %s\n' "$(date -Is)" > "$STATUS_DIR/status.txt"
+  if [[ "${AUTO_CONTINUE:-1}" == 1 ]]; then
+    bash scripts/continue_paper_v2_after_seed42.sh > "$STATUS_DIR/continuation.log" 2>&1 &
+  fi
 else
   printf 'COMPLETE_NOT_PROMOTED %s\n' "$(date -Is)" > "$STATUS_DIR/status.txt"
 fi
