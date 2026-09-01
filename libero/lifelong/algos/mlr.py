@@ -132,7 +132,10 @@ def _unique_dest(dst_dir: str, task_id: int, src_path: str) -> str:
 
 def _safe_copy(src: str, dst_dir: str, task_id: int) -> str:
     dst = _unique_dest(dst_dir, task_id, src)
-    shutil.copy2(src, dst)
+    # The lab data volume does not allow ordinary users to preserve source
+    # timestamps. Replay only depends on the serialized payload, so copy the
+    # file contents without metadata.
+    shutil.copyfile(src, dst)
     return dst
 
 def _group_buffer_by_task(buffer_dir: str) -> Dict[int, List[str]]:
