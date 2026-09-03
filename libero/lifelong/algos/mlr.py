@@ -15,7 +15,7 @@ import torch.distributed as dist
 import itertools
 
 
-import os, glob, random, shutil, hashlib, re, csv
+import os, glob, random, shutil, hashlib, re, csv, json
 from pathlib import Path
 from typing import List, Sequence, Dict, Tuple
 
@@ -36,6 +36,12 @@ LR_PROTOCOL_FIELDS = (
 TRAIN_CURVE_FIELDS = (
     "seed", "arm", "stage", "epoch", "batches", "mean_bc_loss",
     "optimizer_step_end", "lr_end", "scheduler_mode", "batch_size",
+)
+IFA_INTERACTION_FIELDS = (
+    "seed", "stage", "epoch", "batch_count", "current_sample_count",
+    "mean_base_bc_loss", "mean_ifa_hinge", "ifa_active_fraction",
+    "mean_ifa_added_loss", "ifa_to_bc_ratio", "lr_start", "lr_end",
+    "optimizer_steps", "selected_pairs",
 )
 
 
@@ -760,8 +766,26 @@ class MLR(Sequential):
             optimizer_step_start = self._optimizer_step_count
             lr_start = float(self.optimizer.param_groups[0]["lr"])
             lr_values = [lr_start]
+            interaction_logging = bool(
+                getattr(self.cfg, "ifa_interaction_logging", False)
+            )
+            interaction_sums = {
+                "base": 0.0,
+                "hinge": 0.0,
+                "active": 0.0,
+                "added": 0.0,
+                "current_samples": 0,
+            }
             for (idx, data) in enumerate(pbar):
                 loss = self.observe(data,current_task_id,epoch,ifa_info=ifa_info)
+                if interaction_logging:
+                    stats = self._last_ifa_interaction_stats
+                    interaction_sums["base"] += stats["base_bc_loss_before_ifa"]
+                    current_count = stats["current_task_sample_count"]
+                    interaction_sums["hinge"] += stats["ifa_hinge_mean"] * current_count
+                    interaction_sums["active"] += stats["ifa_hinge_active_fraction"] * current_count
+                    interaction_sums["added"] += stats["ifa_added_loss"]
+                    interaction_sums["current_samples"] += current_count
                 epoch_loss_sum += float(loss)
                 epoch_batch_count += 1
                 training_loss += loss
@@ -855,6 +879,43 @@ class MLR(Sequential):
                     "total_steps": self.scheduler_total_steps,
                 },
             )
+
+            if interaction_logging and _is_rank0():
+                interaction_log_dir = str(
+                    getattr(
+                        self.cfg,
+                        "ifa_interaction_log_dir",
+                        os.path.join(self.experiment_dir, "ifa_interaction"),
+                    )
+                )
+                os.makedirs(interaction_log_dir, exist_ok=True)
+                mean_base = interaction_sums["base"] / epoch_batch_count
+                current_samples = interaction_sums["current_samples"]
+                mean_hinge = interaction_sums["hinge"] / max(current_samples, 1)
+                mean_added = interaction_sums["added"] / epoch_batch_count
+                self._append_csv(
+                    os.path.join(
+                        interaction_log_dir,
+                        f"seed{self.cfg.seed}_ifa_epoch_stats.csv",
+                    ),
+                    IFA_INTERACTION_FIELDS,
+                    {
+                        "seed": self.cfg.seed,
+                        "stage": current_task_id,
+                        "epoch": epoch,
+                        "batch_count": epoch_batch_count,
+                        "current_sample_count": interaction_sums["current_samples"],
+                        "mean_base_bc_loss": mean_base,
+                        "mean_ifa_hinge": mean_hinge,
+                        "ifa_active_fraction": interaction_sums["active"] / max(current_samples, 1),
+                        "mean_ifa_added_loss": mean_added,
+                        "ifa_to_bc_ratio": mean_added / max(abs(mean_base), 1e-12),
+                        "lr_start": lr_start,
+                        "lr_end": float(self.optimizer.param_groups[0]["lr"]),
+                        "optimizer_steps": self._optimizer_step_count - optimizer_step_start,
+                        "selected_pairs": json.dumps(selected_pairs),
+                    },
+                )
 
             self._append_csv(
                 os.path.join(self.experiment_dir, "paper_repro_train_curve.csv"),

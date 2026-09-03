@@ -181,6 +181,12 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
             loss,last_feat = self.policy.compute_loss(data[0],None,None)
         
         print('loss:{}'.format(loss))
+        interaction_logging = bool(
+            getattr(self.cfg, "ifa_interaction_logging", False)
+        )
+        base_bc_loss = loss.detach() if interaction_logging else None
+        logged_hinge_values = []
+        logged_old_tasks = []
 
         task_ids = torch.tensor(
             [int(x) for x in data[1]], dtype=torch.long, device=last_feat.device
@@ -314,10 +320,37 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                     cos_ab_t = torch.tensor(cos_ab, dtype=true_feats.dtype, device=true_feats.device).clamp(-1 + eps, 1 - eps)
                     phi = torch.acos(cos_ab_t)
 
-                    loss_hinge_angle = torch.relu(theta_pos - theta_neg + gamma * phi).mean()
+                    hinge_values = torch.relu(theta_pos - theta_neg + gamma * phi)
+                    loss_hinge_angle = hinge_values.mean()
 
                     ifa_weight = float(getattr(self.cfg, "ifa_weight", 0.1))
                     loss = loss + ifa_weight * loss_hinge_angle.mean()
+                    if interaction_logging:
+                        logged_hinge_values.append(hinge_values.detach())
+                        logged_old_tasks.append(int(item))
+
+        if interaction_logging:
+            if logged_hinge_values:
+                flat_hinges = torch.cat(
+                    [values.reshape(-1) for values in logged_hinge_values]
+                )
+                hinge_mean = float(flat_hinges.mean().item())
+                active_fraction = float((flat_hinges > 0).float().mean().item())
+            else:
+                hinge_mean = 0.0
+                active_fraction = 0.0
+            ifa_weight = float(getattr(self.cfg, "ifa_weight", 0.1))
+            self._last_ifa_interaction_stats = {
+                "base_bc_loss_before_ifa": float(base_bc_loss.item()),
+                "ifa_hinge_mean": hinge_mean,
+                "ifa_hinge_active_fraction": active_fraction,
+                "ifa_added_loss": ifa_weight * hinge_mean,
+                "selected_old_tasks": tuple(logged_old_tasks),
+                "current_task": int(current_task_id),
+                "epoch": int(epoch),
+                "lr": float(self.optimizer.param_groups[0]["lr"]),
+                "current_task_sample_count": int(batch_mask.sum().item()),
+            }
 
 
         (self.loss_scale * loss).backward()
