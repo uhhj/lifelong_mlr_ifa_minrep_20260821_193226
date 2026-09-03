@@ -1,0 +1,56 @@
+{
+  "benchmark": "LIBERO_OBJECT",
+  "method": "MLR paper candidate",
+  "seed": 42,
+  "protocol": {
+    "batch_size": 10,
+    "scheduler_mode": "batch_step",
+    "warmup_steps": 500,
+    "epochs_per_stage": 100,
+    "ifa_enabled": false,
+    "evaluation_trials": 20
+  },
+  "fwt": 87.5,
+  "nbt": 23.333,
+  "auc": 75.938,
+  "r": [
+    [
+      60.0,
+      null,
+      null,
+      null
+    ],
+    [
+      45.0,
+      100.0,
+      null,
+      null
+    ],
+    [
+      15.0,
+      95.0,
+      100.0,
+      null
+    ],
+    [
+      15.0,
+      75.0,
+      80.0,
+      90.0
+    ]
+  ],
+  "selected_epochs": {
+    "6": 85,
+    "7": 95,
+    "8": 75,
+    "9": 95
+  },
+  "historical_task6_success": 40.0,
+  "task6_success": 60.0,
+  "promotion_gate": {
+    "fwt_at_least_80": true,
+    "auc_at_least_75": true,
+    "task6_gain_at_least_15pp": true,
+    "pass": true
+  }
+}
