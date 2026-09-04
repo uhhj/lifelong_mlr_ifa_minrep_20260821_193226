@@ -218,8 +218,41 @@ def generate(repo, root, out):
     write_csv(out / "upstream/commit_recipe_history.csv", rows)
 
     batch_rows = distinct_changes(rows, ("batch_config", "batch_cli", "effective_batch"))
-    gamma_rows = distinct_changes(rows, ("gamma", "gamma_symbol", "ifa_weight"))
-    scheduler_rows = distinct_changes(rows, ("warmup_steps", "total_steps_definition", "scheduler_semantics"))
+    gamma_rows = []
+    previous_gamma = UNKNOWN
+    for row in rows:
+        if row["gamma"] == previous_gamma or row["gamma"] == UNKNOWN:
+            continue
+        gamma_rows.append({
+            "commit": row["commit"],
+            "date": row["date"],
+            "file": "lifelong_adaptation_object.sbatch",
+            "symbol": row["gamma_symbol"],
+            "value": row["gamma"],
+            "line_context": f"+{row['gamma_symbol']}={row['gamma']}",
+            "introduced_by_commit": row["commit"],
+            "ifa_weight": row["ifa_weight"],
+            "paper_symbol": "alpha",
+            "semantic_mapping": "same multiplier on angular reference-distance margin",
+        })
+        previous_gamma = row["gamma"]
+    scheduler_rows = []
+    previous_scheduler = (UNKNOWN, UNKNOWN, "NO_SCHEDULER")
+    for row in rows:
+        signature = (row["warmup_steps"], row["total_steps_definition"], row["scheduler_semantics"])
+        if signature == previous_scheduler or row["scheduler_semantics"] == "NO_SCHEDULER":
+            continue
+        scheduler_rows.append({
+            "commit": row["commit"],
+            "date": row["date"],
+            "warmup_steps": row["warmup_steps"],
+            "total_steps_definition": row["total_steps_definition"],
+            "step_call_file": "libero/lifelong/algos/mlr.py",
+            "step_call_scope": "epoch loop after batch loop",
+            "semantic_class": row["scheduler_semantics"],
+            "notes": "first public code snapshot; unchanged through HEAD",
+        })
+        previous_scheduler = signature
     aug_rows = distinct_changes(rows, ("feature_augmentation", "feature_stochastic", "feature_seed_controlled", "feature_mode"))
     eval_rows = distinct_changes(rows, ("eval_trial_count_config", "eval_num_procs", "evaluation_checkpoint_epochs", "evaluation_action_semantics", "evaluation_policy_reset"))
     write_csv(out / "upstream/batch_history.csv", batch_rows)
@@ -328,6 +361,7 @@ This draft has not been sent.
 
 - Starting SHA: `419ecfb366b77207e44efb73667a1e5cfc7f3040`
 - Branch: `research/paper-exact-recipe-source-archaeology`
+- Execution scope: static Git/paper inspection only; no training, optimizer step, feature extraction, rollout, or GPU execution.
 
 ## Public repository history
 

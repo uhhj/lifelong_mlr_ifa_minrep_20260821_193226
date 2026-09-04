@@ -1,0 +1,3077 @@
+commit 3e5b22f3d1b23a2bf30cbe375c600110dbf302a9
+Author:     fanqi.yu@iit.it <fyu@fe01.priv.franklin.lan>
+AuthorDate: Wed Jun 3 14:50:00 2026 +0200
+Commit:     fanqi.yu@iit.it <fyu@fe01.priv.franklin.lan>
+CommitDate: Wed Jun 3 14:50:00 2026 +0200
+
+    Release initial MLR-IFA code
+
+diff --git a/libero/configs/config_adaption.yaml b/libero/configs/config_adaption.yaml
+new file mode 100644
+index 0000000..d1611fe
+--- /dev/null
++++ b/libero/configs/config_adaption.yaml
+@@ -0,0 +1,28 @@
++# @package _global_
++
++defaults:
++  - _self_
++  - data: default
++  - policy: BriefPolicy
++  - train: adaption
++  - eval: default
++  - lifelong: basic
++  - test: null
++hydra:
++  run:
++    dir: .  
++seed: 42
++use_wandb: false
++wandb_project: "lifelong learning"
++folder: null # use default path
++bddl_folder: null # use default path
++init_states_folder: null # use default path
++load_previous_model: false
++device: "cuda"
++task_embedding_format: "clip"
++task_embedding_one_hot_offset: 1
++pretrain: false
++pretrain_model_path: ""
++benchmark_name: "LIBERO_10"
++training: true
++
+diff --git a/libero/configs/eval/default.yaml b/libero/configs/eval/default.yaml
+new file mode 100644
+index 0000000..e2cba32
+--- /dev/null
++++ b/libero/configs/eval/default.yaml
+@@ -0,0 +1,11 @@
++load_path: "" # only used when separately evaluating a pretrained model
++eval: false
++batch_size: 64
++num_workers: 4
++n_eval: 2
++eval_every: 5
++max_steps: 600
++use_mp: true
++num_procs: 20
++save_sim_states: false
++render: false
+diff --git a/libero/configs/test.yaml b/libero/configs/test.yaml
+new file mode 100644
+index 0000000..d96f01b
+--- /dev/null
++++ b/libero/configs/test.yaml
+@@ -0,0 +1,27 @@
++# @package _global_
++defaults:
++  - _self_
++  - data: default
++  - policy: complete_policy
++  - train: default
++  - eval: default
++  - lifelong: basic
++  - test: null
++hydra:
++  run:
++    dir: .  
++seed: 42
++use_wandb: false
++wandb_project: "lifelong learning"
++bddl_folder: null # use default path
++init_states_folder: null # use default path
++load_previous_model: false
++device: "cuda"
++task_embedding_format: "clip"
++task_embedding_one_hot_offset: 1
++pretrain: false
++pretrain_model_path: 
++benchmark_name: "LIBERO_10"
++training: false
++folder: null # use default path
++
+diff --git a/libero/configs/train/adaption.yaml b/libero/configs/train/adaption.yaml
+new file mode 100644
+index 0000000..9adb433
+--- /dev/null
++++ b/libero/configs/train/adaption.yaml
+@@ -0,0 +1,17 @@
++# training
++n_epochs: 100
++batch_size: 18
++num_workers: 12
++grad_clip: 100.
++loss_scale: 1.0
++
++# resume training
++resume: false
++resume_path: ""
++debug: false
++
++use_augmentation: true
++
++defaults:
++    - optimizer@optimizer: adam_w.yaml
++    - scheduler@scheduler: cosine_annealing.yaml
+diff --git a/libero/configs/train/default.yaml b/libero/configs/train/default.yaml
+new file mode 100644
+index 0000000..18b2bde
+--- /dev/null
++++ b/libero/configs/train/default.yaml
+@@ -0,0 +1,17 @@
++# training
++n_epochs: 100
++batch_size: 10
++num_workers: 8
++grad_clip: 100.
++loss_scale: 1.0
++
++# resume training
++resume: false
++resume_path: ""
++debug: false
++
++use_augmentation: true
++
++defaults:
++    - optimizer@optimizer: adam_w.yaml
++    - scheduler@scheduler: cosine_annealing.yaml
+diff --git a/libero/configs/train/optimizer/adam_w.yaml b/libero/configs/train/optimizer/adam_w.yaml
+new file mode 100644
+index 0000000..014e672
+--- /dev/null
++++ b/libero/configs/train/optimizer/adam_w.yaml
+@@ -0,0 +1,6 @@
++name: torch.optim.AdamW
++kwargs:
++  lr: 1e-4
++  betas: [0.9,0.999]
++  eps: 1e-8
++  weight_decay: 0.1
+diff --git a/libero/configs/train/scheduler/cosine_annealing.yaml b/libero/configs/train/scheduler/cosine_annealing.yaml
+new file mode 100644
+index 0000000..d06347b
+--- /dev/null
++++ b/libero/configs/train/scheduler/cosine_annealing.yaml
+@@ -0,0 +1,6 @@
++
++name: torch.optim.lr_scheduler.LambdaLR
++# 这里不再需要 T_max 了
++kwargs:
++    warmup_steps: 500
++    last_epoch: -1
+\ No newline at end of file
+diff --git a/libero/lifelong/algos/base.py b/libero/lifelong/algos/base.py
+new file mode 100644
+index 0000000..e305618
+--- /dev/null
++++ b/libero/lifelong/algos/base.py
+@@ -0,0 +1,334 @@
++import os
++import time
++
++import numpy as np
++import robomimic.utils.tensor_utils as TensorUtils
++import torch
++import torch.nn as nn
++import torch.nn.functional as F
++from torch.utils.data import DataLoader, RandomSampler
++
++from libero.lifelong.metric import *
++from libero.lifelong.models import *
++from libero.lifelong.utils import *
++from libero.lifelong.utils import make_linear_schedule_with_warmup
++from torch.nn.parallel import DistributedDataParallel as DDP
++import torch.distributed as dist
++import math
++
++import pandas as pd
++import itertools
++REGISTERED_ALGOS = {}
++
++def hinge_weight_sigmoid(epoch, t0=78, alpha=3.0, w_max=0.1):
++    s = 1.0 / (1.0 +  math.exp(-(epoch - t0)))
++    return w_max * s
++
++def l2norm(x, eps=1e-8):
++    return x / (x.norm(p=2, dim=-1, keepdim=True) + eps)
++
++def register_algo(policy_class):
++    """Register a policy class with the registry."""
++    policy_name = policy_class.__name__.lower()
++    if policy_name in REGISTERED_ALGOS:
++        raise ValueError("Cannot register duplicate policy ({})".format(policy_name))
++
++    REGISTERED_ALGOS[policy_name] = policy_class
++
++
++def get_algo_class(algo_name):
++    """Get the policy class from the registry."""
++    if algo_name.lower() not in REGISTERED_ALGOS:
++        raise ValueError(
++            "Policy class with name {} not found in registry".format(algo_name)
++        )
++    return REGISTERED_ALGOS[algo_name.lower()]
++
++
++def get_algo_list():
++    return REGISTERED_ALGOS
++
++
++class AlgoMeta(type):
++    """Metaclass for registering environments"""
++
++    def __new__(meta, name, bases, class_dict):
++        cls = super().__new__(meta, name, bases, class_dict)
++
++        # List all algorithms that should not be registered here.
++        _unregistered_algos = []
++
++        if cls.__name__ not in _unregistered_algos:
++            register_algo(cls)
++        return cls
++
++
++class Sequential(nn.Module, metaclass=AlgoMeta):
++    """
++    The sequential finetuning BC baseline, also the superclass of all lifelong
++    learning algorithms.
++    """
++
++    def __init__(self, n_tasks, cfg):
++        super().__init__()
++        self.cfg = cfg
++        self.loss_scale = cfg.train.loss_scale
++        self.n_tasks = n_tasks
++        if not hasattr(cfg, "experiment_dir"):
++            create_experiment_dir(cfg)
++            print(
++                f"[info] Experiment directory not specified. Creating a default one: {cfg.experiment_dir}"
++            )
++        self.experiment_dir = cfg.experiment_dir
++        self.algo = cfg.lifelong.algo
++
++        self.policy = get_policy_class(cfg.policy.policy_type)(cfg, cfg.shape_meta)
++        self.current_task = -1
++
++    def end_task(self, dataset, task_id, benchmark, env=None):
++        """
++        What the algorithm does at the end of learning each lifelong task.
++        """
++        pass
++
++    def start_task(self, task, train_loader):
++        """
++        What the algorithm does at the beginning of learning each lifelong task.
++        """
++        self.current_task = task
++
++        self.optimizer = eval(self.cfg.train.optimizer.name)(
++            self.policy.parameters(),
++            **self.cfg.train.optimizer.kwargs
++        )
++        for name, param in self.policy.module.named_parameters():
++            if param.requires_grad:
++                print(name)
++
++        # build scheduler
++        sched_cfg = self.cfg.train.scheduler.kwargs
++
++        if self.cfg.train.scheduler is not None:
++            warmup_steps = sched_cfg.get("warmup_steps", 500)
++
++            total_steps  = getattr(self, "total_steps", None)
++            if total_steps is None:
++                total_steps = self.cfg.train.n_epochs * len(train_loader)
++
++            lr_lambda = make_linear_schedule_with_warmup(warmup_steps, total_steps)
++
++            self.scheduler = torch.optim.lr_scheduler.LambdaLR(
++                self.optimizer,
++                lr_lambda=lr_lambda,
++                last_epoch=sched_cfg.get("last_epoch", -1),
++            )
++        else:
++            self.scheduler = None
++
++    def map_tensor_to_device(self, data):
++        """Move data to the device specified by self.cfg.device."""
++        return TensorUtils.map_tensor(
++            data, lambda x: safe_device(x, device=self.cfg.device)
++        )
++
++    def observe(self, data,current_task_id,epoch,ifa_info=None):
++        """
++        How the algorithm learns on each data point -- IFA.
++        """
++        data[0] = self.map_tensor_to_device(data[0])
++        self.optimizer.zero_grad()
++        if isinstance(self.policy, DDP):
++            loss,last_feat = self.policy.module.compute_loss(data[0],None,None)
++        else:
++            loss,last_feat = self.policy.compute_loss(data[0],None,None)
++        
++        print('loss:{}'.format(loss))
++
++        task_ids = torch.tensor([int(x) for x in data[1]], dtype=torch.long)
++
++        selected_pair_mask = ifa_info["selected_pair_mask"]
++        sim_language = ifa_info["sim_language"]
++        sim_agent = ifa_info["sim_agent"]
++
++        ifa_task_ids = ifa_info["task_ids"]
++
++        if not torch.is_tensor(selected_pair_mask):
++            selected_pair_mask = torch.as_tensor(selected_pair_mask)
++
++        pairs_below_num = []
++
++        for i, j in itertools.combinations(range(len(ifa_task_ids)), 2):
++            if selected_pair_mask[i, j].item():
++                value = sim_language[i, j].item()
++
++                pairs_below_num.append(
++                    (
++                        int(ifa_task_ids[i]),
++                        int(ifa_task_ids[j]),
++                        value,
++                    )
++                )
++
++        batch_mask = (task_ids == current_task_id) & (task_ids != 6)
++
++        if ifa_info is not None and batch_mask.any().item() and current_task_id > 6:
++
++            batch_size = batch_mask.sum().item()
++            true_feats = last_feat[batch_mask]
++
++            cur_feat = data[0]["feature"]
++            cur_feat = cur_feat.to(true_feats.device).float()
++
++            # [B, 1, 4, 8, 512] -> [B, 4, 8, 512]
++            if cur_feat.dim() == 5 and cur_feat.shape[1] == 1:
++                cur_feat = cur_feat.squeeze(1)
++
++            sample = cur_feat[0, 0, 0, :]   # [B, 512]
++
++            task_id_list = ifa_info["task_ids"]
++            selected_pair_mask = ifa_info["selected_pair_mask"]
++
++            if not torch.is_tensor(selected_pair_mask):
++                selected_pair_mask = torch.as_tensor(selected_pair_mask)
++
++            task_id_tensor = torch.as_tensor(task_id_list)
++
++            cur_pos = (task_id_tensor == current_task_id).nonzero(as_tuple=True)[0]
++
++            if len(cur_pos) == 0:
++                low_sim_tasks = []
++            else:
++                cur_idx = cur_pos.item()
++
++                true_indices = selected_pair_mask[cur_idx].nonzero(as_tuple=True)[0]
++
++                low_sim_tasks = [
++                    int(task_id_tensor[idx].item())
++                    for idx in true_indices
++                    if int(task_id_tensor[idx].item()) != current_task_id
++                ]
++
++            print(f"[IFA] current_task_id={current_task_id}, low_sim_tasks={low_sim_tasks}")
++            if  len(low_sim_tasks)==0:
++                loss_hinge = None
++
++            else:
++                for item in low_sim_tasks:
++                    true_lan_list = []
++                    flase_lan_list = []
++                    for i in range(batch_size):
++                        true_lan_list.append(sample)
++                        false_lan_name = f'{self.cfg.feature_dir}/{item}/0.pt'
++                        flase_lan_list.append(torch.load(false_lan_name, map_location='cuda')['feature'][0,0,0,:])
++
++                    true_lan_list = torch.stack(true_lan_list, dim=0)  # (B,E)
++                    false_lan_list = torch.stack(flase_lan_list, dim=0)  # (B, E)
++
++                    true_feats  = l2norm(true_feats)          # (B,E)
++                    true_lan_list = l2norm(true_lan_list)      # (B,E)
++                    false_lan_list = l2norm(false_lan_list)     # (B,E)
++
++                    sim_language = ifa_info["sim_language"]
++                    ifa_task_ids = ifa_info["task_ids"]
++
++                    if torch.is_tensor(sim_language):
++                        sim_language_cpu = sim_language.detach().cpu()
++                    else:
++                        sim_language_cpu = torch.as_tensor(sim_language)
++
++                    sim = {}
++
++                    for i, tid_i in enumerate(ifa_task_ids):
++                        tid_i = int(tid_i)
++                        sim[tid_i] = {}
++
++                        for j, tid_j in enumerate(ifa_task_ids):
++                            tid_j = int(tid_j)
++                            sim[tid_i][tid_j] = float(sim_language_cpu[i, j].item())
++
++                    gamma = self.cfg.gamma
++                    eps = 1e-6
++
++                    true_feats       = l2norm(true_feats)          # (B,E)
++                    true_lan_list   = l2norm(true_lan_list)       # (B,E)
++                    false_lan_list  = l2norm(false_lan_list)      # (B,E)
++
++                    cos_pos = (true_feats * true_lan_list).sum(-1).clamp(-1 + eps, 1 - eps)   # (B,)
++                    cos_neg = (true_feats * false_lan_list).sum(-1).clamp(-1 + eps, 1 - eps)  # (B,)
++
++                    theta_pos = torch.acos(cos_pos)  # (B,)
++                    theta_neg = torch.acos(cos_neg)  # (B,)
++
++                    cos_ab = sim[current_task_id][item]
++                    cos_ab_t = torch.tensor(cos_ab, dtype=true_feats.dtype, device=true_feats.device).clamp(-1 + eps, 1 - eps)
++                    phi = torch.acos(cos_ab_t)
++
++                    loss_hinge_angle = torch.relu(theta_pos - theta_neg + gamma * phi).mean()
++
++                    loss = loss + 0.1 * loss_hinge_angle.mean()
++
++
++        (self.loss_scale * loss).backward()
++        if self.cfg.train.grad_clip is not None:
++            grad_norm = nn.utils.clip_grad_norm_(
++                self.policy.parameters(), self.cfg.train.grad_clip
++            )
++
++        self.optimizer.step()
++        return loss.item()
++
++    def eval_observe(self, data):
++        data = self.map_tensor_to_device(data)
++        with torch.no_grad():
++            loss = self.policy.compute_loss(data)
++        return loss.item()
++
++    def learn_one_task(self, dataset, task_id, benchmark, result_summary, save_feature=False,saving_dir=None):
++
++        train_dataloader = DataLoader(
++            dataset,
++            batch_size=self.cfg.train.batch_size,
++            num_workers=self.cfg.train.num_workers,
++            sampler=RandomSampler(dataset),
++        )
++
++        self.start_task(task_id,train_dataloader)
++
++        # start training
++
++        for epoch in range(0, self.cfg.train.n_epochs + 1):
++
++            t0 = time.time()
++
++            if save_feature is True:
++                self.policy.train()
++                training_loss = 0.0
++                for (idx, data) in enumerate(train_dataloader):
++                    self.observe(data,task_id,idx, save_feature, saving_dir)
++                break
++
++            self.policy.train()
++            training_loss = 0.0
++            for (idx, data) in enumerate(train_dataloader):
++                loss = self.observe(data,save_feature)
++                training_loss += loss
++
++            training_loss /= len(train_dataloader)
++
++            t1 = time.time()
++
++            print(
++                f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} | time: {(t1-t0)/60:4.2f}"
++            )
++            if epoch % 3 == 0 or epoch == 49:
++                if dist.get_rank() == 0:
++
++                    model_checkpoint_name = os.path.join(self.experiment_dir, f"task{task_id}_model_{epoch}.pth")
++                    
++                    torch_save_model(self.policy, model_checkpoint_name, cfg=self.cfg)
++
++            if self.scheduler is not None and epoch > 0:
++                self.scheduler.step()
++
++    def reset(self):
++        self.policy.reset()
+diff --git a/libero/lifelong/algos/mlr.py b/libero/lifelong/algos/mlr.py
+new file mode 100644
+index 0000000..2798b08
+--- /dev/null
++++ b/libero/lifelong/algos/mlr.py
+@@ -0,0 +1,765 @@
++import os
++
++import numpy as np
++import torch
++import torch.nn as nn
++import torch.nn.functional as F
++from torch.utils.data import ConcatDataset, DataLoader, RandomSampler
++
++from libero.lifelong.algos.base import Sequential
++from libero.lifelong.metric import *
++from libero.lifelong.models import *
++from libero.lifelong.utils import *
++from torch.utils.data.distributed import DistributedSampler
++import torch.distributed as dist
++import itertools
++
++
++import os, glob, random, shutil, hashlib, re
++from pathlib import Path
++from typing import List, Sequence, Dict, Tuple
++
++from tqdm import tqdm
++import math
++
++import glob
++from torch.utils.data import Dataset, DataLoader, DistributedSampler
++
++BUFFER_CAPACITY = 59660000  #A buffer big enough
++
++TASK_PREFIX_RE = re.compile(r'^t(\d+)__')
++
++
++class FileTrajectoryDataset(Dataset):
++    def __init__(self, file_paths, map_location="cpu"):
++        self.file_paths = list(file_paths)
++        if not self.file_paths:
++            raise RuntimeError("No .pt files found.")
++        self.map_location = map_location
++
++    def __len__(self):
++        return len(self.file_paths)
++
++    @staticmethod
++    def detach_to_cpu(x):
++        if torch.is_tensor(x):
++            return x.detach().cpu()
++        elif isinstance(x, dict):
++            return {k: FileTrajectoryDataset.detach_to_cpu(v) for k, v in x.items()}
++        elif isinstance(x, list):
++            return [FileTrajectoryDataset.detach_to_cpu(v) for v in x]
++        elif isinstance(x, tuple):
++            return tuple(FileTrajectoryDataset.detach_to_cpu(v) for v in x)
++        else:
++            return x
++
++    def __getitem__(self, idx):
++        path = self.file_paths[idx]
++        middle = parse_path(path)
++
++        sample = torch.load(path, map_location=self.map_location)
++
++        if "actions" not in sample or "feature" not in sample:
++            raise KeyError(f"{path} missing 'actions' or 'feature'")
++
++        sample = self.detach_to_cpu(sample)
++
++        return sample, middle
++
++# =========================
++# Some tools
++# =========================
++
++def parse_path(path):
++    filename = os.path.basename(path)
++    
++    if filename.startswith("t"):
++        match = re.match(r"t(\d+)", filename)
++        if match:
++            return match.group(1)
++    else:
++        return os.path.split(os.path.dirname(path))[-1]  # "0"
++
++def _list_pt(dir_path: str, patterns: Sequence[str]=("*.pt",)) -> List[str]:
++    if not os.path.isdir(dir_path): return []
++    paths: List[str] = []
++    for pat in patterns:
++        paths.extend(glob.glob(os.path.join(dir_path, pat)))
++    paths.sort()
++    return paths
++
++def _sample(paths: List[str], k: int, rng: random.Random) -> List[str]:
++    if len(paths) <= k: return list(paths)
++    return rng.sample(paths, k)
++
++def _is_rank0() -> bool:
++    return not (dist.is_available() and dist.is_initialized() and dist.get_rank() != 0)
++
++def _unique_dest(dst_dir: str, task_id: int, src_path: str) -> str:
++
++    base = os.path.basename(src_path)
++    stem, ext = os.path.splitext(base)
++    pref = f"t{task_id}__{stem}"
++    cand = os.path.join(dst_dir, pref + ext)
++    if not os.path.exists(cand): return cand
++    h = hashlib.md5(src_path.encode("utf-8")).hexdigest()[:8]
++    cand = os.path.join(dst_dir, f"{pref}__{h}{ext}")
++    if not os.path.exists(cand): return cand
++    i = 1
++    while True:
++        cand2 = os.path.join(dst_dir, f"{pref}__{h}__{i}{ext}")
++        if not os.path.exists(cand2): return cand2
++        i += 1
++
++def _safe_copy(src: str, dst_dir: str, task_id: int) -> str:
++    dst = _unique_dest(dst_dir, task_id, src)
++    shutil.copy2(src, dst)
++    return dst
++
++def _group_buffer_by_task(buffer_dir: str) -> Dict[int, List[str]]:
++    groups: Dict[int, List[str]] = {}
++    for p in _list_pt(buffer_dir):
++        m = TASK_PREFIX_RE.match(os.path.basename(p))
++        tid = int(m.group(1)) if m else -1
++        groups.setdefault(tid, []).append(p)
++    return groups
++
++
++def build_dataset_for_task(base_dir: str, task_id: int, buffer_dir: str, seed: int = 42, start=6) -> FileTrajectoryDataset:
++    rng = random.Random(seed)
++    task_dir = os.path.join(base_dir, str(task_id))
++    task_paths = _list_pt(task_dir)
++    if not task_paths:
++        raise FileNotFoundError(f"No .pt files in {task_dir}")
++    if task_id == start: #############################################$$$$$$$$$$$$
++        mix_paths = task_paths
++    else:
++        buf_paths = _list_pt(buffer_dir)
++        mix_paths = (buf_paths if buf_paths else []) + task_paths
++    rng.shuffle(mix_paths)
++    return FileTrajectoryDataset(mix_paths)
++
++def update_buffer_equal_quota_10( 
++    base_dir: str,
++    task_id: int,
++    buffer_dir: str,
++    *,
++    capacity: int = BUFFER_CAPACITY,
++    seed: int = 42,
++    drop_policy: str = "random",  # or "oldest"
++    rate=0.5
++) -> Tuple[int, int, int, int, Dict[int, int]]:
++    """
++    Strategy: buffer capacity = `capacity`, and the current task is task `task_id` (0-indexed).
++
++    - Identify the set of previous tasks (`prev_task_ids`) already stored in the buffer
++      by parsing the `t{tid}__` prefix. Samples without a valid prefix are assigned
++      to a special task group `-1`.
++    - Total number of tasks = number of known previous tasks + 1 (the current task).
++    - Per-task quota: `per_task_quota = capacity // num_tasks`.
++    - If the buffer does not exceed capacity:
++        - Append only a 50% subset of samples from the current task.
++        - Existing samples are not removed.
++    - If the buffer exceeds capacity:
++        - First, trim each previous task to its quota.
++        - Remove all samples from the unknown group (`-1`).
++        - Then add up to `per_task_quota` samples from the 10% subset of the current task.
++    - If a task contains fewer samples than its quota, all of its samples are kept.
++      No additional samples are added to fill the quota, so the final buffer size
++      may be smaller than `capacity`.
++
++    Returns:
++        tuple:
++            (
++                final_total_count,
++                num_added_this_round,
++                num_removed_this_round,
++                per_task_quota,
++                final_counts_per_task: dict
++            )
++    """
++
++    if not _is_rank0():
++        groups = _group_buffer_by_task(buffer_dir)
++        final_count = sum(len(v) for v in groups.values())
++        return (final_count, 0, 0, 0, {k: len(v) for k, v in groups.items()})
++
++    rng = random.Random(seed)
++    Path(buffer_dir).mkdir(parents=True, exist_ok=True)
++
++    curr_dir = os.path.join(base_dir, str(task_id))
++    curr_all = _list_pt(curr_dir)
++    if not curr_all:
++        raise FileNotFoundError(f"No .pt files in {curr_dir}")
++
++    ten_pct = max(1, math.ceil(len(curr_all) * rate))
++    curr_10pct = _sample(curr_all, ten_pct, rng)
++
++
++    groups = _group_buffer_by_task(buffer_dir)
++    known_prev_ids = sorted([tid for tid in groups.keys() if tid >= 0])
++    num_tasks = len(known_prev_ids) + 1
++    per_quota = capacity // num_tasks if num_tasks > 0 else capacity
++
++    prev_total = sum(len(v) for v in groups.values())
++    if prev_total + len(curr_10pct) <= capacity:
++        added = 0
++        for src in curr_10pct:
++            _safe_copy(src, buffer_dir, task_id=task_id)
++            added += 1
++        groups = _group_buffer_by_task(buffer_dir)
++        final_total = sum(len(v) for v in groups.values())
++        per_counts = {k: len(v) for k, v in groups.items()}
++        return (final_total, added, 0, per_quota, per_counts)
++
++    dropped = 0
++    for tid in list(groups.keys()):
++        limit = 0 if tid < 0 else per_quota
++        files = groups[tid]
++        if len(files) <= limit:
++            continue
++        if drop_policy == "oldest":
++            files_sorted = sorted(files, key=lambda p: os.path.getmtime(p))  # 最旧先删
++        else:
++            files_sorted = list(files)
++            rng.shuffle(files_sorted)
++        to_drop = files_sorted[limit:]
++        for p in to_drop:
++            try:
++                Path(p).unlink()
++                dropped += 1
++            except FileNotFoundError:
++                pass
++        groups[tid] = files_sorted[:limit]
++
++    add_limit = min(per_quota, len(curr_10pct))
++    picked = _sample(curr_10pct, add_limit, rng)
++    added = 0
++    for src in picked:
++        _safe_copy(src, buffer_dir, task_id=task_id)
++        added += 1
++
++    groups = _group_buffer_by_task(buffer_dir)
++    final_total = sum(len(v) for v in groups.values())
++    per_counts = {k: len(v) for k, v in groups.items()}
++    return (final_total, added, dropped, per_quota, per_counts)
++
++########################################################################################################
++
++def _load_feature_from_pt(pt_path, language_idx=0, agent_idx=1):
++    """
++    Load one .pt feature file.
++
++    Expected actual feature shape:
++        [1, 8, 4, 512]
++
++    Meaning:
++        1   = batch
++        8   = timestep/window
++        4   = modality
++        512 = feature dim
++
++    Return:
++        lang_feat:  [1, 512]
++        agent_feat: [8, 512]
++    """
++    data = torch.load(pt_path, map_location="cpu")
++
++    if isinstance(data, dict):
++        feat = data["feature"]
++    else:
++        feat = data
++
++    if not torch.is_tensor(feat):
++        raise TypeError(f"feature in {pt_path} is not a tensor, got {type(feat)}")
++
++    feat = feat.detach().float().cpu()
++
++    # [1, 8, 4, 512] -> [8, 4, 512]
++    if feat.dim() == 4 and feat.shape[0] == 1:
++        feat = feat.squeeze(0)
++
++    if feat.dim() != 3:
++        raise ValueError(f"Unexpected feature shape in {pt_path}: {feat.shape}")
++
++    # Case 1: real layout [T, M, E], e.g. [8, 4, 512]
++    if feat.shape[1] == 4:
++        lang_feat = feat[0, language_idx, :].unsqueeze(0)  # [1, 512]
++        agent_feat = feat[:, agent_idx, :]                 # [T, 512]
++
++    # Case 2: fallback layout [M, T, E], e.g. [4, 8, 512]
++    elif feat.shape[0] == 4:
++        lang_feat = feat[language_idx, 0, :].unsqueeze(0)   # [1, 512]
++        agent_feat = feat[agent_idx, :, :]                  # [T, 512]
++
++    else:
++        raise ValueError(
++            f"Cannot infer feature layout for {pt_path}, shape={feat.shape}. "
++            "Expected [8,4,512] or [4,8,512]."
++        )
++
++    return lang_feat, agent_feat
++
++
++def _concat_task_features(feats):
++    """
++    feats: list of tensors, each tensor can be [1, 512] or [T, 512]
++
++    Return:
++        [N_total, 512]
++    """
++    if len(feats) == 0:
++        return None
++
++    clean_feats = []
++
++    for x in feats:
++        if x is None:
++            continue
++
++        if x.dim() == 1:
++            x = x.unsqueeze(0)
++
++        if x.dim() != 2:
++            raise ValueError(f"Expected feature shape [N, D], got {x.shape}")
++
++        clean_feats.append(x)
++
++    if len(clean_feats) == 0:
++        return None
++
++    return torch.cat(clean_feats, dim=0)
++
++
++def _pairwise_cosine_mean(feats_i, feats_j, eps=1e-8):
++    """
++    Strict pairwise cosine mean:
++
++        Sim(T_i, T_j)
++        = 1 / (Ni * Nj) * sum_i sum_j cos(h_i, h_j)
++
++    Args:
++        feats_i: [Ni, D]
++        feats_j: [Nj, D]
++
++    Return:
++        scalar float
++    """
++    if feats_i is None or feats_j is None:
++        return float("nan")
++
++    if feats_i.numel() == 0 or feats_j.numel() == 0:
++        return float("nan")
++
++    feats_i = feats_i.float()
++    feats_j = feats_j.float()
++
++    if feats_i.dim() == 1:
++        feats_i = feats_i.unsqueeze(0)
++
++    if feats_j.dim() == 1:
++        feats_j = feats_j.unsqueeze(0)
++
++    feats_i = F.normalize(feats_i, dim=-1, eps=eps)
++    feats_j = F.normalize(feats_j, dim=-1, eps=eps)
++
++    sim_matrix = feats_i @ feats_j.T
++
++    return sim_matrix.mean().item()
++
++
++def collect_current_task_features(
++    task_id,
++    current_feat_root="/work/fyu/cl/robot/feature",
++    language_idx=0,
++    agent_idx=1,
++):
++    """
++    Current task features are stored in:
++        current_feat_root/{task_id}/*.pt
++
++    Return:
++        lang_feats:  list of [1, 512]
++        agent_feats: list of [T, 512]
++    """
++    task_dir = os.path.join(current_feat_root, str(task_id))
++    pt_files = sorted(glob.glob(os.path.join(task_dir, "*.pt")))
++
++    if len(pt_files) == 0:
++        raise FileNotFoundError(
++            f"No .pt files found for current task {task_id}: {task_dir}"
++        )
++
++    lang_feats = []
++    agent_feats = []
++
++    for pt in pt_files:
++        lang, agent = _load_feature_from_pt(
++            pt,
++            language_idx=language_idx,
++            agent_idx=agent_idx,
++        )
++
++        lang_feats.append(lang)
++        agent_feats.append(agent)
++
++    return lang_feats, agent_feats
++
++
++def collect_replay_task_features(
++    replay_dir="/work",
++    max_old_task_id=None,
++    language_idx=0,
++    agent_idx=1,
++):
++    """
++    Replay files are named like:
++        t6__949.pt
++
++    where 6 means task 6.
++
++    Return:
++        replay_features = {
++            6: {
++                "language": [tensor, tensor, ...],
++                "agent": [tensor, tensor, ...],
++            },
++            7: ...
++        }
++    """
++    pt_files = sorted(glob.glob(os.path.join(replay_dir, "*.pt")))
++
++    replay_features = {}
++
++    pattern = re.compile(r"t(\d+)__.*\.pt$")
++
++    for pt in pt_files:
++        name = os.path.basename(pt)
++        m = pattern.match(name)
++
++        if m is None:
++            continue
++
++        old_task_id = int(m.group(1))
++
++        if max_old_task_id is not None and old_task_id >= max_old_task_id:
++            continue
++
++        lang, agent = _load_feature_from_pt(
++            pt,
++            language_idx=language_idx,
++            agent_idx=agent_idx,
++        )
++
++        if old_task_id not in replay_features:
++            replay_features[old_task_id] = {
++                "language": [],
++                "agent": [],
++            }
++
++        replay_features[old_task_id]["language"].append(lang)
++        replay_features[old_task_id]["agent"].append(agent)
++
++    return replay_features
++
++
++def build_ifa_similarity_matrix(
++    current_task_id,
++    current_feat_root="/work",
++    replay_dir="/work",
++    language_idx=0,
++    agent_idx=1,
++    top_ratio=0.5,
++):
++    """
++    Build IFA similarity information.
++
++    Selection logic:
++        1. Compute similarities for all task pairs, excluding diagonal.
++           Example:
++               task_ids = [6, 7, 8, 9]
++               candidate_pairs = [(6,7), (6,8), (6,9), (7,8), (7,9), (8,9)]
++
++        2. Select top ceil(50%) pairs by language similarity.
++
++        3. Select top ceil(50%) pairs by agent-view similarity.
++
++        4. Take intersection.
++
++        5. Only keep pairs that contain current_task_id.
++
++    Return:
++        ifa_info = {
++            "task_ids": task_ids,
++            "sim_language": sim_language,
++            "sim_agent": sim_agent,
++            "selected_pair_mask": selected_pair_mask,
++            "selected_pairs": selected_pairs,
++            "candidate_pairs": candidate_pairs,
++            "lang_top_pairs": lang_top_pairs,
++            "agent_top_pairs": agent_top_pairs,
++        }
++    """
++
++    current_task_id = int(current_task_id)
++
++    # ============================================================
++    # 1. collect old replay features
++    # ============================================================
++    replay_features = collect_replay_task_features(
++        replay_dir=replay_dir,
++        max_old_task_id=current_task_id,
++        language_idx=language_idx,
++        agent_idx=agent_idx,
++    )
++
++    # ============================================================
++    # 2. collect current task features
++    # ============================================================
++    cur_lang_feats, cur_agent_feats = collect_current_task_features(
++        task_id=current_task_id,
++        current_feat_root=current_feat_root,
++        language_idx=language_idx,
++        agent_idx=agent_idx,
++    )
++
++    # ============================================================
++    # 3. merge old + current features
++    # ============================================================
++    all_features = {}
++
++    for tid, feats in replay_features.items():
++        all_features[int(tid)] = feats
++
++    all_features[current_task_id] = {
++        "language": cur_lang_feats,
++        "agent": cur_agent_feats,
++    }
++
++    task_ids = sorted(all_features.keys())
++    num_tasks = len(task_ids)
++
++    if current_task_id not in task_ids:
++        raise RuntimeError(
++            f"Current task {current_task_id} is missing from task_ids."
++        )
++
++    # ============================================================
++    # 4. concatenate features per task
++    # ============================================================
++    task_features = {}
++
++    for tid in task_ids:
++        task_features[tid] = {
++            "language": _concat_task_features(all_features[tid]["language"]),
++            "agent": _concat_task_features(all_features[tid]["agent"]),
++        }
++
++    # ============================================================
++    # 5. build pairwise similarity matrices
++    # ============================================================
++    sim_language = torch.zeros(num_tasks, num_tasks)
++    sim_agent = torch.zeros(num_tasks, num_tasks)
++
++    for i, ti in enumerate(task_ids):
++        for j, tj in enumerate(task_ids):
++            sim_language[i, j] = _pairwise_cosine_mean(
++                task_features[ti]["language"],
++                task_features[tj]["language"],
++            )
++
++            sim_agent[i, j] = _pairwise_cosine_mean(
++                task_features[ti]["agent"],
++                task_features[tj]["agent"],
++            )
++
++    # ============================================================
++    # 6. construct all non-diagonal candidate pairs
++    # ============================================================
++    candidate_pairs = []
++    lang_scores = []
++    agent_scores = []
++
++    for ti, tj in itertools.combinations(task_ids, 2):
++        i = task_ids.index(ti)
++        j = task_ids.index(tj)
++
++        candidate_pairs.append((ti, tj))
++        lang_scores.append(sim_language[i, j].item())
++        agent_scores.append(sim_agent[i, j].item())
++
++    # ============================================================
++    # 7. select top ceil(50%) by language and agent-view
++    # ============================================================
++    selected_pairs = []
++    selected_pair_mask = torch.zeros(num_tasks, num_tasks, dtype=torch.bool)
++
++    lang_top_pairs = []
++    agent_top_pairs = []
++
++    if len(candidate_pairs) > 0:
++        lang_scores_t = torch.tensor(lang_scores)
++        agent_scores_t = torch.tensor(agent_scores)
++
++        k = max(1, math.ceil(len(candidate_pairs) * top_ratio))
++
++        lang_top_idx = torch.topk(
++            lang_scores_t,
++            k=k,
++            largest=True,
++        ).indices.tolist()
++
++        agent_top_idx = torch.topk(
++            agent_scores_t,
++            k=k,
++            largest=True,
++        ).indices.tolist()
++
++        lang_top_pairs = [
++            (candidate_pairs[idx], lang_scores[idx])
++            for idx in lang_top_idx
++        ]
++
++        agent_top_pairs = [
++            (candidate_pairs[idx], agent_scores[idx])
++            for idx in agent_top_idx
++        ]
++
++        selected_indices = sorted(
++            list(set(lang_top_idx).intersection(set(agent_top_idx)))
++        )
++
++        # 只保留包含当前任务的 pair
++        for idx in selected_indices:
++            ti, tj = candidate_pairs[idx]
++
++            if current_task_id not in (ti, tj):
++                continue
++
++            selected_pairs.append((ti, tj))
++
++            i = task_ids.index(ti)
++            j = task_ids.index(tj)
++
++            selected_pair_mask[i, j] = True
++            selected_pair_mask[j, i] = True
++
++    ifa_info = {
++        "task_ids": task_ids,
++        "sim_language": sim_language,
++        "sim_agent": sim_agent,
++        "selected_pair_mask": selected_pair_mask,
++        "selected_pairs": selected_pairs,
++
++        # debug info
++        "candidate_pairs": candidate_pairs,
++        "lang_top_pairs": lang_top_pairs,
++        "agent_top_pairs": agent_top_pairs,
++    }
++
++    return ifa_info
++
++class MLR(Sequential):
++    """
++    The multitask learning baseline/upperbound.
++    """
++
++    def __init__(self, n_tasks, cfg, **policy_kwargs):
++        super().__init__(n_tasks=n_tasks, cfg=cfg, **policy_kwargs)
++        self.cfg = cfg
++
++    def learn_all_tasks(self, datasets, benchmark, result_summary,current_task_id):
++
++        ifa_info = build_ifa_similarity_matrix(
++        current_task_id=current_task_id,
++        current_feat_root=self.cfg.feature_dir,
++        replay_dir=self.cfg.buffer_dir,
++        language_idx=0,
++        agent_idx=1,
++        top_ratio=0.5,
++        )
++
++        base_dir = self.cfg.feature_dir
++        buffer_dir = self.cfg.buffer_dir
++
++        dataset = build_dataset_for_task(base_dir, current_task_id, buffer_dir, self.cfg.seed, start=self.cfg.start_task)
++        print("Train set size:", len(dataset))
++
++        # learn on all tasks, only used in multitask learning
++
++        train_sampler = DistributedSampler(
++            dataset=dataset,
++            num_replicas=dist.get_world_size(),
++            rank=dist.get_rank(),
++            shuffle=True,
++        )
++
++        train_dataloader = DataLoader(
++            dataset,
++            batch_size=self.cfg.train.batch_size,
++            num_workers=self.cfg.train.num_workers,
++            sampler=train_sampler,
++            persistent_workers=False,
++        )
++        self.start_task(-1,train_dataloader)
++
++        cumulated_counter = 0.0
++        successes = []
++        losses = []
++
++        # start training
++        for epoch in range(0, self.cfg.train.n_epochs):
++            train_sampler.set_epoch(epoch)
++            pbar = tqdm(train_dataloader, desc=f"Epoch {epoch}", unit="batch")
++            t0 = time.time()
++            self.policy.train()
++            training_loss = 0.0
++            for (idx, data) in enumerate(pbar):
++                loss = self.observe(data,current_task_id,epoch,ifa_info=ifa_info)
++                training_loss += loss
++                avg_loss = training_loss / (idx + 1)
++                pbar.set_postfix(loss=f"{avg_loss:.4f}")
++
++                training_loss /= len(train_dataloader)
++                
++            t1 = time.time()
++
++            print(
++                f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} | time: {(t1-t0)/60:4.2f}"
++            )
++
++            if epoch % 5 == 0 and epoch > 69:  # evaluate BC loss
++
++                self.policy.eval()
++
++                model_checkpoint_name_ep = os.path.join(
++                    self.experiment_dir, f"mlrifa_{current_task_id}_model_ep{epoch}.pth"
++                )
++                if not dist.is_initialized() or dist.get_rank() == 0:
++
++                    torch_save_model(self.policy, model_checkpoint_name_ep, cfg=self.cfg)
++                    losses.append(training_loss)
++
++                # Defaultly, we don't do evaluation during training.
++                if self.cfg.lifelong.eval_in_train:
++                    success_rates = evaluate_multitask_training_success(
++                        self.cfg, self, benchmark, all_tasks
++                    )
++                    success_rate = np.mean(success_rates)
++                else:
++                    success_rate = 0.0
++                successes.append(success_rate)
++                cumulated_counter += 1.0
++
++            if self.scheduler is not None and epoch > 0:
++                self.scheduler.step()
++
++        # return the metrics regarding forward transfer
++        losses = np.array(losses)
++        successes = np.array(successes)
++
++        total, added, dropped, quota, counts = update_buffer_equal_quota_10(
++            base_dir, current_task_id, buffer_dir,
++            capacity=BUFFER_CAPACITY, seed= self.cfg.seed, drop_policy="random",rate=self.cfg.past_data_rate
++        )
++        return successes.sum() / cumulated_counter, losses.sum() / cumulated_counter
+\ No newline at end of file
+diff --git a/libero/lifelong/metric.py b/libero/lifelong/metric.py
+new file mode 100644
+index 0000000..4fce446
+--- /dev/null
++++ b/libero/lifelong/metric.py
+@@ -0,0 +1,242 @@
++import copy
++import gc
++import numpy as np
++import os
++
++import multiprocessing as mp
++os.environ["MUJOCO_GL"] = "egl"
++# 处理 CUDA_VISIBLE_DEVICES 重映射：对进程而言可见列表的第0张就是 "0"
++os.environ["MUJOCO_EGL_DEVICE_ID"] = os.getenv("CUDA_VISIBLE_DEVICES", "0").split(",")[0]
++# 一些服务器上需要无 surface EGL
++os.environ["EGL_PLATFORM"] = "surfaceless"
++# 关键：避免 fork 带来的 GL 状态问题
++mp.set_start_method("spawn", force=True)   # <- 关键：在任何 torch/robosuite 导入之前import torch.nn.functional as F
++
++
++import robomimic.utils.obs_utils as ObsUtils
++import robomimic.utils.tensor_utils as TensorUtils
++import time
++import torch
++
++from torch.utils.data import DataLoader
++
++from libero.libero.envs import OffScreenRenderEnv, SubprocVectorEnv, DummyVectorEnv
++from libero.libero.utils.time_utils import Timer
++from libero.libero.utils.video_utils import VideoWriter
++from libero.lifelong.utils import *
++import imageio, h5py
++
++# torch.backends.cudnn.enabled = False         # <- 让这行生效
++# torch.backends.cudnn.benchmark = False
++# torch.set_grad_enabled(False)                # 评测无需梯度更稳
++
++
++
++def raw_obs_to_tensor_obs(obs, intr, mask, cfg):
++    """
++    Prepare the tensor observations as input for the algorithm.
++    """
++    env_num = len(obs)
++
++    data = {
++        "obs": {},
++        "task_emb": intr.repeat(env_num, 1),
++        "masks": mask.repeat(env_num, 1),
++    }
++
++    all_obs_keys = []
++    for modality_name, modality_list in cfg.data.obs.modality.items():
++        for obs_name in modality_list:
++            data["obs"][obs_name] = []
++        all_obs_keys += modality_list
++
++    for k in range(env_num):
++        for obs_name in all_obs_keys:
++            data["obs"][obs_name].append(
++                ObsUtils.process_obs(
++                    torch.from_numpy(obs[k][cfg.data.obs_key_mapping[obs_name]]),
++                    obs_key=obs_name,
++                ).float()
++            )
++
++    for key in data["obs"]:
++        data["obs"][key] = torch.stack(data["obs"][key])
++
++    data = TensorUtils.map_tensor(data, lambda x: safe_device(x, device=cfg.device))
++    
++    return data
++
++def evaluate_one_task_success(
++    cfg, algo, task, instr, mask, task_id, sim_states=None, task_str="", render = True,see=None
++):
++    """
++    Evaluate a single task's success rate
++    sim_states: if not None, will keep track of all simulated states during
++                evaluation, mainly for visualization and debugging purpose
++    task_str:   the key to access sim_states dictionary
++    """
++    # render = cfg.eval.render
++    with Timer() as t:
++        if cfg.lifelong.algo == "PackNet":  # need preprocess weights for PackNet
++            algo = algo.get_eval_algo(task_id)
++
++        algo.eval()
++        env_num =  10
++        eval_loop_num = (cfg.eval.n_eval + env_num - 1) // env_num
++
++        # initiate evaluation envs
++        env_args = {
++            "bddl_file_name": os.path.join(
++                cfg.bddl_folder, task.problem_folder, task.bddl_file
++            ),
++            "camera_heights": cfg.data.img_h,
++            "camera_widths": cfg.data.img_w,
++        }
++
++        # Try to handle the frame buffer issue
++
++        env = SubprocVectorEnv(
++            [lambda: OffScreenRenderEnv(**env_args) for _ in range(env_num)]
++        )
++
++        ### Evaluation loop
++        # get fixed init states to control the experiment randomness
++        init_states_path = os.path.join(
++            cfg.init_states_folder, task.problem_folder, task.init_states_file
++        )
++        init_states = torch.load(init_states_path)
++        ####################################################################################################################
++        num_success = 0
++        for i in range(eval_loop_num):
++            seed = see + i
++            env.seed(seed)
++            env.reset()
++            env.seed(seed) 
++            indices = np.arange(i * env_num, (i + 1) * env_num) % init_states.shape[0]
++            init_states_ = init_states[indices]
++
++            dones = [False] * env_num
++            steps = 0
++            algo.reset()
++            obs = env.set_init_state(init_states_)
++            history_buffer = []
++           
++            # dummy actions [env_num, 7] all zeros for initial physics simulation
++            dummy = np.zeros((env_num, 7))
++            for _ in range(5):
++                obs, _, _, _ = env.step(dummy)
++
++            frames = []
++            with torch.no_grad():
++
++                while steps < cfg.eval.max_steps:
++                    steps += 1
++
++                    data = raw_obs_to_tensor_obs(obs, instr, mask, cfg)
++
++                    history_buffer.append(data)
++                    if len(history_buffer) > 8:
++                        history_buffer.pop(0)
++
++                    sliding_window = history_buffer.copy()
++
++
++                    def stack_trajectory(data_buffer):
++                        assert len(data_buffer) > 0
++                        result = {
++                            "obs": {},
++                            "task_emb": data_buffer[0]["task_emb"],  # 不变
++                            "masks": data_buffer[0]["masks"],  # 不变
++                        }
++                        obs_keys = data_buffer[0]["obs"].keys()
++                        for key in obs_keys:
++                            result["obs"][key] = torch.stack(
++                                [step["obs"][key] for step in data_buffer],
++                                dim=1  # 这里就是 B,T,C,H,W
++                            )
++                        return result
++
++                    batch_data = stack_trajectory(sliding_window)
++
++                    actions = algo.policy.get_action(batch_data)
++
++                    obs, reward, done, info = env.step(actions)
++
++                    # check whether succeed
++                    for k in range(env_num):
++                        dones[k] = dones[k] or done[k]
++
++                    if all(dones):
++                        break
++
++                # a new form of success record
++                for k in range(env_num):
++                    if i * env_num + k < cfg.eval.n_eval:
++                        num_success += int(dones[k])
++
++        success_rate = num_success / cfg.eval.n_eval
++        env.close()
++        gc.collect()
++    print(f"[info] evaluate task {task_id} takes {t.get_elapsed_time():.1f} seconds")
++    return success_rate
++
++
++def evaluate_success(cfg, algo, benchmark, task_ids, result_summary=None,see=None):
++    """
++    Evaluate the success rate for all task in task_ids.
++    """
++    algo.eval()
++    successes = []
++    for i in task_ids:
++        task_i = benchmark.get_task(i)
++        instr, mask = benchmark.get_task_emb(i)
++        task_str = f"k{task_ids[-1]}_p{i}"
++        curr_summary = result_summary[task_str] if result_summary is not None else None
++        success_rate = evaluate_one_task_success(
++            cfg, algo, task_i, instr, mask , i, sim_states=curr_summary, task_str=task_str,see = see
++        )
++        successes.append(success_rate)
++    return np.array(successes)
++
++
++def evaluate_multitask_training_success(cfg, algo, benchmark, task_ids):
++    """
++    Evaluate the success rate for all task in task_ids.
++    """
++    algo.eval()
++    successes = []
++    for i in task_ids:
++        task_i = benchmark.get_task(i)
++        task_emb = benchmark.get_task_emb(i)
++        success_rate = evaluate_one_task_success(cfg, algo, task_i, task_emb, i)
++        successes.append(success_rate)
++    return np.array(successes)
++
++
++@torch.no_grad()
++def evaluate_loss(cfg, algo, benchmark, datasets):
++    """
++    Evaluate the loss on all datasets.
++    """
++    algo.eval()
++    losses = []
++    for i, dataset in enumerate(datasets):
++        if cfg.lifelong.algo == "PackNet":  # need preprocess weights for PackNet
++            algo = algo.get_eval_algo(task_id=i)
++
++        dataloader = DataLoader(
++            dataset,
++            batch_size=cfg.eval.batch_size,
++            num_workers=cfg.eval.num_workers,
++            shuffle=False,
++        )
++        test_loss = 0
++        for data in dataloader:
++            data = TensorUtils.map_tensor(
++                data, lambda x: safe_device(x, device=cfg.device)
++            )
++            loss = algo.policy.compute_loss(data)
++            test_loss += loss.item()
++        test_loss /= len(dataloader)
++        losses.append(test_loss)
++    return np.array(losses)
+diff --git a/libero/lifelong/models/base_policy.py b/libero/lifelong/models/base_policy.py
+new file mode 100644
+index 0000000..c2c0aa0
+--- /dev/null
++++ b/libero/lifelong/models/base_policy.py
+@@ -0,0 +1,161 @@
++import robomimic.utils.tensor_utils as TensorUtils
++import torch
++import torch.nn as nn
++import numpy as np
++import os
++from libero.lifelong.models.modules.data_augmentation import (
++    IdentityAug,
++    TranslationAug,
++    ImgColorJitterAug,
++    ImgColorJitterGroupAug,
++    BatchWiseImgColorJitterAug,
++    DataAugGroup,
++    RandomErasingAug,
++    RandomAffineAug
++)
++
++
++REGISTERED_POLICIES = {}
++
++
++def register_policy(policy_class):
++    """Register a policy class with the registry."""
++    policy_name = policy_class.__name__.lower()
++    if policy_name in REGISTERED_POLICIES:
++        raise ValueError("Cannot register duplicate policy ({})".format(policy_name))
++
++    REGISTERED_POLICIES[policy_name] = policy_class
++
++
++def get_policy_class(policy_name):
++    """Get the policy class from the registry."""
++    if policy_name.lower() not in REGISTERED_POLICIES:
++        raise ValueError(
++            "Policy class with name {} not found in registry".format(policy_name)
++        )
++    return REGISTERED_POLICIES[policy_name.lower()]
++
++
++def get_policy_list():
++    return REGISTERED_POLICIES
++
++
++class PolicyMeta(type):
++    """Metaclass for registering environments"""
++
++    def __new__(meta, name, bases, class_dict):
++        cls = super().__new__(meta, name, bases, class_dict)
++
++        # List all policies that should not be registered here.
++        _unregistered_policies = ["BasePolicy"]
++
++        if cls.__name__ not in _unregistered_policies:
++            register_policy(cls)
++        return cls
++
++
++class BasePolicy(nn.Module, metaclass=PolicyMeta):
++    def __init__(self, cfg, shape_meta):
++        super().__init__()
++        self.cfg = cfg
++        self.device = cfg.device
++        self.shape_meta = shape_meta
++
++        policy_cfg = cfg.policy
++        rgb_key = cfg.data.obs.modality.rgb[0]
++
++        if self.cfg.aug:
++
++            input_shape = shape_meta["all_shapes"][rgb_key]
++
++            # color jitter
++
++            policy_cfg.color_aug.network_kwargs["input_shape"] = input_shape
++            color_aug = eval(policy_cfg.color_aug.network)(
++                **policy_cfg.color_aug.network_kwargs
++            )
++
++            # affine / translation
++            policy_cfg.translation_aug.network_kwargs["input_shape"] = input_shape
++            translation_aug = eval(policy_cfg.translation_aug.network)(
++                **policy_cfg.translation_aug.network_kwargs
++            )
++
++            # random erase
++            policy_cfg.erase_aug.network_kwargs["input_shape"] = input_shape
++            erase_aug = eval(policy_cfg.erase_aug.network)(
++                **policy_cfg.erase_aug.network_kwargs
++            )
++
++            self.img_aug = DataAugGroup((color_aug, translation_aug, erase_aug))
++
++
++        self.training = cfg.training
++
++    def forward(self, data):
++        """
++        The forward function for training.
++        """
++        raise NotImplementedError
++
++    def get_action(self, data):
++        """
++        The api to get policy's action.
++        """
++        raise NotImplementedError
++
++    def _get_img_tuple(self, data):
++        img_tuple = tuple(
++            [data["obs"][img_name] for img_name in self.rgbkey.keys()]
++        )
++        return img_tuple
++
++    def _get_aug_output_dict(self, out):
++        img_dict = {
++            img_name: out[idx]
++            for idx, img_name in enumerate(self.rgbkey.keys())
++        }
++        return img_dict
++
++    def preprocess_input(self, data, train_mode=True):
++        if self.cfg.train.use_augmentation:
++            img_tuple = self._get_img_tuple(data)
++
++            aug_out = self._get_aug_output_dict(self.img_aug(img_tuple))
++
++            for img_name in self.rgbkey.keys():
++                data["obs"][img_name] = aug_out[img_name]
++
++            return data
++        else:
++
++            data["task_emb"] = data["task_emb"].squeeze(1)
++        return data
++
++    def compute_loss(self, data,taskid, idx, reduction="mean", save_feature=False,saving_dir=None):
++
++        if save_feature is True:
++            data = self.preprocess_input(data)
++            dist = self.forward(data)
++
++            task_dir = os.path.join(saving_dir, str(taskid))
++            os.makedirs(task_dir, exist_ok=True)
++            save_path = os.path.join(task_dir, f"{idx}.pt")
++
++            torch.save({
++                "actions": data["actions"].cpu(),
++                "feature": dist.cpu()
++            }, save_path)
++        ######################################################################################################
++        else:
++
++            # data = self.preprocess_input(data, train_mode=True)
++            dist,last_feat = self.forward(data["feature"].squeeze(1))
++            loss = self.policy_head.loss_fn(dist, data["actions"].squeeze(1), reduction)
++            return loss,last_feat
++
++    def reset(self):
++        """
++        Clear all "history" of the policy if there exists any.
++        """
++        pass
+diff --git a/libero/lifelong/models/brief.py b/libero/lifelong/models/brief.py
+new file mode 100644
+index 0000000..ffa1e5a
+--- /dev/null
++++ b/libero/lifelong/models/brief.py
+@@ -0,0 +1,70 @@
++import robomimic.utils.tensor_utils as TensorUtils
++import torch
++import torch.nn as nn
++
++from libero.lifelong.models.modules.transformer_modules import *
++from libero.lifelong.models.base_policy import BasePolicy
++from libero.lifelong.models.policy_head import *
++
++from libero.lifelong.utils import (
++    torch_load_model,
++
++)
++
++    
++class BriefPolicy(BasePolicy):
++
++    def __init__(self, cfg, shape_meta):
++
++        super().__init__(cfg, shape_meta)
++        policy_cfg = cfg.policy
++        self.training = cfg.training
++
++        self.init = 1
++
++        for param in self.parameters():
++            param.requires_grad = False
++        
++        self.temporal_transformer = OfficialGPT2Decoder(
++            embed_size=512,
++            num_layers=6,
++            num_heads=8,
++            dropout=0.15,
++            max_position_embeddings=32,
++            train = True
++
++        )
++
++        self.policy_head = GMMHead(input_size=512, output_size=7, 
++                                           num_modes=policy_cfg.num_gmm_modes, min_std=1e-4,)
++
++        if self.init == 1:
++            self.init = 0
++            self.load_state_dict(torch_load_model(cfg.pretrain)[0],strict=False)
++
++
++    def forward(self, data):
++
++        x = self.temporal_encode(data)    # (B, T, E)
++        last_feat = x[:, -1, :]        # (B, E)
++        if self.training:
++            return self.policy_head(last_feat), last_feat
++
++
++    def temporal_encode(self, x):
++        B, T, M, E = x.shape
++
++        x = TensorUtils.join_dimensions(x, 1, 2)
++        N = T * M
++
++        out = self.temporal_transformer(x)  # (B, N, E)
++
++        out = out.view(B, T, M, E)
++        return out[:, :, 0, :]     # (B, T, E)
++
++
++    def reset(self):
++        """
++        Reset the latent queue at the start of each new episode/trajectory.
++        """
++        self.latent_queue = []
+\ No newline at end of file
+diff --git a/libero/lifelong/models/complete_policy.py b/libero/lifelong/models/complete_policy.py
+new file mode 100644
+index 0000000..4860243
+--- /dev/null
++++ b/libero/lifelong/models/complete_policy.py
+@@ -0,0 +1,258 @@
++import robomimic.utils.tensor_utils as TensorUtils
++import torch
++import torch.nn as nn
++
++from libero.lifelong.models.modules.rgb_modules import *
++from libero.lifelong.models.modules.language_modules import *
++from libero.lifelong.models.modules.transformer_modules import *
++from libero.lifelong.models.base_policy import BasePolicy
++from libero.lifelong.models.policy_head import *
++from peft import get_peft_config, get_peft_model, LoraConfig, TaskType
++
++from libero.lifelong.utils import (
++    torch_load_model,
++
++)
++    
++class CompletePolicy(BasePolicy):
++
++    def __init__(self, cfg, shape_meta):
++
++        super().__init__(cfg, shape_meta)
++        policy_cfg = cfg.policy
++        self.cfg = cfg
++        self.training = cfg.training
++
++        self.init = 1
++
++        ##### 1. Vision Encoder (Frozen CLIP ViT) #####
++        # We assume rgb_modules.CLIPVisionEncoder wraps a pretrained, frozen CLIP ViT
++        # self.image_encoders = nn.ModuleDict()
++        self.image_proj = nn.ModuleDict()    # ← 新增这一行
++
++        embed_size = policy_cfg.embed_size  # latent dimension E-------------------------------------------?????????????????????????????????????????????
++
++        self.film_scale = nn.ModuleDict()
++        self.film_shift = nn.ModuleDict()
++
++        lora_cfg = LoraConfig(
++            r=cfg.policy.rank,           
++            lora_alpha=cfg.policy.alpha,  
++            target_modules=["q_proj", "v_proj"],
++        )
++        for name, shape in shape_meta["all_shapes"].items():
++            if "rgb" in name:
++                break
++
++        # shape is (C, H, W)
++        kwargs = policy_cfg.image_encoder.network_kwargs.copy()
++        kwargs["input_shape"] = shape
++        kwargs["output_size"] = embed_size
++        # CLIPVisionEncoder should freeze its weights internally
++        self.image_encoders = get_peft_model(CLIPVisionEncoder(**kwargs), lora_cfg)
++
++        self.film_scale = nn.Sequential(
++            nn.Linear(embed_size, embed_size),
++            nn.GELU(),
++            nn.Linear(embed_size, embed_size),
++        )
++
++        self.film_shift = nn.Sequential(
++            nn.Linear(embed_size, embed_size),
++            nn.GELU(),
++            nn.Linear(embed_size, embed_size),
++        )
++
++        proj = nn.Linear(768, embed_size) ##########################-------------------------------------------------------?????????????????????????
++        self.image_proj = proj
++ 
++        self.rgbkey = {'agentview_rgb':0, 'eye_in_hand_rgb':0}
++
++
++        ##### 2. Language Encoder (Frozen CLIP Text) #####
++        lang_kwargs = policy_cfg.language_encoder.network_kwargs.copy()
++        lang_kwargs["output_size"] = embed_size
++        # CLIPTextEncoder should freeze its weights internally
++        self.language_encoder = get_peft_model(CLIPTextEncoder(**lang_kwargs), lora_cfg)
++
++
++        ##### 3. State Encoder (MLP → FiLM hidden) #####
++
++        state_dim = 0
++        for key in shape_meta["all_shapes"]:
++            if "state" in key:
++                shape = shape_meta["all_shapes"][key]
++                state_dim += shape[0] if isinstance(shape, (list, tuple)) else shape
++
++        self.state_encoder = nn.Sequential(
++            nn.Linear(state_dim, policy_cfg.film_hidden_size),
++            nn.ReLU(inplace=True),
++            nn.Linear(policy_cfg.film_hidden_size, embed_size),
++        )
++
++
++        self.state_scale = nn.Sequential(
++            nn.Linear(embed_size, embed_size),
++            nn.GELU(),
++            nn.Linear(embed_size, embed_size),
++        )
++
++        self.state_shift = nn.Sequential(
++            nn.Linear(embed_size, embed_size),
++            nn.GELU(),
++            nn.Linear(embed_size, embed_size),
++        )
++
++        self.max_seq_len = policy_cfg.max_seq_len
++
++        for param in self.parameters():
++            param.requires_grad = False
++        
++        self.temporal_transformer = OfficialGPT2Decoder(
++            embed_size=embed_size,
++            num_layers=6,
++            num_heads=8,
++            dropout=0.15,
++            max_position_embeddings=32,
++            train = self.cfg.training
++        )
++
++        ac_dim = shape_meta['ac_dim']
++        self.policy_head = GMMHead(input_size=embed_size, output_size=ac_dim, 
++                                           num_modes=policy_cfg.num_gmm_modes, min_std=1e-4,)
++
++        if self.init == 1:
++            self.init = 0
++            self.load_state_dict(torch_load_model(cfg.pretrain)[0])
++
++    def forward(self, data):
++
++        # 1. Spatial‐temporal feature encoding
++        x1 = self.spatial_encode(data)  # (B, T, num_modalities, E)
++        return x1
++        x = self.temporal_encode(x1)    # (B, T, E)
++
++        # 2. Policy head only needs the last time step’s embedding
++        last_feat = x[:, -1, :]        # (B, E)
++        if self.training:
++
++            return self.policy_head(last_feat)
++
++    def spatial_encode(self, data):
++
++        # batch and sequence dims
++
++        B, T = next(iter(data['obs'].values())).shape[:2]
++        
++
++        if 'instr_token' in data:
++            instr = data['instr_token']  # dict with input_ids & attention_mask
++            lang_emb = self.language_encoder(**instr)           # (B, E)
++  
++        elif 'task_emb' in data and data['task_emb'] is not None:
++            instr = data['task_emb']
++            mask = data['masks'].squeeze(1)
++            lang_emb = self.language_encoder(instr,mask)           # (B, E)
++
++        else:
++            raise KeyError("Expected 'instr_token' or 'task_emb' in data")
++
++        E = lang_emb.size(-1)
++        lang_tok = lang_emb.unsqueeze(1).unsqueeze(2).expand(-1, T, 1, -1)  # (B, T, 1, E)
++
++        # flatten repeated lang_emb for FiLM inputs
++        instr_rep = lang_emb.unsqueeze(1).expand(-1, T, -1)  # (B, T, E)
++        instr_flat = instr_rep.contiguous().view(B * T, E)   
++
++        vis_toks = []
++        # for name, encoder in self.image_encoders.items():
++        for name, shape in self.rgbkey.items():
++            if "rgb" in name:
++                imgs = data['obs'][name]                             # (B, T, C, H, W)
++                imgs_flat = imgs.view(B * T, *imgs.shape[2:])
++                if self.cfg.aug:
++                    dev = next(self.parameters()).device
++                    imgs_flat = imgs_flat.to(dev, non_blocking=True)
++
++                    if imgs_flat.ndim == 4 and imgs_flat.shape[1] not in (1, 3) and imgs_flat.shape[-1] in (1, 3):
++                        imgs_flat = imgs_flat.permute(0, 3, 1, 2)
++
++                    if imgs_flat.dtype not in (torch.float16, torch.float32):
++                        imgs_flat = imgs_flat.float()
++                    imgs_flat = imgs_flat.contiguous()
++
++                v_feat = self.image_encoders(imgs_flat, langs=None)             # (B*T, E)
++                v_feat = self.image_proj(v_feat)              # (B*T, 512)
++                v_feat = v_feat.view(B, T, 1, E)                    # (B, T, 1, E)
++
++                sc = self.film_scale(instr_flat)
++                sh = self.film_shift(instr_flat)
++
++                v_mod = (1 + sc).view(B, T, 1, E) * v_feat + sh.view(B, T, 1, E)
++
++                vis_toks.append(v_mod)
++        vision_mod = torch.cat(vis_toks, dim=2)               # (B, T, V, E)
++
++        state_list = []
++
++        for key in ['joint_states', 'gripper_states']:
++            if key in data['obs']:
++                state_list.append(data['obs'][key])  # each (B, T, D_i)
++        # concatenate along feature dim
++        state = torch.cat(state_list, dim=-1) if len(state_list) > 1 else state_list[0]        
++        s_flat = state.view(B * T, -1)                        # (B*T, state_dim)
++        s_feat = self.state_encoder(s_flat)                   # (B*T, E)
++        s_feat = s_feat.view(B, T, 1, E)                      # (B, T, 1, E)
++
++        ssc = self.state_scale(instr_flat)
++        ssh = self.state_shift(instr_flat)
++
++        state_mod = (1 + ssc).view(B, T, 1, E) * s_feat + ssh.view(B, T, 1, E)
++
++        if self.cfg.policy.use_language is False:
++            encoded = torch.cat([v_feat, vision_mod, state_mod], dim=2)  # (B, T, M, E)
++        elif self.cfg.policy.use_state is False:
++            add_vision_mod = (1 + ssc).view(B, T, 1, E) * v_feat + ssh.view(B, T, 1, E)
++            encoded = torch.cat([lang_tok, vision_mod, add_vision_mod], dim=2)  # (B, T, M, E)
++        else:
++            encoded = torch.cat([lang_tok, vision_mod, state_mod], dim=2)  # (B, T, M, E)
++        return encoded
++
++    def temporal_encode(self, x):
++        B, T, M, E = x.shape
++        x = TensorUtils.join_dimensions(x, 1, 2)
++        out = self.temporal_transformer(x)  # (B, N, E)
++        out = out.view(B, T, M, E)
++        return out[:, :, 0, :]     # (B, T, E)
++
++    def get_action(self, data):
++        """
++        Online inference: maintain a queue of past embeddings, then predict next action.
++        Args:
++          data: dict containing single‐step observations (unsqueezed along T=1)
++        Returns:
++          action_np: numpy array (B, ac_dim)
++        """
++        self.eval()
++        with torch.no_grad():
++            # Preprocess input (e.g., normalization) if BasePolicy defines it
++            data = self.preprocess_input(data, train_mode=False)
++            # Spatial encode for this single time step; treat T=1
++            x_spatial = self.spatial_encode(data)  # (B, 1, M, E)
++
++            # Temporal encode
++            x_temp = self.temporal_encode(x_spatial)    # (B, T_cur, E)  1 1 512
++            # Take last time step
++            last_emb = x_temp[:, -1, :]             # (B, E)
++            # Action distribution
++            dist = self.policy_head(last_emb,train=False)
++            action = dist.sample().detach().cpu()
++            return  action.view(action.shape[0], -1).numpy()
++
++    def reset(self):
++        """
++        Reset the latent queue at the start of each new episode/trajectory.
++        """
++        self.latent_queue = []
++
++
+diff --git a/libero/lifelong/models/policy_head.py b/libero/lifelong/models/policy_head.py
+new file mode 100644
+index 0000000..0ce0ff2
+--- /dev/null
++++ b/libero/lifelong/models/policy_head.py
+@@ -0,0 +1,230 @@
++import robomimic.utils.tensor_utils as TensorUtils
++import torch
++import torch.distributions as tD
++import torch.distributions as D
++import torch.nn as nn
++import torch.nn.functional as F
++
++
++class DeterministicHead(nn.Module):
++    def __init__(self, input_size, output_size, hidden_size=1024, num_layers=2):
++
++        super().__init__()
++        sizes = [input_size] + [hidden_size] * num_layers + [output_size]
++        layers = []
++        for i in range(num_layers):
++            layers += [nn.Linear(sizes[i], sizes[i + 1]), nn.ReLU()]
++        layers += [nn.Linear(sizes[-2], sizes[-1])]
++
++        if self.action_squash:
++            layers += [nn.Tanh()]
++
++        self.net = nn.Sequential(*layers)
++
++    def forward(self, x):
++        y = self.net(x)
++        return y
++
++
++class GMMHead(nn.Module):
++    def __init__(
++        self,
++        # network_kwargs
++        input_size,
++        output_size,
++        hidden_size=1024,
++        num_layers=2,
++        min_std=0.0001,
++        num_modes=5,
++        activation="softplus",
++        low_eval_noise=False,
++        # loss_kwargs
++        loss_coef=1.0,
++    ):
++        super().__init__()
++        self.num_modes = num_modes
++        self.output_size = output_size
++        self.min_std = min_std
++
++        if num_layers > 0:
++            sizes = [input_size] + [hidden_size] * num_layers
++            layers = []
++            for i in range(num_layers):
++                layers += [nn.Linear(sizes[i], sizes[i + 1]), nn.ReLU()]
++            layers += [nn.Linear(sizes[-1], sizes[-1])]
++            self.share = nn.Sequential(*layers)
++        else:
++            self.share = nn.Identity()
++
++        self.mean_layer = nn.Linear(hidden_size, output_size * num_modes)
++        self.logstd_layer = nn.Linear(hidden_size, output_size * num_modes)
++        self.logits_layer = nn.Linear(hidden_size, num_modes)
++
++        self.low_eval_noise = low_eval_noise
++        self.loss_coef = loss_coef
++
++        if activation == "softplus":
++            self.actv = F.softplus
++        else:
++            self.actv = torch.exp     
++
++    def forward_fn(self, x):
++        # x: (B, input_size)
++        share = self.share(x)
++        means = self.mean_layer(share).view(-1, self.num_modes, self.output_size)
++        means = torch.tanh(means)
++        logits = self.logits_layer(share)
++
++        if self.training or not self.low_eval_noise:
++            logstds = self.logstd_layer(share).view(
++                -1, self.num_modes, self.output_size
++            )
++            stds = self.actv(logstds) + self.min_std
++        else:
++            stds = torch.ones_like(means) * 1e-4
++        return means, stds, logits
++
++    def forward(self, x, train=True):
++        
++        if x.ndim == 3:
++            means, scales, logits = TensorUtils.time_distributed(x, self.forward_fn)   # 把x映射为一个混合高斯分布
++        elif x.ndim < 3:
++            means, scales, logits = self.forward_fn(x)
++        if train:
++     
++
++            compo = D.Normal(loc=means, scale=scales)
++            compo = D.Independent(compo, 1)
++            mix = D.Categorical(logits=logits)
++            gmm = D.MixtureSameFamily(
++                mixture_distribution=mix, component_distribution=compo
++            )
++            return gmm
++        else:
++            max_idx = logits.argmax(dim=-1)
++            B, K, O = means.shape
++            batch_idx = torch.arange(B)
++            chosen_means = means[batch_idx, max_idx]  # (B, output_size)
++            chosen_scales = scales[batch_idx, max_idx]
++            dist = D.Normal(loc=chosen_means, scale=chosen_scales)
++            dist = D.Independent(dist, 1)
++            return dist
++
++
++    def loss_fn(self, gmm, target, reduction="mean"):
++        log_probs = gmm.log_prob(target[:,-1,:])
++        loss = -log_probs
++        if reduction == "mean":
++            return loss.mean() * self.loss_coef
++        elif reduction == "none":
++            return loss * self.loss_coef
++        elif reduction == "sum":
++            return loss.sum() * self.loss_coef
++        else:
++            raise NotImplementedError
++
++class TemporalGMMHead(nn.Module):
++    """
++    GMM head producing a MixtureSameFamily distribution over actions.
++    Supports deterministic mode extraction for evaluation.
++    """
++    def __init__(
++        self,
++        input_size: int,
++        output_size: int,
++        hidden_size: int = 1024,
++        num_layers: int = 2,
++        min_std: float = 1e-4,
++        num_modes: int = 5,
++        low_eval_noise: bool = False,
++        loss_coef: float = 1.0,
++    ):
++        super().__init__()
++        self.num_modes = num_modes
++        self.output_size = output_size
++        self.min_std = min_std
++        self.low_eval_noise = low_eval_noise      
++        self.loss_coef = loss_coef                
++
++        # Shared MLP
++        if num_layers > 0:
++            layers = [nn.Linear(input_size, hidden_size), nn.ReLU()]
++            for _ in range(num_layers - 1):
++                layers += [nn.Linear(hidden_size, hidden_size), nn.ReLU()]
++            self.shared_net = nn.Sequential(*layers)
++        else:
++            self.shared_net = nn.Identity()
++
++        # Output layers
++        self.mean_layer = nn.Linear(hidden_size, output_size * num_modes)
++        self.logstd_layer = nn.Linear(hidden_size, output_size * num_modes)
++        self.logits_layer = nn.Linear(hidden_size, num_modes)
++
++    def forward(self, x: torch.Tensor) -> tD.MixtureSameFamily:
++        """
++        x: (B, T, input_size)
++        returns: GMM distribution of shape (B, T)
++        """
++        if x.dim() == 2:
++            x = x.unsqueeze(1)
++        B, T, D = x.shape
++        x_flat = x.view(B * T, D)
++        hidden = self.shared_net(x_flat)  # (B*T, hidden_size)
++
++        # Means
++        means = self.mean_layer(hidden)  # (B*T, num_modes * output_size)
++        means = means.view(B, T, self.num_modes, self.output_size)
++
++        # Log-stds -> positive std
++        logstds = self.logstd_layer(hidden)
++        logstds = logstds.view(B, T, self.num_modes, self.output_size)
++        stds = F.softplus(logstds) + self.min_std
++
++        # Mixing logits
++        logits = self.logits_layer(hidden).view(B, T, self.num_modes)
++
++        # Low noise eval: replace std with min_std
++        if not self.training and self.low_eval_noise:
++            stds = torch.full_like(stds, fill_value=self.min_std)
++
++        # Build distributions
++        component_dist = tD.Independent(
++            tD.Normal(loc=means, scale=stds), 1
++        )  # treats last dim as event dim
++        mixture_dist = tD.Categorical(logits=logits)
++        gmm = tD.MixtureSameFamily(mixture_dist, component_dist)
++        return gmm
++
++    def mode(self, gmm: tD.MixtureSameFamily) -> torch.Tensor:
++        """
++        Extract the means of the highest-weight Gaussian component.
++        returns: (B, T, output_size)
++        """
++        # logits: (B, T, num_modes)
++        logits = gmm.mixture_distribution.logits
++        # means: (B, T, num_modes, output_size)
++        means = gmm.component_distribution.base_dist.loc
++        B, T, M, D = means.shape
++
++        # Index of mode per (B,T)
++        mode_idx = logits.argmax(dim=-1)  # (B, T)
++        # Gather means
++        means_flat = means.view(B * T, M, D)
++        idx_flat = mode_idx.view(-1)
++        selected = means_flat[torch.arange(B * T, device=means.device), idx_flat]
++        return selected.view(B, T, D)
++
++    def loss_fn(self, gmm: tD.MixtureSameFamily, target: torch.Tensor, reduction: str = 'mean') -> torch.Tensor:
++        """
++        Negative log-likelihood loss.
++        target: (B, T, output_size)
++        """
++        log_probs = gmm.log_prob(target)
++        loss = -log_probs * self.loss_coef
++        if reduction == 'mean':
++            return loss.mean()
++        if reduction == 'sum':
++            return loss.sum()
++        if reduction == 'none':
++            return loss
++        raise ValueError(f"Unknown reduction: {reduction}")
+diff --git a/libero/lifelong/save_feature.py b/libero/lifelong/save_feature.py
+new file mode 100644
+index 0000000..e1b180b
+--- /dev/null
++++ b/libero/lifelong/save_feature.py
+@@ -0,0 +1,192 @@
++import os
++
++os.environ["TOKENIZERS_PARALLELISM"] = "false"
++import sys
++
++import json
++import multiprocessing
++import pprint
++import time
++from pathlib import Path
++
++import hydra
++import numpy as np
++import wandb
++import yaml
++import torch
++from easydict import EasyDict
++from hydra.utils import to_absolute_path
++from omegaconf import OmegaConf
++from collections import OrderedDict
++sys.path.insert(0, "/home/fyu/mlr_ifa")
++
++
++from libero.libero import get_libero_path
++from libero.libero.benchmark import get_benchmark
++from libero.lifelong.algos import get_algo_class, get_algo_list
++from libero.lifelong.models import get_policy_list
++from libero.lifelong.datasets import GroupedTaskDataset, SequenceVLDataset, get_dataset
++from libero.lifelong.metric import evaluate_loss, evaluate_success
++from libero.lifelong.utils import (
++    NpEncoder,
++    compute_flops,
++    control_seed,
++    safe_device,
++    torch_load_model,
++    create_experiment_dir,
++    get_task_embs,
++)
++from torch.nn.parallel import DistributedDataParallel as DDP
++import torch.distributed as dist
++import gc
++
++@hydra.main(config_path="../configs", config_name="config_adaption", version_base=None)
++def main(hydra_cfg):
++    print(">>> hydra root directory（runtime.cwd）：", os.getcwd())
++    # preprocessing
++    dist.init_process_group(backend="nccl")
++    local_rank = int(os.environ["LOCAL_RANK"])
++    torch.cuda.set_device(local_rank)
++
++    yaml_config = OmegaConf.to_yaml(hydra_cfg)
++    cfg = EasyDict(yaml.safe_load(yaml_config))
++
++    # print configs to terminal
++    pp = pprint.PrettyPrinter(indent=2)
++    pp.pprint(cfg)
++
++    pp.pprint("Available algorithms:")
++    pp.pprint(get_algo_list())
++
++    pp.pprint("Available policies:")
++    pp.pprint(get_policy_list())
++
++    # control seed
++    control_seed(cfg.seed)
++
++    # prepare lifelong learning
++    cfg.folder = cfg.folder or get_libero_path("datasets")
++    cfg.bddl_folder = cfg.bddl_folder or get_libero_path("bddl_files")
++    cfg.init_states_folder = cfg.init_states_folder or get_libero_path("init_states")
++
++    benchmark = get_benchmark(cfg.benchmark_name)(cfg.data.task_order_index)
++    n_manip_tasks = benchmark.n_tasks
++
++    # prepare datasets from the benchmark
++    manip_datasets = []
++    descriptions = []
++    shape_meta = None
++
++    for i in range(n_manip_tasks):
++        # currently we assume tasks from same benchmark have the same shape_meta
++        try:
++            task_i_dataset, shape_meta = get_dataset(
++                dataset_path=os.path.join(
++                    cfg.folder, benchmark.get_task_demonstration(i)
++                ),
++                obs_modality=cfg.data.obs.modality,
++                initialize_obs_utils=(i == 0),
++                seq_len=cfg.data.seq_len,
++                demo_limit= cfg.data.demo_limit,
++                train = cfg.training,
++            )  
++        # norm
++        except Exception as e:
++            print(
++                f"[error] failed to load task {i} name {benchmark.get_task_names()[i]}"
++            )
++            print(f"[error] {e}")
++        print(os.path.join(cfg.folder, benchmark.get_task_demonstration(i)))
++        # add language to the vision dataset, hence we call vl_dataset
++        task_description = benchmark.get_task(i).language
++        descriptions.append(task_description)
++        manip_datasets.append(task_i_dataset)
++
++    task_embs = get_task_embs(cfg, descriptions)
++
++    gsz = cfg.data.task_group_size
++    if gsz == 1:  # each manipulation task is its own lifelong learning task
++        datasets = [
++            SequenceVLDataset(ds, emb, mask) for (ds, emb, mask) in zip(manip_datasets, task_embs['input_ids'], task_embs['attention_mask'])
++        ]
++        n_demos = [data.n_demos for data in datasets]
++        n_sequences = [data.total_num_sequences for data in datasets]
++    else:  # group gsz manipulation tasks into a lifelong task, currently not used
++        assert (
++            n_manip_tasks % gsz == 0
++        ), f"[error] task_group_size does not divide n_tasks"
++        datasets = []
++        n_demos = []
++        n_sequences = []
++        for i in range(0, n_manip_tasks, gsz):
++            dataset = GroupedTaskDataset(
++                manip_datasets[i : i + gsz], task_embs[i : i + gsz]
++            )
++            datasets.append(dataset)
++            n_demos.extend([x.n_demos for x in dataset.sequence_datasets])
++            n_sequences.extend(
++                [x.total_num_sequences for x in dataset.sequence_datasets]
++            )
++
++    n_tasks = n_manip_tasks // gsz  # number of lifelong learning tasks
++    print("\n=================== Lifelong Benchmark Information  ===================")
++    print(f" Name: {benchmark.name}")
++    print(f" # Tasks: {n_manip_tasks // gsz}")
++    for i in range(n_tasks):
++        print(f"    - Task {i+1}:")
++        for j in range(gsz):
++            print(f"        {benchmark.get_task(i*gsz+j).language}")
++    print(" # demonstrations: " + " ".join(f"({x})" for x in n_demos))
++    print(" # sequences: " + " ".join(f"({x})" for x in n_sequences))
++    print("=======================================================================\n")
++
++    # prepare experiment and update the config
++    create_experiment_dir(cfg)
++    cfg.shape_meta = shape_meta
++
++    if cfg.use_wandb:
++        wandb.init(project="libero", config=cfg)
++        wandb.run.name = cfg.experiment_name
++
++    result_summary = {
++        "L_conf_mat": np.zeros((n_manip_tasks, n_manip_tasks)),  # loss confusion matrix
++        "S_conf_mat": np.zeros((n_manip_tasks, n_manip_tasks)),  # success confusion matrix
++        "L_fwd": np.zeros((n_manip_tasks,)),  # loss AUC, how fast the agent learns
++        "S_fwd": np.zeros((n_manip_tasks,)),  # success AUC, how fast the agent succeeds
++    }
++
++    if cfg.eval.save_sim_states:
++        # for saving the evaluate simulation states, so we can replay them later
++        for k in range(n_manip_tasks):
++            for p in range(k + 1):  # for testing task p when the agent learns to task k
++                result_summary[f"k{k}_p{p}"] = [[] for _ in range(cfg.eval.n_eval)]
++            for e in range(
++                cfg.train.n_epochs + 1
++            ):  # for testing task k at the e-th epoch when the agent learns on task k
++                if e % cfg.eval.eval_every == 0:
++                    result_summary[f"k{k}_e{e//cfg.eval.eval_every}"] = [
++                        [] for _ in range(cfg.eval.n_eval)
++                    ]
++
++    control_seed(cfg.seed)
++
++    algo = safe_device(get_algo_class(cfg.lifelong.algo)(n_tasks, cfg), cfg.device)
++
++    policy = algo.policy.to(local_rank)
++    
++    policy = DDP(policy, device_ids=[local_rank], output_device=local_rank)
++
++    algo.policy = policy
++
++    algo.train()
++
++    with open(os.path.join(cfg.experiment_dir, "config.json"), "w") as f:
++        json.dump(cfg, f, cls=NpEncoder, indent=4)
++    for i in range(cfg.start_task, cfg.end_task):
++        algo.learn_one_task(
++            datasets[i], i, benchmark, result_summary, save_feature=True, saving_dir=cfg.feature_dir
++        )
++
++if __name__ == "__main__":
++
++    main()
+diff --git a/libero/lifelong/test.py b/libero/lifelong/test.py
+new file mode 100644
+index 0000000..9235e12
+--- /dev/null
++++ b/libero/lifelong/test.py
+@@ -0,0 +1,259 @@
++import os
++
++import multiprocessing as mp
++os.environ["MUJOCO_GL"] = "egl"
++# 处理 CUDA_VISIBLE_DEVICES 重映射：对进程而言可见列表的第0张就是 "0"
++os.environ["MUJOCO_EGL_DEVICE_ID"] = os.getenv("CUDA_VISIBLE_DEVICES", "0").split(",")[0]
++# 一些服务器上需要无 surface EGL
++os.environ["EGL_PLATFORM"] = "surfaceless"
++# 关键：避免 fork 带来的 GL 状态问题
++mp.set_start_method("spawn", force=True)   # <- 关键：在任何 torch/robosuite 导入之前import torch.nn.functional as F
++
++os.environ["TOKENIZERS_PARALLELISM"] = "false"
++import sys
++sys.path.insert(0, "/work")
++
++import json
++import multiprocessing
++import pprint
++import time
++from pathlib import Path
++from omegaconf import OmegaConf
++
++import hydra
++import numpy as np
++import wandb
++import yaml
++import torch
++from easydict import EasyDict
++from hydra.utils import to_absolute_path
++from omegaconf import OmegaConf
++
++from libero.libero import get_libero_path
++from libero.libero.benchmark import get_benchmark
++from libero.lifelong.algos import get_algo_class, get_algo_list
++from libero.lifelong.models import get_policy_list
++from libero.lifelong.datasets import GroupedTaskDataset, SequenceVLDataset, get_dataset
++from libero.lifelong.metric import evaluate_loss, evaluate_success
++from libero.lifelong.utils import (
++    NpEncoder,
++    compute_flops,
++    control_seed,
++    safe_device,
++    torch_load_model,
++    create_experiment_dir,
++    get_task_embs,
++)
++from torch.nn.parallel import DistributedDataParallel as DDP
++import torch.distributed as dist
++from collections import OrderedDict
++
++torch.backends.cudnn.enabled = True
++torch.backends.cudnn.benchmark = True
++torch.set_grad_enabled(False)
++
++os.environ["MUJOCO_GL"] = "egl"
++os.environ["MUJOCO_EGL_DEVICE_ID"] = os.getenv("CUDA_VISIBLE_DEVICES","0").split(",")[0]
++os.environ["EGL_PLATFORM"] = "surfaceless"
++sys.path.insert(0, "/home/fyu/mlr_ifa")
++
++# —— Python hash 种子 —— 
++# os.environ["PYTHONHASHSEED"] = "0"
++def set_global_seed(seed:int):
++    import random
++    random.seed(seed)
++    np.random.seed(seed)
++    torch.manual_seed(seed)
++    torch.cuda.manual_seed_all(seed)
++
++
++from pathlib import Path
++def log_succ(S, i, j, pp, logfile="/home/ct_005.txt"):
++    # 只让 rank0 写文件（DDP 时避免多进程同时写）
++    if dist.is_available() and dist.is_initialized() and dist.get_rank() != 0:
++        return
++    line = f"[task {i} epoch {j:02d} and {pp} succ.] " + " | ".join(f"{x:.2f}" for x in S)
++    print(line)  # 仍然打印到控制台
++    Path(logfile).parent.mkdir(parents=True, exist_ok=True)
++    with open(logfile, "a", encoding="utf-8") as f:
++        f.write(line + "\n")
++
++@hydra.main(config_path="../configs", config_name="test", version_base=None)
++def main(hydra_cfg):
++
++    yaml_config = OmegaConf.to_yaml(hydra_cfg)
++    cfg = EasyDict(yaml.safe_load(yaml_config))
++  
++    # print configs to terminal
++    pp = pprint.PrettyPrinter(indent=2)
++    pp.pprint(cfg)
++
++    pp.pprint("Available algorithms:")
++    pp.pprint(get_algo_list())
++
++    pp.pprint("Available policies:")
++    pp.pprint(get_policy_list())
++
++    # control seed
++    control_seed(cfg.seed)
++
++    # prepare lifelong learning
++    cfg.folder = cfg.folder or get_libero_path("datasets")
++
++    cfg.bddl_folder = cfg.bddl_folder or get_libero_path("bddl_files")
++
++    cfg.init_states_folder = cfg.init_states_folder or get_libero_path("init_states")
++
++    benchmark = get_benchmark(cfg.benchmark_name)(cfg.data.task_order_index)
++    n_manip_tasks = benchmark.n_tasks
++
++    # prepare datasets from the benchmark
++    manip_datasets = []
++    descriptions = []
++    shape_meta = None
++    print(n_manip_tasks)
++    for i in range(n_manip_tasks):
++        # currently we assume tasks from same benchmark have the same shape_meta
++        try:
++            task_i_dataset, shape_meta = get_dataset(
++                dataset_path=os.path.join(
++                    cfg.folder, benchmark.get_task_demonstration(i)
++                ),
++                obs_modality=cfg.data.obs.modality,
++                initialize_obs_utils=(i == 0),
++                seq_len=cfg.data.seq_len,
++                demo_limit= cfg.data.demo_limit,
++                train = cfg.training,
++            )
++
++        except Exception as e:
++
++            print(
++                f"[error] failed to load task {i} name {benchmark.get_task_names()[i]}"
++            )
++            print(f"[error] {e}")
++        print(i)
++        print(os.path.join(cfg.folder, benchmark.get_task_demonstration(i)))
++        # add language to the vision dataset, hence we call vl_dataset
++        task_description = benchmark.get_task(i).language
++        descriptions.append(task_description)
++        manip_datasets.append(task_i_dataset)
++
++    task_embs = get_task_embs(cfg, descriptions)
++    benchmark.set_task_embs(task_embs)
++
++    gsz = cfg.data.task_group_size
++    if gsz == 1:  # each manipulation task is its own lifelong learning task
++        datasets = [
++            SequenceVLDataset(ds, emb, mask) for (ds, emb, mask) in zip(manip_datasets, task_embs['input_ids'], task_embs['attention_mask'])
++        ]
++        n_demos = [data.n_demos for data in datasets]
++        n_sequences = [data.total_num_sequences for data in datasets]
++    else:  # group gsz manipulation tasks into a lifelong task, currently not used
++        assert (
++            n_manip_tasks % gsz == 0
++        ), f"[error] task_group_size does not divide n_tasks"
++        datasets = []
++        n_demos = []
++        n_sequences = []
++        for i in range(0, n_manip_tasks, gsz):
++            dataset = GroupedTaskDataset(
++                manip_datasets[i : i + gsz], task_embs['input_ids'][i : i + gsz], task_embs['attention_mask'][i : i + gsz],
++            )
++            datasets.append(dataset)
++            n_demos.extend([x.n_demos for x in dataset.sequence_datasets])
++            n_sequences.extend(
++                [x.total_num_sequences for x in dataset.sequence_datasets]
++            )
++
++    n_tasks = n_manip_tasks // gsz  # number of lifelong learning tasks
++    print("\n=================== Lifelong Benchmark Information  ===================")
++    print(f" Name: {benchmark.name}")
++    print(f" # Tasks: {n_manip_tasks // gsz}")
++    for i in range(n_tasks):
++        print(f"    - Task {i+1}:")
++        for j in range(gsz):
++            print(f"        {benchmark.get_task(i*gsz+j).language}")
++    print(" # demonstrations: " + " ".join(f"({x})" for x in n_demos))
++    print(" # sequences: " + " ".join(f"({x})" for x in n_sequences))
++    print("=======================================================================\n")
++
++    # prepare experiment and update the config
++    create_experiment_dir(cfg)
++    cfg.shape_meta = shape_meta
++
++    if cfg.use_wandb:
++        wandb.init(project="libero", config=cfg)
++        wandb.run.name = cfg.experiment_name
++
++    result_summary = {
++        "L_conf_mat": np.zeros((n_manip_tasks, n_manip_tasks)),  # loss confusion matrix
++        "S_conf_mat": np.zeros((n_manip_tasks, n_manip_tasks)),  # success confusion matrix
++        "L_fwd": np.zeros((n_manip_tasks,)),  # loss AUC, how fast the agent learns
++        "S_fwd": np.zeros((n_manip_tasks,)),  # success AUC, how fast the agent succeeds
++    }
++
++    if cfg.eval.save_sim_states:
++        # for saving the evaluate simulation states, so we can replay them later
++        for k in range(n_manip_tasks):
++            for p in range(k + 1):  # for testing task p when the agent learns to task k
++                result_summary[f"k{k}_p{p}"] = [[] for _ in range(cfg.eval.n_eval)]
++            for e in range(
++                cfg.train.n_epochs + 1
++            ):  # for testing task k at the e-th epoch when the agent learns on task k
++                if e % cfg.eval.eval_every == 0:
++                    result_summary[f"k{k}_e{e//cfg.eval.eval_every}"] = [
++                        [] for _ in range(cfg.eval.n_eval)
++                    ]
++
++    # define lifelong algorithm
++    algo = safe_device(get_algo_class(cfg.lifelong.algo)(n_tasks, cfg), cfg.device)
++
++    # save the experiment config file, so we can resume or replay later
++    with open(os.path.join(cfg.experiment_dir, "config.json"), "w") as f:
++        json.dump(cfg, f, cls=NpEncoder, indent=4)
++        a = [cfg.seed]
++        for see in a:
++            for pp in range(cfg.start_task,cfg.end_task,1):   # 7 → 0
++                set_global_seed(see)
++                cfg.seed=see
++                for j in range(70,100,5):
++                    for i in range(cfg.start_task,pp+1):
++                        base_dir = cfg.epoch_dir
++
++                        filename = "mlrifa_{}_model_ep{}.pth".format(pp,j)
++
++                        fullpath = os.path.join(base_dir, filename)
++
++                        while not os.path.exists(fullpath):
++                            continue
++                        if os.path.exists(fullpath):
++                            print(fullpath)
++                            algo = safe_device(get_algo_class(cfg.lifelong.algo)(n_tasks, cfg), cfg.device)
++
++                            checkpoint = torch.load(fullpath, map_location='cpu')
++
++                            new_state_dict = OrderedDict((k[7:], v) for k, v in checkpoint["state_dict"].items())
++
++                            algo.policy.load_state_dict(new_state_dict, strict=False)
++
++                            algo.eval()
++
++                            t2 = time.time()
++                            S = evaluate_success(
++                                cfg=cfg,
++                                algo=algo,
++                                benchmark=benchmark,
++                                task_ids=[i],
++                                result_summary=result_summary if cfg.eval.save_sim_states else None,
++                                see = see
++                            )
++
++                            log_succ(S, i, j,pp,logfile=cfg.test_log_file)  
++
++        
++if __name__ == "__main__":
++    # Set the multiprocessing start method to 'spawn'
++    # if multiprocessing.get_start_method(allow_none=True) != "spawn":  
++    #     multiprocessing.set_start_method("spawn", force=True)
++    main()
+diff --git a/libero/lifelong/utils.py b/libero/lifelong/utils.py
+new file mode 100644
+index 0000000..25f2062
+--- /dev/null
++++ b/libero/lifelong/utils.py
+@@ -0,0 +1,244 @@
++import copy
++import json
++import os
++import random
++from pathlib import Path
++
++import numpy as np
++import robomimic.utils.tensor_utils as TensorUtils
++import torch
++import torch.nn as nn
++from hydra.utils import to_absolute_path
++from thop import profile
++from torch.utils.data import DataLoader
++from transformers import AutoModel, AutoTokenizer, logging, CLIPTokenizer    
++from collections import OrderedDict
++
++
++
++def control_seed(seed):
++    random.seed(seed)
++    np.random.seed(seed)
++    torch.manual_seed(seed)
++    torch.cuda.manual_seed_all(seed)
++    torch.backends.cudnn.deterministic = True
++
++
++def safe_device(x, device="cpu"):
++    if device == "cpu":
++        return x.cpu()
++    elif "cuda" in device:
++        if torch.cuda.is_available():
++            return x.to(device)
++        else:
++            return x.cpu()
++
++
++class NpEncoder(json.JSONEncoder):
++    def default(self, obj):
++        if isinstance(obj, np.integer):
++            return int(obj)
++        elif isinstance(obj, np.floating):
++            return float(obj)
++        elif isinstance(obj, np.ndarray):
++            return obj.tolist()
++        else:
++            return super(NpEncoder, self).default(obj)
++
++
++def torch_save_model(model, model_path, cfg=None, previous_masks=None):
++    torch.save(
++        {
++            "state_dict": model.state_dict(),
++            "cfg": cfg,
++            "previous_masks": previous_masks,
++        },
++        model_path,
++    )
++
++def _strip_module_prefix1(state_dict):
++    if not state_dict:
++        return state_dict
++    first_key = next(iter(state_dict))
++    if first_key.startswith("module."):
++        return OrderedDict((k[7:], v) for k, v in state_dict.items())
++
++def torch_load_model(model_path, map_location="cpu"):
++
++    ckpt = torch.load(model_path, map_location=map_location)
++
++    state_dict      = _strip_module_prefix1(ckpt["state_dict"])
++    cfg             = ckpt.get("cfg")
++    previous_masks  = ckpt.get("previous_masks")
++
++    return state_dict, cfg, previous_masks
++
++def _strip_module_prefix(state_dict):
++    if not state_dict:
++        return state_dict
++    first_key = next(iter(state_dict))
++    if first_key.startswith("module."):
++        return state_dict
++    return OrderedDict((k[7:], v) for k, v in state_dict.items())
++
++def get_train_test_loader(
++    dataset, train_ratio, train_batch_size, test_batch_size, num_workers=(0, 0)
++):
++
++    train_size = int(len(dataset) * train_ratio)
++    test_size = len(dataset) - train_size
++    train_dataset, test_dataset = torch.utils.data.random_split(
++        dataset, [train_size, test_size]
++    )
++
++    train_dataloader = DataLoader(
++        train_dataset,
++        batch_size=train_batch_size,
++        num_workers=num_workers[0],
++        shuffle=True,
++    )
++    test_dataloader = DataLoader(
++        test_dataset,
++        batch_size=test_batch_size,
++        num_workers=num_workers[1],
++        shuffle=False,
++    )
++    return train_dataloader, test_dataloader
++
++
++def confidence_interval(p, n):
++    return 1.96 * np.sqrt(p * (1 - p) / n)
++
++
++def compute_flops(algo, dataset, cfg):
++    model = copy.deepcopy(algo.policy)
++    tmp_loader = DataLoader(dataset, batch_size=1, num_workers=0, shuffle=True)
++    data = next(iter(tmp_loader))
++    data = TensorUtils.map_tensor(data, lambda x: safe_device(x, device=cfg.device))
++    macs, params = profile(model, inputs=(data,), verbose=False)
++    GFLOPs = macs * 2 / 1e9
++    MParams = params / 1e6
++    del model
++    return GFLOPs, MParams
++
++
++def create_experiment_dir(cfg):
++    prefix = "experiments"
++    if cfg.pretrain_model_path != "":
++        prefix += "_finetune"
++    if cfg.data.task_order_index > 0:
++        prefix += f"_permute{cfg.data.task_order_index}"
++    if cfg.task_embedding_format == "one-hot":
++        prefix += f"_onehot"
++    if cfg.task_embedding_format == "clip":
++        prefix += f"_clip"
++    if cfg.task_embedding_format == "gpt2":
++        prefix += f"_gpt2"
++    if cfg.task_embedding_format == "roberta":
++        prefix += f"_roberta"
++
++    experiment_dir = (
++        f"./{prefix}/{cfg.benchmark_name}/{cfg.lifelong.algo}/"
++        + f"{cfg.policy.policy_type}_seed{cfg.seed}"
++    )
++
++    if not os.path.exists(experiment_dir):
++        os.makedirs(experiment_dir, exist_ok=True)
++
++    # look for the most recent run
++    experiment_id = 0
++    for path in Path(experiment_dir).glob("run_*"):
++        if not path.is_dir():
++            continue
++        try:
++            folder_id = int(str(path).split("run_")[-1])
++            if folder_id > experiment_id:
++                experiment_id = folder_id
++        except BaseException:
++            pass
++    experiment_id += 1
++
++    experiment_dir += f"/run_{experiment_id:03d}"
++    cfg.experiment_dir = experiment_dir
++    cfg.experiment_name = "_".join(cfg.experiment_dir.split("/")[2:])
++    os.makedirs(cfg.experiment_dir, exist_ok=True)
++    return True
++
++
++def get_task_embs(cfg, descriptions):
++    logging.set_verbosity_error()
++
++    if cfg.task_embedding_format == "one-hot":
++        # offset defaults to 1, if we have pretrained another model, this offset
++        # starts from the pretrained number of tasks + 1
++        offset = cfg.task_embedding_one_hot_offset
++        descriptions = [f"Task {i+offset}" for i in range(len(descriptions))]
++
++    if cfg.task_embedding_format == "bert" or cfg.task_embedding_format == "one-hot":
++        tz = AutoTokenizer.from_pretrained(
++            "bert-base-cased", cache_dir=to_absolute_path("./bert")
++        )
++        model = AutoModel.from_pretrained(
++            "bert-base-cased", cache_dir=to_absolute_path("./bert")
++        )
++        tokens = tz(
++            text=descriptions,  # the sentence to be encoded
++            add_special_tokens=True,  # Add [CLS] and [SEP]
++            max_length=cfg.data.max_word_len,  # maximum length of a sentence
++            padding="max_length",
++            return_attention_mask=True,  # Generate the attention mask
++            return_tensors="pt",  # ask the function to return PyTorch tensors
++        )
++        masks = tokens["attention_mask"]
++        input_ids = tokens["input_ids"]
++        task_embs = model(tokens["input_ids"], tokens["attention_mask"])[
++            "pooler_output"
++        ].detach()
++    elif cfg.task_embedding_format == "gpt2":
++        tz = AutoTokenizer.from_pretrained("gpt2")
++        tz.pad_token = tz.eos_token
++        model = AutoModel.from_pretrained("gpt2")
++        tokens = tz(
++            text=descriptions,  # the sentence to be encoded
++            add_special_tokens=True,  # Add [CLS] and [SEP]
++            max_length=cfg.data.max_word_len,  # maximum length of a sentence
++            padding="max_length",
++            return_attention_mask=True,  # Generate the attention mask
++            return_tensors="pt",  # ask the function to return PyTorch tensors
++        )
++        task_embs = model(**tokens)["last_hidden_state"].detach()[:, -1]
++    elif cfg.task_embedding_format == "clip":
++        tz = CLIPTokenizer.from_pretrained("openai/clip-vit-base-patch16")
++        tokens = tz(
++            text=descriptions,  # the sentence to be encoded
++            max_length=cfg.data.max_word_len,  # maximum length of a sentence
++            padding="max_length",
++            return_attention_mask=True,  # Generate the attention mask
++            return_tensors="pt",  # ask the function to return PyTorch tensors
++        )
++        task_embs = tokens
++
++    elif cfg.task_embedding_format == "roberta":
++        tz = AutoTokenizer.from_pretrained("roberta-base")
++        tz.pad_token = tz.eos_token
++        model = AutoModel.from_pretrained("roberta-base")
++        tokens = tz(
++            text=descriptions,  # the sentence to be encoded
++            add_special_tokens=True,  # Add [CLS] and [SEP]
++            max_length=cfg.data.max_word_len,  # maximum length of a sentence
++            padding="max_length",
++            return_attention_mask=True,  # Generate the attention mask
++            return_tensors="pt",  # ask the function to return PyTorch tensors
++        )
++        task_embs = model(**tokens)["pooler_output"].detach()
++    # cfg.policy.language_encoder.network_kwargs.input_size = task_embs.shape[-1]
++    return task_embs
++def make_linear_schedule_with_warmup(warmup_steps: int, total_steps: int):
++    def lr_fn(step: int):
++        if step < warmup_steps:
++            return float(step) / float(max(1, warmup_steps))
++        return max(
++            0.0,
++            float(total_steps - step) / float(max(1, total_steps - warmup_steps))
++        )
++    return lr_fn
+\ No newline at end of file
+diff --git a/lifelong_adaptation_object.sbatch b/lifelong_adaptation_object.sbatch
+new file mode 100644
+index 0000000..faa4a81
+--- /dev/null
++++ b/lifelong_adaptation_object.sbatch
+@@ -0,0 +1,26 @@
++#!/usr/bin/env bash
++
++PYTHON=/home/fyu/miniconda3/envs/libero/bin/python
++PORT=$((29500 + RANDOM % 100))
++
++export CUDA_VISIBLE_DEVICES="0"
++
++$PYTHON -m torch.distributed.run \
++    --nproc_per_node=1 \
++    --rdzv_backend=c10d \
++    --rdzv_endpoint=localhost:$PORT \
++    libero/lifelong/lifelong_adaptation.py \
++    seed=42 \
++    benchmark_name=LIBERO_OBJECT \
++    policy=BriefPolicy \
++    lifelong=mlr \
++    pretrain=/home/fyu/mlr_ifa/object_multitask_model_ep99.pth \
++    +start_task=6 \
++    +aug=False \
++    +end_task=10 \
++    +feature_dir=./features_object \
++    +gamma=0.31 \
++    +buffer_dir=./buffer_object \
++    training=true \
++    +past_data_rate=0.5
++echo ">>> Training completed ✅"
+\ No newline at end of file
+diff --git a/save_feature_object.sbatch b/save_feature_object.sbatch
+new file mode 100644
+index 0000000..b29bf2f
+--- /dev/null
++++ b/save_feature_object.sbatch
+@@ -0,0 +1,26 @@
++#!/usr/bin/env bash
++set -e
++export HYDRA_FULL_ERROR=1
++
++PYTHON=/home/fyu/miniconda3/envs/libero/bin/python
++PORT=$((29500 + RANDOM % 100))
++
++$PYTHON -m torch.distributed.run \
++  --nproc_per_node=1 \
++  --rdzv_backend=c10d \
++  --rdzv_endpoint=127.0.0.1:$PORT \
++  libero/lifelong/save_feature.py \
++  seed=42 \
++  benchmark_name=LIBERO_OBJECT \
++  policy=complete_policy \
++  lifelong=basic \
++  train.batch_size=1 \
++  pretrain=/home/fyu/mlr_ifa/object_multitask_model_ep99.pth \
++  +start_task=6 \
++  +end_task=10 \
++  +aug=True \
++  +feature_dir=./features_object \
++  train.num_workers=0 \
++  training=False
++
++echo ">>> Save feature completed ✅"
+\ No newline at end of file
+diff --git a/test.sbatch b/test.sbatch
+new file mode 100644
+index 0000000..f51720e
+--- /dev/null
++++ b/test.sbatch
+@@ -0,0 +1,23 @@
++#!/usr/bin/env bash
++
++PYTHON=/home/fyu/miniconda3/envs/libero/bin/python
++
++export CUDA_VISIBLE_DEVICES="0"
++
++export MUJOCO_EGL_DEVICE_ID=0
++export PYTHONPATH=/home/fyu/mlr_ifa:$PYTHONPATH
++
++$PYTHON libero/lifelong/test.py \
++    seed=42 \
++    benchmark_name=LIBERO_OBJECT \
++    policy=complete_policy \
++    lifelong=basic \
++    pretrain=/home/fyu/mlr_ifa/object_multitask_model_ep99.pth  \
++    +start_task=6 \
++    +end_task=10 \
++    +aug=True \
++    training=False \
++    +epoch_dir=./epoch \
++    +test_log_file=./log.txt
++
++echo ">>> Training completed ✅"
+\ No newline at end of file

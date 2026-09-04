@@ -59,7 +59,8 @@ def test_textual_match_score():
 
 def test_date_classification():
     assert relation_to_paper("2026-03-11T12:00:00+00:00") == "ON_ARXIV_WINDOW"
-    assert relation_to_paper("2026-06-03T12:00:00+00:00") == "AFTER_CVPR_PUBLICATION"
+    assert relation_to_paper("2026-06-03T12:00:00+00:00") == "AFTER_ARXIV"
+    assert relation_to_paper("2026-06-15T12:00:00+00:00") == "AFTER_CVPR_PUBLICATION"
 
 
 def test_missing_files_graceful():

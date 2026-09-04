@@ -65,9 +65,18 @@ def classify_scheduler(source_text):
             if re.match(r"for epoch\b", stripped):
                 epoch_indent = indent
                 break
-        if batch_indent is not None and step_indent > batch_indent:
+        effective_indent = step_indent
+        for previous in reversed(lines[:index]):
+            stripped = previous.strip()
+            indent = len(previous) - len(previous.lstrip())
+            if indent < step_indent and stripped.startswith("if ") and "scheduler" in stripped:
+                effective_indent = indent
+                break
+            if indent < step_indent and stripped:
+                break
+        if batch_indent is not None and effective_indent > batch_indent:
             step_scope = "batch"
-        elif epoch_indent is not None and step_indent == epoch_indent + 4:
+        elif epoch_indent is not None and effective_indent == epoch_indent + 4:
             step_scope = "epoch"
         else:
             context = "\n".join(lines[max(0, index - 8):index + 2])
@@ -114,7 +123,7 @@ def relation_to_paper(date_text):
         return "BEFORE_ARXIV"
     if day <= "2026-03-12":
         return "ON_ARXIV_WINDOW"
-    if day <= "2026-05-31":
+    if day < "2026-06-05":
         return "AFTER_ARXIV"
     return "AFTER_CVPR_PUBLICATION"
 
@@ -146,7 +155,11 @@ def textual_match(recipe, claims):
             unknowns.append(claim)
             continue
         known += 1
-        if str(actual).lower() == str(expected).lower():
+        try:
+            equal = math.isclose(float(actual), float(expected), rel_tol=0.0, abs_tol=1e-12)
+        except (TypeError, ValueError):
+            equal = str(actual).lower() == str(expected).lower()
+        if equal:
             matches += 1
         else:
             mismatches += 1
@@ -160,14 +173,16 @@ def textual_match(recipe, claims):
 
 
 def rank_candidates(rows, paper_date="2026-03-11"):
-    target = datetime.fromisoformat(paper_date).date()
+    target = datetime.fromisoformat(paper_date).astimezone() if "T" in paper_date else datetime.fromisoformat(paper_date)
 
     def key(row):
-        day = datetime.fromisoformat(row["date"].replace("Z", "+00:00")).date()
+        moment = datetime.fromisoformat(row["date"].replace("Z", "+00:00"))
+        if moment.tzinfo is not None and target.tzinfo is None:
+            moment = moment.replace(tzinfo=None)
         return (
             -float(row.get("match_fraction", 0)),
             int(row.get("textual_mismatches", 0)),
-            abs((day - target).days),
+            abs((moment - target).total_seconds()),
             row["commit"],
         )
 
@@ -200,6 +215,8 @@ def recipe_from_files(files):
         for group in re.findall(r"epoch\s*in\s*\[([^]]+)\]", mlr)
         for value in re.findall(r"\d+", group)
     })
+    if not save_epochs and re.search(r"epoch\s*%\s*5\s*==\s*0", mlr) and re.search(r"epoch\s*>\s*69", mlr):
+        save_epochs = list(range(70, 100, 5))
     eval_range = re.search(r"range\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)", evaluation)
     eval_epochs = []
     if eval_range:
@@ -243,5 +260,5 @@ def recipe_from_files(files):
         "eval_num_procs": safe_float(_scalar(eval_config, "num_procs")),
         "evaluation_checkpoint_epochs": ";".join(map(str, eval_epochs)) if eval_epochs else UNKNOWN,
         "evaluation_action_semantics": action,
-        "evaluation_policy_reset": "YES" if "algo.policy.reset()" in files.get("libero/lifelong/metric.py", "") else UNKNOWN,
+        "evaluation_policy_reset": "YES_ALGO_RESET" if "algo.reset()" in files.get("libero/lifelong/metric.py", "") or "algo.policy.reset()" in files.get("libero/lifelong/metric.py", "") else UNKNOWN,
     }
