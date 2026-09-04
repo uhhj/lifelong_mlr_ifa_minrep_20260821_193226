@@ -158,6 +158,13 @@ def summarize_bridge(root, out):
             "interaction_nbt": interaction_summary[1]["mean"],
             "interaction_auc": interaction_summary[2]["mean"],
             "interpretation": "fixed_gamma_0.31",
+        },
+        {
+            "seed": "sample_std",
+            "interaction_fwt": interaction_summary[0]["sample_std"],
+            "interaction_nbt": interaction_summary[1]["sample_std"],
+            "interaction_auc": interaction_summary[2]["sample_std"],
+            "interpretation": "fixed_gamma_0.31",
         }
     ])
 
@@ -242,8 +249,67 @@ def summarize_bridge(root, out):
 
     gamma_means = {key: statistics.mean(float(row[key]) for row in gamma_rows) for key in gamma_rows[0] if key != "seed"}
     interaction_means = {row["metric"]: row["mean"] for row in interaction_summary}
+    interaction_stds = {row["metric"]: row["sample_std"] for row in interaction_summary}
     legacy_effects = [row for row in fixed_effects if row["regime"] == "legacy_epoch"]
     legacy_means = {key: statistics.mean(float(row[key]) for row in legacy_effects) for key in ("delta_fwt", "delta_nbt", "delta_auc")}
+    frozen_summary = {}
+    for regime, method in (
+        ("legacy_epoch", "mlr"),
+        ("legacy_epoch", "ifa"),
+        ("batch_step", "mlr"),
+        ("batch_step", "ifa"),
+    ):
+        matching = [row for row in canonical if row["regime"] == regime and row["method"] == method]
+        frozen_summary[(regime, method)] = {
+            metric: statistics.mean(float(row[metric]) for row in matching)
+            for metric in ("FWT", "NBT", "AUC")
+        }
+
+    stage_current_summary = []
+    for regime in ("legacy_epoch", "batch_step"):
+        for stage in range(6, 10):
+            values = [
+                float(row["delta_current_success"])
+                for row in stage_current
+                if row["regime"] == regime and int(row["stage"]) == stage
+            ]
+            stage_current_summary.append(
+                {"regime": regime, "stage": stage, "mean": statistics.mean(values)}
+            )
+    batch_stage_summary = [row for row in stage_current_summary if row["regime"] == "batch_step"]
+    largest_penalty = min(batch_stage_summary, key=lambda row: row["mean"])
+    old_tradeoff_rows = []
+    for regime in ("legacy_epoch", "batch_step"):
+        for stage in range(7, 10):
+            current_values = [
+                float(row["delta_current_success"])
+                for row in stage_current
+                if row["regime"] == regime and int(row["stage"]) == stage
+            ]
+            old_values = [
+                float(row["delta_old_success"])
+                for row in stage_old
+                if row["regime"] == regime and int(row["stage"]) == stage
+            ]
+            old_tradeoff_rows.append(
+                {
+                    "regime": regime,
+                    "stage": stage,
+                    "current_mean": statistics.mean(current_values),
+                    "old_mean": statistics.mean(old_values),
+                }
+            )
+    stable_old_compensation = all(
+        row["old_mean"] > 0
+        for row in old_tradeoff_rows
+        if row["regime"] == "batch_step" and row["current_mean"] < 0
+    ) and any(
+        row["current_mean"] < 0 for row in old_tradeoff_rows if row["regime"] == "batch_step"
+    )
+    frozen_legacy_mlr = frozen_summary[("legacy_epoch", "mlr")]
+    frozen_legacy_ifa = frozen_summary[("legacy_epoch", "ifa")]
+    frozen_batch_mlr = frozen_summary[("batch_step", "mlr")]
+    frozen_batch_ifa = frozen_summary[("batch_step", "ifa")]
     report = f"""# IFA optimization-regime interaction diagnosis
 
 ## Identity
@@ -254,7 +320,7 @@ def summarize_bridge(root, out):
 
 ## Frozen existing results
 
-Legacy MLR is 77.500 FWT / 2.778 NBT / 76.284 AUC; legacy IFA gamma0.31 is 78.333 / 6.852 / 74.861. Batch-step MLR is 90.000 / 13.704 / 82.882; batch-step IFA gamma0.30 is 86.667 / 13.611 / 79.757.
+Legacy MLR is {frozen_legacy_mlr['FWT']:.3f} FWT / {frozen_legacy_mlr['NBT']:.3f} NBT / {frozen_legacy_mlr['AUC']:.3f} AUC; legacy IFA gamma0.31 is {frozen_legacy_ifa['FWT']:.3f} / {frozen_legacy_ifa['NBT']:.3f} / {frozen_legacy_ifa['AUC']:.3f}. Batch-step MLR is {frozen_batch_mlr['FWT']:.3f} / {frozen_batch_mlr['NBT']:.3f} / {frozen_batch_mlr['AUC']:.3f}; batch-step IFA gamma0.30 is {frozen_batch_ifa['FWT']:.3f} / {frozen_batch_ifa['NBT']:.3f} / {frozen_batch_ifa['AUC']:.3f}.
 
 ## Why the gamma0.31 bridge was required
 
@@ -280,7 +346,7 @@ Legacy IFA minus MLR: {legacy_means['delta_fwt']:.3f} FWT / {legacy_means['delta
 
 ## Difference-in-differences
 
-Batch-step minus legacy relative IFA effect: {interaction_means['FWT']:.3f} FWT / {interaction_means['NBT']:.3f} NBT / {interaction_means['AUC']:.3f} AUC.
+Batch-step minus legacy relative IFA effect: {interaction_means['FWT']:.3f} ± {interaction_stds['FWT']:.3f} FWT / {interaction_means['NBT']:.3f} ± {interaction_stds['NBT']:.3f} NBT / {interaction_means['AUC']:.3f} ± {interaction_stds['AUC']:.3f} AUC (sample standard deviation across seeds).
 
 ## IFA pressure
 
@@ -288,7 +354,7 @@ Offline pressure is reported in `pressure/`; increased-under-strong-optimization
 
 ## Stage/task decomposition
 
-The complete current-task and old-task deltas are in `interaction/stage_current_task_effects.csv` and `interaction/stage_old_task_effects.csv`; no retention tradeoff is inferred without corresponding old-task improvement.
+The largest mean batch-step current-task penalty occurs at stage {largest_penalty['stage']} ({largest_penalty['mean']:.3f} percentage points). Stage-specific means are {', '.join(f"stage{row['stage']}={row['mean']:.3f}" for row in batch_stage_summary)}. Stable old-task compensation for every batch-step stage with a current-task penalty is {stable_old_compensation}. The complete current-task and old-task deltas are in `interaction/stage_current_task_effects.csv` and `interaction/stage_old_task_effects.csv`; no retention tradeoff is inferred without corresponding old-task improvement.
 
 ## Observed
 
