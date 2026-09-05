@@ -234,11 +234,11 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
             cur_feat = data[0]["feature"]
             cur_feat = cur_feat.to(true_feats.device).float()
 
-            # [B, 1, 4, 8, 512] -> [B, 4, 8, 512]
+            # [B, 1, time, modality, E] -> [B, time, modality, E]
             if cur_feat.dim() == 5 and cur_feat.shape[1] == 1:
                 cur_feat = cur_feat.squeeze(1)
 
-            sample = cur_feat[0, 0, 0, :]   # [B, 512]
+            sample = cur_feat[0, 0, 0, :]   # [E], historical mixed-batch first reference
             own_references = (
                 cur_feat[batch_mask, 0, 0, :]
                 if getattr(self.cfg, "ifa_own_reference_fix", False)

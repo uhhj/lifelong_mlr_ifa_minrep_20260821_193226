@@ -16,7 +16,7 @@ exec(compile(ast.Module(body=[norm, observe], type_ignores=[]), '<actual observe
 def run(fix, tasks, current=7, enabled=True):
     g = torch.tensor([[.6, .8], [.8, .6]], requires_grad=True)
     refs = torch.tensor([[1., 0.] if t == 6 else [0., 1.] for t in tasks])
-    f = refs[:, None, None, None, :].expand(-1, 1, 4, 8, -1)
+    f = refs[:, None, None, None, :].expand(-1, 1, 8, 4, -1)
     cfg = NS(train=NS(grad_clip=None), ifa_enabled=enabled, feature_dir='unused', gamma=.3, ifa_weight=.1)
     if fix is not None:
         cfg.ifa_own_reference_fix = fix
