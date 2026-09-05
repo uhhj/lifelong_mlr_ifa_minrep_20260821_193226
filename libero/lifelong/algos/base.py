@@ -239,6 +239,11 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                 cur_feat = cur_feat.squeeze(1)
 
             sample = cur_feat[0, 0, 0, :]   # [B, 512]
+            own_references = (
+                cur_feat[batch_mask, 0, 0, :]
+                if getattr(self.cfg, "ifa_own_reference_fix", False)
+                else None
+            )
 
             task_id_list = ifa_info["task_ids"]
             selected_pair_mask = ifa_info["selected_pair_mask"]
@@ -272,7 +277,7 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
                     true_lan_list = []
                     flase_lan_list = []
                     for i in range(batch_size):
-                        true_lan_list.append(sample)
+                        true_lan_list.append(sample if own_references is None else own_references[i])
                         false_lan_name = f'{self.cfg.feature_dir}/{item}/0.pt'
                         flase_lan_list.append(
                             torch.load(false_lan_name, map_location=true_feats.device)["feature"][0, 0, 0, :]
