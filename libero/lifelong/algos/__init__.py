@@ -7,4 +7,4 @@ from libero.lifelong.algos.packnet import PackNet
 from libero.lifelong.algos.single_task import SingleTask
 from libero.lifelong.algos.basic import Basic
 from libero.lifelong.algos.multitask_pretraining import multitaskpretraining
-
+from libero.lifelong.algos.mlr_replay_constraint import MLRReplayConstraint
