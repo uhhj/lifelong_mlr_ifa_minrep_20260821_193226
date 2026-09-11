@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "cases": [
+    "new_only",
+    "mixed",
+    "old_only"
+  ],
+  "comparison": "fixed-kappa endpoint vs original implementation, exact equality",
+  "kappa": 0,
+  "corrected_steps": 0,
+  "max_abs_difference": 0.0,
+  "source_sha256": {
+    "libero/lifelong/algos/fixed_kappa.py": "0fe9fdbf8ed65968641a7f64d20f19ae1bdc396ba377d05e3362e62b33b3f967",
+    "libero/lifelong/algos/mlr_fixed_kappa.py": "53cf10db0194208984489bb0a2b9d59a5d274a1865c6ac2fdcaabd84abdb48ae",
+    "libero/configs/lifelong/mlr_fixed_kappa.yaml": "a0b2bf8e7f8c72c393944feac411ae948e188b44dd3528a78abcd615853b4b71",
+    "libero/lifelong/algos/mlr.py": "97f8ebb8ffdd54f5596c956c8f125feac70ebdbd913386bc8384c58d4a7463e5",
+    "libero/lifelong/algos/base.py": "aeae2e732469729c8f6ced3e5de85604cb43335998ee632dc8aa2e00cb66215a",
+    "libero/lifelong/models/brief.py": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+    "libero/lifelong/models/base_policy.py": "3dcca28f629caeff76f013340056ab5f3af02dd32b8e849f8942c251ee7c4365",
+    "libero/lifelong/models/policy_head.py": "8c74c06a64c7be8c98fe0d317c83721b8f10d3ad7148253d23e2178cea4a209b",
+    "libero/lifelong/lifelong_adaptation.py": "3d408cbeadc69e952355c6126774f6b4353a7cd5b181f3d1a6559300da42267f",
+    "libero/lifelong/test.py": "3cafb8d1e404d409125bf9b27bab3b4e8b2754a016f9173cbb1c3223fcb10393"
+  },
+  "torch": "1.13.0+cu116",
+  "device": "cuda:0",
+  "baseline_config": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/final_paper_text_faithful/mlr/seed42/run_001/config.json",
+  "limitations": "Direct policy API, no DDP wrapper. These real batches may not trigger conflict; forced-conflict unit tests and torchrun smoke are separate checks."
+}

@@ -1,0 +1,35 @@
+{
+  "config_sha256": "694ce26b13eab40f9f683bd280bdde71849d9966bd26a9318565fa876706b2bd",
+  "counts": {
+    "6": 1562,
+    "7": 1480,
+    "8": 1560,
+    "9": 1319
+  },
+  "command": [
+    "/home/dm/miniconda3/envs/wzp_mlr_tmp/bin/python",
+    "-m",
+    "torch.distributed.run",
+    "--standalone",
+    "--nproc_per_node=1",
+    "libero/lifelong/save_feature.py",
+    "seed=46",
+    "benchmark_name=LIBERO_OBJECT",
+    "policy=complete_policy",
+    "lifelong=basic",
+    "folder=/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/data",
+    "bddl_folder=/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/libero/libero/bddl_files",
+    "init_states_folder=/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/libero/libero/init_files",
+    "train.batch_size=1",
+    "train.num_workers=0",
+    "pretrain=/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/checkpoints/object_multitask_model_ep99.pth",
+    "+start_task=6",
+    "+end_task=10",
+    "+aug=true",
+    "+feature_dir=/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/features/object_seed46",
+    "+experiment_root=/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/fixed_kappa_confirmation_v2/feature_seed46",
+    "training=false"
+  ],
+  "wall_seconds": 191.9016234120354,
+  "full_policy_matches_historical_feature_config": true
+}

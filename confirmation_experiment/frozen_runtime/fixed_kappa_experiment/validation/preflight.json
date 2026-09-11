@@ -1,0 +1,767 @@
+{
+  "status": "PASS",
+  "source_sha256": {
+    "libero/lifelong/algos/fixed_kappa.py": "0fe9fdbf8ed65968641a7f64d20f19ae1bdc396ba377d05e3362e62b33b3f967",
+    "libero/lifelong/algos/mlr_fixed_kappa.py": "53cf10db0194208984489bb0a2b9d59a5d274a1865c6ac2fdcaabd84abdb48ae",
+    "libero/configs/lifelong/mlr_fixed_kappa.yaml": "a0b2bf8e7f8c72c393944feac411ae948e188b44dd3528a78abcd615853b4b71",
+    "libero/lifelong/algos/mlr.py": "97f8ebb8ffdd54f5596c956c8f125feac70ebdbd913386bc8384c58d4a7463e5",
+    "libero/lifelong/algos/base.py": "aeae2e732469729c8f6ced3e5de85604cb43335998ee632dc8aa2e00cb66215a",
+    "libero/lifelong/models/brief.py": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+    "libero/lifelong/models/base_policy.py": "3dcca28f629caeff76f013340056ab5f3af02dd32b8e849f8942c251ee7c4365",
+    "libero/lifelong/models/policy_head.py": "8c74c06a64c7be8c98fe0d317c83721b8f10d3ad7148253d23e2178cea4a209b",
+    "libero/lifelong/lifelong_adaptation.py": "3d408cbeadc69e952355c6126774f6b4353a7cd5b181f3d1a6559300da42267f",
+    "libero/lifelong/test.py": "3cafb8d1e404d409125bf9b27bab3b4e8b2754a016f9173cbb1c3223fcb10393"
+  },
+  "seeds": {
+    "42": {
+      "endpoints": {
+        "mlr": {
+          "directory": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/final_paper_text_faithful/mlr/seed42",
+          "config_sha256": "d30796a20cd00aa4a32baade9d14d46af3643fc3aaa3e1a4b662bf2b75c5d89c",
+          "log_sha256": "bb1b3cedba4248adad96829aee6056e5df14c7ad0b6effc885d886c85a77f2a7",
+          "matrix": [
+            [
+              35.0,
+              null,
+              null,
+              null
+            ],
+            [
+              45.0,
+              100.0,
+              null,
+              null
+            ],
+            [
+              20.0,
+              95.0,
+              85.0,
+              null
+            ],
+            [
+              5.0,
+              85.0,
+              85.0,
+              80.0
+            ]
+          ]
+        },
+        "hard": {
+          "directory": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/replay_constraint/aggregate_v1/formal/constraint/seed42",
+          "config_sha256": "fe034826ddac82154877180f82e548ee182ea16a3a9571345ffb2f4509c36e6e",
+          "log_sha256": "72061dec090422ec0e2ff6cc7ea6262c323b64d6ca4321706e9e898c50a06ea9",
+          "matrix": [
+            [
+              35.0,
+              null,
+              null,
+              null
+            ],
+            [
+              60.0,
+              100.0,
+              null,
+              null
+            ],
+            [
+              25.0,
+              100.0,
+              85.0,
+              null
+            ],
+            [
+              0.0,
+              100.0,
+              85.0,
+              70.0
+            ]
+          ]
+        }
+      },
+      "common_recipe": {
+        "seed": 42,
+        "benchmark_name": "LIBERO_OBJECT",
+        "data": {
+          "data_modality": [
+            "image",
+            "proprio"
+          ],
+          "seq_len": 8,
+          "demo_limit": 10,
+          "frame_stack": 1,
+          "use_eye_in_hand": true,
+          "use_gripper": true,
+          "use_joint": true,
+          "use_ee": false,
+          "max_word_len": 25,
+          "state_dim": null,
+          "num_kp": 64,
+          "img_h": 128,
+          "img_w": 128,
+          "task_group_size": 1,
+          "task_order_index": 0,
+          "shuffle_task": false,
+          "obs": {
+            "modality": {
+              "rgb": [
+                "agentview_rgb",
+                "eye_in_hand_rgb"
+              ],
+              "depth": [],
+              "low_dim": [
+                "gripper_states",
+                "joint_states"
+              ]
+            }
+          },
+          "obs_key_mapping": {
+            "agentview_rgb": "agentview_image",
+            "eye_in_hand_rgb": "robot0_eye_in_hand_image",
+            "gripper_states": "robot0_gripper_qpos",
+            "joint_states": "robot0_joint_pos"
+          },
+          "affine_translate": 4,
+          "action_scale": 1.0,
+          "train_dataset_ratio": 0.8
+        },
+        "policy": {
+          "color_aug": {
+            "_target_": "BatchWiseImgColorJitterAug",
+            "network": "BatchWiseImgColorJitterAug",
+            "prob": 0.9,
+            "network_kwargs": {
+              "brightness": 0.3,
+              "contrast": 0.3,
+              "saturation": 0.3,
+              "hue": 0.3
+            }
+          },
+          "translation_aug": {
+            "_target_": "RandomAffineAug",
+            "network": "RandomAffineAug",
+            "prob": 0.6,
+            "network_kwargs": {
+              "degrees": 15,
+              "translate": 0.1
+            }
+          },
+          "erase_aug": {
+            "_target_": "RandomErasingAug",
+            "network": "RandomErasingAug",
+            "prob": 0.1,
+            "network_kwargs": {
+              "scale": [
+                0.02,
+                0.33
+              ],
+              "ratio": [
+                0.3,
+                3.3
+              ]
+            }
+          },
+          "image_encoder": {
+            "network": "CLIPVisionEncoder",
+            "network_kwargs": {
+              "vision_model_name": "openai/clip-vit-base-patch16",
+              "output_size": 64,
+              "input_shape": null
+            }
+          },
+          "language_encoder": {
+            "network": "CLIPTextEncoder",
+            "network_kwargs": {
+              "text_model_name": "openai/clip-vit-base-patch16",
+              "output_size": 64
+            }
+          },
+          "temporal_position_encoding": {
+            "network": "SinusoidalPositionEncoding",
+            "network_kwargs": {
+              "input_size": null,
+              "inv_freq_factor": 10,
+              "factor_ratio": null
+            }
+          },
+          "policy_head": {
+            "network": "TemporalGMMHead",
+            "network_kwargs": {
+              "hidden_size": 1024,
+              "num_layers": 2,
+              "min_std": 0.0001,
+              "num_modes": 5,
+              "low_eval_noise": false,
+              "activation": "softplus"
+            },
+            "loss_kwargs": {
+              "loss_coef": 1.0
+            }
+          },
+          "policy_type": "BriefPolicy",
+          "extra_num_layers": 0,
+          "extra_hidden_size": 128,
+          "embed_size": 512,
+          "transformer_num_layers": 6,
+          "transformer_num_heads": 8,
+          "transformer_head_output_size": 64,
+          "transformer_mlp_hidden_size": 256,
+          "transformer_dropout": 0.15,
+          "transformer_max_seq_len": 8,
+          "film_hidden_size": 512,
+          "num_tasks": 10,
+          "max_seq_len": 8,
+          "num_gmm_modes": 5,
+          "rank": 8,
+          "alpha": 8
+        },
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        },
+        "start_task": 6,
+        "end_task": 10,
+        "aug": false,
+        "past_data_rate": 0.5,
+        "ifa_enabled": false,
+        "repro_scheduler_mode": "batch_step",
+        "task_embedding_format": "clip",
+        "save_final_checkpoint": true,
+        "load_previous_model": false
+      },
+      "initial_checkpoint_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+      "limitation": "Existing endpoints identify cache/checkpoint paths; historical cache content hashes were not recorded.",
+      "feature_file_counts": {
+        "6": 1562,
+        "7": 1480,
+        "8": 1560,
+        "9": 1319
+      }
+    },
+    "43": {
+      "endpoints": {
+        "mlr": {
+          "directory": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/final_paper_text_faithful/mlr/seed43",
+          "config_sha256": "4f08658081ac08911cd416efa6e561725d84d1419df46b2dc268db4fd7867d2a",
+          "log_sha256": "c5cf2d6b2f71321a79501735cd0b031ff96d612f2c2be11bfe9a75ebaef71fc8",
+          "matrix": [
+            [
+              65.0,
+              null,
+              null,
+              null
+            ],
+            [
+              45.0,
+              100.0,
+              null,
+              null
+            ],
+            [
+              60.0,
+              95.0,
+              100.0,
+              null
+            ],
+            [
+              45.0,
+              95.0,
+              100.0,
+              80.0
+            ]
+          ]
+        },
+        "hard": {
+          "directory": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/replay_constraint/aggregate_v1/formal/constraint/seed43",
+          "config_sha256": "6ae3218f74da8def4ad59def0e575c09b28e7584e6166e8bbb291da993716878",
+          "log_sha256": "6e0a83c14fcba5d7d9ada407cabf4d5afde3ac0a457e9cf96ddd3c31b7677b19",
+          "matrix": [
+            [
+              65.0,
+              null,
+              null,
+              null
+            ],
+            [
+              45.0,
+              90.0,
+              null,
+              null
+            ],
+            [
+              60.0,
+              85.0,
+              100.0,
+              null
+            ],
+            [
+              55.00000000000001,
+              90.0,
+              95.0,
+              50.0
+            ]
+          ]
+        }
+      },
+      "common_recipe": {
+        "seed": 43,
+        "benchmark_name": "LIBERO_OBJECT",
+        "data": {
+          "data_modality": [
+            "image",
+            "proprio"
+          ],
+          "seq_len": 8,
+          "demo_limit": 10,
+          "frame_stack": 1,
+          "use_eye_in_hand": true,
+          "use_gripper": true,
+          "use_joint": true,
+          "use_ee": false,
+          "max_word_len": 25,
+          "state_dim": null,
+          "num_kp": 64,
+          "img_h": 128,
+          "img_w": 128,
+          "task_group_size": 1,
+          "task_order_index": 0,
+          "shuffle_task": false,
+          "obs": {
+            "modality": {
+              "rgb": [
+                "agentview_rgb",
+                "eye_in_hand_rgb"
+              ],
+              "depth": [],
+              "low_dim": [
+                "gripper_states",
+                "joint_states"
+              ]
+            }
+          },
+          "obs_key_mapping": {
+            "agentview_rgb": "agentview_image",
+            "eye_in_hand_rgb": "robot0_eye_in_hand_image",
+            "gripper_states": "robot0_gripper_qpos",
+            "joint_states": "robot0_joint_pos"
+          },
+          "affine_translate": 4,
+          "action_scale": 1.0,
+          "train_dataset_ratio": 0.8
+        },
+        "policy": {
+          "color_aug": {
+            "_target_": "BatchWiseImgColorJitterAug",
+            "network": "BatchWiseImgColorJitterAug",
+            "prob": 0.9,
+            "network_kwargs": {
+              "brightness": 0.3,
+              "contrast": 0.3,
+              "saturation": 0.3,
+              "hue": 0.3
+            }
+          },
+          "translation_aug": {
+            "_target_": "RandomAffineAug",
+            "network": "RandomAffineAug",
+            "prob": 0.6,
+            "network_kwargs": {
+              "degrees": 15,
+              "translate": 0.1
+            }
+          },
+          "erase_aug": {
+            "_target_": "RandomErasingAug",
+            "network": "RandomErasingAug",
+            "prob": 0.1,
+            "network_kwargs": {
+              "scale": [
+                0.02,
+                0.33
+              ],
+              "ratio": [
+                0.3,
+                3.3
+              ]
+            }
+          },
+          "image_encoder": {
+            "network": "CLIPVisionEncoder",
+            "network_kwargs": {
+              "vision_model_name": "openai/clip-vit-base-patch16",
+              "output_size": 64,
+              "input_shape": null
+            }
+          },
+          "language_encoder": {
+            "network": "CLIPTextEncoder",
+            "network_kwargs": {
+              "text_model_name": "openai/clip-vit-base-patch16",
+              "output_size": 64
+            }
+          },
+          "temporal_position_encoding": {
+            "network": "SinusoidalPositionEncoding",
+            "network_kwargs": {
+              "input_size": null,
+              "inv_freq_factor": 10,
+              "factor_ratio": null
+            }
+          },
+          "policy_head": {
+            "network": "TemporalGMMHead",
+            "network_kwargs": {
+              "hidden_size": 1024,
+              "num_layers": 2,
+              "min_std": 0.0001,
+              "num_modes": 5,
+              "low_eval_noise": false,
+              "activation": "softplus"
+            },
+            "loss_kwargs": {
+              "loss_coef": 1.0
+            }
+          },
+          "policy_type": "BriefPolicy",
+          "extra_num_layers": 0,
+          "extra_hidden_size": 128,
+          "embed_size": 512,
+          "transformer_num_layers": 6,
+          "transformer_num_heads": 8,
+          "transformer_head_output_size": 64,
+          "transformer_mlp_hidden_size": 256,
+          "transformer_dropout": 0.15,
+          "transformer_max_seq_len": 8,
+          "film_hidden_size": 512,
+          "num_tasks": 10,
+          "max_seq_len": 8,
+          "num_gmm_modes": 5,
+          "rank": 8,
+          "alpha": 8
+        },
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        },
+        "start_task": 6,
+        "end_task": 10,
+        "aug": false,
+        "past_data_rate": 0.5,
+        "ifa_enabled": false,
+        "repro_scheduler_mode": "batch_step",
+        "task_embedding_format": "clip",
+        "save_final_checkpoint": true,
+        "load_previous_model": false
+      },
+      "initial_checkpoint_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+      "limitation": "Existing endpoints identify cache/checkpoint paths; historical cache content hashes were not recorded.",
+      "feature_file_counts": {
+        "6": 1562,
+        "7": 1480,
+        "8": 1560,
+        "9": 1319
+      }
+    },
+    "44": {
+      "endpoints": {
+        "mlr": {
+          "directory": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/final_paper_text_faithful/mlr/seed44",
+          "config_sha256": "5dea0dc8eb55b7de71163cf1b82bfde6c3ff7599af621e33b1c70324e6abcb61",
+          "log_sha256": "9458b4357863f6aad371f2aabd8a71d2fb5ccdb082e03025692f89d4e2073f4a",
+          "matrix": [
+            [
+              60.0,
+              null,
+              null,
+              null
+            ],
+            [
+              55.00000000000001,
+              100.0,
+              null,
+              null
+            ],
+            [
+              35.0,
+              100.0,
+              85.0,
+              null
+            ],
+            [
+              65.0,
+              100.0,
+              100.0,
+              100.0
+            ]
+          ]
+        },
+        "hard": {
+          "directory": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/replay_constraint/aggregate_v1/formal/constraint/seed44",
+          "config_sha256": "1c3e91e74e2ec224dc09bcb96a95c32155829a88c444e3c89c64f8914fc8e838",
+          "log_sha256": "f28aca1143860729c4dee87d729f393a5aca58b90edcb1c555a60696abb42a85",
+          "matrix": [
+            [
+              60.0,
+              null,
+              null,
+              null
+            ],
+            [
+              60.0,
+              100.0,
+              null,
+              null
+            ],
+            [
+              40.0,
+              95.0,
+              85.0,
+              null
+            ],
+            [
+              50.0,
+              100.0,
+              95.0,
+              95.0
+            ]
+          ]
+        }
+      },
+      "common_recipe": {
+        "seed": 44,
+        "benchmark_name": "LIBERO_OBJECT",
+        "data": {
+          "data_modality": [
+            "image",
+            "proprio"
+          ],
+          "seq_len": 8,
+          "demo_limit": 10,
+          "frame_stack": 1,
+          "use_eye_in_hand": true,
+          "use_gripper": true,
+          "use_joint": true,
+          "use_ee": false,
+          "max_word_len": 25,
+          "state_dim": null,
+          "num_kp": 64,
+          "img_h": 128,
+          "img_w": 128,
+          "task_group_size": 1,
+          "task_order_index": 0,
+          "shuffle_task": false,
+          "obs": {
+            "modality": {
+              "rgb": [
+                "agentview_rgb",
+                "eye_in_hand_rgb"
+              ],
+              "depth": [],
+              "low_dim": [
+                "gripper_states",
+                "joint_states"
+              ]
+            }
+          },
+          "obs_key_mapping": {
+            "agentview_rgb": "agentview_image",
+            "eye_in_hand_rgb": "robot0_eye_in_hand_image",
+            "gripper_states": "robot0_gripper_qpos",
+            "joint_states": "robot0_joint_pos"
+          },
+          "affine_translate": 4,
+          "action_scale": 1.0,
+          "train_dataset_ratio": 0.8
+        },
+        "policy": {
+          "color_aug": {
+            "_target_": "BatchWiseImgColorJitterAug",
+            "network": "BatchWiseImgColorJitterAug",
+            "prob": 0.9,
+            "network_kwargs": {
+              "brightness": 0.3,
+              "contrast": 0.3,
+              "saturation": 0.3,
+              "hue": 0.3
+            }
+          },
+          "translation_aug": {
+            "_target_": "RandomAffineAug",
+            "network": "RandomAffineAug",
+            "prob": 0.6,
+            "network_kwargs": {
+              "degrees": 15,
+              "translate": 0.1
+            }
+          },
+          "erase_aug": {
+            "_target_": "RandomErasingAug",
+            "network": "RandomErasingAug",
+            "prob": 0.1,
+            "network_kwargs": {
+              "scale": [
+                0.02,
+                0.33
+              ],
+              "ratio": [
+                0.3,
+                3.3
+              ]
+            }
+          },
+          "image_encoder": {
+            "network": "CLIPVisionEncoder",
+            "network_kwargs": {
+              "vision_model_name": "openai/clip-vit-base-patch16",
+              "output_size": 64,
+              "input_shape": null
+            }
+          },
+          "language_encoder": {
+            "network": "CLIPTextEncoder",
+            "network_kwargs": {
+              "text_model_name": "openai/clip-vit-base-patch16",
+              "output_size": 64
+            }
+          },
+          "temporal_position_encoding": {
+            "network": "SinusoidalPositionEncoding",
+            "network_kwargs": {
+              "input_size": null,
+              "inv_freq_factor": 10,
+              "factor_ratio": null
+            }
+          },
+          "policy_head": {
+            "network": "TemporalGMMHead",
+            "network_kwargs": {
+              "hidden_size": 1024,
+              "num_layers": 2,
+              "min_std": 0.0001,
+              "num_modes": 5,
+              "low_eval_noise": false,
+              "activation": "softplus"
+            },
+            "loss_kwargs": {
+              "loss_coef": 1.0
+            }
+          },
+          "policy_type": "BriefPolicy",
+          "extra_num_layers": 0,
+          "extra_hidden_size": 128,
+          "embed_size": 512,
+          "transformer_num_layers": 6,
+          "transformer_num_heads": 8,
+          "transformer_head_output_size": 64,
+          "transformer_mlp_hidden_size": 256,
+          "transformer_dropout": 0.15,
+          "transformer_max_seq_len": 8,
+          "film_hidden_size": 512,
+          "num_tasks": 10,
+          "max_seq_len": 8,
+          "num_gmm_modes": 5,
+          "rank": 8,
+          "alpha": 8
+        },
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        },
+        "start_task": 6,
+        "end_task": 10,
+        "aug": false,
+        "past_data_rate": 0.5,
+        "ifa_enabled": false,
+        "repro_scheduler_mode": "batch_step",
+        "task_embedding_format": "clip",
+        "save_final_checkpoint": true,
+        "load_previous_model": false
+      },
+      "initial_checkpoint_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+      "limitation": "Existing endpoints identify cache/checkpoint paths; historical cache content hashes were not recorded.",
+      "feature_file_counts": {
+        "6": 1562,
+        "7": 1480,
+        "8": 1560,
+        "9": 1319
+      }
+    }
+  }
+}
