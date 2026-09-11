@@ -1,0 +1,17 @@
+通信故障恢复附录（原科学协议不变）
+
+失败发生于seed45 MLR训练完成、soft等待task7之前。旧PyTorch的standalone启动器把两个并存进程放在localhost:29400，MLR退出使另一个启动器失去C10d store。本附录只修复独立进程通信和故障恢复，不修改κ、模型、梯度算式、优化器、scheduler、clip、缓存、采样、任务顺序、epoch或20-trial规则。
+
+所有原有代码文件、PRECHECK、PROTOCOL、失败日志、已完成checkpoint、训练曲线和评估证据先记录哈希。恢复代码放在recovery/，原FAILED.json保留；恢复队列拥有单独的失败域。完成结果不被重训结果替换。
+
+独立启动器使用c10d + localhost:0 + 不同rdzv_id，先通过两真实NCCL进程同时存活、首进程退出、另一进程继续通信的测试。仅改变启动器基础设施，不改变单GPU world_size=1配置。
+
+seed45 soft的task6活状态已经丢失，因此在独立审计目录忠实重放原100epoch前缀，唯一目的为重建状态；不作为新seed/新分支、不另计正式成绩。必须逐项匹配原15700步loss序列哈希、ep99 model、AdamW、scheduler、全局RNG和step计数，并验证buffer内容。匹配后保存完整恢复状态，从同一活进程返回原task6结束边界；task7前恢复原输出/buffer路径，保留原task6日志，仅追加task7–9。重放产物永远不替换原task6 checkpoint。任一校验失败就停止。
+
+seed45两arm已有task6/ep99的真实20-trial返回值。原test.py在各stage开始set_global_seed，并为每单元重新构建策略及环境，因此丢失的task6末尾RNG可以在stage7的原重置点隔离。先用真实checkpoint和原评估入口（不运行机器人trials）验证连续路径与复用首格路径在其余九个调用前的完整model、RNG、配置、任务顺序和后端状态一致。通过后复用task6实测值，从原stage7调用继续。task7曾被异常终止的未完成评估单元没有最终结果；不能排除仿真已开始，它按相同初始协议忠实重放，保留失败日志，不增加主矩阵的trial数或择优选择结果。
+
+恢复评估使用独立segment日志。完成后核对已有task6值并只向canonical日志追加缺失单元；不重复追加现有结果。新的真实评估调用保存轻量返回值及RNG恢复证据，不保存图像或逐步大模型，不改变动作采样。
+
+顺序保持seed45 MLR剩余评估、soft剩余训练与评估，然后seed46和47的配对原流程。seed46/47的task6完整闸门仍必须通过。主要结果还是三个新seed，历史上下文和六seed探索性描述仍后置。本轮不启动任何机制实验。
+
+最终报告必须记录恢复计算、异常中断的未完成单元、通信修复、结果复用及校验范围。所有原冻结文件的哈希仍核对，已完成结果的保留也在最终汇总前重新核对。恢复实现单独commit/push；后续长队列仍不按中间成绩停机。
