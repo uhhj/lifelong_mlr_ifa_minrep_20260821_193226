@@ -30,6 +30,7 @@ def load(name):
     path=ROOT/'gradient_relation_experiment'/f'{name}.py';source=path.read_text(encoding='utf-8')
     adapted=source.replace('runs/gradient_relation_v1','runs/gradient_relation_4090_v2')
     adapted=adapted.replace('new_controlled_3090_from_official',COHORT)
+    adapted=adapted.replace('new controlled 3090 carrier','new controlled 4090 carrier')
     if name=='summarize':
         adapted=adapted.replace('当前3090重放历史4090失败已保留，用户随后授权新受控载体。不得将新载体结果写回原历史实验。',
             '硬件中断前3090已完成的24点独立保留；跨硬件续训未通过既有起点核对，因此本组在4090完整执行全部固定120点，不与旧24点混算。')
