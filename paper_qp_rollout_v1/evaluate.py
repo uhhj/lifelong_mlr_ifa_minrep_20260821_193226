@@ -13,7 +13,7 @@ class Observer:
         self.active={'round':r,'init_sha256':digest(states),'policy_seed':self.cell['round_policy_seeds'][r],'policy_rng_before':digest(rng_state()),'count':-5,'success':[False]*10,'first':[None]*10}
         obs=self.inner.set_init_state(states)
         # Observation fingerprint catches renderer/state differences without storing images.
-        self.active['initial_obs_sha256']=digest(obs)
+        self.active['initial_obs_sha256']=observation_digest(obs)
         return obs
     def step(self,actions):
         saved=np.asarray(actions).copy();assert saved.shape==(10,7) and np.isfinite(saved).all()

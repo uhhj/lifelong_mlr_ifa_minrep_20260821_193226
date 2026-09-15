@@ -18,6 +18,24 @@ def write(p,x):
 def verify():
     for p,h in read(OUT/'FROZEN_INPUTS.json').items():assert sha(ROOT/p)==h,('frozen input changed',p)
 def round_seed(point_index,task,round_index):return 9100000+point_index*100+task*2+round_index
+def observation_digest(value):
+    """Hash observation contents, never the pointers of NumPy object arrays."""
+    import numpy as np
+    h=hashlib.sha256()
+    def visit(v):
+        if isinstance(v,np.ndarray):
+            h.update(repr((v.dtype.str,v.shape)).encode())
+            if v.dtype.hasobject:
+                for item in v.flat:visit(item)
+            else:h.update(np.ascontiguousarray(v).tobytes())
+        elif isinstance(v,dict):
+            h.update(b'dict')
+            for k in sorted(v,key=repr):visit(k);visit(v[k])
+        elif isinstance(v,(tuple,list)):
+            h.update(type(v).__name__.encode());h.update(str(len(v)).encode())
+            for x in v:visit(x)
+        else:h.update(repr((type(v).__name__,v)).encode())
+    visit(value);return h.hexdigest()
 def trial_summary(done,steps):
     import numpy as np
     a=np.asarray(done,dtype=bool);ss=np.asarray(steps);assert a.shape[1]==10

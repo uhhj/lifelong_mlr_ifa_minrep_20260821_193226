@@ -1,7 +1,19 @@
 import unittest,tempfile
 import numpy as np
-from .common import trial_summary,round_seed
+from .common import trial_summary,round_seed,observation_digest
 class Tests(unittest.TestCase):
+    def test_observation_object_array_content_hash(self):
+        import copy
+        x=np.array([{'image':np.arange(12,dtype=np.uint8).reshape(2,2,3),'state':np.array([1.,2.])}],dtype=object)
+        y=copy.deepcopy(x)
+        self.assertNotEqual(x.tobytes(),y.tobytes())
+        self.assertEqual(observation_digest(x),observation_digest(y))
+        y[0]['state'][0]=3.
+        self.assertNotEqual(observation_digest(x),observation_digest(y))
+    def test_observation_dict_insertion_order(self):
+        x=np.array([dict(a=1,b=np.array([3]))],dtype=object)
+        y=np.array([dict(b=np.array([3]),a=1)],dtype=object)
+        self.assertEqual(observation_digest(x),observation_digest(y))
     def test_warmup_not_success(self):
         flags=np.ones((5,10),bool)
         self.assertFalse(any(x['success'] for x in trial_summary(flags,[-4,-3,-2,-1,0])))
