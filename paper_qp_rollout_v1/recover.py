@@ -10,7 +10,7 @@ def run(mode):
     pts={x['point']:x for x in design['points']}
     members={x['point']:x for x in read(ROOT/'reports/sensitive_component_compatibility_v1/PROBE_MEMBERSHIP.json')['points']}
     origins={x['point']:x for s in p['seeds'] for x in rows(ROOT/f'reports/functional_geometry_diagnostic_v1/carrier/seed{s}/origins.jsonl')}
-    names=p['preflight6'] if mode=='preflight' else p['points'];current=None;algo=None
+    names=p['preflight6'] if mode=='preflight' else ([n for n in p['points'] if n.startswith('s45_')] if mode=='seed45' else p['points']);current=None;algo=None
     try:
         for name in names:
             out=OUT/'recovery'/name;out.mkdir(parents=True,exist_ok=True)
@@ -57,6 +57,6 @@ def run(mode):
             write(out/'COMPLETE.json',{'point':name,'status':'PASS','checkpoints':checkpoints,'parity':checks,'seconds':time.time()-start})
             del base,P,Pold;gc.collect();torch.cuda.empty_cache()
             write(OUT/'RECOVERY_STATUS.json',{'mode':mode,'point':name,'completed':len(list((OUT/'recovery').glob('*/COMPLETE.json'))),'time':time.time()})
-        write(OUT/('RECOVERY_PREFLIGHT.json' if mode=='preflight' else 'RECOVERY_COMPLETE.json'),{'status':'PASS','points':len(names),'full_original_witnesses_per_point':6})
+        write(OUT/('RECOVERY_PREFLIGHT.json' if mode=='preflight' else ('RECOVERY_COMPLETE_SEED45.json' if mode=='seed45' else 'RECOVERY_COMPLETE.json')),{'status':'PASS','points':len(names),'full_original_witnesses_per_point':6})
     finally:torch.distributed.destroy_process_group()
 if __name__=='__main__':run(sys.argv[1])
