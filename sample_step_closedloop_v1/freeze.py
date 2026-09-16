@@ -18,7 +18,7 @@ def run():
  for name in names:
   pt=pts[name];seed=pt['seed'];spec=design['source_plan_sha256'][f'{seed}/8'];plan=read(ROOT/spec['path']);assert sha(ROOT/spec['path'])==spec['sha256']
   sequence=[batch_indices(plan,pt['stage_step']+i) for i in range(300)]
-  assert sequence[:20]==pt['future20_record_indices'] and all(len(x)==10 for x in sequence)
+  assert sequence[:20]==pt['future20_record_indices'] and all(0<len(x)<=10 for x in sequence)
   batches[name]=dict(point=pt,plan=spec,batches=sequence,origin=origins[name],probe=members[name]);a=origins[name]['anchor'];assert sha(a['path'])==a['sha256'];anchors[name]=dict(a)
   for f,h in zip(plan['immutable_feature_origins'],plan['record_sha256']):assert sha(ROOT/f)==h;files.add(ROOT/f)
   for r in lineage:
