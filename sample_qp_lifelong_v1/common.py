@@ -27,6 +27,17 @@ def sha(path):
         for b in iter(lambda:f.read(8*1024*1024), b''): h.update(b)
     return h.hexdigest()
 
+def publish_eval_log(source, destination):
+    from fixed_kappa_experiment.metrics import read_fixed_matrix
+    matrix=read_fixed_matrix(source)
+    destination=Path(destination)
+    if destination.exists():
+        assert read_fixed_matrix(destination)==matrix, 'Do not replace a completed evaluation'
+    else:
+        tmp=destination.with_name(destination.name+'.tmp')
+        tmp.write_bytes(Path(source).read_bytes());os.replace(tmp,destination)
+    return matrix
+
 def verify():
     p = read(OUT/'PROTOCOL_FROZEN.json')
     for f,h in p['files'].items():

@@ -3,9 +3,40 @@ import unittest
 import torch
 from sample_qp_optimized_v1.tests import original_functions, ToyGMM
 from sample_qp_optimized_v1.core import Workspace, inner, project
-from .common import selected_references
+from .common import selected_references,publish_eval_log
 
 class Tests(unittest.TestCase):
+    def test_completed_eval_reuse_does_not_append_duplicate_rows(self):
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as d:
+            source=Path(d)/'attempt.log';dest=Path(d)/'canonical.log'
+            body=''.join('[task %d epoch 99 and %d succ.] 0.50\n'%(t,s)
+                         for s in range(6,10) for t in range(6,s+1))
+            source.write_text(body);publish_eval_log(source,dest);publish_eval_log(source,dest)
+            self.assertEqual(dest.read_text(),body)
+            source.write_text(body.replace('0.50','0.55',1))
+            with self.assertRaises(AssertionError):publish_eval_log(source,dest)
+            self.assertEqual(dest.read_text(),body)
+            source.write_text(body.splitlines()[0]+'\n')
+            with self.assertRaises(ValueError):publish_eval_log(source,dest)
+
+    def test_passive_trial_recorder_ignores_warmup_and_preserves_rng(self):
+        import numpy as np
+        from .evaluate import Observer
+        from cb_ifa_experiment.gpu_runtime import digest,rng_state
+        class Env:
+            def set_init_state(self,x):return x
+            def step(self,a):return {},None,[True]+[False]*9,{}
+            def close(self):pass
+        o=Observer(Env());before=digest(rng_state())
+        o.set_init_state(np.zeros((10,2)))
+        for _ in range(5):o.step(np.zeros((10,7)))
+        self.assertFalse(any(o.active['successes']))
+        o.step(np.zeros((10,7)));o.close()
+        self.assertEqual(o.rounds[0]['first_success_step'][0],1)
+        self.assertEqual(digest(rng_state()),before)
+
     def test_membership_is_private_reproducible_and_old_only(self):
         plan = dict(task=9,records=[dict(task=t,origin='%d/%03d.pt'%(t,i),sha256='x')
                                    for t in range(6,10) for i in range(50)])

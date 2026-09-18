@@ -5,6 +5,7 @@ os.environ.setdefault('PYOPENGL_PLATFORM','egl')
 os.environ.setdefault('EGL_PLATFORM','surfaceless')
 import hashlib
 import runpy
+import sys
 import time
 from .common import *
 
@@ -40,6 +41,13 @@ def main():
     from libero.lifelong import metric
     verify();assert read(RUN/'TRAINING_COMPLETE.json')['status']=='PASS'
     dest=RUN/'evaluation';dest.mkdir(exist_ok=True)
+    # test.py writes one row even for a faithfully reused completed cell. Keep
+    # each invocation's full native log separate, then publish exactly ten rows.
+    attempt=len(list(dest.glob('native_attempt*.log')))
+    native_log=dest/('native_attempt%03d.log'%attempt)
+    assert not native_log.exists()
+    sys.argv=[('+test_log_file='+str(native_log)) if x.startswith('+test_log_file=') else x
+              for x in sys.argv]
     native=metric.evaluate_success;factory=metric.SubprocVectorEnv;instances=[];calls=[]
     cells=[(s,t) for s in TASKS for t in range(6,s+1)]
     def make(*a,**kw):
@@ -80,6 +88,7 @@ def main():
     try:runpy.run_path(str(ROOT/'libero/lifelong/test.py'),run_name='__main__')
     finally:metric.SubprocVectorEnv=factory;metric.evaluate_success=native
     assert len(calls)==10
+    publish_eval_log(native_log,RUN/'primary_ep99.log')
     write(RUN/'EVALUATION_COMPLETE.json',dict(status='PASS',cells=10,trials=200,
           success_matrix={str((r['stage'],r['task'])):r['success_rate'] for r in calls}))
 

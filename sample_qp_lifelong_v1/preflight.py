@@ -63,6 +63,9 @@ def main():
                     else:update(algo,g.batch(ds,ix),task,0,refs,w,guard)
                     torch.cuda.synchronize();times[arm].append(time.perf_counter()-tick)
                     s=g.capture(algo);states[arm].append({k:g.digest(v) for k,v in s.items()})
+                    if arm=='optimized' and i==0:
+                        write(dest/('logging_task%d.json'%task),dict(task=task,step=i,state_hashes=states[arm][-1]))
+                        assert all(g.compare_states(s,g.capture(algo)).values()),'Logging changed state'
             assert states['reference']==states['optimized'], ('Full-stage GPU parity',task)
             # Serialize at a real epoch boundary, then reproduce iterator RNG consumption.
             boundary=g.capture(algo); atomic_save(dest/'boundary.pt',boundary)
