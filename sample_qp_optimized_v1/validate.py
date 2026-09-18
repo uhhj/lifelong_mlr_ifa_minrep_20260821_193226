@@ -139,6 +139,7 @@ def run_gpu():
         scientific_changes=False,reference_windows_per_old_task=32,reference_refresh='each step',
         solver='unchanged SLSQP and polish',gram='unchanged float64 chunks65536',
         hardware=torch.cuda.get_device_name(0),files=audit['files'],
+        historical_legacy_first_step_gate=True,
         run_order=['legacy,opt','opt,legacy','legacy,opt'],gpu_budget_hours=6,
         acceptance='all three points exact20 and historical300 parity; paired20 wall speedup >1')
     write(run_dir/'PROTOCOL_FROZEN.json',frozen)
@@ -152,6 +153,17 @@ def run_gpu():
             def do(which,h):
                 if which=='legacy':return legacy.update(algo,ds,plan,spec,Pold,lineage,name,'SAMPLE_STEP_QP',h,guard)
                 return update(algo,ds,plan,spec,Pold,name,h,w,guard)
+            # A hardware change must not be mistaken for an optimization regression.
+            # Verify the unmodified legacy implementation against its saved first step.
+            g.restore(algo,base)
+            do('legacy',1)
+            first=g.capture(algo)
+            first_hashes=legacy.check_first(name,'SAMPLE_STEP_QP',first)
+            write(run_dir/(name+'_HARDWARE_FIRST_STEP.json'),dict(status='PASS',
+                hardware=torch.cuda.get_device_name(0),legacy_historical_exact=True,
+                state_hashes=first_hashes))
+            del first
+            g.restore(algo,base)
             # Check reference gradients themselves against production, before optimizing states.
             g.restore(algo,base)
             oldH,_=reference_gradients(algo,Pold,lineage,name,guard)
