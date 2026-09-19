@@ -1,7 +1,10 @@
 {
    G1: PASS_F1_AND_F2_CAPTURED,
-  G2: FAIL_REFERENCE_UNRESOLVED,
-  G3: FAIL_WRITEBACK_PARITY_NOT_RUN,
-  decision: STOP_BEFORE_FORMAL_RESUME,
+  G2: PASS_FINAL_FLOAT64_AND_80DIGIT,
+  G3: PASS_F2_WRITEBACK_AND_POST_F2_CHECKPOINT,
+  additional_replay: STOPPED_LATER_UNRESOLVED_INSTANCE,
+  later_failure: {task: 8, epoch: 11, batch: 180, kkt: 2.3018110750783194e-08},
+  post_f2_checkpoint: /root/sample_qp_lifelong_v1_continuation_v2/recovery/slot0.pt,
+  decision: DO_NOT_RESUME_FORMAL_UNTIL_LATER_INSTANCE_REVIEW,
   formal_training_resumed: false
 }
