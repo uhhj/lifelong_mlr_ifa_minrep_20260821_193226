@@ -1,30 +1,42 @@
 {
-  "status": "BLOCKED",
+  "status": "PASS",
   "formal_training_resumed": false,
   "branch": "codex/sample-qp-lifelong-v1",
-  "head": "f9ef426a7126c0d68be9cb9c6c387083c63db2b1",
+  "head": "261307fe9775b1e69631b8805c348a9354dca279",
   "checks": {
     "clip_tokenizer": true,
     "clip_text_model": true,
     "clip_vision_model": true,
     "offline_cache": true,
-    "storage_isolation": true,
+    "offline_network_disabled": true,
+    "runtime_import_provenance": true,
+    "untracked_runtime_snapshots": true,
+    "diagnostic_storage_isolation": true,
     "source_recovery_slot": true,
     "recovery_global_step": 41799,
     "historical_task_markers": true,
     "gpu_cuda": true,
     "ddp_smoke": true,
-    "json_atomicity": true,
-    "runtime_provenance": true,
-    "model_bootstrap": false,
-    "replay_capture": false
+    "model_bootstrap": true,
+    "checkpoint_load_path": true,
+    "json_validity": true,
+    "solver_capture_configuration": true,
+    "output_writability": true
   },
-  "blockers": [
-    "\u5b8c\u6574\u6a21\u578bbootstrap/\u6b63\u5f0fcheckpoint load\u5c1a\u672a\u5b8c\u6210",
-    "\u5b9e\u9645\u8bad\u7ec3import\u94fe\u5b58\u5728\u975eGit cb_ifa_experiment\u4e0efunctional_geometry_diagnostic_v1\uff0c\u9700\u5728\u6b63\u786ePYTHONPATH\u4e0b\u51bb\u7ed3 provenance",
-    "\u672a\u5b8c\u6210\u76ee\u6807batch\u91cd\u653e\uff0c\u56e0\u6b64\u672a\u751f\u6210before_extended/after_extended"
-  ],
+  "runtime_import_environment": "PYTHONPATH=/data/lifelong_mlr_ifa_minrep_20260912 (root namespace package); diagnostic gpu_runtime snapshot under /tmp/qp_later_failure_diag_v1/runtime",
+  "gpu": {
+    "model": "NVIDIA GeForce RTX 3090",
+    "uuid": "GPU-a0e56e6e-54f9-b453-d80c-c450e5f1e15c",
+    "identity_match": false,
+    "uuid_is_nonblocking": true
+  },
   "clip_cache": "/tmp/qp_later_failure_diag_v1/hf",
   "diagnostic_storage": "/root/qp_later_failure_diag_v1",
-  "source_storage_writable_by_diag": false
+  "formal_storage_writable_by_diag": false,
+  "bootstrap": {
+    "train_object_constructed": true,
+    "trainable_parameters": 21633611,
+    "steps_executed": 0
+  },
+  "next_action": "start target task8/epoch11/batch180 replay"
 }
