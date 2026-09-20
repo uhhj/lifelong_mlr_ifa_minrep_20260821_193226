@@ -1,0 +1,150 @@
+{
+  "status": "HISTORICAL_FAILURE_REPRODUCED_AND_CAPTURED",
+  "event_jsonl": "/root/qp_later_failure_diag_v1/run/events/task8_epoch011_attempt006.jsonl",
+  "event_lines": 185,
+  "first_batch": 0,
+  "last_success_batch": 184,
+  "last_success_global_step": 41984,
+  "last_success_optimizer_step": 3584,
+  "last_success_scheduler_step": 3584,
+  "failure_batch": 185,
+  "failure_pre_update_global_step": 41984,
+  "status_batch_180_explanation": "STATUS \u7684 batch=180 \u662f\u6210\u529f\u8ba1\u6570\u4e14\u53ea\u6bcf20\u6b65\u5237\u65b0\uff0c\u4e0d\u7b49\u4e8e\u5931\u8d25 Python batch index\uff1b\u5931\u8d25\u4f4d\u7f6e\u6309\u6700\u540e\u4e00\u6761\u6210\u529f event \u52a0\u4e00\u786e\u5b9a\u3002",
+  "replayed_batches": [
+    180,
+    181,
+    182,
+    183,
+    184
+  ],
+  "all_replayed_events_match": true,
+  "field_differences_max_abs": 0.0,
+  "pre_failure_state": "/data/lifelong_mlr_ifa_minrep_20260912/reports/qp_later_failure_diag_v1/t8_e11_b180/PRE_FAILURE_STATE.pt",
+  "pre_failure_state_reloaded_and_compared": true,
+  "failure_input": "/data/lifelong_mlr_ifa_minrep_20260912/reports/qp_later_failure_diag_v1/t8_e11_b180/FAILURE_BATCH_INPUT.json",
+  "input_fingerprint": "/data/lifelong_mlr_ifa_minrep_20260912/reports/qp_later_failure_diag_v1/t8_e11_b180/UPDATE_INPUT_FINGERPRINT.json",
+  "solver_binding_identity": true,
+  "solver_binding_source": "/tmp/qp_target_step/sample_qp_optimized_v1_continuation_v2/solver.py",
+  "single_step_status": "UPDATE_RAISED",
+  "single_step_error": "AssertionError(('dual QP did not meet frozen KKT', 'Optimization terminated successfully', 2.3018110750783194e-08))",
+  "historical_kkt": 2.3018110750783194e-08,
+  "before_extended": {
+    "primal_positive": 4.864608038612772e-08,
+    "nonnegative_violation": 0.0,
+    "complementarity": 2.077003434249096e-08,
+    "kkt": 4.864608038612772e-08,
+    "slsqp_iterations": 369,
+    "base_done": 10000,
+    "continuation_done": 20000
+  },
+  "after_extended": {
+    "primal_positive": 2.3018110750783194e-08,
+    "nonnegative_violation": 0.0,
+    "complementarity": 1.7748983241179486e-08,
+    "kkt": 2.3018110750783194e-08,
+    "base_done": 10000,
+    "continuation_done": 20000,
+    "extended_done": 100000,
+    "total_polish_done": 130000,
+    "elapsed_seconds": 12.519811480000044,
+    "passed": false
+  },
+  "curve": [
+    {
+      "additional_sweeps": "0",
+      "primal_positive": "4.864608038612772e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "2.077003434249096e-08",
+      "kkt": "4.864608038612772e-08",
+      "objective": "-0.09709162414697005",
+      "dx_norm": "0.0",
+      "elapsed_seconds": "0.00028660499992838595"
+    },
+    {
+      "additional_sweeps": "100",
+      "primal_positive": "4.8660115936627335e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "2.0797166820094296e-08",
+      "kkt": "4.8660115936627335e-08",
+      "objective": "-0.097091624147256",
+      "dx_norm": "7.5626415591431264e-06",
+      "elapsed_seconds": "0.013305252999998629"
+    },
+    {
+      "additional_sweeps": "1000",
+      "primal_positive": "4.877392634217159e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "2.1037862433902208e-08",
+      "kkt": "4.877392634217159e-08",
+      "objective": "-0.09709162414981658",
+      "dx_norm": "7.545204481246442e-05",
+      "elapsed_seconds": "0.12621963899982802"
+    },
+    {
+      "additional_sweeps": "5000",
+      "primal_positive": "4.903397926581121e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "2.2031743806234728e-08",
+      "kkt": "4.903397926581121e-08",
+      "objective": "-0.09709162416090199",
+      "dx_norm": "0.0003731961980382712",
+      "elapsed_seconds": "0.6274636429998282"
+    },
+    {
+      "additional_sweeps": "10000",
+      "primal_positive": "4.889471355573605e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "2.309877010649173e-08",
+      "kkt": "4.889471355573605e-08",
+      "objective": "-0.09709162417405309",
+      "dx_norm": "0.0007355123680844383",
+      "elapsed_seconds": "1.2522611619997406"
+    },
+    {
+      "additional_sweeps": "20000",
+      "primal_positive": "4.752189897150316e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "2.464141935242122e-08",
+      "kkt": "4.752189897150316e-08",
+      "objective": "-0.09709162419791625",
+      "dx_norm": "0.0014241178415486484",
+      "elapsed_seconds": "2.4966641890000574"
+    },
+    {
+      "additional_sweeps": "50000",
+      "primal_positive": "3.914499052681819e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "2.5022167450062176e-08",
+      "kkt": "3.914499052681819e-08",
+      "objective": "-0.09709162425085902",
+      "dx_norm": "0.0031792255092303423",
+      "elapsed_seconds": "6.245816907000062"
+    },
+    {
+      "additional_sweeps": "100000",
+      "primal_positive": "2.3018110750783194e-08",
+      "nonnegative_violation": "0.0",
+      "complementarity": "1.7748983241179486e-08",
+      "kkt": "2.3018110750783194e-08",
+      "objective": "-0.09709162429351605",
+      "dx_norm": "0.005133688080223542",
+      "elapsed_seconds": "12.518255793999742"
+    }
+  ],
+  "qp_assets": {
+    "before_extended.npz": {
+      "exists": true,
+      "bytes": 72666
+    },
+    "convergence.csv": {
+      "exists": true,
+      "bytes": 1211
+    },
+    "after_extended.npz": {
+      "exists": true,
+      "bytes": 73459
+    }
+  },
+  "formal_training_resumed": false,
+  "solver_comparison_performed": false
+}
