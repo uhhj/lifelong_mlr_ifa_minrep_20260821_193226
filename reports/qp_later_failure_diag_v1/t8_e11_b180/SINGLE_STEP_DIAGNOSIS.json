@@ -1,0 +1,118 @@
+{
+  "status": "TARGET_SINGLE_STEP_NOT_REPRODUCED",
+  "formal_training_resumed": false,
+  "frozen_input_asset_sha256": {
+    "PRE_TARGET_STATE.pt": "2ca6bccff53cd6e1dbefc07fc8d938feaf44a7e18c0db0b349b522ce2d0147fc",
+    "TARGET_BATCH.json": "e0528376a54c69a45ff25cf45362e7f8a78e104a209fbdaa59dafbc2aaf54acf"
+  },
+  "original_asset_actual_metadata": {
+    "python_batch_index": 179,
+    "human_ordinal": 180,
+    "pre_update_global_step": 41978,
+    "optimizer_step": 3578,
+    "scheduler_step": 3578,
+    "lr": 8.9875e-05
+  },
+  "runtime_corrected_target_metadata": {
+    "task": 8,
+    "epoch": 11,
+    "python_batch_index": 180,
+    "human_readable_ordinal": 181,
+    "pre_update_global_step": 41979,
+    "record_indices": [
+      2985,
+      497,
+      914,
+      293,
+      1566,
+      1460,
+      2948,
+      2308,
+      180,
+      434
+    ],
+    "source_ids": [
+      8,
+      8,
+      7,
+      7,
+      6,
+      8,
+      7,
+      6,
+      7,
+      6
+    ],
+    "reference_sha256": "5246db2f37a51e439815784137e49bd4a7de977334c73123f4b08e17543d2cce",
+    "batch_size": 10
+  },
+  "pre_target_index180_state": {
+    "path": "/data/lifelong_mlr_ifa_minrep_20260912/reports/qp_later_failure_diag_v1/t8_e11_b180/PRE_TARGET_INDEX180_STATE.pt",
+    "size": 259750594,
+    "sha256": "4201ae882705b54b84fca249ffea5b96a86ec1690274e4f713fe082110039047",
+    "global_step": 41979,
+    "optimizer_step": 3579,
+    "scheduler_step": 3579,
+    "lr": 8.987171052631578e-05
+  },
+  "solver_binding": {
+    "core_solve_source": "/tmp/qp_target_step/sample_qp_optimized_v1_continuation_v2/solver.py",
+    "solver_solve_source": "/tmp/qp_target_step/sample_qp_optimized_v1_continuation_v2/solver.py",
+    "identity": true,
+    "core_filename": "/tmp/qp_target_step/sample_qp_optimized_v1_continuation_v2/solver.py",
+    "solver_filename": "/tmp/qp_target_step/sample_qp_optimized_v1_continuation_v2/solver.py"
+  },
+  "index179_predecessor_result": {
+    "mixed_bc": 10398791.0,
+    "lr": 8.9875e-05,
+    "lr_after": 8.987171052631578e-05,
+    "trigger": true,
+    "constraints": 64,
+    "optimizer_step": 3579,
+    "scheduler_step": 3579,
+    "active": 4,
+    "kkt": 9.6668228977137e-12,
+    "projection_residual": 5.788644689281082e-11,
+    "native_norm": 0.06451911630547993,
+    "actual_norm": 0.057532480807867985,
+    "actual_correction_norm": 0.02920151838948537,
+    "correction_ratio": 0.45260257829980755,
+    "actual_positive": 0,
+    "native_positive": 24,
+    "seconds": 2.3022274479999396
+  },
+  "index180_result": {
+    "status": "UPDATE_RETURNED",
+    "result": {
+      "mixed_bc": 6548287.5,
+      "lr": 8.987171052631578e-05,
+      "lr_after": 8.986842105263158e-05,
+      "trigger": true,
+      "constraints": 64,
+      "optimizer_step": 3580,
+      "scheduler_step": 3580,
+      "active": 3,
+      "kkt": 9.717893156846458e-12,
+      "projection_residual": 7.854050926839817e-11,
+      "native_norm": 0.07491930236757555,
+      "actual_norm": 0.06668087216156057,
+      "actual_correction_norm": 0.03415499959368309,
+      "correction_ratio": 0.4558905183888243,
+      "actual_positive": 0,
+      "native_positive": 26,
+      "seconds": 2.125358451000011
+    },
+    "seconds": 2.128598928451538,
+    "post_optimizer_step": 3580,
+    "post_scheduler_step": 3580,
+    "formal_training_resumed": false
+  },
+  "expected_historical_kkt": 2.3018110750783194e-08,
+  "observed_index180_standard_path_kkt": 9.717893156846458e-12,
+  "qp_capture_assets": {
+    "before_extended.npz": false,
+    "convergence.csv": false,
+    "after_extended.npz": false
+  },
+  "reason": "Both direct updates from the frozen state returned standard-path KKT well below 1e-8; the target solver did not enter extended, so no before/convergence/after extended QP artifacts exist. Do not label this historical instance reproduced; no repeated target execution was performed."
+}
