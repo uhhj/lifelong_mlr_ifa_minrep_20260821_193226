@@ -1,0 +1,135 @@
+{
+  "solver": "v3 L-BFGS-B fallback",
+  "fallback_options": {
+    "maxiter": 100000,
+    "maxfun": 200000,
+    "ftol": 1e-15,
+    "gtol": 1e-12,
+    "maxls": 50
+  },
+  "kkt_threshold": 1e-08,
+  "strict_parity": true,
+  "forced_path": {
+    "F1": {
+      "captured_stage": "post_10k",
+      "historical_standard_kkt": 1.5633119541946794e-08,
+      "action": "continuation_20k_from_capture",
+      "kkt_float64": 6.923108746004214e-09,
+      "kkt_decimal80": 6.923108805785106e-09,
+      "passed": true
+    },
+    "F2": {
+      "captured_stage": "post_30k",
+      "historical_standard_kkt": 1.0038755857838533e-08,
+      "action": "lbfgsb_fallback_from_capture",
+      "kkt_float64": 9.34249511086449e-09,
+      "kkt_decimal80": 9.342495130668564e-09,
+      "nit": 1,
+      "nfev": 2,
+      "njev": 2,
+      "seconds": 0.0006,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+      "objective": -0.08096378191549942,
+      "passed": true
+    },
+    "B185": {
+      "captured_stage": "post_30k",
+      "historical_standard_kkt": 4.864608038612772e-08,
+      "action": "lbfgsb_fallback_from_capture",
+      "kkt_float64": 4.1823128293927425e-10,
+      "kkt_decimal80": 4.182313583312901e-10,
+      "nit": 64,
+      "nfev": 73,
+      "njev": 73,
+      "seconds": 0.0071,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+      "objective": -0.09709162431168405,
+      "passed": true
+    }
+  },
+  "full_solve": {
+    "F1": {
+      "fallback_triggered": false,
+      "expected_fallback_on_server": false,
+      "final_kkt_float64": 6.923108746004214e-09,
+      "final_kkt_decimal80": 6.923108950202858e-09,
+      "base_sweeps": 10000,
+      "continuation_sweeps": 20000,
+      "slsqp_iterations": 311,
+      "seconds": 3.737,
+      "determinism_max_abs_lam_diff": 0.0,
+      "lam_mapping_max_err": 4.235164736271502e-22,
+      "rates_finite": true,
+      "checks": {
+        "float64_kkt_within_threshold": true,
+        "decimal80_kkt_within_threshold": true,
+        "deterministic": true,
+        "rates_finite": true,
+        "fallback_trigger_matches_history": true
+      },
+      "status": "PASS"
+    },
+    "F2": {
+      "fallback_triggered": true,
+      "expected_fallback_on_server": true,
+      "final_kkt_float64": 9.34249511086449e-09,
+      "final_kkt_decimal80": 9.342495101446917e-09,
+      "base_sweeps": 10000,
+      "continuation_sweeps": 20000,
+      "slsqp_iterations": 181,
+      "seconds": 3.663,
+      "determinism_max_abs_lam_diff": 0.0,
+      "lam_mapping_max_err": 3.3881317890172014e-21,
+      "rates_finite": true,
+      "standard_path_max_abs_diff_vs_capture": 0.0,
+      "checks": {
+        "float64_kkt_within_threshold": true,
+        "decimal80_kkt_within_threshold": true,
+        "deterministic": true,
+        "rates_finite": true,
+        "standard_path_parity_with_capture": true,
+        "fallback_trigger_matches_history": true
+      },
+      "status": "PASS"
+    },
+    "B185": {
+      "fallback_triggered": true,
+      "expected_fallback_on_server": true,
+      "final_kkt_float64": 4.1823128293927425e-10,
+      "final_kkt_decimal80": 4.1823129591865267e-10,
+      "base_sweeps": 10000,
+      "continuation_sweeps": 20000,
+      "slsqp_iterations": 369,
+      "seconds": 3.891,
+      "determinism_max_abs_lam_diff": 0.0,
+      "lam_mapping_max_err": 1.0587911840678754e-22,
+      "rates_finite": true,
+      "standard_path_max_abs_diff_vs_capture": 0.0,
+      "checks": {
+        "float64_kkt_within_threshold": true,
+        "decimal80_kkt_within_threshold": true,
+        "deterministic": true,
+        "rates_finite": true,
+        "standard_path_parity_with_capture": true,
+        "fallback_trigger_matches_history": true
+      },
+      "status": "PASS"
+    }
+  },
+  "normal_path": {
+    "b_nonpositive": {
+      "passed": true
+    },
+    "zero_u_norm": {
+      "passed": true
+    },
+    "well_conditioned_vs_v2": {
+      "v3_fallback_triggered": false,
+      "passed": true
+    },
+    "status": "PASS"
+  },
+  "status": "PASS"
+}

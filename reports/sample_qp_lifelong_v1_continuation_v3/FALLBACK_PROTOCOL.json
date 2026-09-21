@@ -1,0 +1,24 @@
+{
+  "revision": "lbfgsb-fallback-v1",
+  "trigger": "final KKT of the unchanged SLSQP+10k+20k dual path exceeds 1e-8",
+  "method": "scipy.optimize.minimize L-BFGS-B on the identical normalized dual QP",
+  "start": "current 30k-polish iterate (no reinitialization, no extra coordinate sweeps)",
+  "options": {
+    "maxiter": 100000,
+    "maxfun": 200000,
+    "ftol": 1e-15,
+    "gtol": 1e-12,
+    "maxls": 50,
+    "maxcor": "len(x) (full memory BFGS; dual dimension <= 96, trivial cost, deterministic)"
+  },
+  "options_freeze_reason": "maxcor default (10) is insufficient on the real ill-conditioned batch185 instance (KKT 1.95e-8); full memory reaches 4.18e-10 on the same instance. Frozen once after diagnosis; used identically for F1, F2, batch185 and formal training.",
+  "acceptance": "project KKT checker (primal positivity, nonnegativity, complementarity) <= 1e-8; optimizer success/message are recorded only",
+  "on_failure": "fail-stop with a complete dual-QP dump; never relax the threshold",
+  "unchanged": "QP objective, constraints, normalization, scale, u_norm, dual definition, lambda mapping lam[valid]=x*u_norm/scale, correction construction, 1e-8 threshold",
+  "evidence": {
+    "offline_regression": "regression/OFFLINE_REGRESSION.json (strict parity PASS: F1 no fallback 6.92e-9; F2 fallback 9.34e-9; B185 fallback 4.18e-10; standard paths reproduce captures bit-exactly)",
+    "unit_tests": "12 optimized + 5 lifelong tests PASS",
+    "writeback": "regression/b185_writeback/WRITEBACK_VALIDATION.json (12/12 PASS; standard_kkt 4.864608038612772e-8 reproduced; optimizer/scheduler +1 exactly; deterministic; post-step snapshot reloads exactly)",
+    "preflight": "PREFLIGHT_COMPLETE.json (0/32/64/96 GPU parity + legacy64 regression PASS)"
+  }
+}
