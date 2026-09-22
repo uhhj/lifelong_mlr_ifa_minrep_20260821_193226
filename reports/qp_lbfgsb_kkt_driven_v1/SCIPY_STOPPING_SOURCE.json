@@ -1,0 +1,18 @@
+{
+  "path": "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/site-packages/scipy/optimize/_lbfgsb_py.py",
+  "sha256": "b82ad489475cfe8d1e5ba9f69e9f668e7456e4be09df4000c7e0e1ed7018797a",
+  "relevant_lines": [
+    "                     disp=None, maxcor=10, ftol=2.2204460492503131e-09,",
+    "    ftol : float",
+    "        f^{k+1})/max{|f^k|,|f^{k+1}|,1} <= ftol``.",
+    "    The option `ftol` is exposed via the `scipy.optimize.minimize` interface,",
+    "    but calling `scipy.optimize.fmin_l_bfgs_b` directly exposes `factr`. The",
+    "    relationship between the two is ``ftol = factr * numpy.finfo(float).eps``.",
+    "    I.e., `factr` multiplies the default machine floating-point precision to",
+    "    arrive at `ftol`.",
+    "    pgtol = gtol",
+    "    factr = ftol / np.finfo(float).eps",
+    "        _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr,",
+    "                       pgtol, wa, iwa, task, iprint, csave, lsave,"
+  ]
+}

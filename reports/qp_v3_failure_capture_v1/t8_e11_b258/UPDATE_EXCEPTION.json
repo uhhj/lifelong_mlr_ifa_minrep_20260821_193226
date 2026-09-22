@@ -1,0 +1,10 @@
+{
+  "batch": 258,
+  "pre_update_global_step": 42057,
+  "error": "AssertionError('dual QP did not meet frozen KKT after L-BFGS-B fallback', 'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH', 1.547045713756745e-08)",
+  "traceback": "Traceback (most recent call last):\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/qp_v3_failure_capture_v1/run.py\", line 108, in main\n    actual=step.update(algo,data,8,11,refs,w,guard=None,diag_dir=diag)\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/qp_v3_failure_capture_v1/step.py\", line 32, in update\n    c, sol = project(H, K, native, diag_dir=diag_dir)\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/qp_v3_failure_capture_v1/core.py\", line 107, in project\n    sol = solve(K, f, un, diag_dir=diag_dir)  # Same SLSQP + polishing and frozen KKT tolerance.\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/qp_v3_failure_capture_v1/solver.py\", line 139, in solve\n    raise AssertionError('dual QP did not meet frozen KKT after '\nAssertionError: ('dual QP did not meet frozen KKT after L-BFGS-B fallback', 'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH', 1.547045713756745e-08)\n",
+  "seconds": 5.507440975999998,
+  "optimizer_step_after": 3658,
+  "scheduler_step_after": 3658,
+  "formal_training_resumed": false
+}

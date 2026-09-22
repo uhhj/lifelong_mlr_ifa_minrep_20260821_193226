@@ -1,0 +1,25 @@
+{
+  "candidate": "LBFGSB_KKT_DRIVEN_V1",
+  "options": {
+    "maxiter": 100000,
+    "maxfun": 200000,
+    "ftol": 0.0,
+    "gtol": 0.0,
+    "maxls": 50,
+    "maxcor": "len(x)"
+  },
+  "kkt_tolerance": 1e-08,
+  "qp": "min x>=0: .5*x.T@A@x-b.T@x",
+  "standard_path": "unchanged SLSQP + 10000 base + 20000 continuation",
+  "selection_priority": [
+    "callback first_pass_x",
+    "final_x if no first pass"
+  ],
+  "callback_does_not_stop_solver": true,
+  "normalization_unchanged": true,
+  "lambda_mapping": "lam[valid]=x*u_norm/scale",
+  "reference_precision": "80 decimal digits from exact binary64 values",
+  "scipy": "1.10.1",
+  "head": "4e97eb7fa76ffa73a670dc8c76becc3cb2c5368b",
+  "formal_training_resumed": false
+}
