@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "primary_tau": 0.999,
+  "sensitivity": [
+    0.99,
+    0.9999
+  ],
+  "seeds": [
+    2026092201,
+    2026092202,
+    2026092203
+  ],
+  "implementation_seeds": [
+    2026092201,
+    2026092202
+  ],
+  "confirmation_seed": 2026092203,
+  "m": [
+    32,
+    64,
+    96
+  ],
+  "p": 128,
+  "synthetic_count": 27,
+  "real_count": 5,
+  "synthetic_rng": "Fresh private numpy RandomState(seed) per kind/m case; no global RNG",
+  "high": "m/4 Gaussian-QR centers, positive diag(R) signs; 4 unit-noise(.01) samples per center",
+  "mixed": "m/8 Gaussian-QR centers; 4 positive and 2 near-negative samples per center; m/4 independent columns",
+  "v": "unit Gaussian drawn after all columns from same local stream",
+  "grouping": "signed complete-link admissibility in valid order; max mean group affinity, tie group ID; true medoid tie valid ID",
+  "main_initial_x": "zero for every branch; references never passed to algorithm",
+  "random_seeds": [
+    0,
+    1,
+    2
+  ],
+  "random_k": "SIM cluster count design input; no grouping time charged to RANDOM",
+  "warmups": 1,
+  "repetitions": 10,
+  "order": "cyclic rotation by fixture index + threshold index + repeat index, sequential",
+  "blas_threads": 1,
+  "cpu_affinity": "single first currently allowed logical CPU",
+  "total_timing": "external wall clock around entire engine call: selection, construction, kernel, full certification",
+  "excluded_timing": [
+    "file IO",
+    "reference preparation",
+    "extra spectral diagnostics",
+    "E_update comparison",
+    "reporting"
+  ],
+  "inherited_kernel": "unchanged qp_workingset_refinement_diag_v1.refine.run",
+  "kernel_limits": {
+    "working_set_iterations": 512,
+    "linear_refinements": 3
+  },
+  "outer_limit": "m subQP calls",
+  "reinsertion": "all inactive coordinates with float64 OR Decimal80 residual >1e-8; never shrink outer C",
+  "full_check_reuse": "reuse inner certification only when C is the full original index order, for ALL arms",
+  "first_round": "SIM_ONESHOT is the SIM_ADD first result/time; never separately solve",
+  "kkt": 1e-08,
+  "reference_kkt": 1e-12,
+  "E_update": 1e-05,
+  "engineering_budgets_not_universal_safety": true,
+  "reference": "cached five full solutions or full zero-start kernel; one stationary full-support refinement, <=1e-12 else unresolved",
+  "reference_never_initializes_competitors": true,
+  "negative_quadratic": "report error if q80 < -1e-60*max(1,sum(abs(terms))); log smaller negatives explicitly",
+  "N_crosscheck_budget": "abs difference <=1e-10 +1e-7*max(two norms); arithmetic audit only",
+  "zero_u": "physical zero correction; normalized E_update not defined; fixed main fixtures require u_norm>0",
+  "rules": {
+    "H1": "SIM_ADD all32 strict KKT + E_update pass, boundary tests expected outcomes",
+    "H2": "high/mixed median k_final/m <=.75",
+    "H3": "high/mixed median SIM/random-median T <=.90 OR solve-count ratio <=.80 AND T ratio <=1",
+    "H4": "high/mixed median SIM/FULL T <=.80 AND low <=1.10",
+    "real_advance": "all5 strict accuracy AND geometric mean SIM/FULL T <=.90",
+    "heavy_label": "high/mixed median k_final/m >.90; descriptive secondary marker"
+  },
+  "optional_real_32_96": "not added; no asset search beyond fixed fixture paths",
+  "flags": {
+    "training_active": false,
+    "formal_solver_modified": false,
+    "model_writeback": false,
+    "GPU_required": false
+  },
+  "sources": {
+    "qp_similarity_workingset_offline_v1/summarize.py": "e67fa3915f4fd44ae3b41f910e1d1329262c1a424ecd8f73c0e38a5c01de2053",
+    "qp_similarity_workingset_offline_v1/grouping.py": "f1461a38bdffcbda54f85430b3b13202703b18db2f63a9d19bd0134a6bbf0a33",
+    "qp_similarity_workingset_offline_v1/reference.py": "ace0cf10e5da708125f9eb050824d8979aacc65df4b3e8aa30758fb527350858",
+    "qp_similarity_workingset_offline_v1/run.py": "825417a5a9ab2ce844ef1489e47edeb519d0a90f93efc164d87490f6c339e6c3",
+    "qp_similarity_workingset_offline_v1/__init__.py": "38c9e8b2f318755eae6d4d3eacea04ba3babd1faa414d7eb6427192e3ad946bf",
+    "qp_similarity_workingset_offline_v1/data.py": "5e1270a0316e4e0acf3eced1e252822e54a337c5ec02d9942278a9bde4f0f00c",
+    "qp_similarity_workingset_offline_v1/engine.py": "230ec6b2dedefcea7d1d5df24838ef387730948db2082bd7bacb794a0cb6b656",
+    "qp_similarity_workingset_offline_v1/tests.py": "7a8e96ed768f12f3627ebe0a84fbe56be8629f8f77c2aac42b1855192d9c6b4b",
+    "qp_workingset_refinement_diag_v1/refine.py": "c0f5b70b5a89ebe24f8496ca332ca202557ac718566f0de668557e6e3376aefb",
+    "qp_workingset_refinement_diag_v1/numeric.py": "c0aafcae8f2dbb4eacfa017b588a037e8884d59664798d7c0f989d98f5990ba7",
+    "qp_workingset_refinement_diag_v1/run.py": "4abb7ca559faee35fd264b5777e81fe8d6ed88d16afe327bb4eabed9a985ed91"
+  },
+  "numpy": "1.22.4",
+  "scipy": "1.10.1",
+  "source_commit": "4c55fb42e3cb42f66ce1a626614d492ed77a1984"
+}
