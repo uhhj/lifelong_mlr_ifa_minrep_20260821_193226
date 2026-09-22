@@ -1,0 +1,48 @@
+{
+  "name": "qp_workingset_refinement_diag_v1",
+  "rules": {
+    "max_working_set_iterations": 512,
+    "max_linear_refinements": 3,
+    "initial_support": "x > 0 exactly; no magnitude cutoff",
+    "enter": "largest positive b-Ax among ALL inactive coordinates; ties lowest original index",
+    "leave": "minimum feasible line-search ratio for negative stationary variables; ties lowest index",
+    "solve": "numpy.linalg.solve(A_WW,b_W); exact binary64 inputs, no matrix modification",
+    "linear_target": "1e-12/max(1,max(abs(z))) for 80-digit recomputed absolute equation residual",
+    "singular_policy": "LinAlgError or nonfinite condition number => SINGULAR_WORKING_SET_UNRESOLVED",
+    "refinement": "up to 3 corrections using binary64 solve and Decimal80 residual; no pseudoinverse",
+    "cycle": "repeat of identical working-set and binary64 x bytes => CYCLE_DETECTED",
+    "acceptance": "full float64 AND Decimal80 project KKT <=1e-8",
+    "already_float64_pass": "return original x unchanged; report precision mismatch rather than alter it"
+  },
+  "kkt": 1e-08,
+  "source_commit": "ec18946524f0612bc8d60a9575198224fe39fc41",
+  "B58_starts": [
+    "x_standard",
+    "lbfgsb_candidate",
+    "trust_final",
+    "trust_best_kkt_iterate"
+  ],
+  "primary_start": "x_standard",
+  "best_trust": "minimum recomputed KKT; first index on ties; start only, never acceptance",
+  "regression": "same refinement on original standard 30k x; F1 standard result regenerated using untouched v4 solver",
+  "regression_trigger": "B58 x_standard refinement passes both checkers",
+  "old_standard_pass": "return exact original x without a linear solve",
+  "constraints": "All original coordinates checked, no permanent removal",
+  "matrix": "Use original unsymmetrized binary64 A in solves/KKT; symmetric part used ONLY for spectral reporting",
+  "precision": "Decimal 80 decimal digits, Decimal.from_float on original binary64 values",
+  "no_ridge": true,
+  "no_pseudoinverse": true,
+  "no_eigenvalue_clipping": true,
+  "numpy": "1.22.4",
+  "scipy": "1.10.1",
+  "source_files": {
+    "qp_workingset_refinement_diag_v1/refine.py": "c0f5b70b5a89ebe24f8496ca332ca202557ac718566f0de668557e6e3376aefb",
+    "qp_workingset_refinement_diag_v1/numeric.py": "c0aafcae8f2dbb4eacfa017b588a037e8884d59664798d7c0f989d98f5990ba7",
+    "qp_workingset_refinement_diag_v1/run.py": "4abb7ca559faee35fd264b5777e81fe8d6ed88d16afe327bb4eabed9a985ed91",
+    "qp_workingset_refinement_diag_v1/__init__.py": "75fbe9f677f0476c44ff293d1508f42bb8223cc252aeba62e0c09c97adab40ad",
+    "qp_workingset_refinement_diag_v1/tests.py": "e85c21a9d0d934385ba8875f6bd84fec1c9a69ff19b036d6ef41b81369ab315e"
+  },
+  "training_active": false,
+  "formal_solver_modified": false,
+  "model_writeback": false
+}
