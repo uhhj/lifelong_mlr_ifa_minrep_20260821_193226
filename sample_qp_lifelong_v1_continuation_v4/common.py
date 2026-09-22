@@ -40,8 +40,8 @@ def publish_eval_log(source, destination):
 
 def verify():
     p = read(OUT/'PROTOCOL_FROZEN.json')
-    for f,h in p['files'].items():
-        assert sha(ROOT/f) == h, ('Frozen input changed', f)
+    from .execution import verify_execution
+    verify_execution(p)
     return p
 
 def selected_references(plan):

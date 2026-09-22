@@ -58,6 +58,11 @@ def run(resume=False):
             if restore and task==restore['task']:
                 g.restore(algo,restore['state']);first_epoch=restore['next_epoch']
                 assert all(g.compare_states(restore['state'],g.capture(algo)).values())
+                write(OUT/'RUNTIME_RESTORE.json',dict(status='PASS',task=task,
+                    next_epoch=first_epoch,global_step=finished,
+                    optimizer_step=algo._optimizer_step_count,
+                    scheduler_step=algo._scheduler_step_count,
+                    full_state_exact=True,formal_training_resumed=True))
                 del restore;restore=None
             lr_fn=make_linear_schedule_with_warmup(500,plan['batches_per_epoch']*100)
             for epoch in range(first_epoch,100):
@@ -107,12 +112,15 @@ def run(resume=False):
                 atomic_save(state_path,dict(state=state,task=task,next_epoch=epoch+1,global_step=finished,
                     accepted_epochs=accepted,elapsed_seconds=elapsed_before+time.monotonic()-start,
                     protocol_sha256=sha(OUT/'PROTOCOL_FROZEN.json'),
+                    execution_protocol_sha256=sha(OUT/'EXECUTION_FROZEN.json'),
                     plan_sha256=sha(OUT/('plans/task%d.json'%task)),
                     reference_sha256=sha(OUT/('plans/references_task%d.json'%task)),
                     boundary='After native epoch_schedule_step and checkpoint mode changes; before next DataLoader iterator'))
                 write(RUN/'RECOVERY_INDEX.json',dict(path=str(state_path),sha256=sha(state_path),
                     task=task,epoch=epoch,global_step=finished))
                 write(RUN/'ACCEPTED_EPOCHS.json',accepted)
+                from .execution import observe_epoch11
+                observe_epoch11(task,epoch,state_path,path,algo)
                 print('EPOCH_COMPLETE',task,epoch,finished,'/',105500,'seconds',round(row['seconds'],2),flush=True)
                 del state
             endpoint=checkpoints/('mlrifa_%d_model_ep99.pth'%task)
