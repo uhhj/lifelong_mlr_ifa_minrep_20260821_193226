@@ -1,0 +1,97 @@
+{
+  "name": "gn_functional_geometry_v1",
+  "git_HEAD": "4afe7a266c67675a231cc9050e33b737c1be02a1",
+  "old_task": 8,
+  "new_task": 9,
+  "seed": 45,
+  "rank": 32,
+  "primary_directions": 16,
+  "H1_top_directions": 8,
+  "scales": [
+    0.25,
+    0.5,
+    1.0
+  ],
+  "primary_scale": 1.0,
+  "epsilon": 0.012880407046407517,
+  "dtype": "frozen float32 decoder latents; float64 head for all diagnostics",
+  "geometry": "terminal GMM expected action; variance branch is invisible to this geometry; not full-distribution Fisher",
+  "eigensolver": {
+    "method": "matrix-free scipy eigsh",
+    "k": 32,
+    "ncv": 72,
+    "tol": 1e-06,
+    "maxiter": 500,
+    "seeds": [
+      2026092303,
+      2026092304
+    ]
+  },
+  "numerics": {
+    "orthogonal_max": 2e-05,
+    "eigen_relative_residual_max": 0.002,
+    "repeat_min_principal_cosine": 0.99,
+    "trace_excess_relative": 1e-05
+  },
+  "action_metric": {
+    "groups": [
+      "translation 0:3",
+      "rotation 3:6",
+      "gripper 6"
+    ],
+    "source": "old_build terminal expert actions",
+    "scale_floor": 0.05,
+    "equal_group_weight": true
+  },
+  "split_sha256": "84eacf469814375fe4edb6704c40182fd02c09b4b4b740435d01d11b65bc282f",
+  "scale_sha256": "15c74c67d881894fe7e9dcc4fbb1b28a52be435e9a71cae763274e15fe920914",
+  "H1": {
+    "spearman_min": 0.6,
+    "top_random_median_ratio_min": 2.0,
+    "top_complement_median_ratio_min": 2.0,
+    "epsilon_rank_correlation_min": 0.9,
+    "signs": [
+      -1,
+      1
+    ]
+  },
+  "H2": {
+    "trace": "exact streamed scalar output gradients; no full J stored",
+    "rank90_max": 32,
+    "adjacent_minus_cross_median_min": 0.01,
+    "all_build_demo_adjacent_minus_cross_positive": true,
+    "far_fraction": 0.2
+  },
+  "H3": {
+    "gradient_roles": [
+      "old_gradient",
+      "new_gradient"
+    ],
+    "evaluation_roles": [
+      "old_probe",
+      "new_probe"
+    ],
+    "weak_relative_gradient_norm": 1e-06,
+    "loss_effect_tolerance": 1e-09,
+    "perturbation": "delta=-epsilon*sign(z_new)*unit_direction; eta_k=epsilon/abs(z_new); weak directions not amplified",
+    "numerical_weak_directions_remain_in_denominator": true,
+    "minimum_nonweak": 8,
+    "minimum_each_class": 3,
+    "sign_accuracy_min": 0.75,
+    "spearman_min": 0.6,
+    "shared_joint_fraction_min": 0.7,
+    "conflict_joint_fraction_min": 0.7,
+    "accuracy_advantage_over_random_min": 0.1,
+    "spearman_advantage_over_random_min": 0.1,
+    "random_baseline": "unconditioned orthonormal rank32, first16 directions at same norm",
+    "raw_baseline": "whole new-gradient descent only; one checkpoint cannot establish statistical predictive superiority",
+    "matched_probe_derivative": "secondary Taylor calibration only, never used to label heldout records"
+  },
+  "threshold_status": "prospective engineering screening rules, not theoretical guarantees; frozen before outcome measurement",
+  "H2_fingerprint_limit": "nonnegative squared responses omit direction signs and within-action orientation",
+  "support_scope": "one development seed, one task pair, head only; no independent confirmation or closed-loop evidence",
+  "training_active": false,
+  "formal_solver_modified": false,
+  "model_writeback": false,
+  "optimizer_steps_executed": 0
+}

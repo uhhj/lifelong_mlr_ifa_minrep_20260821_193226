@@ -1,0 +1,91 @@
+{
+  "status": "LOW_RANK_REDUNDANCY_SUPPORTED",
+  "N": 128,
+  "rank_bound": 896,
+  "full_trace": 4523.8877240502925,
+  "captured_energy": {
+    "1": 0.1164889213262673,
+    "2": 0.2314894552590203,
+    "4": 0.4575094839176997,
+    "8": 0.7364448824927373,
+    "16": 0.8686627241301611,
+    "32": 0.9293849197204468
+  },
+  "r80": 11,
+  "r90": 21,
+  "r95": ">32 (not identified)",
+  "pair_distributions": {
+    "ADJACENT": {
+      "n": 57,
+      "mean": 0.9860021649489569,
+      "median": 0.9999452804100752,
+      "quantiles": {
+        "0": 0.5718831108652753,
+        "0.1": 0.9915732841503899,
+        "0.25": 0.9983446474219873,
+        "0.5": 0.9999452804100752,
+        "0.75": 0.9999852283620388,
+        "0.9": 0.9999963317799897,
+        "1": 0.9999981555686805
+      }
+    },
+    "SAME_FAR": {
+      "n": 1509,
+      "mean": 0.3331254946277534,
+      "median": 0.09794993806914054,
+      "quantiles": {
+        "0": 0.00022139908704491836,
+        "0.1": 0.02598462563176475,
+        "0.25": 0.0929349029527314,
+        "0.5": 0.09794993806914054,
+        "0.75": 0.8571390844399166,
+        "0.9": 0.9897358514581996,
+        "1": 0.9999474798388006
+      }
+    },
+    "CROSS_TRAJECTORY": {
+      "n": 6144,
+      "mean": 0.44913236449502764,
+      "median": 0.10087344421501038,
+      "quantiles": {
+        "0": 0.00017433892310633574,
+        "0.1": 0.009448993990431158,
+        "0.25": 0.09344270782275567,
+        "0.5": 0.10087344421501038,
+        "0.75": 0.9801586258417851,
+        "0.9": 0.998800610329108,
+        "1": 0.9999974842826022
+      }
+    }
+  },
+  "per_demo": [
+    {
+      "trajectory": "demo_0",
+      "adjacent_n": 19,
+      "cross_n": 3072,
+      "mean_gap": 0.5084846072027417
+    },
+    {
+      "trajectory": "demo_1",
+      "adjacent_n": 12,
+      "cross_n": 3072,
+      "mean_gap": 0.50562788242848
+    },
+    {
+      "trajectory": "demo_6",
+      "adjacent_n": 12,
+      "cross_n": 3072,
+      "mean_gap": 0.6162705606312547
+    },
+    {
+      "trajectory": "demo_9",
+      "adjacent_n": 14,
+      "cross_n": 3072,
+      "mean_gap": 0.5212155139422031
+    }
+  ],
+  "adjacent_minus_cross_median": 0.8990718361950649,
+  "concentrated": true,
+  "adjacency_supported": true,
+  "limitation": "Pairs share windows and trajectories, not independent observations. Squared fingerprints lose signs and output orientation. Four build trajectories only; gap is an engineering effect-size check, not a population significance test."
+}
