@@ -1,0 +1,70 @@
+{
+  "name": "gn_h3_scale_geometry_diag_v1",
+  "parent_HEAD": "17e1a9fc61b41059d0906e6a98836c3e5f178ed3",
+  "parent_protocol_sha256": "af64faf8b5ddb601b0a22ddc2fd1a6cf6a3c83f92bf1e895ecc5e65fe71dbd05",
+  "checkpoint_sha256": "2ca0c685e913cc644653993c88b0c3ff0f0069d73e040337da6224c97e0d3c09",
+  "mean_basis_path": "/data/lifelong_mlr_ifa_minrep_20260912/reports/gn_functional_geometry_v1/OLD_TASK_GN_BASIS.npz",
+  "mean_basis_sha256": "8bb8f10c25ac0aacd47e3a07b642c38418fb1cd80894789c8d0e16995ca7b010",
+  "split_sha256": "84eacf469814375fe4edb6704c40182fd02c09b4b4b740435d01d11b65bc282f",
+  "geometry": [
+    "MEAN_GN_REUSED",
+    "MODEL_FISHER_MC8"
+  ],
+  "rank": 16,
+  "scales": [
+    1.0,
+    0.25,
+    0.0625,
+    0.015625
+  ],
+  "epsilon0": 0.012880407046407517,
+  "perturbation": "Identical previous rule: delta=-epsilon0*scale*sign(u.T@g_new_gradient)*u, eta_k=epsilon/abs(z_new); no optimizer updates.",
+  "primary_predictor": "g_old_probe.T@delta; exact same held-out windows as measured NLL, derivative calibration only",
+  "secondary_predictor": "g_old_gradient.T@delta; trajectory-disjoint transfer prediction",
+  "fisher": {
+    "definition": "E_H E_a~p_theta0(a|H)[score(a,H) score(a,H).T]",
+    "approximation": "8 frozen independent model action samples per old_build window; 128 windows; no gradient through sampled actions",
+    "samples_per_window": 8,
+    "sampling_seed": 2026092306,
+    "action_metric": "full official GMM log density; no Wa rescaling, label replacement or empirical expert-score approximation",
+    "covariance_centering": false,
+    "interpretation": "Model Fisher MC estimate, NOT claimed equal to expert NLL Hessian or exact GGN; includes mixture means, weights and scales"
+  },
+  "eigensolver": {
+    "k": 16,
+    "ncv": 40,
+    "tol": 1e-06,
+    "maxiter": 500,
+    "seeds": [
+      2026092307,
+      2026092308
+    ]
+  },
+  "numerical": {
+    "max_orthogonal_error": 2e-05,
+    "max_eigen_relative_residual": 0.002,
+    "min_repeat_principal_cosine": 0.99
+  },
+  "weak_new_projection_relative": 1e-06,
+  "loss_effect_tolerance": 1e-09,
+  "rules": {
+    "good_scale": "16 numerically evaluable directions, conservative sign accuracy >=.9375 (15/16), Spearman>=.9, Pearson>=.9",
+    "local_recovery": "smallest scale good, sign accuracy improves >=.125, relative linearization error drops >=4x",
+    "material_geometry_advantage": "at least two pre-fixed scales improve accuracy >=.125 and Spearman >=.15, without lower evaluable coverage",
+    "limits": "Descriptive engineering criteria; not statistical significance. If both smallest-scale calibrations fail: unresolved Taylor regime/measurement, NOT evidence that gradient directional derivatives are invalid."
+  },
+  "no_rank_or_step_tuning": true,
+  "no_new_sampling_of_training_windows": true,
+  "no_formal_changes": true,
+  "training_active": false,
+  "formal_training_resumed": false,
+  "sources": [
+    "https://www.jmlr.org/papers/v21/17-678.html"
+  ],
+  "limitations": [
+    "Fisher Monte Carlo approximation is one fixed draw set, not repeated reference estimation.",
+    "The two eigenspaces change direction identity and functional displacement at equal parameter norm; this comparison cannot uniquely prove previous functional definition was wrong.",
+    "Same-probe Taylor agreement is not cross-trajectory relation generalization.",
+    "No control, optimizer or rollout benefit tested."
+  ]
+}

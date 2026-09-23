@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/runpy.py", line 194, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/data/lifelong_mlr_ifa_minrep_20260912/gn_h3_scale_geometry_diag_v1/audit.py", line 34, in <module>
+    if __name__=='__main__':main()
+  File "/data/lifelong_mlr_ifa_minrep_20260912/gn_h3_scale_geometry_diag_v1/audit.py", line 33, in main
+    write(OUT/'INDEPENDENT_AUDIT.json',result);print(json.dumps(result));assert all(checks.values())
+  File "/data/lifelong_mlr_ifa_minrep_20260912/gn_functional_geometry_v1/common.py", line 12, in write
+    t.write_text(json.dumps(z,indent=2,allow_nan=False,ensure_ascii=False)+'\n');os.replace(t,p)
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/json/encoder.py", line 201, in encode
+    chunks = list(chunks)
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/data/conda_envs/mlr_ifa_minrep/lib/python3.8/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type bool_ is not JSON serializable
