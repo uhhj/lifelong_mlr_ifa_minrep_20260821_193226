@@ -1,0 +1,21 @@
+import tempfile,json,copy
+from pathlib import Path
+import pandas as pd
+from actual_update_fidelity_v1 import analysis as a
+from actual_update_fidelity_v1.common import OUT,read,write,ALPHAS
+realout=OUT
+with tempfile.TemporaryDirectory(prefix='actual_update_fidelity_summary_test_') as folder:
+ a.OUT=Path(folder)
+ for name in ['START_MANIFEST.json','PROTOCOL.json','EXPERIMENT_CONTEXT.json']:write(a.OUT/name,read(realout/name))
+ for s in read(realout/'START_MANIFEST.json')['starts']:
+  path=a.OUT/'starts'/s['start_id'];path.mkdir(parents=True);rows=[]
+  for arm in ['adamw','raw']:
+   for alpha in ALPHAS:
+    for j in range(24):
+     pred=(j-11.5)*.01*alpha
+     rows.append(dict(start_id=s['start_id'],seed=s['seed'],transition=s['transition'],stage=s['stage'],arm=arm,alpha=alpha,record_id=j,predicted_delta_loss=pred,measured_delta_loss=pred,tau_zero=1e-7))
+  pd.DataFrame(rows).to_csv(path/'measurements.csv',index=False);write(path/'COMPLETE.json',dict(start_id=s['start_id'],noise=dict(strictly_repeatable=True)))
+ result=a.summarize();assert result['classification']=='FIRST_ORDER_ACTUAL_UPDATE_SUPPORTED';assert not result['hvp_trigger']
+ assert len(list(a.OUT.glob('*.png')))==6
+ write(realout/'ANALYSIS_PIPELINE_SMOKE.json',dict(status='PASS',synthetic_only=True,scientific_measurements_used=False,isolated_temporary_output=True,plots=6,formal_training_resumed=False))
+print('ANALYSIS_PIPELINE_SMOKE_PASS')
