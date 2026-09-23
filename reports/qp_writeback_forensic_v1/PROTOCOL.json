@@ -1,0 +1,20 @@
+{
+  "head": "d04d116747199e3da3ab10263a82f5d8748357a5",
+  "targets": [
+    "s45_t7_e98_b195",
+    "s45_t8_e99_b94"
+  ],
+  "formal_training_resumed": false,
+  "formal_solver_modified": false,
+  "kkt_tolerance": 1e-08,
+  "writeback_tolerance": 5e-06,
+  "definitions": {
+    "d64": "u32 promoted to binary64 minus H64 @ lambda64",
+    "d32": "formal flat float32 u32 - float32(H64 @ lambda64)",
+    "dscatter": "layout-only per-parameter reconstruction of u32 minus reshaped c32, then concatenate; formal code scatters correction, not displacement",
+    "dwritten": "exact binary64 difference theta_written(float32) - theta_before(float32)",
+    "dwritten_float32_report": "formal Workspace.displacement float32 subtraction after physical write"
+  },
+  "checks": "same fixed ||u32|| denominator at every layer AND existing own displacement norm gate+1e-15; raw positive signs are not automatically failures",
+  "source_restore": "existing source rolling state must match all frozen model/AdamW/scheduler/RNG/counter/mode witnesses; zero prior batches"
+}
