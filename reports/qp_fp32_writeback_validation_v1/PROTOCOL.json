@@ -1,0 +1,30 @@
+{
+  "targets": [
+    "s45_t7_e98_b195",
+    "s45_t8_e99_b94"
+  ],
+  "threshold": 5e-06,
+  "kkt": 1e-08,
+  "denominator": "fixed norm of exact native float32 candidate minus source, evaluated in float64; also record frozen formal solver u32 norm",
+  "dstar": "unchanged forensic ideal d64 = promote(formal float32 u)-H64 lambda64; original QP untouched",
+  "W0": "physical native parameters then formal float32 correction subtraction",
+  "W1": "restore theta_before; build full float64(theta_before)+dstar64; one final fp32 write",
+  "W2": "restore theta_before; build float64(theta_before)+float64(formal dstar32); one final fp32 write",
+  "old_state_mutation": "candidate proposal is generated transactionally once; materialization branches never step optimizer or scheduler and restore all states",
+  "ulp_bins": [
+    "<0.5",
+    "0.5-1",
+    "1-2",
+    "2-4",
+    ">=4"
+  ],
+  "top_contributions": "top20 by absolute coordinate contribution; report absolute share, signed/net ratio and positive share separately; fractions of coordinates are not energy fractions",
+  "near_active": "abs(ideal dot)/(h_norm*d0_norm)<=1e-8; active normalized dual>1e-12",
+  "rounding_bound": "requested +inf spacing at nearest float32 ideal target, plus maximum up/down neighbor gap bound to cover exponent-boundary asymmetry",
+  "stage_A_gate": "both W1 physical residual <=5e-6",
+  "stage_A_failure": "FP32_GRID_FEASIBILITY_NOT_RESOLVED; stop, no120 regression, no repair runs",
+  "stage_B": "only A passes; same120 starts, all original QP/ref/probe/gates; W1 only; any physical failure blocks supported conclusion",
+  "stage_C": "only120pass AND previous protection/fidelity gates pass; same corrected candidates, evaluation-only buffer trajectories excluded from references and replay; unavailable explicitly retained",
+  "GN_workset": false,
+  "formal_training_resumed": false
+}
