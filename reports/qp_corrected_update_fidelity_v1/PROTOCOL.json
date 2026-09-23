@@ -1,0 +1,90 @@
+{
+  "name": "QP-Corrected Update Fidelity & Functional Workset Validation v1",
+  "phase1_starts": 120,
+  "parity_starts": [
+    "s45_t7_e71_b154",
+    "s45_t8_e70_b232",
+    "s46_t7_e39_b189",
+    "s46_t8_e75_b271",
+    "s47_t7_e34_b60",
+    "s47_t8_e41_b14"
+  ],
+  "kkt": 1e-08,
+  "physical_tolerance": 5e-06,
+  "reference_count": "32 per old task;32 task7,64 task8",
+  "solver": "unchanged v4; no fallback changes",
+  "d0": "reuse exact prior candidate; formal core receives its original float32 displacement difference; final measured d_full is exact difference of actual float32 written parameters",
+  "solver_failure": "preserve start, complete dump, no B result fabricated; any numerical failure prevents total gate PASS",
+  "deadband": "reuse prior per-window tau exactly for2758 unchanged; same32eps baseline-noise formula for122 replacements and24new probes",
+  "primary_damage": "mean positive actual old delta per start; median paired B-A",
+  "bootstrap": {
+    "replicates": 10000,
+    "seed": 2026092401,
+    "unit": "start",
+    "stratified": "resample20starts within each of6cells; pooled equal-cell median paired primary difference"
+  },
+  "protection": {
+    "cells_negative_required": 5,
+    "strong_reversal": "cell median paired damage increase>10% cell median native positive damage plus mean old deadband",
+    "harmful_fraction": "median paired fraction<0",
+    "introduced": "introduced window count <=0.5*prevented count across all paired starts; report both rates and counts",
+    "CI": "upper percentile95CI<0"
+  },
+  "fidelity": {
+    "median_spearman": 0.9,
+    "median_sign": 0.9,
+    "median_recall": 0.8,
+    "median_precision": 0.8,
+    "stable_cells": 5,
+    "defined_fraction": 0.5,
+    "decisive_coverage": 0.5
+  },
+  "plasticity": {
+    "retention": "median across native discernibly improving starts; each start mean probe delta",
+    "low": "retention>=.9 and reversal<.1",
+    "severe": "retention<.5 or reversal>.3",
+    "otherwise": "MATERIAL_COST",
+    "no_eligible": "unclassifiable; not fabricate LOW_COST"
+  },
+  "phase2": {
+    "gate": "protection AND corrected-fidelity SUPPORTED; all120solver/writebacks successful",
+    "K": "floor(m/2)",
+    "methods": [
+      "FULL",
+      "RANDOM0",
+      "RANDOM1",
+      "RANDOM2",
+      "STRIDE",
+      "LATENT",
+      "GN"
+    ],
+    "rank": 32,
+    "geometry": "same mean-action GN head-only metric and q definition as H2; recompute at each state on full reference pool; frozen historical ACTION_METRIC diagonal; no share/conflict labels",
+    "latent": "normalized mean over temporal and modality axes of H",
+    "kcenter": "first canonical index then farthest min cosine distance; ties lowest canonical index",
+    "stride": "sort(task,trajectory,window,origin), select floor((j+.5)*m/K)",
+    "constraint_generation": "add single most positive normalized violated omitted constraint per round; m rounds maximum; full existing KKT and physical scan; no extra solver",
+    "timing": "all feature/Jacobian+selection+repeated QP+full scans; report shared H construction separately",
+    "random_replicates": [
+      0,
+      1,
+      2
+    ],
+    "gn_gate": ">=5of6cells better than BOTH stride and latent on at least2 metrics with no material extra plasticity; total GN time counted; exact efficacy ties do not count",
+    "comparison_eps": {
+      "update_rel": 1e-05,
+      "loss": "frozen deadband"
+    },
+    "resource": "no full120model-state copies; phase2 reconstructs same frozen origins again if required",
+    "eigsh": {
+      "k": 32,
+      "ncv": 72,
+      "tol": 1e-06,
+      "maxiter": 500,
+      "private_seed": 2026092303
+    },
+    "comparison_detail": "Per cell20 paired successes; time win ratio<.95, update error win<-1e-5, protection win more than prior per-start deadband; smaller workset/failure count strictly less. GN vs each stride/latent needs two wins, new cost within one frozen new-probe deadband. All three random replicates reported.",
+    "basis_numerics": "reuse original GN orthogonality/eigen residual thresholds; no rank retry"
+  },
+  "formal_training_resumed": false
+}

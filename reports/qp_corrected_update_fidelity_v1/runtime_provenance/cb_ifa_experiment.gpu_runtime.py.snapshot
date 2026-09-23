@@ -1,0 +1,230 @@
+"""Shared, process-scoped bindings for the frozen E1 GPU continuation."""
+import os
+os.environ.setdefault('MUJOCO_GL','egl')
+os.environ.setdefault('PYOPENGL_PLATFORM','egl')
+os.environ.setdefault('EGL_PLATFORM','surfaceless')
+os.environ.setdefault('MUJOCO_EGL_DEVICE_ID','0')
+os.environ.setdefault('HF_HUB_OFFLINE','1')
+os.environ.setdefault('TRANSFORMERS_OFFLINE','1')
+os.environ.setdefault('TOKENIZERS_PARALLELISM','false')
+
+import copy
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import random
+
+import numpy as np
+import torch
+from easydict import EasyDict
+from cb_ifa_experiment.common import read,write,sha
+
+ROOT=Path(__file__).resolve().parents[1]
+CPU=ROOT/'reports/cb_ifa_reframing_v1'
+REPORTS=CPU/'gpu_v1'
+RUNS=ROOT/'runs/cb_ifa_reframing_v1/gpu_v1'
+
+
+def verify_frozen():
+    p=read(REPORTS/'GPU_PROTOCOL.json')
+    for name,expected in p['implementation_sha256'].items():
+        assert sha(ROOT/'cb_ifa_experiment'/name)==expected,('Implementation changed',name)
+    assert sha(CPU/'DECISION_RULES.yaml')==p['decision_rules_sha256']
+    assert sha(CPU/'INPUT_MANIFEST.jsonl.gz')==p['CPU_input_manifest_sha256']
+    from cb_ifa_experiment.common import BASE_SHA
+    assert sha(ROOT/'libero/lifelong/algos/base.py')==BASE_SHA
+
+
+def bind():
+    import libero
+    assert ROOT in Path(libero.__file__).resolve().parents
+    p=str(ROOT/'libero')
+    if p not in libero.__path__:libero.__path__.insert(0,p)
+
+
+bind()
+
+
+def seed_all(seed):
+    from libero.lifelong.utils import control_seed
+    control_seed(seed)
+
+
+def rng_state():
+    return {'python':random.getstate(),'numpy':np.random.get_state(),'cpu':torch.get_rng_state(),
+            'cuda':torch.cuda.get_rng_state_all()}
+
+
+def restore_rng(r):
+    random.setstate(r['python']);np.random.set_state(r['numpy']);torch.set_rng_state(r['cpu'])
+    torch.cuda.set_rng_state_all(r['cuda'])
+
+
+def cpu_state(value):
+    if torch.is_tensor(value):return value.detach().cpu().clone()
+    if isinstance(value,dict):return {k:cpu_state(v) for k,v in value.items()}
+    if isinstance(value,list):return [cpu_state(v) for v in value]
+    if isinstance(value,tuple):return tuple(cpu_state(v) for v in value)
+    return value
+
+
+def digest(value):
+    from cb_ifa_experiment.real_policy_cpu import digest as d
+    return d(value)
+
+
+def atomic_save(path,value):
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+    tmp=path.with_name(path.name+'.tmp');torch.save(value,tmp);os.replace(tmp,path)
+
+
+def remap_config(config):
+    cfg=EasyDict(copy.deepcopy(config))
+    cfg.device='cuda:0';cfg.pretrain=str(ROOT/'checkpoints/object_multitask_model_ep99.pth')
+    cfg.folder=str(ROOT/'data');cfg.bddl_folder=str(ROOT/'libero/libero/bddl_files')
+    cfg.init_states_folder=str(ROOT/'libero/libero/init_files')
+    return cfg
+
+
+def train_config(seed,out):
+    cfg=remap_config(read(ROOT/f'runs/fixed_kappa_confirmation_v2/formal/seed{seed}/mlr/run_001/config.json'))
+    cfg.seed=seed;cfg.experiment_dir=str(out);cfg.feature_dir=str(ROOT/f'features/object_seed{seed}')
+    cfg.buffer_dir=str(out/'unused_buffer');cfg.ifa_enabled=False;cfg.ifa_interaction_logging=False
+    cfg.lifelong.algo='MLR';cfg.use_wandb=False
+    return cfg
+
+
+def bootstrap_train(cfg):
+    """Match the native initial RNG-consuming setup before constructing MLR."""
+    from libero.libero.benchmark import get_benchmark
+    from libero.lifelong.utils import get_task_embs
+    seed_all(cfg.seed)
+    bench=get_benchmark(cfg.benchmark_name)(cfg.data.task_order_index)
+    get_task_embs(cfg,[bench.get_task(i).language for i in range(bench.n_tasks)])
+
+
+def init_ddp(path):
+    if not torch.cuda.is_available():raise RuntimeError('CUDA required')
+    import torch.distributed as dist
+    torch.cuda.set_device(0)
+    if not dist.is_initialized():
+        dist.init_process_group('nccl',init_method='file://'+str(Path(path).resolve()),world_size=1,rank=0)
+
+
+def build_train(cfg,ddp=True):
+    from libero.lifelong.algos.mlr import MLR
+    algo=MLR(1,cfg).to('cuda:0')
+    if ddp:algo.policy=torch.nn.parallel.DistributedDataParallel(algo.policy,device_ids=[0],output_device=0)
+    return algo
+
+
+class CachedWindows(torch.utils.data.Dataset):
+    """The same serialized windows/collation, with deterministic read-only RAM caching."""
+    def __init__(self,origins,expected=None):
+        self.file_paths=[str(ROOT/p) for p in origins]
+        self.origins=origins;self.samples=[];self.tasks=[]
+        for i,path in enumerate(self.file_paths):
+            if expected is not None:assert sha(path)==expected[i],path
+            data=torch.load(path,map_location='cpu')
+            assert set(data)>={'feature','actions'}
+            assert tuple(data['feature'].shape)==(1,8,4,512)
+            assert tuple(data['actions'].shape)==(1,8,7)
+            self.samples.append(data);self.tasks.append(str(int(Path(path).parent.name)))
+
+    def __len__(self):return len(self.samples)
+    def __getitem__(self,i):return self.samples[i],self.tasks[i]
+
+
+class FixedBatches:
+    def __init__(self,flat,offsets,start,end):self.flat=flat;self.offsets=offsets;self.start=start;self.end=end
+    def __len__(self):return self.end-self.start
+    def __iter__(self):
+        for i in range(self.start,self.end):yield self.flat[self.offsets[i]:self.offsets[i+1]].tolist()
+
+
+def loader(ds,flat,offsets,start,end):
+    # Creating each epoch's iterator consumes the same one global Torch base-seed
+    # draw as the original num_workers=0 DataLoader; fixed samplers consume none.
+    return torch.utils.data.DataLoader(ds,batch_sampler=FixedBatches(flat,offsets,start,end),num_workers=0)
+
+
+def schedule(seed,arm):
+    d=CPU/f'E1_learnability/seed{seed}'
+    if arm=='L2':
+        p=read(d/'L2_TASK7_ONLY_PLAN.json');z=np.load(d/'L2_TASK7_ONLY_SEQUENCE.npz')
+        assert sha(d/'L2_TASK7_ONLY_SEQUENCE.npz')==p['sequence_sha256']
+        flat=z['record_indices'];n=len(p['origins']);sizes=np.tile([10]*(n//10)+([n%10] if n%10 else []),100)
+        offsets=np.r_[0,np.cumsum(sizes)];epochs=np.repeat(np.arange(100),int(np.ceil(n/10)))
+        phases=np.zeros(len(sizes),dtype=int)
+        with gzip.open(d/'WINDOW_CATALOG.json.gz','rt') as f:cat={r['origin']:r for r in json.load(f)}
+        hashes=[cat[x]['sha256'] for x in p['origins']]
+        origins=p['origins'];totals=[len(sizes)]
+    elif arm=='L4':
+        budget=read(d/'EXPOSURE_BUDGET.json')
+        assert sha(d/'EXPOSURE_SEQUENCES.npz')==budget['sequence_sha256']
+        assert sha(d/'WINDOW_CATALOG.json.gz')==budget['catalog_sha256']
+        z=np.load(d/'EXPOSURE_SEQUENCES.npz');flat=z['joint'];offsets=z['offsets'];sizes=z['batch_sizes'];epochs=z['epoch']
+        phases=(z['original_stage']==7).astype(int)
+        with gzip.open(d/'WINDOW_CATALOG.json.gz','rt') as f:cat=sorted(json.load(f),key=lambda x:x['record_index'])
+        origins=[x['origin'] for x in cat];hashes=[x['sha256'] for x in cat]
+        totals=read(d/'EXPOSURE_BUDGET.json')['scheduler_phase_total_steps']
+    else:raise ValueError(arm)
+    return dict(flat=flat,offsets=offsets,sizes=sizes,epochs=epochs,phases=phases,totals=totals,origins=origins,hashes=hashes)
+
+
+def epoch_spans(s):
+    start=0
+    while start<len(s['sizes']):
+        phase=int(s['phases'][start]);epoch=int(s['epochs'][start]);end=start+1
+        while end<len(s['sizes']) and s['phases'][end]==phase and s['epochs'][end]==epoch:end+=1
+        yield phase,epoch,start,end
+        start=end
+
+
+def eval_config(seed,out):
+    # The historical test.py opened config.json without writing it. Recompose
+    # its frozen Hydra recipe instead of treating that empty file as evidence.
+    from hydra import initialize_config_dir,compose
+    from omegaconf import OmegaConf
+    overrides=[f'seed={seed}','benchmark_name=LIBERO_OBJECT','policy=complete_policy','lifelong=basic',
+       'folder='+str(ROOT/'data'),'pretrain='+str(ROOT/'checkpoints/object_multitask_model_ep99.pth'),
+       'bddl_folder='+str(ROOT/'libero/libero/bddl_files'),'init_states_folder='+str(ROOT/'libero/libero/init_files'),
+       'eval.n_eval=20','eval.num_procs=20','+start_task=6','+end_task=10','+aug=true',
+       '+epoch_dir='+str(out),'+test_log_file='+str(out/'unused_native_log.txt'),
+       '+eval_epochs=[99]','+experiment_root='+str(out),'training=false']
+    with initialize_config_dir(config_dir=str(ROOT/'libero/configs'),version_base=None):
+        raw=OmegaConf.to_container(compose(config_name='test',overrides=overrides),resolve=True)
+    cfg=remap_config(raw);cfg.experiment_dir=str(out);cfg.use_wandb=False
+    feature=read(ROOT/f'runs/fixed_kappa_confirmation_v2/feature_seed{seed}/run_001/config.json')
+    cfg.shape_meta=EasyDict(feature['shape_meta'])
+    assert cfg.data.obs.modality==feature['data']['obs']['modality']
+    assert cfg.eval.n_eval==20 and cfg.policy.use_language is True and cfg.policy.use_state is False
+    return cfg
+
+
+def build_eval(seed,setting,out):
+    import robomimic.utils.obs_utils as ObsUtils
+    from libero.libero.benchmark import get_benchmark
+    from libero.lifelong.utils import get_task_embs
+    from libero.lifelong.algos import get_algo_class
+    cfg=eval_config(seed,out);seed_all(seed)
+    ObsUtils.initialize_obs_utils_with_obs_specs({'obs':dict(cfg.data.obs.modality)})
+    bench=get_benchmark(cfg.benchmark_name)(cfg.data.task_order_index)
+    bench.set_task_embs(get_task_embs(cfg,[bench.get_task(i).language for i in range(bench.n_tasks)]))
+    algo=get_algo_class(cfg.lifelong.algo)(bench.n_tasks,cfg).to('cuda:0')
+    if setting=='L0':path=ROOT/'checkpoints/object_multitask_model_ep99.pth'
+    elif setting in ('L1','L3'):
+        stage=6 if setting=='L1' else 7
+        path=ROOT/f'runs/fixed_kappa_confirmation_v2/formal/seed{seed}/mlr/run_001/mlrifa_{stage}_model_ep99.pth'
+    else:path=RUNS/f'seed{seed}/{setting}/endpoint.pth'
+    ck=torch.load(path,map_location='cpu')
+    state={k[7:] if k.startswith('module.') else k:v for k,v in ck['state_dict'].items()}
+    if setting=='L0':algo.policy.load_state_dict(state,strict=True)
+    else:
+        expected={k for k in algo.policy.state_dict() if k.startswith(('temporal_transformer.','policy_head.'))}
+        assert set(state)==expected,('checkpoint trainable key mismatch',set(state)^expected)
+        result=algo.policy.load_state_dict(state,strict=False)
+        assert not result.unexpected_keys and not (set(result.missing_keys)&expected)
+    algo.eval()
+    return algo,cfg,bench,path
