@@ -1,0 +1,5 @@
+{
+  "traceback": "Traceback (most recent call last):\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/actual_update_fidelity_v1/run.py\", line 118, in main\n    if not (OUT/'ADAMW_PROPOSAL_PARITY.json').exists() or read(OUT/'ADAMW_PROPOSAL_PARITY.json')['status']!='PASS':preflight(starts)\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/actual_update_fidelity_v1/run.py\", line 46, in preflight\n    record=engine.parity(algo,ds,s);records.append(record);write(OUT/'ADAMW_PROPOSAL_PARITY.json',dict(status='RUNNING',records=records))\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/actual_update_fidelity_v1/engine.py\", line 57, in parity\n    assert all(checks.values()),checks\nAssertionError: {'model': True, 'optimizer': True, 'scheduler': True, 'rng': True, 'optimizer_step': True, 'scheduler_step': True, 'training_modes': True, 'optimizer_plus_one': True, 'scheduler_plus_one': True, 'transaction_restores_source': True, 'theta_plus_d0_reconstructs_native_within_2ulp': False}\n",
+  "formal_training_resumed": false,
+  "pid": 3299
+}

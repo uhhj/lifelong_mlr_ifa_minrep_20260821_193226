@@ -1,0 +1,144 @@
+"""Full-density model Fisher on all trainable parameters; no optimizer modification."""
+import contextlib
+import math
+import time
+import numpy as np
+from gradient_relation_experiment.kernel import *
+
+
+def params(algo):return tuple(p for p in algo.policy.parameters() if p.requires_grad)
+
+
+def flat_grad(grads,ps):
+    return torch.cat([(torch.zeros_like(p) if g is None else g).reshape(-1) for g,p in zip(grads,ps)])
+
+
+def displacement(algo,base):return torch.cat([v.reshape(-1) for v in delta(algo,base)])
+
+
+def assign_displacement(algo,base,d):
+    offset=0
+    with torch.no_grad():
+        for n,p in algo.policy.named_parameters():
+            if p.requires_grad:
+                p.copy_(base['model'][n].to(p.device)+d[offset:offset+p.numel()].reshape_as(p).to(p.device));offset+=p.numel()
+    assert offset==d.numel()
+
+
+def gmm(algo,data):
+    model=module(algo)
+    assert not model.policy_head.low_eval_noise,'Full learned variance required; do not use constant evaluation variance'
+    latent=model.temporal_encode(data['feature'].squeeze(1))[:,-1,:]
+    dist=model.policy_head(latent,train=True)
+    assert isinstance(dist,torch.distributions.MixtureSameFamily)
+    return dist
+
+
+def description(dist):
+    return {'logits':dist.mixture_distribution.logits.detach().cpu().double(),
+        'means':dist.component_distribution.base_dist.loc.detach().cpu().double(),
+        'scales':dist.component_distribution.base_dist.scale.detach().cpu().double()}
+
+
+def density(desc,actions):
+    comp=torch.distributions.Independent(torch.distributions.Normal(desc['means'],desc['scales']),1)
+    return torch.logsumexp(comp.log_prob(actions.unsqueeze(-2))+desc['logits'],dim=-1)
+
+
+def sample(desc,n,generator):
+    # Samples are [draw, window, action]; the private CPU stream never changes carrier RNG.
+    weights=desc['logits'].softmax(-1);indices=torch.multinomial(weights,n,replacement=True,generator=generator).T
+    batch=torch.arange(weights.shape[0])[None,:].expand_as(indices)
+    means=desc['means'][batch,indices];scales=desc['scales'][batch,indices]
+    return (means+scales*torch.randn(means.shape,dtype=torch.float64,generator=generator)).detach()
+
+
+def collect_distributions(algo,banks):
+    modes={n:m.training for n,m in algo.policy.named_modules()};rng=rng_state();algo.policy.eval();result={}
+    try:
+        with torch.no_grad():
+            for key,batches in banks.items():
+                parts=[description(gmm(algo,b)) for b in batches]
+                result[key]={k:torch.cat([v[k] for v in parts]) for k in parts[0]}
+    finally:
+        for n,m in algo.policy.named_modules():m.training=modes[n]
+        restore_rng(rng)
+    return result
+
+
+def kl_measure(before,after,seed,n=256):
+    rng=torch.Generator(device='cpu');rng.manual_seed(seed);a=sample(before,n,rng)
+    difference=density(before,a)-density(after,a)
+    per_window=difference.mean(0)
+    se=(difference.var(0,unbiased=True).sum()/n/(difference.shape[1]**2)).sqrt()
+    value=float(per_window.mean());se=float(se)
+    return {'kl_mc':value,'mc_se':se,'ci95_low':value-1.96*se,'ci95_high':value+1.96*se,
+        'mc_unresolved':abs(value)<=1.96*se,'windows':difference.shape[1],'samples_per_window':n,
+        'negative_estimate_retained':value<0,'mc_error_scope':'conditional action sampling error; not across-trajectory sampling uncertainty'}
+
+
+def fisher(algo,ds,indices,directions,seed,rank=16,keep_scores=False):
+    assert len(indices)>0
+    ps=params(algo);p=sum(v.numel() for v in ps);W=len(indices);A=4;M=W*A
+    # Only one reference score matrix is on GPU. It is transient, not an all-origin archive.
+    scores=torch.empty((M,p),dtype=torch.float32,device='cuda');reference=torch.zeros(p,device='cuda')
+    rng=torch.Generator(device='cpu');rng.manual_seed(seed);model=module(algo);modes={n:m.training for n,m in algo.policy.named_modules()}
+    state=rng_state();algo.policy.eval();begin=time.monotonic();density_errors=[];row=0
+    try:
+        for index in indices:
+            data=algo.map_tensor_to_device(default_collate([ds[index][0]]));dist=gmm(algo,data)
+            expert=data['actions'].squeeze(1)[:,-1,:]
+            grads=torch.autograd.grad(-dist.log_prob(expert).mean(),ps,retain_graph=True,allow_unused=True)
+            reference.add_(flat_grad(grads,ps),alpha=1/W);del grads
+            desc=description(dist);actions=sample(desc,A,rng).to('cuda',dtype=torch.float32).detach()
+            with torch.no_grad():
+                manual=density(desc,actions.cpu().double());native_lp=dist.log_prob(actions).cpu().double()
+                density_errors.append(float((manual-native_lp).abs().max()))
+            for action_index in range(A):
+                grads=torch.autograd.grad(dist.log_prob(actions[action_index]).sum(),ps,retain_graph=action_index<A-1,allow_unused=True)
+                scores[row].copy_(flat_grad(grads,ps));row+=1;del grads
+            del dist,data
+        assert row==M
+        # A whole-matrix isfinite check materializes multi-GiB temporaries. Validate
+        # small row blocks without changing score values, scope or reduction order.
+        for chunk in scores.split(4,dim=0):assert bool(torch.isfinite(chunk).all())
+        gram=(scores@scores.T).double().cpu()/M
+        values,vectors=torch.linalg.eigh((gram+gram.T)/2)
+        effective=min(rank,int((values>values.max()*1e-8).sum()));assert effective>=8,('Insufficient positive sampled rank',effective)
+        values=values[-effective:];vectors=vectors[:,-effective:].to('cuda',dtype=torch.float32)
+        U=scores.T@vectors;U/=torch.sqrt(values*M).to('cuda',dtype=torch.float32)[None,:]
+        # Whiten the small metric, then diagonalize the actual compressed sampled operator.
+        metric=(U.T@U).double().cpu();ev,rot=torch.linalg.eigh((metric+metric.T)/2)
+        assert float(ev.min())>0
+        transform=(rot@torch.diag(ev.rsqrt())@rot.T).to('cuda',dtype=torch.float32)
+        U=U@transform
+        projected=scores@U;compressed=(projected.T@projected).double().cpu()/M
+        lam,rotation=torch.linalg.eigh((compressed+compressed.T)/2)
+        order=torch.arange(effective-1,-1,-1);lam=lam[order];rotation=rotation[:,order].to('cuda',dtype=torch.float32)
+        U=U@rotation
+        orth=float((U.T@U-torch.eye(effective,device='cuda')).abs().max());assert orth<2e-3,orth
+        trace=float(gram.diag().sum());measurements={}
+        for name,d in directions.items():
+            d=d.to('cuda');individual=.5*(scores@d).double().square().view(W,A)
+            energy=float(individual.mean());se=float((individual.var(1,unbiased=True).sum()/A/W**2).sqrt())
+            coordinates=(U.T@d).double().cpu();energies={str(r):float(.5*(lam[:r]*coordinates[:r].square()).sum()) for r in (4,8,16) if r<=effective}
+            assert all(v<=energy+max(1e-8,energy*2e-3) for v in energies.values()),(energies,energy)
+            measurements[name]={'sample_energy':energy,'sample_energy_mc_se':se,'low_rank_energy':energies,
+                'equal_trace_isotropic_energy':trace*float(d.double().square().sum())/(2*p),
+                'first_order':float(reference.double()@d.double()),'norm':float(d.norm())}
+        result={'U':U,'eigenvalues':lam,'trace':trace,'reference_gradient':reference.cpu(),'directions':measurements,
+            'sample_count':M,'windows':W,'rank':effective,'orthogonality_max_error':orth,
+            'density_interface_max_abs_error':max(density_errors),'seconds':time.monotonic()-begin,
+            'scores_cpu':scores.cpu() if keep_scores else None}
+        if not keep_scores:del scores
+        return result
+    finally:
+        for n,m in algo.policy.named_modules():m.training=modes[n]
+        restore_rng(state)
+
+
+def cross_energy(scores_cpu,U,chunk=500000):
+    product=torch.zeros((scores_cpu.shape[0],U.shape[1]),device='cuda')
+    for start in range(0,U.shape[0],chunk):
+        end=min(start+chunk,U.shape[0]);product+=scores_cpu[:,start:end].to('cuda')@U[start:end]
+    return float(product.double().square().sum()/scores_cpu.shape[0])

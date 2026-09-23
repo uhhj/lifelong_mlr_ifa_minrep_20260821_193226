@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "alphas": [
+    1.0,
+    0.5,
+    0.25,
+    0.125,
+    0.0625,
+    0.03125
+  ],
+  "parameter_scope": "all formal trainable decoder+head float32 parameters",
+  "formal_training_resumed": false,
+  "seed_role": "development",
+  "candidate": "native MLR backward/clip/AdamW/scheduler inside isolated snapshot, restore afterwards",
+  "raw_gradient": "same clipped MLR gradient, equal Euclidean norm",
+  "probe": "eval all modules, learned GMM variance, terminal expert NLL; no sampled actions",
+  "deadband": "tau_i=max(2*repeat_abs_difference,32*float32_eps*max(1,abs(base_NLL_i))); prediction uses same units and tau_i; frozen before directional outcomes",
+  "statistics_unit": "start then equal seed-transition strata; report neutral coverage and undefined metrics",
+  "reliability": {
+    "median_spearman": 0.8,
+    "median_sign_accuracy": 0.85,
+    "median_harm_recall": 0.8,
+    "median_harm_precision": 0.8,
+    "minimum_defined_start_fraction": 0.5,
+    "minimum_decisive_window_fraction": 0.5,
+    "all_six_strata_required": true
+  },
+  "classification": "alpha1 reliable A; .5/.25 reliable B; .125 reliable B with explicit1/8 extension; <=.0625 reliable C; else D; engineering rules not theorem",
+  "hvp_trigger": "alpha1 unreliable AND smallest-alpha median Spearman improves>=.15 OR sign accuracy improves>=.10 (the two improvements are parenthesized); require smallest-alpha decisive coverage>=.5",
+  "hvp_starts": "first middle/late point per seed-transition (12), plus last middle point each stratum(6), plus last late in first2 sortedstrata(2);20 total",
+  "hvp_probes": "first3 frozen windows per oldtask (3 or6); true NLL double-autograd HVP, no Fisher",
+  "normal_path_restore": "exact source witness for all120 starts; no new carrier on mismatch",
+  "quantization": "Norm(actual float32 written displacement-alpha*d), actual norm and Cauchy bound ||h||*rounding_norm recorded. Main prediction alpha*h dot d remains unchanged.",
+  "raw_comparison": "two self-direction fidelity curves do not prove relative same-target superiority; additionally wrong-direction proxy h dot d_raw against actual AdamW y",
+  "execution": "reconstruct only missing origins from nearest saved anchor/previous restored origin; no formal checkpoints or solver called",
+  "implementation_sha256": {
+    "actual_update_fidelity_v1/prepare.py": "0e93df634fd6737f613f21196e3650eb68298ed04f49682dcce053f6bb0047a0",
+    "actual_update_fidelity_v1/run.py": "790b181bf5b25c6762b90b8e1f6c8ec738a64a22acf721dbce8cc91a751756d3",
+    "actual_update_fidelity_v1/__init__.py": "6e92d2734c3a8f27aa6eabd753f977123c0209ea399e2c3e0033b9d88f5ab8a2",
+    "actual_update_fidelity_v1/common.py": "f5f0523ff1e440c2303cd1783c792f5ee4a6c917091546055b4ff9fa2343c51d",
+    "actual_update_fidelity_v1/queue.py": "2c585b9322275e47106e90726e74ca65dea23a441fd0bcfb4c8734357e6fdcce",
+    "actual_update_fidelity_v1/engine.py": "07c7372c94a156d9d0f2f34c0c75f7f299548cae0176fc23406c05d70b0eaecc",
+    "actual_update_fidelity_v1/analysis.py": "1bc84de92177bf4225391dd00dba0f9717091accfa26f58ef3faab35a6a412cf",
+    "actual_update_fidelity_v1/tests.py": "fef67e16934c0456c1e78e04cdd730ae53164a13c3741aefc0ac9dcecbebbb0d"
+  },
+  "raw_support_rule": "At alpha1 all six strata paired median Spearman AdamW-minus-raw >=.05, sign and harm recall nondecreasing, precision decline<=.02; consistent reverse Spearman<=-.05 and sign<=0 gives NOT_SUPPORTED; otherwise INCONCLUSIVE. Same-target raw proxy is separate.",
+  "premeasurement_finalization": "Implementation completed after state-only parity; no directional outcome has been measured. Corrected HVP trigger logical OR and quantization description before scientific run.",
+  "displacement_arithmetic": "d0 is the exact binary64 difference between two true float32 parameter states; perturbation addition in binary64 then one float32 write. Model, native gradients and optimizer stay float32. Alpha1 must bitwise reconstruct native parameters."
+}
