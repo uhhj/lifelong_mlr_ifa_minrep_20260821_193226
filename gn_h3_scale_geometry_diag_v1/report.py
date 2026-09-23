@@ -1,4 +1,4 @@
-import csv,numpy as np
+import csv,json,numpy as np
 from scipy.stats import pearsonr,spearmanr
 from .common import *
 def correlation(a,b,spearman=True):
