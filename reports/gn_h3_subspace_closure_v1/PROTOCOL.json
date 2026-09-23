@@ -1,0 +1,87 @@
+{
+  "name": "gn_h3_subspace_closure_v1",
+  "parent_HEAD": "5a99b95fe54cd59772037a8ac864edf946b3b3e9",
+  "assets": {
+    "mean_basis": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/reports/gn_functional_geometry_v1/OLD_TASK_GN_BASIS.npz",
+      "sha256": "8bb8f10c25ac0aacd47e3a07b642c38418fb1cd80894789c8d0e16995ca7b010"
+    },
+    "fisher_basis16": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/reports/gn_h3_scale_geometry_diag_v1/NLL_MODEL_FISHER_BASIS.npz",
+      "sha256": "b8b97da4254467c38001fc2fb7e8fbc38b958a01da171a5569b7e02516facfc1"
+    },
+    "fisher_draws": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/reports/gn_h3_scale_geometry_diag_v1/FISHER_MODEL_DRAWS.npz",
+      "sha256": "c117fbcaa09e6b0d79073b5de1b54836df2d61fe95c7263c987c4b8e9a565c3f"
+    }
+  },
+  "split_sha256": "84eacf469814375fe4edb6704c40182fd02c09b4b4b740435d01d11b65bc282f",
+  "epsilon0": 0.012880407046407517,
+  "A": {
+    "scope": "Same true checkpoint, official GMM NLL, head float64 and fixed float32 decoder features, both old_probe and new_probe",
+    "directions": "Existing mean top16, existing Fisher top16, normalized old_probe gradient, normalized new_gradient gradient, one fixed random unit direction: 35 total",
+    "h_factors": [
+      1.0,
+      0.1,
+      0.01,
+      0.001,
+      0.0001,
+      1e-05,
+      1e-06,
+      1e-07
+    ],
+    "formula": "mean(per-window L(theta+h*v)-L(theta-h*v))/(2*h)",
+    "tolerance": "relative error <=1e-4, denominator max(abs(g.T@v),1e-8*norm(g)); report weak derivatives separately",
+    "pass_rule": "Every one of 70 direction/task groups closes at two adjacent pre-fixed scales with h_factor<=1e-3. No new h grid after outcomes.",
+    "failure_action": "Stop before B; preserve all measurements, no optimization or training"
+  },
+  "B": {
+    "geometries": [
+      "MEAN_GN",
+      "MODEL_FISHER_MC8",
+      "RANDOM"
+    ],
+    "ranks": [
+      4,
+      8,
+      16,
+      21
+    ],
+    "mean_basis": "Reuse existing top32; do not rebuild",
+    "fisher_basis": "Same saved 1024 model draws and operator; extend top16 to top21, keep original 16 columns, save five new columns only",
+    "fisher_extension_solver": {
+      "k": 21,
+      "ncv": 48,
+      "tol": 1e-06,
+      "maxiter": 500,
+      "seed": 2026092309
+    },
+    "random_basis_seed": 2026092310,
+    "rotation_seed": 2026092311,
+    "projector": "P=U @ solve(U.T@U,U.T@v); correct finite-precision non-orthogonality without changing span",
+    "score": "g_old_gradient.T @ P @ g_new_gradient; matched old_probe score recorded separately",
+    "perturbation": "delta=-epsilon*(P@g_new)/norm(P@g_new); common norm across all spaces, epsilon=epsilon0*scale. Record unnormalized score and projection energy too.",
+    "scales": [
+      1.0,
+      0.015625
+    ],
+    "scale_reason": "Reuse only previous endpoints, normal scale and 1/64 local check; no additional step search",
+    "predicted_change": "-epsilon*score/norm(P@g_new), not score itself",
+    "invariance": "For every r/space rotate by frozen orthogonal r x r matrix; projector vector, score and perturbation must agree to relative 1e-10",
+    "weak_projection_relative": 1e-08,
+    "loss_effect_tolerance": 1e-09,
+    "aggregation": "Four nested ranks are correlated; report exact per-rank outcomes, not independent trials or significance. One random nested basis only.",
+    "comparison": "At each scale, compare conservative sign counts, joint old/new outcomes, Spearman and relative Taylor error; ties or mixed tradeoffs mean no established advantage. No controller gate."
+  },
+  "training_active": false,
+  "formal_training_resumed": false,
+  "optimizer_steps_executed": 0,
+  "formal_solver_modified": false,
+  "limits": [
+    "B is a normalized projected-gradient direction test, not real AdamW and not a raw unconstrained gradient step.",
+    "Basis invariance holds within each fixed span, not when truncation changes which span is chosen.",
+    "Fisher is a fixed model-score MC estimate, not expert NLL Hessian.",
+    "A validates local derivatives only; does not guarantee a given B step is within the linear regime.",
+    "No sample, task, seed, reference or rank tuning based on outcomes."
+  ]
+}
