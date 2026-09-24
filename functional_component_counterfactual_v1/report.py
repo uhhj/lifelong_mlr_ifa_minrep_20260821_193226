@@ -77,7 +77,7 @@ def main():
   eng=read(dest/'ENGAGEMENT.json');geo=read(dest/'GEOMETRY.json');par=read(dest/'PARITY.json');phys=read(dest/'PHYSICAL.json')
   engagement.append(dict(start_id=sid,seed=s['seed'],transition=s['transition'],**eng,**phys))
   geometry.append(dict(start_id=sid,orthogonal_error=geo['orthogonal_error'],eigen_relative_max=geo['max_relative_eigen_residual'],rank=geo['rank'],trace=geo['trace'],coverage8=geo['trace_coverage']['8'],coverage16=geo['trace_coverage']['16'],coverage32=geo['trace_coverage']['32'],eigengap16=geo['eigengap16']))
-  parities.append(dict(start_id=sid,**par));resources.append(dict(start_id=sid,**read(dest/'COMPLETE.json'),basis_seconds=geo['seconds'],proposal_seconds=par['seconds']))
+  parities.append(dict(start_id=sid,**par));resources.append(dict(**read(dest/'COMPLETE.json'),basis_seconds=geo['seconds'],proposal_seconds=par['seconds']))
   for bank,a in [('D',dm),('T',tm)]:
    for role in sorted({k[0] for k in a}):
     task=next(int(r['task_id']) for r in (dd if bank=='D' else tt) if r['role']==role)
