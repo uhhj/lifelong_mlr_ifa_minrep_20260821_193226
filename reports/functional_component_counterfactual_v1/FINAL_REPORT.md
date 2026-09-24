@@ -10,10 +10,83 @@
   "LOCAL_EFFECT_REPLICATION": "SUPPORTED_ON_DEVELOPMENT_SET",
   "GEOMETRY_ADDED_VALUE": "NOT_ESTABLISHED",
   "BEHAVIORAL_EFFECT": {
-    "status": "NOT_RUN_ENVIRONMENT_UNAVAILABLE",
-    "failed_cell": 0,
-    "error": "[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/conda_envs/mlr_ifa_minrep/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\nGym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.\nPlease upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.\nSee the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.\n/data/conda_envs/mlr_ifa_minrep/lib/python3.8/site-packages/thop/profile.py:12: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.\n  if LooseVersion(torch.__version__) < LooseVersion(\"1.0.0\"):\n\n============= Initialized Observation Utils with Obs Spec =============\n\nusing obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']\nusing obs modality: depth with keys: []\nusing obs modality: low_dim with keys: ['joint_states', 'gripper_states']\n[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n/data/conda_envs/mlr_ifa_minrep/lib/python3.8/site-packages/huggingface_hub/file_download.py:1150: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.\n  warnings.warn(\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 116, in spawn_main\n    exitcode = _main(fd, parent_sentinel)\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 126, in _main\n    self = reduction.pickle.load(from_parent)\nModuleNotFoundError: No module named 'libero.libero'\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 116, in spawn_main\n    exitcode = _main(fd, parent_sentinel)\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 126, in _main\n    self = reduction.pickle.load(from_parent)\nModuleNotFoundError: No module named 'libero.libero'\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 116, in spawn_main\n    exitcode = _main(fd, parent_sentinel)\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 126, in _main\n    self = reduction.pickle.load(from_parent)\nModuleNotFoundError: No module named 'libero.libero'\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 116, in spawn_main\n    exitcode = _main(fd, parent_sentinel)\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 126, in _main\n    self = reduction.pickle.load(from_parent)\nModuleNotFoundError: No module named 'libero.libero'\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 116, in spawn_main\n    exitcode = _main(fd, parent_sentinel)\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 126, in _main\n    self = reduction.pickle.load(from_parent)\nModuleNotFoundError: No module named 'libero.libero'\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 116, in spawn_main\n    exitcode = _main(fd, parent_sentinel)\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/spawn.py\", line 126, in _main\n    self = reduction.pickle.load(from_parent)\nModuleNotFoundError: No module named 'libero.libero'\nTraceback (most recent call last):\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/runpy.py\", line 194, in _run_module_as_main\n    return _run_code(code, main_globals, None,\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/runpy.py\", line 87, in _run_code\n    exec(code, run_globals)\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/functional_component_counterfactual_v1/behavior.py\", line 82, in <module>\n    mp.set_start_method('spawn',force=True);run_cell(int(sys.argv[1]))\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/functional_component_counterfactual_v1/behavior.py\", line 41, in run_cell\n    try:values=metric.evaluate_success(cfg,algo,bench,[cell['task']],None,see=cell['seed'])\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/libero/lifelong/metric.py\", line 195, in evaluate_success\n    success_rate = evaluate_one_task_success(\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/libero/lifelong/metric.py\", line 112, in evaluate_one_task_success\n    env.seed(seed)\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/libero/libero/envs/venv.py\", line 852, in seed\n    return [w.seed(s) for w, s in zip(self.workers, seed_list)]\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/libero/libero/envs/venv.py\", line 852, in <listcomp>\n    return [w.seed(s) for w, s in zip(self.workers, seed_list)]\n  File \"/data/lifelong_mlr_ifa_minrep_20260912/libero/libero/envs/venv.py\", line 473, in seed\n    self.parent_remote.send([\"seed\", seed])\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/connection.py\", line 206, in send\n    self._send_bytes(_ForkingPickler.dumps(obj))\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/connection.py\", line 411, in _send_bytes\n    self._send(header + buf)\n  File \"/data/conda_envs/mlr_ifa_minrep/lib/python3.8/multiprocessing/connection.py\", line 368, in _send\n    n = write(self._handle, buf)\nBrokenPipeError: [Errno 32] Broken pipe\n",
-    "completed_cells": 0,
+    "status": "COMPLETE",
+    "trials": 480,
+    "paired_trials": 240,
+    "remove_minus_keep": -0.008333333333333333,
+    "conditional_paired_trial_CI95": [
+      -0.04583333333333333,
+      0.025000000000000005
+    ],
+    "transition_counts": {
+      "00": 45,
+      "01": 9,
+      "10": 11,
+      "11": 175
+    },
+    "cell_values": [
+      {
+        "point": "s45_t7_e62_b221",
+        "task": 6,
+        "difference": -0.15
+      },
+      {
+        "point": "s45_t7_e62_b221",
+        "task": 7,
+        "difference": -0.05
+      },
+      {
+        "point": "s45_t8_e63_b85",
+        "task": 7,
+        "difference": 0.0
+      },
+      {
+        "point": "s45_t8_e63_b85",
+        "task": 8,
+        "difference": -0.05
+      },
+      {
+        "point": "s46_t7_e64_b212",
+        "task": 6,
+        "difference": 0.05
+      },
+      {
+        "point": "s46_t7_e64_b212",
+        "task": 7,
+        "difference": 0.0
+      },
+      {
+        "point": "s46_t8_e62_b105",
+        "task": 7,
+        "difference": -0.05
+      },
+      {
+        "point": "s46_t8_e62_b105",
+        "task": 8,
+        "difference": 0.1
+      },
+      {
+        "point": "s47_t7_e62_b212",
+        "task": 6,
+        "difference": 0.05
+      },
+      {
+        "point": "s47_t7_e62_b212",
+        "task": 7,
+        "difference": 0.0
+      },
+      {
+        "point": "s47_t8_e64_b87",
+        "task": 7,
+        "difference": -0.05
+      },
+      {
+        "point": "s47_t8_e64_b87",
+        "task": 8,
+        "difference": 0.05
+      }
+    ],
+    "interpretation": "Low-powered20 trials/task, six correlated development states; no equivalence or long-term claim",
     "formal_training_resumed": false
   },
   "RESOURCE_COST": "MEASURED_SEPARATELY",
@@ -592,7 +665,80 @@ formal_training_resumed=false。
 ### 8：固定6点NLL与行为配对结果
 
 ```json
-[]
+[
+  {
+    "start_id": "s45_t7_e62_b221",
+    "task": 6,
+    "remove_minus_keep_success": -0.15,
+    "remove_minus_keep_NLL": 0.0507997116073966
+  },
+  {
+    "start_id": "s45_t7_e62_b221",
+    "task": 7,
+    "remove_minus_keep_success": -0.05,
+    "remove_minus_keep_NLL": -0.007178563085095754
+  },
+  {
+    "start_id": "s45_t8_e63_b85",
+    "task": 7,
+    "remove_minus_keep_success": 0.0,
+    "remove_minus_keep_NLL": 0.08768217265605927
+  },
+  {
+    "start_id": "s45_t8_e63_b85",
+    "task": 8,
+    "remove_minus_keep_success": -0.05,
+    "remove_minus_keep_NLL": 0.12413486838340759
+  },
+  {
+    "start_id": "s46_t7_e64_b212",
+    "task": 6,
+    "remove_minus_keep_success": 0.05,
+    "remove_minus_keep_NLL": -0.009613655507564545
+  },
+  {
+    "start_id": "s46_t7_e64_b212",
+    "task": 7,
+    "remove_minus_keep_success": 0.0,
+    "remove_minus_keep_NLL": 0.01646580547094345
+  },
+  {
+    "start_id": "s46_t8_e62_b105",
+    "task": 7,
+    "remove_minus_keep_success": -0.05,
+    "remove_minus_keep_NLL": -0.025282636284828186
+  },
+  {
+    "start_id": "s46_t8_e62_b105",
+    "task": 8,
+    "remove_minus_keep_success": 0.1,
+    "remove_minus_keep_NLL": -0.04163230210542679
+  },
+  {
+    "start_id": "s47_t7_e62_b212",
+    "task": 6,
+    "remove_minus_keep_success": 0.05,
+    "remove_minus_keep_NLL": -0.029660001397132874
+  },
+  {
+    "start_id": "s47_t7_e62_b212",
+    "task": 7,
+    "remove_minus_keep_success": 0.0,
+    "remove_minus_keep_NLL": -0.02767115831375122
+  },
+  {
+    "start_id": "s47_t8_e64_b87",
+    "task": 7,
+    "remove_minus_keep_success": -0.05,
+    "remove_minus_keep_NLL": 0.04099756479263306
+  },
+  {
+    "start_id": "s47_t8_e64_b87",
+    "task": 8,
+    "remove_minus_keep_success": 0.05,
+    "remove_minus_keep_NLL": -0.002216435968875885
+  }
+]
 ```
 
 7：夹爪指令变化窗口和时序分层的尾部损伤见 STATE_AND_TRAJECTORY_STRATA.csv 与 DESCRIPTIVE_ANSWERS.json，不以全局均值代替。9：成本含候选、GN、D/T及KL，T前向与KL合并计时，未单独分离；对照范数补录的影子状态恢复时间单列，不能隐去。10：以上结论仅限固定开发载体，不自动触发续训。
