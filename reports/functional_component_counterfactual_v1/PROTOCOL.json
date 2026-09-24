@@ -1,0 +1,78 @@
+{
+  "name": "functional_component_counterfactual_v1",
+  "user_protocol_sha256": "20a2223260b007db37c9ab96a78be265aa2096de2b5146ca301adfabf2bef660",
+  "head": "7eb19d0f37c7b599697436ad1856aaee0fc6b790",
+  "start_manifest_sha256": "bd6a4ab750f4f6057c24608963eb108fbae1a65e1a2f90c75a514fd6055414b1",
+  "data_roles_sha256": "1c359aa6c11f4d6cddfe3d2260b9a43b7d48d880b479bee0f94e98f3f8c31bbd",
+  "rank": 16,
+  "spectrum_rank": 32,
+  "eigensolver": {
+    "method": "matrix-free scipy eigsh",
+    "k": 32,
+    "ncv": 72,
+    "tol": 1e-06,
+    "maxiter": 500,
+    "seeds": [
+      2026092303,
+      2026092304
+    ]
+  },
+  "numerics": {
+    "orthogonal_max": 2e-05,
+    "eigen_relative_residual_max": 0.002,
+    "repeat_min_principal_cosine": 0.99,
+    "trace_excess_relative": 1e-05
+  },
+  "random_seeds": [
+    2026092401,
+    2026092402,
+    2026092403
+  ],
+  "lambdas": [
+    1.0,
+    0.5,
+    0.0
+  ],
+  "kl_samples": 64,
+  "kl_seed": 2026092410,
+  "bootstrap_replicates": 5000,
+  "bootstrap_seed": 2026092411,
+  "block_length": 2,
+  "paired_comparison_interval": 0.975,
+  "numerical_floor": 1e-07,
+  "equivalence_floor": 0.0001,
+  "tie_rule": "within tau_num/2 weighted old+new numerical errors; prefer KEEP then HALF then REMOVE",
+  "selection": "0.5 trajectory-equal old NLL+0.5 trajectory-equal new NLL on D only; freeze before opening T",
+  "rollouts": {
+    "points": [
+      "s45_t7_e62_b221",
+      "s45_t8_e63_b85",
+      "s46_t7_e64_b212",
+      "s46_t8_e62_b105",
+      "s47_t7_e62_b212",
+      "s47_t8_e64_b87"
+    ],
+    "arms": [
+      "KEEP",
+      "GN_REMOVE"
+    ],
+    "trials_per_task": 20,
+    "task_roles": [
+      "old",
+      "new"
+    ],
+    "total": 480
+  },
+  "formal_training_resumed": false,
+  "QP_called": false,
+  "physical_QP_gates_used": false,
+  "basis_retention": "sequential temporary basis; retain spectrum, selected coefficients, projected vectors for smoke endpoints, seeds, operator source and data hashes; reproducible rebuilding",
+  "protocol_status": "FROZEN_BEFORE_D_T_OUTCOMES",
+  "statistical_implementation": {
+    "trajectory_weights": "Shared Exp(1) Bayesian bootstrap weights per seed/task/trajectory across all starts/arms; conditional on observed trajectories",
+    "start_resampling": "length2 circular blocks;3 blocks per cell; equal six-cell weighting; fixed D choices",
+    "point_intervals": "5000 paired trajectory bootstrap for D and T; use same weights for paired candidates",
+    "local_effect_rule": "report coverage and D/T relation concordance; support requires positive paired D/T effect correlations for both tasks with conditional95CI lower>0 and nonnegative seed directions; no runtime gate"
+  },
+  "behavior_seed_rule": "sha256(functional_component_counterfactual_v1/start_id/task/round) first32bits; environment seed=carrier seed; original evaluator"
+}

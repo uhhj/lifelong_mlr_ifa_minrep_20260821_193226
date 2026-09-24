@@ -1,0 +1,69 @@
+# Source and context
+
+{
+  "head": "7eb19d0f37c7b599697436ad1856aaee0fc6b790",
+  "branch": "codex/sample-qp-lifelong-v1",
+  "tracked_diff": " M libero/lifelong/algos/__init__.py\n M reports/qp_solver_recovery_v2/F2_before_extended.json\n M reports/qp_solver_recovery_v2/F2_before_extended.npz\n M reports/qp_solver_recovery_v2/F2_final.npz\n M reports/sample_qp_lifelong_v1_continuation_v4/STATUS.json\n",
+  "python": "3.8.20 (default, Oct  3 2024, 15:24:27) \n[GCC 11.2.0]",
+  "torch": "1.13.0+cu116",
+  "cuda": "11.6",
+  "gpu": "NVIDIA GeForce RTX 3090, GPU-3721b5a3-d960-69eb-5d97-9e0d68c4a38f, 24576 MiB, 535.230.02",
+  "disk_free": {
+    "/data": 806797312,
+    "/root": 2713346048
+  },
+  "formal_training_resumed": false,
+  "sources": {
+    "actual_update_fidelity_v1/engine.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/actual_update_fidelity_v1/engine.py",
+      "sha256": "07c7372c94a156d9d0f2f34c0c75f7f299548cae0176fc23406c05d70b0eaecc",
+      "tracked": true
+    },
+    "actual_update_fidelity_v1/run.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/actual_update_fidelity_v1/run.py",
+      "sha256": "790b181bf5b25c6762b90b8e1f6c8ec738a64a22acf721dbce8cc91a751756d3",
+      "tracked": true
+    },
+    "gradient_relation_experiment/kernel.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/gradient_relation_experiment/kernel.py",
+      "sha256": "080eb7536856669c76c5a02eafcb5e2865fd9bfcfe56e75f59b2ebbe751878a8",
+      "tracked": true
+    },
+    "cb_ifa_experiment/gpu_runtime.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/cb_ifa_experiment/gpu_runtime.py",
+      "sha256": "04091da98d876ef03e4a9e6a11f8d1f133b5a7c136a24f4b89c34485dce14edf",
+      "tracked": false
+    },
+    "gn_functional_geometry_v1/engine.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/gn_functional_geometry_v1/engine.py",
+      "sha256": "6d81f2388dde56c7c2b93eaa8906379d4b864cdf8e8e1fb4ef02a7773c81a664",
+      "tracked": true
+    },
+    "gn_h3_subspace_closure_v1/project.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/gn_h3_subspace_closure_v1/project.py",
+      "sha256": "091aa5544e9e4fc37f0b13a61763f80a283e66b61d09e389e6620eafbc198fd1",
+      "tracked": true
+    },
+    "libero/lifelong/models/base_policy.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/libero/lifelong/models/base_policy.py",
+      "sha256": "3dcca28f629caeff76f013340056ab5f3af02dd32b8e849f8942c251ee7c4365",
+      "tracked": true
+    },
+    "libero/lifelong/models/brief.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/libero/lifelong/models/brief.py",
+      "sha256": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+      "tracked": true
+    },
+    "libero/lifelong/models/policy_head.py": {
+      "path": "/data/lifelong_mlr_ifa_minrep_20260912/libero/lifelong/models/policy_head.py",
+      "sha256": "8c74c06a64c7be8c98fe0d317c83721b8f10d3ad7148253d23e2178cea4a209b",
+      "tracked": true
+    }
+  },
+  "imports": {
+    "cb_ifa_experiment.gpu_runtime": "/data/lifelong_mlr_ifa_minrep_20260912/cb_ifa_experiment/gpu_runtime.py",
+    "gn_functional_geometry_v1.engine": "/data/lifelong_mlr_ifa_minrep_20260912/gn_functional_geometry_v1/engine.py",
+    "gn_h3_subspace_closure_v1.project": "/data/lifelong_mlr_ifa_minrep_20260912/gn_h3_subspace_closure_v1/project.py",
+    "actual_update_fidelity_v1.engine": "/data/lifelong_mlr_ifa_minrep_20260912/actual_update_fidelity_v1/engine.py"
+  }
+}
