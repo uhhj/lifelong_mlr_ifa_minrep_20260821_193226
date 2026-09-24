@@ -1,5 +1,8 @@
 import os,sys,time,subprocess,traceback
 from .common import *
+# Spawn children must install the same historical LIBERO package binding before unpickling environments.
+from cb_ifa_experiment.gpu_runtime import bind as bind_historical_runtime
+bind_historical_runtime()
 def cells():
  starts=read(OUT/'START_MANIFEST.json')['starts'];out=[]
  for s in starts:

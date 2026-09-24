@@ -1,0 +1,9 @@
+{
+  "cause": "Parent invoked gpu_runtime.bind only inside run_cell; spawn child imports main without invoking run_cell, then cannot unpickle libero.libero module names",
+  "change": "Call existing process-scoped gpu_runtime.bind at module import, also in spawn children; no package install or formal source edit",
+  "completed_trials_before_fix": 0,
+  "protocol_changed": false,
+  "formal_training_resumed": false,
+  "spawn_import_test": "PASS",
+  "test_log_sha256": "57753ad86bd605638d29bc84842392803d5073f394900919bcfdfb0189a9750d"
+}
