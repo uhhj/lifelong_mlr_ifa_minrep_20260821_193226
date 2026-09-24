@@ -63,4 +63,23 @@ class Tests(unittest.TestCase):
   self.assertTrue(torch.allclose(out,(J.T@torch.diag(w)@J)@v))
  def test_rng_state_restore(self):
   before=torch.get_rng_state();torch.randn(7);torch.set_rng_state(before);self.assertTrue(torch.equal(before,torch.get_rng_state()))
+ def test_paired_block_bootstrap_constant_gains(self):
+  from .report import bootstrap
+  from .common import METHODS
+  starts=[];allmeans={};choices={}
+  for seed in [45,46,47]:
+   for task in [7,8]:
+    for j in range(6):
+     sid=str((seed,task,j));starts.append(dict(start_id=sid,seed=seed,task_id=task,cell_order=j))
+     a={};d={}
+     for role in ['old','new']:
+      for demo in ['a','b']:
+       for name in ['KEEP']+[m+'_REMOVE' for m in METHODS]:
+        benefit=.1 if name=='GN_REMOVE' else .04 if name!='KEEP' else 0.
+        a['T_'+role,name,demo]=2.-benefit;d['D_'+role,name,demo]=2.-benefit
+     allmeans[sid]={'D':d,'T':a};choices[sid]={m:dict(candidate=m+'_REMOVE') for m in METHODS}
+  result=bootstrap(starts,allmeans,choices)
+  self.assertAlmostEqual(result['GN'][0],.1,places=12)
+  self.assertAlmostEqual(result['GN_minus_C2_simultaneous97_5'][0],.06,places=12)
+  self.assertAlmostEqual(result['GN_minus_C3_simultaneous97_5'][1],.06,places=12)
 if __name__=='__main__':unittest.main()
