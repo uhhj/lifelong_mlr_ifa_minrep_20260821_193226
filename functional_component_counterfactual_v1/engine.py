@@ -200,6 +200,9 @@ def finish(algo,bundle,roles,taus):
  bundle['T'],_,ts=eval_roles(algo,bundle,roles,'T',distribution=True)
  table(dest/'T_WINDOWS.csv',bundle['T'])
  for name in ['parity','engagement','geometry','physical','noise']:write(dest/(name.upper()+'.json'),bundle[name])
+ from .control_metadata import records
+ x=bundle['heads']['KEEP'].double()-bundle['heads']['X00'].double()
+ write(dest/'CONTROL_MATERIALIZATION.json',dict(rows=records(bundle['heads']['KEEP'],x,bundle['directions'],bundle['engagement'],bundle['geometry']['rank']),source='Original measurement process',formal_training_resumed=False))
  if bundle['start']['smoke']:
   SCRATCH.mkdir(parents=True,exist_ok=True)
   # Native trainable model only and REMOVE head delta, frozen for later rollout; no optimizer continuation.

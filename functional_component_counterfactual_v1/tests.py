@@ -82,4 +82,12 @@ class Tests(unittest.TestCase):
   self.assertAlmostEqual(result['GN'][0],.1,places=12)
   self.assertAlmostEqual(result['GN_minus_C2_simultaneous97_5'][0],.06,places=12)
   self.assertAlmostEqual(result['GN_minus_C3_simultaneous97_5'][1],.06,places=12)
+ def test_control_materialization_metadata(self):
+  from .control_metadata import records
+  h=torch.tensor([1.,-2.,.3],dtype=torch.float32);x=torch.tensor([.01,-.02,.03],dtype=torch.float64)
+  dirs={'GN':x*.2,'C3':x*.3};eng={'conditional_increment_norm':float(x.norm())*2}
+  out=records(h,x,dirs,eng,2)
+  self.assertAlmostEqual(out[0]['rho_head'],.04,places=12)
+  self.assertAlmostEqual(out[0]['rho_all'],.01,places=12)
+  self.assertAlmostEqual(out[1]['realized_delete_norm'],float((h.double()-(h.double()-dirs['C3']).float().double()).norm()),places=12)
 if __name__=='__main__':unittest.main()

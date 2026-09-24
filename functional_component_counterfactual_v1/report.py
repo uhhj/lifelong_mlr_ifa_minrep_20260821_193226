@@ -67,6 +67,9 @@ def main():
  starts=read(OUT/'START_MANIFEST.json')['starts'];complete=[s for s in starts if (OUT/'starts'/s['start_id']/'COMPLETE.json').exists()]
  if len(complete)!=36:
   write(OUT/'SUMMARY.json',dict(MEASUREMENT_VALIDITY='INCOMPLETE',completed=len(complete),expected=36,LOCAL_EFFECT_REPLICATION='NOT_EVALUATED',GEOMETRY_ADDED_VALUE='NOT_EVALUATED',BEHAVIORAL_EFFECT=read(OUT/'BEHAVIORAL_REPORT.json')['status'] if (OUT/'BEHAVIORAL_REPORT.json').exists() else 'NOT_RUN',formal_training_resumed=False));return
+ if OUT==ROOT/'reports/functional_component_counterfactual_v1' and any(not (OUT/'starts'/s['start_id']/'CONTROL_MATERIALIZATION.json').exists() for s in starts):
+  import subprocess,sys
+  subprocess.run([sys.executable,'-u','-m','functional_component_counterfactual_v1.control_metadata'],check=True)
  taus=read(OUT/'NUMERICAL_RESOLUTION.json')['tasks']
  means_all={};choices={};effects=[];interactions=[];evaluations=[];engagement=[];geometry=[];parities=[];selection_rows=[];strata=[];resources=[];pointstats=[]
  for s in starts:
@@ -133,7 +136,9 @@ def main():
  table(OUT/'GEOMETRY_CHECKS.csv',geometry);table(OUT/'ENGAGEMENT.csv',engagement);table(OUT/'CANDIDATE_EFFECTS.csv',effects);table(OUT/'INTERACTIONS.csv',interactions);table(OUT/'SELECTIONS_D_ONLY.csv',selection_rows);table(OUT/'T_EVALUATION.csv',evaluations);table(OUT/'STATE_AND_TRAJECTORY_STRATA.csv',strata);table(OUT/'CELL_AND_SEED_SUMMARY.csv',cell+seedrows);table(OUT/'D_T_LABELS.csv',rel)
  write(OUT/'PROPOSAL_PARITY.json',dict(status='PASS',points=parities))
  write(OUT/'STATISTICAL_REPORT.json',dict(bootstrap=boot,D_T_correlations=cors,labels=rel,label_summary=dict(D_counts=dict(collections.Counter(r['D_label'] for r in rel)),T_counts=dict(collections.Counter(r['T_label'] for r in rel)),D_decisive=sum(r['D_label']!='UNRESOLVED' for r in rel),T_decisive=sum(r['T_label']!='UNRESOLVED' for r in rel),agreement_all36=sum(r['D_label']==r['T_label'] and r['T_label']!='UNRESOLVED' for r in rel)/36),leave_one_seed_out=leave,seed_directions_nonnegative=allseeds,limits='Conditional development-carrier intervals, trajectory dependencies retained. D/T correlation and gain intervals share trajectory weights and paired circular start blocks; point marginal intervals reported separately.'))
- write(OUT/'RESOURCE_COST.json',dict(points=resources,total_prepare_seconds=sum(r['prepare_seconds'] for r in resources),total_T_seconds=sum(r['T_seconds'] for r in resources),peak_gpu_bytes=max(r['peak_gpu_bytes'] for r in resources),basis_retention='operator seeds/spectrum/coefficients; large U released after projection',T_privilege=read(OUT/'DATA_ROLES.json')['T_privileged_raw_access']))
+ controls=[dict(start_id=s['start_id'],**r) for s in starts if (OUT/'starts'/s['start_id']/'CONTROL_MATERIALIZATION.json').exists() for r in read(OUT/'starts'/s['start_id']/'CONTROL_MATERIALIZATION.json')['rows']]
+ table(OUT/'CONTROL_MATERIALIZATION.csv',controls)
+ write(OUT/'RESOURCE_COST.json',dict(points=resources,total_prepare_seconds=sum(r['prepare_seconds'] for r in resources),total_T_seconds=sum(r['T_seconds'] for r in resources),peak_gpu_bytes=max(r['peak_gpu_bytes'] for r in resources),basis_retention='operator seeds/spectrum/coefficients; large U released after projection',T_privilege=read(OUT/'DATA_ROLES.json')['T_privileged_raw_access'],control_metadata_supplement_seconds=sum(read(OUT/'starts'/s['start_id']/'CONTROL_MATERIALIZATION.json').get('seconds',0.) for s in starts if (OUT/'starts'/s['start_id']/'CONTROL_MATERIALIZATION.json').exists()),timing_limits='D includes calibration at smoke; T includes full GMM KL. Projection/random construction is included in prepare total; not individually timed on initial six smoke points.'))
  behavior=read(OUT/'BEHAVIORAL_REPORT.json') if (OUT/'BEHAVIORAL_REPORT.json').exists() else dict(status='NOT_RUN')
  summary=dict(MEASUREMENT_VALIDITY='PASS',PROJECTED_UPDATE_ENGAGEMENT=dict(median_rho_head=float(np.median([r['rho_head'] for r in engagement if r['rho_head'] is not None])),median_rho_all=float(np.median([r['rho_all'] for r in engagement if r['rho_all'] is not None])),below_physical_resolution=sum(r['status']=='BELOW_PHYSICAL_RESOLUTION' for r in engagement)),LOCAL_EFFECT_REPLICATION='SUPPORTED_ON_DEVELOPMENT_SET' if local_support else 'INCONCLUSIVE',GEOMETRY_ADDED_VALUE='SUPPORTED_ON_DEVELOPMENT_SET' if geometry_support else 'NOT_ESTABLISHED',BEHAVIORAL_EFFECT=behavior,RESOURCE_COST='MEASURED_SEPARATELY',completed=36,formal_training_resumed=False)
  write(OUT/'SUMMARY.json',summary)
@@ -144,6 +149,13 @@ def main():
  report+='边际KEEP−REMOVE与各自相对BASE的绝对效应分开。X00/X10用于交互分解，详见INTERACTIONS.csv。D选择在T前冻结；GN固定HALF/REMOVE单列，三个随机重复取平均而非择优。六cell、三个seed及leave-one-seed-out均保留。未建立几何增量时不加rank/新几何。\n\n'
  report+='## 尾部、行为与成本\n\n逐任务/轨迹原始NLL、时间三分段及夹爪指令变化窗口见各start CSV与STATE_AND_TRAJECTORY_STRATA.csv；不称接触真值。旁观旧任务不建空间，单列其损伤。完整GMM KL估计保留负值和MC标准误，不能当利益标签。行为仅由BEHAVIORAL_REPORT.json中的实际480预算rollout判断，NLL不替代成功率；20次/任务低功效不证明等效。资源逐起点记录并披露T额外缓存访问，见RESOURCE_COST.json。\n\n'
  report+='## 下一步\n\n'+('仅可另行设计有限规模续训，当前不自动执行。' if geometry_support else '当前未建立GN超越等幅廉价对照的增量，不推进该几何到正式训练；不追加变体补救。')+'\n\nformal_training_resumed=false。\n'
+ from . import answers
+ answers.OUT=OUT
+ described=answers.describe(starts,engagement,geometry,effects,interactions,evaluations,strata,means_all,choices,behavior)
+ report+='\n## 逐项数值回答\n\n以下是冻结规则下的描述统计，不新增通过门槛。\n\n'
+ for title,key in [('2–3：空间介入、完整算子能量及截断外能量','engagement_and_energy'),('4–5：跨轨迹边际效果与整步绝对效果','absolute_and_marginal_effects'),('5：空间内外交互','interactions'),('6：D选择后各方法在T上的共同增益与新旧代价','D_selected_method_costs'),('7：旁观旧任务逐起点结果','other_old_task_rows'),('8：固定6点NLL与行为配对结果','behavior_NLL_paired')]:
+  report+='### '+title+'\n\n```json\n'+json.dumps(described[key],indent=2,ensure_ascii=False)+'\n```\n\n'
+ report+='7：夹爪指令变化窗口和时序分层的尾部损伤见 STATE_AND_TRAJECTORY_STRATA.csv 与 DESCRIPTIVE_ANSWERS.json，不以全局均值代替。9：成本含候选、GN、D/T及KL，T前向与KL合并计时，未单独分离；对照范数补录的影子状态恢复时间单列，不能隐去。10：以上结论仅限固定开发载体，不自动触发续训。\n'
  (OUT/'FINAL_REPORT.md').write_text(report)
  render(engagement,geometry,effects,interactions,evaluations,behavior)
  status('REPORT_COMPLETE',summary=summary)
@@ -164,3 +176,8 @@ def render(eng,geo,effects,inter,ev,behavior):
  for r in ev:
   if r['method']=='GN':ax.plot([0,.5,1],[r['fixed_remove_gain'],r['fixed_half_gain'],0],alpha=.35)
  ax.set(xlabel='Lambda (1 = KEEP)',ylabel='T joint NLL benefit vs KEEP');fig.savefig(OUT/'dose_response.png',dpi=150);plt.close(fig)
+
+ if behavior.get('status')=='COMPLETE':
+  fig,ax=plt.subplots();counts=behavior['transition_counts'];keys=['00','01','10','11']
+  ax.bar(keys,[counts[k] for k in keys]);ax.set(xlabel='KEEP / REMOVE success (0 or 1)',ylabel='Paired trials',title='480 rollouts / 240 paired trials')
+  fig.savefig(OUT/'behavior_paired.png',dpi=150);plt.close(fig)
