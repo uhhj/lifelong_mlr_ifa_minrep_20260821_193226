@@ -46,7 +46,7 @@ def directory(cell):
     return OUT / 'behavior' / ('s%d' % cell['seed']) / cell['model_id'] / ('task%d' % cell['task'])
 
 
-def run_cell(cell):
+def run_cell(cell, attempt=None):
     from pathlib import Path
     from cb_ifa_experiment.gpu_runtime import torch, seed_all, digest, eval_config
     import robomimic.utils.obs_utils as ObsUtils
@@ -55,7 +55,11 @@ def run_cell(cell):
     from libero.lifelong.utils import get_task_embs
     from libero.lifelong import metric
     from paper_qp_rollout_v1.evaluate import Observer
-    dest = directory(cell);dest.mkdir(parents=True, exist_ok=True)
+    dest = directory(cell)
+    if attempt is not None:
+        assert attempt.isdigit(), 'Diagnostic attempt must be an explicit numeric ID'
+        dest = OUT/'behavior_attempts'/('s%d'%cell['seed'])/cell['model_id']/('task%d'%cell['task'])/('attempt'+attempt)
+    dest.mkdir(parents=True, exist_ok=True)
     if (dest / 'COMPLETE.json').exists():
         complete = read(dest / 'COMPLETE.json')
         assert sha(cell['checkpoint']) == complete['checkpoint_sha256']
@@ -63,7 +67,8 @@ def run_cell(cell):
         return
     assert not (dest / 'STARTED.json').exists(), 'Interrupted rollout requires an explicit replay audit'
     assert Path(cell['checkpoint']).exists()
-    write(dest / 'STARTED.json', dict(cell=cell, pid=os.getpid(), started=time.time(), formal_training_resumed=False))
+    write(dest / 'STARTED.json', dict(cell=cell, pid=os.getpid(), started=time.time(),
+          diagnostic_attempt=attempt, formal_training_resumed=False))
     torch.set_num_threads(2);torch.backends.cudnn.benchmark=True
     cfg = eval_config(cell['seed'], dest)
     assert cfg.eval.n_eval == 20
@@ -105,14 +110,28 @@ def run_cell(cell):
                          initial_obs=[r['initial_obs_sha256'] for r in rounds],
                          policy_rng_before=[r['policy_rng_before'] for r in rounds])
     shared = OUT/'behavior'/'pairing'/('s%d_t%d.json'%(cell['seed'],cell['task']))
-    if shared.exists():assert read(shared)==pair_evidence, 'Rollout initial pairing mismatch'
-    else:freeze(shared,pair_evidence)
+    # Persist the actual completed rounds before any pairing assertion. Diagnostics
+    # must never discard the first mismatching fields together with the result.
     write(dest/'ROUNDS.json',rounds);write(dest/'TRIALS.json',trials)
+    expected_pair=read(shared) if shared.exists() else pair_evidence
+    pairing_checks={key:expected_pair[key]==pair_evidence[key] for key in pair_evidence}
+    write(dest/'PAIRING_CHECK.json',dict(status='PASS' if all(pairing_checks.values()) else 'FAIL',
+          checks=pairing_checks,expected=expected_pair,actual=pair_evidence,
+          source_pairing_sha256=sha(shared) if shared.exists() else None,
+          diagnostic_attempt=attempt,formal_training_resumed=False))
+    if not all(pairing_checks.values()):
+        write(dest/'FAILURE_CONTEXT.json',dict(reason='Rollout initial pairing mismatch',
+              cell=cell,checks=pairing_checks,checkpoint_sha256=sha(cell['checkpoint']),
+              native_evaluator_sha256=sha(ROOT/'libero/lifelong/metric.py'),
+              completed_rollouts_retained=20,formal_training_resumed=False))
+        raise AssertionError('Rollout initial pairing mismatch: '+str(pairing_checks))
+    if not shared.exists():freeze(shared,pair_evidence)
     write(dest/'COMPLETE.json',dict(status='PASS',cell=cell,trials=20,successes=sum(t['success'] for t in trials),
           seconds=time.monotonic()-begin,checkpoint_sha256=sha(cell['checkpoint']),model_unchanged=True,
           frozen_frontend_hash=frozen,native_evaluator_sha256=sha(ROOT/'libero/lifelong/metric.py'),
           init_file_sha256=sha(init),initial_indices=list(range(20)),formal_training_resumed=False,
-          files={name:sha(dest/name) for name in ('TRIALS.json','ROUNDS.json','CONFIG.json')}))
+          diagnostic_attempt=attempt,
+          files={name:sha(dest/name) for name in ('TRIALS.json','ROUNDS.json','CONFIG.json','PAIRING_CHECK.json')}))
 
 
 def queue(pilot):
@@ -149,6 +168,9 @@ if __name__=='__main__':
     import multiprocessing as mp
     mp.set_start_method('spawn',force=True)
     parser=argparse.ArgumentParser();parser.add_argument('--pilot',action='store_true');parser.add_argument('--cell',type=int)
+    parser.add_argument('--attempt',help='Isolated diagnostic repetition; never replaces a main result')
     args=parser.parse_args()
-    if args.cell is None:queue(args.pilot)
-    else:run_cell(cells(args.pilot)[args.cell])
+    if args.cell is None:
+        assert args.attempt is None
+        queue(args.pilot)
+    else:run_cell(cells(args.pilot)[args.cell],args.attempt)
