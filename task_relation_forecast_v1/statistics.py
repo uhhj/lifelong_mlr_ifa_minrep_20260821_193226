@@ -30,7 +30,7 @@ def design(rows, family, train, test):
     x = np.asarray([[r[k] for k in keys] for r in rows], dtype=float)
     assert np.isfinite(x).all(), 'Unavailable signals must not be silently imputed or rows dropped'
     mean, scale = x[train].mean(0), x[train].std(0)
-    zero = scale == 0
+    zero = np.ptp(x[train], axis=0) == 0
     safe = np.where(zero, 1., scale)
     x = (x - mean) / safe
     x[:, zero] = 0
@@ -38,7 +38,7 @@ def design(rows, family, train, test):
     if family in ('M_LA', 'M_GA'):
         inter = x[:, -2] * x[:, -1]
         mu, sd = inter[train].mean(), inter[train].std()
-        inter = (inter - mu) / sd if sd > 0 else np.zeros_like(inter)
+        inter = (inter - mu) / sd if np.ptp(inter[train]) > 0 else np.zeros_like(inter)
         x = np.column_stack((x, inter))
         meta['interaction'] = dict(mean=float(mu), scale=float(sd))
     return x[train], x[test], meta
@@ -48,8 +48,9 @@ def predict_fold(rows, family, y, train, test):
     a, b, meta = design(rows, family, train, test)
     y = np.asarray(y, dtype=float)
     mu, sd = y[train].mean(), y[train].std()
-    meta.update(y_mean=float(mu), y_scale=float(sd), constant_target=bool(sd == 0))
-    if sd == 0:
+    constant = bool(np.ptp(y[train]) == 0)
+    meta.update(y_mean=float(mu), y_scale=float(sd), constant_target=constant)
+    if constant:
         return np.full(len(test), mu), meta
     # Intercept unpenalized; mean-MSE + 1.0 * ||beta||^2.
     center = a.mean(0)

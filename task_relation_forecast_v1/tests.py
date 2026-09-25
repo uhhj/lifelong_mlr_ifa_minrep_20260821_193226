@@ -46,6 +46,14 @@ class FrozenProtocolTests(unittest.TestCase):
         self.assertTrue(np.all(pred == .25))
         self.assertTrue(m['constant_target'])
 
+    def test_constant_nonbinary_target_and_features(self):
+        f = folds(self.rows)[0]
+        rows = [dict(r, b_t=.1) for r in self.rows]
+        pred, m = predict_fold(rows, 'M0', np.full(36, .1), f['train'], f['test'])
+        self.assertTrue(m['constant_target'])
+        self.assertTrue(m['zero_variance'][0])
+        np.testing.assert_allclose(pred, .1, atol=1e-16)
+
     def test_reference_arrays_shared(self):
         success = {}
         for seed in SEEDS:

@@ -6,6 +6,6 @@ These unselected weights can no longer be directly re-evaluated without reconstr
 
 New large assets are isolated under diagnostic_storage/task_relation_forecast_v1 on /data, with a 2 GiB stop reserve. Frozen frontend is shared; source step300 is reused as target reference; only decoder/head endpoints and one active full recovery state are retained by the new source runner. No automatic historical cleanup is performed by runners.
 
-CPU protocol tests: 6/6. Native cache smoke: PASS for one window per A/D/E role. Scientific results are not available yet. Source pilot prepares only seed45 tasks6 and7. Formal lifelong training remains stopped.
+CPU protocol tests: 7/7. Native cache smoke: PASS for one window per A/D/E role. Scientific results are not available yet. Source pilot prepares only seed45 tasks6 and7. Formal lifelong training remains stopped.
 
 Base exposure audit: official checkpoint provenance and released pretraining recipe agree on tasks0–5; original author training-job manifest unavailable, recorded explicitly. Native LR step0 equals0, therefore first shadow-update signal is expected to be degenerate; no schedule change is made to improve that signal.
