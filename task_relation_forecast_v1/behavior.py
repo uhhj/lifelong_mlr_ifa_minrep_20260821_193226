@@ -4,6 +4,7 @@ import os
 import subprocess
 import sys
 import time
+import shutil
 from .common import ROOT, OUT, read, write, freeze, sha, stable_seed
 from .runtime import model_path
 # Required in spawned environment workers before historical LIBERO unpickling.
@@ -44,6 +45,34 @@ def cells(pilot=False):
 
 def directory(cell):
     return OUT / 'behavior' / ('s%d' % cell['seed']) / cell['model_id'] / ('task%d' % cell['task'])
+
+
+def accept_paired_retry(cell, attempt):
+    source=OUT/'behavior_attempts'/('s%d'%cell['seed'])/cell['model_id']/('task%d'%cell['task'])/('attempt'+attempt)
+    target=directory(cell);complete=read(source/'COMPLETE.json')
+    assert complete['cell']==cell and complete['model_unchanged'] and complete['status']=='PASS'
+    assert all(read(source/'PAIRING_CHECK.json')['checks'].values())
+    assert sha(cell['checkpoint'])==complete['checkpoint_sha256']
+    assert all(sha(source/n)==h for n,h in complete['files'].items())
+    a,b=read(target/'CONFIG.json'),read(source/'CONFIG.json')
+    differences=[k for k in set(a)|set(b) if a.get(k)!=b.get(k)]
+    assert set(differences)<=set(['epoch_dir','experiment_dir','experiment_root','test_log_file'])
+    assert not (target/'COMPLETE.json').exists()
+    previous={}
+    for name in ('ROUNDS.json','TRIALS.json','PAIRING_CHECK.json'):
+        if (target/name).exists():
+            archived=target/('FAILED_ATTEMPT000_'+name);assert not archived.exists()
+            previous[name]=sha(target/name);os.replace(target/name,archived)
+        shutil.copy2(source/name,target/name)
+    retry_config='RETRY'+attempt+'_CONFIG.json';assert not (target/retry_config).exists()
+    shutil.copy2(source/'CONFIG.json',target/retry_config)
+    record=dict(accepted_attempt=str(source),accepted_attempt_complete_sha256=sha(source/'COMPLETE.json'),
+          accepted_unix_time=time.time(),archived_original_files=previous,config_differences=differences,
+          selection='Single fixed retry; acceptance uses exact initialization/RNG/model checks only, never success count',
+          failure_root_cause='UNRESOLVED_INTERMITTENT_OBSERVATION_MISMATCH',formal_training_resumed=False)
+    write(target/'RETRY_ACCEPTANCE.json',record);complete['accepted_retry']=record
+    complete['files']={n:sha(target/n) for n in ['ROUNDS.json','TRIALS.json','PAIRING_CHECK.json','CONFIG.json',retry_config,'RETRY_ACCEPTANCE.json']}
+    write(target/'COMPLETE.json',complete)
 
 
 def run_cell(cell, attempt=None):
@@ -88,8 +117,42 @@ def run_cell(cell, attempt=None):
     assert digest(state) == digest({k:v.cpu() for k,v in algo.policy.state_dict().items() if k in expected})
     algo.eval();torch.set_grad_enabled(False);before = digest(algo.policy.state_dict())
     factory = metric.SubprocVectorEnv;instances=[]
+    class EarlyPairingObserver(Observer):
+        def set_init_state(self,states):
+            obs=super().set_init_state(states)
+            shared=OUT/'behavior'/'pairing'/('s%d_t%d.json'%(cell['seed'],cell['task']))
+            if shared.exists():
+                import numpy as np
+                expected=read(shared);index=len(self.rounds)
+                actual=dict(init=self.active['init_sha256'],initial_obs=self.active['initial_obs_sha256'],
+                            policy_rng_before=self.active['policy_rng_before'])
+                checks={k:actual[k]==expected[k][index] for k in actual}
+                write(dest/('INITIAL_PAIRING_round%d.json'%index),dict(checks=checks,actual=actual,
+                      expected={k:expected[k][index] for k in actual},formal_training_resumed=False))
+                if not all(checks.values()):
+                    arrays={};paths={}
+                    def visit(v,path):
+                        if isinstance(v,np.ndarray) and v.dtype.hasobject:
+                            for i,item in enumerate(v.flat):visit(item,path+'/'+str(i))
+                        elif isinstance(v,dict):
+                            for k in sorted(v):visit(v[k],path+'/'+k)
+                        elif isinstance(v,(list,tuple)):
+                            for i,item in enumerate(v):visit(item,path+'/'+str(i))
+                        else:
+                            key='a%04d'%len(arrays);arrays[key]=np.asarray(v).copy();paths[key]=path
+                    visit(obs,'obs')
+                    tmp=dest/'MISMATCH_OBSERVATIONS.tmp.npz';np.savez_compressed(tmp,**arrays)
+                    os.replace(tmp,dest/'MISMATCH_OBSERVATIONS.npz')
+                    write(dest/'FAILURE_CONTEXT.json',dict(reason='Rollout initial pairing mismatch',
+                          cell=cell,round=index,checks=checks,actual=actual,
+                          expected={k:expected[k][index] for k in actual},observation_array_paths=paths,
+                          before_policy_actions_this_round=True,formal_training_resumed=False))
+                    write(dest/'PARTIAL_ROUNDS.json',self.rounds)
+                    self.inner.close()
+                    raise AssertionError('Rollout initial pairing mismatch before policy actions: '+str(checks))
+            return obs
     def wrapped(*args, **kwargs):
-        obj = Observer(factory(*args, **kwargs), cell, dest, False);instances.append(obj);return obj
+        obj = EarlyPairingObserver(factory(*args, **kwargs), cell, dest, False);instances.append(obj);return obj
     metric.SubprocVectorEnv = wrapped;begin = time.monotonic()
     try:
         values = metric.evaluate_success(cfg, algo, bench, [cell['task']], None, see=cell['seed'])
@@ -152,11 +215,27 @@ def queue(pilot):
         log=OUT/('BEHAVIOR_%s_%03d.log'%('pilot' if pilot else 'full',index))
         command=[sys.executable,'-u','-m','task_relation_forecast_v1.behavior','--cell',str(index)]
         if pilot:command.append('--pilot')
-        with log.open('a') as output:
-            run=subprocess.run(command,cwd=str(ROOT),stdout=output,stderr=subprocess.STDOUT)
-        if run.returncode:
+        previous=directory(cell)/'STARTED.json'
+        failure=directory(cell)/'FAILURE_CONTEXT.json'
+        if previous.exists():
+            assert failure.exists() and read(failure)['reason']=='Rollout initial pairing mismatch', 'Unclassified interrupted cell'
+            returncode=1
+        else:
+            with log.open('a') as output:
+                returncode=subprocess.run(command,cwd=str(ROOT),stdout=output,stderr=subprocess.STDOUT).returncode
+        if returncode and failure.exists() and read(failure)['reason']=='Rollout initial pairing mismatch':
+            retry=OUT/'behavior_attempts'/('s%d'%cell['seed'])/cell['model_id']/('task%d'%cell['task'])/'attempt001'
+            assert not retry.exists(), 'The one permitted isolated retry was already used; stop for diagnosis'
+            retry_log=OUT/('BEHAVIOR_retry_%s_%03d.log'%('pilot' if pilot else 'full',index))
+            with retry_log.open('a') as output:
+                returncode=subprocess.run(command+['--attempt','001'],cwd=str(ROOT),stdout=output,stderr=subprocess.STDOUT).returncode
+            if returncode==0:accept_paired_retry(cell,'001')
+            else:log=retry_log
+        if returncode:
             write(OUT/'STATUS.json',dict(stage='BEHAVIOR_FAILED',cell=cell,log=str(log),
-                  returncode=run.returncode,formal_training_resumed=False))
+                  returncode=returncode,formal_training_resumed=False))
+            write(OUT/'QUEUE_STATUS.json',dict(status='FAILED_STOP',stage='behavior',cell=cell,
+                  log=str(log),formal_training_resumed=False))
             raise RuntimeError('Native rollout failed; see '+str(log))
     write(OUT/('PILOT_BEHAVIOR_COMPLETE.json' if pilot else 'BEHAVIOR_COMPLETE.json'),
           dict(status='PASS',cells=len(cc),trials=len(cc)*20,formal_training_resumed=False))
