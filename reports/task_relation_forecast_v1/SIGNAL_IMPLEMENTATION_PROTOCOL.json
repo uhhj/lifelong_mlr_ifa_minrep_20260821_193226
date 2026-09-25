@@ -1,0 +1,28 @@
+{
+  "GN": {
+    "maxiter": 500,
+    "ncv": 40,
+    "rank": 16,
+    "seed": 2026092303,
+    "tol": 1e-06
+  },
+  "GN_operator": "unmodified gn_functional_geometry_v1.engine.Engine",
+  "GN_rank_tolerance": "max(1e-12, lambda_max*1e-10)",
+  "IFA": "unmodified mlr._pairwise_cosine_mean on native language and agent-view feature extraction axes; continuous scores",
+  "action_metric": "source D terminal expert action group RMS std, floor0.05, equal translation/rotation/gripper weights; same diagonal for source/target",
+  "features": [
+    "b_t",
+    "b_s",
+    "S_visual",
+    "S_language",
+    "S_lat",
+    "A",
+    "S_GN",
+    "R_old",
+    "R_new"
+  ],
+  "first_step": "original LR0; no replacement by later batch",
+  "formal_training_resumed": false,
+  "latent_pooling": "valid-frame temporal mean, flatten all4 equally weighted512D modalities, normalize each window, trajectory-equal centroid cosine",
+  "loss_aggregation": "official per-window GMM NLL, trajectory-equal task mean"
+}

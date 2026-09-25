@@ -17,6 +17,15 @@ class FrozenProtocolTests(unittest.TestCase):
             for i in f['train']:
                 self.assertNotIn(f['held'], (self.rows[i]['source'], self.rows[i]['target']))
 
+    def test_signal_data_firewall(self):
+        from .runtime import allowed
+        self.assertFalse(allowed('signal','E_eval',7,6,7))
+        self.assertFalse(allowed('signal','A_train',6,6,7))
+        self.assertFalse(allowed('shadow','A_train',6,6,7))
+        self.assertTrue(allowed('shadow','A_train',7,6,7))
+        self.assertTrue(allowed('signal','D_signal',6,6,7))
+        self.assertTrue(allowed('signal','D_signal',7,6,7))
+
     def test_data_roles_disjoint_and_order_invariant(self):
         ds = ['demo%d' % i for i in range(50)]
         a = split_demos(6, ds)
