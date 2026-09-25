@@ -1,0 +1,55 @@
+{
+  "GN_rank": 16,
+  "auxiliary_step": 100,
+  "bootstrap_count": 5000,
+  "bootstrap_seed": 2026092501,
+  "experiment": "task_relation_forecast_v1",
+  "first_shadow_step_lr_zero": true,
+  "first_shadow_step_policy": "keep original first batch and zero LR; report degenerate probe signals, do not substitute another step",
+  "formal_training_resumed": false,
+  "latent_pooling": "equal modality weight, valid-frame temporal mean, flattened modalities, normalize each window then trajectory-balanced centroid cosine",
+  "mask": "exclude terminal padding in latent pooling; full native windows for model",
+  "pilot": {
+    "pairs": [
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "rollouts": 240,
+    "seed": 45,
+    "updates": 2600
+  },
+  "primary_interval": 0.975,
+  "ridge_lambda": 1.0,
+  "rollouts": 2880,
+  "seeds": [
+    45,
+    46,
+    47
+  ],
+  "shadow_steps": 36,
+  "source_reference_prefix_reused": true,
+  "source_snapshots": [
+    0,
+    100,
+    300,
+    1000
+  ],
+  "source_steps": 1000,
+  "target_steps": 300,
+  "tasks": [
+    6,
+    7,
+    8,
+    9
+  ],
+  "total_updates": 22800,
+  "train_manifest_sha256": "c1665775d7b71826de3234c5dd81eb9ba664f4f3ea9003b4ebe54b29438159b9",
+  "training_protocol_sha256": "fcf1c778df2ce3c3cadc841b19011e22f0a8d9424cc123ff9ad8a0106ed0621c",
+  "user_protocol_sha256": "2aa1c4db20b26523a2567e27e364b7a6b81ff98559690a280ed429ed4b9e4dc7"
+}
