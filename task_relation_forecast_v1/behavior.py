@@ -47,6 +47,11 @@ def directory(cell):
     return OUT / 'behavior' / ('s%d' % cell['seed']) / cell['model_id'] / ('task%d' % cell['task'])
 
 
+def policy_input_view(obs,cfg):
+    names=[name for values in cfg.data.obs.modality.values() for name in values]
+    return [{name:row[cfg.data.obs_key_mapping[name]] for name in names} for row in obs]
+
+
 def accept_paired_retry(cell, attempt):
     source=OUT/'behavior_attempts'/('s%d'%cell['seed'])/cell['model_id']/('task%d'%cell['task'])/('attempt'+attempt)
     target=directory(cell);complete=read(source/'COMPLETE.json')
@@ -120,15 +125,28 @@ def run_cell(cell, attempt=None):
     class EarlyPairingObserver(Observer):
         def set_init_state(self,states):
             obs=super().set_init_state(states)
+            from paper_qp_rollout_v1.common import observation_digest
+            index=len(self.rounds)
+            policy_digest=observation_digest(policy_input_view(obs,cfg))
+            self.active['policy_input_obs_sha256']=policy_digest
+            policy_shared=OUT/'behavior/policy_input_pairing'/('s%d_t%d_r%d.json'%(cell['seed'],cell['task'],index))
+            if not policy_shared.exists():
+                freeze(policy_shared,dict(sha256=policy_digest,first_cell=cell,
+                       raw_keys=[cfg.data.obs_key_mapping[n] for values in cfg.data.obs.modality.values() for n in values],
+                       provenance='Native configured observation fields only; historical full-observation hashes retained separately'))
+            policy_match=read(policy_shared)['sha256']==policy_digest
             shared=OUT/'behavior'/'pairing'/('s%d_t%d.json'%(cell['seed'],cell['task']))
             if shared.exists():
                 import numpy as np
                 expected=read(shared);index=len(self.rounds)
                 actual=dict(init=self.active['init_sha256'],initial_obs=self.active['initial_obs_sha256'],
                             policy_rng_before=self.active['policy_rng_before'])
-                checks={k:actual[k]==expected[k][index] for k in actual}
+                checks={k:actual[k]==expected[k][index] for k in ('init','policy_rng_before')}
+                checks['policy_input_obs']=policy_match
                 write(dest/('INITIAL_PAIRING_round%d.json'%index),dict(checks=checks,actual=actual,
-                      expected={k:expected[k][index] for k in actual},formal_training_resumed=False))
+                      expected={k:expected[k][index] for k in actual},policy_input_sha256=policy_digest,
+                      full_observation_match=actual['initial_obs']==expected['initial_obs'][index],
+                      formal_training_resumed=False))
                 if not all(checks.values()):
                     arrays={};paths={}
                     def visit(v,path):
@@ -177,9 +195,11 @@ def run_cell(cell, attempt=None):
     # must never discard the first mismatching fields together with the result.
     write(dest/'ROUNDS.json',rounds);write(dest/'TRIALS.json',trials)
     expected_pair=read(shared) if shared.exists() else pair_evidence
-    pairing_checks={key:expected_pair[key]==pair_evidence[key] for key in pair_evidence}
+    pairing_checks={key:expected_pair[key]==pair_evidence[key] for key in ('init','policy_rng_before')}
+    pairing_checks['policy_input_obs']=all(r['policy_input_obs_sha256']==read(OUT/'behavior/policy_input_pairing'/('s%d_t%d_r%d.json'%(cell['seed'],cell['task'],r['round'])))['sha256'] for r in rounds)
     write(dest/'PAIRING_CHECK.json',dict(status='PASS' if all(pairing_checks.values()) else 'FAIL',
           checks=pairing_checks,expected=expected_pair,actual=pair_evidence,
+          full_observation_match=expected_pair['initial_obs']==pair_evidence['initial_obs'],
           source_pairing_sha256=sha(shared) if shared.exists() else None,
           diagnostic_attempt=attempt,formal_training_resumed=False))
     if not all(pairing_checks.values()):
