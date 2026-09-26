@@ -1,0 +1,236 @@
+{
+  "aug": true,
+  "bddl_folder": "/data/lifelong_mlr_ifa_minrep_20260912/libero/libero/bddl_files",
+  "benchmark_name": "LIBERO_OBJECT",
+  "data": {
+    "action_scale": 1.0,
+    "affine_translate": 4,
+    "data_modality": [
+      "image",
+      "proprio"
+    ],
+    "demo_limit": 10,
+    "frame_stack": 1,
+    "img_h": 128,
+    "img_w": 128,
+    "max_word_len": 25,
+    "num_kp": 64,
+    "obs": {
+      "modality": {
+        "depth": [],
+        "low_dim": [
+          "gripper_states",
+          "joint_states"
+        ],
+        "rgb": [
+          "agentview_rgb",
+          "eye_in_hand_rgb"
+        ]
+      }
+    },
+    "obs_key_mapping": {
+      "agentview_rgb": "agentview_image",
+      "eye_in_hand_rgb": "robot0_eye_in_hand_image",
+      "gripper_states": "robot0_gripper_qpos",
+      "joint_states": "robot0_joint_pos"
+    },
+    "seq_len": 8,
+    "shuffle_task": false,
+    "state_dim": null,
+    "task_group_size": 1,
+    "task_order_index": 0,
+    "train_dataset_ratio": 0.8,
+    "use_ee": false,
+    "use_eye_in_hand": true,
+    "use_gripper": true,
+    "use_joint": true
+  },
+  "device": "cuda:0",
+  "end_task": 10,
+  "epoch_dir": "/data/lifelong_mlr_ifa_minrep_20260912/reports/task_relation_forecast_v1/behavior/s47/source9/task9",
+  "eval": {
+    "batch_size": 64,
+    "eval": false,
+    "eval_every": 5,
+    "load_path": "",
+    "max_steps": 600,
+    "n_eval": 20,
+    "num_procs": 20,
+    "num_workers": 4,
+    "render": false,
+    "save_sim_states": false,
+    "use_mp": true
+  },
+  "eval_epochs": [
+    99
+  ],
+  "experiment_dir": "/data/lifelong_mlr_ifa_minrep_20260912/reports/task_relation_forecast_v1/behavior/s47/source9/task9",
+  "experiment_root": "/data/lifelong_mlr_ifa_minrep_20260912/reports/task_relation_forecast_v1/behavior/s47/source9/task9",
+  "folder": "/data/lifelong_mlr_ifa_minrep_20260912/data",
+  "init_states_folder": "/data/lifelong_mlr_ifa_minrep_20260912/libero/libero/init_files",
+  "lifelong": {
+    "algo": "Basic"
+  },
+  "load_previous_model": false,
+  "policy": {
+    "alpha": 8,
+    "color_aug": {
+      "_target_": "BatchWiseImgColorJitterAug",
+      "network": "BatchWiseImgColorJitterAug",
+      "network_kwargs": {
+        "brightness": 0.3,
+        "contrast": 0.3,
+        "hue": 0.3,
+        "saturation": 0.3
+      },
+      "prob": 0.9
+    },
+    "embed_size": 512,
+    "erase_aug": {
+      "_target_": "RandomErasingAug",
+      "network": "RandomErasingAug",
+      "network_kwargs": {
+        "ratio": [
+          0.3,
+          3.3
+        ],
+        "scale": [
+          0.02,
+          0.33
+        ]
+      },
+      "prob": 0.1
+    },
+    "extra_hidden_size": 128,
+    "extra_num_layers": 0,
+    "film_hidden_size": 512,
+    "image_encoder": {
+      "network": "CLIPVisionEncoder",
+      "network_kwargs": {
+        "input_shape": null,
+        "output_size": 64,
+        "vision_model_name": "openai/clip-vit-base-patch16"
+      }
+    },
+    "language_encoder": {
+      "network": "CLIPTextEncoder",
+      "network_kwargs": {
+        "output_size": 64,
+        "text_model_name": "openai/clip-vit-base-patch16"
+      }
+    },
+    "max_seq_len": 8,
+    "num_gmm_modes": 5,
+    "num_tasks": 10,
+    "policy_head": {
+      "loss_kwargs": {
+        "loss_coef": 1.0
+      },
+      "network": "TemporalGMMHead",
+      "network_kwargs": {
+        "activation": "softplus",
+        "hidden_size": 1024,
+        "low_eval_noise": false,
+        "min_std": 0.0001,
+        "num_layers": 2,
+        "num_modes": 5
+      }
+    },
+    "policy_type": "CompletePolicy",
+    "rank": 8,
+    "temporal_position_encoding": {
+      "network": "SinusoidalPositionEncoding",
+      "network_kwargs": {
+        "factor_ratio": null,
+        "input_size": null,
+        "inv_freq_factor": 10
+      }
+    },
+    "transformer_dropout": 0.15,
+    "transformer_head_output_size": 64,
+    "transformer_max_seq_len": 8,
+    "transformer_mlp_hidden_size": 256,
+    "transformer_num_heads": 8,
+    "transformer_num_layers": 6,
+    "translation_aug": {
+      "_target_": "RandomAffineAug",
+      "network": "RandomAffineAug",
+      "network_kwargs": {
+        "degrees": 15,
+        "translate": 0.1
+      },
+      "prob": 0.6
+    },
+    "use_language": true,
+    "use_state": false,
+    "use_vision": true
+  },
+  "pretrain": "/data/lifelong_mlr_ifa_minrep_20260912/checkpoints/object_multitask_model_ep99.pth",
+  "pretrain_model_path": null,
+  "seed": 47,
+  "shape_meta": {
+    "ac_dim": 7,
+    "all_obs_keys": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "gripper_states",
+      "joint_states"
+    ],
+    "all_shapes": {
+      "agentview_rgb": [
+        3,
+        128,
+        128
+      ],
+      "eye_in_hand_rgb": [
+        3,
+        128,
+        128
+      ],
+      "gripper_states": [
+        2
+      ],
+      "joint_states": [
+        7
+      ]
+    },
+    "use_images": true
+  },
+  "start_task": 6,
+  "task_embedding_format": "clip",
+  "task_embedding_one_hot_offset": 1,
+  "test_log_file": "/data/lifelong_mlr_ifa_minrep_20260912/reports/task_relation_forecast_v1/behavior/s47/source9/task9/unused_native_log.txt",
+  "train": {
+    "batch_size": 10,
+    "debug": false,
+    "grad_clip": 100.0,
+    "loss_scale": 1.0,
+    "n_epochs": 100,
+    "num_workers": 8,
+    "optimizer": {
+      "kwargs": {
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "lr": 0.0001,
+        "weight_decay": 0.1
+      },
+      "name": "torch.optim.AdamW"
+    },
+    "resume": false,
+    "resume_path": "",
+    "scheduler": {
+      "kwargs": {
+        "last_epoch": -1,
+        "warmup_steps": 500
+      },
+      "name": "torch.optim.lr_scheduler.LambdaLR"
+    },
+    "use_augmentation": true
+  },
+  "training": false,
+  "use_wandb": false,
+  "wandb_project": "lifelong learning"
+}
