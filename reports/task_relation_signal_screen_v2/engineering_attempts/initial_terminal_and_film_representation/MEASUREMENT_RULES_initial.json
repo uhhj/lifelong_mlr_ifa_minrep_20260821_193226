@@ -1,0 +1,13 @@
+{
+  "S10": "base agent-view valid-frame mean plus joint_states/gripper_states/ee_pos/ee_ori at terminal; source-half coordinate standardization; 5NN mean distance",
+  "S12_deadband": "32*float32_eps*max(1,abs(window NLL)), historical rule; no effect-tuned adjustment",
+  "action_std_floor": 0.05,
+  "feature_std_floor": 1e-08,
+  "missing": "raw null+availability; folds use training mean (0 standardized), no extra predictive masks; whole unavailable packages never ranked as available",
+  "mmd": "biased RBF MMD, train-half pooled median squared-distance bandwidth, average two held halves",
+  "noise_rule": "scale_floor=max(1e-8,10*max_abs_technical_repeat_difference); constant_floor=max(1e-8,10*max_abs_technical_repeat_difference); only six label-blind units; freeze before analyze-dev",
+  "readout_alpha": 1.0,
+  "readout_objective": "mean over samples and action dimensions + ||W||_F^2; intercept unpenalized",
+  "source_labels_read_by_measurement": false,
+  "tau_MSE": 1e-08
+}

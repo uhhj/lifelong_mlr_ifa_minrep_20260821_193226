@@ -1,0 +1,17 @@
+{
+  "S10": "base image_encoder+image_proj before FiLM (no language), masked frame mean + terminal proprioception; D_signal only",
+  "S12_deadband": "32*float32_eps*max(1,abs(window NLL)), historical rule; no effect-tuned adjustment",
+  "action_std_floor": 0.05,
+  "feature_std_floor": 1e-08,
+  "missing": "raw null+availability; folds use training mean (0 standardized), no extra predictive masks; whole unavailable packages never ranked as available",
+  "mmd": "biased RBF MMD, train-half pooled median squared-distance bandwidth, average two held halves",
+  "noise_rule": "scale_floor=max(1e-8,10*max_abs_technical_repeat_difference); constant_floor=max(1e-8,10*max_abs_technical_repeat_difference); only six label-blind units; freeze before analyze-dev",
+  "readout_alpha": 1.0,
+  "readout_objective": "mean over samples and action dimensions + ||W||_F^2; intercept unpenalized",
+  "source_labels_read_by_measurement": false,
+  "tau_MSE": 1e-08,
+  "representation": "S02/S07/S09 decoder output valid-frame mean; official GMM NLL still terminal output",
+  "readout_combination": "only A+S07 extra descriptive; A+C20 extra descriptive; C20 optionally selected best C0 with <=6 extra dimensions",
+  "development_resampling": 1000,
+  "group_permutations": 1000
+}
