@@ -1,5 +1,6 @@
 *.json text eol=lf
 *.jsonl text eol=lf
-*.csv text eol=lf
+# CSV writer emits CRLF. Preserve bytes used by frozen manifests and SHA256.
+*.csv -text
 *.md text eol=lf
 *.png binary
