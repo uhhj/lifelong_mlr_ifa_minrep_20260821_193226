@@ -1,0 +1,59 @@
+{
+  "status": "CLEANUP_COMPLETE",
+  "timestamp_unix": 1790507474.0079432,
+  "cache_freed_bytes": 408035328,
+  "completed_prefix_snapshots_removed": 84,
+  "completed_prefix_allocated_bytes_removed": 21817819136,
+  "measurement_files_reverified": 42,
+  "disk": {
+    "/": {
+      "total": 62559989760,
+      "used": 55957360640,
+      "free": 3499102208
+    },
+    "/data": {
+      "total": 158203019264,
+      "used": 78264389632,
+      "free": 72921161728
+    }
+  },
+  "research_processes": [],
+  "confirmation_completion_markers": {
+    "sources": {
+      "complete_markers": 17,
+      "pass_markers": 17
+    },
+    "transfers": {
+      "complete_markers": 2,
+      "pass_markers": 2
+    },
+    "offline": {
+      "complete_markers": 2,
+      "pass_markers": 2
+    },
+    "behavior": {
+      "complete_markers": 10,
+      "pass_markers": 10
+    }
+  },
+  "queue_status_is_stale": true,
+  "last_persisted_queue_status": {
+    "diagnostic_training_performed": true,
+    "formal_training_resumed": false,
+    "pid": 2256,
+    "stage": "CACHE_s50_t5_A_train",
+    "status": "RUNNING",
+    "updated_unix": 1790500157.3135695
+  },
+  "formal_training_resumed": false,
+  "retained": [
+    "All confirmation models, features, recovery states and rollouts",
+    "All development measurement JSON/CSV, source/base models and stream provenance",
+    "All historical unique checkpoints, diagnostic failure states, frozen starts, CLIP cache and installed environments"
+  ],
+  "limits": [
+    "No full-repository hashing; only removed prefix files and associated measurements hashed.",
+    "Completed temporary prefix checkpoints can no longer be loaded directly; reconstruct from retained source/base model and frozen 21-call stream if required.",
+    "Root filesystem still has limited free space; unique recovery states retained."
+  ]
+}
