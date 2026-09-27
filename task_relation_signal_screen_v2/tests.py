@@ -65,5 +65,43 @@ class NumericalTests(unittest.TestCase):
             b,_,bm=nested_dynamic_cv(rows,changed,reg,dict(S02=1.,S07=2.,S08=3.))
         ix=[i for i,r in enumerate(rows) if r['target']==6]
         np.testing.assert_array_equal(a[ix],b[ix]);self.assertEqual(am[0],bm[0])
+    def test_frozen_confirmation_prediction(self):
+        from unittest.mock import patch
+        from .confirm_signals import predict
+        reg={'a':dict(bound=None,scale_floor=1e-8,constant_floor=1e-8)}
+        train=[{'a':-1.},{'a':0.},{'a':1.}]
+        expected,raw,fit=ridge(train,[{'a':.25}],np.array([-.3,0.,.4]),['a'],reg)
+        frozen=dict(candidates=[dict(package='S04',endpoint='TRANSFER_300',features=['a'],fit=fit)],baselines=[])
+        with patch('task_relation_signal_screen_v2.confirm_signals.read',return_value=frozen):
+            result=predict({'a':.25},0)
+            self.assertEqual(len(result),1)
+            self.assertEqual(result[0]['prediction'],expected[0]);self.assertEqual(result[0]['raw_prediction'],raw[0])
+            self.assertEqual(predict({'a':.25},20),[])
+    def test_development_pipeline_synthetic(self):
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from .common import PACKAGES,PAIRS,write,table,unit,read
+        from . import analyze_dev
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);dest=root/'new';old=root/'old';dest.mkdir();old.mkdir()
+            keys=['b_target','b_source','b_progress','base_progress1','base_progress5','base_progress20']+list(dict.fromkeys(f for fields in PACKAGES.values() for f in fields))
+            registry={f:dict(bound=None,scale_floor=1e-8,constant_floor=1e-8) for f in keys}
+            write(dest/'SIGNAL_REGISTRY.json',dict(features=registry,new_C0_candidates=['S02','S03','S05','S06','S07','S08','S09','S10','S11']))
+            rng=np.random.RandomState(4);labels=[]
+            for k,s,t in PAIRS:
+                scores=dict(zip(keys,rng.randn(len(keys)).tolist()))
+                dynamic=set(PACKAGES['S12']+PACKAGES['S13']+PACKAGES['S14']+['base_progress1','base_progress5','base_progress20'])
+                a={f:v for f,v in scores.items() if f not in dynamic};b={f:v for f,v in scores.items() if f in dynamic}
+                write(dest/'static'/unit(k,s,t)/'SIGNALS.json',dict(scores=a,halves=[a,a]))
+                write(dest/'probes'/unit(k,s,t)/'MEASUREMENTS.json',dict(scores=b,halves=[b,b]))
+                write(dest/'static'/unit(k,s,t)/'COMPUTE_COST.json',dict(version=2,package_seconds={p:1. for p in PACKAGES},scope='synthetic test only'))
+                table(dest/'probes'/unit(k,s,t)/'PROBE_STEPS.csv',[dict(call=1,lr=0)])
+                labels.append(dict(seed=k,source=s,target=t,TRANSFER_300=.4*np.tanh(scores['linear_probe']),DAMAGE_300=.3*np.tanh(scores['affinity'])))
+            table(old/'TARGETS.csv',labels)
+            with patch.object(analyze_dev,'OUT',dest),patch.object(analyze_dev,'OLD',old):analyze_dev.main()
+            final=read(dest/'FINALISTS_FROZEN.json');self.assertLessEqual(len(final['candidates']),6)
+            self.assertTrue(final['no_independent_confirmation_yet'])
+            self.assertTrue((dest/'DEV_OOF_PREDICTIONS.csv').exists())
 
 if __name__=='__main__':unittest.main()

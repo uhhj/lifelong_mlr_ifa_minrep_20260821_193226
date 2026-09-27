@@ -37,7 +37,18 @@ python -m task_relation_signal_screen_v2.confirm_cache --seed 48 --task 0 --role
 
 `panel` 仅用当前共同基座的语言编码器和官方任务文本；`confirmation_assets` 只下载六个被选任务的官方文件，固定远端 revision 与 LFS SHA256，核验动作/观测接口、旧演示重复性和已有seed目录，冻结整轨迹数据角色。缓存入口使用角色限定的 HDF5 view，不通过完整数据集低维缓存提前读取其他角色。
 
-确认训练、前瞻预测封存、9360次闭环及最终裁决的统一队列**尚未实现/启动**。`confirmation_statistics.py` 已提供依赖保持的 trial 重建与 max-T 数值内核；只有软件测试，不是确认结果。不得将资产准备或该数值测试记为 Stage B 完成。
+确认阶段入口：
+
+```bash
+python -m task_relation_signal_screen_v2.freeze_confirmation
+python -m task_relation_signal_screen_v2.confirm_queue
+```
+
+先固定 seed48 的任务0与3及双向适应作为技术单元（计入总预算），然后其余源/目标单元和234个唯一闭环组合。每组合40个原生trial。`--sources-only` 仅执行18个source，不能称为完成确认。独立目录内的缓存、source、C0信号、Cq封存、target、E_eval与行为均可按完成标记续做。
+
+`confirm_runtime` 使用历史seed45配置模板并显式设置新seed与suite，不伪造不存在的历史配置。源轨迹实际前300步作为同目标基座reference；目标分支核对相同初始optimizer/scheduler、数据流和LR。Cq与reference按相同原生call比较，即使有效更新计数不同也记录差异。正式lifelong不恢复。
+
+数值汇总入口 `adjudicate_confirmation` 要求90对和9360个trial均齐全，重建共享参照标签、5000次配对初态重采样和max-T区间。队列最后状态为 `MEASUREMENTS_AND_STATISTICS_COMPLETE_REVIEW_REQUIRED`：仍需独立核验、任务删除敏感性解释及最终报告，不能把机械门限或资产准备当作独立确认完成。
 
 ## 解释约束
 
