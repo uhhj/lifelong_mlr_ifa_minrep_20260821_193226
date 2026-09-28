@@ -11,6 +11,7 @@ experiment changes from this repository's `main` branch.
 - **Modalities:** vision, language and state explicitly enabled; the official checkpoint's original state flag remains unknown.
 - [Final report](reports/goal_seed42_state_v2/REPORT.md), [reproduction instructions](REPRODUCTION_GOAL_STATE_V2.md), [acceptance evidence](reports/goal_seed42_state_v2/run/final_acceptance.json).
 - Weights, demonstrations and latent tensors remain on the execution server and are not included in this branch.
+- [E1 paired audit](reports/goal_seed42_state_v2_paired_audit_E1/README.md): read-only analysis of the same 200 episodes, with 12 comparison summaries, 80 initial-state histories and the signed NBT decomposition. No new training or rollouts.
 
 
 [![arXiv](https://img.shields.io/badge/arXiv-2603.10929-b31b1b.svg)](https://arxiv.org/abs/2603.10929)
