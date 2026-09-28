@@ -1,5 +1,18 @@
 # Lifelong Imitation Learning with Multimodal Latent Replay and Incremental Adjustment
 
+## MLR branch: completed GOAL seed42 state-v2 run
+
+This branch archives the verified MLR+IFA run based on upstream commit
+`a721807f2f7fa7f9833dcc85c592d78e9accd00b`. It does not merge the separate OBJECT
+experiment changes from this repository's `main` branch.
+
+- **Completed:** 4 tasks × 100 epochs, 76,100 optimizer steps, 4 final epoch99 checkpoints, 200 closed-loop episodes.
+- **Results:** FWT 78.75%, NBT 1.1111 percentage points, AUC 78.4375%.
+- **Modalities:** vision, language and state explicitly enabled; the official checkpoint's original state flag remains unknown.
+- [Final report](reports/goal_seed42_state_v2/REPORT.md), [reproduction instructions](REPRODUCTION_GOAL_STATE_V2.md), [acceptance evidence](reports/goal_seed42_state_v2/run/final_acceptance.json).
+- Weights, demonstrations and latent tensors remain on the execution server and are not included in this branch.
+
+
 [![arXiv](https://img.shields.io/badge/arXiv-2603.10929-b31b1b.svg)](https://arxiv.org/abs/2603.10929)
 
 <p align="center">

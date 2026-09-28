@@ -8,7 +8,7 @@ mp.set_start_method("spawn", force=True)
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import sys
-sys.path.insert(0, "/work")
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import json
 import multiprocessing
@@ -52,7 +52,7 @@ torch.set_grad_enabled(False)
 os.environ["MUJOCO_GL"] = "egl"
 os.environ["MUJOCO_EGL_DEVICE_ID"] = os.getenv("CUDA_VISIBLE_DEVICES","0").split(",")[0]
 os.environ["EGL_PLATFORM"] = "surfaceless"
-sys.path.insert(0, "/home/fyu/mlr_ifa")
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # os.environ["PYTHONHASHSEED"] = "0"
 def set_global_seed(seed:int):
@@ -75,6 +75,9 @@ def log_succ(S, i, j, pp, logfile="/home/ct_005.txt"):
 
 @hydra.main(config_path="../configs", config_name="test", version_base=None)
 def main(hydra_cfg):
+    if hydra_cfg.get("runbook_v2", False):
+        from libero.lifelong.runbook_v2 import eval_main
+        return eval_main(hydra_cfg)
 
     yaml_config = OmegaConf.to_yaml(hydra_cfg)
     cfg = EasyDict(yaml.safe_load(yaml_config))
@@ -220,17 +223,16 @@ def main(hydra_cfg):
 
                         fullpath = os.path.join(base_dir, filename)
 
-                        while not os.path.exists(fullpath):
-                            continue
+                        if not os.path.exists(fullpath):
+                            raise FileNotFoundError(fullpath)
                         if os.path.exists(fullpath):
                             print(fullpath)
                             algo = safe_device(get_algo_class(cfg.lifelong.algo)(n_tasks, cfg), cfg.device)
 
                             checkpoint = torch.load(fullpath, map_location='cpu')
 
-                            new_state_dict = OrderedDict((k[7:], v) for k, v in checkpoint["state_dict"].items())
-
-                            algo.policy.load_state_dict(new_state_dict, strict=False)
+                            from libero.lifelong.runbook_core import strict_downstream_load
+                            strict_downstream_load(algo.policy, checkpoint["state_dict"])
 
                             algo.eval()
 

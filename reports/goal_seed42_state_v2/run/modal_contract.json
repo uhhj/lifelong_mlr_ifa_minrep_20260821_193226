@@ -1,0 +1,82 @@
+{
+  "schema_version": 2,
+  "use_vision": true,
+  "use_language": true,
+  "use_state": true,
+  "token_order": [
+    "language",
+    "agentview",
+    "eye_in_hand",
+    "state"
+  ],
+  "state_keys": [
+    "joint_states",
+    "gripper_states"
+  ],
+  "state_dims": [
+    7,
+    2
+  ],
+  "window_length": 8,
+  "embedding_dim": 512,
+  "official_checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+  "frozen_frontend_sha256": "df397791729f5baae1260e54eca45153fd0d708207ea1eabe94c05397fa33740",
+  "pretrain_use_state": "unknown",
+  "effective_use_state": true,
+  "pretrain_metadata_gap_status": "DISCLOSED_GAP",
+  "code_commit": "a721807f2f7fa7f9833dcc85c592d78e9accd00b",
+  "code_patch_sha256": "57e9566ab44c74d88563892080e1dd34304e36e4204d7acd8ede088b6c2363a0",
+  "export": {
+    "batch_size": 1,
+    "module_mode": "train",
+    "cfg_training": false,
+    "augmentation": true,
+    "use_augmentation": true,
+    "obs_preprocessing": "robomimic process_obs; RGB uint8 to CHW float [0,1]; source CLIP normalization",
+    "augmentation_layers": [
+      "BatchWiseImgColorJitterAug",
+      "RandomAffineAug",
+      "RandomErasingAug"
+    ],
+    "augmentation_config": {
+      "color_aug": {
+        "_target_": "BatchWiseImgColorJitterAug",
+        "network": "BatchWiseImgColorJitterAug",
+        "prob": 0.9,
+        "network_kwargs": {
+          "brightness": 0.3,
+          "contrast": 0.3,
+          "saturation": 0.3,
+          "hue": 0.3
+        }
+      },
+      "translation_aug": {
+        "_target_": "RandomAffineAug",
+        "network": "RandomAffineAug",
+        "prob": 0.6,
+        "network_kwargs": {
+          "degrees": 15,
+          "translate": 0.1
+        }
+      },
+      "erase_aug": {
+        "_target_": "RandomErasingAug",
+        "network": "RandomErasingAug",
+        "prob": 0.1,
+        "network_kwargs": {
+          "scale": [
+            0.02,
+            0.33
+          ],
+          "ratio": [
+            0.3,
+            3.3
+          ]
+        }
+      }
+    },
+    "sampler": "RandomSampler without replacement",
+    "seed": 42
+  },
+  "fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc"
+}

@@ -1,0 +1,86 @@
+{
+  "mode": "SMOKE_ONLY",
+  "effective_use_state": true,
+  "spatial_frozen_before": "9ff523e1d9d8345599dc125bf46fc894b0596f74961ff9ca41b1bf4cde8b1f51",
+  "export_model_requires_grad_names": [
+    "policy_head.share.0.weight",
+    "policy_head.share.0.bias",
+    "policy_head.share.2.weight",
+    "policy_head.share.2.bias",
+    "policy_head.share.4.weight",
+    "policy_head.share.4.bias",
+    "policy_head.mean_layer.weight",
+    "policy_head.mean_layer.bias",
+    "policy_head.logstd_layer.weight",
+    "policy_head.logstd_layer.bias",
+    "policy_head.logits_layer.weight",
+    "policy_head.logits_layer.bias"
+  ],
+  "export_mode": "train; original augmentation enabled; no optimizer updates",
+  "full_strict_official_load": {
+    "missing": [],
+    "unexpected": [],
+    "coverage": 1.0,
+    "keys": 615
+  },
+  "brief_official_load": {
+    "loaded_keys": 100,
+    "coverage": 1.0,
+    "missing": [],
+    "unexpected": [],
+    "spatial_keys_not_overwritten": 0
+  },
+  "modal_semantics": {
+    "status": "PASS",
+    "real_observations_and_weights": true,
+    "state_token_formula_max_error": 0.0,
+    "token_identity_order": [
+      "language",
+      "agentview",
+      "eye_in_hand",
+      "state"
+    ],
+    "state_perturbation_max_deltas": [
+      0.010768920183181763,
+      0.11079859733581543,
+      0.4784025549888611
+    ],
+    "first3_tokens_exactly_unchanged": true,
+    "false_branch_negative_control_max_delta": 0.0,
+    "gmm_mean_scale_logits_max_errors": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "negative_control_is_software_only": true
+  },
+  "optimizer_steps": [
+    {
+      "bc": -11.066949844360352,
+      "ifa_raw": 0.0,
+      "ifa_weighted": 0.0,
+      "total": -11.066949844360352,
+      "grad_norm": 157.9600830078125,
+      "lr_used": 0.0,
+      "lr_next": 2.0000000000000002e-07
+    },
+    {
+      "bc": 2.299180269241333,
+      "ifa_raw": 0.0,
+      "ifa_weighted": 0.0,
+      "total": 2.299180269241333,
+      "grad_norm": 75.08816528320312,
+      "lr_used": 2.0000000000000002e-07,
+      "lr_next": 4.0000000000000003e-07
+    }
+  ],
+  "spatial_frozen_after": "9ff523e1d9d8345599dc125bf46fc894b0596f74961ff9ca41b1bf4cde8b1f51",
+  "epoch_boundary_smoke_resume_exact_next_update": true,
+  "stage_downstream_load_test": {
+    "loaded_keys": 100,
+    "coverage": 1.0,
+    "missing": [],
+    "unexpected": [],
+    "spatial_keys_not_overwritten": 515
+  }
+}

@@ -40,7 +40,8 @@ class BriefPolicy(BasePolicy):
 
         if self.init == 1:
             self.init = 0
-            self.load_state_dict(torch_load_model(cfg.pretrain)[0],strict=False)
+            from libero.lifelong.runbook_core import strict_downstream_load
+            self.load_report = strict_downstream_load(self, torch_load_model(cfg.pretrain)[0])
 
 
     def forward(self, data):

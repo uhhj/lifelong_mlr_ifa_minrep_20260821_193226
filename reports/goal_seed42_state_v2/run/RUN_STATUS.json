@@ -1,0 +1,388 @@
+{
+  "status": "COMPLETED",
+  "training_epochs_completed": 400,
+  "formal_episodes_completed": 200,
+  "run_id": "goal_seed42_mlr_ifa_paper_aligned_state_v2",
+  "effective_use_state": true,
+  "pretrain_use_state": "unknown",
+  "updated_at": "2026-09-28T01:33:40+0800",
+  "task": 9,
+  "exported_current": 1901,
+  "windows_current": 1969,
+  "exported_total": 4759,
+  "epoch_index": 99,
+  "epoch_completed": true,
+  "global_step": 76100,
+  "final_checkpoints": {
+    "6": {
+      "modal_contract": {
+        "schema_version": 2,
+        "use_vision": true,
+        "use_language": true,
+        "use_state": true,
+        "token_order": [
+          "language",
+          "agentview",
+          "eye_in_hand",
+          "state"
+        ],
+        "state_keys": [
+          "joint_states",
+          "gripper_states"
+        ],
+        "state_dims": [
+          7,
+          2
+        ],
+        "window_length": 8,
+        "embedding_dim": 512,
+        "official_checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+        "frozen_frontend_sha256": "df397791729f5baae1260e54eca45153fd0d708207ea1eabe94c05397fa33740",
+        "pretrain_use_state": "unknown",
+        "effective_use_state": true,
+        "pretrain_metadata_gap_status": "DISCLOSED_GAP",
+        "code_commit": "a721807f2f7fa7f9833dcc85c592d78e9accd00b",
+        "code_patch_sha256": "57e9566ab44c74d88563892080e1dd34304e36e4204d7acd8ede088b6c2363a0",
+        "export": {
+          "batch_size": 1,
+          "module_mode": "train",
+          "cfg_training": false,
+          "augmentation": true,
+          "use_augmentation": true,
+          "obs_preprocessing": "robomimic process_obs; RGB uint8 to CHW float [0,1]; source CLIP normalization",
+          "augmentation_layers": [
+            "BatchWiseImgColorJitterAug",
+            "RandomAffineAug",
+            "RandomErasingAug"
+          ],
+          "augmentation_config": {
+            "color_aug": {
+              "_target_": "BatchWiseImgColorJitterAug",
+              "network": "BatchWiseImgColorJitterAug",
+              "prob": 0.9,
+              "network_kwargs": {
+                "brightness": 0.3,
+                "contrast": 0.3,
+                "saturation": 0.3,
+                "hue": 0.3
+              }
+            },
+            "translation_aug": {
+              "_target_": "RandomAffineAug",
+              "network": "RandomAffineAug",
+              "prob": 0.6,
+              "network_kwargs": {
+                "degrees": 15,
+                "translate": 0.1
+              }
+            },
+            "erase_aug": {
+              "_target_": "RandomErasingAug",
+              "network": "RandomErasingAug",
+              "prob": 0.1,
+              "network_kwargs": {
+                "scale": [
+                  0.02,
+                  0.33
+                ],
+                "ratio": [
+                  0.3,
+                  3.3
+                ]
+              }
+            }
+          },
+          "sampler": "RandomSampler without replacement",
+          "seed": 42
+        },
+        "fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc"
+      },
+      "modal_fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc",
+      "path": "/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run/checkpoints/final_task6_epoch99.pth",
+      "sha256": "dd5a6a80bcc1cfb2d16a95f1dc8df226e8412b1a48c8f30e5857605b672e07ff",
+      "task": 6,
+      "epoch_index": 99,
+      "parent_checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+      "global_step": 10000,
+      "load_coverage": 1.0
+    },
+    "7": {
+      "modal_contract": {
+        "schema_version": 2,
+        "use_vision": true,
+        "use_language": true,
+        "use_state": true,
+        "token_order": [
+          "language",
+          "agentview",
+          "eye_in_hand",
+          "state"
+        ],
+        "state_keys": [
+          "joint_states",
+          "gripper_states"
+        ],
+        "state_dims": [
+          7,
+          2
+        ],
+        "window_length": 8,
+        "embedding_dim": 512,
+        "official_checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+        "frozen_frontend_sha256": "df397791729f5baae1260e54eca45153fd0d708207ea1eabe94c05397fa33740",
+        "pretrain_use_state": "unknown",
+        "effective_use_state": true,
+        "pretrain_metadata_gap_status": "DISCLOSED_GAP",
+        "code_commit": "a721807f2f7fa7f9833dcc85c592d78e9accd00b",
+        "code_patch_sha256": "57e9566ab44c74d88563892080e1dd34304e36e4204d7acd8ede088b6c2363a0",
+        "export": {
+          "batch_size": 1,
+          "module_mode": "train",
+          "cfg_training": false,
+          "augmentation": true,
+          "use_augmentation": true,
+          "obs_preprocessing": "robomimic process_obs; RGB uint8 to CHW float [0,1]; source CLIP normalization",
+          "augmentation_layers": [
+            "BatchWiseImgColorJitterAug",
+            "RandomAffineAug",
+            "RandomErasingAug"
+          ],
+          "augmentation_config": {
+            "color_aug": {
+              "_target_": "BatchWiseImgColorJitterAug",
+              "network": "BatchWiseImgColorJitterAug",
+              "prob": 0.9,
+              "network_kwargs": {
+                "brightness": 0.3,
+                "contrast": 0.3,
+                "saturation": 0.3,
+                "hue": 0.3
+              }
+            },
+            "translation_aug": {
+              "_target_": "RandomAffineAug",
+              "network": "RandomAffineAug",
+              "prob": 0.6,
+              "network_kwargs": {
+                "degrees": 15,
+                "translate": 0.1
+              }
+            },
+            "erase_aug": {
+              "_target_": "RandomErasingAug",
+              "network": "RandomErasingAug",
+              "prob": 0.1,
+              "network_kwargs": {
+                "scale": [
+                  0.02,
+                  0.33
+                ],
+                "ratio": [
+                  0.3,
+                  3.3
+                ]
+              }
+            }
+          },
+          "sampler": "RandomSampler without replacement",
+          "seed": 42
+        },
+        "fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc"
+      },
+      "modal_fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc",
+      "path": "/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run/checkpoints/final_task7_epoch99.pth",
+      "sha256": "146f11436350f8643709c49b3bbb97b42952539aed05ba3a01d529299074b6d2",
+      "task": 7,
+      "epoch_index": 99,
+      "parent_checkpoint_sha256": "dd5a6a80bcc1cfb2d16a95f1dc8df226e8412b1a48c8f30e5857605b672e07ff",
+      "global_step": 23900,
+      "load_coverage": 1.0
+    },
+    "8": {
+      "modal_contract": {
+        "schema_version": 2,
+        "use_vision": true,
+        "use_language": true,
+        "use_state": true,
+        "token_order": [
+          "language",
+          "agentview",
+          "eye_in_hand",
+          "state"
+        ],
+        "state_keys": [
+          "joint_states",
+          "gripper_states"
+        ],
+        "state_dims": [
+          7,
+          2
+        ],
+        "window_length": 8,
+        "embedding_dim": 512,
+        "official_checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+        "frozen_frontend_sha256": "df397791729f5baae1260e54eca45153fd0d708207ea1eabe94c05397fa33740",
+        "pretrain_use_state": "unknown",
+        "effective_use_state": true,
+        "pretrain_metadata_gap_status": "DISCLOSED_GAP",
+        "code_commit": "a721807f2f7fa7f9833dcc85c592d78e9accd00b",
+        "code_patch_sha256": "57e9566ab44c74d88563892080e1dd34304e36e4204d7acd8ede088b6c2363a0",
+        "export": {
+          "batch_size": 1,
+          "module_mode": "train",
+          "cfg_training": false,
+          "augmentation": true,
+          "use_augmentation": true,
+          "obs_preprocessing": "robomimic process_obs; RGB uint8 to CHW float [0,1]; source CLIP normalization",
+          "augmentation_layers": [
+            "BatchWiseImgColorJitterAug",
+            "RandomAffineAug",
+            "RandomErasingAug"
+          ],
+          "augmentation_config": {
+            "color_aug": {
+              "_target_": "BatchWiseImgColorJitterAug",
+              "network": "BatchWiseImgColorJitterAug",
+              "prob": 0.9,
+              "network_kwargs": {
+                "brightness": 0.3,
+                "contrast": 0.3,
+                "saturation": 0.3,
+                "hue": 0.3
+              }
+            },
+            "translation_aug": {
+              "_target_": "RandomAffineAug",
+              "network": "RandomAffineAug",
+              "prob": 0.6,
+              "network_kwargs": {
+                "degrees": 15,
+                "translate": 0.1
+              }
+            },
+            "erase_aug": {
+              "_target_": "RandomErasingAug",
+              "network": "RandomErasingAug",
+              "prob": 0.1,
+              "network_kwargs": {
+                "scale": [
+                  0.02,
+                  0.33
+                ],
+                "ratio": [
+                  0.3,
+                  3.3
+                ]
+              }
+            }
+          },
+          "sampler": "RandomSampler without replacement",
+          "seed": 42
+        },
+        "fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc"
+      },
+      "modal_fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc",
+      "path": "/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run/checkpoints/final_task8_epoch99.pth",
+      "sha256": "aaddd3480aa889244e3ed29dd3c84a05a62784d7172064584188886b24dad588",
+      "task": 8,
+      "epoch_index": 99,
+      "parent_checkpoint_sha256": "146f11436350f8643709c49b3bbb97b42952539aed05ba3a01d529299074b6d2",
+      "global_step": 42400,
+      "load_coverage": 1.0
+    },
+    "9": {
+      "modal_contract": {
+        "schema_version": 2,
+        "use_vision": true,
+        "use_language": true,
+        "use_state": true,
+        "token_order": [
+          "language",
+          "agentview",
+          "eye_in_hand",
+          "state"
+        ],
+        "state_keys": [
+          "joint_states",
+          "gripper_states"
+        ],
+        "state_dims": [
+          7,
+          2
+        ],
+        "window_length": 8,
+        "embedding_dim": 512,
+        "official_checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+        "frozen_frontend_sha256": "df397791729f5baae1260e54eca45153fd0d708207ea1eabe94c05397fa33740",
+        "pretrain_use_state": "unknown",
+        "effective_use_state": true,
+        "pretrain_metadata_gap_status": "DISCLOSED_GAP",
+        "code_commit": "a721807f2f7fa7f9833dcc85c592d78e9accd00b",
+        "code_patch_sha256": "57e9566ab44c74d88563892080e1dd34304e36e4204d7acd8ede088b6c2363a0",
+        "export": {
+          "batch_size": 1,
+          "module_mode": "train",
+          "cfg_training": false,
+          "augmentation": true,
+          "use_augmentation": true,
+          "obs_preprocessing": "robomimic process_obs; RGB uint8 to CHW float [0,1]; source CLIP normalization",
+          "augmentation_layers": [
+            "BatchWiseImgColorJitterAug",
+            "RandomAffineAug",
+            "RandomErasingAug"
+          ],
+          "augmentation_config": {
+            "color_aug": {
+              "_target_": "BatchWiseImgColorJitterAug",
+              "network": "BatchWiseImgColorJitterAug",
+              "prob": 0.9,
+              "network_kwargs": {
+                "brightness": 0.3,
+                "contrast": 0.3,
+                "saturation": 0.3,
+                "hue": 0.3
+              }
+            },
+            "translation_aug": {
+              "_target_": "RandomAffineAug",
+              "network": "RandomAffineAug",
+              "prob": 0.6,
+              "network_kwargs": {
+                "degrees": 15,
+                "translate": 0.1
+              }
+            },
+            "erase_aug": {
+              "_target_": "RandomErasingAug",
+              "network": "RandomErasingAug",
+              "prob": 0.1,
+              "network_kwargs": {
+                "scale": [
+                  0.02,
+                  0.33
+                ],
+                "ratio": [
+                  0.3,
+                  3.3
+                ]
+              }
+            }
+          },
+          "sampler": "RandomSampler without replacement",
+          "seed": 42
+        },
+        "fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc"
+      },
+      "modal_fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc",
+      "path": "/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run/checkpoints/final_task9_epoch99.pth",
+      "sha256": "59f2bf55f55e9e0ec4f3a44746e02dcb07ba1447cd06bdc9ab0b8a0154046e29",
+      "task": 9,
+      "epoch_index": 99,
+      "parent_checkpoint_sha256": "aaddd3480aa889244e3ed29dd3c84a05a62784d7172064584188886b24dad588",
+      "global_step": 76100,
+      "load_coverage": 1.0
+    }
+  },
+  "current_stage": 9,
+  "current_task": 9
+}

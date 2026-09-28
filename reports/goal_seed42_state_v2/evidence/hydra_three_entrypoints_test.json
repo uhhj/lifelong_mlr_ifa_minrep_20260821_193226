@@ -1,0 +1,26 @@
+{
+  "export": {
+    "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/source/libero/lifelong/save_feature.py seed=42 benchmark_name=LIBERO_GOAL data.task_order_index=0 data.demo_limit=10 data.seq_len=8 train.n_epochs=100 eval.n_eval=20 eval.max_steps=600 train.batch_size=1 train.num_workers=12 policy=complete_policy lifelong=basic training=false ++aug=true ++gamma=0.7 ++past_data_rate=0.5 ++start_task=6 ++end_task=10 ++runbook_v2=true ++runbook_resume=false ++run_id=goal_seed42_mlr_ifa_paper_aligned_state_v2 ++run_dir=/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run pretrain=/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth folder=/data/mlr_ifa/datasets bddl_folder=/data/mlr_ifa/src/libero/libero/bddl_files init_states_folder=/data/mlr_ifa/src/libero/libero/init_files hydra.run.dir=/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run hydra.output_subdir=null ++policy.use_vision=true ++policy.use_language=true ++policy.use_state=true --cfg job --resolve",
+    "exit_code": 0,
+    "three_python_booleans_true": true,
+    "batch": 1,
+    "n_eval": 20,
+    "gamma": 0.7
+  },
+  "adaptation": {
+    "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/source/libero/lifelong/lifelong_adaptation.py seed=42 benchmark_name=LIBERO_GOAL data.task_order_index=0 data.demo_limit=10 data.seq_len=8 train.n_epochs=100 eval.n_eval=20 eval.max_steps=600 train.batch_size=10 train.num_workers=0 policy=BriefPolicy lifelong=mlr training=true ++aug=false ++gamma=0.7 ++past_data_rate=0.5 ++start_task=6 ++end_task=10 ++runbook_v2=true ++runbook_resume=false ++run_id=goal_seed42_mlr_ifa_paper_aligned_state_v2 ++run_dir=/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run pretrain=/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth folder=/data/mlr_ifa/datasets bddl_folder=/data/mlr_ifa/src/libero/libero/bddl_files init_states_folder=/data/mlr_ifa/src/libero/libero/init_files hydra.run.dir=/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run hydra.output_subdir=null ++policy.use_vision=true ++policy.use_language=true ++policy.use_state=true --cfg job --resolve",
+    "exit_code": 0,
+    "three_python_booleans_true": true,
+    "batch": 10,
+    "n_eval": 20,
+    "gamma": 0.7
+  },
+  "eval": {
+    "command": "/data/mlr_ifa/env/bin/python /data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/source/libero/lifelong/test.py seed=42 benchmark_name=LIBERO_GOAL data.task_order_index=0 data.demo_limit=10 data.seq_len=8 train.n_epochs=100 eval.n_eval=20 eval.max_steps=600 train.batch_size=10 train.num_workers=12 policy=complete_policy lifelong=basic training=false ++aug=true ++gamma=0.7 ++past_data_rate=0.5 ++start_task=6 ++end_task=10 ++runbook_v2=true ++runbook_resume=false ++run_id=goal_seed42_mlr_ifa_paper_aligned_state_v2 ++run_dir=/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run pretrain=/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth folder=/data/mlr_ifa/datasets bddl_folder=/data/mlr_ifa/src/libero/libero/bddl_files init_states_folder=/data/mlr_ifa/src/libero/libero/init_files hydra.run.dir=/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run hydra.output_subdir=null ++policy.use_vision=true ++policy.use_language=true ++policy.use_state=true --cfg job --resolve",
+    "exit_code": 0,
+    "three_python_booleans_true": true,
+    "batch": 10,
+    "n_eval": 20,
+    "gamma": 0.7
+  }
+}

@@ -31,7 +31,7 @@ def safe_device(x, device="cpu"):
         if torch.cuda.is_available():
             return x.to(device)
         else:
-            return x.cpu()
+            raise RuntimeError("CUDA requested but unavailable; refusing CPU fallback")
 
 
 class NpEncoder(json.JSONEncoder):
@@ -57,11 +57,8 @@ def torch_save_model(model, model_path, cfg=None, previous_masks=None):
     )
 
 def _strip_module_prefix1(state_dict):
-    if not state_dict:
-        return state_dict
-    first_key = next(iter(state_dict))
-    if first_key.startswith("module."):
-        return OrderedDict((k[7:], v) for k, v in state_dict.items())
+    from libero.lifelong.runbook_core import strip_prefix
+    return strip_prefix(state_dict)
 
 def torch_load_model(model_path, map_location="cpu"):
 

@@ -63,7 +63,15 @@ def get_dataset(
     if demo_limit is not None:
         first_demos = dataset.demos[:demo_limit]
         dataset.load_demo_info(filter_by_attribute=None, demos=first_demos)
+        # Prune cache as well as rebuilt indices; no hidden 40-demo cache.
+        if getattr(dataset, "hdf5_cache", None) is not None:
+            dataset.hdf5_cache = {k: v for k, v in dataset.hdf5_cache.items() if k in first_demos}
+        assert set(dataset._index_to_demo_id.values()) == set(first_demos)
+        assert len(dataset) == sum(dataset._demo_id_to_demo_length[d] for d in first_demos)
 
+    # load_demo_info reopens HDF5 after SequenceDataset initialization. Spawn
+    # workers cannot pickle an open h5py handle; each worker reopens lazily.
+    dataset.close_and_delete_hdf5_handle()
     return dataset, shape_meta
 
 
@@ -141,3 +149,8 @@ class TruncatedSequenceDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.sequence_dataset.__getitem__(idx)
+
+
+def initialize_obs_worker(worker_id, obs_modality):
+    """Spawn workers have fresh ObsUtils globals; use the identical parent spec."""
+    ObsUtils.initialize_obs_utils_with_obs_specs({"obs": obs_modality})

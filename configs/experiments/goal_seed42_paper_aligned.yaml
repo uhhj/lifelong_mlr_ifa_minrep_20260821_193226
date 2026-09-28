@@ -1,0 +1,30 @@
+# Protocol declaration; Hydra mapping is scripts/verify_goal_seed42.py:config.
+label: goal_seed42_mlr_ifa_paper_aligned_v1
+status: BLOCKED
+training_seed: 42
+benchmark: LIBERO_GOAL
+task_order_index: 0
+incremental_tasks: [6, 7, 8, 9]
+demonstrations_per_task: 10
+epochs_per_task: 100
+batch_size: 10
+feature_batch_size: 1
+seq_len: 8
+eval:
+  n_eval: 20
+  max_steps: 600
+  initial_zero_action_steps: 5
+  env_num: 10
+gamma: 0.7
+ifa_weight: 0.1
+past_data_rate: 0.5
+buffer_capacity_files: 59660000
+scheduler:
+  type: linear_warmup_decay
+  warmup_optimizer_steps: 500
+  peak_lr: 0.0001
+  final_lr: 0
+  advance: once_after_each_optimizer_step
+final_checkpoint_epoch_index: 99
+use_state_decision: unresolved_user_deferred
+smoke_only_use_state: false

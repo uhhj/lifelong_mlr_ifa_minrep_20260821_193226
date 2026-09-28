@@ -18,7 +18,7 @@ from easydict import EasyDict
 from hydra.utils import to_absolute_path
 from omegaconf import OmegaConf
 from collections import OrderedDict
-sys.path.insert(0, "/home/fyu/mlr_ifa")
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 
 from libero.libero import get_libero_path
@@ -42,6 +42,9 @@ import gc
 
 @hydra.main(config_path="../configs", config_name="config_adaption", version_base=None)
 def main(hydra_cfg):
+    if hydra_cfg.get("runbook_v2", False):
+        from libero.lifelong.runbook_v2 import export_main
+        return export_main(hydra_cfg)
     print(">>> hydra root directory（runtime.cwd）：", os.getcwd())
     # preprocessing
     dist.init_process_group(backend="nccl")

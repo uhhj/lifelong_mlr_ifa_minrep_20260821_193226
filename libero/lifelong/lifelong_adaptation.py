@@ -2,7 +2,7 @@ import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import sys
-sys.path.insert(0, "/home/fyu/mlr_ifa")
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import json
 import multiprocessing
@@ -38,6 +38,9 @@ import torch.distributed as dist
 
 @hydra.main(config_path="../configs", config_name="config_adaption", version_base=None)
 def main(hydra_cfg):
+    if hydra_cfg.get("runbook_v2", False):
+        from libero.lifelong.runbook_v2 import train_main
+        return train_main(hydra_cfg)
 
     dist.init_process_group(backend="nccl", init_method="env://")
 

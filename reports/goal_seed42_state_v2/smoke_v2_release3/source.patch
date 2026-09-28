@@ -1,0 +1,2082 @@
+diff --git a/configs/experiments/goal_seed42_paper_aligned.yaml b/configs/experiments/goal_seed42_paper_aligned.yaml
+new file mode 100644
+index 0000000..a834eec
+--- /dev/null
++++ b/configs/experiments/goal_seed42_paper_aligned.yaml
+@@ -0,0 +1,30 @@
++# Protocol declaration; Hydra mapping is scripts/verify_goal_seed42.py:config.
++label: goal_seed42_mlr_ifa_paper_aligned_v1
++status: BLOCKED
++training_seed: 42
++benchmark: LIBERO_GOAL
++task_order_index: 0
++incremental_tasks: [6, 7, 8, 9]
++demonstrations_per_task: 10
++epochs_per_task: 100
++batch_size: 10
++feature_batch_size: 1
++seq_len: 8
++eval:
++  n_eval: 20
++  max_steps: 600
++  initial_zero_action_steps: 5
++  env_num: 10
++gamma: 0.7
++ifa_weight: 0.1
++past_data_rate: 0.5
++buffer_capacity_files: 59660000
++scheduler:
++  type: linear_warmup_decay
++  warmup_optimizer_steps: 500
++  peak_lr: 0.0001
++  final_lr: 0
++  advance: once_after_each_optimizer_step
++final_checkpoint_epoch_index: 99
++use_state_decision: unresolved_user_deferred
++smoke_only_use_state: false
+diff --git a/configs/experiments/goal_seed42_paper_aligned_state_v2.yaml b/configs/experiments/goal_seed42_paper_aligned_state_v2.yaml
+new file mode 100644
+index 0000000..5d0ca40
+--- /dev/null
++++ b/configs/experiments/goal_seed42_paper_aligned_state_v2.yaml
+@@ -0,0 +1,11 @@
++label: goal_seed42_mlr_ifa_paper_aligned_state_v2
++seed: 42
++batch_size: 10
++n_epochs: 100
++n_eval: 20
++gamma: 0.7
++past_data_rate: 0.5
++policy:
++  use_vision: true
++  use_language: true
++  use_state: true
+diff --git a/libero/lifelong/algos/base.py b/libero/lifelong/algos/base.py
+index e305618..a53a22e 100644
+--- a/libero/lifelong/algos/base.py
++++ b/libero/lifelong/algos/base.py
+@@ -131,150 +131,39 @@ class Sequential(nn.Module, metaclass=AlgoMeta):
+             data, lambda x: safe_device(x, device=self.cfg.device)
+         )
+ 
+-    def observe(self, data,current_task_id,epoch,ifa_info=None):
+-        """
+-        How the algorithm learns on each data point -- IFA.
+-        """
++    def observe(self, data, current_task_id, epoch, ifa_info=None):
++        from libero.lifelong.runbook_core import ifa_loss
+         data[0] = self.map_tensor_to_device(data[0])
+         self.optimizer.zero_grad()
+-        if isinstance(self.policy, DDP):
+-            loss,last_feat = self.policy.module.compute_loss(data[0],None,None)
+-        else:
+-            loss,last_feat = self.policy.compute_loss(data[0],None,None)
+-        
+-        print('loss:{}'.format(loss))
+-
+-        task_ids = torch.tensor([int(x) for x in data[1]], dtype=torch.long)
+-
+-        selected_pair_mask = ifa_info["selected_pair_mask"]
+-        sim_language = ifa_info["sim_language"]
+-        sim_agent = ifa_info["sim_agent"]
+-
+-        ifa_task_ids = ifa_info["task_ids"]
+-
+-        if not torch.is_tensor(selected_pair_mask):
+-            selected_pair_mask = torch.as_tensor(selected_pair_mask)
+-
+-        pairs_below_num = []
+-
+-        for i, j in itertools.combinations(range(len(ifa_task_ids)), 2):
+-            if selected_pair_mask[i, j].item():
+-                value = sim_language[i, j].item()
+-
+-                pairs_below_num.append(
+-                    (
+-                        int(ifa_task_ids[i]),
+-                        int(ifa_task_ids[j]),
+-                        value,
+-                    )
+-                )
+-
+-        batch_mask = (task_ids == current_task_id) & (task_ids != 6)
+-
+-        if ifa_info is not None and batch_mask.any().item() and current_task_id > 6:
+-
+-            batch_size = batch_mask.sum().item()
+-            true_feats = last_feat[batch_mask]
+-
+-            cur_feat = data[0]["feature"]
+-            cur_feat = cur_feat.to(true_feats.device).float()
+-
+-            # [B, 1, 4, 8, 512] -> [B, 4, 8, 512]
+-            if cur_feat.dim() == 5 and cur_feat.shape[1] == 1:
+-                cur_feat = cur_feat.squeeze(1)
+-
+-            sample = cur_feat[0, 0, 0, :]   # [B, 512]
+-
+-            task_id_list = ifa_info["task_ids"]
+-            selected_pair_mask = ifa_info["selected_pair_mask"]
+-
+-            if not torch.is_tensor(selected_pair_mask):
+-                selected_pair_mask = torch.as_tensor(selected_pair_mask)
+-
+-            task_id_tensor = torch.as_tensor(task_id_list)
+-
+-            cur_pos = (task_id_tensor == current_task_id).nonzero(as_tuple=True)[0]
+-
+-            if len(cur_pos) == 0:
+-                low_sim_tasks = []
+-            else:
+-                cur_idx = cur_pos.item()
+-
+-                true_indices = selected_pair_mask[cur_idx].nonzero(as_tuple=True)[0]
+-
+-                low_sim_tasks = [
+-                    int(task_id_tensor[idx].item())
+-                    for idx in true_indices
+-                    if int(task_id_tensor[idx].item()) != current_task_id
+-                ]
+-
+-            print(f"[IFA] current_task_id={current_task_id}, low_sim_tasks={low_sim_tasks}")
+-            if  len(low_sim_tasks)==0:
+-                loss_hinge = None
+-
+-            else:
+-                for item in low_sim_tasks:
+-                    true_lan_list = []
+-                    flase_lan_list = []
+-                    for i in range(batch_size):
+-                        true_lan_list.append(sample)
+-                        false_lan_name = f'{self.cfg.feature_dir}/{item}/0.pt'
+-                        flase_lan_list.append(torch.load(false_lan_name, map_location='cuda')['feature'][0,0,0,:])
+-
+-                    true_lan_list = torch.stack(true_lan_list, dim=0)  # (B,E)
+-                    false_lan_list = torch.stack(flase_lan_list, dim=0)  # (B, E)
+-
+-                    true_feats  = l2norm(true_feats)          # (B,E)
+-                    true_lan_list = l2norm(true_lan_list)      # (B,E)
+-                    false_lan_list = l2norm(false_lan_list)     # (B,E)
+-
+-                    sim_language = ifa_info["sim_language"]
+-                    ifa_task_ids = ifa_info["task_ids"]
+-
+-                    if torch.is_tensor(sim_language):
+-                        sim_language_cpu = sim_language.detach().cpu()
+-                    else:
+-                        sim_language_cpu = torch.as_tensor(sim_language)
+-
+-                    sim = {}
+-
+-                    for i, tid_i in enumerate(ifa_task_ids):
+-                        tid_i = int(tid_i)
+-                        sim[tid_i] = {}
+-
+-                        for j, tid_j in enumerate(ifa_task_ids):
+-                            tid_j = int(tid_j)
+-                            sim[tid_i][tid_j] = float(sim_language_cpu[i, j].item())
+-
+-                    gamma = self.cfg.gamma
+-                    eps = 1e-6
+-
+-                    true_feats       = l2norm(true_feats)          # (B,E)
+-                    true_lan_list   = l2norm(true_lan_list)       # (B,E)
+-                    false_lan_list  = l2norm(false_lan_list)      # (B,E)
+-
+-                    cos_pos = (true_feats * true_lan_list).sum(-1).clamp(-1 + eps, 1 - eps)   # (B,)
+-                    cos_neg = (true_feats * false_lan_list).sum(-1).clamp(-1 + eps, 1 - eps)  # (B,)
+-
+-                    theta_pos = torch.acos(cos_pos)  # (B,)
+-                    theta_neg = torch.acos(cos_neg)  # (B,)
+-
+-                    cos_ab = sim[current_task_id][item]
+-                    cos_ab_t = torch.tensor(cos_ab, dtype=true_feats.dtype, device=true_feats.device).clamp(-1 + eps, 1 - eps)
+-                    phi = torch.acos(cos_ab_t)
+-
+-                    loss_hinge_angle = torch.relu(theta_pos - theta_neg + gamma * phi).mean()
+-
+-                    loss = loss + 0.1 * loss_hinge_angle.mean()
+-
+-
++        policy = self.policy.module if isinstance(self.policy, DDP) else self.policy
++        bc, last_feat = policy.compute_loss(data[0], None, None)
++        negatives = {}
++        if ifa_info is not None and current_task_id in ifa_info["task_ids"]:
++            tids = ifa_info["task_ids"]
++            pos = tids.index(current_task_id)
++            for i, tid in enumerate(tids):
++                if tid != current_task_id and bool(ifa_info["selected_pair_mask"][pos, i]):
++                    if tid >= current_task_id:
++                        raise ValueError("Future-task IFA reference forbidden")
++                    if not hasattr(self, "_ifa_reference_cache"):
++                        self._ifa_reference_cache = {}
++                    if tid not in self._ifa_reference_cache:
++                        path = os.path.join(self.cfg.feature_dir, str(tid), "0.pt")
++                        self._ifa_reference_cache[tid] = torch.load(path, map_location="cpu")["feature"][0, 0, 0, :]
++                    negatives[tid] = self._ifa_reference_cache[tid]
++        raw_ifa = ifa_loss(last_feat, data[0]["feature"], [int(x) for x in data[1]],
++                           current_task_id, ifa_info, negatives, self.cfg.gamma)
++        loss = bc + 0.1 * raw_ifa
+         (self.loss_scale * loss).backward()
+-        if self.cfg.train.grad_clip is not None:
+-            grad_norm = nn.utils.clip_grad_norm_(
+-                self.policy.parameters(), self.cfg.train.grad_clip
+-            )
+-
++        grad_norm = nn.utils.clip_grad_norm_(self.policy.parameters(), self.cfg.train.grad_clip)
++        lr_used = self.optimizer.param_groups[0]["lr"]
+         self.optimizer.step()
++        if self.scheduler is not None:
++            self.scheduler.step()
++        self.last_loss_log = {"bc": bc.item(), "ifa_raw": raw_ifa.item(),
++                              "ifa_weighted": 0.1 * raw_ifa.item(), "total": loss.item(),
++                              "grad_norm": float(grad_norm), "lr_used": lr_used,
++                              "lr_next": self.optimizer.param_groups[0]["lr"]}
+         return loss.item()
+ 
+     def eval_observe(self, data):
+diff --git a/libero/lifelong/algos/mlr.py b/libero/lifelong/algos/mlr.py
+index 2798b08..0c6d5ff 100644
+--- a/libero/lifelong/algos/mlr.py
++++ b/libero/lifelong/algos/mlr.py
+@@ -1,4 +1,5 @@
+ import os
++import json
+ 
+ import numpy as np
+ import torch
+@@ -363,9 +364,8 @@ def _pairwise_cosine_mean(feats_i, feats_j, eps=1e-8):
+     feats_i = F.normalize(feats_i, dim=-1, eps=eps)
+     feats_j = F.normalize(feats_j, dim=-1, eps=eps)
+ 
+-    sim_matrix = feats_i @ feats_j.T
+-
+-    return sim_matrix.mean().item()
++    # Exact algebraic identity; FP32 reduction order may differ slightly.
++    return torch.dot(feats_i.mean(0), feats_j.mean(0)).item()
+ 
+ 
+ def collect_current_task_features(
+@@ -717,10 +717,18 @@ class MLR(Sequential):
+             for (idx, data) in enumerate(pbar):
+                 loss = self.observe(data,current_task_id,epoch,ifa_info=ifa_info)
+                 training_loss += loss
++                log_dir = Path(self.experiment_dir) / "logs"
++                log_dir.mkdir(exist_ok=True)
++                with (log_dir / "train.jsonl").open("a") as log:
++                    row = dict(self.last_loss_log)
++                    row.update({"task": current_task_id, "epoch_index": epoch, "batch_index": idx,
++                                "new_samples": sum(int(t) == current_task_id for t in data[1]),
++                                "old_samples": sum(int(t) != current_task_id for t in data[1])})
++                    log.write(json.dumps(row) + "\n")
+                 avg_loss = training_loss / (idx + 1)
+                 pbar.set_postfix(loss=f"{avg_loss:.4f}")
+ 
+-                training_loss /= len(train_dataloader)
++            training_loss /= len(train_dataloader)
+                 
+             t1 = time.time()
+ 
+@@ -728,7 +736,7 @@ class MLR(Sequential):
+                 f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} | time: {(t1-t0)/60:4.2f}"
+             )
+ 
+-            if epoch % 5 == 0 and epoch > 69:  # evaluate BC loss
++            if epoch == self.cfg.train.n_epochs - 1:  # evaluate BC loss
+ 
+                 self.policy.eval()
+ 
+@@ -751,8 +759,7 @@ class MLR(Sequential):
+                 successes.append(success_rate)
+                 cumulated_counter += 1.0
+ 
+-            if self.scheduler is not None and epoch > 0:
+-                self.scheduler.step()
++            # Scheduler advances once per optimizer step in observe().
+ 
+         # return the metrics regarding forward transfer
+         losses = np.array(losses)
+diff --git a/libero/lifelong/datasets.py b/libero/lifelong/datasets.py
+index a446b05..a3fc0ac 100644
+--- a/libero/lifelong/datasets.py
++++ b/libero/lifelong/datasets.py
+@@ -63,7 +63,15 @@ def get_dataset(
+     if demo_limit is not None:
+         first_demos = dataset.demos[:demo_limit]
+         dataset.load_demo_info(filter_by_attribute=None, demos=first_demos)
+-
++        # Prune cache as well as rebuilt indices; no hidden 40-demo cache.
++        if getattr(dataset, "hdf5_cache", None) is not None:
++            dataset.hdf5_cache = {k: v for k, v in dataset.hdf5_cache.items() if k in first_demos}
++        assert set(dataset._index_to_demo_id.values()) == set(first_demos)
++        assert len(dataset) == sum(dataset._demo_id_to_demo_length[d] for d in first_demos)
++
++    # load_demo_info reopens HDF5 after SequenceDataset initialization. Spawn
++    # workers cannot pickle an open h5py handle; each worker reopens lazily.
++    dataset.close_and_delete_hdf5_handle()
+     return dataset, shape_meta
+ 
+ 
+@@ -141,3 +149,8 @@ class TruncatedSequenceDataset(Dataset):
+ 
+     def __getitem__(self, idx):
+         return self.sequence_dataset.__getitem__(idx)
++
++
++def initialize_obs_worker(worker_id, obs_modality):
++    """Spawn workers have fresh ObsUtils globals; use the identical parent spec."""
++    ObsUtils.initialize_obs_utils_with_obs_specs({"obs": obs_modality})
+diff --git a/libero/lifelong/lifelong_adaptation.py b/libero/lifelong/lifelong_adaptation.py
+index 64db192..94d3a16 100644
+--- a/libero/lifelong/lifelong_adaptation.py
++++ b/libero/lifelong/lifelong_adaptation.py
+@@ -2,7 +2,7 @@ import os
+ 
+ os.environ["TOKENIZERS_PARALLELISM"] = "false"
+ import sys
+-sys.path.insert(0, "/home/fyu/mlr_ifa")
++sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+ 
+ import json
+ import multiprocessing
+@@ -38,6 +38,9 @@ import torch.distributed as dist
+ 
+ @hydra.main(config_path="../configs", config_name="config_adaption", version_base=None)
+ def main(hydra_cfg):
++    if hydra_cfg.get("runbook_v2", False):
++        from libero.lifelong.runbook_v2 import train_main
++        return train_main(hydra_cfg)
+ 
+     dist.init_process_group(backend="nccl", init_method="env://")
+ 
+diff --git a/libero/lifelong/modal_contract.py b/libero/lifelong/modal_contract.py
+new file mode 100644
+index 0000000..9375bc4
+--- /dev/null
++++ b/libero/lifelong/modal_contract.py
+@@ -0,0 +1,147 @@
++import hashlib
++import json
++from pathlib import Path
++import torch
++from libero.lifelong.runbook_core import sha256, strip_prefix, atomic_json
++
++
++def fingerprint(value):
++    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'),
++                                    ensure_ascii=True).encode()).hexdigest()
++
++
++def validate_flags(cfg):
++    for key in ('use_vision', 'use_language', 'use_state'):
++        if cfg.policy.get(key) is not True:
++            raise ValueError('Expected boolean True: policy.' + key)
++
++
++def tensor_state_hash(state):
++    h = hashlib.sha256()
++    for key in sorted(state):
++        tensor = state[key].detach().cpu().contiguous()
++        h.update(key.encode())
++        h.update(str(tuple(tensor.shape)).encode())
++        h.update(str(tensor.dtype).encode())
++        h.update(tensor.numpy().tobytes())
++    return h.hexdigest()
++
++
++def frontend_hash(state):
++    state = strip_prefix(state)
++    return tensor_state_hash({k: v for k, v in state.items()
++                              if not k.startswith(('temporal_transformer.', 'policy_head.'))})
++
++
++def build_contract(cfg, patch_path):
++    validate_flags(cfg)
++    checkpoint = torch.load(cfg.pretrain, map_location='cpu')
++    state = strip_prefix(checkpoint['state_dict'])
++    required = {'state_encoder.0.weight': (512, 9), 'state_encoder.0.bias': (512,),
++                'state_encoder.2.weight': (512, 512), 'state_encoder.2.bias': (512,)}
++    for prefix in ('state_scale', 'state_shift'):
++        for layer in (0, 2):
++            required[prefix + '.%d.weight' % layer] = (512, 512)
++            required[prefix + '.%d.bias' % layer] = (512,)
++    for key, shape in required.items():
++        assert key in state and tuple(state[key].shape) == shape, (key, shape)
++    body = {'schema_version': 2, 'use_vision': True, 'use_language': True, 'use_state': True,
++        'token_order': ['language', 'agentview', 'eye_in_hand', 'state'],
++        'state_keys': ['joint_states', 'gripper_states'], 'state_dims': [7, 2],
++        'window_length': 8, 'embedding_dim': 512,
++        'official_checkpoint_sha256': sha256(cfg.pretrain),
++        'frozen_frontend_sha256': frontend_hash(state),
++        'pretrain_use_state': checkpoint['cfg']['policy'].get('use_state', 'unknown'),
++        'effective_use_state': True, 'pretrain_metadata_gap_status': 'DISCLOSED_GAP',
++        'code_commit': 'a721807f2f7fa7f9833dcc85c592d78e9accd00b',
++        'code_patch_sha256': sha256(patch_path),
++        'export': {'batch_size': 1, 'module_mode': 'train', 'cfg_training': False,
++            'augmentation': True, 'use_augmentation': True,
++            'obs_preprocessing': 'robomimic process_obs; RGB uint8 to CHW float [0,1]; source CLIP normalization',
++            'augmentation_layers': ['BatchWiseImgColorJitterAug', 'RandomAffineAug', 'RandomErasingAug'],
++            'augmentation_config': json.loads(json.dumps({k: cfg.policy[k] for k in ['color_aug', 'translation_aug', 'erase_aug']})),
++            'sampler': 'RandomSampler without replacement', 'seed': 42}}
++    return dict(body, fingerprint=fingerprint(body))
++
++
++def validate_contract(received, expected):
++    for value in (received, expected):
++        if not isinstance(value, dict) or 'fingerprint' not in value:
++            raise ValueError('Missing verifiable modal contract; old caches forbidden')
++        body = {k: v for k, v in value.items() if k != 'fingerprint'}
++        if fingerprint(body) != value['fingerprint']:
++            raise ValueError('Modal fingerprint mismatch')
++    if received != expected:
++        raise ValueError('Modal contract content mismatch; cross-modal resume forbidden')
++
++
++def check_metadata(meta, expected):
++    validate_contract(meta.get('modal_contract'), expected)
++    if meta.get('modal_fingerprint') != expected['fingerprint']:
++        raise ValueError('Missing/mismatched modal fingerprint in artifact')
++
++
++def semantic_tests(full, brief, processed, output=None):
++    """Real observation tests; preserve modes, cfg, and RNG exactly."""
++    from libero.lifelong.runbook_core import rng_state, restore_rng
++    import copy
++    saved_rng = rng_state()
++    modes = [(m, m.training) for root in (full, brief) for m in root.modules()]
++    flag = full.cfg.policy.use_state
++    try:
++        full.eval()
++        brief.eval()
++        with torch.no_grad():
++            h = full.spatial_encode(processed)
++            b, t, _, e = h.shape
++            instr = processed['task_emb']
++            masks = processed['masks'].squeeze(1)
++            language = full.language_encoder(instr, masks)
++            langflat = language[:, None, :].expand(-1, t, -1).reshape(b * t, e)
++            state = torch.cat([processed['obs'][k] for k in ['joint_states', 'gripper_states']], -1)
++            statefeat = full.state_encoder(state.reshape(b * t, 9)).reshape(b, t, 1, e)
++            expected = ((1 + full.state_scale(langflat)).reshape(b, t, 1, e) * statefeat
++                        + full.state_shift(langflat).reshape(b, t, 1, e))
++            torch.testing.assert_close(h[:, :, 3:4], expected, rtol=1e-5, atol=1e-6)
++            torch.testing.assert_close(h[:, :, 0], language[:, None].expand(-1, t, -1))
++            for index, key in enumerate(['agentview_rgb', 'eye_in_hand_rgb'], 1):
++                img = processed['obs'][key].reshape(b*t, *processed['obs'][key].shape[2:])
++                vision = full.image_proj(full.image_encoders(img, langs=None))
++                vision = ((1 + full.film_scale(langflat)) * vision + full.film_shift(langflat)).reshape(b, t, e)
++                torch.testing.assert_close(h[:, :, index], vision, rtol=1e-5, atol=1e-6)
++            deltas = []
++            for amount in (.01, .1, .5):
++                changed = copy.deepcopy(processed)
++                for key in ['joint_states', 'gripper_states']:
++                    changed['obs'][key] += amount
++                shifted = full.spatial_encode(changed)
++                assert torch.equal(h[:, :, :3], shifted[:, :, :3])
++                delta = (h[:, :, 3] - shifted[:, :, 3]).abs().max().item()
++                if delta <= 1e-6:
++                    raise ValueError('State nonresponse: delta=%g, perturbation=%g' % (delta, amount))
++                deltas.append(delta)
++            full.cfg.policy.use_state = False
++            negative0 = full.spatial_encode(processed)
++            negative1 = full.spatial_encode(changed)
++            assert torch.equal(negative0, negative1)
++            full.cfg.policy.use_state = True
++            a = full.policy_head.forward_fn(full.temporal_encode(h)[:, -1])
++            bdist = brief.policy_head.forward_fn(brief.temporal_encode(h)[:, -1])
++            errors = []
++            for left, right in zip(a, bdist):
++                torch.testing.assert_close(left, right, rtol=1e-5, atol=1e-6)
++                errors.append((left - right).abs().max().item())
++            report = {'status': 'PASS', 'real_observations_and_weights': True,
++                'state_token_formula_max_error': (h[:, :, 3:4] - expected).abs().max().item(),
++                'token_identity_order': ['language', 'agentview', 'eye_in_hand', 'state'],
++                'state_perturbation_max_deltas': deltas, 'first3_tokens_exactly_unchanged': True,
++                'false_branch_negative_control_max_delta': (negative0-negative1).abs().max().item(),
++                'gmm_mean_scale_logits_max_errors': errors, 'negative_control_is_software_only': True}
++            if output:
++                atomic_json(output, report)
++            return report
++    finally:
++        full.cfg.policy.use_state = flag
++        for module, training in modes:
++            module.training = training
++        restore_rng(saved_rng)
+diff --git a/libero/lifelong/models/brief.py b/libero/lifelong/models/brief.py
+index ffa1e5a..3f15d09 100644
+--- a/libero/lifelong/models/brief.py
++++ b/libero/lifelong/models/brief.py
+@@ -40,7 +40,8 @@ class BriefPolicy(BasePolicy):
+ 
+         if self.init == 1:
+             self.init = 0
+-            self.load_state_dict(torch_load_model(cfg.pretrain)[0],strict=False)
++            from libero.lifelong.runbook_core import strict_downstream_load
++            self.load_report = strict_downstream_load(self, torch_load_model(cfg.pretrain)[0])
+ 
+ 
+     def forward(self, data):
+diff --git a/libero/lifelong/runbook_core.py b/libero/lifelong/runbook_core.py
+new file mode 100644
+index 0000000..3d01514
+--- /dev/null
++++ b/libero/lifelong/runbook_core.py
+@@ -0,0 +1,182 @@
++"""Audited helpers for the user-registered GOAL seed42 protocol."""
++import hashlib
++import json
++import os
++import random
++from pathlib import Path
++import numpy as np
++import torch
++
++
++def sha256(path):
++    h = hashlib.sha256()
++    with open(path, 'rb') as f:
++        for block in iter(lambda: f.read(8 * 1024 * 1024), b''):
++            h.update(block)
++    return h.hexdigest()
++
++
++def json_default(value):
++    if isinstance(value, np.integer):
++        return int(value)
++    if isinstance(value, np.floating):
++        return float(value)
++    if isinstance(value, np.ndarray):
++        return value.tolist()
++    if isinstance(value, Path):
++        return str(value)
++    if torch.is_tensor(value):
++        return value.detach().cpu().tolist()
++    raise TypeError(type(value).__name__)
++
++
++def atomic_json(path, value):
++    path = Path(path)
++    path.parent.mkdir(parents=True, exist_ok=True)
++    temp = path.with_name(path.name + '.tmp')
++    temp.write_text(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False, default=json_default))
++    os.replace(str(temp), str(path))
++
++
++def strip_prefix(state):
++    if not state:
++        return state
++    prefixed = [k.startswith('module.') for k in state]
++    if any(prefixed) and not all(prefixed):
++        raise ValueError('Mixed module prefixes')
++    return {k[7:] if all(prefixed) else k: v for k, v in state.items()}
++
++
++def strict_downstream_load(model, state):
++    state = strip_prefix(state)
++    prefixes = ('temporal_transformer.', 'policy_head.')
++    own = model.state_dict()
++    needed = {k for k in own if k.startswith(prefixes)}
++    supplied = {k for k in state if k.startswith(prefixes)}
++    if not needed or supplied != needed:
++        raise ValueError('Downstream keys mismatch: missing=%s unexpected=%s' %
++                         (sorted(needed - supplied), sorted(supplied - needed)))
++    if any(tuple(state[k].shape) != tuple(own[k].shape) for k in needed):
++        raise ValueError('Downstream shape mismatch')
++    merged = dict(own)
++    merged.update({k: state[k] for k in needed})
++    result = model.load_state_dict(merged, strict=True)
++    return {'loaded_keys': len(needed), 'coverage': 1.0,
++            'missing': list(result.missing_keys), 'unexpected': list(result.unexpected_keys),
++            'spatial_keys_not_overwritten': len(own) - len(needed)}
++
++
++def ifa_loss(last_feat, features, task_ids, current_task, info, negatives, gamma):
++    """Mean over current samples and selected task pairs, retaining source angles.
++
++    Language is modality 0 at time 0. Negative references retain old task 0.pt.
++    """
++    if features.ndim == 5:
++        if features.shape[1] != 1:
++            raise ValueError('Expected singleton saved feature batch axis')
++        features = features.squeeze(1)
++    if features.ndim != 4 or features.shape[2] != 4:
++        raise ValueError('Expected [B,T,M=4,E]')
++    ids = torch.as_tensor(task_ids, device=last_feat.device)
++    selected = ids == current_task
++    zero = last_feat.sum() * 0.0
++    if info is None or not selected.any():
++        return zero
++    tids = [int(t) for t in info['task_ids']]
++    if current_task not in tids:
++        return zero
++    pos = tids.index(current_task)
++    mask = torch.as_tensor(info['selected_pair_mask'])
++    peers = [t for i, t in enumerate(tids) if t != current_task and bool(mask[pos, i])]
++    if not peers:
++        return zero
++    def norm(x):
++        return x / (x.norm(p=2, dim=-1, keepdim=True) + 1e-8)
++    z = norm(last_feat[selected])
++    positive = norm(features[selected, 0, 0, :].to(z).detach())
++    theta_pos = torch.acos((z * positive).sum(-1).clamp(-1 + 1e-6, 1 - 1e-6))
++    values = []
++    for peer in peers:
++        negative = norm(negatives[peer].to(z).detach())
++        theta_neg = torch.acos((z * negative).sum(-1).clamp(-1 + 1e-6, 1 - 1e-6))
++        cos_ab = torch.as_tensor(info['sim_language'][pos, tids.index(peer)],
++                                device=z.device, dtype=z.dtype)
++        phi = torch.acos(cos_ab.clamp(-1 + 1e-6, 1 - 1e-6))
++        values.append(torch.relu(theta_pos - theta_neg + gamma * phi).mean())
++    return torch.stack(values).mean()
++
++
++def metrics(matrix):
++    r = np.asarray(matrix, dtype=float)
++    if r.shape != (4, 4) or not np.isfinite(r[np.tril_indices(4)]).all():
++        raise ValueError('Complete 4x4 lower triangle required')
++    if not np.isnan(r[np.triu_indices(4, 1)]).all():
++        raise ValueError('Unmeasured upper triangle must be NaN')
++    if ((r[np.tril_indices(4)] < 0) | (r[np.tril_indices(4)] > 1)).any():
++        raise ValueError('Rates must be in [0,1]')
++    nbt = [float(np.mean(r[j, j] - r[j + 1:, j])) for j in range(3)]
++    auc = [float(np.mean(r[j:, j])) for j in range(4)]
++    return {'FWT': float(np.diag(r).mean()), 'NBT': float(np.mean(nbt)),
++            'AUC': float(np.mean(auc)), 'FinalAvgSR': float(r[-1].mean()),
++            'NBT_per_task': nbt, 'AUC_per_task': auc}
++
++
++def rng_state():
++    return {'python': random.getstate(), 'numpy': np.random.get_state(),
++            'torch': torch.get_rng_state(), 'cuda': torch.cuda.get_rng_state_all()}
++
++
++def restore_rng(state):
++    random.setstate(state['python'])
++    np.random.set_state(state['numpy'])
++    torch.set_rng_state(state['torch'])
++    torch.cuda.set_rng_state_all(state['cuda'])
++
++
++def transactional_buffer_update(feature_root, task, current_buffer, output_root, seed=42, rate=0.5, modal_contract=None):
++    """Publish an immutable original-algorithm buffer generation with a marker.
++
++    Repeated calls verify and return the committed generation without appending.
++    A failed pending generation is preserved for inspection, never merged silently.
++    The original buffer is never mutated. Not yet integrated into formal resume.
++    """
++    from libero.lifelong.algos.mlr import update_buffer_equal_quota_10, BUFFER_CAPACITY
++    root = Path(output_root)
++    root.mkdir(parents=True, exist_ok=True)
++    generation = root / ('after_task_%d' % task)
++    if generation.exists():
++        manifest = json.loads((generation / 'manifest.json').read_text())
++        if modal_contract is not None:
++            from libero.lifelong.modal_contract import check_metadata
++            check_metadata(manifest, modal_contract)
++        if not manifest['complete'] or manifest['task'] != task:
++            raise ValueError('Invalid buffer commit')
++        for entry in manifest['files']:
++            if sha256(generation / entry['name']) != entry['sha256']:
++                raise ValueError('Committed buffer corrupted')
++        return manifest
++    pending = root / ('after_task_%d.pending' % task)
++    pending.mkdir(exist_ok=False)
++    for file in sorted(Path(current_buffer).glob('*.pt')):
++        tid = int(file.name.split('__')[0][1:])
++        if tid >= task:
++            raise ValueError('Future/duplicate task in input buffer')
++        os.link(str(file), str(pending / file.name))
++    stats = update_buffer_equal_quota_10(str(feature_root), task, str(pending),
++                                        capacity=BUFFER_CAPACITY, seed=seed, rate=rate)
++    files = []
++    for file in sorted(pending.glob('*.pt')):
++        sample = torch.load(str(file), map_location='cpu')
++        files.append({'name': file.name, 'sha256': sha256(file), 'bytes': file.stat().st_size,
++                      'tensor_bytes': sum(x.numel() * x.element_size() for x in sample.values()
++                                          if torch.is_tensor(x))})
++    manifest = {'complete': True, 'task': task, 'seed': seed, 'storage_rate': rate,
++                'capacity_files': BUFFER_CAPACITY, 'source_buffer': str(current_buffer),
++                'generation': str(generation), 'original_algorithm_stats': stats, 'files': files,
++                'disk_bytes': sum(v['bytes'] for v in files),
++                'tensor_bytes': sum(v['tensor_bytes'] for v in files)}
++    if modal_contract is not None:
++        manifest.update(modal_contract=modal_contract, modal_fingerprint=modal_contract['fingerprint'])
++    atomic_json(pending / 'manifest.json', manifest)
++    os.replace(str(pending), str(generation))
++    return json.loads((generation / 'manifest.json').read_text())
+diff --git a/libero/lifelong/runbook_v2.py b/libero/lifelong/runbook_v2.py
+new file mode 100644
+index 0000000..94c9f45
+--- /dev/null
++++ b/libero/lifelong/runbook_v2.py
+@@ -0,0 +1,448 @@
++"""Protocol orchestration dispatched from the three published Hydra entrypoints.
++
++Models, preprocessing, GMM objective, samplers and selection are the release code.
++This module adds provenance, epoch checkpoints, replay transactions and evaluation.
++"""
++import copy
++from functools import partial
++import json
++import os
++import time
++from collections import Counter
++from pathlib import Path
++import numpy as np
++import torch
++import torch.distributed as dist
++from torch.nn.parallel import DistributedDataParallel as DDP
++from torch.utils.data import Dataset, DataLoader, RandomSampler, DistributedSampler
++from easydict import EasyDict
++from omegaconf import OmegaConf
++from libero.lifelong.runbook_core import (sha256, atomic_json, strip_prefix, rng_state,
++    restore_rng, strict_downstream_load, transactional_buffer_update, metrics)
++from libero.lifelong.modal_contract import (validate_flags, check_metadata, validate_contract,
++    semantic_tests, frontend_hash)
++from libero.lifelong.utils import control_seed, get_task_embs, make_linear_schedule_with_warmup
++
++
++def json_read(path):
++    return json.loads(Path(path).read_text())
++
++
++def append_json(path, value):
++    from libero.lifelong.runbook_core import json_default
++    path = Path(path)
++    path.parent.mkdir(parents=True, exist_ok=True)
++    with path.open('a') as f:
++        f.write(json.dumps(value, default=json_default, allow_nan=False) + '\n')
++
++
++def save_torch(path, value):
++    temp = str(path) + '.tmp'
++    torch.save(value, temp)
++    os.replace(temp, str(path))
++
++
++def metadata(contract):
++    return {'modal_contract': contract, 'modal_fingerprint': contract['fingerprint']}
++
++
++def status(run, state, **kwargs):
++    previous = json_read(run / 'RUN_STATUS.json') if (run / 'RUN_STATUS.json').exists() else {}
++    previous.update(status=state, updated_at=time.strftime('%Y-%m-%dT%H:%M:%S%z'), **kwargs)
++    atomic_json(run / 'RUN_STATUS.json', previous)
++
++
++def start(hydra_cfg, phase, distributed=True):
++    cfg = EasyDict(OmegaConf.to_container(hydra_cfg, resolve=True))
++    validate_flags(cfg)
++    assert cfg.seed == 42 and cfg.benchmark_name == 'LIBERO_GOAL'
++    assert cfg.gamma == .7 and cfg.past_data_rate == .5
++    assert cfg.train.n_epochs == 100 and cfg.eval.n_eval == 20
++    assert cfg.data.seq_len == 8 and cfg.data.demo_limit == 10
++    assert torch.cuda.is_available() and torch.cuda.device_count() == 1
++    if distributed:
++        dist.init_process_group('nccl')
++        assert dist.get_world_size() == 1
++    torch.cuda.set_device(0)
++    run = Path(cfg.run_dir)
++    contract = json_read(run / 'modal_contract.json')
++    validate_contract(contract, contract)
++    assert sha256(run / 'source.patch') == contract['code_patch_sha256']
++    assert sha256(cfg.pretrain) == contract['official_checkpoint_sha256']
++    cfg.shape_meta = torch.load(cfg.pretrain, map_location='cpu')['cfg']['shape_meta']
++    cfg.experiment_dir = str(run)
++    cfg.feature_dir = str(run / 'features')
++    config_name = 'resolved_%s%s.yaml' % (phase, '_resume' if cfg.get('runbook_resume', False) else '')
++    (run / config_name).write_text(OmegaConf.to_yaml(OmegaConf.create(json.loads(json.dumps(cfg)))))
++    control_seed(42)
++    return cfg, run, contract
++
++
++class IndexedRawDataset(Dataset):
++    def __init__(self, source):
++        self.source = source
++    def __len__(self):
++        return len(self.source)
++    def __getitem__(self, i):
++        sample = self.source[i]
++        sample['_source_index'] = i
++        return sample
++
++
++class IndexedFeatures(Dataset):
++    def __init__(self, source):
++        self.source = source
++        self.file_paths = source.file_paths
++    def __len__(self):
++        return len(self.source)
++    def __getitem__(self, i):
++        sample, tid = self.source[i]
++        return sample, tid, i
++
++
++def export_main(hydra_cfg):
++    from libero.libero.benchmark import get_benchmark
++    from libero.lifelong.datasets import get_dataset, SequenceVLDataset, initialize_obs_worker
++    from libero.lifelong.algos.basic import Basic
++    cfg, run, contract = start(hydra_cfg, 'export')
++    assert cfg.train.batch_size == 1 and cfg.aug is True and cfg.training is False
++    if (run / 'features').exists() or (run / 'feature_manifest.json').exists():
++        raise RuntimeError('New export requires a fresh feature directory; old caches are not relabeled')
++    benchmark = get_benchmark('LIBERO_GOAL')(0)
++    tokens = get_task_embs(cfg, [t.language for t in benchmark.tasks])
++    # Match source reset immediately before policy construction.
++    control_seed(42)
++    algo = Basic(10, cfg).cuda()
++    algo.policy = DDP(algo.policy, device_ids=[0])
++    algo.train()
++    frozen = frontend_hash(algo.policy.module.state_dict())
++    assert frozen == contract['frozen_frontend_sha256']
++    manifest = dict(metadata(contract), complete=False, tasks={}, run_id=cfg.run_id,
++                    official_checkpoint_sha256=contract['official_checkpoint_sha256'],
++                    resolved_export_sha256=sha256(run / 'resolved_export.yaml'))
++    status(run, 'EXPORTING', training_epochs_completed=0, formal_episodes_completed=0)
++    for task in range(6, 10):
++        ds, shape = get_dataset(os.path.join(cfg.folder, benchmark.get_task_demonstration(task)),
++                               cfg.data.obs.modality, seq_len=8, demo_limit=10)
++        assert ds.n_demos == 10 and set(ds.hdf5_cache) == set(ds.demos)
++        vd = SequenceVLDataset(ds, tokens['input_ids'][task], tokens['attention_mask'][task])
++        loader = DataLoader(IndexedRawDataset(vd), batch_size=1, sampler=RandomSampler(vd),
++                            num_workers=cfg.train.num_workers,
++                            worker_init_fn=partial(initialize_obs_worker, obs_modality=cfg.data.obs.modality))
++        algo.start_task(task, loader)
++        algo.policy.train()
++        entries = []
++        for index, data in enumerate(loader):
++            source_index = data['_source_index'].item()
++            with torch.no_grad():
++                algo.observe(data, task, index, True, str(run / 'features'))
++            path = run / 'features' / str(task) / ('%d.pt' % index)
++            payload = torch.load(str(path), map_location='cpu')
++            assert list(payload['feature'].shape) == [1, 8, 4, 512]
++            assert list(payload['actions'].shape) == [1, 8, 7]
++            assert all(torch.isfinite(v).all() for v in payload.values())
++            demo = ds._index_to_demo_id[source_index]
++            offset = source_index - ds._demo_id_to_start_indices[demo]
++            entries.append({'file': str(path.relative_to(run)), 'sha256': sha256(path),
++                'bytes': path.stat().st_size, 'source_index': source_index, 'demo_id': demo,
++                'window_start': offset, 'export_index': index, 'dtype': str(payload['feature'].dtype),
++                'shape': [1, 8, 4, 512]})
++            if index % 100 == 0:
++                status(run, 'EXPORTING', task=task, exported_current=index + 1, windows_current=len(ds))
++                print('EXPORT', task, index + 1, '/', len(ds), flush=True)
++        assert len(entries) == len(ds) and len({v['source_index'] for v in entries}) == len(ds)
++        manifest['tasks'][str(task)] = {'name': benchmark.get_task(task).name, 'demo_ids': ds.demos,
++                                      'windows': len(ds), 'files': entries}
++        atomic_json(run / 'feature_manifest.partial.json', manifest)
++        ds.close_and_delete_hdf5_handle()
++    assert frontend_hash(algo.policy.module.state_dict()) == frozen
++    manifest['complete'] = True
++    atomic_json(run / 'feature_manifest.json', manifest)
++    status(run, 'FEATURES_READY', exported_total=sum(v['windows'] for v in manifest['tasks'].values()))
++    dist.destroy_process_group()
++
++
++def validate_features(run, contract, hash_files=True):
++    manifest = json_read(run / 'feature_manifest.json')
++    check_metadata(manifest, contract)
++    assert manifest['complete'] and set(manifest['tasks']) == {'6', '7', '8', '9'}
++    for task in manifest['tasks'].values():
++        assert len(task['demo_ids']) == 10 and task['windows'] == len(task['files'])
++        for entry in task['files']:
++            p = run / entry['file']
++            assert p.is_file() and p.stat().st_size == entry['bytes']
++            if hash_files:
++                assert sha256(p) == entry['sha256'], str(p)
++    return manifest
++
++
++def train_main(hydra_cfg):
++    from libero.lifelong.algos.mlr import MLR, build_dataset_for_task, build_ifa_similarity_matrix, parse_path
++    cfg, run, contract = start(hydra_cfg, 'adaptation')
++    assert cfg.train.batch_size == 10 and cfg.training is True and cfg.aug is False
++    feature_manifest = validate_features(run, contract)
++    cpdir = run / 'checkpoints'
++    cpdir.mkdir(exist_ok=True)
++    manifest_path = cpdir / 'manifest.json'
++    finals = json_read(manifest_path) if manifest_path.exists() else {}
++    rolling = cpdir / 'rolling_epoch_end.pth'
++    resume = bool(cfg.get('runbook_resume', False))
++    if not resume and (rolling.exists() or finals):
++        raise RuntimeError('Full cannot overwrite existing training; use checked resume')
++    algo = MLR(1, cfg).cuda()
++    algo.policy = DDP(algo.policy, device_ids=[0])
++    atomic_json(run / 'training_load_coverage.json', algo.policy.module.load_report)
++    state = torch.load(str(rolling), map_location='cpu') if resume and rolling.exists() else None
++    if resume and state is None:
++        raise RuntimeError('No epoch-end checkpoint to resume')
++    if state:
++        check_metadata(state, contract)
++        assert state['feature_manifest_sha256'] == sha256(run / 'feature_manifest.json')
++        algo.policy.load_state_dict(state['state_dict'], strict=True)
++    initial = run / 'buffer'
++    initial.mkdir(exist_ok=True)
++    if list(initial.glob('*.pt')):
++        raise RuntimeError('Initial buffer must be empty')
++    atomic_json(initial / 'manifest.json', dict(metadata(contract), complete=True, task=None, files=[]))
++    previous_buffer = initial
++    global_step = state['global_step'] if state else 0
++    start_task = state['task'] if state else 6
++    for task in range(6, start_task):
++        previous_buffer = run / 'buffer_manifests' / ('after_task_%d' % task)
++        check_metadata(json_read(previous_buffer / 'manifest.json'), contract)
++    parent_sha = contract['official_checkpoint_sha256'] if start_task == 6 else finals[str(start_task-1)]['sha256']
++    for task in range(start_task, 10):
++        cfg.buffer_dir = str(previous_buffer)
++        buffer_manifest = json_read(previous_buffer / 'manifest.json')
++        check_metadata(buffer_manifest, contract)
++        for entry in buffer_manifest['files']:
++            assert sha256(previous_buffer / entry['name']) == entry['sha256']
++            assert int(parse_path(str(previous_buffer / entry['name']))) < task
++        dataset = IndexedFeatures(build_dataset_for_task(str(run/'features'), task, str(previous_buffer), 42, start=6))
++        sampler = DistributedSampler(dataset, num_replicas=1, rank=0, shuffle=True)
++        loader = DataLoader(dataset, batch_size=10, sampler=sampler,
++                            num_workers=cfg.train.num_workers, persistent_workers=False)
++        info = build_ifa_similarity_matrix(task, str(run/'features'), str(previous_buffer), top_ratio=.5)
++        assert max(info['task_ids']) == task
++        atomic_json(run / ('ifa_task%d.json' % task), info)
++        algo.start_task(task, loader)
++        epoch_start = 0
++        if state is not None and state['task'] == task:
++            algo.optimizer.load_state_dict(state['optimizer'])
++            algo.scheduler.load_state_dict(state['scheduler'])
++            epoch_start = state['epoch_index'] + 1
++            restore_rng(state['rng'])
++            assert state['sampler']['seed'] == sampler.seed
++        schedule = make_linear_schedule_with_warmup(500, 100 * len(loader))
++        np.savetxt(run / ('lr_schedule_task%d.csv' % task),
++                   np.array([[i, 1e-4*schedule(i)] for i in range(100*len(loader)+1)]), delimiter=',',
++                   header='completed_optimizer_steps,lr_for_next_step', comments='')
++        for epoch in range(epoch_start, 100):
++            sampler.set_epoch(epoch)
++            algo.policy.train()
++            started = time.time()
++            seen = Counter()
++            counts = Counter()
++            sums = Counter()
++            epoch_records = []
++            status(run, 'TRAINING', task=task, epoch_index=epoch, epoch_completed=False,
++                   training_epochs_completed=(task-6)*100+epoch, global_step=global_step)
++            for index, data in enumerate(loader):
++                ids = list(data[1])
++                seen.update(int(x) for x in data[2])
++                counts.update(int(x) for x in ids)
++                algo.observe(data, task, epoch, ifa_info=info)
++                global_step += 1
++                row = dict(algo.last_loss_log, task=task, epoch_index=epoch,
++                           batch_index=index, global_step=global_step)
++                assert all(np.isfinite(row[k]) for k in ('bc','ifa_raw','ifa_weighted','total','grad_norm'))
++                row.update(new_samples=ids.count(str(task)), old_samples=len(ids)-ids.count(str(task)))
++                epoch_records.append(row)
++                for key in ('bc','ifa_raw','ifa_weighted','total'):
++                    sums[key] += row[key] * len(ids)
++            assert len(seen) == len(dataset) and all(v == 1 for v in seen.values())
++            assert sum(counts.values()) == len(dataset)
++            old = sum(n for t, n in counts.items() if t != task)
++            summary = {'kind': 'epoch', 'task': task, 'epoch_index': epoch,
++                'optimizer_steps': len(loader), 'global_step': global_step,
++                'new_samples': counts[task], 'old_samples': old, 'repeated_samples': 0,
++                'old_fraction': old / len(dataset), 'per_task_counts': dict(counts),
++                'duration_seconds': time.time()-started,
++                'lr_next': algo.optimizer.param_groups[0]['lr'],
++                **{k: v / len(dataset) for k, v in sums.items()}}
++            # Epoch logs are committed atomically; resume can overwrite a partial epoch log.
++            atomic_json(run / 'logs/epochs' / ('task%d_epoch%03d.json' % (task, epoch)),
++                        {'summary': summary, 'steps': epoch_records})
++            payload = dict(metadata(contract), state_dict=algo.policy.state_dict(),
++                optimizer=algo.optimizer.state_dict(), scheduler=algo.scheduler.state_dict(),
++                rng=rng_state(), task=task, epoch_index=epoch, global_step=global_step,
++                sampler={'epoch': epoch, 'seed': sampler.seed, 'num_replicas': 1, 'rank': 0},
++                completed_tasks=list(range(6, task)), cfg=cfg, parent_checkpoint_sha256=parent_sha,
++                feature_manifest=feature_manifest, feature_manifest_sha256=sha256(run/'feature_manifest.json'),
++                buffer_manifest=buffer_manifest, buffer_path=str(previous_buffer), run_id=cfg.run_id)
++            save_torch(rolling, payload)
++            state = payload
++            append_json(run / 'logs/train.jsonl', summary)
++            status(run, 'TRAINING', task=task, epoch_index=epoch, epoch_completed=True,
++                   training_epochs_completed=(task-6)*100+epoch+1, global_step=global_step)
++            print('EPOCH_COMPLETE', task, epoch, 'steps', global_step, 'seconds', round(summary['duration_seconds'],2), flush=True)
++        assert state['task'] == task and state['epoch_index'] == 99
++        assert algo.scheduler.last_epoch == 100 * len(loader)
++        assert algo.optimizer.param_groups[0]['lr'] == 0.0
++        final_path = cpdir / ('final_task%d_epoch99.pth' % task)
++        if str(task) not in finals:
++            save_torch(final_path, state)
++            loaded = torch.load(str(final_path), map_location='cpu')
++            check_metadata(loaded, contract)
++            strict_downstream_load(algo.policy.module, loaded['state_dict'])
++            finals[str(task)] = dict(metadata(contract), path=str(final_path), sha256=sha256(final_path),
++                task=task, epoch_index=99, parent_checkpoint_sha256=parent_sha,
++                global_step=global_step, load_coverage=1.0)
++            atomic_json(manifest_path, finals)
++            del loaded
++        else:
++            assert sha256(final_path) == finals[str(task)]['sha256']
++        buffer = transactional_buffer_update(run/'features', task, previous_buffer,
++                                             run/'buffer_manifests', modal_contract=contract)
++        check_metadata(buffer, contract)
++        previous_buffer = Path(buffer['generation'])
++        parent_sha = finals[str(task)]['sha256']
++        state = None
++    status(run, 'TRAINING_COMPLETED_EVAL_PENDING', training_epochs_completed=400,
++           formal_episodes_completed=0, global_step=global_step, final_checkpoints=finals)
++    dist.destroy_process_group()
++
++
++def eval_main(hydra_cfg):
++    from libero.libero.benchmark import get_benchmark
++    from libero.libero.envs import OffScreenRenderEnv, SubprocVectorEnv
++    from libero.lifelong.metric import raw_obs_to_tensor_obs
++    from libero.lifelong.models.complete_policy import CompletePolicy
++    from libero.lifelong.models.brief import BriefPolicy
++    import robomimic.utils.obs_utils as ObsUtils
++    cfg, run, contract = start(hydra_cfg, 'eval', distributed=False)
++    finals = json_read(run / 'checkpoints/manifest.json')
++    if set(finals) != {'6','7','8','9'}:
++        raise ValueError('Four final checkpoints required; no waiting or skipping')
++    benchmark = get_benchmark('LIBERO_GOAL')(0)
++    tokens = get_task_embs(cfg, [t.language for t in benchmark.tasks])
++    ObsUtils.initialize_obs_utils_with_obs_specs({'obs': cfg.data.obs.modality})
++    out = run / 'evaluation'
++    out.mkdir(exist_ok=True)
++    all_records = []
++    for stage in range(6,10):
++        meta = finals[str(stage)]
++        check_metadata(meta, contract)
++        assert meta['epoch_index'] == 99 and sha256(meta['path']) == meta['sha256']
++        policy = CompletePolicy(cfg, cfg.shape_meta).cuda().eval()
++        checkpoint = torch.load(meta['path'], map_location='cpu')
++        check_metadata(checkpoint, contract)
++        load_report = strict_downstream_load(policy, checkpoint['state_dict'])
++        assert frontend_hash(policy.state_dict()) == contract['frozen_frontend_sha256']
++        atomic_json(out / ('load_stage%d.json' % stage), load_report)
++        # Test the actual online state branch after replacing downstream parameters.
++        brief_cfg = copy.deepcopy(cfg)
++        brief_cfg.aug = False
++        brief_cfg.training = True
++        brief = BriefPolicy(brief_cfg, cfg.shape_meta).cuda().eval()
++        strict_downstream_load(brief, checkpoint['state_dict'])
++        del checkpoint
++        for task_id in range(6,stage+1):
++            task = benchmark.get_task(task_id)
++            init_path = Path(cfg.init_states_folder) / task.problem_folder / task.init_states_file
++            source_row = json_read(run/'data_manifest.json')['tasks'][task_id]
++            assert sha256(init_path) == source_row['init_sha256']
++            assert sha256(Path(cfg.bddl_folder)/task.problem_folder/task.bddl_file) == source_row['bddl_sha256']
++            init_states = torch.load(str(init_path), map_location='cpu')
++            assert len(init_states) >= 20
++            import hashlib
++            init_hashes = [hashlib.sha256(np.asarray(x).tobytes()).hexdigest() for x in init_states[:20]]
++            assert len(set(init_hashes)) == 20
++            cell_path = out / ('stage%d_task%d.json' % (stage, task_id))
++            if cell_path.exists():
++                cell = json_read(cell_path)
++                check_metadata(cell, contract)
++                assert cell['checkpoint_sha'] == meta['sha256'] and len(cell['episodes']) == 20
++                all_records.extend(cell['episodes'])
++                continue
++            control_seed(42)
++            records = []
++            env_args = {'bddl_file_name': os.path.join(cfg.bddl_folder, task.problem_folder, task.bddl_file),
++                        'camera_heights': 128, 'camera_widths': 128}
++            env = SubprocVectorEnv([lambda: OffScreenRenderEnv(**env_args) for _ in range(10)])
++            try:
++                for batch in range(2):
++                    seed = 42 + batch
++                    env.seed(seed)
++                    env.reset()
++                    env.seed(seed)
++                    obs = env.set_init_state(init_states[batch*10:(batch+1)*10])
++                    policy.reset()
++                    history = []
++                    for _ in range(5):
++                        obs, _, _, _ = env.step(np.zeros((10,7)))
++                    dones = [False]*10
++                    terminal_steps = [None]*10
++                    terminal_times = [None]*10
++                    began = time.time()
++                    for steps in range(1,601):
++                        data = raw_obs_to_tensor_obs(obs, tokens['input_ids'][task_id], tokens['attention_mask'][task_id], cfg)
++                        history.append(data)
++                        history = history[-8:]
++                        batch_data = {'task_emb': data['task_emb'], 'masks': data['masks'], 'obs': {
++                            key: torch.stack([x['obs'][key] for x in history], 1) for key in data['obs']}}
++                        if batch == 0 and steps == 1:
++                            semantic_tests(policy, brief, policy.preprocess_input(copy.deepcopy(batch_data), False),
++                                           out / ('online_modality_stage%d_task%d.json' % (stage,task_id)))
++                        actions = policy.get_action(batch_data)
++                        assert actions.shape == (10,7) and np.isfinite(actions).all()
++                        obs, _, done, _ = env.step(actions)
++                        for worker in range(10):
++                            if bool(done[worker]) and not dones[worker]:
++                                terminal_steps[worker] = steps
++                                terminal_times[worker] = time.time()-began
++                            dones[worker] = dones[worker] or bool(done[worker])
++                        if all(dones):
++                            break
++                    for worker in range(10):
++                        init_id = batch*10+worker
++                        row = {'kind': 'FORMAL', 'run_id': cfg.run_id, 'training_seed': 42,
++                            'stage': stage, 'task_id': task_id, 'task_name': task.name,
++                            'checkpoint_sha': meta['sha256'], 'eval_seed': 42,
++                            'env_batch_seed': seed, 'worker_seed': seed+worker,
++                            'init_state_id': init_id, 'init_state_hash': init_hashes[init_id],
++                            'success': bool(dones[worker]), 'policy_steps': terminal_steps[worker] or steps,
++                            'termination_reason': 'success' if dones[worker] else 'max_policy_steps',
++                            'duration_seconds': terminal_times[worker] or time.time()-began,
++                            'exception': None, 'modal_fingerprint': contract['fingerprint']}
++                        records.append(row)
++                        append_json(out/'episode_journal.jsonl', row)
++                    print('EVAL_BATCH', stage, task_id, batch, 'success', sum(dones), flush=True)
++            except Exception as exc:
++                append_json(out/'exceptions.jsonl', {'stage': stage,'task': task_id,'batch': batch,
++                    'initial_state_ids': list(range(batch*10,(batch+1)*10)), 'exception': repr(exc),
++                    'retry_rule': 'Abort current cell. Explicit resume restarts same cell and initial states from RNG42; no substitutes.'})
++                raise
++            finally:
++                env.close()
++            assert len(records) == 20
++            atomic_json(cell_path, dict(metadata(contract), checkpoint_sha=meta['sha256'], episodes=records))
++            all_records.extend(records)
++            status(run, 'EVALUATING', formal_episodes_completed=len(all_records), current_stage=stage, current_task=task_id)
++        del policy, brief
++        torch.cuda.empty_cache()
++    assert len(all_records) == 200
++    temp = out/'rollouts.jsonl.tmp'
++    with temp.open('w') as f:
++        for row in all_records:
++            f.write(json.dumps(row)+'\n')
++    os.replace(str(temp), str(out/'rollouts.jsonl'))
++    matrix = np.full((4,4),np.nan)
++    for stage in range(6,10):
++        for task in range(6,stage+1):
++            rows = [r for r in all_records if r['stage']==stage and r['task_id']==task]
++            assert len(rows)==20 and {r['init_state_id'] for r in rows} == set(range(20))
++            matrix[stage-6,task-6] = sum(r['success'] for r in rows)/20
++    np.savetxt(out/'success_matrix.csv', matrix, delimiter=',',header='task6,task7,task8,task9',comments='')
++    atomic_json(run/'metrics.json',metrics(matrix))
++    status(run, 'COMPLETED', training_epochs_completed=400, formal_episodes_completed=200)
+diff --git a/libero/lifelong/save_feature.py b/libero/lifelong/save_feature.py
+index e1b180b..526a538 100644
+--- a/libero/lifelong/save_feature.py
++++ b/libero/lifelong/save_feature.py
+@@ -18,7 +18,7 @@ from easydict import EasyDict
+ from hydra.utils import to_absolute_path
+ from omegaconf import OmegaConf
+ from collections import OrderedDict
+-sys.path.insert(0, "/home/fyu/mlr_ifa")
++sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+ 
+ 
+ from libero.libero import get_libero_path
+@@ -42,6 +42,9 @@ import gc
+ 
+ @hydra.main(config_path="../configs", config_name="config_adaption", version_base=None)
+ def main(hydra_cfg):
++    if hydra_cfg.get("runbook_v2", False):
++        from libero.lifelong.runbook_v2 import export_main
++        return export_main(hydra_cfg)
+     print(">>> hydra root directory（runtime.cwd）：", os.getcwd())
+     # preprocessing
+     dist.init_process_group(backend="nccl")
+diff --git a/libero/lifelong/test.py b/libero/lifelong/test.py
+index 81f576e..bba5b3a 100644
+--- a/libero/lifelong/test.py
++++ b/libero/lifelong/test.py
+@@ -8,7 +8,7 @@ mp.set_start_method("spawn", force=True)
+ 
+ os.environ["TOKENIZERS_PARALLELISM"] = "false"
+ import sys
+-sys.path.insert(0, "/work")
++sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+ 
+ import json
+ import multiprocessing
+@@ -52,7 +52,7 @@ torch.set_grad_enabled(False)
+ os.environ["MUJOCO_GL"] = "egl"
+ os.environ["MUJOCO_EGL_DEVICE_ID"] = os.getenv("CUDA_VISIBLE_DEVICES","0").split(",")[0]
+ os.environ["EGL_PLATFORM"] = "surfaceless"
+-sys.path.insert(0, "/home/fyu/mlr_ifa")
++sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+ 
+ # os.environ["PYTHONHASHSEED"] = "0"
+ def set_global_seed(seed:int):
+@@ -75,6 +75,9 @@ def log_succ(S, i, j, pp, logfile="/home/ct_005.txt"):
+ 
+ @hydra.main(config_path="../configs", config_name="test", version_base=None)
+ def main(hydra_cfg):
++    if hydra_cfg.get("runbook_v2", False):
++        from libero.lifelong.runbook_v2 import eval_main
++        return eval_main(hydra_cfg)
+ 
+     yaml_config = OmegaConf.to_yaml(hydra_cfg)
+     cfg = EasyDict(yaml.safe_load(yaml_config))
+@@ -220,17 +223,16 @@ def main(hydra_cfg):
+ 
+                         fullpath = os.path.join(base_dir, filename)
+ 
+-                        while not os.path.exists(fullpath):
+-                            continue
++                        if not os.path.exists(fullpath):
++                            raise FileNotFoundError(fullpath)
+                         if os.path.exists(fullpath):
+                             print(fullpath)
+                             algo = safe_device(get_algo_class(cfg.lifelong.algo)(n_tasks, cfg), cfg.device)
+ 
+                             checkpoint = torch.load(fullpath, map_location='cpu')
+ 
+-                            new_state_dict = OrderedDict((k[7:], v) for k, v in checkpoint["state_dict"].items())
+-
+-                            algo.policy.load_state_dict(new_state_dict, strict=False)
++                            from libero.lifelong.runbook_core import strict_downstream_load
++                            strict_downstream_load(algo.policy, checkpoint["state_dict"])
+ 
+                             algo.eval()
+ 
+diff --git a/libero/lifelong/utils.py b/libero/lifelong/utils.py
+index 25f2062..ebb71d8 100644
+--- a/libero/lifelong/utils.py
++++ b/libero/lifelong/utils.py
+@@ -31,7 +31,7 @@ def safe_device(x, device="cpu"):
+         if torch.cuda.is_available():
+             return x.to(device)
+         else:
+-            return x.cpu()
++            raise RuntimeError("CUDA requested but unavailable; refusing CPU fallback")
+ 
+ 
+ class NpEncoder(json.JSONEncoder):
+@@ -57,11 +57,8 @@ def torch_save_model(model, model_path, cfg=None, previous_masks=None):
+     )
+ 
+ def _strip_module_prefix1(state_dict):
+-    if not state_dict:
+-        return state_dict
+-    first_key = next(iter(state_dict))
+-    if first_key.startswith("module."):
+-        return OrderedDict((k[7:], v) for k, v in state_dict.items())
++    from libero.lifelong.runbook_core import strip_prefix
++    return strip_prefix(state_dict)
+ 
+ def torch_load_model(model_path, map_location="cpu"):
+ 
+diff --git a/scripts/eval_goal_seed42.sh b/scripts/eval_goal_seed42.sh
+new file mode 100644
+index 0000000..c0048ea
+--- /dev/null
++++ b/scripts/eval_goal_seed42.sh
+@@ -0,0 +1,4 @@
++#!/usr/bin/env bash
++set -euo pipefail
++root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
++bash "$root/scripts/run_goal_seed42.sh" --mode eval "$@"
+diff --git a/scripts/goal_v2_driver.py b/scripts/goal_v2_driver.py
+new file mode 100644
+index 0000000..c4c2cec
+--- /dev/null
++++ b/scripts/goal_v2_driver.py
+@@ -0,0 +1,164 @@
++"""Execute the registered state-enabled GOAL seed42 pipeline on an existing GPU."""
++import argparse
++import copy
++import json
++import os
++import shlex
++import shutil
++import subprocess
++import sys
++import time
++from pathlib import Path
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT))
++from hydra import compose, initialize_config_dir
++from omegaconf import OmegaConf
++from easydict import EasyDict
++from libero.lifelong.runbook_core import atomic_json, sha256
++from libero.lifelong.modal_contract import build_contract, validate_flags, validate_contract, check_metadata
++
++MODALITY_OVERRIDES = ['++policy.use_vision=true', '++policy.use_language=true', '++policy.use_state=true']
++LABEL = 'goal_seed42_mlr_ifa_paper_aligned_state_v2'
++
++
++def overrides(args, phase):
++    return ['seed=42', 'benchmark_name=LIBERO_GOAL', 'data.task_order_index=0', 'data.demo_limit=10',
++        'data.seq_len=8', 'train.n_epochs=100', 'eval.n_eval=20', 'eval.max_steps=600',
++        'train.batch_size=' + ('1' if phase=='export' else '10'),
++        'train.num_workers=' + ('0' if phase=='adaptation' else '12'),
++        'policy=' + ('BriefPolicy' if phase=='adaptation' else 'complete_policy'),
++        'lifelong=' + ('mlr' if phase=='adaptation' else 'basic'),
++        'training=' + ('true' if phase=='adaptation' else 'false'),
++        '++aug=' + ('false' if phase=='adaptation' else 'true'),
++        '++gamma=0.7', '++past_data_rate=0.5', '++start_task=6', '++end_task=10',
++        '++runbook_v2=true', '++runbook_resume=' + ('true' if args.mode=='resume' else 'false'),
++        '++run_id='+LABEL, '++run_dir='+str(args.run_dir),
++        'pretrain='+args.pretrained, 'folder='+args.data_root,
++        'bddl_folder='+args.bddl_root, 'init_states_folder='+args.init_states_root,
++        'hydra.run.dir='+str(args.run_dir), 'hydra.output_subdir=null'] + MODALITY_OVERRIDES
++
++
++def cfg_for(args, phase):
++    with initialize_config_dir(config_dir=str(ROOT/'libero/configs'), version_base=None):
++        cfg = compose(config_name=('test' if phase == 'eval' else 'config_adaption'), overrides=overrides(args, phase))
++    cfg = EasyDict(OmegaConf.to_container(cfg, resolve=True))
++    specification=OmegaConf.load(ROOT/'configs/experiments/goal_seed42_paper_aligned_state_v2.yaml')
++    assert specification.label == LABEL and cfg.seed == specification.seed
++    assert cfg.gamma == specification.gamma and cfg.train.n_epochs == specification.n_epochs
++    assert cfg.eval.n_eval == specification.n_eval and cfg.policy.use_state is specification.policy.use_state
++    validate_flags(cfg)
++    return cfg
++
++
++def command(args, phase):
++    entry = {'export': 'save_feature.py', 'adaptation': 'lifelong_adaptation.py', 'eval': 'test.py'}[phase]
++    cmd = [sys.executable]
++    if phase != 'eval':
++        cmd += ['-m','torch.distributed.run','--standalone','--nproc_per_node=1']
++    cmd += [str(ROOT/'libero/lifelong'/entry)] + overrides(args, phase)
++    return cmd
++
++
++def run_command(args, cmd, name):
++    logdir = args.run_dir/'logs'
++    logdir.mkdir(parents=True, exist_ok=True)
++    with (logdir/'commands.log').open('a') as journal:
++        journal.write(time.strftime('%Y-%m-%dT%H:%M:%S%z')+' START '+shlex.join(cmd)+'\n')
++        journal.flush()
++        with (logdir/(name+'.log')).open('a') as log:
++            result = subprocess.run(cmd, cwd=str(ROOT), stdout=log, stderr=subprocess.STDOUT)
++        journal.write(time.strftime('%Y-%m-%dT%H:%M:%S%z')+' END '+name+' EXIT '+str(result.returncode)+'\n')
++    if result.returncode:
++        from libero.lifelong.runbook_v2 import status
++        state = 'TRAINING_COMPLETED_EVAL_PENDING' if name == 'evaluation' else 'FAILED'
++        status(args.run_dir, state, failed_command=name, exit_code=result.returncode)
++        raise RuntimeError('%s exit=%d; see %s' % (name,result.returncode,logdir/(name+'.log')))
++
++
++def prepare(args):
++    args.run_dir.mkdir(parents=True,exist_ok=True)
++    patch = ROOT.parent/'evidence/source.patch'
++    existing_patch=args.run_dir/'source.patch'
++    if existing_patch.exists() and sha256(existing_patch) != sha256(patch):
++        raise RuntimeError('Existing source snapshot differs; preserve it and use a new run directory')
++    cfg = cfg_for(args,'export')
++    expected = build_contract(cfg,patch)
++    target = args.run_dir/'modal_contract.json'
++    if target.exists():
++        validate_contract(json.loads(target.read_text()),expected)
++    else:
++        atomic_json(target,expected)
++    if not existing_patch.exists():
++        shutil.copy2(patch,existing_patch)
++    for phase in ['export','adaptation','eval']:
++        cfg = cfg_for(args,phase)
++        path=args.run_dir/('resolved_'+phase+'.yaml')
++        if not path.exists():
++            path.write_text(OmegaConf.to_yaml(OmegaConf.create(json.loads(json.dumps(cfg)))))
++    if not (args.run_dir/'resolved_config.yaml').exists():
++        shutil.copy2(args.run_dir/'resolved_adaptation.yaml',args.run_dir/'resolved_config.yaml')
++    return expected
++
++
++def preflight(args):
++    import verify_goal_seed42 as legacy
++    cfg = cfg_for(args,'export')
++    legacy.preflight(args,cfg)
++    manifest = json.loads((args.run_dir/'pretrained_manifest.json').read_text())
++    manifest.update(pretrain_use_state=manifest['checkpoint_cfg']['policy'].get('use_state','unknown'),
++                    effective_use_state=True, modality_gap_status='DISCLOSED_GAP')
++    atomic_json(args.run_dir/'pretrained_manifest.json',manifest)
++    # Supersede old preflight status names, not historical audit evidence.
++    atomic_json(args.run_dir/'RUN_STATUS.json',{'status':'PREFLIGHT_PASSED','training_epochs_completed':0,
++        'formal_episodes_completed':0,'run_id':LABEL,'effective_use_state':True,'pretrain_use_state':'unknown'})
++
++
++def main():
++    p=argparse.ArgumentParser(description=__doc__)
++    p.add_argument('--mode',choices=['preflight','smoke','full','resume','eval'],required=True)
++    for name in ['pretrained','data-root','bddl-root','init-states-root']:
++        p.add_argument('--'+name,required=True)
++    p.add_argument('--run-dir',required=True,type=Path)
++    p.add_argument('--smoke-dir',type=Path)
++    p.add_argument('--dry-run',action='store_true')
++    args=p.parse_args()
++    args.run_dir=args.run_dir.resolve()
++    if args.smoke_dir is None:
++        args.smoke_dir=args.run_dir.parent/'smoke_v2'
++    os.environ.update(PYTHONPATH=str(ROOT)+os.pathsep+os.environ.get('PYTHONPATH',''),
++        CUDA_VISIBLE_DEVICES='0',MUJOCO_EGL_DEVICE_ID='0',MUJOCO_GL='egl',PYOPENGL_PLATFORM='egl',
++        HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',TOKENIZERS_PARALLELISM='false',WANDB_MODE='disabled')
++    if args.dry_run:
++        for phase in ['export','adaptation','eval']:
++            cfg_for(args,phase)
++            print(shlex.join(command(args,phase)))
++        return
++    contract=prepare(args)
++    if args.mode=='preflight':
++        preflight(args)
++    elif args.mode=='smoke':
++        assert args.run_dir == args.smoke_dir, 'Smoke must use the isolated smoke directory'
++        run_command(args,[sys.executable,'-m','torch.distributed.run','--standalone','--nproc_per_node=1',
++                         str(ROOT/'scripts/smoke_state_v2.py'),'--run-dir',str(args.run_dir)],'smoke')
++    else:
++        checked=json.loads((args.smoke_dir/'test_gate.json').read_text())
++        check_metadata(checked,contract)
++        assert checked['status']=='PASS'
++        shutil.copy2(args.smoke_dir/'modality_tests.json',args.run_dir/'modality_tests.json')
++        if args.mode=='full':
++            if (args.run_dir/'features').exists() or (args.run_dir/'checkpoints').exists():
++                raise RuntimeError('Full requires fresh features and checkpoints; use a new directory or checked resume')
++            if not (args.run_dir/'preflight_result.json').exists():
++                preflight(args)
++            run_command(args,command(args,'export'),'export')
++            run_command(args,command(args,'adaptation'),'adaptation')
++        elif args.mode=='resume':
++            run_command(args,command(args,'adaptation'),'adaptation_resume')
++        run_command(args,command(args,'eval'),'evaluation')
++        run_command(args,[sys.executable,str(ROOT/'scripts/summarize_goal_seed42.py'),
++                          '--run-dir',str(args.run_dir)],'summarize')
++    print('DRIVER_MODE_FINISHED',args.mode,flush=True)
++
++
++if __name__=='__main__':
++    main()
+diff --git a/scripts/run_goal_seed42.sh b/scripts/run_goal_seed42.sh
+new file mode 100644
+index 0000000..c6786a7
+--- /dev/null
++++ b/scripts/run_goal_seed42.sh
+@@ -0,0 +1,9 @@
++#!/usr/bin/env bash
++set -euo pipefail
++root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
++export PYTHONPATH="$root${PYTHONPATH:+:$PYTHONPATH}"
++export CUDA_VISIBLE_DEVICES=0 MUJOCO_EGL_DEVICE_ID=0 MUJOCO_GL=egl PYOPENGL_PLATFORM=egl
++export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false WANDB_MODE=disabled
++printf 'START %s\n' "$(date -Is)"
++trap 'rc=$?; printf "END %s EXIT %s\n" "$(date -Is)" "$rc"' EXIT
++python "$root/scripts/goal_v2_driver.py" "$@"
+diff --git a/scripts/smoke_state_v2.py b/scripts/smoke_state_v2.py
+new file mode 100644
+index 0000000..3764ee4
+--- /dev/null
++++ b/scripts/smoke_state_v2.py
+@@ -0,0 +1,60 @@
++import argparse
++import json
++import sys
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1]
++sys.path.insert(0,str(ROOT))
++import torch
++from easydict import EasyDict
++from omegaconf import OmegaConf
++import verify_goal_seed42 as legacy
++from libero.lifelong.modal_contract import validate_flags, validate_contract
++from libero.lifelong.runbook_core import atomic_json
++
++def main():
++    p=argparse.ArgumentParser()
++    p.add_argument('--run-dir',type=Path,required=True)
++    args=p.parse_args()
++    configs={phase: EasyDict(OmegaConf.to_container(OmegaConf.load(args.run_dir/('resolved_'+phase+'.yaml')),
++                                                   resolve=True)) for phase in ['export','adaptation','eval']}
++    for cfg in configs.values():
++        validate_flags(cfg)
++    cfg=configs['export']
++    cfg.experiment_dir=str(args.run_dir/'smoke')
++    cfg.feature_dir=str(args.run_dir/'smoke/features')
++    cfg.buffer_dir=str(args.run_dir/'smoke/buffer')
++    # Real optimizer smoke uses the registered batch metadata, with two bounded windows.
++    cfg.train.batch_size=10
++    args.pretrained=cfg.pretrain
++    legacy.smoke(args,cfg)
++    from functools import partial
++    from libero.lifelong.datasets import get_dataset, initialize_obs_worker
++    from libero.libero.benchmark import get_benchmark
++    from torch.utils.data import DataLoader, Subset
++    benchmark=get_benchmark('LIBERO_GOAL')(0)
++    dataset,_=get_dataset(str(Path(cfg.folder)/benchmark.get_task_demonstration(6)),
++                          cfg.data.obs.modality,seq_len=8,demo_limit=10)
++    loader=DataLoader(Subset(dataset,[0,1]),batch_size=1,num_workers=12,
++                      worker_init_fn=partial(initialize_obs_worker,obs_modality=cfg.data.obs.modality))
++    count=0
++    for data in loader:
++        assert data['actions'].shape==(1,8,7)
++        assert torch.isfinite(data['obs']['agentview_rgb']).all()
++        count+=1
++    assert count==2
++    atomic_json(args.run_dir/'spawn_loader_test.json',{'status':'PASS','num_workers':12,
++                'real_windows':count,'handle_reopened_in_workers':True})
++    contract=json.loads((args.run_dir/'modal_contract.json').read_text())
++    validate_contract(contract,contract)
++    for bad in [None, {'use_state':False},dict(contract,use_state=False)]:
++        try:
++            validate_contract(bad,contract)
++        except ValueError:
++            continue
++        raise AssertionError('Old/unverifiable modal cache accepted')
++    atomic_json(args.run_dir/'test_gate.json',{'status':'PASS','modal_contract':contract,
++        'modal_fingerprint':contract['fingerprint'],'three_configs_boolean_true':True,
++        'raw_hdf5_spawn_loader':True,'old_cache_rejection':True,'formal_updates':0,'formal_episodes':0})
++
++if __name__=='__main__':
++    main()
+diff --git a/scripts/summarize_goal_seed42.py b/scripts/summarize_goal_seed42.py
+new file mode 100644
+index 0000000..80e5867
+--- /dev/null
++++ b/scripts/summarize_goal_seed42.py
+@@ -0,0 +1,41 @@
++"""Summarize only a complete validated 200-episode formal record."""
++import argparse
++import json
++import sys
++from pathlib import Path
++sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
++import numpy as np
++from libero.lifelong.runbook_core import metrics, atomic_json
++
++def main():
++    p = argparse.ArgumentParser(description=__doc__)
++    p.add_argument('--run-dir', required=True, type=Path)
++    p.add_argument('--dry-run', action='store_true')
++    args = p.parse_args()
++    if args.dry_run:
++        print('Requires 4 registered final checkpoints and 200 unique completed formal rollouts.')
++        return
++    run = args.run_dir
++    checkpoints = json.loads((run / 'checkpoints/manifest.json').read_text())
++    rows = [json.loads(s) for s in (run / 'evaluation/rollouts.jsonl').read_text().splitlines() if s.strip()]
++    if len(rows) != 200:
++        raise ValueError('Exactly 200 formal episode records required')
++    r = np.full((4, 4), np.nan)
++    for stage in range(6, 10):
++        cp = checkpoints[str(stage)]
++        assert cp['epoch_index'] == 99
++        for task in range(6, stage + 1):
++            cell = [v for v in rows if v['stage'] == stage and v['task_id'] == task]
++            assert len(cell) == 20 and {v['init_state_id'] for v in cell} == set(range(20))
++            assert len({v['init_state_hash'] for v in cell}) == 20
++            for v in cell:
++                assert v['kind'] == 'FORMAL' and v['training_seed'] == 42
++                assert not v['exception'] and v['checkpoint_sha'] == cp['sha256']
++                assert type(v['success']) is bool
++            r[stage - 6, task - 6] = sum(v['success'] for v in cell) / 20
++    atomic_json(run / 'metrics.json', metrics(r))
++    np.savetxt(run / 'evaluation/success_matrix.csv', r, delimiter=',',
++               header='task6,task7,task8,task9', comments='')
++
++if __name__ == '__main__':
++    main()
+diff --git a/scripts/test_goal_buffer_and_updates.py b/scripts/test_goal_buffer_and_updates.py
+new file mode 100644
+index 0000000..895e1c0
+--- /dev/null
++++ b/scripts/test_goal_buffer_and_updates.py
+@@ -0,0 +1,89 @@
++"""Additional isolated checks using existing real smoke features; no formal data."""
++import argparse
++import hashlib
++import json
++import os
++import sys
++from pathlib import Path
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT))
++import torch
++from libero.lifelong.runbook_core import transactional_buffer_update, atomic_json
++from libero.lifelong.models.brief import BriefPolicy
++from libero.lifelong.utils import control_seed, make_linear_schedule_with_warmup
++
++
++def digest(model, prefix):
++    h = hashlib.sha256()
++    for key, value in model.state_dict().items():
++        if key.startswith(prefix):
++            h.update(value.detach().cpu().numpy().tobytes())
++    return h.hexdigest()
++
++
++def main():
++    p = argparse.ArgumentParser(description=__doc__)
++    p.add_argument('--run-dir', type=Path, required=True)
++    p.add_argument('--output-name', default='additional')
++    args = p.parse_args()
++    smoke = args.run_dir / 'smoke'
++    out = smoke / args.output_name
++    out.mkdir(exist_ok=False)
++    empty = out / 'empty_buffer'
++    empty.mkdir()
++    original = sorted(p.name for p in (smoke / 'features/6').glob('*.pt'))
++    result = transactional_buffer_update(smoke / 'features', 6, empty, out / 'generations')
++    again = transactional_buffer_update(smoke / 'features', 6, empty, out / 'generations')
++    assert result == again and len(result['files']) == 1
++    assert not list(empty.iterdir())
++    assert original == sorted(p.name for p in (smoke / 'features/6').glob('*.pt'))
++    # Original seed42 chooses one of the two windows; verify exact selection.
++    import random
++    expected = random.Random(42).sample(original, 1)[0]
++    assert result['files'][0]['name'] == 't6__' + expected
++    control_seed(42)
++    saved = torch.load(str(smoke / 'epoch_boundary_smoke.pth'), map_location='cpu')
++    cfg = saved['cfg']
++    model = BriefPolicy(cfg, cfg.shape_meta).cuda().train()
++    params = [n for n, v in model.named_parameters() if v.requires_grad]
++    assert params and all(n.startswith(('temporal_transformer.', 'policy_head.')) for n in params)
++    before = {k: digest(model, k) for k in ['temporal_transformer.', 'policy_head.']}
++    optimizer = torch.optim.AdamW(model.parameters(), **cfg.train.optimizer.kwargs)
++    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, make_linear_schedule_with_warmup(500, 2000))
++    sample = torch.load(str(smoke / 'features/6/0.pt'), map_location='cuda')
++    lrs = []
++    for _ in range(2):
++        optimizer.zero_grad()
++        distribution, _ = model(sample['feature'])
++        loss = model.policy_head.loss_fn(distribution, sample['actions'])
++        loss.backward()
++        torch.nn.utils.clip_grad_norm_(model.parameters(), 100)
++        lrs.append(optimizer.param_groups[0]['lr'])
++        optimizer.step()
++        scheduler.step()
++    changed = {k: digest(model, k) != before[k] for k in before}
++    assert all(changed.values()) and lrs[0] == 0 and lrs[1] > 0
++    from torch.utils.data import DataLoader, DistributedSampler
++    from libero.lifelong.algos.mlr import FileTrajectoryDataset
++    dataset = FileTrajectoryDataset(sorted(str(p) for p in (smoke/'features/6').glob('*.pt')))
++    signatures = []
++    for workers in (0, 12):
++        control_seed(42)
++        sampler = DistributedSampler(dataset, num_replicas=1, rank=0, shuffle=True)
++        sampler.set_epoch(3)
++        loader = DataLoader(dataset, batch_size=1, sampler=sampler, num_workers=workers)
++        values = []
++        for sample, tids in loader:
++            values.append(hashlib.sha256(sample['feature'].numpy().tobytes()).hexdigest())
++        signatures.append((values, torch.get_rng_state()))
++    assert signatures[0][0] == signatures[1][0]
++    assert torch.equal(signatures[0][1], signatures[1][1])
++    atomic_json(out / 'result.json', {'status': 'PASS', 'kind': 'SOFTWARE_SMOKE_ONLY',
++        'workers_0_vs_12_same_order_and_parent_torch_rng': True, 'buffer_same_call_idempotent': True, 'original_buffer_untouched': True,
++        'selection_matches_original_seed42': True, 'buffer_selection': result,
++        'updated_modules': changed, 'learner_trainable_names': params, 'lr_used': lrs})
++    print('ADDITIONAL_CHECKS_PASS')
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/scripts/verify_goal_seed42.py b/scripts/verify_goal_seed42.py
+new file mode 100644
+index 0000000..49ee671
+--- /dev/null
++++ b/scripts/verify_goal_seed42.py
+@@ -0,0 +1,409 @@
++"""Resource and bounded real-data smoke helpers; invoked by goal_v2_driver."""
++import argparse
++import copy
++import importlib
++import json
++import os
++import platform
++import subprocess
++import sys
++import time
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT))
++import numpy as np
++import torch
++import torch.distributed as dist
++from easydict import EasyDict
++from hydra import compose, initialize_config_dir
++from omegaconf import OmegaConf
++from libero.lifelong.runbook_core import (sha256, atomic_json, strip_prefix,
++    strict_downstream_load, ifa_loss, metrics, rng_state, restore_rng)
++
++
++def config(args):
++    with initialize_config_dir(config_dir=str(ROOT / 'libero/configs'), version_base=None):
++        cfg = compose(config_name='config_adaption', overrides=[
++            'benchmark_name=LIBERO_GOAL', 'policy=complete_policy', 'lifelong=mlr',
++            'seed=42', 'train.batch_size=10', 'train.n_epochs=100', 'eval.n_eval=20',
++            'training=false', '+gamma=0.7', '+past_data_rate=0.5', '+aug=true',
++            '+start_task=6', '+end_task=10'])
++    cfg = EasyDict(OmegaConf.to_container(cfg, resolve=True))
++    cfg.pretrain = args.pretrained
++    cfg.folder = args.data_root
++    cfg.bddl_folder = args.bddl_root
++    cfg.init_states_folder = args.init_states_root
++    cfg.experiment_dir = str(args.run_dir / 'smoke')
++    cfg.feature_dir = str(args.run_dir / 'smoke/features')
++    cfg.buffer_dir = str(args.run_dir / 'smoke/buffer')
++    return cfg
++
++
++def preflight(args, cfg):
++    from libero.libero.benchmark import get_benchmark
++    from libero.lifelong.datasets import get_dataset
++    report = {'platform': platform.platform(), 'python': sys.version,
++              'cuda_visible_devices': os.environ.get('CUDA_VISIBLE_DEVICES'),
++              'egl_device': os.environ.get('MUJOCO_EGL_DEVICE_ID'),
++              'source': str(ROOT), 'source_commit': subprocess.check_output(
++                  ['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()}
++    assert report['source_commit'] == 'a721807f2f7fa7f9833dcc85c592d78e9accd00b'
++    for name in ['torch', 'torchvision', 'numpy', 'h5py', 'mujoco', 'robosuite',
++                 'robomimic', 'transformers', 'peft', 'hydra']:
++        report[name] = getattr(importlib.import_module(name), '__version__', 'imported')
++    assert torch.cuda.is_available(), 'GPU required; no CPU fallback'
++    assert torch.cuda.device_count() == 1
++    report['gpu'] = torch.cuda.get_device_name(0)
++    report['torch_cuda'] = torch.version.cuda
++    report['nvidia_smi'] = subprocess.check_output(['nvidia-smi'], text=True)
++    probe = torch.ones((32, 32), device='cuda')
++    assert torch.isfinite(probe @ probe).all()
++    subprocess.run([sys.executable, '-m', 'pip', 'check'], check=True)
++    (args.run_dir / 'requirements.lock.txt').write_text(subprocess.check_output(
++        [sys.executable, '-m', 'pip', 'freeze'], text=True))
++    atomic_json(args.run_dir / 'environment.json', report)
++    ckpt = torch.load(args.pretrained, map_location='cpu')
++    assert ckpt['cfg']['benchmark_name'] == 'LIBERO_GOAL'
++    assert 'libero_goal' in ckpt['cfg']['experiment_dir'].lower()
++    checkpoint_hash = sha256(args.pretrained)
++    assert checkpoint_hash == '241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7'
++    state = strip_prefix(ckpt['state_dict'])
++    atomic_json(args.run_dir / 'pretrained_manifest.json', {
++        'path': args.pretrained, 'sha256': checkpoint_hash,
++        'bytes': Path(args.pretrained).stat().st_size,
++        'source': 'https://drive.google.com/drive/folders/1NOiyhkb1Hni_ElhqcN7GkiXnfCqOKiSH',
++        'checkpoint_cfg': ckpt['cfg'], 'metadata_seed': ckpt['cfg'].get('seed'),
++        'seed_caveat': 'Metadata records 42; unpublished pretraining trajectory not independently verified.',
++        'key_shapes': {k: list(v.shape) for k, v in state.items()},
++        'use_state_in_checkpoint_cfg': ckpt['cfg']['policy'].get('use_state', 'ABSENT')})
++    benchmark = get_benchmark('LIBERO_GOAL')(0)
++    manifest = {'benchmark': 'LIBERO_GOAL', 'task_order_index': 0, 'tasks': []}
++    for tid in range(10):
++        task = benchmark.get_task(tid)
++        data = Path(args.data_root) / benchmark.get_task_demonstration(tid)
++        bddl = Path(args.bddl_root) / task.problem_folder / task.bddl_file
++        init = Path(args.init_states_root) / task.problem_folder / task.init_states_file
++        for p in [data, bddl, init]:
++            assert p.is_file(), str(p)
++        states = torch.load(str(init), map_location='cpu')
++        assert len(states) >= 20
++        state_hashes = [__import__('hashlib').sha256(np.asarray(v).tobytes()).hexdigest()
++                        for v in states[:20]]
++        assert len(set(state_hashes)) == 20
++        row = {'task_id': tid, 'name': task.name, 'language': task.language,
++               'group': 'pretrained' if tid < 6 else 'incremental',
++               'data': str(data), 'data_sha256': sha256(data), 'data_bytes': data.stat().st_size,
++               'bddl': str(bddl), 'bddl_sha256': sha256(bddl),
++               'init_states': str(init), 'init_sha256': sha256(init),
++               'init_count': len(states), 'first20_init_hashes': state_hashes}
++        if tid >= 6:
++            ds, shape = get_dataset(str(data), cfg.data.obs.modality, seq_len=8, demo_limit=10)
++            assert ds.n_demos == 10 and len(ds) == sum(ds._demo_id_to_demo_length.values())
++            assert set(ds._index_to_demo_id.values()) == set(ds.demos)
++            assert set(ds.hdf5_cache) == set(ds.demos)
++            # Inspect first and last window of every selected demo and action padding.
++            for demo in ds.demos:
++                start = ds._demo_id_to_start_indices[demo]
++                end = start + ds._demo_id_to_demo_length[demo] - 1
++                for index in [start, end]:
++                    sample = ds[index]
++                    assert sample['actions'].shape == (8, 7)
++                    assert np.isfinite(sample['actions']).all()
++                target = ds.hdf5_file['data'][demo]['actions'][-1]
++                np.testing.assert_allclose(ds[end]['actions'], np.tile(target, (8, 1)))
++            row.update({'demo_ids': ds.demos, 'windows': len(ds),
++                        'demo_lengths': ds._demo_id_to_demo_length, 'cache_demo_ids': list(ds.hdf5_cache)})
++            ds.close_and_delete_hdf5_handle()
++            del ds
++        manifest['tasks'].append(row)
++        print('AUDITED_TASK', tid, task.name, row.get('windows'), flush=True)
++    atomic_json(args.run_dir / 'data_manifest.json', manifest)
++    atomic_json(args.run_dir / 'preflight_result.json', {'status': 'PASS', 'formal_status': 'NOT_STARTED'})
++    # Dry-run the full per-stage optimizer-step schedule without doing optimization.
++    from libero.lifelong.utils import make_linear_schedule_with_warmup
++    past = 0
++    schedule_manifest = []
++    for row in manifest['tasks'][6:]:
++        n = row['windows'] + past
++        batches = (n + 9) // 10
++        total = 100 * batches
++        schedule = make_linear_schedule_with_warmup(500, total)
++        vals = np.array([1e-4 * schedule(i) for i in range(total + 1)])
++        assert vals[0] == 0 and vals[500] == 1e-4 and vals[-1] == 0
++        assert np.all(np.diff(vals[500:]) < 0)
++        np.savetxt(args.run_dir / ('lr_schedule_task%d.csv' % row['task_id']),
++                   np.column_stack([np.arange(total + 1), vals]), delimiter=',',
++                   header='completed_optimizer_steps,lr_for_next_step', comments='')
++        schedule_manifest.append({'task': row['task_id'], 'new_windows': row['windows'],
++                                  'old_windows': past, 'batches_per_epoch': batches, 'total_steps': total})
++        past += (row['windows'] + 1) // 2
++    atomic_json(args.run_dir / 'lr_schedule_manifest.json', schedule_manifest)
++
++
++def software_tests(out):
++    from libero.lifelong.algos.mlr import _pairwise_cosine_mean
++    from libero.lifelong.utils import _strip_module_prefix1
++    results = []
++    value = torch.tensor([3.0])
++    for state in [{'x': value}, {'module.x': value}]:
++        assert torch.equal(_strip_module_prefix1(state)['x'], value)
++    try:
++        _strip_module_prefix1({'x': value, 'module.y': value})
++        raise AssertionError('Mixed-prefix checkpoint accepted')
++    except ValueError:
++        pass
++    results.append('prefix_with_without_and_mixed')
++    r = np.array([[.8, np.nan, np.nan, np.nan], [.7, .9, np.nan, np.nan],
++                  [.6, .8, .7, np.nan], [.5, .7, .6, .8]])
++    m = metrics(r)
++    np.testing.assert_allclose([m[k] for k in ['FWT', 'NBT', 'AUC', 'FinalAvgSR']],
++                               [.8, .15, .725, .65])
++    r[np.tril_indices(4)] = [.2, .3, .2, .4, .3, .2, .5, .4, .3, .2]
++    assert metrics(r)['NBT'] < 0
++    r[3, 0] = np.nan
++    try:
++        metrics(r)
++        raise AssertionError('Incomplete metrics accepted')
++    except ValueError:
++        pass
++    results.append('metrics_contract_negative_NBT_and_incomplete_rejection')
++    torch.manual_seed(42)
++    a, b = torch.randn(17, 512), torch.randn(23, 512)
++    dense = (torch.nn.functional.normalize(a, dim=-1) @ torch.nn.functional.normalize(b, dim=-1).T).mean()
++    err = abs(_pairwise_cosine_mean(a, b) - dense.item())
++    assert err < 1e-7
++    results.append('exact_similarity_identity_error_%g' % err)
++    features = torch.zeros(3, 8, 4, 512)
++    features[0, :, 0, 1] = 1  # old sample deliberately first
++    features[1, :, 0, 0] = 1
++    features[2, :, 0, 2] = 1
++    z = features[:, 0, 0].clone().requires_grad_(True)
++    info = {'task_ids': [6, 7, 8], 'selected_pair_mask': torch.tensor(
++        [[0, 0, 1], [0, 0, 1], [1, 1, 0]], dtype=torch.bool), 'sim_language': torch.eye(3)}
++    neg = {6: features[0, 0, 0], 7: -features[0, 0, 0]}
++    correct = ifa_loss(z, features, [6, 8, 8], 8, info, neg, .7)
++    bad_features = features.clone()
++    bad_features[1:, 0, 0] = features[0, 0, 0]
++    old_bug = ifa_loss(z, bad_features, [6, 8, 8], 8, info, neg, .7)
++    assert old_bug > correct + .1
++    perm = torch.tensor([2, 0, 1])
++    assert torch.allclose(correct, ifa_loss(z[perm], features[perm], [8, 6, 8], 8, info, neg, .7))
++    info1, info2 = copy.deepcopy(info), copy.deepcopy(info)
++    info1['selected_pair_mask'][2, 1] = False
++    info2['selected_pair_mask'][2, 0] = False
++    vals = [ifa_loss(z, bad_features, [6, 8, 8], 8, v, neg, .7) for v in [info1, info2]]
++    assert torch.allclose(old_bug, (vals[0] + vals[1]) / 2)
++    assert ifa_loss(z, features, [6, 6, 6], 8, info, neg, .7).item() == 0
++    assert ifa_loss(z, features, [6, 8, 8], 8, None, {}, .7).item() == 0
++    empty_info = copy.deepcopy(info)
++    empty_info['selected_pair_mask'].zero_()
++    assert ifa_loss(z, features, [6, 8, 8], 8, empty_info, {}, .7).item() == 0
++    old_bug.backward()
++    assert torch.isfinite(z.grad).all() and torch.count_nonzero(z.grad[0]) == 0
++    results.append('IFA_old_first_own_positive_permutation_pair_mean_empty_and_gradients')
++    atomic_json(out / 'software_tests.json', {'status': 'PASS', 'tests': results,
++                                             'synthetic_only': True})
++
++
++def model_hash(model, frozen_only=False):
++    import hashlib
++    h = hashlib.sha256()
++    for name, p in model.named_parameters():
++        if not frozen_only or not name.startswith(('temporal_transformer.', 'policy_head.')):
++            h.update(name.encode())
++            h.update(p.detach().cpu().numpy().tobytes())
++    return h.hexdigest()
++
++
++def smoke(args, cfg):
++    from torch.utils.data import DataLoader, RandomSampler
++    from torch.nn.parallel import DistributedDataParallel as DDP
++    import robomimic.utils.tensor_utils as TU
++    from libero.libero.benchmark import get_benchmark
++    from libero.lifelong.datasets import get_dataset, SequenceVLDataset
++    from libero.lifelong.models.complete_policy import CompletePolicy
++    from libero.lifelong.algos.mlr import MLR
++    from libero.lifelong.utils import control_seed, get_task_embs
++    out = args.run_dir / 'smoke'
++    out.mkdir(exist_ok=False)
++    software_tests(out)
++    control_seed(42)
++    dist.init_process_group('nccl')
++    assert dist.get_world_size() == 1
++    torch.cuda.set_device(0)
++    benchmark = get_benchmark('LIBERO_GOAL')(0)
++    tokens = get_task_embs(cfg, [t.language for t in benchmark.tasks])
++    ds, shape = get_dataset(str(Path(cfg.folder) / benchmark.get_task_demonstration(6)),
++                             cfg.data.obs.modality, seq_len=8, demo_limit=10)
++    cfg.shape_meta = shape
++    vd = SequenceVLDataset(ds, tokens['input_ids'][6], tokens['attention_mask'][6])
++    loader = DataLoader(vd, batch_size=1, sampler=RandomSampler(vd), num_workers=0)
++    full = CompletePolicy(cfg, shape).cuda().train()
++    frozen_hash = model_hash(full, True)
++    expected_trainable = [n for n, p in full.named_parameters() if p.requires_grad]
++    assert all(n.startswith(('temporal_transformer.', 'policy_head.')) for n in expected_trainable)
++    result = {'mode': 'SMOKE_ONLY', 'effective_use_state': cfg.policy.use_state,
++              'spatial_frozen_before': frozen_hash, 'export_model_requires_grad_names': expected_trainable,
++              'export_mode': 'train; original augmentation enabled; no optimizer updates',
++              'full_strict_official_load': {'missing': [], 'unexpected': [], 'coverage': 1.0,
++                                           'keys': len(full.state_dict())}}
++    windows = []
++    feature_dir = out / 'features/6'
++    feature_dir.mkdir(parents=True)
++    for i, batch in enumerate(loader):
++        if i == 2:
++            break
++        batch = TU.map_tensor(batch, lambda x: x.cuda())
++        with torch.no_grad():
++            processed = full.preprocess_input(copy.deepcopy(batch))
++            latent = full(processed)
++        assert list(latent.shape) == [1, 8, 4, 512]
++        assert torch.isfinite(latent).all() and torch.isfinite(batch['actions']).all()
++        torch.save({'feature': latent.cpu(), 'actions': batch['actions'].cpu()}, str(feature_dir / ('%d.pt' % i)))
++        windows.append({'feature': latent.detach().unsqueeze(0), 'actions': batch['actions'].unsqueeze(0)})
++    # Same preprocessed, deterministic input through both decoder interfaces.
++    full.eval()
++    cfg_train = copy.deepcopy(cfg)
++    cfg_train.training = True
++    cfg_train.aug = False
++    cfg_train.policy.policy_type = 'BriefPolicy'
++    algo = MLR(1, cfg_train).cuda()
++    assert all(p.requires_grad for p in algo.policy.parameters())
++    result['brief_official_load'] = algo.policy.load_report
++    algo.policy.eval()
++    with torch.no_grad():
++        deterministic = full.spatial_encode(processed)
++        torch.testing.assert_close(full.temporal_encode(deterministic), algo.policy.temporal_encode(deterministic))
++    from libero.lifelong.modal_contract import semantic_tests
++    result['modal_semantics'] = semantic_tests(full, algo.policy, processed, args.run_dir / 'modality_tests.json')
++    algo.policy = DDP(algo.policy, device_ids=[0])
++    algo.start_task(6, [0] * 20)
++    algo.policy.train()
++    initial_hash = model_hash(algo.policy)
++    logs = []
++    for i in range(2):
++        loss = algo.observe([windows[i], ['6']], 6, 0, ifa_info=None)
++        assert np.isfinite(loss)
++        assert np.isfinite(algo.last_loss_log['grad_norm'])
++        logs.append(dict(algo.last_loss_log))
++    assert logs[0]['lr_used'] == 0 and logs[1]['lr_used'] > 0
++    assert model_hash(algo.policy) != initial_hash
++    assert model_hash(full, True) == frozen_hash
++    result['optimizer_steps'] = logs
++    result['spatial_frozen_after'] = model_hash(full, True)
++    checkpoint = out / 'epoch_boundary_smoke.pth'
++    torch.save({'state_dict': algo.policy.state_dict(), 'optimizer': algo.optimizer.state_dict(),
++                'scheduler': algo.scheduler.state_dict(), 'rng': rng_state(), 'epoch_index': 0,
++                'global_step': 2, 'sampler_epoch': 0, 'cfg': cfg_train, 'completed_tasks': [],
++                'features': [sha256(p) for p in sorted(feature_dir.glob('*.pt'))], 'buffer': []}, str(checkpoint))
++    algo.observe([windows[0], ['6']], 6, 1, ifa_info=None)
++    continuous_hash = model_hash(algo.policy)
++    saved = torch.load(str(checkpoint), map_location='cpu')
++    algo.policy.load_state_dict(saved['state_dict'], strict=True)
++    algo.optimizer.load_state_dict(saved['optimizer'])
++    algo.scheduler.load_state_dict(saved['scheduler'])
++    restore_rng(saved['rng'])
++    algo.observe([windows[0], ['6']], 6, 1, ifa_info=None)
++    assert model_hash(algo.policy) == continuous_hash
++    result['epoch_boundary_smoke_resume_exact_next_update'] = True
++    full_before = model_hash(full, True)
++    result['stage_downstream_load_test'] = strict_downstream_load(full, saved['state_dict'])
++    assert model_hash(full, True) == full_before
++    bad = dict(saved['state_dict'])
++    bad.pop(next(iter(bad)))
++    try:
++        strict_downstream_load(full, bad)
++        raise AssertionError('Missing trainable tensor accepted')
++    except ValueError:
++        pass
++    # Closed loop starts from the genuine official model, not smoke-trained weights.
++    full.load_state_dict(strip_prefix(torch.load(cfg.pretrain, map_location='cpu')['state_dict']), strict=True)
++    del algo, saved, bad, windows
++    torch.cuda.empty_cache()
++    atomic_json(out / 'model_tests.json', result)
++    ds.close_and_delete_hdf5_handle()
++    closed_loop_smoke(args, cfg, full, benchmark, tokens)
++    atomic_json(out / 'result.json', {'status': 'PASS', 'formal_status': 'NOT_STARTED',
++                                     'training_epochs_completed': 0, 'formal_rollouts': 0})
++    dist.destroy_process_group()
++
++
++def closed_loop_smoke(args, cfg, policy, benchmark, tokens):
++    from libero.libero.envs import OffScreenRenderEnv
++    from libero.lifelong.metric import raw_obs_to_tensor_obs
++    from libero.lifelong.utils import control_seed
++    task = benchmark.get_task(6)
++    control_seed(42)
++    env = OffScreenRenderEnv(bddl_file_name=str(Path(cfg.bddl_folder) / task.problem_folder / task.bddl_file),
++                            camera_heights=128, camera_widths=128)
++    states = torch.load(str(Path(cfg.init_states_folder) / task.problem_folder / task.init_states_file))
++    start = time.time()
++    record = {'kind': 'SMOKE_ONLY', 'task_id': 6, 'task_name': task.name, 'seed': 42,
++              'init_state_id': 0, 'checkpoint_sha256': sha256(cfg.pretrain), 'success': False,
++              'policy_steps': 0, 'max_steps': 600, 'exception': None}
++    try:
++        env.seed(42)
++        env.reset()
++        env.seed(42)
++        obs = env.set_init_state(states[0])
++        for _ in range(5):
++            obs, _, _, _ = env.step(np.zeros(7))
++        history = []
++        policy.reset()
++        for step in range(1, 601):
++            data = raw_obs_to_tensor_obs([obs], tokens['input_ids'][6], tokens['attention_mask'][6], cfg)
++            history.append(data)
++            history = history[-8:]
++            batch = {'task_emb': data['task_emb'], 'masks': data['masks'], 'obs': {
++                key: torch.stack([x['obs'][key] for x in history], 1) for key in data['obs']}}
++            actions = policy.get_action(batch)
++            assert actions.shape == (1, 7) and np.isfinite(actions).all()
++            obs, _, done, _ = env.step(actions[0])
++            actual_success = bool(env.check_success())
++            assert bool(done) == actual_success
++            record['policy_steps'] = step
++            if step % 100 == 0:
++                print('SMOKE_ROLLOUT_STEP', step, flush=True)
++            if actual_success:
++                record['success'] = True
++                break
++        record['termination_reason'] = 'success' if record['success'] else 'max_policy_steps'
++    except Exception as exc:
++        record['exception'] = repr(exc)
++        raise
++    finally:
++        env.close()
++        record['duration_seconds'] = time.time() - start
++        atomic_json(args.run_dir / 'smoke/rollout.json', record)
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--mode', choices=['preflight', 'smoke', 'full', 'resume'], required=True)
++    for name in ['pretrained', 'data-root', 'bddl-root', 'init-states-root']:
++        parser.add_argument('--' + name, required=True)
++    parser.add_argument('--run-dir', required=True, type=Path)
++    parser.add_argument('--dry-run', action='store_true')
++    args = parser.parse_args()
++    cfg = config(args)
++    if args.dry_run:
++        print(OmegaConf.to_yaml(OmegaConf.create(json.loads(json.dumps(cfg)))))
++        print('FORMAL STATUS: BLOCKED; user deferred use_state decision. No computation performed.')
++        return
++    args.run_dir.mkdir(parents=True, exist_ok=True)
++    (args.run_dir / 'resolved_config.yaml').write_text(OmegaConf.to_yaml(OmegaConf.create(json.loads(json.dumps(cfg)))))
++    atomic_json(args.run_dir / 'RUN_STATUS.json', {'status': 'BLOCKED',
++        'reason': 'User explicitly deferred use_state scientific protocol choice',
++        'formal_epochs_completed': 0, 'formal_episodes_completed': 0,
++        'stage_final_checkpoints': [], 'active_mode': args.mode})
++    if args.mode in ['full', 'resume']:
++        raise SystemExit('BLOCKED: use_state decision unresolved; formal orchestration not released.')
++    if args.mode == 'preflight':
++        preflight(args, cfg)
++    else:
++        smoke(args, cfg)
++
++
++if __name__ == '__main__':
++    raise SystemExit('Use scripts/run_goal_seed42.sh for the state-v2 protocol')

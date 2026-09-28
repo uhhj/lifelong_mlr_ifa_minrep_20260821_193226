@@ -1,4 +1,5 @@
 import os
+import json
 
 import numpy as np
 import torch
@@ -363,9 +364,8 @@ def _pairwise_cosine_mean(feats_i, feats_j, eps=1e-8):
     feats_i = F.normalize(feats_i, dim=-1, eps=eps)
     feats_j = F.normalize(feats_j, dim=-1, eps=eps)
 
-    sim_matrix = feats_i @ feats_j.T
-
-    return sim_matrix.mean().item()
+    # Exact algebraic identity; FP32 reduction order may differ slightly.
+    return torch.dot(feats_i.mean(0), feats_j.mean(0)).item()
 
 
 def collect_current_task_features(
@@ -717,10 +717,18 @@ class MLR(Sequential):
             for (idx, data) in enumerate(pbar):
                 loss = self.observe(data,current_task_id,epoch,ifa_info=ifa_info)
                 training_loss += loss
+                log_dir = Path(self.experiment_dir) / "logs"
+                log_dir.mkdir(exist_ok=True)
+                with (log_dir / "train.jsonl").open("a") as log:
+                    row = dict(self.last_loss_log)
+                    row.update({"task": current_task_id, "epoch_index": epoch, "batch_index": idx,
+                                "new_samples": sum(int(t) == current_task_id for t in data[1]),
+                                "old_samples": sum(int(t) != current_task_id for t in data[1])})
+                    log.write(json.dumps(row) + "\n")
                 avg_loss = training_loss / (idx + 1)
                 pbar.set_postfix(loss=f"{avg_loss:.4f}")
 
-                training_loss /= len(train_dataloader)
+            training_loss /= len(train_dataloader)
                 
             t1 = time.time()
 
@@ -728,7 +736,7 @@ class MLR(Sequential):
                 f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} | time: {(t1-t0)/60:4.2f}"
             )
 
-            if epoch % 5 == 0 and epoch > 69:  # evaluate BC loss
+            if epoch == self.cfg.train.n_epochs - 1:  # evaluate BC loss
 
                 self.policy.eval()
 
@@ -751,8 +759,7 @@ class MLR(Sequential):
                 successes.append(success_rate)
                 cumulated_counter += 1.0
 
-            if self.scheduler is not None and epoch > 0:
-                self.scheduler.step()
+            # Scheduler advances once per optimizer step in observe().
 
         # return the metrics regarding forward transfer
         losses = np.array(losses)

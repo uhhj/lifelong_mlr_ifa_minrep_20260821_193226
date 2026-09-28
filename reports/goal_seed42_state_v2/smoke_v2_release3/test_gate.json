@@ -1,0 +1,225 @@
+{
+  "status": "PASS",
+  "modal_contract": {
+    "schema_version": 2,
+    "use_vision": true,
+    "use_language": true,
+    "use_state": true,
+    "token_order": [
+      "language",
+      "agentview",
+      "eye_in_hand",
+      "state"
+    ],
+    "state_keys": [
+      "joint_states",
+      "gripper_states"
+    ],
+    "state_dims": [
+      7,
+      2
+    ],
+    "window_length": 8,
+    "embedding_dim": 512,
+    "official_checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+    "frozen_frontend_sha256": "df397791729f5baae1260e54eca45153fd0d708207ea1eabe94c05397fa33740",
+    "pretrain_use_state": "unknown",
+    "effective_use_state": true,
+    "pretrain_metadata_gap_status": "DISCLOSED_GAP",
+    "code_commit": "a721807f2f7fa7f9833dcc85c592d78e9accd00b",
+    "code_patch_sha256": "57e9566ab44c74d88563892080e1dd34304e36e4204d7acd8ede088b6c2363a0",
+    "export": {
+      "batch_size": 1,
+      "module_mode": "train",
+      "cfg_training": false,
+      "augmentation": true,
+      "use_augmentation": true,
+      "obs_preprocessing": "robomimic process_obs; RGB uint8 to CHW float [0,1]; source CLIP normalization",
+      "augmentation_layers": [
+        "BatchWiseImgColorJitterAug",
+        "RandomAffineAug",
+        "RandomErasingAug"
+      ],
+      "augmentation_config": {
+        "color_aug": {
+          "_target_": "BatchWiseImgColorJitterAug",
+          "network": "BatchWiseImgColorJitterAug",
+          "prob": 0.9,
+          "network_kwargs": {
+            "brightness": 0.3,
+            "contrast": 0.3,
+            "saturation": 0.3,
+            "hue": 0.3
+          }
+        },
+        "translation_aug": {
+          "_target_": "RandomAffineAug",
+          "network": "RandomAffineAug",
+          "prob": 0.6,
+          "network_kwargs": {
+            "degrees": 15,
+            "translate": 0.1
+          }
+        },
+        "erase_aug": {
+          "_target_": "RandomErasingAug",
+          "network": "RandomErasingAug",
+          "prob": 0.1,
+          "network_kwargs": {
+            "scale": [
+              0.02,
+              0.33
+            ],
+            "ratio": [
+              0.3,
+              3.3
+            ]
+          }
+        }
+      },
+      "sampler": "RandomSampler without replacement",
+      "seed": 42
+    },
+    "fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc"
+  },
+  "modal_fingerprint": "4c0a99a8c2f88695fc91292748e4f809a3bf38866bb78dc32d8fc7d0f5001ecc",
+  "three_configs_boolean_true": true,
+  "raw_hdf5_spawn_loader": true,
+  "old_cache_rejection": true,
+  "formal_updates": 0,
+  "formal_episodes": 0,
+  "additional_checks": {
+    "status": "PASS",
+    "kind": "SOFTWARE_SMOKE_ONLY",
+    "workers_0_vs_12_same_order_and_parent_torch_rng": true,
+    "buffer_same_call_idempotent": true,
+    "original_buffer_untouched": true,
+    "selection_matches_original_seed42": true,
+    "buffer_selection": {
+      "complete": true,
+      "task": 6,
+      "seed": 42,
+      "storage_rate": 0.5,
+      "capacity_files": 59660000,
+      "source_buffer": "/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/smoke_v2_release3/smoke/additional/empty_buffer",
+      "generation": "/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/smoke_v2_release3/smoke/additional/generations/after_task_6",
+      "original_algorithm_stats": [
+        1,
+        1,
+        0,
+        59660000,
+        {
+          "6": 1
+        }
+      ],
+      "files": [
+        {
+          "name": "t6__0.pt",
+          "sha256": "0d03cd0bb7859a0cb3a516178b0f1939932abfa1817a01fbd86910505493f964",
+          "bytes": 66639,
+          "tensor_bytes": 65760
+        }
+      ],
+      "disk_bytes": 66639,
+      "tensor_bytes": 65760
+    },
+    "updated_modules": {
+      "temporal_transformer.": true,
+      "policy_head.": true
+    },
+    "learner_trainable_names": [
+      "temporal_transformer.decoder.wte.weight",
+      "temporal_transformer.decoder.wpe.weight",
+      "temporal_transformer.decoder.h.0.ln_1.weight",
+      "temporal_transformer.decoder.h.0.ln_1.bias",
+      "temporal_transformer.decoder.h.0.attn.c_attn.weight",
+      "temporal_transformer.decoder.h.0.attn.c_attn.bias",
+      "temporal_transformer.decoder.h.0.attn.c_proj.weight",
+      "temporal_transformer.decoder.h.0.attn.c_proj.bias",
+      "temporal_transformer.decoder.h.0.ln_2.weight",
+      "temporal_transformer.decoder.h.0.ln_2.bias",
+      "temporal_transformer.decoder.h.0.mlp.c_fc.weight",
+      "temporal_transformer.decoder.h.0.mlp.c_fc.bias",
+      "temporal_transformer.decoder.h.0.mlp.c_proj.weight",
+      "temporal_transformer.decoder.h.0.mlp.c_proj.bias",
+      "temporal_transformer.decoder.h.1.ln_1.weight",
+      "temporal_transformer.decoder.h.1.ln_1.bias",
+      "temporal_transformer.decoder.h.1.attn.c_attn.weight",
+      "temporal_transformer.decoder.h.1.attn.c_attn.bias",
+      "temporal_transformer.decoder.h.1.attn.c_proj.weight",
+      "temporal_transformer.decoder.h.1.attn.c_proj.bias",
+      "temporal_transformer.decoder.h.1.ln_2.weight",
+      "temporal_transformer.decoder.h.1.ln_2.bias",
+      "temporal_transformer.decoder.h.1.mlp.c_fc.weight",
+      "temporal_transformer.decoder.h.1.mlp.c_fc.bias",
+      "temporal_transformer.decoder.h.1.mlp.c_proj.weight",
+      "temporal_transformer.decoder.h.1.mlp.c_proj.bias",
+      "temporal_transformer.decoder.h.2.ln_1.weight",
+      "temporal_transformer.decoder.h.2.ln_1.bias",
+      "temporal_transformer.decoder.h.2.attn.c_attn.weight",
+      "temporal_transformer.decoder.h.2.attn.c_attn.bias",
+      "temporal_transformer.decoder.h.2.attn.c_proj.weight",
+      "temporal_transformer.decoder.h.2.attn.c_proj.bias",
+      "temporal_transformer.decoder.h.2.ln_2.weight",
+      "temporal_transformer.decoder.h.2.ln_2.bias",
+      "temporal_transformer.decoder.h.2.mlp.c_fc.weight",
+      "temporal_transformer.decoder.h.2.mlp.c_fc.bias",
+      "temporal_transformer.decoder.h.2.mlp.c_proj.weight",
+      "temporal_transformer.decoder.h.2.mlp.c_proj.bias",
+      "temporal_transformer.decoder.h.3.ln_1.weight",
+      "temporal_transformer.decoder.h.3.ln_1.bias",
+      "temporal_transformer.decoder.h.3.attn.c_attn.weight",
+      "temporal_transformer.decoder.h.3.attn.c_attn.bias",
+      "temporal_transformer.decoder.h.3.attn.c_proj.weight",
+      "temporal_transformer.decoder.h.3.attn.c_proj.bias",
+      "temporal_transformer.decoder.h.3.ln_2.weight",
+      "temporal_transformer.decoder.h.3.ln_2.bias",
+      "temporal_transformer.decoder.h.3.mlp.c_fc.weight",
+      "temporal_transformer.decoder.h.3.mlp.c_fc.bias",
+      "temporal_transformer.decoder.h.3.mlp.c_proj.weight",
+      "temporal_transformer.decoder.h.3.mlp.c_proj.bias",
+      "temporal_transformer.decoder.h.4.ln_1.weight",
+      "temporal_transformer.decoder.h.4.ln_1.bias",
+      "temporal_transformer.decoder.h.4.attn.c_attn.weight",
+      "temporal_transformer.decoder.h.4.attn.c_attn.bias",
+      "temporal_transformer.decoder.h.4.attn.c_proj.weight",
+      "temporal_transformer.decoder.h.4.attn.c_proj.bias",
+      "temporal_transformer.decoder.h.4.ln_2.weight",
+      "temporal_transformer.decoder.h.4.ln_2.bias",
+      "temporal_transformer.decoder.h.4.mlp.c_fc.weight",
+      "temporal_transformer.decoder.h.4.mlp.c_fc.bias",
+      "temporal_transformer.decoder.h.4.mlp.c_proj.weight",
+      "temporal_transformer.decoder.h.4.mlp.c_proj.bias",
+      "temporal_transformer.decoder.h.5.ln_1.weight",
+      "temporal_transformer.decoder.h.5.ln_1.bias",
+      "temporal_transformer.decoder.h.5.attn.c_attn.weight",
+      "temporal_transformer.decoder.h.5.attn.c_attn.bias",
+      "temporal_transformer.decoder.h.5.attn.c_proj.weight",
+      "temporal_transformer.decoder.h.5.attn.c_proj.bias",
+      "temporal_transformer.decoder.h.5.ln_2.weight",
+      "temporal_transformer.decoder.h.5.ln_2.bias",
+      "temporal_transformer.decoder.h.5.mlp.c_fc.weight",
+      "temporal_transformer.decoder.h.5.mlp.c_fc.bias",
+      "temporal_transformer.decoder.h.5.mlp.c_proj.weight",
+      "temporal_transformer.decoder.h.5.mlp.c_proj.bias",
+      "temporal_transformer.decoder.ln_f.weight",
+      "temporal_transformer.decoder.ln_f.bias",
+      "policy_head.share.0.weight",
+      "policy_head.share.0.bias",
+      "policy_head.share.2.weight",
+      "policy_head.share.2.bias",
+      "policy_head.share.4.weight",
+      "policy_head.share.4.bias",
+      "policy_head.mean_layer.weight",
+      "policy_head.mean_layer.bias",
+      "policy_head.logstd_layer.weight",
+      "policy_head.logstd_layer.bias",
+      "policy_head.logits_layer.weight",
+      "policy_head.logits_layer.bias"
+    ],
+    "lr_used": [
+      0.0,
+      2.0000000000000002e-07
+    ]
+  }
+}
