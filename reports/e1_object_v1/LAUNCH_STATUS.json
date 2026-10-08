@@ -1,0 +1,46 @@
+{
+  "checked_unix": 1791456459.5470037,
+  "queue": {
+    "status": "RUNNING",
+    "pid": 3270,
+    "child_pid": 3283,
+    "command": [
+      "/data/conda_envs/mlr_ifa_minrep/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--nproc_per_node=1",
+      "--master_port",
+      "37777",
+      "-m",
+      "e1_object_v1.train",
+      "--seed",
+      "42"
+    ],
+    "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/TRAIN_seed42.log",
+    "updated_unix": 1791456223.8137107,
+    "baseline_training_rerun": false
+  },
+  "training": {
+    "status": "TRAINING",
+    "seed": 42,
+    "task": 6,
+    "next_epoch": 52,
+    "stage_complete": false,
+    "optimizer_step": 8164,
+    "scheduler_step": 8164,
+    "totals": {
+      "checks": 0,
+      "triggered": 0,
+      "accepted": 0,
+      "capped": 0,
+      "overhead_seconds": 0.0
+    },
+    "recovery": "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/recovery/latest.pt",
+    "e1_training_active": true,
+    "baseline_training_rerun": false
+  },
+  "code_commit": "45d4d2a",
+  "protocol_evidence_commit": "3c36f74",
+  "existing_automation_recreated": false,
+  "complete": false
+}
