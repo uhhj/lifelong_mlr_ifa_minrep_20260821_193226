@@ -1,0 +1,314 @@
+{
+  "name": "E1-OBJECT-v1",
+  "seed_order": [
+    42,
+    43,
+    44
+  ],
+  "tasks": [
+    6,
+    7,
+    8,
+    9
+  ],
+  "settings": {
+    "enabled": true,
+    "every": 10,
+    "batch_size": 20,
+    "tau": 0.0001,
+    "tau_num": 1e-06,
+    "rho": 0.25,
+    "grad_floor": 1e-12
+  },
+  "baseline_results": {
+    "42": {
+      "benchmark": "LIBERO_OBJECT",
+      "method": "ifa",
+      "seed": 42,
+      "evaluation_view": "PRIMARY_EP99",
+      "n_eval": 20,
+      "selected_epochs": {
+        "6": 99,
+        "7": 99,
+        "8": 99,
+        "9": 99
+      },
+      "fwt": 77.5,
+      "nbt": -0.278,
+      "auc": 77.708,
+      "r": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          50.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          40.0,
+          95.0,
+          100.0,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          100.0,
+          75.0
+        ]
+      ]
+    },
+    "43": {
+      "benchmark": "LIBERO_OBJECT",
+      "method": "ifa",
+      "seed": 43,
+      "evaluation_view": "PRIMARY_EP99",
+      "n_eval": 20,
+      "selected_epochs": {
+        "6": 99,
+        "7": 99,
+        "8": 99,
+        "9": 99
+      },
+      "fwt": 70.0,
+      "nbt": 12.778,
+      "auc": 63.542,
+      "r": [
+        [
+          65.0,
+          null,
+          null,
+          null
+        ],
+        [
+          50.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          40.0,
+          100.0,
+          90.0,
+          null
+        ],
+        [
+          35.0,
+          90.0,
+          80.0,
+          25.0
+        ]
+      ]
+    },
+    "44": {
+      "benchmark": "LIBERO_OBJECT",
+      "method": "ifa",
+      "seed": 44,
+      "evaluation_view": "PRIMARY_EP99",
+      "n_eval": 20,
+      "selected_epochs": {
+        "6": 99,
+        "7": 99,
+        "8": 99,
+        "9": 99
+      },
+      "fwt": 82.5,
+      "nbt": 3.056,
+      "auc": 80.833,
+      "r": [
+        [
+          60.0,
+          null,
+          null,
+          null
+        ],
+        [
+          65.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          65.0,
+          100.0,
+          95.0,
+          null
+        ],
+        [
+          30.0,
+          95.0,
+          95.0,
+          75.0
+        ]
+      ]
+    }
+  },
+  "baseline_protocol": {
+    "identity": {
+      "name": "final_paper_text_faithful",
+      "starting_sha": "1f4e45d604be7f2b61b356e70ac4fa7c80557fe0",
+      "scope": "LIFELONG-STAGE PAPER-TEXT-FAITHFUL REPRODUCTION WITH RELEASED/FROZEN PRETRAINED INITIALIZATION",
+      "benchmark": "LIBERO_OBJECT"
+    },
+    "source_priority": [
+      "paper_explicit_text",
+      "public_release_fallback_for_unspecified_fields",
+      "minimal_unit_consistent_interpretation",
+      "prior_runs_for_sanity_only_not_parameter_inference"
+    ],
+    "paper_explicit_fields": {
+      "batch_size": 10,
+      "epochs_per_stage": 100,
+      "optimizer": "torch.optim.AdamW",
+      "initial_lr": 0.0001,
+      "scheduler_name": "linear",
+      "buffer_policy": "total size equivalent to five demonstrations per task",
+      "past_data_rate": 0.5,
+      "effective_stored_demo_equivalent": 5,
+      "ifa_lambda": 0.1,
+      "ifa_alpha_gamma": 0.3,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "n_eval": 20
+    },
+    "paper_unspecified_fields": [
+      "scheduler_step_unit",
+      "warmup_steps",
+      "feature_extraction_augmentation",
+      "checkpoint_selection_rule",
+      "exact_evaluation_action_sampling",
+      "AdamW_betas_eps_weight_decay"
+    ],
+    "implementation_choices": {
+      "scheduler_step_unit": "after_each_optimizer_step",
+      "scheduler_step_unit_provenance": "MINIMAL_UNIT_CONSISTENT_INTERPRETATION; PAPER DOES NOT SPECIFY SCHEDULER STEP UNIT",
+      "warmup_steps": 500,
+      "warmup_provenance": "RELEASE_FALLBACK",
+      "total_steps_formula": "epochs_per_stage * len(train_loader)",
+      "optimizer_betas": [
+        0.9,
+        0.999
+      ],
+      "optimizer_eps": 1e-08,
+      "optimizer_weight_decay": 0.1,
+      "optimizer_unspecified_provenance": "RELEASE_FALLBACK",
+      "feature_augmentation": "seed-controlled stochastic augmentation in frozen cache generation",
+      "feature_augmentation_provenance": "RELEASE_FALLBACK; NOT PAPER-SPECIFIED",
+      "feature_regeneration": false,
+      "action_inference_semantics": "GMM component distribution with stochastic sampling",
+      "action_inference_provenance": "RELEASE_IMPLEMENTATION_FALLBACK",
+      "primary_checkpoint": 99,
+      "primary_checkpoint_reason": "final state after the 100th zero-indexed epoch",
+      "secondary_candidate_epochs": [
+        70,
+        75,
+        80,
+        85,
+        90,
+        95,
+        99
+      ],
+      "secondary_selection": "best current-task success; later epoch on ties; old tasks at selected checkpoint",
+      "secondary_label": "SECONDARY_RELEASE_COMPATIBLE_SELECTION",
+      "structural_collapse_rule": "same current task at or below 10 percentage points in at least two of three seeds for either method"
+    },
+    "paths": {
+      "pretrained_checkpoint": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/checkpoints/object_multitask_model_ep99.pth",
+      "feature_cache_seed_mapping": {
+        "42": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/features/object_seed42",
+        "43": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/features/object_seed43",
+        "44": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/features/object_seed44"
+      },
+      "runs": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/final_paper_text_faithful",
+      "buffers": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/buffers/final_paper_text_faithful",
+      "reports": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/reports/final_paper_text_faithful"
+    },
+    "task_order": {
+      "pretrained_tasks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "lifelong_tasks": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "start_task": 6,
+      "end_task_exclusive": 10
+    },
+    "checkpoint_save_epochs": [
+      70,
+      75,
+      80,
+      85,
+      90,
+      95,
+      99
+    ],
+    "methods": {
+      "mlr": {
+        "ifa_enabled": false,
+        "gamma_explicit_but_unused": 0.3
+      },
+      "ifa": {
+        "ifa_enabled": true,
+        "ifa_lambda": 0.1,
+        "gamma": 0.3
+      }
+    },
+    "provenance_boundary": "PAPER_EXACT_RECIPE_NOT_PUBLICLY_RECOVERABLE",
+    "pretraining_limitation": "paper-time pretraining code is not public; the frozen released checkpoint is shared by all runs"
+  },
+  "primary_checkpoint": 99,
+  "secondary_evaluation": "same historical selected-checkpoint protocol; diagnostic only",
+  "append_seeds_if": "seed42 primary overall AUC strictly exceeds seed42 historical IFA primary overall AUC",
+  "baseline_rerun": false,
+  "pretraining_rerun": false,
+  "checkpoint": "/data/lifelong_mlr_ifa_minrep_20260912/checkpoints/object_multitask_model_ep99.pth",
+  "checkpoint_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+  "feature_manifest_sha256": "9992aec8235af4753d5980ecc0953889e5ed69f4f1df71ed976f0327601f8031",
+  "initial_buffer": "empty; task6 has no E1 checks",
+  "check_sampling": "uniform without replacement over sorted legal old buffer windows; matches uniform old-window replay marginal",
+  "check_rng": "random.Random(1000003+seed), independent, reset at each task and saved at epoch boundaries",
+  "scheduler": "inherit paired baseline batch_step, not upstream legacy_epoch",
+  "reference_auc": 77.708,
+  "reference_comparison": "same seed; primary ep99; fixed shared pretraining",
+  "implementation_files": {
+    "e1_object_v1/__init__.py": "852086f418707af73ce73705e8ee6e3b082e4b09886253ea4315961c0cb877b5",
+    "e1_object_v1/baseline_loop.py": "b1a1ee9b6bedc51c512da6164a091a80425b4edb964963a1da561be25d4fe023",
+    "e1_object_v1/bindings.py": "a2d0eeb6f27a80c02f3a73a10e69a235b0456e62ca826f04be07e675b9875c53",
+    "e1_object_v1/control.py": "9cd0313b50d6d1428d9b7a7f6d104f66dc36f376c13ffd043767951a8d940949",
+    "e1_object_v1/driver.py": "255cc594f31459a91ba5ad9ee4416ebcd59b833d47a8e18b4bd071a145a1f3be",
+    "e1_object_v1/eval_metric.py": "41d16d11ff82e024184ae61ec946cd484f3dc830913486b5bccbc97bfbc8d24a",
+    "e1_object_v1/evaluate.py": "fe1d07a5646799db78d42031ba6c5bfdf202f19202c26e248307a2e3e7fc7087",
+    "e1_object_v1/evaluate.sh": "11656c2130b9e8065d7db5edf9d60200bfcde9819e3eba0362218e709f4ac79e",
+    "e1_object_v1/io.py": "df672ff11f1d51a94d23f9b72c4818bb12884318ef7a076aab181ea704593f64",
+    "e1_object_v1/legacy_metrics.py": "2c1c1f62ca8f3cd6bac694945f1d0d9c630d5d8e7209ce3ba8c9a0d7ac446f8b",
+    "e1_object_v1/prepare.py": "45213349cad643a4e8cf2121ffd24e729b618f4f721757e90b88dd6d69b98d09",
+    "e1_object_v1/runtime.py": "f116ba3327f5330ce3a082df62da8a9f903cdffd813ab6a6ab12a6bb9d51b332",
+    "e1_object_v1/smoke.py": "081fc68b2ace0f2d0c318de25438d313a62f4d57088f2adfc491e17064af5f79",
+    "e1_object_v1/tests.py": "27bf74f6fec8aa94305465f66ecf8aac1654908795a5582d8c8e527b8ce47008",
+    "e1_object_v1/train.py": "be726bf60b363951b0cc37c069c411d50dc732574cf07a4718af7f7207231d28"
+  },
+  "future_tuning": false,
+  "feature_provenance": {
+    "same_paths_as_historical_IFA_baseline": true,
+    "matched_migration_hashes": 17763,
+    "total_features": 17763,
+    "no_feature_regeneration": true,
+    "demonstration_selection": "inherit original cached windows; no re-sampling of demonstrations"
+  }
+}
