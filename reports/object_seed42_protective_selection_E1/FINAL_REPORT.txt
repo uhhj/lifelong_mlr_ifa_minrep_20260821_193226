@@ -1,0 +1,95 @@
+LIBERO-OBJECT E1 保护性选样 — seed42最终报告
+状态：COMPLETED；独立验收PASS；不扩展seed43/44，不启动E2，不重跑E0。
+正式评估及汇总完成：北京时间2026-10-09 03:53:40；独立验收：2026-10-09。
+
+研究结论
+预先固定主口径epoch99：E1总体AUC未超过已有E0。本次单seed未显示主终点收益，不能宣布方法稳定有效；也不能据此证明该方法对所有seed无效。
+
+主指标（百分比尺度，差值为百分点；差值从未舍入矩阵计算）
+版本       AUC↑       FWT↑       NBT↓
+E0         77.708     77.500     -0.278
+E1         77.292     76.250     -3.333
+E1−E0      -0.417     -1.250     -3.056
+原流水线FINAL_ACCEPTANCE的差值来自先舍入指标再相减；其记录保留。本报告使用独立审计的未舍入差值。
+
+主成功率矩阵：行=完成训练的阶段，列=评估任务6/7/8/9；每个有效单元20次。
+阶段       E0任务6  7   8   9       E1任务6  7   8   9
+6          35     —   —   —       35     —   —   —
+7          50    100  —   —       45    100  —   —
+8          40     95 100  —       35     95  85  —
+9          25    100 100  75      25     95 100  85
+
+各任务AUC（引入后跨阶段平均）：
+任务6：37.500→35.000，差−2.500。
+任务7：98.333→96.667，差−1.667。
+任务8：100.000→92.500，差−7.500。
+任务9：75.000→85.000，差+10.000。
+任务9提升没有抵消总体AUC下降。NBT下降也受任务8刚引入时85%、随后100%的变化影响，不能单独解释为保护旧行为机制得到证实。
+
+次口径（预定原E0检查点选择规则；不代替主终点）
+E0：AUC80.000、FWT86.250、NBT11.667。
+E1：AUC81.771、FWT82.500、NBT0.833。
+差值：AUC+1.771、FWT−3.750、NBT−10.833。
+E1选定epoch：任务6=70、任务7=80、任务8=95、任务9=95。
+E1次口径矩阵：
+阶段6：[40, —, —, —]
+阶段7：[25,100, —, —]
+阶段8：[45,100,95, —]
+阶段9：[35,95,100,95]
+次口径具有按当前任务闭环结果选检查点的固有选择偏差；不因该结果改善而改变扩展条件。
+
+真实执行与退出码
+特征恢复：bash /data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source/protective_e1/export.sh；export.exit=0，5921个文件逐一匹配E0历史SHA256。仅恢复输入，未训练E0。
+正式启动：nohup bash /data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source/protective_e1/pipeline.sh > /data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/pipeline.log 2>&1 < /dev/null &
+prepare退出0；隔离预检退出0；train退出0。
+训练内部：python -m torch.distributed.run --nproc_per_node=1 --master_port=37985 -m protective_e1.train
+原pipeline.exit=1：首个评估在spawn导入libero.libero时失败，尚无正式记录，未执行环境step。
+工程恢复：nohup bash /data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/engineering_recovery/20261008_import_binding/resume_eval.sh > /data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/engineering_recovery/20261008_import_binding/resume.log 2>&1 < /dev/null &
+恢复流程：bash protective_e1/evaluate.sh primary；bash protective_e1/evaluate.sh secondary；python -B .../finalize_readonly.py。
+primary、secondary、finalize_readonly均退出0，resume.exit=0，无残留训练/评估进程。
+独立验收：/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/monitor/independent_audit_20261009.py --root /data/mlr_ifa/experiments/E1_protective_object_seed42_20261008 --output /data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/final_audit_20261009 --server；退出0。
+完整参数、真实日志与配置见evidence目录及MONITOR_HANDOFF.json；源码新增补丁见../source.patch；导入修复与只读汇总差异见../recovery_import/。
+
+验收
+任务6—9各100epoch；每epoch157/227/309/362次更新，总105500；batch10，warmup500，调度逐step，原BC+IFA与gamma0.3不变。
+规定epoch70/75/80/85/90/95/99各阶段共28个checkpoint已核验哈希。四个epoch99最终checkpoint均已真实参与GPU评估；事后仅CPU反序列化检查参数有限及形状一致，不是CPU执行环境或回退评估。
+主口径200记录/10单元；次口径680记录/34单元；全部单元恰好20个原初态0—19，无缺失、无重复ID。
+20软件测试PASS；真实GPU预检PASS，5次隔离optimizer调用，正式状态重新初始化；本轮恢复只新增纯导入spawn检查，0环境、0rollout。
+任务槽位、当前样本和IFA首条语言参考不变由冻结代码断言及真实预检证明；逐步日志没有记录完整原batch内容，不声称可从事件文件单独重建该全部证明。
+阶段缓存成员按原随机入库代码和seed独立复算，数量781/1521/2301/2961，全部一致。5921特征、2961最终buffer、28checkpoint和官方前端权重哈希验收通过。
+评分刷新：阶段6=0，阶段7=46，阶段8=62，阶段9=73；严格阶段首步及500step间隔。
+H16/C64互不重叠，N16合法当前窗口，候选任务正确，softmax由分数复算一致；无无效候选、无退化回退、无IFA首条参考否决。
+
+成本与诊断
+训练耗时：3391.064秒（56.52分钟），平均31.11optimizer step/秒，含评分与恢复checkpoint存储成本。
+评分：187.283秒；替换处理：105.727秒；二者合计293.010秒。选样IO另计89.016秒但已包含于上述处理时间，不重复相加。
+PyTorch记录训练峰值allocated显存：568819712字节（542.47MiB），不是整卡显存占用。
+主评估22:08:33→23:28:31，79分58秒；次评估23:28:31→03:53:37，265分06秒；合计5小时45分04秒。
+旧槽共460300次，优先分布赋值230710次，占50.122%。这是赋值次数，不保证每次都与原样本ID不同；原batch没有完整原ID日志。
+任务7/8/9赋值比例：50.352%/50.047%/50.093%；优先样本覆盖ID数767/1513/2299；重复赋值38558/74608/112965。详见独立审计top_reused，未用这些诊断调整训练。
+E0原训练时间日志不可得，因此不提供虚构E1−E0时间差。
+
+真实尝试账目
+正式880条；正常成功和失败均保留，未按失败结果重试。
+另有一次启动级技术失败：请求10个spawn worker，日志可见8条导入失败堆栈，父进程在第一次env.seed失败；0条正式记录、0次环境step。没有逐worker构造账簿，不把推断的零构造数称为逐worker实测。
+恢复后从首个正式单元开始一次性完成880条，无新增smoke环境。
+
+来源、保护与解释边界
+E0历史报告提交1c64d9051124307e8debfc2c47aced189e32d393；基线final_paper_text_faithful/ifa/seed42。原baseline模型与其他GOAL/E1/E2/E3目录均未修改、未重跑。
+官方OBJECT预训练SHA256：159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b。
+冻结合同SHA256：b82fc3d9a58d82302924c0b48eda56e95361227776d59f1f41505dda50b4ee31，保持原件。
+原RTX4090与当前RTX3090硬件不同；GPU数量/精度与依赖继承，但不能宣称精确恢复原始轨迹。
+旧E0阶段buffer快照缺失；这里证明的是相同输入+原确定性存储规则的重建一致性，不能伪称与未取得的旧快照直接比较。
+Hydra在源码根下自动生成的三份.hydra输出发生改变，已单独记录实际哈希。真实代码/输入配置未改；不重贴合同标签。spawn修复只在外置sitecustomize调用原bind()。
+原评估器保存初态索引与checkpoint路径，不含逐动作轨迹或原初态内容hash；不声称额外的逐动作追踪验收。
+11:28验收时nvidia-smi无法连接驱动；正式GPU评估已于03:53完成且退出0。没有为验收重跑环境或改用CPU评估，也未擅自重启/付费开机。
+本次单seed与20初态结果不支持稳定改善、显著性或完整因果结论。评分是头部梯度代理，不是闭环保护保证。
+
+产物
+远端：/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008
+最终权重：/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/run_001/mlrifa_6_model_ep99.pth 至 mlrifa_9_model_ep99.pth。
+本地：D:\论文课题研究\MLR+IFA\execution\20261008_E1_protective_selection\final_20261009
+全部880记录：evidence/trials_primary.jsonl、evidence/trials_secondary.jsonl。
+所有44评估单元：local_audit/all_evaluation_cells.csv。
+独立验收：SERVER_INDEPENDENT_AUDIT.json；原配置/训练日志/选样事件/尝试失败证据均在evidence/。
+未下载权重或特征，不push、不追加实验。

@@ -1,0 +1,276 @@
+[robosuite WARNING] No private macro file found! (__init__.py:7)
+[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)
+[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+/data/mlr_ifa/env/lib/python3.8/site-packages/thop/profile.py:12: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+  if LooseVersion(torch.__version__) < LooseVersion("1.0.0"):
+>>> hydra root directory（runtime.cwd）： /data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source
+[2026-10-08 19:44:10,038][torch.distributed.distributed_c10d][INFO] - Added key: store_based_barrier_key:1 to store for rank: 0
+[2026-10-08 19:44:10,038][torch.distributed.distributed_c10d][INFO] - Rank 0: Completed store-based barrier for key:store_based_barrier_key:1 with 1 nodes.
+{ 'aug': True,
+  'bddl_folder': '/data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source/libero/libero/bddl_files',
+  'benchmark_name': 'LIBERO_OBJECT',
+  'data': { 'action_scale': 1.0,
+            'affine_translate': 4,
+            'data_modality': ['image', 'proprio'],
+            'demo_limit': 10,
+            'frame_stack': 1,
+            'img_h': 128,
+            'img_w': 128,
+            'max_word_len': 25,
+            'num_kp': 64,
+            'obs': { 'modality': { 'depth': [],
+                                   'low_dim': [ 'gripper_states',
+                                                'joint_states'],
+                                   'rgb': [ 'agentview_rgb',
+                                            'eye_in_hand_rgb']}},
+            'obs_key_mapping': { 'agentview_rgb': 'agentview_image',
+                                 'eye_in_hand_rgb': 'robot0_eye_in_hand_image',
+                                 'gripper_states': 'robot0_gripper_qpos',
+                                 'joint_states': 'robot0_joint_pos'},
+            'seq_len': 8,
+            'shuffle_task': False,
+            'state_dim': None,
+            'task_group_size': 1,
+            'task_order_index': 0,
+            'train_dataset_ratio': 0.8,
+            'use_ee': False,
+            'use_eye_in_hand': True,
+            'use_gripper': True,
+            'use_joint': True},
+  'device': 'cuda',
+  'end_task': 10,
+  'eval': { 'batch_size': 64,
+            'eval': False,
+            'eval_every': 5,
+            'load_path': '',
+            'max_steps': 600,
+            'n_eval': 2,
+            'num_procs': 20,
+            'num_workers': 4,
+            'render': False,
+            'save_sim_states': False,
+            'use_mp': True},
+  'experiment_root': '/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/export',
+  'feature_dir': '/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/features',
+  'folder': '/data/mlr_ifa/datasets',
+  'init_states_folder': '/data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source/libero/libero/init_files',
+  'lifelong': {'algo': 'Basic'},
+  'load_previous_model': False,
+  'policy': { 'alpha': 8,
+              'color_aug': { '_target_': 'BatchWiseImgColorJitterAug',
+                             'network': 'BatchWiseImgColorJitterAug',
+                             'network_kwargs': { 'brightness': 0.3,
+                                                 'contrast': 0.3,
+                                                 'hue': 0.3,
+                                                 'saturation': 0.3},
+                             'prob': 0.9},
+              'embed_size': 512,
+              'erase_aug': { '_target_': 'RandomErasingAug',
+                             'network': 'RandomErasingAug',
+                             'network_kwargs': { 'ratio': [0.3, 3.3],
+                                                 'scale': [0.02, 0.33]},
+                             'prob': 0.1},
+              'extra_hidden_size': 128,
+              'extra_num_layers': 0,
+              'film_hidden_size': 512,
+              'image_encoder': { 'network': 'CLIPVisionEncoder',
+                                 'network_kwargs': { 'input_shape': None,
+                                                     'output_size': 64,
+                                                     'vision_model_name': 'openai/clip-vit-base-patch16'}},
+              'language_encoder': { 'network': 'CLIPTextEncoder',
+                                    'network_kwargs': { 'output_size': 64,
+                                                        'text_model_name': 'openai/clip-vit-base-patch16'}},
+              'max_seq_len': 8,
+              'num_gmm_modes': 5,
+              'num_tasks': 10,
+              'policy_head': { 'loss_kwargs': {'loss_coef': 1.0},
+                               'network': 'TemporalGMMHead',
+                               'network_kwargs': { 'activation': 'softplus',
+                                                   'hidden_size': 1024,
+                                                   'low_eval_noise': False,
+                                                   'min_std': 0.0001,
+                                                   'num_layers': 2,
+                                                   'num_modes': 5}},
+              'policy_type': 'CompletePolicy',
+              'rank': 8,
+              'temporal_position_encoding': { 'network': 'SinusoidalPositionEncoding',
+                                              'network_kwargs': { 'factor_ratio': None,
+                                                                  'input_size': None,
+                                                                  'inv_freq_factor': 10}},
+              'transformer_dropout': 0.15,
+              'transformer_head_output_size': 64,
+              'transformer_max_seq_len': 8,
+              'transformer_mlp_hidden_size': 256,
+              'transformer_num_heads': 8,
+              'transformer_num_layers': 6,
+              'translation_aug': { '_target_': 'RandomAffineAug',
+                                   'network': 'RandomAffineAug',
+                                   'network_kwargs': { 'degrees': 15,
+                                                       'translate': 0.1},
+                                   'prob': 0.6},
+              'use_language': True,
+              'use_state': False,
+              'use_vision': True},
+  'pretrain': '/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth',
+  'pretrain_model_path': '',
+  'seed': 42,
+  'start_task': 6,
+  'task_embedding_format': 'clip',
+  'task_embedding_one_hot_offset': 1,
+  'train': { 'batch_size': 1,
+             'debug': False,
+             'grad_clip': 100.0,
+             'loss_scale': 1.0,
+             'n_epochs': 100,
+             'num_workers': 0,
+             'optimizer': { 'kwargs': { 'betas': [0.9, 0.999],
+                                        'eps': 1e-08,
+                                        'lr': 0.0001,
+                                        'weight_decay': 0.1},
+                            'name': 'torch.optim.AdamW'},
+             'resume': False,
+             'resume_path': '',
+             'scheduler': { 'kwargs': {'last_epoch': -1, 'warmup_steps': 500},
+                            'name': 'torch.optim.lr_scheduler.LambdaLR'},
+             'use_augmentation': True},
+  'training': False,
+  'use_wandb': False,
+  'wandb_project': 'lifelong learning'}
+'Available algorithms:'
+{ 'agem': <class 'libero.lifelong.algos.agem.AGEM'>,
+  'basic': <class 'libero.lifelong.algos.basic.Basic'>,
+  'er': <class 'libero.lifelong.algos.er.ER'>,
+  'ewc': <class 'libero.lifelong.algos.ewc.EWC'>,
+  'mlr': <class 'libero.lifelong.algos.mlr.MLR'>,
+  'mlrreplayconstraint': <class 'libero.lifelong.algos.mlr_replay_constraint.MLRReplayConstraint'>,
+  'multitaskpretraining': <class 'libero.lifelong.algos.multitask_pretraining.multitaskpretraining'>,
+  'packnet': <class 'libero.lifelong.algos.packnet.PackNet'>,
+  'sequential': <class 'libero.lifelong.algos.base.Sequential'>,
+  'singletask': <class 'libero.lifelong.algos.single_task.SingleTask'>}
+'Available policies:'
+[ 'bc_rnn_policy',
+  'bc_transformer_policy',
+  'bc_vilt_policy',
+  'BriefPolicy',
+  'CompletePolicy']
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 46%|████▌     | 23/50 [00:00<00:00, 229.85it/s]100%|██████████| 50/50 [00:00<00:00, 272.58it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_alphabet_soup_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 78%|███████▊  | 39/50 [00:00<00:00, 315.57it/s]100%|██████████| 50/50 [00:00<00:00, 302.66it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_cream_cheese_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 68%|██████▊   | 34/50 [00:00<00:00, 325.75it/s]100%|██████████| 50/50 [00:00<00:00, 374.94it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_salad_dressing_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 564.41it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_bbq_sauce_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 54%|█████▍    | 27/50 [00:00<00:00, 266.29it/s]100%|██████████| 50/50 [00:00<00:00, 343.59it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_ketchup_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 76%|███████▌  | 38/50 [00:00<00:00, 358.22it/s]100%|██████████| 50/50 [00:00<00:00, 296.74it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_tomato_sauce_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 70%|███████   | 35/50 [00:00<00:00, 343.87it/s]100%|██████████| 50/50 [00:00<00:00, 386.53it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_butter_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 80%|████████  | 40/50 [00:00<00:00, 394.01it/s]100%|██████████| 50/50 [00:00<00:00, 419.55it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_milk_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 78%|███████▊  | 39/50 [00:00<00:00, 389.08it/s]100%|██████████| 50/50 [00:00<00:00, 313.07it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_chocolate_pudding_and_place_it_in_the_basket_demo.hdf5
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s] 80%|████████  | 40/50 [00:00<00:00, 399.74it/s]100%|██████████| 50/50 [00:00<00:00, 420.28it/s]
+/data/mlr_ifa/datasets/libero_object/pick_up_the_orange_juice_and_place_it_in_the_basket_demo.hdf5
+/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+
+=================== Lifelong Benchmark Information  ===================
+ Name: libero_object
+ # Tasks: 10
+    - Task 1:
+        pick up the alphabet soup and place it in the basket
+    - Task 2:
+        pick up the cream cheese and place it in the basket
+    - Task 3:
+        pick up the salad dressing and place it in the basket
+    - Task 4:
+        pick up the bbq sauce and place it in the basket
+    - Task 5:
+        pick up the ketchup and place it in the basket
+    - Task 6:
+        pick up the tomato sauce and place it in the basket
+    - Task 7:
+        pick up the butter and place it in the basket
+    - Task 8:
+        pick up the milk and place it in the basket
+    - Task 9:
+        pick up the chocolate pudding and place it in the basket
+    - Task 10:
+        pick up the orange juice and place it in the basket
+ # demonstrations: (10) (10) (10) (10) (10) (10) (10) (10) (10) (10)
+ # sequences: (1556) (1502) (1403) (1519) (1615) (1454) (1562) (1480) (1560) (1319)
+=======================================================================
+
+policy_head.share.0.weight
+policy_head.share.0.bias
+policy_head.share.2.weight
+policy_head.share.2.bias
+policy_head.share.4.weight
+policy_head.share.4.bias
+policy_head.mean_layer.weight
+policy_head.mean_layer.bias
+policy_head.logstd_layer.weight
+policy_head.logstd_layer.bias
+policy_head.logits_layer.weight
+policy_head.logits_layer.bias
+/data/mlr_ifa/env/lib/python3.8/site-packages/robomimic/utils/dataset.py:516: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  pad_mask = pad_mask[:, None].astype(np.bool)
+policy_head.share.0.weight
+policy_head.share.0.bias
+policy_head.share.2.weight
+policy_head.share.2.bias
+policy_head.share.4.weight
+policy_head.share.4.bias
+policy_head.mean_layer.weight
+policy_head.mean_layer.bias
+policy_head.logstd_layer.weight
+policy_head.logstd_layer.bias
+policy_head.logits_layer.weight
+policy_head.logits_layer.bias
+policy_head.share.0.weight
+policy_head.share.0.bias
+policy_head.share.2.weight
+policy_head.share.2.bias
+policy_head.share.4.weight
+policy_head.share.4.bias
+policy_head.mean_layer.weight
+policy_head.mean_layer.bias
+policy_head.logstd_layer.weight
+policy_head.logstd_layer.bias
+policy_head.logits_layer.weight
+policy_head.logits_layer.bias
+policy_head.share.0.weight
+policy_head.share.0.bias
+policy_head.share.2.weight
+policy_head.share.2.bias
+policy_head.share.4.weight
+policy_head.share.4.bias
+policy_head.mean_layer.weight
+policy_head.mean_layer.bias
+policy_head.logstd_layer.weight
+policy_head.logstd_layer.bias
+policy_head.logits_layer.weight
+policy_head.logits_layer.bias

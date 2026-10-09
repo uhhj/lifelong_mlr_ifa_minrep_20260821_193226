@@ -1,5 +1,22 @@
 # Lifelong Imitation Learning with Multimodal Latent Replay and Incremental Adjustment
 
+## Completed OBJECT seed42 protective-selection E1
+
+The independent OBJECT E1 experiment completed 400 training epochs, 105,500
+optimizer updates and 880 closed-loop episodes. Its primary epoch99 AUC was
+77.292 versus the archived E0 baseline's 77.708 (difference −0.417 percentage
+points). The prespecified primary endpoint did not improve, so no additional
+seeds or parameter search were started. E0 was not retrained.
+
+- [Results, matrices and evidence](reports/object_seed42_protective_selection_E1/README.md)
+- [Isolated implementation and execution notes](experiments/object_seed42_protective_selection_E1/README.md)
+- [Independent acceptance](reports/object_seed42_protective_selection_E1/SERVER_INDEPENDENT_AUDIT.json)
+
+This separate OBJECT experiment retains its E0 settings, including `use_state=False`
+and `gamma=0.3`. It is distinct from the GOAL state-v2 experiment below and its
+read-only paired audit also called E1. Its source is archived in an isolated
+directory; the existing GOAL implementation remains unchanged.
+
 ## MLR branch: completed GOAL seed42 state-v2 run
 
 This branch archives the verified MLR+IFA run based on upstream commit

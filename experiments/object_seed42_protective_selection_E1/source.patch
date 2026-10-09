@@ -1,0 +1,1749 @@
+diff --git a/libero/lifelong/replay_selection.py b/libero/lifelong/replay_selection.py
+new file mode 100644
+--- /dev/null
++++ b/libero/lifelong/replay_selection.py
+@@ -0,0 +1,291 @@
++"""E1 same-task replay replacement. No optimizer, buffer update or rollout API.
++
++The caller supplies an immutable, stage-legal catalog and its verified payload
++loader. This module never discovers files or reads discarded old features.
++"""
++import copy
++import math
++import random
++import time
++from contextlib import contextmanager
++from dataclasses import asdict, dataclass
++
++import numpy as np
++import torch
++from torch.utils.data._utils.collate import default_collate
++
++
++@dataclass(frozen=True)
++class SelectionConfig:
++    enabled: bool = True
++    refresh_interval_steps: int = 500
++    refresh_at_stage_start: bool = True
++    reference_per_old_task: int = 16
++    candidates_per_old_task: int = 64
++    current_reference_size: int = 16
++    priority_replace_probability: float = 0.5
++    conflict_coefficient: float = 1.0
++    softmax_temperature: float = 1.0
++    numerical_epsilon: float = 1e-8
++    gradient_scope: str = 'policy_head'
++    preserve_task_slots: bool = True
++    fallback: str = 'original_retrieval'
++
++    def __post_init__(self):
++        assert self.refresh_interval_steps > 0
++        assert min(self.reference_per_old_task, self.candidates_per_old_task,
++                   self.current_reference_size) > 0
++        assert 0 <= self.priority_replace_probability <= 1
++        assert self.softmax_temperature > 0 and self.numerical_epsilon > 0
++        assert self.conflict_coefficient >= 0 and self.gradient_scope == 'policy_head'
++        assert self.preserve_task_slots and self.fallback == 'original_retrieval'
++
++
++@contextmanager
++def isolated_scoring(policy):
++    """Restore *every* module mode and all model RNG streams, also on errors."""
++    modes = [(m, m.training) for m in policy.modules()]
++    py, np_state, cpu = random.getstate(), np.random.get_state(), torch.get_rng_state()
++    cuda = torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
++    try:
++        policy.eval()
++        # Full training density, including when low_eval_noise=True.
++        policy.policy_head.train(True)
++        with torch.enable_grad():
++            yield
++    finally:
++        for m, flag in modes:
++            m.training = flag
++        random.setstate(py)
++        np.random.set_state(np_state)
++        torch.set_rng_state(cpu)
++        if cuda is not None:
++            torch.cuda.set_rng_state_all(cuda)
++
++
++def _to_device(value, device):
++    if torch.is_tensor(value):
++        return value.to(device)
++    if isinstance(value, dict):
++        return {k: _to_device(v, device) for k, v in value.items()}
++    if isinstance(value, (tuple, list)):
++        return type(value)(_to_device(v, device) for v in value)
++    return value
++
++
++def head_gradient(policy, payloads):
++    """Exact baseline BC target slice; temporal decoder has no autograd graph."""
++    params = tuple(policy.policy_head.parameters())
++    if not params or not all(p.requires_grad for p in params):
++        raise RuntimeError('Scoring requires the baseline trainable policy head')
++    data = _to_device(default_collate(payloads), params[0].device)
++    if not torch.isfinite(data['feature']).all().item() or not torch.isfinite(data['actions']).all().item():
++        return None
++    # Match BasePolicy.compute_loss's squeeze(1), without BriefPolicy.forward.
++    with torch.no_grad():
++        features = policy.temporal_encode(data['feature'].squeeze(1))[:, -1, :].detach()
++    if not torch.isfinite(features).all().item():
++        return None
++    density = policy.policy_head(features, train=True)
++    loss = policy.policy_head.loss_fn(density, data['actions'].squeeze(1), reduction='mean')
++    if not torch.isfinite(loss).item():
++        return None
++    grads = torch.autograd.grad(loss, params, allow_unused=False)
++    vector = torch.cat([g.detach().reshape(-1) for g in grads])
++    return vector if torch.isfinite(vector).all().item() else None
++
++
++def unit(vector, epsilon):
++    if vector is None or not torch.isfinite(vector).all().item():
++        return None
++    norm = torch.linalg.vector_norm(vector)
++    if not torch.isfinite(norm).item() or norm.item() <= epsilon:
++        return None
++    return vector / norm
++
++
++def protective_score(candidate, historical, current, alpha=1.0, epsilon=1e-8):
++    c, h = unit(candidate, epsilon), unit(historical, epsilon)
++    n = unit(current, epsilon)
++    if c is None or h is None:
++        return None
++    score = torch.dot(c, h)
++    if n is not None:
++        score = score - alpha * torch.clamp(-torch.dot(c, n), min=0)
++    value = float(score.item())
++    return value if math.isfinite(value) else None
++
++
++def language_reference(feature):
++    # A single payload has [1,T,M,E]; batch indexing removes only B.
++    if feature.ndim == 4 and feature.shape[0] == 1:
++        feature = feature.squeeze(0)
++    if feature.ndim != 3:
++        raise ValueError('Expected one [1,T,M,E] or [T,M,E] latent payload')
++    return feature[0, 0, :]
++
++
++def _tuple_tree(value):
++    return tuple(_tuple_tree(x) for x in value) if isinstance(value, (list, tuple)) else value
++
++
++class ProtectiveReplaySelector:
++    def __init__(self, policy, seed, current_task, old_catalog, current_ids,
++                 payload_loader, catalog_fingerprint, config=None):
++        self.policy = getattr(policy, 'module', policy)
++        self.config = config or SelectionConfig()
++        self.current_task = int(current_task)
++        self.old = {int(t): tuple(ids) for t, ids in sorted(old_catalog.items()) if ids}
++        assert all(t < current_task for t in self.old), 'Future-task leakage'
++        flat = [i for ids in self.old.values() for i in ids]
++        self.current = tuple(current_ids)
++        assert len(flat) == len(set(flat)) and len(self.current) == len(set(self.current))
++        assert set(flat).isdisjoint(self.current)
++        self.load = payload_loader
++        self.catalog_fingerprint = catalog_fingerprint
++        self.rng = random.Random(int(seed))  # Independent; never random.seed().
++        self.last_refresh_step = None
++        self.distributions = {}
++        self.refresh_record = None
++        self.totals = dict(refreshes=0, old_slots=0, priority_draws=0,
++                           assigned_slots=0, first_reference_veto=0,
++                           invalid_candidates=0, fallback_refreshes=0,
++                           new_direction_fallbacks=0, io_seconds=0.,
++                           scoring_seconds=0., replacement_seconds=0.)
++
++    def should_refresh(self, stage_optimizer_step):
++        if not self.config.enabled or not self.old or self.config.priority_replace_probability == 0:
++            return False
++        if self.last_refresh_step is None:
++            return self.config.refresh_at_stage_start or stage_optimizer_step >= self.config.refresh_interval_steps
++        return stage_optimizer_step - self.last_refresh_step >= self.config.refresh_interval_steps
++
++    def _load_many(self, ids):
++        begin = time.perf_counter()
++        result = [self.load(i) for i in ids]
++        self.totals['io_seconds'] += time.perf_counter() - begin
++        return result
++
++    def refresh(self, stage_optimizer_step):
++        if not self.should_refresh(stage_optimizer_step):
++            return None
++        begin = time.perf_counter()
++        cfg = self.config
++        record = dict(step=int(stage_optimizer_step), references={}, candidates={},
++                      scores={}, probabilities={}, valid_ids={}, invalid_candidates={}, reason='OK')
++        refs, candidates = {}, {}
++        for task, ids in self.old.items():
++            n_ref = min(cfg.reference_per_old_task, max(1, len(ids)-1))
++            sampled = self.rng.sample(ids, min(len(ids), n_ref + cfg.candidates_per_old_task))
++            refs[task], candidates[task] = sampled[:n_ref], sampled[n_ref:]
++            record['references'][str(task)] = refs[task]
++            record['candidates'][str(task)] = candidates[task]
++        new_ids = self.rng.sample(self.current, min(len(self.current), cfg.current_reference_size))
++        record['current_reference'] = new_ids
++        distributions = {}
++        with isolated_scoring(self.policy):
++            h = None
++            for task, ids in refs.items():
++                g = head_gradient(self.policy, self._load_many(ids))
++                if g is None:
++                    h = None
++                    break
++                h = g / len(refs) if h is None else h + g / len(refs)
++            if unit(h, cfg.numerical_epsilon) is None:
++                record['reason'] = 'INVALID_HISTORICAL_DIRECTION'
++                self.totals['fallback_refreshes'] += 1
++            else:
++                n = head_gradient(self.policy, self._load_many(new_ids)) if new_ids else None
++                if unit(n, cfg.numerical_epsilon) is None:
++                    n = None
++                    self.totals['new_direction_fallbacks'] += 1
++                    record['reason'] = 'HISTORY_ONLY_INVALID_CURRENT_DIRECTION'
++                for task, ids in candidates.items():
++                    valid_ids, scores, invalid = [], [], []
++                    for item_id in ids:
++                        g = head_gradient(self.policy, self._load_many([item_id]))
++                        score = protective_score(g, h, n, cfg.conflict_coefficient, cfg.numerical_epsilon)
++                        if score is None:
++                            invalid.append(item_id)
++                        else:
++                            valid_ids.append(item_id)
++                            scores.append(score)
++                        del g
++                    self.totals['invalid_candidates'] += len(invalid)
++                    record['invalid_candidates'][str(task)] = invalid
++                    if scores:
++                        scaled = [s / cfg.softmax_temperature for s in scores]
++                        peak = max(scaled)
++                        weights = [math.exp(s-peak) for s in scaled]
++                        total = sum(weights)
++                        probs = [x/total for x in weights]
++                        distributions[task] = dict(ids=valid_ids, scores=scores, probabilities=probs)
++                        record['valid_ids'][str(task)] = valid_ids
++                        record['scores'][str(task)] = scores
++                        record['probabilities'][str(task)] = probs
++        self.distributions = distributions
++        self.last_refresh_step = int(stage_optimizer_step)
++        self.totals['refreshes'] += 1
++        # CUDA tensor scalar checks above synchronize all scoring kernels.
++        self.totals['scoring_seconds'] += time.perf_counter()-begin
++        self.refresh_record = record
++        return copy.deepcopy(record)
++
++    def replace_old_slots(self, batch):
++        if not self.config.enabled or self.config.priority_replace_probability == 0:
++            return batch, []
++        begin = time.perf_counter()
++        payload, tasks = batch
++        output = None
++        events = []
++        for slot, value in enumerate(tasks):
++            task = int(value)
++            if task >= self.current_task:
++                assert task == self.current_task, 'Future task in original batch'
++                continue
++            self.totals['old_slots'] += 1
++            distribution = self.distributions.get(task)
++            if not distribution or self.rng.random() >= self.config.priority_replace_probability:
++                continue
++            item_id = self.rng.choices(distribution['ids'], weights=distribution['probabilities'], k=1)[0]
++            self.totals['priority_draws'] += 1
++            sample = self._load_many([item_id])[0]
++            assert set(sample) == set(payload), 'Payload schema changed'
++            if slot == 0 and not torch.equal(language_reference(payload['feature'][0]).cpu(), language_reference(sample['feature']).cpu()):
++                self.totals['first_reference_veto'] += 1
++                events.append(dict(slot=slot, task=task, candidate=item_id, applied=False, reason='IFA_LANGUAGE_REFERENCE'))
++                continue
++            if output is None:
++                output = {k:v.clone() for k,v in payload.items()}
++            for key, value in sample.items():
++                assert torch.is_tensor(value) and value.shape == output[key][slot].shape
++                assert value.dtype == output[key].dtype, 'Payload dtype changed'
++                output[key][slot].copy_(value.to(output[key].device))
++            self.totals['assigned_slots'] += 1
++            events.append(dict(slot=slot, task=task, candidate=item_id, applied=True))
++        self.totals['replacement_seconds'] += time.perf_counter()-begin
++        return ([output, tasks] if output is not None else batch), events
++
++    def state_dict(self):
++        return copy.deepcopy(dict(version=1, config=asdict(self.config), current_task=self.current_task,
++            catalog_fingerprint=self.catalog_fingerprint, old_catalog=self.old, current_ids=self.current,
++            rng=self.rng.getstate(), last_refresh_step=self.last_refresh_step,
++            distributions=self.distributions, refresh_record=self.refresh_record, totals=self.totals))
++
++    def load_state_dict(self, state):
++        assert state['version'] == 1 and state['config'] == asdict(self.config)
++        assert state['current_task'] == self.current_task
++        assert state['catalog_fingerprint'] == self.catalog_fingerprint
++        assert {int(k):tuple(v) for k,v in state['old_catalog'].items()} == self.old
++        assert tuple(state['current_ids']) == self.current
++        distributions = {int(k):v for k,v in state['distributions'].items()}
++        for task, d in distributions.items():
++            assert set(d['ids']) <= set(self.old[task])
++            assert len(d['ids']) == len(d['probabilities']) == len(d['scores'])
++            assert all(math.isfinite(p) and p > 0 for p in d['probabilities'])
++            assert abs(sum(d['probabilities'])-1) < 1e-10
++        self.rng.setstate(_tuple_tree(state['rng']))
++        self.last_refresh_step = state['last_refresh_step']
++        self.distributions = copy.deepcopy(distributions)
++        self.refresh_record = copy.deepcopy(state['refresh_record'])
++        self.totals = copy.deepcopy(state['totals'])
+diff --git a/libero/lifelong/replay_selection_hook.py b/libero/lifelong/replay_selection_hook.py
+new file mode 100644
+--- /dev/null
++++ b/libero/lifelong/replay_selection_hook.py
+@@ -0,0 +1,51 @@
++"""Explicit pre-observe integration for a separately gated E0-derived runner.
++
++Use class E1MLR(ProtectiveSelectionMixin, MLR). The runner must configure each
++stage with its verified legal catalog, and atomically checkpoint this sidecar
++with the existing model/optimizer/scheduler/RNG epoch checkpoint. Merely copying
++this module does not start or certify an experiment.
++"""
++import copy
++from .replay_selection import ProtectiveReplaySelector, SelectionConfig
++
++
++class ProtectiveSelectionMixin:
++    def configure_e1_stage(self, task, old_catalog, current_ids, payload_loader,
++                           catalog_fingerprint, selection_config=None):
++        self.e1_selector = ProtectiveReplaySelector(
++            self.policy, self.cfg.seed, task, old_catalog, current_ids,
++            payload_loader, catalog_fingerprint, selection_config or SelectionConfig())
++        self.e1_stage_step = 0
++        self.e1_events = []
++
++    def observe(self, data, current_task_id, epoch, ifa_info=None):
++        selector = getattr(self, 'e1_selector', None)
++        if selector is None or selector.current_task != current_task_id:
++            raise RuntimeError('Stage legal catalog was not configured and verified')
++        # No original sampler/loader/optimizer/scheduler calls are replaced.
++        before_tasks = tuple(str(x) for x in data[1])
++        refresh = selector.refresh(self.e1_stage_step)
++        replaced, events = selector.replace_old_slots(data)
++        assert tuple(str(x) for x in replaced[1]) == before_tasks
++        before_step = self._optimizer_step_count
++        loss = super().observe(replaced, current_task_id, epoch, ifa_info=ifa_info)
++        assert self._optimizer_step_count == before_step + 1
++        self.e1_stage_step += 1
++        self.e1_events.append(dict(stage=current_task_id, epoch=epoch,
++            stage_optimizer_step=self.e1_stage_step, refresh=refresh, replacements=events))
++        return loss
++
++    def pop_e1_events(self):
++        events, self.e1_events = self.e1_events, []
++        return events
++
++    def e1_sidecar(self):
++        return dict(stage_optimizer_step=self.e1_stage_step,
++                    selector=self.e1_selector.state_dict(), pending_events=copy.deepcopy(self.e1_events))
++
++    def restore_e1_sidecar(self, state):
++        self.e1_selector.load_state_dict(state['selector'])
++        self.e1_stage_step = int(state['stage_optimizer_step'])
++        last = self.e1_selector.last_refresh_step
++        assert last is None or 0 <= last <= self.e1_stage_step
++        self.e1_events = copy.deepcopy(state['pending_events'])
+diff --git a/protective_e1/__init__.py b/protective_e1/__init__.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/__init__.py
+@@ -0,0 +1 @@
++"""E1-OBJECT-v1: isolated, fixed single-correction MLR+IFA experiment."""
+diff --git a/protective_e1/baseline_loop.py b/protective_e1/baseline_loop.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/baseline_loop.py
+@@ -0,0 +1,251 @@
++# Baseline MLR loop; only epoch range changed for recovery.
++# Source SHA256: 97f8ebb8ffdd54f5596c956c8f125feac70ebdbd913386bc8384c58d4a7463e5
++from libero.lifelong.algos.mlr import *
++from libero.lifelong.algos.mlr import _is_rank0
++
++class E1EpochLoop(MLR):
++    def learn_all_tasks(self, datasets, benchmark, result_summary,current_task_id):
++
++        ifa_info = None
++        if getattr(self.cfg, "ifa_enabled", True):
++            ifa_info = build_ifa_similarity_matrix(
++                current_task_id=current_task_id,
++                current_feat_root=self.cfg.feature_dir,
++                replay_dir=self.cfg.buffer_dir,
++                language_idx=0,
++                agent_idx=1,
++                top_ratio=0.5,
++            )
++
++        selected_pairs = [] if ifa_info is None else ifa_info["selected_pairs"]
++        gpu_name = torch.cuda.get_device_name(torch.cuda.current_device())
++        print(
++            f"[protocol] seed={self.cfg.seed} gpu={gpu_name} "
++            f"stage={current_task_id} ifa_enabled={getattr(self.cfg, 'ifa_enabled', True)} "
++            f"selected_pairs={selected_pairs}"
++        )
++
++        base_dir = self.cfg.feature_dir
++        buffer_dir = self.cfg.buffer_dir
++
++        dataset = build_dataset_for_task(base_dir, current_task_id, buffer_dir, self.cfg.seed, start=self.cfg.start_task)
++        print("Train set size:", len(dataset))
++
++        # learn on all tasks, only used in multitask learning
++
++        train_sampler = DistributedSampler(
++            dataset=dataset,
++            num_replicas=dist.get_world_size(),
++            rank=dist.get_rank(),
++            shuffle=True,
++        )
++
++        train_dataloader = DataLoader(
++            dataset,
++            batch_size=self.cfg.train.batch_size,
++            num_workers=self.cfg.train.num_workers,
++            sampler=train_sampler,
++            persistent_workers=False,
++        )
++        self.start_task(-1,train_dataloader)
++
++        cumulated_counter = 0.0
++        successes = []
++        losses = []
++
++        # start training
++        for epoch in range(self.e1_start_epoch, self.cfg.train.n_epochs):
++            train_sampler.set_epoch(epoch)
++            pbar = tqdm(train_dataloader, desc=f"Epoch {epoch}", unit="batch")
++            t0 = time.time()
++            self.policy.train()
++            training_loss = 0.0
++            epoch_loss_sum = 0.0
++            epoch_batch_count = 0
++            optimizer_step_start = self._optimizer_step_count
++            lr_start = float(self.optimizer.param_groups[0]["lr"])
++            lr_values = [lr_start]
++            interaction_logging = bool(
++                getattr(self.cfg, "ifa_interaction_logging", False)
++            )
++            interaction_sums = {
++                "base": 0.0,
++                "hinge": 0.0,
++                "active": 0.0,
++                "added": 0.0,
++                "current_samples": 0,
++            }
++            for (idx, data) in enumerate(pbar):
++                loss = self.observe(data,current_task_id,epoch,ifa_info=ifa_info)
++                if interaction_logging:
++                    stats = self._last_ifa_interaction_stats
++                    interaction_sums["base"] += stats["base_bc_loss_before_ifa"]
++                    current_count = stats["current_task_sample_count"]
++                    interaction_sums["hinge"] += stats["ifa_hinge_mean"] * current_count
++                    interaction_sums["active"] += stats["ifa_hinge_active_fraction"] * current_count
++                    interaction_sums["added"] += stats["ifa_added_loss"]
++                    interaction_sums["current_samples"] += current_count
++                epoch_loss_sum += float(loss)
++                epoch_batch_count += 1
++                training_loss += loss
++                avg_loss = training_loss / (idx + 1)
++                pbar.set_postfix(loss=f"{avg_loss:.4f}")
++                lr_values.append(float(self.optimizer.param_groups[0]["lr"]))
++
++                training_loss /= len(train_dataloader)
++
++                max_updates = getattr(self.cfg, "max_optimizer_updates", None)
++                if (
++                    max_updates is not None
++                    and self._optimizer_step_count >= int(max_updates)
++                ):
++                    break
++                
++            t1 = time.time()
++
++            current_lr = self.optimizer.param_groups[0]["lr"]
++            mean_bc_loss = epoch_loss_sum / epoch_batch_count
++            print(
++                f"[info] Epoch: {epoch:3d} | train loss: {training_loss:5.2f} "
++                f"| lr: {current_lr:.8g} | time: {(t1-t0)/60:4.2f}"
++            )
++
++            reached_max_updates = (
++                getattr(self.cfg, "max_optimizer_updates", None) is not None
++                and self._optimizer_step_count >= int(self.cfg.max_optimizer_updates)
++            )
++            save_final_checkpoint = getattr(self.cfg, "save_final_checkpoint", False)
++            diagnostic_epochs = set(
++                int(item)
++                for item in getattr(self.cfg, "diagnostic_checkpoint_epochs", [])
++            )
++            if (
++                should_save_mlr_checkpoint(
++                    epoch,
++                    self.cfg.train.n_epochs,
++                    diagnostic_epochs,
++                    save_final_checkpoint,
++                )
++                or (save_final_checkpoint and reached_max_updates)
++            ):
++
++                self.policy.eval()
++
++                model_checkpoint_name_ep = os.path.join(
++                    self.experiment_dir, f"mlrifa_{current_task_id}_model_ep{epoch}.pth"
++                )
++                if not dist.is_initialized() or dist.get_rank() == 0:
++
++                    torch_save_model(self.policy, model_checkpoint_name_ep, cfg=self.cfg)
++                    print(
++                        f"[checkpoint] seed={self.cfg.seed} stage={current_task_id} "
++                        f"epoch={epoch} path={model_checkpoint_name_ep}"
++                    )
++                    losses.append(training_loss)
++
++                # Defaultly, we don't do evaluation during training.
++                if self.cfg.lifelong.eval_in_train:
++                    success_rates = evaluate_multitask_training_success(
++                        self.cfg, self, benchmark, all_tasks
++                    )
++                    success_rate = np.mean(success_rates)
++                else:
++                    success_rate = 0.0
++                successes.append(success_rate)
++                cumulated_counter += 1.0
++
++            self.epoch_schedule_step(epoch)
++
++            arm = str(getattr(self.cfg, "repro_arm", "unspecified"))
++            self._append_csv(
++                os.path.join(self.experiment_dir, "lr_protocol.csv"),
++                LR_PROTOCOL_FIELDS,
++                {
++                    "seed": self.cfg.seed,
++                    "arm": arm,
++                    "stage": current_task_id,
++                    "epoch": epoch,
++                    "batches": epoch_batch_count,
++                    "optimizer_step_start": optimizer_step_start,
++                    "optimizer_step_end": self._optimizer_step_count,
++                    "lr_start": lr_start,
++                    "lr_end": float(self.optimizer.param_groups[0]["lr"]),
++                    "lr_min": min(lr_values),
++                    "lr_max": max(lr_values),
++                    "scheduler_mode": self.repro_scheduler_mode,
++                    "batch_size": self.cfg.train.batch_size,
++                    "warmup_steps": self.scheduler_warmup_steps,
++                    "total_steps": self.scheduler_total_steps,
++                },
++            )
++
++            if interaction_logging and _is_rank0():
++                interaction_log_dir = str(
++                    getattr(
++                        self.cfg,
++                        "ifa_interaction_log_dir",
++                        os.path.join(self.experiment_dir, "ifa_interaction"),
++                    )
++                )
++                os.makedirs(interaction_log_dir, exist_ok=True)
++                mean_base = interaction_sums["base"] / epoch_batch_count
++                current_samples = interaction_sums["current_samples"]
++                mean_hinge = interaction_sums["hinge"] / max(current_samples, 1)
++                mean_added = interaction_sums["added"] / epoch_batch_count
++                self._append_csv(
++                    os.path.join(
++                        interaction_log_dir,
++                        f"seed{self.cfg.seed}_ifa_epoch_stats.csv",
++                    ),
++                    IFA_INTERACTION_FIELDS,
++                    {
++                        "seed": self.cfg.seed,
++                        "stage": current_task_id,
++                        "epoch": epoch,
++                        "batch_count": epoch_batch_count,
++                        "current_sample_count": interaction_sums["current_samples"],
++                        "mean_base_bc_loss": mean_base,
++                        "mean_ifa_hinge": mean_hinge,
++                        "ifa_active_fraction": interaction_sums["active"] / max(current_samples, 1),
++                        "mean_ifa_added_loss": mean_added,
++                        "ifa_to_bc_ratio": mean_added / max(abs(mean_base), 1e-12),
++                        "lr_start": lr_start,
++                        "lr_end": float(self.optimizer.param_groups[0]["lr"]),
++                        "optimizer_steps": self._optimizer_step_count - optimizer_step_start,
++                        "selected_pairs": json.dumps(selected_pairs),
++                    },
++                )
++
++            self._append_csv(
++                os.path.join(self.experiment_dir, "paper_repro_train_curve.csv"),
++                TRAIN_CURVE_FIELDS,
++                {
++                    "seed": self.cfg.seed,
++                    "arm": arm,
++                    "stage": current_task_id,
++                    "epoch": epoch,
++                    "batches": epoch_batch_count,
++                    "mean_bc_loss": mean_bc_loss,
++                    "optimizer_step_end": self._optimizer_step_count,
++                    "lr_end": float(self.optimizer.param_groups[0]["lr"]),
++                    "scheduler_mode": self.repro_scheduler_mode,
++                    "batch_size": self.cfg.train.batch_size,
++                },
++            )
++
++            max_updates = getattr(self.cfg, "max_optimizer_updates", None)
++            if (
++                max_updates is not None
++                and self._optimizer_step_count >= int(max_updates)
++            ):
++                break
++
++        # return the metrics regarding forward transfer
++        losses = np.array(losses)
++        successes = np.array(successes)
++
++        total, added, dropped, quota, counts = update_buffer_equal_quota_10(
++            base_dir, current_task_id, buffer_dir,
++            capacity=BUFFER_CAPACITY, seed= self.cfg.seed, drop_policy="random",rate=self.cfg.past_data_rate
++        )
++        return successes.sum() / cumulated_counter, losses.sum() / cumulated_counter
+diff --git a/protective_e1/bindings.py b/protective_e1/bindings.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/bindings.py
+@@ -0,0 +1,11 @@
++"""Reuse the migrated server's established sibling-package resolution."""
++from pathlib import Path
++
++
++def bind():
++    import libero
++    root=Path(__file__).resolve().parents[1]
++    assert root in Path(libero.__file__).resolve().parents
++    # Same binding as existing cb_ifa_experiment.gpu_runtime.bind(), no install/edit.
++    sibling=str(root/'libero')
++    if sibling not in libero.__path__:libero.__path__.insert(0,sibling)
+diff --git a/protective_e1/e0_seed42.json b/protective_e1/e0_seed42.json
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/e0_seed42.json
+@@ -0,0 +1,42 @@
++{
++  "benchmark": "LIBERO_OBJECT",
++  "method": "ifa",
++  "seed": 42,
++  "evaluation_view": "PRIMARY_EP99",
++  "n_eval": 20,
++  "selected_epochs": {
++    "6": 99,
++    "7": 99,
++    "8": 99,
++    "9": 99
++  },
++  "fwt": 77.5,
++  "nbt": -0.278,
++  "auc": 77.708,
++  "r": [
++    [
++      35.0,
++      null,
++      null,
++      null
++    ],
++    [
++      50.0,
++      100.0,
++      null,
++      null
++    ],
++    [
++      40.0,
++      95.0,
++      100.0,
++      null
++    ],
++    [
++      25.0,
++      100.0,
++      100.0,
++      75.0
++    ]
++  ]
++}
+diff --git a/protective_e1/env.sh b/protective_e1/env.sh
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/env.sh
+@@ -0,0 +1,9 @@
++#!/usr/bin/env bash
++source /data/mlr_ifa/activate.sh
++E1_SOURCE=/data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source
++E1_OUT=/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008
++export E1_SOURCE E1_OUT
++export PYTHONPATH="$E1_SOURCE:$E1_SOURCE/libero"
++export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONDONTWRITEBYTECODE=1
++export CUDA_VISIBLE_DEVICES=0
++cd "$E1_SOURCE"
+diff --git a/protective_e1/eval_metric.py b/protective_e1/eval_metric.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/eval_metric.py
+@@ -0,0 +1,118 @@
++"""Exact baseline rollout function, plus per-trial recording only."""
++from libero.lifelong.metric import *
++from .evaluate import record_trial
++
++def evaluate_one_task_success(
++    cfg, algo, task, instr, mask, task_id, sim_states=None, task_str="", render = True,see=None
++):
++    """
++    Evaluate a single task's success rate
++    sim_states: if not None, will keep track of all simulated states during
++                evaluation, mainly for visualization and debugging purpose
++    task_str:   the key to access sim_states dictionary
++    """
++    # render = cfg.eval.render
++    with Timer() as t:
++        if cfg.lifelong.algo == "PackNet":  # need preprocess weights for PackNet
++            algo = algo.get_eval_algo(task_id)
++
++        algo.eval()
++        env_num =  10
++        eval_loop_num = (cfg.eval.n_eval + env_num - 1) // env_num
++
++        # initiate evaluation envs
++        env_args = {
++            "bddl_file_name": os.path.join(
++                cfg.bddl_folder, task.problem_folder, task.bddl_file
++            ),
++            "camera_heights": cfg.data.img_h,
++            "camera_widths": cfg.data.img_w,
++        }
++
++        # Try to handle the frame buffer issue
++
++        env = SubprocVectorEnv(
++            [lambda: OffScreenRenderEnv(**env_args) for _ in range(env_num)]
++        )
++
++        ### Evaluation loop
++        # get fixed init states to control the experiment randomness
++        init_states_path = os.path.join(
++            cfg.init_states_folder, task.problem_folder, task.init_states_file
++        )
++        init_states = torch.load(init_states_path)
++        ####################################################################################################################
++        num_success = 0
++        for i in range(eval_loop_num):
++            seed = see + i
++            env.seed(seed)
++            env.reset()
++            env.seed(seed) 
++            indices = np.arange(i * env_num, (i + 1) * env_num) % init_states.shape[0]
++            init_states_ = init_states[indices]
++
++            dones = [False] * env_num
++            steps = 0
++            algo.reset()
++            obs = env.set_init_state(init_states_)
++            history_buffer = []
++           
++            # dummy actions [env_num, 7] all zeros for initial physics simulation
++            dummy = np.zeros((env_num, 7))
++            for _ in range(5):
++                obs, _, _, _ = env.step(dummy)
++
++            frames = []
++            with torch.no_grad():
++
++                while steps < cfg.eval.max_steps:
++                    steps += 1
++
++                    data = raw_obs_to_tensor_obs(obs, instr, mask, cfg)
++
++                    history_buffer.append(data)
++                    if len(history_buffer) > 8:
++                        history_buffer.pop(0)
++
++                    sliding_window = history_buffer.copy()
++
++
++                    def stack_trajectory(data_buffer):
++                        assert len(data_buffer) > 0
++                        result = {
++                            "obs": {},
++                            "task_emb": data_buffer[0]["task_emb"],  # 不变
++                            "masks": data_buffer[0]["masks"],  # 不变
++                        }
++                        obs_keys = data_buffer[0]["obs"].keys()
++                        for key in obs_keys:
++                            result["obs"][key] = torch.stack(
++                                [step["obs"][key] for step in data_buffer],
++                                dim=1  # 这里就是 B,T,C,H,W
++                            )
++                        return result
++
++                    batch_data = stack_trajectory(sliding_window)
++
++                    actions = algo.policy.get_action(batch_data)
++
++                    obs, reward, done, info = env.step(actions)
++
++                    # check whether succeed
++                    for k in range(env_num):
++                        dones[k] = dones[k] or done[k]
++
++                    if all(dones):
++                        break
++
++                # a new form of success record
++                for k in range(env_num):
++                    if i * env_num + k < cfg.eval.n_eval:
++                        record_trial(cfg, task_id, see, i * env_num + k, int(indices[k]), bool(dones[k]), steps)
++                        num_success += int(dones[k])
++
++        success_rate = num_success / cfg.eval.n_eval
++        env.close()
++        gc.collect()
++    print(f"[info] evaluate task {task_id} takes {t.get_elapsed_time():.1f} seconds")
++    return success_rate
+diff --git a/protective_e1/evaluate.py b/protective_e1/evaluate.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/evaluate.py
+@@ -0,0 +1,39 @@
++"""Invoke original evaluation, with observation-only per-trial records."""
++import json
++import os
++import re
++from pathlib import Path
++
++CURRENT={}
++
++
++def record_trial(cfg,task,seed,trial,initial_state,success,steps):
++    assert CURRENT, 'Evaluation checkpoint provenance missing'
++    path=Path(os.environ['E1_TRIAL_LOG']);path.parent.mkdir(parents=True,exist_ok=True)
++    row=dict(CURRENT,seed=seed,task=task,trial=trial,initial_state_index=initial_state,
++             success=success,vector_group_steps=steps)
++    with path.open('a') as f: f.write(json.dumps(row,allow_nan=False)+'\n');f.flush()
++
++
++def main():
++    from .bindings import bind
++    bind()
++    import torch
++    import libero.lifelong.test as baseline
++    import libero.lifelong.metric as metric
++    from . import eval_metric
++    # Import canonical module so record_trial and loader share the same context under -m.
++    from protective_e1 import evaluate as context
++    native_load=torch.load
++    def observed_load(path,*args,**kwargs):
++        result=native_load(path,*args,**kwargs)
++        if isinstance(path,(str,Path)):
++            m=re.fullmatch(r'mlrifa_(\d+)_model_ep(\d+)\.pth',Path(path).name)
++            if m:context.CURRENT.update(checkpoint=str(path),stage=int(m[1]),epoch=int(m[2]))
++        return result
++    torch.load=observed_load
++    metric.evaluate_one_task_success=eval_metric.evaluate_one_task_success
++    baseline.main()
++
++
++if __name__=='__main__':main()
+diff --git a/protective_e1/evaluate.sh b/protective_e1/evaluate.sh
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/evaluate.sh
+@@ -0,0 +1,46 @@
++#!/usr/bin/env bash
++set -euo pipefail
++source "$(dirname "$0")/env.sh"
++VIEW="${1:?primary or secondary}"
++test -s "$E1_OUT/TRAINING_COMPLETE.json"
++case "$VIEW" in primary|secondary) ;; *) exit 2;; esac
++test ! -e "$E1_OUT/${VIEW}_COMPLETE.json" || exit 0
++LOG_FILE="$E1_OUT/eval_${VIEW}.log"
++export E1_TRIAL_LOG="$E1_OUT/trials_${VIEW}.jsonl"
++test ! -e "$LOG_FILE" && test ! -e "$E1_TRIAL_LOG" || { echo 'Partial evaluation retained; explicit technical recovery required'; exit 3; }
++ARGS=(seed=42 benchmark_name=LIBERO_OBJECT policy=complete_policy lifelong=basic
++ folder=/data/mlr_ifa/datasets bddl_folder="$E1_SOURCE/libero/libero/bddl_files"
++ init_states_folder="$E1_SOURCE/libero/libero/init_files"
++ pretrain=/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth
++ eval.n_eval=20 eval.num_procs=20 +start_task=6 +end_task=10 +aug=true
++ +epoch_dir="$E1_OUT/run_001" +test_log_file="$LOG_FILE" training=false use_wandb=false)
++if [[ "$VIEW" == primary ]]; then
++ python -m protective_e1.evaluate "${ARGS[@]}" '+eval_epochs=[99]' +experiment_root="$E1_OUT/eval_primary"
++else
++ python -m protective_e1.evaluate "${ARGS[@]}" +eval_current_only=true '+eval_epochs=[70,75,80,85,90,95,99]' +experiment_root="$E1_OUT/eval_secondary_selection"
++ read -r E6 E7 E8 E9 < <(python - "$LOG_FILE" <<'PY'
++import re,sys
++p=re.compile(r'\[task (\d+) epoch (\d+) and (\d+) succ\.\]\s+([0-9.]+)');r={}
++for line in open(sys.argv[1]):
++ m=p.search(line)
++ if m:
++  t,e,s=map(int,m.group(1,2,3));r[s,e,t]=float(m[4])
++print(*(max((70,75,80,85,90,95,99),key=lambda e:(r[s,e,s],e)) for s in range(6,10)))
++PY
++ )
++ for SPEC in "7:$E7:[6]" "8:$E8:[6,7]" "9:$E9:[6,7,8]"; do
++  IFS=: read -r STAGE EPOCH TASKS <<< "$SPEC"
++  python -m protective_e1.evaluate "${ARGS[@]}" +eval_stage="$STAGE" +eval_task_ids="$TASKS" +eval_epochs="[$EPOCH]" +experiment_root="$E1_OUT/eval_secondary_stage${STAGE}"
++ done
++fi
++python - "$VIEW" <<'PY'
++import os,json,sys,re
++from pathlib import Path
++from protective_e1.io import write,sha
++o=Path(os.environ['E1_OUT']);v=sys.argv[1]
++rows=[json.loads(x) for x in (o/('trials_'+v+'.jsonl')).read_text().splitlines()]
++n=200 if v=='primary' else 680
++assert len(rows)==n
++assert all(type(r['success']) is bool for r in rows)
++write(o/(v+'_COMPLETE.json'),dict(status='PASS',records=n,trials_sha256=sha(o/('trials_'+v+'.jsonl'))))
++PY
+diff --git a/protective_e1/export.py b/protective_e1/export.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/export.py
+@@ -0,0 +1,6 @@
++"""Run the unchanged E0 feature exporter with package binding only."""
++from .bindings import bind
++bind()
++from libero.lifelong.save_feature import main
++if __name__ == '__main__':
++    main()
+diff --git a/protective_e1/export.sh b/protective_e1/export.sh
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/export.sh
+@@ -0,0 +1,16 @@
++#!/usr/bin/env bash
++set -euo pipefail
++source "$(dirname "$0")/env.sh"
++exec 9>"$E1_OUT/process.lock"
++flock -n 9
++test ! -e "$E1_OUT/features/6/0.pt"
++mkdir -p "$E1_OUT/features" "$E1_OUT/export"
++printf '%s\n' "$$" > "$E1_OUT/export.pid"
++trap 'code=$?; printf "%s\n" "$code" > "$E1_OUT/export.exit"' EXIT
++python -m torch.distributed.run --nproc_per_node=1 --master_port=37983 -m protective_e1.export \
++ seed=42 benchmark_name=LIBERO_OBJECT policy=complete_policy lifelong=basic \
++ folder=/data/mlr_ifa/datasets bddl_folder="$E1_SOURCE/libero/libero/bddl_files" \
++ init_states_folder="$E1_SOURCE/libero/libero/init_files" \
++ train.batch_size=1 train.num_workers=0 pretrain=/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth \
++ +start_task=6 +end_task=10 +aug=true +feature_dir="$E1_OUT/features" \
++ +experiment_root="$E1_OUT/export" training=false use_wandb=false
+diff --git a/protective_e1/finalize.py b/protective_e1/finalize.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/finalize.py
+@@ -0,0 +1,50 @@
++"""Read-only scientific checks and historical E0 comparison; no policy imports."""
++import csv,json,os,time
++from pathlib import Path
++from collections import Counter,defaultdict
++from .io import write,sha
++from .legacy_metrics import metrics,fixed_epoch_matrix,load_matrix
++
++S=Path(os.environ['E1_SOURCE']);O=Path(os.environ['E1_OUT'])
++def auc(r):return sum(sum(r[q][i] for q in range(i,4))/(4-i) for i in range(4))/4
++def main():
++    assert json.loads((O/'TRAINING_COMPLETE.json').read_text())['status']=='TRAINED_EVAL_PENDING'
++    for v,n in [('primary',200),('secondary',680)]:
++        receipt=json.loads((O/(v+'_COMPLETE.json')).read_text())
++        path=O/('trials_'+v+'.jsonl');assert sha(path)==receipt['trials_sha256']
++        rows=[json.loads(x) for x in path.read_text().splitlines()];assert len(rows)==n
++        groups=defaultdict(list)
++        for x in rows:groups[x['stage'],x['epoch'],x['task']].append(x)
++        assert all(len(xs)==20 and sorted(r['initial_state_index'] for r in xs)==list(range(20)) for xs in groups.values())
++        # Secondary may reuse an already-evaluated ep99 cell in a different view; views stay separate.
++        assert len(groups)==(10 if v=='primary' else 34)
++        matrix,selected=fixed_epoch_matrix(O/'eval_primary.log') if v=='primary' else load_matrix(O/'eval_secondary.log',epochs=(70,75,80,85,90,95,99))
++        for stage in range(6,10):
++            for task in range(6,stage+1):
++                xs=groups[stage,int(selected[str(stage)]),task]
++                assert abs(sum(x['success'] for x in xs)*5-matrix[stage-6][task-6])<1e-8
++        write(O/('metrics_'+v+'.json'),dict(metrics(matrix),selected_epochs=selected))
++    rows=list(csv.DictReader((O/'run_001/paper_repro_train_curve.csv').open()))
++    assert len(rows)==400 and len({(r['stage'],r['epoch']) for r in rows})==400
++    assert all(int(r['batch_size'])==10 for r in rows)
++    expected_batches={6:157,7:227,8:309,9:362}
++    for r in rows:assert int(r['batches'])==expected_batches[int(r['stage'])]
++    contract=json.loads((O/'CONTRACT.json').read_text())
++    assert all(sha(S/k)==v for k,v in contract['source_sha256'].items())
++    parity=json.loads((O/'FEATURE_PARITY.json').read_text())
++    for t,files in parity['features'].items():
++        assert all(sha(O/'features'/t/n)==h for n,h in files.items())
++    training=json.loads((O/'TRAINING_COMPLETE.json').read_text())
++    assert all(sha(O/'run_001'/n)==h for n,h in training['checkpoints'].items())
++    baseline=json.loads((S/'protective_e1/e0_seed42.json').read_text());new=json.loads((O/'metrics_primary.json').read_text())
++    delta={k:new[k]-baseline[k] for k in ('auc','fwt','nbt')}
++    improved=auc(new['r'])>auc(baseline['r'])+1e-9
++    result=dict(status='SEED42_COMPLETE_EXTENSION_PENDING' if improved else 'COMPLETED',
++      seed=42,baseline=baseline,e1=new,difference=delta,primary_auc_improved=improved,
++      additional_seeds=[43,44] if improved else [],baseline_rerun=False,
++      training_epochs=400,new_optimizer_steps=sum(int(r['batches']) for r in rows),
++      formal_primary_rollouts=200,formal_secondary_rollouts=680,
++      source_and_features_unchanged=True,training=training,disclosed_gaps=contract['disclosed_gaps'],timestamp=time.time())
++    write(O/'FINAL_ACCEPTANCE.json',result);write(O/'RUN_STATUS.json',result)
++    print(json.dumps(result,indent=2))
++if __name__=='__main__':main()
+diff --git a/protective_e1/input_config.json b/protective_e1/input_config.json
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/input_config.json
+@@ -0,0 +1,216 @@
++{
++  "seed": 42,
++  "use_wandb": false,
++  "wandb_project": "lifelong learning",
++  "folder": "/data/lifelong_mlr_ifa_minrep_20260912/data",
++  "bddl_folder": "/data/lifelong_mlr_ifa_minrep_20260912/libero/libero/bddl_files",
++  "init_states_folder": "/data/lifelong_mlr_ifa_minrep_20260912/libero/libero/init_files",
++  "load_previous_model": false,
++  "device": "cuda",
++  "task_embedding_format": "clip",
++  "task_embedding_one_hot_offset": 1,
++  "pretrain": "/data/lifelong_mlr_ifa_minrep_20260912/checkpoints/object_multitask_model_ep99.pth",
++  "pretrain_model_path": "",
++  "benchmark_name": "LIBERO_OBJECT",
++  "training": true,
++  "data": {
++    "data_modality": [
++      "image",
++      "proprio"
++    ],
++    "seq_len": 8,
++    "demo_limit": 10,
++    "frame_stack": 1,
++    "use_eye_in_hand": true,
++    "use_gripper": true,
++    "use_joint": true,
++    "use_ee": false,
++    "max_word_len": 25,
++    "state_dim": null,
++    "num_kp": 64,
++    "img_h": 128,
++    "img_w": 128,
++    "task_group_size": 1,
++    "task_order_index": 0,
++    "shuffle_task": false,
++    "obs": {
++      "modality": {
++        "rgb": [
++          "agentview_rgb",
++          "eye_in_hand_rgb"
++        ],
++        "depth": [],
++        "low_dim": [
++          "gripper_states",
++          "joint_states"
++        ]
++      }
++    },
++    "obs_key_mapping": {
++      "agentview_rgb": "agentview_image",
++      "eye_in_hand_rgb": "robot0_eye_in_hand_image",
++      "gripper_states": "robot0_gripper_qpos",
++      "joint_states": "robot0_joint_pos"
++    },
++    "affine_translate": 4,
++    "action_scale": 1.0,
++    "train_dataset_ratio": 0.8
++  },
++  "policy": {
++    "color_aug": {
++      "_target_": "BatchWiseImgColorJitterAug",
++      "network": "BatchWiseImgColorJitterAug",
++      "prob": 0.9,
++      "network_kwargs": {
++        "brightness": 0.3,
++        "contrast": 0.3,
++        "saturation": 0.3,
++        "hue": 0.3
++      }
++    },
++    "translation_aug": {
++      "_target_": "RandomAffineAug",
++      "network": "RandomAffineAug",
++      "prob": 0.6,
++      "network_kwargs": {
++        "degrees": 15,
++        "translate": 0.1
++      }
++    },
++    "erase_aug": {
++      "_target_": "RandomErasingAug",
++      "network": "RandomErasingAug",
++      "prob": 0.1,
++      "network_kwargs": {
++        "scale": [
++          0.02,
++          0.33
++        ],
++        "ratio": [
++          0.3,
++          3.3
++        ]
++      }
++    },
++    "image_encoder": {
++      "network": "CLIPVisionEncoder",
++      "network_kwargs": {
++        "vision_model_name": "openai/clip-vit-base-patch16",
++        "output_size": 64,
++        "input_shape": null
++      }
++    },
++    "language_encoder": {
++      "network": "CLIPTextEncoder",
++      "network_kwargs": {
++        "text_model_name": "openai/clip-vit-base-patch16",
++        "output_size": 64
++      }
++    },
++    "temporal_position_encoding": {
++      "network": "SinusoidalPositionEncoding",
++      "network_kwargs": {
++        "input_size": null,
++        "inv_freq_factor": 10,
++        "factor_ratio": null
++      }
++    },
++    "policy_head": {
++      "network": "TemporalGMMHead",
++      "network_kwargs": {
++        "hidden_size": 1024,
++        "num_layers": 2,
++        "min_std": 0.0001,
++        "num_modes": 5,
++        "low_eval_noise": false,
++        "activation": "softplus"
++      },
++      "loss_kwargs": {
++        "loss_coef": 1.0
++      }
++    },
++    "policy_type": "BriefPolicy",
++    "extra_num_layers": 0,
++    "extra_hidden_size": 128,
++    "embed_size": 512,
++    "transformer_num_layers": 6,
++    "transformer_num_heads": 8,
++    "transformer_head_output_size": 64,
++    "transformer_mlp_hidden_size": 256,
++    "transformer_dropout": 0.15,
++    "transformer_max_seq_len": 8,
++    "film_hidden_size": 512,
++    "num_tasks": 10,
++    "max_seq_len": 8,
++    "num_gmm_modes": 5,
++    "rank": 8,
++    "alpha": 8
++  },
++  "train": {
++    "optimizer": {
++      "name": "torch.optim.AdamW",
++      "kwargs": {
++        "lr": 0.0001,
++        "betas": [
++          0.9,
++          0.999
++        ],
++        "eps": 1e-08,
++        "weight_decay": 0.1
++      }
++    },
++    "scheduler": {
++      "name": "torch.optim.lr_scheduler.LambdaLR",
++      "kwargs": {
++        "warmup_steps": 500,
++        "last_epoch": -1
++      }
++    },
++    "n_epochs": 100,
++    "batch_size": 10,
++    "num_workers": 0,
++    "grad_clip": 100.0,
++    "loss_scale": 1.0,
++    "resume": false,
++    "resume_path": "",
++    "debug": false,
++    "use_augmentation": true
++  },
++  "eval": {
++    "load_path": "",
++    "eval": false,
++    "batch_size": 64,
++    "num_workers": 4,
++    "n_eval": 2,
++    "eval_every": 5,
++    "max_steps": 600,
++    "use_mp": true,
++    "num_procs": 20,
++    "save_sim_states": false,
++    "render": false
++  },
++  "lifelong": {
++    "algo": "MLR",
++    "eval_in_train": false
++  },
++  "start_task": 6,
++  "end_task": 10,
++  "aug": false,
++  "feature_dir": "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42",
++  "buffer_dir": "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/buffer",
++  "experiment_root": "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42",
++  "past_data_rate": 0.5,
++  "ifa_enabled": true,
++  "ifa_weight": 0.1,
++  "gamma": 0.3,
++  "repro_scheduler_mode": "batch_step",
++  "repro_arm": "E1_OBJECT_v1",
++  "save_final_checkpoint": true,
++  "experiment_dir": "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/run_001",
++  "experiment_name": "dm_Elements_wzp2026_lifelong_mlr_ifa_minrep_runs_final_paper_text_faithful_ifa_seed42_run_001",
++  "shape_meta": null,
++  "e1_root": "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42",
++  "e1_report": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/seed42",
++  "e1_recovery": "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/recovery/latest.pt",
++  "e1_protocol": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/PROTOCOL.json"
++}
+diff --git a/protective_e1/io.py b/protective_e1/io.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/io.py
+@@ -0,0 +1,28 @@
++import hashlib
++import json
++import os
++from pathlib import Path
++
++
++def sha(path):
++    h = hashlib.sha256()
++    with open(path, 'rb') as f:
++        for block in iter(lambda: f.read(8*1024*1024), b''): h.update(block)
++    return h.hexdigest()
++
++
++def write(path, value):
++    path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
++    tmp = path.with_name(path.name+'.tmp')
++    with tmp.open('w', encoding='utf-8') as f:
++        f.write(json.dumps(value, indent=2, allow_nan=False)+'\n'); f.flush(); os.fsync(f.fileno())
++    os.replace(tmp, path)
++
++
++def save(path, value):
++    import torch
++    path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
++    tmp = path.with_name(path.name+'.tmp')
++    with tmp.open('wb') as f:
++        torch.save(value, f); f.flush(); os.fsync(f.fileno())
++    os.replace(tmp, path)
+diff --git a/protective_e1/legacy_metrics.py b/protective_e1/legacy_metrics.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/legacy_metrics.py
+@@ -0,0 +1,107 @@
++#!/usr/bin/env python3
++import argparse
++import json
++import re
++from pathlib import Path
++
++LINE = re.compile(r"\[task (\d+) epoch (\d+) and (\d+) succ\.\]\s+([0-9.]+)")
++EPOCHS = (70, 75, 80, 85, 90, 95)
++
++
++def load_matrix(path, epochs=EPOCHS):
++    records = {}
++    for line in Path(path).read_text(encoding="utf-8").splitlines():
++        match = LINE.search(line)
++        if not match:
++            continue
++        task, epoch, stage = int(match[1]), int(match[2]), int(match[3])
++        rate = float(match[4])
++        if 6 <= task <= stage <= 9:
++            records[(stage, epoch, task)] = rate * 100.0
++
++    missing_diagonal = [
++        (stage, epoch, stage)
++        for stage in range(6, 10)
++        for epoch in epochs
++        if (stage, epoch, stage) not in records
++    ]
++    if missing_diagonal:
++        raise ValueError(
++            f"missing current-task checkpoint-selection entries in {path}: "
++            f"{missing_diagonal}"
++        )
++
++    matrix = [[None] * 4 for _ in range(4)]
++    selected_epochs = {}
++    for stage in range(6, 10):
++        best_epoch = max(
++            epochs,
++            key=lambda epoch: (records[(stage, epoch, stage)], epoch),
++        )
++        selected_epochs[str(stage)] = best_epoch
++        missing_selected = [
++            (stage, best_epoch, task)
++            for task in range(6, stage + 1)
++            if (stage, best_epoch, task) not in records
++        ]
++        if missing_selected:
++            raise ValueError(
++                f"missing selected-checkpoint entries in {path}: "
++                f"{missing_selected}"
++            )
++        for task in range(6, stage + 1):
++            matrix[stage - 6][task - 6] = records[(stage, best_epoch, task)]
++    return matrix, selected_epochs
++
++
++def metrics(r):
++    m = len(r)
++    fwt = sum(r[i][i] for i in range(m)) / m
++    per_task_nbt = [sum(r[i][i] - r[q][i] for q in range(i + 1, m)) / (m - i - 1) for i in range(m - 1)]
++    nbt = sum(per_task_nbt) / (m - 1)
++    per_task_auc = [sum(r[q][i] for q in range(i, m)) / (m - i) for i in range(m)]
++    auc = sum(per_task_auc) / m
++    return {"fwt": round(fwt, 3), "nbt": round(nbt, 3), "auc": round(auc, 3), "r": r}
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--mlr-log", required=True)
++    parser.add_argument("--mlr-ifa-log", required=True)
++    parser.add_argument("--output", required=True)
++    args = parser.parse_args()
++    mlr_r, mlr_epochs = load_matrix(args.mlr_log)
++    mlr_ifa_r, mlr_ifa_epochs = load_matrix(args.mlr_ifa_log)
++    result = {
++        "benchmark": "LIBERO_OBJECT",
++        "seed": 42,
++        "checkpoint_selection": "best current-task success; latest epoch on ties",
++        "mlr": {**metrics(mlr_r), "selected_epochs": mlr_epochs},
++        "mlr_ifa": {**metrics(mlr_ifa_r), "selected_epochs": mlr_ifa_epochs},
++    }
++    Path(args.output).write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
++    print(json.dumps(result, indent=2))
++
++
++if __name__ == "__main__":
++    main()
++
++
++# Existing primary matrix parser, unchanged.
++def fixed_epoch_matrix(path, epoch=99):
++    records = {}
++    for line in Path(path).read_text(encoding="utf-8").splitlines():
++        match = LINE.search(line)
++        if match:
++            task, checkpoint, stage = map(int, match.group(1, 2, 3))
++            if checkpoint == epoch and 6 <= task <= stage <= 9:
++                records[(stage, task)] = float(match.group(4)) * 100.0
++    expected = {(stage, task) for stage in range(6, 10) for task in range(6, stage + 1)}
++    missing = sorted(expected - records.keys())
++    if missing:
++        raise ValueError(f"missing primary ep{epoch} entries in {path}: {missing}")
++    matrix = [[None] * 4 for _ in range(4)]
++    for stage, task in expected:
++        matrix[stage - 6][task - 6] = records[(stage, task)]
++    return matrix, {str(stage): epoch for stage in range(6, 10)}
++
+diff --git a/protective_e1/pipeline.sh b/protective_e1/pipeline.sh
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/pipeline.sh
+@@ -0,0 +1,21 @@
++#!/usr/bin/env bash
++set -euo pipefail
++source "$(dirname "$0")/env.sh"
++exec 9>"$E1_OUT/process.lock"
++flock -n 9
++printf '%s\n' "$$" > "$E1_OUT/pipeline.pid"
++trap 'code=$?; printf "%s\n" "$code" > "$E1_OUT/pipeline.exit"' EXIT
++run_step() {
++ local label="$1"; shift
++ printf '%s START %s\n' "$(date -Is)" "$label" >> "$E1_OUT/commands.log"
++ "$@" > "$E1_OUT/${label}.log" 2>&1
++ printf '%s EXIT 0 %s\n' "$(date -Is)" "$label" >> "$E1_OUT/commands.log"
++}
++run_step prepare python -B -m protective_e1.prepare
++if [[ ! -e "$E1_OUT/REAL_PREFLIGHT.json" ]]; then
++ run_step preflight python -m torch.distributed.run --nproc_per_node=1 --master_port=37984 -m protective_e1.preflight
++fi
++run_step train python -m torch.distributed.run --nproc_per_node=1 --master_port=37985 -m protective_e1.train
++run_step evaluate_primary bash protective_e1/evaluate.sh primary
++run_step evaluate_secondary bash protective_e1/evaluate.sh secondary
++run_step finalize python -B -m protective_e1.finalize
+diff --git a/protective_e1/preflight.py b/protective_e1/preflight.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/preflight.py
+@@ -0,0 +1,94 @@
++"""Short checks using actual recovered OBJECT payloads and the actual E0 policy."""
++import copy
++import hashlib
++import json
++import os
++import time
++from pathlib import Path
++import torch
++import torch.distributed as dist
++from easydict import EasyDict
++from torch.utils.data import DataLoader
++from torch.utils.data.distributed import DistributedSampler
++from .prepare import O,S,config
++from .train import build
++from .runtime import capture,restore_rng,rng
++from .io import write,sha,save
++from libero.lifelong.algos.mlr import MLR,build_dataset_for_task,update_buffer_equal_quota_10,BUFFER_CAPACITY,build_ifa_similarity_matrix
++from libero.lifelong.utils import torch_load_model
++from libero.lifelong.replay_selection import SelectionConfig
++
++def signature(value):
++    h=hashlib.sha256()
++    def visit(x):
++        if torch.is_tensor(x):h.update(str((x.dtype,tuple(x.shape))).encode());h.update(x.detach().cpu().contiguous().numpy().tobytes())
++        elif isinstance(x,dict):
++            for k,v in x.items():h.update(str(k).encode());visit(v)
++        elif isinstance(x,(list,tuple)):
++            for v in x:visit(v)
++        elif hasattr(x,'tobytes'):h.update(x.tobytes())
++        else:h.update(repr(x).encode())
++    visit(value);return h.hexdigest()
++
++def restore(algo,state):
++    algo.policy.load_state_dict(state['model'],strict=True);algo.optimizer.load_state_dict(state['optimizer'])
++    algo.scheduler.load_state_dict(state['scheduler']);algo._optimizer_step_count=state['optimizer_step'];algo._scheduler_step_count=state['scheduler_step']
++    for n,m in algo.policy.named_modules():m.training=state['modes'][n]
++    restore_rng(state['rng'])
++
++def main():
++    root=O/'preflight';assert not root.exists(),'Do not rerun existing real checks silently'
++    root.mkdir();dist.init_process_group('nccl');torch.cuda.set_device(0)
++    begin=time.time()
++    try:
++        cfg=EasyDict(config(root));algo,benchmark=build(cfg)
++        pretrained=torch_load_model(cfg.pretrain)[0]
++        trainable={n:p for n,p in algo.policy.module.named_parameters() if p.requires_grad}
++        assert trainable and all(n in pretrained and torch.equal(p.detach().cpu(),pretrained[n].cpu()) for n,p in trainable.items())
++        loaded_count=len(trainable);del pretrained
++        update_buffer_equal_quota_10(cfg.feature_dir,6,cfg.buffer_dir,capacity=BUFFER_CAPACITY,seed=42,drop_policy='random',rate=.5)
++        old={6:[]};current=[];catalog={}
++        for p in sorted(Path(cfg.buffer_dir).glob('*.pt')):
++            old[6].append(p.name);catalog[p.name]=dict(path=str(p),sha256=sha(p))
++        for p in sorted((Path(cfg.feature_dir)/'7').glob('*.pt')):
++            key='7/'+p.name;current.append(key);catalog[key]=dict(path=str(p),sha256=sha(p))
++        algo.catalog=catalog;algo.stage=7;algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog),SelectionConfig(priority_replace_probability=0.))
++        dataset=build_dataset_for_task(cfg.feature_dir,7,cfg.buffer_dir,42,start=6)
++        loader=DataLoader(dataset,batch_size=10,num_workers=0,sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True))
++        algo.start_task(-1,loader);algo.policy.train();iterator=iter(loader);batch=next(iterator);second=next(iterator)
++        ifa=build_ifa_similarity_matrix(current_task_id=7,current_feat_root=cfg.feature_dir,replay_dir=cfg.buffer_dir,language_idx=0,agent_idx=1,top_ratio=.5)
++        initial=capture(algo)
++        native_loss=MLR.observe(algo,copy.deepcopy(batch),7,0,ifa_info=ifa);native=capture(algo)
++        restore(algo,initial);e1_loss=algo.observe(copy.deepcopy(batch),7,0,ifa_info=ifa);off=capture(algo)
++        assert native_loss==e1_loss and signature(native)==signature(off),'ZERO_PROBABILITY_UPDATE_DIVERGED'
++        restore(algo,initial);algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog))
++        before=capture(algo);refresh=algo.e1_selector.refresh(0);after=capture(algo)
++        assert signature(before)==signature(after),'SCORING_CHANGED_TRAINING_STATE'
++        assert refresh['reason']=='OK' and len(algo.e1_selector.distributions[6]['ids'])==64
++        replacement,events=algo.e1_selector.replace_old_slots(copy.deepcopy(batch))
++        assert replacement[1]==batch[1]
++        for i,t in enumerate(batch[1]):
++            if int(t)==7:
++                for k in batch[0]:assert torch.equal(replacement[0][k][i],batch[0][k][i])
++        algo.observe(copy.deepcopy(batch),7,0,ifa_info=ifa)
++        middle=capture(algo);side=algo.e1_sidecar()
++        save(root/'resume_check.pth',dict(state=middle,side=side))
++        expected_loss=algo.observe(copy.deepcopy(second),7,0,ifa_info=ifa);expected=capture(algo)
++        restored=torch.load(root/'resume_check.pth',map_location='cpu');restore(algo,restored['state']);algo.restore_e1_sidecar(restored['side'])
++        restored_loss=algo.observe(copy.deepcopy(second),7,0,ifa_info=ifa);actual=capture(algo)
++        assert expected_loss==restored_loss and signature(expected)==signature(actual),'RESUME_NEXT_UPDATE_DIVERGED'
++        assert signature(initial['model'])!=signature(actual['model']),'NONZERO_LR_DID_NOT_UPDATE'
++        saved_rng=copy.deepcopy(rng());loader.sampler.set_epoch(1);a=next(iter(loader));rng_a=signature(rng())
++        restore_rng(saved_rng);loader.sampler.set_epoch(1);b=next(iter(loader))
++        assert a[1]==b[1] and all(torch.equal(a[0][k],b[0][k]) for k in a[0]) and rng_a==signature(rng())
++        result=dict(status='PASS',optimizer_calls=5,actual_policy='E0 BriefPolicy/GMMHead',real_payloads=True,
++          old_buffer_windows=len(old[6]),current_windows=len(current),zero_probability_native_update_parity=True,
++          refresh_preserves_parameters_optimizer_scheduler_rng_modes=True,only_head_gradient=True,
++          candidate_count=64,reference_count=16,current_reference_count=16,same_task_slots_current_content=True,
++          saved_state_next_update_exact=True,next_epoch_loader_rng_exact=True,trainable_pretrain_keys_loaded=loaded_count,
++          ifa_pairs=ifa['selected_pairs'],formal_state_reused=False,seconds=time.time()-begin,
++          torch=torch.__version__,cuda=torch.version.cuda,gpu=torch.cuda.get_device_name(),refresh=refresh)
++        write(O/'REAL_PREFLIGHT.json',result);print(json.dumps(result),flush=True)
++    finally:dist.destroy_process_group()
++
++if __name__=='__main__':main()
+diff --git a/protective_e1/prepare.py b/protective_e1/prepare.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/prepare.py
+@@ -0,0 +1,60 @@
++import hashlib
++import json
++import os
++import time
++from pathlib import Path
++from dataclasses import asdict
++from .bindings import bind
++bind()
++from .io import write,sha
++from libero.lifelong.replay_selection import SelectionConfig
++
++S=Path(os.environ['E1_SOURCE']);O=Path(os.environ['E1_OUT'])
++
++def config(out=None):
++    root=Path(out) if out else O
++    cfg=json.loads((S/'protective_e1/input_config.json').read_text())
++    for key in list(cfg):
++        if key.startswith('e1_'):del cfg[key]
++    cfg.update(seed=42,pretrain='/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth',
++       feature_dir=str(O/'features'),buffer_dir=str(root/'buffer'),experiment_dir=str(root/'run_001'),
++       experiment_root=str(root),folder='/data/mlr_ifa/datasets',bddl_folder=str(S/'libero/libero/bddl_files'),
++       init_states_folder=str(S/'libero/libero/init_files'),e1_root=str(root),e1_contract=str(O/'CONTRACT.json'),
++       e1_selection=asdict(SelectionConfig()),repro_arm='E1_protective_selection',use_wandb=False)
++    return cfg
++
++def main():
++    assert (O/'export.exit').read_text().strip()=='0'
++    historical=json.loads((S/'protective_e1/historical_feature_manifest.json').read_text())['42']
++    actual={};count=0
++    for task in (6,7,8,9):
++        expected={Path(r['path']).name:r['sha256'] for r in historical[str(task)]}
++        files={p.name:p for p in (O/'features'/str(task)).glob('*.pt')}
++        assert set(files)==set(expected),(task,len(files),len(expected))
++        actual[str(task)]={n:sha(p) for n,p in files.items()}
++        assert actual[str(task)]==expected,'CACHE_BYTES_DIFFER_FROM_E0'
++        count+=len(files)
++    assert count==5921
++    write(O/'FEATURE_PARITY.json',dict(status='PASS',all_bytes_match_historical_E0=True,files=count,
++       counts={k:len(v) for k,v in actual.items()},historical_manifest_sha256=sha(S/'protective_e1/historical_feature_manifest.json'),features=actual))
++    checkpoint='/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth'
++    assert sha(checkpoint)=='159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b'
++    contract=dict(name='E1_protective_OBJECT_seed42',baseline='final_paper_text_faithful/ifa/seed42',
++      seed=42,feature_parity=sha(O/'FEATURE_PARITY.json'),pretrain_sha256=sha(checkpoint),
++      source_sha256={str(p.relative_to(S)):sha(p) for p in sorted(S.rglob('*')) if p.is_file() and p.suffix in ('.py','.sh','.yaml')},
++      settings=asdict(SelectionConfig()),tasks=[6,7,8,9],n_epochs=100,train_batch_size=10,
++      primary=dict(checkpoint_epoch=99,cells=10,trials_per_cell=20),
++      secondary=dict(candidate_epochs=[70,75,80,85,90,95,99],cells=34,trials_per_cell=20),
++      primary_endpoint='task-balanced overall AUC',extension_rule='strictly positive unrounded overall AUC difference, then fixed seeds43/44; no baseline retraining',
++      disclosed_gaps=['Historical baseline ran each seed on one RTX4090; current host has one RTX3090. Precision/library version and GPU count preserved; architecture differs.',
++      'Original stage-buffer snapshots unavailable. Same byte-identical feature files, same deterministic E0 buffer implementation and seed reconstruct membership; actual per-stage hashes will be recorded.',
++      'Feature cache re-exported with the original seeded exporter then every file SHA256 matched to historical E0 manifest. This is verified input recovery, not baseline training.'],
++      created_unix=time.time(),baseline_rerun=False)
++    target=O/'CONTRACT.json'
++    if target.exists():
++        old=json.loads(target.read_text());contract['created_unix']=old['created_unix'];assert old==contract
++    else:write(target,contract)
++    write(O/'resolved_training.json',config())
++    print(json.dumps(dict(status='PREPARED',feature_files=count,byte_parity=True,contract_sha256=sha(target))),flush=True)
++
++if __name__=='__main__':main()
+diff --git a/protective_e1/runtime.py b/protective_e1/runtime.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/runtime.py
+@@ -0,0 +1,142 @@
++"""E0 epoch loop and update with E1 replacement and atomic epoch recovery."""
++import copy
++import csv
++import json
++import os
++import random
++import time
++from pathlib import Path
++
++import numpy as np
++import torch
++from .bindings import bind
++bind()
++from .baseline_loop import E1EpochLoop
++from .io import sha, write, save
++from libero.lifelong.algos.mlr import MLR, update_buffer_equal_quota_10, BUFFER_CAPACITY
++from libero.lifelong.replay_selection_hook import ProtectiveSelectionMixin
++from libero.lifelong.replay_selection import SelectionConfig
++
++
++def cpu(value):
++    if torch.is_tensor(value): return value.detach().cpu().clone()
++    if isinstance(value,dict): return {k:cpu(v) for k,v in value.items()}
++    if isinstance(value,list): return [cpu(v) for v in value]
++    if isinstance(value,tuple): return tuple(cpu(v) for v in value)
++    return copy.deepcopy(value)
++
++
++def rng():
++    return dict(python=random.getstate(),numpy=np.random.get_state(),cpu=torch.get_rng_state(),cuda=torch.cuda.get_rng_state_all())
++
++
++def restore_rng(value):
++    random.setstate(value['python']);np.random.set_state(value['numpy'])
++    torch.set_rng_state(value['cpu']);torch.cuda.set_rng_state_all(value['cuda'])
++
++
++def capture(algo):
++    return dict(model=cpu(algo.policy.state_dict()),optimizer=cpu(algo.optimizer.state_dict()),
++      scheduler=cpu(algo.scheduler.state_dict()),optimizer_step=algo._optimizer_step_count,
++      scheduler_step=algo._scheduler_step_count,rng=cpu(rng()),modes={n:m.training for n,m in algo.policy.named_modules()})
++
++
++class SelectionMLR(ProtectiveSelectionMixin,E1EpochLoop):
++    def __init__(self,*args,**kwargs):
++        super().__init__(*args,**kwargs)
++        self.out=Path(self.cfg.e1_root);self.out.mkdir(parents=True,exist_ok=True)
++        self.recovery=self.out/'recovery/latest.pth';self.resume=None
++        self.e1_start_epoch=0;self.stage=None;self.catalog={};self.verified=set()
++        self.selection_totals={};self.run_started=time.time()
++        if self.recovery.exists():
++            self.resume=torch.load(self.recovery,map_location='cpu')
++            assert self.resume['contract_sha256']==sha(self.cfg.e1_contract)
++            self.selection_totals=self.resume['selection_totals']
++            folder=Path(self.cfg.buffer_dir).resolve()
++            assert folder==self.out.resolve()/'buffer'
++            expected=self.resume['buffer_hashes'];actual={p.name:p for p in folder.glob('*.pt')}
++            assert set(expected)<=set(actual)
++            assert all(sha(actual[k])==v for k,v in expected.items())
++            extras=set(actual)-set(expected)
++            if extras:
++                archive=self.out/'interrupted'/('buffer_'+str(time.time_ns()));archive.mkdir(parents=True)
++                for k in extras:os.replace(actual[k],archive/k)
++            for name in ('lr_protocol.csv','paper_repro_train_curve.csv'):
++                path=Path(self.experiment_dir)/name
++                if not path.exists():continue
++                with path.open() as f:reader=csv.DictReader(f);fields=reader.fieldnames;rows=list(reader)
++                keep=[r for r in rows if int(r['stage'])<self.resume['task'] or (int(r['stage'])==self.resume['task'] and int(r['epoch'])<self.resume['next_epoch'])]
++                if len(keep)!=len(rows):
++                    os.replace(path,path.with_suffix('.interrupted_%d.csv'%time.time_ns()))
++                    with path.open('w',newline='') as f:w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(keep)
++
++    def payload(self,item_id):
++        row=self.catalog[item_id];path=Path(row['path'])
++        if item_id not in self.verified:assert sha(path)==row['sha256'];self.verified.add(item_id)
++        sample=torch.load(path,map_location='cpu')
++        assert set(sample)=={'feature','actions'}
++        assert all(torch.isfinite(x).all() for x in sample.values())
++        return {k:v.detach().cpu() for k,v in sample.items()}
++
++    def start_task(self,task,train_loader):
++        super().start_task(task,train_loader)
++        if self.resume and self.resume['task']==self.stage:
++            value=self.resume['state'];self.policy.load_state_dict(value['model'],strict=True)
++            self.optimizer.load_state_dict(value['optimizer']);self.scheduler.load_state_dict(value['scheduler'])
++            self._optimizer_step_count=value['optimizer_step'];self._scheduler_step_count=value['scheduler_step']
++            for n,m in self.policy.named_modules():m.training=value['modes'][n]
++            self.restore_e1_sidecar(self.resume['selector_sidecar']);restore_rng(value['rng'])
++        elif self.resume and self.resume['task']<self.stage and self.resume['stage_complete']:
++            self.policy.load_state_dict(self.resume['state']['model'],strict=True);restore_rng(self.resume['state']['rng'])
++
++    def _buffer_hashes(self):return {p.name:sha(p) for p in sorted(Path(self.cfg.buffer_dir).glob('*.pt'))}
++
++    def checkpoint(self,next_epoch,stage_complete=False):
++        events=self.pop_e1_events()
++        if events:
++            folder=self.out/'selection_logs'/('task%d'%self.stage);folder.mkdir(parents=True,exist_ok=True)
++            target=folder/('epoch%03d.jsonl'%(next_epoch-1))
++            if target.exists():os.replace(target,target.with_suffix('.interrupted_%d.jsonl'%time.time_ns()))
++            with target.open('x') as f:
++                for row in events:f.write(json.dumps(row,allow_nan=False)+'\n')
++        self.selection_totals[str(self.stage)]=copy.deepcopy(self.e1_selector.totals)
++        value=dict(state=capture(self),task=self.stage,next_epoch=next_epoch,stage_complete=stage_complete,
++          selector_sidecar=self.e1_sidecar(),buffer_hashes=self._buffer_hashes(),selection_totals=self.selection_totals,
++          contract_sha256=sha(self.cfg.e1_contract))
++        save(self.recovery,value)
++        write(self.out/'RUN_STATUS.json',dict(status='TRAINING',stage=self.stage,next_epoch=next_epoch,
++          stage_optimizer_steps=self.e1_stage_step,optimizer_steps=self._optimizer_step_count,selection_totals=self.selection_totals,
++          stage_complete=stage_complete,updated_unix=time.time(),pid=os.getpid()))
++
++    def _append_csv(self,path,fieldnames,row):
++        MLR._append_csv(path,fieldnames,row)
++        if Path(path).name=='paper_repro_train_curve.csv':self.checkpoint(int(row['epoch'])+1)
++
++    def learn_all_tasks(self,datasets,benchmark,result_summary,current_task_id):
++        self.stage=current_task_id
++        if self.resume and (current_task_id<self.resume['task'] or (current_task_id==self.resume['task'] and self.resume['stage_complete'])):return 0.,0.
++        self.e1_start_epoch=self.resume['next_epoch'] if self.resume and self.resume['task']==current_task_id else 0
++        self.catalog={};old={};new=[];self.verified=set()
++        for path in sorted(Path(self.cfg.buffer_dir).glob('*.pt')):
++            task=int(path.name.split('__')[0][1:]);assert task<current_task_id
++            item='buffer/'+path.name;old.setdefault(task,[]).append(item)
++            self.catalog[item]=dict(path=str(path),sha256=sha(path),task=task)
++        for path in sorted((Path(self.cfg.feature_dir)/str(current_task_id)).glob('*.pt')):
++            item='current/%d/%s'%(current_task_id,path.name);new.append(item)
++            self.catalog[item]=dict(path=str(path),sha256=sha(path),task=current_task_id)
++        catalog_path=self.out/('catalog_task%d.json'%current_task_id)
++        if catalog_path.exists():assert json.loads(catalog_path.read_text())==self.catalog
++        else:write(catalog_path,self.catalog)
++        self.configure_e1_stage(current_task_id,old,new,self.payload,sha(catalog_path),SelectionConfig(**self.cfg.e1_selection))
++        if self.e1_start_epoch==self.cfg.train.n_epochs:
++            self.policy.load_state_dict(self.resume['state']['model'],strict=True)
++            restore_rng(self.resume['state']['rng']);self.restore_e1_sidecar(self.resume['selector_sidecar'])
++            update_buffer_equal_quota_10(self.cfg.feature_dir,current_task_id,self.cfg.buffer_dir,
++                capacity=BUFFER_CAPACITY,seed=self.cfg.seed,drop_policy='random',rate=self.cfg.past_data_rate)
++            value=dict(self.resume,stage_complete=True,buffer_hashes=self._buffer_hashes());save(self.recovery,value);self.resume=value
++            return 0.,0.
++        result=super().learn_all_tasks(datasets,benchmark,result_summary,current_task_id)
++        write(self.out/('buffer_after_task%d.json'%current_task_id),self._buffer_hashes())
++        self.checkpoint(self.cfg.train.n_epochs,True)
++        self.resume=None
++        return result
+diff --git a/protective_e1/train.py b/protective_e1/train.py
+new file mode 100644
+--- /dev/null
++++ b/protective_e1/train.py
+@@ -0,0 +1,45 @@
++import json
++import os
++import time
++from pathlib import Path
++import torch
++import torch.distributed as dist
++from torch.nn.parallel import DistributedDataParallel as DDP
++from easydict import EasyDict
++from .runtime import SelectionMLR
++from .io import sha,write
++from libero.libero.benchmark import get_benchmark
++from libero.lifelong.utils import control_seed,get_task_embs
++
++O=Path(os.environ['E1_OUT']);S=Path(os.environ['E1_SOURCE'])
++
++def build(cfg):
++    assert torch.cuda.is_available()
++    control_seed(cfg.seed)
++    benchmark=get_benchmark(cfg.benchmark_name)(cfg.data.task_order_index)
++    benchmark.set_task_embs(get_task_embs(cfg,[benchmark.get_task(i).language for i in range(benchmark.n_tasks)]))
++    Path(cfg.experiment_dir).mkdir(parents=True,exist_ok=True);Path(cfg.buffer_dir).mkdir(parents=True,exist_ok=True)
++    algo=SelectionMLR(1,cfg).cuda();algo.policy=DDP(algo.policy,device_ids=[0],output_device=0)
++    return algo,benchmark
++
++def main():
++    assert json.loads((O/'REAL_PREFLIGHT.json').read_text())['status']=='PASS'
++    contract=json.loads((O/'CONTRACT.json').read_text())
++    assert all(sha(S/k)==v for k,v in contract['source_sha256'].items())
++    cfg=EasyDict(json.loads((O/'resolved_training.json').read_text()))
++    done=O/'TRAINING_COMPLETE.json'
++    if done.exists():return
++    dist.init_process_group('nccl');torch.cuda.set_device(0)
++    torch.cuda.reset_peak_memory_stats();begin=time.time()
++    try:
++        algo,benchmark=build(cfg)
++        write(Path(cfg.experiment_dir)/'config.json',dict(cfg));algo.train()
++        for task in range(6,10):algo.learn_all_tasks(None,benchmark,{},task)
++        checkpoints=sorted(Path(cfg.experiment_dir).glob('mlrifa_*_model_ep*.pth'));assert len(checkpoints)==28
++        write(done,dict(status='TRAINED_EVAL_PENDING',seed=42,epochs=400,invocation_seconds=time.time()-begin,
++          peak_gpu_bytes=torch.cuda.max_memory_allocated(),selection_totals=algo.selection_totals,
++          checkpoints={p.name:sha(p) for p in checkpoints}))
++        write(O/'RUN_STATUS.json',dict(status='TRAINED_EVAL_PENDING',updated_unix=time.time()))
++    finally:dist.destroy_process_group()
++
++if __name__=='__main__':main()

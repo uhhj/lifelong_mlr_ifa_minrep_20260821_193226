@@ -1,0 +1,23 @@
+{
+  "status": "E0_EVIDENCE_FOUND_FEATURE_BYTES_RECOVERED_E1_LAUNCHED",
+  "baseline": "final_paper_text_faithful/ifa/seed42",
+  "archive_commit": "1c64d9051124307e8debfc2c47aced189e32d393",
+  "reported_metrics": {
+    "auc": 77.708,
+    "fwt": 77.5,
+    "nbt": -0.278
+  },
+  "baseline_rerun": false,
+  "recovered_features": 5921,
+  "all_feature_bytes_match_historical_manifest": true,
+  "checkpoint_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+  "disclosed_gaps": [
+    "Historical baseline ran each seed on one RTX4090; current host has one RTX3090. Precision/library version and GPU count preserved; architecture differs.",
+    "Original stage-buffer snapshots unavailable. Same byte-identical feature files, same deterministic E0 buffer implementation and seed reconstruct membership; actual per-stage hashes will be recorded.",
+    "Feature cache re-exported with the original seeded exporter then every file SHA256 matched to historical E0 manifest. This is verified input recovery, not baseline training."
+  ],
+  "remaining_archival_limits": [
+    "Original E0 training logs, full run/checkpoints and stage-buffer snapshots unavailable on this server; cannot claim verified historical training-time or exact original execution trajectory."
+  ],
+  "evidence": "launch_evidence/FEATURE_PARITY.json; launch_evidence/CONTRACT.json; baseline_evidence/git_archive"
+}

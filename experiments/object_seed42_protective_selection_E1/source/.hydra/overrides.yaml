@@ -1,0 +1,17 @@
+- seed=42
+- benchmark_name=LIBERO_OBJECT
+- policy=complete_policy
+- lifelong=basic
+- folder=/data/mlr_ifa/datasets
+- bddl_folder=/data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source/libero/libero/bddl_files
+- init_states_folder=/data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source/libero/libero/init_files
+- train.batch_size=1
+- train.num_workers=0
+- pretrain=/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth
+- +start_task=6
+- +end_task=10
+- +aug=true
+- +feature_dir=/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/features
+- +experiment_root=/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/export
+- training=false
+- use_wandb=false

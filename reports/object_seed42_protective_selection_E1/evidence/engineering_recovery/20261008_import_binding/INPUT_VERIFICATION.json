@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "timestamp": 1791468454.4653287,
+  "training_epochs": 400,
+  "optimizer_steps": 105500,
+  "checkpoints": 28,
+  "feature_hash_matches": 5921,
+  "buffer_hash_matches": 2961,
+  "pretrain_unchanged": true,
+  "code_unchanged": true,
+  "generated_hydra_metadata_changes": {
+    ".hydra/config.yaml": {
+      "expected": "684ae957d155802bea00199c5bba41ffe38221909f66e6032ae19dacc67e7ff1",
+      "actual": "1e1bd957fa627244e5b5cc8f424405b0614e79fd88a0b7d19bc16986eeedb44e"
+    },
+    ".hydra/hydra.yaml": {
+      "expected": "80c57f78730f3d0462d2e352ecfa2d731e7b02a13318d66396db686cbd1b4564",
+      "actual": "c912e21b0b80d65befd016ec6d0f3b5881b51241da51e2ffb484e26fa0bd9146"
+    },
+    ".hydra/overrides.yaml": {
+      "expected": "399e2e36032529d4b1add0f0ec5e0b9dee403ed76d6a438ae8ff8b40d208c845",
+      "actual": "eb4ce69c701677a5dcbede636cdd17ef75ba8c9ce90121d0cdfbdd98236fa876"
+    }
+  },
+  "failed_attempt": {
+    "pipeline_exit": 1,
+    "phase": "evaluate_primary",
+    "failure": "spawn unpickling ModuleNotFoundError libero.libero",
+    "worker_start_attempts": 10,
+    "constructed_environments": 0,
+    "formal_episode_records": 0,
+    "environment_steps": 0,
+    "evidence": "evaluate_primary.log: child fails at reduction.pickle.load before worker function; parent fails at first env.seed before reset or step"
+  },
+  "recovery_scope": "Existing package bind applied in spawned interpreter via external sitecustomize; frozen source/checkpoints/contract untouched."
+}

@@ -1,0 +1,124 @@
+{
+  "identity": {
+    "name": "final_paper_text_faithful",
+    "starting_sha": "1f4e45d604be7f2b61b356e70ac4fa7c80557fe0",
+    "scope": "LIFELONG-STAGE PAPER-TEXT-FAITHFUL REPRODUCTION WITH RELEASED/FROZEN PRETRAINED INITIALIZATION",
+    "benchmark": "LIBERO_OBJECT"
+  },
+  "source_priority": [
+    "paper_explicit_text",
+    "public_release_fallback_for_unspecified_fields",
+    "minimal_unit_consistent_interpretation",
+    "prior_runs_for_sanity_only_not_parameter_inference"
+  ],
+  "paper_explicit_fields": {
+    "batch_size": 10,
+    "epochs_per_stage": 100,
+    "optimizer": "torch.optim.AdamW",
+    "initial_lr": 0.0001,
+    "scheduler_name": "linear",
+    "buffer_policy": "total size equivalent to five demonstrations per task",
+    "past_data_rate": 0.5,
+    "effective_stored_demo_equivalent": 5,
+    "ifa_lambda": 0.1,
+    "ifa_alpha_gamma": 0.3,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_eval": 20
+  },
+  "paper_unspecified_fields": [
+    "scheduler_step_unit",
+    "warmup_steps",
+    "feature_extraction_augmentation",
+    "checkpoint_selection_rule",
+    "exact_evaluation_action_sampling",
+    "AdamW_betas_eps_weight_decay"
+  ],
+  "implementation_choices": {
+    "scheduler_step_unit": "after_each_optimizer_step",
+    "scheduler_step_unit_provenance": "MINIMAL_UNIT_CONSISTENT_INTERPRETATION; PAPER DOES NOT SPECIFY SCHEDULER STEP UNIT",
+    "warmup_steps": 500,
+    "warmup_provenance": "RELEASE_FALLBACK",
+    "total_steps_formula": "epochs_per_stage * len(train_loader)",
+    "optimizer_betas": [
+      0.9,
+      0.999
+    ],
+    "optimizer_eps": 1e-08,
+    "optimizer_weight_decay": 0.1,
+    "optimizer_unspecified_provenance": "RELEASE_FALLBACK",
+    "feature_augmentation": "seed-controlled stochastic augmentation in frozen cache generation",
+    "feature_augmentation_provenance": "RELEASE_FALLBACK; NOT PAPER-SPECIFIED",
+    "feature_regeneration": false,
+    "action_inference_semantics": "GMM component distribution with stochastic sampling",
+    "action_inference_provenance": "RELEASE_IMPLEMENTATION_FALLBACK",
+    "primary_checkpoint": 99,
+    "primary_checkpoint_reason": "final state after the 100th zero-indexed epoch",
+    "secondary_candidate_epochs": [
+      70,
+      75,
+      80,
+      85,
+      90,
+      95,
+      99
+    ],
+    "secondary_selection": "best current-task success; later epoch on ties; old tasks at selected checkpoint",
+    "secondary_label": "SECONDARY_RELEASE_COMPATIBLE_SELECTION",
+    "structural_collapse_rule": "same current task at or below 10 percentage points in at least two of three seeds for either method"
+  },
+  "paths": {
+    "pretrained_checkpoint": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/checkpoints/object_multitask_model_ep99.pth",
+    "feature_cache_seed_mapping": {
+      "42": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/features/object_seed42",
+      "43": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/features/object_seed43",
+      "44": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/features/object_seed44"
+    },
+    "runs": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/runs/final_paper_text_faithful",
+    "buffers": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/buffers/final_paper_text_faithful",
+    "reports": "/media/dm/Elements/wzp2026/lifelong_mlr_ifa_minrep/reports/final_paper_text_faithful"
+  },
+  "task_order": {
+    "pretrained_tasks": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "lifelong_tasks": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "start_task": 6,
+    "end_task_exclusive": 10
+  },
+  "checkpoint_save_epochs": [
+    70,
+    75,
+    80,
+    85,
+    90,
+    95,
+    99
+  ],
+  "methods": {
+    "mlr": {
+      "ifa_enabled": false,
+      "gamma_explicit_but_unused": 0.3
+    },
+    "ifa": {
+      "ifa_enabled": true,
+      "ifa_lambda": 0.1,
+      "gamma": 0.3
+    }
+  },
+  "provenance_boundary": "PAPER_EXACT_RECIPE_NOT_PUBLICLY_RECOVERABLE",
+  "pretraining_limitation": "paper-time pretraining code is not public; the frozen released checkpoint is shared by all runs"
+}
