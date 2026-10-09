@@ -31,6 +31,8 @@ Per-task AUC differences are −2.500, −1.667, −7.500 and +10.000 points for
 
 ## Evidence
 
+- [Selection preference and short-window repetition audit](selection_diagnostics/README.md):
+  read-only analysis of 389 candidate pools and 230,710 priority assignments.
 - [Complete report in Chinese](FINAL_REPORT.txt): both matrices, all tasks,
   actual commands/exit codes, costs, diagnostics, attempt accounting and limits.
 - [Independent server audit](SERVER_INDEPENDENT_AUDIT.json) and
