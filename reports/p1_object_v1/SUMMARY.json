@@ -1,0 +1,290 @@
+{
+  "status": "COMPLETE",
+  "results": [
+    {
+      "seed": 42,
+      "r": [
+        [
+          30.0,
+          null,
+          null,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          80.0,
+          null
+        ],
+        [
+          50.0,
+          100.0,
+          90.0,
+          35.0
+        ]
+      ],
+      "metrics": {
+        "auc": 63.125,
+        "fwt": 61.25,
+        "nbt": -4.444444444444445
+      },
+      "metrics_rounded": {
+        "fwt": 61.25,
+        "nbt": -4.444,
+        "auc": 63.125,
+        "r": [
+          [
+            30.0,
+            null,
+            null,
+            null
+          ],
+          [
+            25.0,
+            100.0,
+            null,
+            null
+          ],
+          [
+            25.0,
+            100.0,
+            80.0,
+            null
+          ],
+          [
+            50.0,
+            100.0,
+            90.0,
+            35.0
+          ]
+        ]
+      },
+      "baseline_r": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          50.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          40.0,
+          95.0,
+          100.0,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          100.0,
+          75.0
+        ]
+      ],
+      "baseline_metrics": {
+        "auc": 77.70833333333333,
+        "fwt": 77.5,
+        "nbt": -0.2777777777777778
+      },
+      "delta": {
+        "auc": -14.583333333333334,
+        "fwt": -16.25,
+        "nbt": -4.166666666666667
+      },
+      "exact_rational_metrics": {
+        "auc": "505/8",
+        "fwt": "245/4",
+        "nbt": "-40/9"
+      },
+      "exact_baseline_metrics": {
+        "auc": "1865/24",
+        "fwt": "155/2",
+        "nbt": "-5/18"
+      },
+      "primary_trials": 200,
+      "epochs": 400,
+      "teacher_provenance": [
+        {
+          "task": 6,
+          "new_count": 781,
+          "active_count": 781,
+          "table_sha256": "37cc52491774d25c06d0acdccbbd0b482249f53ddb65a6dcb86de66de8a380f5",
+          "checkpoint_sha256": "94fec0708dea61e1f377d0959aa6d3fb11f7b137227441a204b2d420e3c76e55"
+        },
+        {
+          "task": 7,
+          "new_count": 740,
+          "active_count": 1521,
+          "table_sha256": "8cdd003e1b36022fa507669b1dca45fa2539c21e964b5d5ff7a11c7a888392f1",
+          "checkpoint_sha256": "328d353f5246ed33ed89b307e72086225bac20234b33fdd0cf5dd4284ca6f28a"
+        },
+        {
+          "task": 8,
+          "new_count": 780,
+          "active_count": 2301,
+          "table_sha256": "7cb4c399f2c3cec1ae84c3f549fe270eaa697fe2f17ca5c943d4618254cdd690",
+          "checkpoint_sha256": "6e03fddb96a18d491610188722d05291fc120bf9bc0b6327e045287df481a91a"
+        },
+        {
+          "task": 9,
+          "new_count": 660,
+          "active_count": 2961,
+          "table_sha256": "4a9359d3b78da9e6fa75bb5b3a68c2f092c098e505b099df3871aa4e7f6c008f",
+          "checkpoint_sha256": "fac71fc8eff8c75193709c70d671e55c9b397edd6f1ac2ff333c807439f6d3f4"
+        }
+      ],
+      "mechanism": {
+        "6": {
+          "steps": 15700,
+          "distill_steps": 0,
+          "old_windows": 0,
+          "negative_kl_windows": 0,
+          "clipped_steps": 15628,
+          "mean_per_step": {
+            "bc": -25.415834036571965,
+            "ifa_weighted": 0.0,
+            "policy_kl": 0.0,
+            "policy_weighted": 0.0,
+            "total_loss": -25.415834036571965
+          },
+          "distill_forward_seconds": 0.0
+        },
+        "7": {
+          "steps": 22700,
+          "distill_steps": 22300,
+          "old_windows": 78100,
+          "negative_kl_windows": 28,
+          "clipped_steps": 22609,
+          "mean_per_step": {
+            "bc": -26.657215092405348,
+            "ifa_weighted": 0.012202349864438767,
+            "policy_kl": 6.425116651201288,
+            "policy_weighted": 0.32125583256006507,
+            "total_loss": -26.323756913919542
+          },
+          "distill_forward_seconds": 177.99355152798285
+        },
+        "8": {
+          "steps": 30900,
+          "distill_steps": 30820,
+          "old_windows": 152100,
+          "negative_kl_windows": 37,
+          "clipped_steps": 30861,
+          "mean_per_step": {
+            "bc": -27.98759014957883,
+            "ifa_weighted": 0.017742255337801566,
+            "policy_kl": 6.466501794842261,
+            "policy_weighted": 0.32332508974211116,
+            "total_loss": -27.646522810292524
+          },
+          "distill_forward_seconds": 252.17905794595754
+        },
+        "9": {
+          "steps": 36200,
+          "distill_steps": 36197,
+          "old_windows": 230100,
+          "negative_kl_windows": 52,
+          "clipped_steps": 36196,
+          "mean_per_step": {
+            "bc": -28.73337003113815,
+            "ifa_weighted": 0.0,
+            "policy_kl": 6.4263860444634,
+            "policy_weighted": 0.3213193022231713,
+            "total_loss": -28.41205073160032
+          },
+          "distill_forward_seconds": 294.5204795249483
+        }
+      },
+      "training_cost": {
+        "status": "PASS",
+        "seed": 42,
+        "epochs_per_task": 100,
+        "tasks": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "invocation_seconds": 4430.754727509,
+        "peak_gpu_bytes": 691987968,
+        "totals": {
+          "steps": 105500,
+          "distill_steps": 89317,
+          "old_windows": 460300,
+          "negative_kl_windows": 117,
+          "distill_forward_seconds": 724.6930889988887
+        },
+        "checkpoints": [
+          "/data/lifelong_mlr_ifa_minrep_20260912/runs/p1_object_v1/seed42/checkpoints/mlrifa_6_model_ep99.pth",
+          "/data/lifelong_mlr_ifa_minrep_20260912/runs/p1_object_v1/seed42/checkpoints/mlrifa_7_model_ep99.pth",
+          "/data/lifelong_mlr_ifa_minrep_20260912/runs/p1_object_v1/seed42/checkpoints/mlrifa_8_model_ep99.pth",
+          "/data/lifelong_mlr_ifa_minrep_20260912/runs/p1_object_v1/seed42/checkpoints/mlrifa_9_model_ep99.pth"
+        ]
+      },
+      "teacher_build_cost": [
+        {
+          "task": 6,
+          "teacher_count": 781,
+          "active_count": 781,
+          "seconds": 0.6744312539999555,
+          "numeric_payload_bytes": 234300,
+          "latent_bytes": 52052159,
+          "active_teacher_bytes": 308835,
+          "index_bytes": 511921,
+          "source_checkpoint_sha256": "94fec0708dea61e1f377d0959aa6d3fb11f7b137227441a204b2d420e3c76e55"
+        },
+        {
+          "task": 7,
+          "teacher_count": 740,
+          "active_count": 1521,
+          "seconds": 0.6560448629998064,
+          "numeric_payload_bytes": 456300,
+          "latent_bytes": 101371655,
+          "active_teacher_bytes": 601414,
+          "index_bytes": 996869,
+          "source_checkpoint_sha256": "328d353f5246ed33ed89b307e72086225bac20234b33fdd0cf5dd4284ca6f28a"
+        },
+        {
+          "task": 8,
+          "teacher_count": 780,
+          "active_count": 2301,
+          "seconds": 0.7773418270003276,
+          "numeric_payload_bytes": 690300,
+          "latent_bytes": 153357183,
+          "active_teacher_bytes": 909865,
+          "index_bytes": 1508093,
+          "source_checkpoint_sha256": "6e03fddb96a18d491610188722d05291fc120bf9bc0b6327e045287df481a91a"
+        },
+        {
+          "task": 9,
+          "teacher_count": 660,
+          "active_count": 2961,
+          "seconds": 0.7418073170001662,
+          "numeric_payload_bytes": 888300,
+          "latent_bytes": 197344635,
+          "active_teacher_bytes": 1170892,
+          "index_bytes": 1940499,
+          "source_checkpoint_sha256": "fac71fc8eff8c75193709c70d671e55c9b397edd6f1ac2ff333c807439f6d3f4"
+        }
+      ],
+      "run_additional_seeds": false,
+      "postprocess_source_sha256": "76e7de6dfc5eea09634e0392354a31caecdacc6c86628bf4072d7c1ea252066b"
+    }
+  ],
+  "seeds_completed": 1,
+  "primary_gate": "NO_OVERALL_BENEFIT",
+  "seed43_44_not_run": true,
+  "e1_enabled": false,
+  "baseline_training_rerun": false,
+  "secondary_evaluation": false
+}
