@@ -1,0 +1,34 @@
+SSH: root@jq1.9gpu.com port11920; existing credentials used through getpass only.
+Remote S=/data/mlr_ifa/experiment_workspaces/E1U_uniform_pool_20261009/source
+Remote O=/data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009
+
+1. Installation: /data/mlr_ifa/env/bin/python /data/mlr_ifa/install_e1u_20261009.py
+   Exit0. Independent new source/output;10336 original E1 files hashed read-only.
+
+2. source "$S/protective_e1/env.sh"
+   python -B -m unittest discover -s ../tests -v > "$O/software_tests.log" 2>&1
+   Exit0,28/28 software tests. Synthetic tests are not experimental outcomes.
+
+3. python -B -m protective_e1.prepare > "$O/prepare.log" 2>&1
+   Exit0,5921 exact feature hashes, official checkpoint hash, contract frozen.
+
+4. python -m torch.distributed.run --nproc_per_node=1 --master_port=37986 -m protective_e1.preflight > "$O/preflight.log" 2>&1
+   Exit0,exactly5 actual GPU optimizer calls, no environment trials.
+
+5. bash "$O/probe_eval_config.sh" > "$O/resolved_eval_probe.yaml" 2> "$O/eval_probe_stderr.log"
+   Exit0. This extracts ARGS verbatim from actual evaluate.sh and invokes its
+   Hydra entry with --cfg job --resolve; no model/environment execution.
+
+6. nohup bash "$S/protective_e1/pipeline.sh" > "$O/pipeline.log" 2>&1 < /dev/null &
+   Live pipeline PID3312,train PID3349. SSH launch wrapper timed out after10s;
+   independent process/status evidence confirms successful single launch.
+   Formal exit is pending, not exit0. Do not repeat launch.
+   commands.log: prepare exit0; pure spawn import exit0; train START12:55:05+08:00.
+
+7. Scheduled monitor mlr-v2 updated ACTIVE, every2h, E1-U-specific handoff.
+   Completion requires independent_acceptance.py only after pipeline.exit=0 and
+   no residual train/evaluator/pipeline. Current status TRAINING, no formal result.
+
+Artifacts: source.patch;source/;BASE_SOURCE_SHA256.json;SOURCE_MANIFEST.json;
+launch_evidence/{CONTRACT,REAL_PREFLIGHT,FEATURE_PARITY,resolved_training,
+resolved_eval_primary,LAUNCH_SNAPSHOT,E1_READONLY_BEFORE}.json;MONITOR_HANDOFF.json.

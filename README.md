@@ -1,5 +1,20 @@
 # Lifelong Imitation Learning with Multimodal Latent Replay and Incremental Adjustment
 
+## Completed OBJECT seed42 uniform-pool E1-U
+
+E1-U completed 400 epochs, 105,500 optimizer steps and 880 formal closed-loop
+episodes, with independent acceptance PASS. It retains E1's candidate pools,
+refresh schedule and replacement gate, using uniform within-pool probabilities.
+Primary AUC was 73.646 versus E1's 77.292 and E0's 77.708; the prespecified
+extension condition was not met, so no additional seeds were run.
+
+- [Results, matrices and verified evidence](reports/object_seed42_uniform_pool_E1U/README.md)
+- [Frozen implementation, tests and protocol](experiments/object_seed42_uniform_pool_E1U/README.md)
+- [Independent acceptance](reports/object_seed42_uniform_pool_E1U/evidence/INDEPENDENT_ACCEPTANCE.json)
+
+E0 and E1 remain unchanged. This single-seed observation does not establish a
+stable or causal effect; the report preserves hardware and historical-data gaps.
+
 ## Completed OBJECT seed42 protective-selection E1
 
 The independent OBJECT E1 experiment completed 400 training epochs, 105,500

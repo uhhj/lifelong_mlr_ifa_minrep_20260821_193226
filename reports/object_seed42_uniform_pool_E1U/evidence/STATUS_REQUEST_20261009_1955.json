@@ -1,0 +1,421 @@
+{
+  "now": 1791546956.2248883,
+  "status": {
+    "status": "AWAITING_INDEPENDENT_EXIT_AUDIT",
+    "seed": 42,
+    "baseline": {
+      "benchmark": "LIBERO_OBJECT",
+      "method": "ifa",
+      "seed": 42,
+      "evaluation_view": "PRIMARY_EP99",
+      "n_eval": 20,
+      "selected_epochs": {
+        "6": 99,
+        "7": 99,
+        "8": 99,
+        "9": 99
+      },
+      "fwt": 77.5,
+      "nbt": -0.278,
+      "auc": 77.708,
+      "r": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          50.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          40.0,
+          95.0,
+          100.0,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          100.0,
+          75.0
+        ]
+      ]
+    },
+    "e1u": {
+      "fwt": 76.25,
+      "nbt": 7.222,
+      "auc": 73.646,
+      "r": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          55.00000000000001,
+          95.0,
+          null,
+          null
+        ],
+        [
+          15.0,
+          100.0,
+          100.0,
+          null
+        ],
+        [
+          30.0,
+          100.0,
+          75.0,
+          75.0
+        ]
+      ],
+      "selected_epochs": {
+        "6": 99,
+        "7": 99,
+        "8": 99,
+        "9": 99
+      }
+    },
+    "uniform_audit": {
+      "versions": {
+        "E0": {
+          "auc": 77.70833333333333,
+          "fwt": 77.5,
+          "nbt": -0.27777777777777785,
+          "matrix": [
+            [
+              35.0,
+              null,
+              null,
+              null
+            ],
+            [
+              50.0,
+              100.0,
+              null,
+              null
+            ],
+            [
+              40.0,
+              95.0,
+              100.0,
+              null
+            ],
+            [
+              25.0,
+              100.0,
+              100.0,
+              75.0
+            ]
+          ]
+        },
+        "E1": {
+          "auc": 77.29166666666667,
+          "fwt": 76.25,
+          "nbt": -3.3333333333333335,
+          "matrix": [
+            [
+              35.0,
+              null,
+              null,
+              null
+            ],
+            [
+              45.0,
+              100.0,
+              null,
+              null
+            ],
+            [
+              35.0,
+              95.0,
+              85.0,
+              null
+            ],
+            [
+              25.0,
+              95.0,
+              100.0,
+              85.0
+            ]
+          ]
+        },
+        "E1U": {
+          "auc": 73.64583333333333,
+          "fwt": 76.25,
+          "nbt": 7.222222222222221,
+          "matrix": [
+            [
+              35.0,
+              null,
+              null,
+              null
+            ],
+            [
+              55.00000000000001,
+              95.0,
+              null,
+              null
+            ],
+            [
+              15.0,
+              100.0,
+              100.0,
+              null
+            ],
+            [
+              30.0,
+              100.0,
+              75.0,
+              75.0
+            ]
+          ]
+        }
+      },
+      "differences": {
+        "E1_minus_E1U": {
+          "auc": 3.645833333333343,
+          "fwt": 0.0,
+          "nbt": -10.555555555555555
+        },
+        "E1U_minus_E0": {
+          "auc": -4.0625,
+          "fwt": -1.25,
+          "nbt": 7.499999999999999
+        }
+      },
+      "primary_auc_exceeds_E0": false,
+      "strict_pairing": true,
+      "pairing_epochs": 400,
+      "pairing_mismatches": [],
+      "numeric_fallbacks": [],
+      "refreshes": {
+        "7": 46,
+        "8": 62,
+        "9": 73
+      },
+      "steps": {
+        "6": 15700,
+        "7": 22700,
+        "8": 30900,
+        "9": 36200
+      },
+      "gates": {
+        "attempted": 230710,
+        "id_changed": 230416,
+        "ifa_veto": 0
+      },
+      "priority_draws": 230710,
+      "top_quartile_observed_share": 0.2519396645138919,
+      "top_quartile_expected_share": 0.25,
+      "attempts": {
+        "primary": {
+          "vector_attempts": 20,
+          "lane_attempts": 200,
+          "formal_records": 200,
+          "uncommitted_attempts": 0
+        },
+        "secondary": {
+          "vector_attempts": 68,
+          "lane_attempts": 680,
+          "formal_records": 680,
+          "uncommitted_attempts": 0
+        }
+      },
+      "cost": {
+        "training_seconds": 3425.2234902381897,
+        "peak_gpu_bytes": 568819712,
+        "scoring_seconds": 183.0729805040039,
+        "replacement_seconds": 103.4459309100032,
+        "io_seconds_nested_in_scoring_and_replacement": 86.59181197184171,
+        "checkpoint_and_epoch_log_seconds": 262.71325712999953,
+        "note": "Component times are included in training wall time; do not add IO again. Interrupted attempts retained separately; E0 historic wall time unavailable.",
+        "evaluate_primary_seconds": 4263.0,
+        "evaluate_secondary_seconds": 16886.0
+      },
+      "limits": [
+        "Single seed observation, not a statistically stable or causal effect estimate.",
+        "E1U-E0 combines pool restriction and replacement structure; not a pure pool-size effect.",
+        "E1 lacks retained-slot IDs; no invented full-flow E1 coverage comparison.",
+        "Scoring is retained as a sidepass, so this is not a scoring-free efficiency version.",
+        "E0 RTX4090 versus E1/E1U RTX3090; E0 timing and historical stage buffer snapshots unavailable."
+      ]
+    },
+    "difference": {
+      "auc": -4.0625,
+      "fwt": -1.25,
+      "nbt": 7.499999999999999
+    },
+    "primary_auc_improved": false,
+    "additional_seeds": [],
+    "baseline_rerun": false,
+    "training_epochs": 400,
+    "new_optimizer_steps": 105500,
+    "formal_primary_rollouts": 200,
+    "formal_secondary_rollouts": 680,
+    "source_and_features_unchanged": true,
+    "training": {
+      "status": "TRAINED_EVAL_PENDING",
+      "seed": 42,
+      "epochs": 400,
+      "invocation_seconds": 3425.2234902381897,
+      "peak_gpu_bytes": 568819712,
+      "selection_totals": {
+        "6": {
+          "refreshes": 0,
+          "old_slots": 0,
+          "priority_draws": 0,
+          "assigned_slots": 0,
+          "first_reference_veto": 0,
+          "invalid_candidates": 0,
+          "fallback_refreshes": 0,
+          "new_direction_fallbacks": 0,
+          "io_seconds": 0.0,
+          "scoring_seconds": 0.0,
+          "replacement_seconds": 0.08132881800224823
+        },
+        "7": {
+          "refreshes": 46,
+          "old_slots": 78100,
+          "priority_draws": 39325,
+          "assigned_slots": 39325,
+          "first_reference_veto": 0,
+          "invalid_candidates": 0,
+          "fallback_refreshes": 0,
+          "new_direction_fallbacks": 0,
+          "io_seconds": 15.024949828995432,
+          "scoring_seconds": 22.66401560999998,
+          "replacement_seconds": 19.495689943976686
+        },
+        "8": {
+          "refreshes": 62,
+          "old_slots": 152100,
+          "priority_draws": 76121,
+          "assigned_slots": 76121,
+          "first_reference_veto": 0,
+          "invalid_candidates": 0,
+          "fallback_refreshes": 0,
+          "new_direction_fallbacks": 0,
+          "io_seconds": 27.95064676493712,
+          "scoring_seconds": 57.65414952300034,
+          "replacement_seconds": 34.00695496401431
+        },
+        "9": {
+          "refreshes": 73,
+          "old_slots": 230100,
+          "priority_draws": 115264,
+          "assigned_slots": 115264,
+          "first_reference_veto": 0,
+          "invalid_candidates": 0,
+          "fallback_refreshes": 0,
+          "new_direction_fallbacks": 0,
+          "io_seconds": 43.61621537790916,
+          "scoring_seconds": 102.75481537100359,
+          "replacement_seconds": 49.86195718400995
+        }
+      },
+      "checkpoints": {
+        "mlrifa_6_model_ep70.pth": "5c16fc64e1be2fb6db87e6b038b730dfa62753bd5019bd73cbb78596746b0fcb",
+        "mlrifa_6_model_ep75.pth": "998eca1864c057f2bbcc982744b59f4c7fa2dd2aadda2906608c390c15474530",
+        "mlrifa_6_model_ep80.pth": "92ef7cffa5b55e0e2ea89decb46480240dc195cefad88f16b70733857a39707c",
+        "mlrifa_6_model_ep85.pth": "f43bff9cd4d89f733429808a178218a2b5ee5edfb4595480e5f627ccb02b4a29",
+        "mlrifa_6_model_ep90.pth": "273ea9e53ec0fd80cd0314b9cff928730df2732f82e0761297284a3e1616869e",
+        "mlrifa_6_model_ep95.pth": "14fbc501e81d3844b1ee8cfcc65ac728e1f56c8958c11eb61c877ea146740516",
+        "mlrifa_6_model_ep99.pth": "749085da837f76df9c78ac4b8989d56d8e88cd6e35f52049dd86cc3e3d26a575",
+        "mlrifa_7_model_ep70.pth": "c72be08571584d502d77ce7dc6f94a7b6761d5a3537bf0ac2b1b14622ed51463",
+        "mlrifa_7_model_ep75.pth": "0a0da55218fda6d63a8d7a50db801dc7343a9f90cdc5bb2a548ba4022da714ef",
+        "mlrifa_7_model_ep80.pth": "7c56e873fbbf79d12253f5aa1825e658ec6063e1537f7c76c146c9ccd0584b5e",
+        "mlrifa_7_model_ep85.pth": "3b940a4666bd2843de63c487114354e969d568979ed7a92f07d6f731c0b679c5",
+        "mlrifa_7_model_ep90.pth": "879818af5e32ea400b28b2248bb53958733affb850a7329189e3012506b29456",
+        "mlrifa_7_model_ep95.pth": "8a0395d2a1688b8154b6f3f45ad651670a2379a751eb57c7e3563ead0b887fa0",
+        "mlrifa_7_model_ep99.pth": "1fb61fddf46c1d3ec5d3c9681147f6cf8eb5de40b5094f5f8d07f437c9e37bb1",
+        "mlrifa_8_model_ep70.pth": "8f4a2132abae27bc501be8ff02c9fec51b72e6a1b9fb6400352a3367056683bb",
+        "mlrifa_8_model_ep75.pth": "74f3649c38782de0918e2c367d59647c4c82e0cd522b4545e3a0d650ef273387",
+        "mlrifa_8_model_ep80.pth": "700aa765cad0809a8e67f1508bf11c7a6827e5a307c11ecf91de278b37f26b29",
+        "mlrifa_8_model_ep85.pth": "7613cf2cf4911e0f20dddc9e7480386a5180046430fa061c5b5ec1efd5f330a0",
+        "mlrifa_8_model_ep90.pth": "d86458889e03828d0c003a80ca8ee8089a22a069796d814c88ace9e77e2e0f79",
+        "mlrifa_8_model_ep95.pth": "4be991a7e6ca65a1067f1edbfcd977689623c8b433b0faa52ea6a6e378ec3fef",
+        "mlrifa_8_model_ep99.pth": "cd5c94ffe51010d680b183904ab5a2a6936d1952bf413f32c8424286e767ae95",
+        "mlrifa_9_model_ep70.pth": "3f10c8232a67aa916291fcdf979e4d8af36855611e60aca8eb90da5f1243aa01",
+        "mlrifa_9_model_ep75.pth": "4907ad094e833d8be3ead2a852bf348672c0c17d725e4349a4765f70476c8d99",
+        "mlrifa_9_model_ep80.pth": "680acd7ef0cd46ba74ea59756a811c3346b5533e01a879d35cb1aee307377b23",
+        "mlrifa_9_model_ep85.pth": "3b9eb9c5f1b7ddf1018c9d86edc76d99cb168703f7923ba012cf01ff4988a1d2",
+        "mlrifa_9_model_ep90.pth": "78cfb0d350161c49d4cc9eff4fe8bddcccb5cf6d792f67c6c735e0493734ae59",
+        "mlrifa_9_model_ep95.pth": "43e623231add434d7ed80c78b5b529528224c749dd553b235e9a69af96e557fc",
+        "mlrifa_9_model_ep99.pth": "cd2de5c3ed392e8ac6a940e08e0f828d871d55d2d023176b926068ec5c31d477"
+      }
+    },
+    "disclosed_gaps": [
+      "Historical baseline ran each seed on one RTX4090; current host has one RTX3090. Precision/library version and GPU count preserved; architecture differs.",
+      "Original stage-buffer snapshots unavailable. Same byte-identical feature files, same deterministic E0 buffer implementation and seed reconstruct membership; actual per-stage hashes will be recorded.",
+      "E1U reuses the already verified E1 features read-only, with every SHA256 checked against historical E0. No E1U feature export. E1 stage buffer snapshots are directly available; E0 missing historical snapshots limitation remains."
+    ],
+    "timestamp": 1791546302.8850133
+  },
+  "pipeline_exit": "0\n",
+  "commands": "2026-10-09T12:55:02+08:00 START prepare\n2026-10-09T12:55:05+08:00 EXIT 0 prepare\n2026-10-09T12:55:05+08:00 START spawn_import\n2026-10-09T12:55:05+08:00 EXIT 0 spawn_import\n2026-10-09T12:55:05+08:00 START train\n2026-10-09T13:52:20+08:00 EXIT 0 train\n2026-10-09T13:52:20+08:00 START evaluate_primary\n2026-10-09T15:03:23+08:00 EXIT 0 evaluate_primary\n2026-10-09T15:03:23+08:00 START evaluate_secondary\n2026-10-09T19:44:49+08:00 EXIT 0 evaluate_secondary\n2026-10-09T19:44:49+08:00 START finalize\n2026-10-09T19:45:02+08:00 EXIT 0 finalize\n",
+  "primary": {
+    "count": 200,
+    "latest": {
+      "checkpoint": "/data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009/run_001/mlrifa_9_model_ep99.pth",
+      "stage": 9,
+      "epoch": 99,
+      "event": "environment_closed",
+      "unix": 1791529402.5399692,
+      "pid": 3514,
+      "task": 9,
+      "lanes": 10
+    },
+    "completion_times": [
+      1791527407.8977144,
+      1791527591.9696798,
+      1791527761.7727568,
+      1791528049.7675877,
+      1791528331.3679185,
+      1791528409.9500659,
+      1791528476.681946,
+      1791528765.1554558,
+      1791529044.897598,
+      1791529334.345794,
+      1791529399.8597376
+    ],
+    "last_log_mtime": 1791529402.6660125
+  },
+  "secondary": {
+    "count": 680,
+    "latest": {
+      "checkpoint": "/data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009/run_001/mlrifa_9_model_ep90.pth",
+      "stage": 9,
+      "epoch": 90,
+      "event": "environment_closed",
+      "unix": 1791546288.036399,
+      "pid": 14729,
+      "task": 8,
+      "lanes": 10
+    },
+    "completion_times": [
+      1791544284.614108,
+      1791544578.9416494,
+      1791544856.8085623,
+      1791544938.8124266,
+      1791545010.620472,
+      1791545306.5147486,
+      1791545580.9141467,
+      1791545657.6747844,
+      1791545726.2140644,
+      1791546010.7009428,
+      1791546285.8243003
+    ],
+    "last_log_mtime": 1791546288.1763191
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 0 %, 10 MiB\n",
+  "processes": [
+    "  15616       00:00 bash -c /data/mlr_ifa/env/bin/python - <<'PY' import json,time,subprocess from pathlib import Path o=Path('/data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009') r={'now':time.time(),'status':json.loads((o/'RUN_STATUS.json').read_text()),'pipeline_exit':(o/'pipeline.exit').read_text() if (o/'pipeline.exit').exists() else None,'commands':(o/'commands.log').read_text()} for v in ('primary','secondary'):  p=o/('trials_'+v+'.jsonl');a=o/('attempts_'+v+'.jsonl')  rows=[json.loads(x) for x in p.read_text().splitlines() if x] if p.exists() else []  events=[json.loads(x) for x in a.read_text().splitlines() if x] if a.exists() else []  ends=[x for x in events if x['event']=='vector_attempt_complete']  r[v]={'count':len(rows),'latest':events[-1] if events else None,'completion_times':[x['unix'] for x in ends[-11:]],'last_log_mtime':(o/('evaluate_'+v+'.log')).stat().st_mtime} r['gpu']=subprocess.check_output(['nvidia-smi','--query-gpu=name,utilization.gpu,memory.used','--format=csv,noheader'],text=True) r['processes']=[x for x in subprocess.check_output(['ps','-eo','pid,etime,args'],text=True).splitlines() if 'protective_e1.evaluate' in x or 'protective_e1/pipeline.sh' in x] print(json.dumps(r,indent=2)) (o/'STATUS_REQUEST_20261009_1955.json').write_text(json.dumps(r,indent=2)) PY"
+  ]
+}

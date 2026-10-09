@@ -1,0 +1,47 @@
+--- independent_acceptance.py
++++ independent_acceptance_v2.py
+@@ -1,5 +1,5 @@
+ """External read-only independent acceptance after pipeline exit, no policy load."""
+-import json, csv, hashlib, os, subprocess
++import json, csv, hashlib, os, subprocess, math
+ from pathlib import Path
+ from collections import defaultdict, Counter
+ O=Path('/data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009')
+@@ -30,7 +30,7 @@
+     curve=list(csv.DictReader((O/'run_001/paper_repro_train_curve.csv').open()))
+     assert len(curve)==400 and {(int(x['stage']),int(x['epoch'])) for x in curve}=={(s,e) for s in range(6,10) for e in range(100)}
+     assert sum(int(r['batches']) for r in curve)==105500
+-    tables={};counts={}
++    tables={};counts={};float_comparisons=[]
+     for view,expected in [('primary',200),('secondary',680)]:
+         records=[json.loads(x) for x in (O/('trials_'+view+'.jsonl')).read_text().splitlines()]
+         assert len(records)==expected
+@@ -42,7 +42,14 @@
+         matrix=[[None]*4 for _ in range(4)]
+         for s in range(6,10):
+             for t in range(6,s+1):matrix[s-6][t-6]=sum(r['success'] for r in cells[s,selected[s],t])*5.
+-        published=json.loads((O/('metrics_'+view+'.json')).read_text());assert matrix==published['r']
++        published=json.loads((O/('metrics_'+view+'.json')).read_text())
++        for i in range(4):
++            for j in range(4):
++                a,b=matrix[i][j],published['r'][i][j]
++                if a is None or b is None:assert a is b
++                else:
++                    assert math.isclose(a,b,rel_tol=0,abs_tol=1e-10), (view,i,j,a,b)
++                    if a!=b:float_comparisons.append(dict(view=view,stage=i+6,task=j+6,from_integer_success_count=a,published_float=b,absolute_difference=abs(a-b)))
+         tables[view]=dict(matrix=matrix,metrics=metrics(matrix),selected_epochs=selected)
+         attempts=[json.loads(x) for x in (O/('attempts_'+view+'.jsonl')).read_text().splitlines()]
+         begin=[r for r in attempts if r['event']=='vector_attempt_start'];end=[r for r in attempts if r['event']=='vector_attempt_complete']
+@@ -54,10 +61,11 @@
+         counts[view]=dict(formal=expected,attempted_lanes=len(begin)*10)
+     pairs=[json.loads(p.read_text()) for p in (O/'pairing').glob('*.json')];assert len(pairs)==400
+     audit=json.loads((O/'UNIFORM_AUDIT.json').read_text())
+-    assert audit['versions']['E1U']['auc']==tables['primary']['metrics']['auc']
++    assert math.isclose(audit['versions']['E1U']['auc'],tables['primary']['metrics']['auc'],rel_tol=0,abs_tol=1e-10)
+     improved=tables['primary']['metrics']['auc']>audit['versions']['E0']['auc']
+     result=dict(status='SEED42_COMPLETE_EXTENSION_PENDING' if improved else 'COMPLETED',independent_audit='PASS',
+         pipeline_exit=0,residual_processes=leftovers,counts=counts,tables=tables,
++        float_comparisons=float_comparisons,readonly_validation_fix='Only compare percentage floats within absolute1e-10; integer episode counts and success indicators remain exact. Original failed validator and log preserved.',
+         strict_pairing=all(p['strict_pairing'] for p in pairs),original_files_unchanged=len(old),
+         source_unchanged=True,features_unchanged=5921,checkpoints_hashed=28,
+         extension_seeds=[43,44] if improved else [],limitations=audit['limits'])

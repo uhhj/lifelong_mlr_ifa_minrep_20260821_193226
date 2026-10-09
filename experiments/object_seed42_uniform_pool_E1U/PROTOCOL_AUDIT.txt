@@ -1,0 +1,58 @@
+E1-U LIBERO-OBJECT seed42: frozen before formal launch 2026-10-09
+
+Source: e963d8d0f3a4626365d33bdb5c83a60821fff115,
+experiments/object_seed42_protective_selection_E1/source/.
+Every copied source/test/fixture Git blob was independently checked against the
+fixed commit tree before edits. Diagnosis reference d9a355b6fb75d22ece19cb9c324201e2dae55540.
+No root GOAL implementation was used. Original local checkout remains unchanged.
+
+Only algorithm change: SelectionConfig.pool_weighting='uniform', still calculate
+head gradients and original softmax; used probabilities are exactly 1/valid_count.
+Same ordered candidates, random.Random and rng.choices calls, .5 gate, H16/C64/N16,
+refresh at stage start/every500 updates, original BC+IFA/gamma .3 and optimizer.
+Uniform config is explicit in both actual config and contract creation paths.
+OBJECT CompletePolicy remains use_state=False. BriefPolicy operates on existing
+byte-identical historical features; no modal conversion, export or GOAL override.
+
+Engineering changes: new fixed source/output paths; dataset identity side channel
+using the original __getitem__ index with no second sampler iteration; strip IDs
+before model input; all-slot identity logs; read-only E1 pool/gate and buffer
+comparison; epoch logging/recovery overhead timing; explicit attempt ledger.
+Existing spawn binding is included in startup; Hydra run output goes outside the
+source tree. Hash scope includes actual .py/.sh/.yaml/.json sources and excludes
+the copied historical .hydra generated metadata. No live source edit after freeze.
+Final scientific validation leaves AWAITING_INDEPENDENT_EXIT_AUDIT until separate
+independent_acceptance.py confirms pipeline.exit=0 and no residual process.
+
+Preparation: 5921/5921 feature SHA256 matches historical E0; official OBJECT
+checkpoint SHA256 159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b.
+10336 original E1 files/source artifacts hashed read-only before this run.
+All outputs under /data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009.
+New formal buffer empty; no previous recovery state; no E0/E1 retraining.
+
+Target environment: PyTorch1.13.0+cu116, CUDA11.6, RTX3090 24GB.
+28 software tests PASS (original20 plus8 new), exit0.
+Real GPU preflight PASS, exactly5 isolated optimizer calls, 12.34 seconds, exit0.
+88 trainable pretrained parameter keys exactly match official initialization.
+Scoring state isolation, equal zero-probability native update, exact restored next
+update, next-epoch DataLoader RNG and identity side-channel parity all passed.
+Pure spawn import PASS, child exit0, no environment instance/rollout.
+Actual evaluation Hydra config parse PASS, state False as boolean, n_eval20,
+600 max steps, correct own checkpoint root and same official frontend.
+
+Formal budget: 400 epochs,105500 steps,181 refreshes,28 required checkpoints;
+primary200 and secondary680 independent episodes, same original E1 evaluation.
+Normal failed episodes are not retried. Technical attempts are retained.
+Preflight state discarded; formal process starts with control_seed42 from official
+pretrain. Full three-version comparison and extension use exact matrix metrics.
+Only if E1U primary AUC > E0 primary AUC may fixed seeds43/44 follow; do not rerun E0.
+
+Limits: E0 RTX4090 versus current RTX3090; missing E0 historical training wall time
+and buffer snapshots remain disclosed. E1 full retained-ID stream is unavailable.
+E1U-E0 includes pool restriction and replacement, not a pure pool-size effect.
+One seed cannot establish stable causal effects. Scoring remains, so no claim of
+scoring-free efficiency. No push, paid resource creation, extra closed-loop smoke.
+
+Launch SSH shell response timed out after10s because the background shell held the
+channel; actual PID3312 and train PID3349 were independently observed healthy.
+No duplicate launch was attempted. A live process has no final exit code yet.

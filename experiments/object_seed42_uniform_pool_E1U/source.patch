@@ -1,0 +1,572 @@
+--- a/bootstrap/sitecustomize.py
++++ b/bootstrap/sitecustomize.py
+@@ -0,0 +1,7 @@
++"""Evaluation process bootstrap: apply the existing, unchanged package binding.
++
++Needed by multiprocessing spawn before it unpickles libero.libero worker types.
++No model, environment, RNG, or evaluation-rule changes.
++"""
++from protective_e1.bindings import bind
++bind()
+--- a/check_spawn.py
++++ b/check_spawn.py
+@@ -0,0 +1,13 @@
++"""Import-only spawn check. No environment construction or rollout."""
++import json
++import multiprocessing as mp
++
++def child(q):
++    import libero.libero.envs.venv as v
++    q.put(dict(module=v.__file__,worker_imported=hasattr(v,'SubprocVectorEnv')))
++
++if __name__=='__main__':
++    ctx=mp.get_context('spawn');q=ctx.Queue();p=ctx.Process(target=child,args=(q,))
++    p.start();result=q.get(timeout=45);p.join(timeout=10)
++    assert p.exitcode==0 and result['worker_imported']
++    print(json.dumps(dict(status='PASS',child_exit=p.exitcode,environment_instances=0,rollouts=0,**result)))
+--- a/libero/lifelong/replay_selection.py
++++ b/libero/lifelong/replay_selection.py
+@@ -17,6 +17,7 @@
+ 
+ @dataclass(frozen=True)
+ class SelectionConfig:
++    pool_weighting: str = 'score'
+     enabled: bool = True
+     refresh_interval_steps: int = 500
+     refresh_at_stage_start: bool = True
+@@ -32,6 +33,7 @@
+     fallback: str = 'original_retrieval'
+ 
+     def __post_init__(self):
++        assert self.pool_weighting in ('score', 'uniform')
+         assert self.refresh_interval_steps > 0
+         assert min(self.reference_per_old_task, self.candidates_per_old_task,
+                    self.current_reference_size) > 0
+@@ -219,6 +221,10 @@
+                         weights = [math.exp(s-peak) for s in scaled]
+                         total = sum(weights)
+                         probs = [x/total for x in weights]
++                        score_probs = probs
++                        if cfg.pool_weighting == 'uniform':
++                            probs = [1.0 / len(valid_ids)] * len(valid_ids)
++                        record.setdefault('score_probabilities', {})[str(task)] = score_probs
+                         distributions[task] = dict(ids=valid_ids, scores=scores, probabilities=probs)
+                         record['valid_ids'][str(task)] = valid_ids
+                         record['scores'][str(task)] = scores
+--- a/libero/lifelong/replay_selection_hook.py
++++ b/libero/lifelong/replay_selection_hook.py
+@@ -23,16 +23,23 @@
+         if selector is None or selector.current_task != current_task_id:
+             raise RuntimeError('Stage legal catalog was not configured and verified')
+         # No original sampler/loader/optimizer/scheduler calls are replaced.
++        identities = None
++        if len(data) == 3:
++            from protective_e1.identity import identity_rows
++            identities = tuple(data[2])
++            data = [data[0], data[1]]
+         before_tasks = tuple(str(x) for x in data[1])
+         refresh = selector.refresh(self.e1_stage_step)
+         replaced, events = selector.replace_old_slots(data)
+         assert tuple(str(x) for x in replaced[1]) == before_tasks
++        actual_samples = identity_rows(identities, before_tasks, events) if identities is not None else None
+         before_step = self._optimizer_step_count
+         loss = super().observe(replaced, current_task_id, epoch, ifa_info=ifa_info)
+         assert self._optimizer_step_count == before_step + 1
+         self.e1_stage_step += 1
+         self.e1_events.append(dict(stage=current_task_id, epoch=epoch,
+-            stage_optimizer_step=self.e1_stage_step, refresh=refresh, replacements=events))
++            stage_optimizer_step=self.e1_stage_step, refresh=refresh, replacements=events,
++            actual_samples=actual_samples))
+         return loss
+ 
+     def pop_e1_events(self):
+--- a/protective_e1/baseline_loop.py
++++ b/protective_e1/baseline_loop.py
+@@ -2,6 +2,7 @@
+ # Source SHA256: 97f8ebb8ffdd54f5596c956c8f125feac70ebdbd913386bc8384c58d4a7463e5
+ from libero.lifelong.algos.mlr import *
+ from libero.lifelong.algos.mlr import _is_rank0
++from .identity import IdentityDataset
+ 
+ class E1EpochLoop(MLR):
+     def learn_all_tasks(self, datasets, benchmark, result_summary,current_task_id):
+@@ -29,6 +30,7 @@
+         buffer_dir = self.cfg.buffer_dir
+ 
+         dataset = build_dataset_for_task(base_dir, current_task_id, buffer_dir, self.cfg.seed, start=self.cfg.start_task)
++        dataset = IdentityDataset(dataset)
+         print("Train set size:", len(dataset))
+ 
+         # learn on all tasks, only used in multitask learning
+--- a/protective_e1/e1_seed42.json
++++ b/protective_e1/e1_seed42.json
+@@ -0,0 +1,37 @@
++{
++  "fwt": 76.25,
++  "nbt": -3.333,
++  "auc": 77.292,
++  "r": [
++    [
++      35.0,
++      null,
++      null,
++      null
++    ],
++    [
++      45.0,
++      100.0,
++      null,
++      null
++    ],
++    [
++      35.0,
++      95.0,
++      85.0,
++      null
++    ],
++    [
++      25.0,
++      95.0,
++      100.0,
++      85.0
++    ]
++  ],
++  "selected_epochs": {
++    "6": 99,
++    "7": 99,
++    "8": 99,
++    "9": 99
++  }
++}
+--- a/protective_e1/env.sh
++++ b/protective_e1/env.sh
+@@ -1,9 +1,9 @@
+ #!/usr/bin/env bash
+ source /data/mlr_ifa/activate.sh
+-E1_SOURCE=/data/mlr_ifa/experiment_workspaces/E1_protective_object_20261008/source
+-E1_OUT=/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008
++E1_SOURCE=/data/mlr_ifa/experiment_workspaces/E1U_uniform_pool_20261009/source
++E1_OUT=/data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009
+ export E1_SOURCE E1_OUT
+-export PYTHONPATH="$E1_SOURCE:$E1_SOURCE/libero"
++export PYTHONPATH="$E1_SOURCE/bootstrap:$E1_SOURCE:$E1_SOURCE/libero"
+ export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONDONTWRITEBYTECODE=1
+ export CUDA_VISIBLE_DEVICES=0
+ cd "$E1_SOURCE"
+--- a/protective_e1/eval_metric.py
++++ b/protective_e1/eval_metric.py
+@@ -31,10 +31,13 @@
+ 
+         # Try to handle the frame buffer issue
+ 
++        from protective_e1.evaluate import ledger
++        ledger('environment_construct_start',task=task_id,lanes=env_num)
+         env = SubprocVectorEnv(
+             [lambda: OffScreenRenderEnv(**env_args) for _ in range(env_num)]
+         )
+ 
++        ledger('environment_construct_complete',task=task_id,lanes=env_num)
+         ### Evaluation loop
+         # get fixed init states to control the experiment randomness
+         init_states_path = os.path.join(
+@@ -45,6 +48,7 @@
+         num_success = 0
+         for i in range(eval_loop_num):
+             seed = see + i
++            ledger('vector_attempt_start',task=task_id,group=i,env_seed=seed,initial_indices=list(range(i*env_num,(i+1)*env_num)))
+             env.seed(seed)
+             env.reset()
+             env.seed(seed) 
+@@ -111,8 +115,10 @@
+                         record_trial(cfg, task_id, see, i * env_num + k, int(indices[k]), bool(dones[k]), steps)
+                         num_success += int(dones[k])
+ 
++            ledger('vector_attempt_complete',task=task_id,group=i,env_seed=seed,steps=steps,successes=[bool(x) for x in dones],lanes=env_num)
+         success_rate = num_success / cfg.eval.n_eval
+         env.close()
++        ledger('environment_closed',task=task_id,lanes=env_num)
+         gc.collect()
+     print(f"[info] evaluate task {task_id} takes {t.get_elapsed_time():.1f} seconds")
+     return success_rate
+--- a/protective_e1/evaluate.py
++++ b/protective_e1/evaluate.py
+@@ -2,6 +2,7 @@
+ import json
+ import os
+ import re
++import time
+ from pathlib import Path
+ 
+ CURRENT={}
+@@ -14,6 +15,11 @@
+              success=success,vector_group_steps=steps)
+     with path.open('a') as f: f.write(json.dumps(row,allow_nan=False)+'\n');f.flush()
+ 
++
++def ledger(event, **fields):
++    path=Path(os.environ['E1_TRIAL_LOG']).with_name(Path(os.environ['E1_TRIAL_LOG']).name.replace('trials_','attempts_'))
++    with path.open('a') as f:
++        f.write(json.dumps(dict(CURRENT,event=event,unix=time.time(),pid=os.getpid(),**fields),allow_nan=False)+'\n');f.flush()
+ 
+ def main():
+     from .bindings import bind
+--- a/protective_e1/evaluate.sh
++++ b/protective_e1/evaluate.sh
+@@ -13,7 +13,7 @@
+  init_states_folder="$E1_SOURCE/libero/libero/init_files"
+  pretrain=/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth
+  eval.n_eval=20 eval.num_procs=20 +start_task=6 +end_task=10 +aug=true
+- +epoch_dir="$E1_OUT/run_001" +test_log_file="$LOG_FILE" training=false use_wandb=false)
++ +epoch_dir="$E1_OUT/run_001" +test_log_file="$LOG_FILE" training=false use_wandb=false hydra.run.dir="$E1_OUT/hydra_outputs/${VIEW}_$(date +%s%N)" hydra.job.chdir=false)
+ if [[ "$VIEW" == primary ]]; then
+  python -m protective_e1.evaluate "${ARGS[@]}" '+eval_epochs=[99]' +experiment_root="$E1_OUT/eval_primary"
+ else
+--- a/protective_e1/finalize.py
++++ b/protective_e1/finalize.py
+@@ -31,16 +31,21 @@
+     for r in rows:assert int(r['batches'])==expected_batches[int(r['stage'])]
+     contract=json.loads((O/'CONTRACT.json').read_text())
+     assert all(sha(S/k)==v for k,v in contract['source_sha256'].items())
++    assert sha('/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth')==contract['pretrain_sha256']
++    original=json.loads((O/'E1_READONLY_BEFORE.json').read_text())
++    assert all(sha(k)==v for k,v in original.items()), 'Original E1 input changed'
+     parity=json.loads((O/'FEATURE_PARITY.json').read_text())
+     for t,files in parity['features'].items():
+         assert all(sha(O/'features'/t/n)==h for n,h in files.items())
+     training=json.loads((O/'TRAINING_COMPLETE.json').read_text())
+     assert all(sha(O/'run_001'/n)==h for n,h in training['checkpoints'].items())
+     baseline=json.loads((S/'protective_e1/e0_seed42.json').read_text());new=json.loads((O/'metrics_primary.json').read_text())
+-    delta={k:new[k]-baseline[k] for k in ('auc','fwt','nbt')}
+-    improved=auc(new['r'])>auc(baseline['r'])+1e-9
+-    result=dict(status='SEED42_COMPLETE_EXTENSION_PENDING' if improved else 'COMPLETED',
+-      seed=42,baseline=baseline,e1=new,difference=delta,primary_auc_improved=improved,
++    from .uniform_summary import summarize
++    extra=summarize(O,S)
++    delta=extra['differences']['E1U_minus_E0']
++    improved=auc(new['r'])>auc(baseline['r'])
++    result=dict(status='AWAITING_INDEPENDENT_EXIT_AUDIT',
++      seed=42,baseline=baseline,e1u=new,uniform_audit=extra,difference=delta,primary_auc_improved=improved,
+       additional_seeds=[43,44] if improved else [],baseline_rerun=False,
+       training_epochs=400,new_optimizer_steps=sum(int(r['batches']) for r in rows),
+       formal_primary_rollouts=200,formal_secondary_rollouts=680,
+--- a/protective_e1/identity.py
++++ b/protective_e1/identity.py
+@@ -0,0 +1,23 @@
++"""Read-only identity side channel; no sampler iteration or random calls."""
++from pathlib import Path
++from torch.utils.data import Dataset
++
++class IdentityDataset(Dataset):
++    def __init__(self, base): self.base = base
++    def __len__(self): return len(self.base)
++    def __getitem__(self, index):
++        payload, task = self.base[index]
++        path = Path(self.base.file_paths[index])
++        item = ('buffer/' + path.name) if path.name.startswith('t') else ('current/%s/%s' % (task, path.name))
++        return payload, task, item
++
++def identity_rows(original_ids, tasks, events):
++    attempted = {e['slot']: e for e in events}
++    result = []
++    for slot, (item, task) in enumerate(zip(original_ids, tasks)):
++        e = attempted.get(slot)
++        final = e['candidate'] if e and e['applied'] else item
++        result.append(dict(slot=slot, task=int(task), original_id=item, final_id=final,
++            attempted=e is not None, assigned=bool(e and e['applied']),
++            id_changed=final != item, ifa_veto=bool(e and e.get('reason')=='IFA_LANGUAGE_REFERENCE')))
++    return result
+--- a/protective_e1/paired_audit.py
++++ b/protective_e1/paired_audit.py
+@@ -0,0 +1,34 @@
++"""Read-only E1 pairing evidence. Never influences selector/model or draws."""
++import json
++from pathlib import Path
++from .io import write, sha
++OLD=Path('/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008')
++
++def epoch_pairing(out,stage,epoch,rows):
++    oldpath=OLD/'selection_logs'/('task%d'%stage)/('epoch%03d.jsonl'%epoch)
++    old=[json.loads(line) for line in oldpath.read_text().splitlines()]
++    differences=[]
++    if len(old)!=len(rows):differences.append(dict(kind='row_count',old=len(old),new=len(rows)))
++    for a,b in zip(old,rows):
++        at=b['stage_optimizer_step']
++        for k in ('stage','epoch','stage_optimizer_step'):
++            if a[k]!=b[k]:differences.append(dict(step=at,kind=k))
++        ar,br=a['refresh'],b['refresh']
++        if (ar is None)!=(br is None):differences.append(dict(step=at,kind='refresh_cadence'))
++        elif ar is not None:
++            for k in ('step','references','current_reference','candidates'):
++                if ar[k]!=br[k]:differences.append(dict(step=at,kind=k))
++        if [(x['slot'],x['task']) for x in a['replacements']] != [(x['slot'],x['task']) for x in b['replacements']]:
++            differences.append(dict(step=at,kind='attempted_positions'))
++    result=dict(stage=stage,epoch=epoch,e1_source=str(oldpath),e1_sha256=sha(oldpath),
++                rows=len(rows),strict_pairing=not differences,differences=differences,
++                interpretation='Paired pools and gates' if not differences else 'PAIRING_GAP: retained real trajectory; no reseeding or matching redraw')
++    write(Path(out)/'pairing'/('task%d_epoch%03d.json'%(stage,epoch)),result)
++    return result
++
++def buffer_pairing(out,stage,actual):
++    path=OLD/('buffer_after_task%d.json'%stage)
++    expected=json.loads(path.read_text())
++    result=dict(stage=stage,e1_sha256=sha(path),members_and_payload_hashes_match=actual==expected,count=len(actual))
++    write(Path(out)/('buffer_pairing_task%d.json'%stage),result)
++    assert actual==expected, 'E1U stage buffer differs from E1'
+--- a/protective_e1/pipeline.sh
++++ b/protective_e1/pipeline.sh
+@@ -15,6 +15,7 @@
+ if [[ ! -e "$E1_OUT/REAL_PREFLIGHT.json" ]]; then
+  run_step preflight python -m torch.distributed.run --nproc_per_node=1 --master_port=37984 -m protective_e1.preflight
+ fi
++run_step spawn_import python -B check_spawn.py
+ run_step train python -m torch.distributed.run --nproc_per_node=1 --master_port=37985 -m protective_e1.train
+ run_step evaluate_primary bash protective_e1/evaluate.sh primary
+ run_step evaluate_secondary bash protective_e1/evaluate.sh secondary
+--- a/protective_e1/preflight.py
++++ b/protective_e1/preflight.py
+@@ -52,7 +52,7 @@
+             old[6].append(p.name);catalog[p.name]=dict(path=str(p),sha256=sha(p))
+         for p in sorted((Path(cfg.feature_dir)/'7').glob('*.pt')):
+             key='7/'+p.name;current.append(key);catalog[key]=dict(path=str(p),sha256=sha(p))
+-        algo.catalog=catalog;algo.stage=7;algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog),SelectionConfig(priority_replace_probability=0.))
++        algo.catalog=catalog;algo.stage=7;algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog),SelectionConfig(pool_weighting='uniform',priority_replace_probability=0.))
+         dataset=build_dataset_for_task(cfg.feature_dir,7,cfg.buffer_dir,42,start=6)
+         loader=DataLoader(dataset,batch_size=10,num_workers=0,sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True))
+         algo.start_task(-1,loader);algo.policy.train();iterator=iter(loader);batch=next(iterator);second=next(iterator)
+@@ -61,10 +61,11 @@
+         native_loss=MLR.observe(algo,copy.deepcopy(batch),7,0,ifa_info=ifa);native=capture(algo)
+         restore(algo,initial);e1_loss=algo.observe(copy.deepcopy(batch),7,0,ifa_info=ifa);off=capture(algo)
+         assert native_loss==e1_loss and signature(native)==signature(off),'ZERO_PROBABILITY_UPDATE_DIVERGED'
+-        restore(algo,initial);algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog))
++        restore(algo,initial);algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog),SelectionConfig(pool_weighting='uniform'))
+         before=capture(algo);refresh=algo.e1_selector.refresh(0);after=capture(algo)
+         assert signature(before)==signature(after),'SCORING_CHANGED_TRAINING_STATE'
+         assert refresh['reason']=='OK' and len(algo.e1_selector.distributions[6]['ids'])==64
++        assert refresh['probabilities']['6'] == [1./64]*64
+         replacement,events=algo.e1_selector.replace_old_slots(copy.deepcopy(batch))
+         assert replacement[1]==batch[1]
+         for i,t in enumerate(batch[1]):
+@@ -78,10 +79,16 @@
+         restored_loss=algo.observe(copy.deepcopy(second),7,0,ifa_info=ifa);actual=capture(algo)
+         assert expected_loss==restored_loss and signature(expected)==signature(actual),'RESUME_NEXT_UPDATE_DIVERGED'
+         assert signature(initial['model'])!=signature(actual['model']),'NONZERO_LR_DID_NOT_UPDATE'
++        from .identity import IdentityDataset
+         saved_rng=copy.deepcopy(rng());loader.sampler.set_epoch(1);a=next(iter(loader));rng_a=signature(rng())
+         restore_rng(saved_rng);loader.sampler.set_epoch(1);b=next(iter(loader))
+         assert a[1]==b[1] and all(torch.equal(a[0][k],b[0][k]) for k in a[0]) and rng_a==signature(rng())
+-        result=dict(status='PASS',optimizer_calls=5,actual_policy='E0 BriefPolicy/GMMHead',real_payloads=True,
++        restore_rng(saved_rng)
++        identity_loader=DataLoader(IdentityDataset(dataset),batch_size=10,num_workers=0,sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True))
++        identity_loader.sampler.set_epoch(1);c=next(iter(identity_loader))
++        assert a[1]==c[1] and all(torch.equal(a[0][k],c[0][k]) for k in a[0]) and rng_a==signature(rng())
++        assert len(c[2])==10 and all(k.startswith(('buffer/','current/')) for k in c[2])
++        result=dict(identity_sidechannel_loader_payload_rng_parity=True,pool_weighting='uniform',status='PASS',optimizer_calls=5,actual_policy='E0 BriefPolicy/GMMHead',real_payloads=True,
+           old_buffer_windows=len(old[6]),current_windows=len(current),zero_probability_native_update_parity=True,
+           refresh_preserves_parameters_optimizer_scheduler_rng_modes=True,only_head_gradient=True,
+           candidate_count=64,reference_count=16,current_reference_count=16,same_task_slots_current_content=True,
+--- a/protective_e1/prepare.py
++++ b/protective_e1/prepare.py
+@@ -20,11 +20,14 @@
+        feature_dir=str(O/'features'),buffer_dir=str(root/'buffer'),experiment_dir=str(root/'run_001'),
+        experiment_root=str(root),folder='/data/mlr_ifa/datasets',bddl_folder=str(S/'libero/libero/bddl_files'),
+        init_states_folder=str(S/'libero/libero/init_files'),e1_root=str(root),e1_contract=str(O/'CONTRACT.json'),
+-       e1_selection=asdict(SelectionConfig()),repro_arm='E1_protective_selection',use_wandb=False)
++       e1_selection=asdict(SelectionConfig(pool_weighting='uniform')),repro_arm='E1U_uniform_pool',use_wandb=False)
+     return cfg
+ 
+ def main():
+-    assert (O/'export.exit').read_text().strip()=='0'
++    assert (O/'features').resolve() == Path('/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/features').resolve()
++    assert O.name == 'E1U_uniform_pool_seed42_20261009' and S.parent.name == 'E1U_uniform_pool_20261009'
++    import torch
++    assert torch.cuda.is_available(), 'GPU required; no CPU fallback'
+     historical=json.loads((S/'protective_e1/historical_feature_manifest.json').read_text())['42']
+     actual={};count=0
+     for task in (6,7,8,9):
+@@ -39,16 +42,21 @@
+        counts={k:len(v) for k,v in actual.items()},historical_manifest_sha256=sha(S/'protective_e1/historical_feature_manifest.json'),features=actual))
+     checkpoint='/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth'
+     assert sha(checkpoint)=='159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b'
+-    contract=dict(name='E1_protective_OBJECT_seed42',baseline='final_paper_text_faithful/ifa/seed42',
++    contract=dict(name='E1U_uniform_pool',source_commit='e963d8d0f3a4626365d33bdb5c83a60821fff115',
++      diagnostic_commit='d9a355b6fb75d22ece19cb9c324201e2dae55540',
++      sole_algorithm_change='softmax pool weights replaced by exact uniform weights; scoring and random.choices retained',
++      device=torch.cuda.get_device_name(),torch_version=torch.__version__,cuda_version=torch.version.cuda,
++      e1_readonly_root='/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008',
++      readonly_e1_manifest_sha256=sha(O/'E1_READONLY_BEFORE.json'),baseline='final_paper_text_faithful/ifa/seed42',
+       seed=42,feature_parity=sha(O/'FEATURE_PARITY.json'),pretrain_sha256=sha(checkpoint),
+-      source_sha256={str(p.relative_to(S)):sha(p) for p in sorted(S.rglob('*')) if p.is_file() and p.suffix in ('.py','.sh','.yaml')},
+-      settings=asdict(SelectionConfig()),tasks=[6,7,8,9],n_epochs=100,train_batch_size=10,
++      source_sha256={str(p.relative_to(S)):sha(p) for p in sorted(S.rglob('*')) if p.is_file() and p.suffix in ('.py','.sh','.yaml','.json') and '.hydra' not in p.parts},
++      settings=asdict(SelectionConfig(pool_weighting='uniform')),tasks=[6,7,8,9],n_epochs=100,train_batch_size=10,
+       primary=dict(checkpoint_epoch=99,cells=10,trials_per_cell=20),
+       secondary=dict(candidate_epochs=[70,75,80,85,90,95,99],cells=34,trials_per_cell=20),
+       primary_endpoint='task-balanced overall AUC',extension_rule='strictly positive unrounded overall AUC difference, then fixed seeds43/44; no baseline retraining',
+       disclosed_gaps=['Historical baseline ran each seed on one RTX4090; current host has one RTX3090. Precision/library version and GPU count preserved; architecture differs.',
+       'Original stage-buffer snapshots unavailable. Same byte-identical feature files, same deterministic E0 buffer implementation and seed reconstruct membership; actual per-stage hashes will be recorded.',
+-      'Feature cache re-exported with the original seeded exporter then every file SHA256 matched to historical E0 manifest. This is verified input recovery, not baseline training.'],
++      'E1U reuses the already verified E1 features read-only, with every SHA256 checked against historical E0. No E1U feature export. E1 stage buffer snapshots are directly available; E0 missing historical snapshots limitation remains.'],
+       created_unix=time.time(),baseline_rerun=False)
+     target=O/'CONTRACT.json'
+     if target.exists():
+--- a/protective_e1/runtime.py
++++ b/protective_e1/runtime.py
+@@ -13,6 +13,7 @@
+ bind()
+ from .baseline_loop import E1EpochLoop
+ from .io import sha, write, save
++from .paired_audit import epoch_pairing, buffer_pairing
+ from libero.lifelong.algos.mlr import MLR, update_buffer_equal_quota_10, BUFFER_CAPACITY
+ from libero.lifelong.replay_selection_hook import ProtectiveSelectionMixin
+ from libero.lifelong.replay_selection import SelectionConfig
+@@ -92,6 +93,7 @@
+     def _buffer_hashes(self):return {p.name:sha(p) for p in sorted(Path(self.cfg.buffer_dir).glob('*.pt'))}
+ 
+     def checkpoint(self,next_epoch,stage_complete=False):
++        checkpoint_started=time.perf_counter()
+         events=self.pop_e1_events()
+         if events:
+             folder=self.out/'selection_logs'/('task%d'%self.stage);folder.mkdir(parents=True,exist_ok=True)
+@@ -99,6 +101,8 @@
+             if target.exists():os.replace(target,target.with_suffix('.interrupted_%d.jsonl'%time.time_ns()))
+             with target.open('x') as f:
+                 for row in events:f.write(json.dumps(row,allow_nan=False)+'\n')
++            assert all(row['actual_samples'] is not None for row in events)
++            epoch_pairing(self.out,self.stage,next_epoch-1,events)
+         self.selection_totals[str(self.stage)]=copy.deepcopy(self.e1_selector.totals)
+         value=dict(state=capture(self),task=self.stage,next_epoch=next_epoch,stage_complete=stage_complete,
+           selector_sidecar=self.e1_sidecar(),buffer_hashes=self._buffer_hashes(),selection_totals=self.selection_totals,
+@@ -107,6 +111,8 @@
+         write(self.out/'RUN_STATUS.json',dict(status='TRAINING',stage=self.stage,next_epoch=next_epoch,
+           stage_optimizer_steps=self.e1_stage_step,optimizer_steps=self._optimizer_step_count,selection_totals=self.selection_totals,
+           stage_complete=stage_complete,updated_unix=time.time(),pid=os.getpid()))
++        with (self.out/'checkpoint_cost.jsonl').open('a') as f:
++            f.write(json.dumps(dict(stage=self.stage,next_epoch=next_epoch,stage_complete=stage_complete,seconds=time.perf_counter()-checkpoint_started,included_in_training_total=True))+'\n')
+ 
+     def _append_csv(self,path,fieldnames,row):
+         MLR._append_csv(path,fieldnames,row)
+@@ -133,9 +139,12 @@
+             restore_rng(self.resume['state']['rng']);self.restore_e1_sidecar(self.resume['selector_sidecar'])
+             update_buffer_equal_quota_10(self.cfg.feature_dir,current_task_id,self.cfg.buffer_dir,
+                 capacity=BUFFER_CAPACITY,seed=self.cfg.seed,drop_policy='random',rate=self.cfg.past_data_rate)
+-            value=dict(self.resume,stage_complete=True,buffer_hashes=self._buffer_hashes());save(self.recovery,value);self.resume=value
++            hashes=self._buffer_hashes();buffer_pairing(self.out,current_task_id,hashes)
++            write(self.out/('buffer_after_task%d.json'%current_task_id),hashes)
++            value=dict(self.resume,stage_complete=True,buffer_hashes=hashes);save(self.recovery,value);self.resume=value
+             return 0.,0.
+         result=super().learn_all_tasks(datasets,benchmark,result_summary,current_task_id)
++        buffer_pairing(self.out,current_task_id,self._buffer_hashes())
+         write(self.out/('buffer_after_task%d.json'%current_task_id),self._buffer_hashes())
+         self.checkpoint(self.cfg.train.n_epochs,True)
+         self.resume=None
+--- a/protective_e1/uniform_summary.py
++++ b/protective_e1/uniform_summary.py
+@@ -0,0 +1,108 @@
++"""Full-log read-only validation and unrounded three-version comparison."""
++import json, math
++from pathlib import Path
++from collections import Counter, defaultdict
++from datetime import datetime
++from .io import write
++
++def exact(r):
++    return dict(auc=sum(sum(r[k][j] for k in range(j,4))/(4-j) for j in range(4))/4,
++        fwt=sum(r[j][j] for j in range(4))/4,
++        nbt=sum(sum(r[j][j]-r[k][j] for k in range(j+1,4))/(3-j) for j in range(3))/3)
++
++def summarize(O,S):
++    refs={name:json.loads(path.read_text()) for name,path in [
++        ('E0',S/'protective_e1/e0_seed42.json'),('E1',S/'protective_e1/e1_seed42.json'),('E1U',O/'metrics_primary.json')]}
++    table={name:dict(exact(item['r']),matrix=item['r']) for name,item in refs.items()}
++    differences={label:{k:table[a][k]-table[b][k] for k in ('auc','fwt','nbt')}
++        for label,a,b in [('E1_minus_E1U','E1','E1U'),('E1U_minus_E0','E1U','E0')]}
++    flows=defaultdict(Counter);gates=Counter();refreshes=Counter();steps=Counter();pool_counts=defaultdict(Counter)
++    active={};pool_info={};pairing=[];fallbacks=[];slot_counts=Counter()
++    for stage,batches in [(6,157),(7,227),(8,309),(9,362)]:
++        catalog=json.loads((O/('catalog_task%d.json'%stage)).read_text())
++        for epoch in range(100):
++            pp=json.loads((O/'pairing'/('task%d_epoch%03d.json'%(stage,epoch))).read_text());pairing.append(pp)
++            p=O/'selection_logs'/('task%d'%stage)/('epoch%03d.jsonl'%epoch)
++            rows=[json.loads(x) for x in p.read_text().splitlines()];assert len(rows)==batches
++            for event in rows:
++                steps[stage]+=1;assert event['stage_optimizer_step']==steps[stage]
++                r=event['refresh']
++                if r is not None:
++                    refreshes[stage]+=1;assert r['step']==event['stage_optimizer_step']-1
++                    assert r['step']%500==0
++                    if r['reason']!='OK' or any(r['invalid_candidates'].values()):fallbacks.append(dict(stage=stage,step=r['step'],record=r))
++                    for task,ids in r['valid_ids'].items():
++                        ps=r['probabilities'][task];assert ps==[1./len(ids)]*len(ids)
++                        key=(stage,r['step'],int(task));active[stage,int(task)]=key
++                        pool_info[key]=dict(ids=ids,scores=r['scores'][task],n=len(ids),ess=1/sum(p*p for p in ps))
++                samples=event['actual_samples'];assert samples is not None and len(samples)<=10
++                replacements={e['slot']:e for e in event['replacements']}
++                for slot,row in enumerate(samples):
++                    task=row['task'];assert row['slot']==slot
++                    assert catalog[row['original_id']]['task']==task==catalog[row['final_id']]['task']
++                    assert row['attempted']==(slot in replacements)
++                    assert row['id_changed']==(row['original_id']!=row['final_id'])
++                    if task==stage:assert not row['attempted'] and not row['id_changed']
++                    else:
++                        slot_counts[stage,task]+=1
++                        flows[stage,task][row['final_id']]+=1
++                    e=replacements.get(slot)
++                    if e:
++                        gates['attempted']+=1;gates['id_changed']+=row['id_changed'];gates['ifa_veto']+=row['ifa_veto']
++                        assert row['final_id']==(e['candidate'] if e['applied'] else row['original_id'])
++                        key=active[stage,task];assert e['candidate'] in pool_info[key]['ids']
++                        pool_counts[key][e['candidate']]+=1
++        assert steps[stage]==100*batches
++        bp=json.loads((O/('buffer_pairing_task%d.json'%stage)).read_text());assert bp['members_and_payload_hashes_match']
++        assert bp['count']=={6:781,7:1521,8:2301,9:2961}[stage]
++    assert dict(refreshes)=={7:46,8:62,9:73};assert sum(steps.values())==105500
++    pools=[];top_count=0;draws=0
++    for key,info in pool_info.items():
++        counts=pool_counts[key];n=sum(counts.values());size=info['n']
++        top=set(sorted(info['ids'],key=lambda k:info['scores'][info['ids'].index(k)],reverse=True)[:size//4])
++        top_count+=sum(v for k,v in counts.items() if k in top);draws+=n
++        pools.append(dict(stage=key[0],refresh_step=key[1],task=key[2],candidate_count=size,ess=info['ess'],draws=n,
++            unique=len(counts),actual_repeat_fraction=(n-len(counts))/n if n else None,
++            expected_uniform_unique=size*(1-(1-1/size)**n)))
++    flow_summary=[dict(stage=k[0],task=k[1],slots=sum(c.values()),unique=len(c),repeat_fraction=1-len(c)/sum(c.values()),
++                       most_common=c.most_common(10)) for k,c in sorted(flows.items())]
++    write(O/'pool_diagnostics.json',pools);write(O/'full_replay_flow.json',flow_summary)
++    attempts={}
++    for view,total in [('primary',200),('secondary',680)]:
++        rows=[json.loads(x) for x in (O/('attempts_'+view+'.jsonl')).read_text().splitlines()]
++        starts=[r for r in rows if r['event']=='vector_attempt_start'];ends=[r for r in rows if r['event']=='vector_attempt_complete']
++        key=lambda r:(r['stage'],r['epoch'],r['task'],r['group'])
++        assert len(starts)==len(ends)==total//10 and Counter(map(key,starts))==Counter(map(key,ends))
++        assert all(v==1 for v in Counter(map(key,starts)).values())
++        assert sum(r['event']=='environment_construct_complete' for r in rows)==total//20
++        assert sum(r['event']=='environment_closed' for r in rows)==total//20
++        formal=[json.loads(x) for x in (O/('trials_'+view+'.jsonl')).read_text().splitlines()]
++        assert len(formal)==total
++        attempts[view]=dict(vector_attempts=len(starts),lane_attempts=len(starts)*10,formal_records=total,uncommitted_attempts=0)
++    train=json.loads((O/'TRAINING_COMPLETE.json').read_text())
++    cost=dict(training_seconds=train['invocation_seconds'],peak_gpu_bytes=train['peak_gpu_bytes'],
++       scoring_seconds=sum(v['scoring_seconds'] for v in train['selection_totals'].values()),
++       replacement_seconds=sum(v['replacement_seconds'] for v in train['selection_totals'].values()),
++       io_seconds_nested_in_scoring_and_replacement=sum(v['io_seconds'] for v in train['selection_totals'].values()),
++       checkpoint_and_epoch_log_seconds=sum(json.loads(x)['seconds'] for x in (O/'checkpoint_cost.jsonl').read_text().splitlines()),
++       note='Component times are included in training wall time; do not add IO again. Interrupted attempts retained separately; E0 historic wall time unavailable.')
++    stamps={}
++    for line in (O/'commands.log').read_text().splitlines():
++        parts=line.split();stamp=datetime.fromisoformat(parts[0]).timestamp()
++        if parts[1]=='START':stamps[parts[2]]=stamp
++        elif parts[1]=='EXIT' and parts[-1] in ('evaluate_primary','evaluate_secondary'):cost[parts[-1]+'_seconds']=stamp-stamps[parts[-1]]
++    result=dict(versions=table,differences=differences,primary_auc_exceeds_E0=table['E1U']['auc']>table['E0']['auc'],
++        strict_pairing=all(x['strict_pairing'] for x in pairing),pairing_epochs=len(pairing),
++        pairing_mismatches=[x for x in pairing if not x['strict_pairing']],numeric_fallbacks=fallbacks,
++        refreshes=dict(refreshes),steps=dict(steps),gates=dict(gates),priority_draws=draws,
++        top_quartile_observed_share=top_count/draws,top_quartile_expected_share=.25,
++        attempts=attempts,cost=cost,
++        limits=['Single seed observation, not a statistically stable or causal effect estimate.',
++          'E1U-E0 combines pool restriction and replacement structure; not a pure pool-size effect.',
++          'E1 lacks retained-slot IDs; no invented full-flow E1 coverage comparison.',
++          'Scoring is retained as a sidepass, so this is not a scoring-free efficiency version.',
++          'E0 RTX4090 versus E1/E1U RTX3090; E0 timing and historical stage buffer snapshots unavailable.'])
++    write(O/'UNIFORM_AUDIT.json',result)
++    lines=['E1-U results (pending external process/exit acceptance)','',json.dumps(table,indent=2),json.dumps(differences,indent=2),json.dumps(cost,indent=2),'',*result['limits']]
++    (O/'FINAL_REPORT.txt').write_text('\n'.join(lines))
++    return result

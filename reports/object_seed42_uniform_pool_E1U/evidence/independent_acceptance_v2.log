@@ -1,0 +1,128 @@
+{
+  "status": "COMPLETED",
+  "independent_audit": "PASS",
+  "pipeline_exit": 0,
+  "residual_processes": [],
+  "counts": {
+    "primary": {
+      "formal": 200,
+      "attempted_lanes": 200
+    },
+    "secondary": {
+      "formal": 680,
+      "attempted_lanes": 680
+    }
+  },
+  "tables": {
+    "primary": {
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          55.0,
+          95.0,
+          null,
+          null
+        ],
+        [
+          15.0,
+          100.0,
+          100.0,
+          null
+        ],
+        [
+          30.0,
+          100.0,
+          75.0,
+          75.0
+        ]
+      ],
+      "metrics": {
+        "auc": 73.64583333333333,
+        "fwt": 76.25,
+        "nbt": 7.222222222222222
+      },
+      "selected_epochs": {
+        "6": 99,
+        "7": 99,
+        "8": 99,
+        "9": 99
+      }
+    },
+    "secondary": {
+      "matrix": [
+        [
+          40.0,
+          null,
+          null,
+          null
+        ],
+        [
+          55.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          20.0,
+          100.0,
+          100.0,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          75.0,
+          75.0
+        ]
+      ],
+      "metrics": {
+        "auc": 74.375,
+        "fwt": 78.75,
+        "nbt": 10.555555555555555
+      },
+      "selected_epochs": {
+        "6": 70,
+        "7": 99,
+        "8": 95,
+        "9": 90
+      }
+    }
+  },
+  "float_comparisons": [
+    {
+      "view": "primary",
+      "stage": 7,
+      "task": 6,
+      "from_integer_success_count": 55.0,
+      "published_float": 55.00000000000001,
+      "absolute_difference": 7.105427357601002e-15
+    },
+    {
+      "view": "secondary",
+      "stage": 7,
+      "task": 6,
+      "from_integer_success_count": 55.0,
+      "published_float": 55.00000000000001,
+      "absolute_difference": 7.105427357601002e-15
+    }
+  ],
+  "readonly_validation_fix": "Only compare percentage floats within absolute1e-10; integer episode counts and success indicators remain exact. Original failed validator and log preserved.",
+  "strict_pairing": true,
+  "original_files_unchanged": 10336,
+  "source_unchanged": true,
+  "features_unchanged": 5921,
+  "checkpoints_hashed": 28,
+  "extension_seeds": [],
+  "limitations": [
+    "Single seed observation, not a statistically stable or causal effect estimate.",
+    "E1U-E0 combines pool restriction and replacement structure; not a pure pool-size effect.",
+    "E1 lacks retained-slot IDs; no invented full-flow E1 coverage comparison.",
+    "Scoring is retained as a sidepass, so this is not a scoring-free efficiency version.",
+    "E0 RTX4090 versus E1/E1U RTX3090; E0 timing and historical stage buffer snapshots unavailable."
+  ]
+}

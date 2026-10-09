@@ -1,0 +1,165 @@
+{
+  "versions": {
+    "E0": {
+      "auc": 77.70833333333333,
+      "fwt": 77.5,
+      "nbt": -0.27777777777777785,
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          50.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          40.0,
+          95.0,
+          100.0,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          100.0,
+          75.0
+        ]
+      ]
+    },
+    "E1": {
+      "auc": 77.29166666666667,
+      "fwt": 76.25,
+      "nbt": -3.3333333333333335,
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          45.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          35.0,
+          95.0,
+          85.0,
+          null
+        ],
+        [
+          25.0,
+          95.0,
+          100.0,
+          85.0
+        ]
+      ]
+    },
+    "E1U": {
+      "auc": 73.64583333333333,
+      "fwt": 76.25,
+      "nbt": 7.222222222222221,
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          55.00000000000001,
+          95.0,
+          null,
+          null
+        ],
+        [
+          15.0,
+          100.0,
+          100.0,
+          null
+        ],
+        [
+          30.0,
+          100.0,
+          75.0,
+          75.0
+        ]
+      ]
+    }
+  },
+  "differences": {
+    "E1_minus_E1U": {
+      "auc": 3.645833333333343,
+      "fwt": 0.0,
+      "nbt": -10.555555555555555
+    },
+    "E1U_minus_E0": {
+      "auc": -4.0625,
+      "fwt": -1.25,
+      "nbt": 7.499999999999999
+    }
+  },
+  "primary_auc_exceeds_E0": false,
+  "strict_pairing": true,
+  "pairing_epochs": 400,
+  "pairing_mismatches": [],
+  "numeric_fallbacks": [],
+  "refreshes": {
+    "7": 46,
+    "8": 62,
+    "9": 73
+  },
+  "steps": {
+    "6": 15700,
+    "7": 22700,
+    "8": 30900,
+    "9": 36200
+  },
+  "gates": {
+    "attempted": 230710,
+    "id_changed": 230416,
+    "ifa_veto": 0
+  },
+  "priority_draws": 230710,
+  "top_quartile_observed_share": 0.2519396645138919,
+  "top_quartile_expected_share": 0.25,
+  "attempts": {
+    "primary": {
+      "vector_attempts": 20,
+      "lane_attempts": 200,
+      "formal_records": 200,
+      "uncommitted_attempts": 0
+    },
+    "secondary": {
+      "vector_attempts": 68,
+      "lane_attempts": 680,
+      "formal_records": 680,
+      "uncommitted_attempts": 0
+    }
+  },
+  "cost": {
+    "training_seconds": 3425.2234902381897,
+    "peak_gpu_bytes": 568819712,
+    "scoring_seconds": 183.0729805040039,
+    "replacement_seconds": 103.4459309100032,
+    "io_seconds_nested_in_scoring_and_replacement": 86.59181197184171,
+    "checkpoint_and_epoch_log_seconds": 262.71325712999953,
+    "note": "Component times are included in training wall time; do not add IO again. Interrupted attempts retained separately; E0 historic wall time unavailable.",
+    "evaluate_primary_seconds": 4263.0,
+    "evaluate_secondary_seconds": 16886.0
+  },
+  "limits": [
+    "Single seed observation, not a statistically stable or causal effect estimate.",
+    "E1U-E0 combines pool restriction and replacement structure; not a pure pool-size effect.",
+    "E1 lacks retained-slot IDs; no invented full-flow E1 coverage comparison.",
+    "Scoring is retained as a sidepass, so this is not a scoring-free efficiency version.",
+    "E0 RTX4090 versus E1/E1U RTX3090; E0 timing and historical stage buffer snapshots unavailable."
+  ]
+}
