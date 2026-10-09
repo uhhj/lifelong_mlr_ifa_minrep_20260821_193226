@@ -1,0 +1,221 @@
+{
+  "seed": 42,
+  "r": [
+    [
+      30.0,
+      null,
+      null,
+      null
+    ],
+    [
+      35.0,
+      95.0,
+      null,
+      null
+    ],
+    [
+      10.0,
+      95.0,
+      100.0,
+      null
+    ],
+    [
+      20.0,
+      95.0,
+      95.0,
+      65.0
+    ]
+  ],
+  "metrics": {
+    "fwt": 72.5,
+    "nbt": 4.444,
+    "auc": 70.312,
+    "r": [
+      [
+        30.0,
+        null,
+        null,
+        null
+      ],
+      [
+        35.0,
+        95.0,
+        null,
+        null
+      ],
+      [
+        10.0,
+        95.0,
+        100.0,
+        null
+      ],
+      [
+        20.0,
+        95.0,
+        95.0,
+        65.0
+      ]
+    ]
+  },
+  "baseline_metrics": {
+    "fwt": 77.5,
+    "nbt": -0.278,
+    "auc": 77.708,
+    "r": [
+      [
+        35.0,
+        null,
+        null,
+        null
+      ],
+      [
+        50.0,
+        100.0,
+        null,
+        null
+      ],
+      [
+        40.0,
+        95.0,
+        100.0,
+        null
+      ],
+      [
+        25.0,
+        100.0,
+        100.0,
+        75.0
+      ]
+    ]
+  },
+  "delta": {
+    "auc": -7.396000000000001,
+    "fwt": -5.0,
+    "nbt": 4.7219999999999995
+  },
+  "comparison": "same seed historical IFA; primary ep99",
+  "secondary_metrics": {
+    "fwt": 78.75,
+    "nbt": 17.222,
+    "auc": 70.0,
+    "r": [
+      [
+        50.0,
+        null,
+        null,
+        null
+      ],
+      [
+        40.0,
+        100.0,
+        null,
+        null
+      ],
+      [
+        10.0,
+        95.0,
+        100.0,
+        null
+      ],
+      [
+        20.0,
+        75.0,
+        90.0,
+        65.0
+      ]
+    ]
+  },
+  "secondary_selected_epochs": {
+    "6": 70,
+    "7": 95,
+    "8": 99,
+    "9": 85
+  },
+  "trial_counts": {
+    "primary": 200,
+    "secondary": 680
+  },
+  "mechanism": {
+    "6": {
+      "checks": 0,
+      "triggered": 0,
+      "accepted": 0,
+      "capped": 0,
+      "trigger_rate": null,
+      "acceptance_rate": null,
+      "cap_rate": null,
+      "reasons": {},
+      "overhead_seconds": 0
+    },
+    "7": {
+      "checks": 2270,
+      "triggered": 1097,
+      "accepted": 1097,
+      "capped": 0,
+      "trigger_rate": 0.48325991189427314,
+      "acceptance_rate": 1.0,
+      "cap_rate": 0.0,
+      "reasons": {
+        "WITHIN_TOLERANCE": 1173,
+        "ACCEPTED": 1097
+      },
+      "overhead_seconds": 86.76511398600587
+    },
+    "8": {
+      "checks": 3090,
+      "triggered": 1467,
+      "accepted": 1466,
+      "capped": 0,
+      "trigger_rate": 0.4747572815533981,
+      "acceptance_rate": 0.9993183367416496,
+      "cap_rate": 0.0,
+      "reasons": {
+        "WITHIN_TOLERANCE": 1623,
+        "ACCEPTED": 1466,
+        "RESTORED_NATIVE_CANDIDATE": 1
+      },
+      "overhead_seconds": 117.26994843699504
+    },
+    "9": {
+      "checks": 3620,
+      "triggered": 1760,
+      "accepted": 1757,
+      "capped": 0,
+      "trigger_rate": 0.4861878453038674,
+      "acceptance_rate": 0.9982954545454545,
+      "cap_rate": 0.0,
+      "reasons": {
+        "WITHIN_TOLERANCE": 1860,
+        "ACCEPTED": 1757,
+        "RESTORED_NATIVE_CANDIDATE": 3
+      },
+      "overhead_seconds": 136.52659478601709
+    }
+  },
+  "training_cost": {
+    "status": "PASS",
+    "seed": 42,
+    "epochs_per_task": 100,
+    "tasks": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "invocation_seconds": 3240.1053871309996,
+    "peak_gpu_bytes": 896708608,
+    "totals": {
+      "checks": 8980,
+      "triggered": 4324,
+      "accepted": 4320,
+      "capped": 0,
+      "overhead_seconds": 340.561657209018
+    },
+    "checkpoints": [
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/run_001/mlrifa_6_model_ep99.pth",
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/run_001/mlrifa_7_model_ep99.pth",
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/run_001/mlrifa_8_model_ep99.pth",
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/e1_object_v1/seed42/run_001/mlrifa_9_model_ep99.pth"
+    ]
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "status": "PASS",
+  "checks": {
+    "primary_count": true,
+    "primary_identities": true,
+    "primary_logs_match_trials": true,
+    "primary_independent_metrics": true,
+    "secondary_count": true,
+    "secondary_identities": true,
+    "secondary_logs_match_trials": true,
+    "secondary_independent_metrics": true,
+    "400_complete_epochs": true,
+    "frozen_original_code_unchanged": true,
+    "evaluation_repair_code_matches_record": true,
+    "additional_seeds_not_run": true
+  },
+  "details": {
+    "primary": {
+      "trials": 200,
+      "cells": 10,
+      "metrics": {
+        "auc": 70.312,
+        "fwt": 72.5,
+        "nbt": 4.444
+      },
+      "epochs": {
+        "6": 99,
+        "7": 99,
+        "8": 99,
+        "9": 99
+      }
+    },
+    "secondary": {
+      "trials": 680,
+      "cells": 34,
+      "metrics": {
+        "auc": 70.0,
+        "fwt": 78.75,
+        "nbt": 17.222
+      },
+      "epochs": {
+        "6": 70,
+        "7": 95,
+        "8": 99,
+        "9": 85
+      }
+    },
+    "execution_cost": [
+      {
+        "command": [
+          "/data/conda_envs/mlr_ifa_minrep/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--nproc_per_node=1",
+          "--master_port",
+          "37777",
+          "-m",
+          "e1_object_v1.train",
+          "--seed",
+          "42"
+        ],
+        "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/TRAIN_seed42.log",
+        "seconds": 3244.1459682760005,
+        "returncode": 0
+      },
+      {
+        "command": [
+          "bash",
+          "e1_object_v1/evaluate.sh",
+          "42",
+          "primary"
+        ],
+        "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/EVAL_primary_seed42.log",
+        "seconds": 15.275142427999526,
+        "returncode": 1
+      },
+      {
+        "command": [
+          "/data/conda_envs/mlr_ifa_minrep/bin/python",
+          "-m",
+          "torch.distributed.run",
+          "--nproc_per_node=1",
+          "--master_port",
+          "58417",
+          "-m",
+          "e1_object_v1.train",
+          "--seed",
+          "42"
+        ],
+        "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/TRAIN_seed42.log",
+        "seconds": 6.218254850000449,
+        "returncode": 0
+      },
+      {
+        "command": [
+          "bash",
+          "e1_object_v1/evaluate_spawn_v1.sh",
+          "42",
+          "primary"
+        ],
+        "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/EVAL_primary_seed42.log",
+        "seconds": 4877.844988717,
+        "returncode": 0
+      },
+      {
+        "command": [
+          "bash",
+          "e1_object_v1/evaluate_spawn_v1.sh",
+          "42",
+          "secondary"
+        ],
+        "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/e1_object_v1/EVAL_secondary_seed42.log",
+        "seconds": 15703.724088339999,
+        "returncode": 0
+      }
+    ],
+    "completed_at_beijing": "2026-10-09T01:33:05.268301+08:00"
+  }
+}
