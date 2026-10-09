@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "checks": {
+    "beta_zero_exact_native_parity": true,
+    "no_old_exact_native_parity": true,
+    "student_decoder_and_head_gradients": true,
+    "teacher_actions_stop_gradient": true,
+    "forward_modes_buffers_rng_unchanged": true,
+    "one_native_optimizer_scheduler_step": true,
+    "native_rng_unchanged_by_distill": true,
+    "frozen_parameters_unchanged": true,
+    "parameter_boundary": true,
+    "candidate_resume_exact_parity": true,
+    "batch_identity_content_parity": true,
+    "teacher_identity_errors_stop": true,
+    "teacher_build_no_training_state_mutation": true,
+    "teacher_no_refresh_and_transaction_idempotent": true,
+    "recovery_teacher_buffer_rng_complete": true,
+    "original_BC_IFA_construction_AST": true,
+    "baseline_unrounded_matrix_metrics": true
+  },
+  "details": {
+    "unit_tests": 6,
+    "trainable_parameters": 21633611,
+    "initial_engineering_teacher_count": 781,
+    "ifa_pairs": [
+      [
+        6,
+        7
+      ]
+    ],
+    "source_files": {
+      "e1_object_v1/baseline_loop.py": "b1a1ee9b6bedc51c512da6164a091a80425b4edb964963a1da561be25d4fe023",
+      "e1_object_v1/bindings.py": "a2d0eeb6f27a80c02f3a73a10e69a235b0456e62ca826f04be07e675b9875c53",
+      "e1_object_v1/control.py": "9cd0313b50d6d1428d9b7a7f6d104f66dc36f376c13ffd043767951a8d940949",
+      "e1_object_v1/io.py": "df672ff11f1d51a94d23f9b72c4818bb12884318ef7a076aab181ea704593f64",
+      "e1_object_v1/runtime.py": "f116ba3327f5330ce3a082df62da8a9f903cdffd813ab6a6ab12a6bb9d51b332",
+      "libero/lifelong/algos/base.py": "aeae2e732469729c8f6ced3e5de85604cb43335998ee632dc8aa2e00cb66215a",
+      "libero/lifelong/algos/mlr.py": "97f8ebb8ffdd54f5596c956c8f125feac70ebdbd913386bc8384c58d4a7463e5",
+      "libero/lifelong/metric.py": "f66c92dce56019aeaedc0d29c44d1d0a7f77c2e2d0fd3e5f13d2fd6b88f10f92",
+      "libero/lifelong/models/base_policy.py": "3dcca28f629caeff76f013340056ab5f3af02dd32b8e849f8942c251ee7c4365",
+      "libero/lifelong/models/brief.py": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+      "libero/lifelong/models/modules/transformer_modules.py": "963a3e6474bfe1c8ff9e6d08617d7deed8e4c8be05d370fab1c0025e84a415df",
+      "libero/lifelong/models/policy_head.py": "8c74c06a64c7be8c98fe0d317c83721b8f10d3ad7148253d23e2178cea4a209b",
+      "libero/lifelong/test.py": "3cafb8d1e404d409125bf9b27bab3b4e8b2754a016f9173cbb1c3223fcb10393",
+      "p1_object_v1/__init__.py": "fea7c3e43d6ef4c7d4c9cae09cba380bedbb14658db32aec47ac9d645e7ab982",
+      "p1_object_v1/baseline_loop.py": "8e504ddab2163492c1a809d54ef7ad2be9a4840b008181e47ef77d627de7a503",
+      "p1_object_v1/bindings.py": "a2d0eeb6f27a80c02f3a73a10e69a235b0456e62ca826f04be07e675b9875c53",
+      "p1_object_v1/dataset.py": "896f3c978bdbd72bfc04a7456d102544dbfeb58567052376246b592cc4caa491",
+      "p1_object_v1/eval_metric.py": "6fcd2557375b8924df0d40fd01f79c683db6fa57ae4b34dbe2d1ddf13bb3288a",
+      "p1_object_v1/evaluate.py": "752a0a53b58906481a7e58b02d46eee0ba8032f0cc2d96458cc2af9bc76802e9",
+      "p1_object_v1/evaluate.sh": "81a694340d50428fa61123bd470b00ac92a21d8277c83d37498bd5f3e2044426",
+      "p1_object_v1/evaluate_spawn_v1.py": "453912411a9241c5c963de759e5aa0e311180bb4016d5aa1725dbf040766098c",
+      "p1_object_v1/io.py": "df672ff11f1d51a94d23f9b72c4818bb12884318ef7a076aab181ea704593f64",
+      "p1_object_v1/launch.sh": "5365ec5272b0b4f0c7bbc216101429a7da176831e4c6940e2ed61e4ce943ba1b",
+      "p1_object_v1/legacy_metrics.py": "2c1c1f62ca8f3cd6bac694945f1d0d9c630d5d8e7209ce3ba8c9a0d7ac446f8b",
+      "p1_object_v1/native_observe.py": "dd8d6e9af5775c6851e05909b332680df0119496afb8a5cd6b28f9c1e15cead4",
+      "p1_object_v1/policy_distill.py": "8ff6f1c59689c0a8e5e73ce77e155af28560e48c7eb2f3fa80b3d6675f1725a7",
+      "p1_object_v1/prepare.py": "10ff7d5abc75c4ee901aa7bb2df3e887ba16c2d8363683ab1e1652f93e53ec34",
+      "p1_object_v1/queue.py": "ace69fb9422d272530a8d3b6d2f6ea92789578726670eac085c2449491aeb81b",
+      "p1_object_v1/runtime.py": "9a1705a03e4592706629da53ed7597346113401ec95d323ca00f8c9ca053884f",
+      "p1_object_v1/smoke.py": "097e2c70d3a1f4ce71da6aba5754f40decbc92f75edfc486cec61485bd45f92d",
+      "p1_object_v1/teacher_store.py": "91cf51eb6c8ff33af36b082439abde6ba7f34d3ba2f6c3bd1471f151ffb17fb9",
+      "p1_object_v1/tests.py": "a4c61df73abce7a6765a2c92eb3fce71c9eb01a465fd4ba05ee3124e2fafc38d",
+      "p1_object_v1/train.py": "695ff71c82efc8f6b9d8b33144592c73c8a509dfcb9696185189d4a845250af7"
+    }
+  }
+}
