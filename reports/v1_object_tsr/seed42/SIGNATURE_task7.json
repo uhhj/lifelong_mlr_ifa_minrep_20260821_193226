@@ -1,0 +1,2224 @@
+{
+  "task": 7,
+  "seed": 42,
+  "valid": true,
+  "norm": 101.8427564500213,
+  "invalid_reason": null,
+  "epsilon_num": 1e-12,
+  "reference_model_sha256": "d2ca5bf428c502530f4cb409015e9c299207a646885a9ca24516765dfc6a1d86",
+  "pretrain_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+  "parameter_manifest": {
+    "last_decoder_block": 5,
+    "signature_parameters": [
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_1.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_1.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_attn.weight",
+        "shape": [
+          512,
+          1536
+        ],
+        "count": 786432
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_attn.bias",
+        "shape": [
+          1536
+        ],
+        "count": 1536
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_proj.weight",
+        "shape": [
+          512,
+          512
+        ],
+        "count": 262144
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_2.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_2.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_fc.weight",
+        "shape": [
+          512,
+          2048
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_fc.bias",
+        "shape": [
+          2048
+        ],
+        "count": 2048
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_proj.weight",
+        "shape": [
+          2048,
+          512
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "policy_head.share.0.weight",
+        "shape": [
+          1024,
+          512
+        ],
+        "count": 524288
+      },
+      {
+        "name": "policy_head.share.0.bias",
+        "shape": [
+          1024
+        ],
+        "count": 1024
+      },
+      {
+        "name": "policy_head.share.2.weight",
+        "shape": [
+          1024,
+          1024
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "policy_head.share.2.bias",
+        "shape": [
+          1024
+        ],
+        "count": 1024
+      },
+      {
+        "name": "policy_head.share.4.weight",
+        "shape": [
+          1024,
+          1024
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "policy_head.share.4.bias",
+        "shape": [
+          1024
+        ],
+        "count": 1024
+      },
+      {
+        "name": "policy_head.mean_layer.weight",
+        "shape": [
+          35,
+          1024
+        ],
+        "count": 35840
+      },
+      {
+        "name": "policy_head.mean_layer.bias",
+        "shape": [
+          35
+        ],
+        "count": 35
+      },
+      {
+        "name": "policy_head.logstd_layer.weight",
+        "shape": [
+          35,
+          1024
+        ],
+        "count": 35840
+      },
+      {
+        "name": "policy_head.logstd_layer.bias",
+        "shape": [
+          35
+        ],
+        "count": 35
+      },
+      {
+        "name": "policy_head.logits_layer.weight",
+        "shape": [
+          5,
+          1024
+        ],
+        "count": 5120
+      },
+      {
+        "name": "policy_head.logits_layer.bias",
+        "shape": [
+          5
+        ],
+        "count": 5
+      }
+    ],
+    "trainable_parameters": [
+      {
+        "name": "temporal_transformer.decoder.wte.weight",
+        "shape": [
+          1,
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.wpe.weight",
+        "shape": [
+          32,
+          512
+        ],
+        "count": 16384
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.ln_1.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.ln_1.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.attn.c_attn.weight",
+        "shape": [
+          512,
+          1536
+        ],
+        "count": 786432
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.attn.c_attn.bias",
+        "shape": [
+          1536
+        ],
+        "count": 1536
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.attn.c_proj.weight",
+        "shape": [
+          512,
+          512
+        ],
+        "count": 262144
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.attn.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.ln_2.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.ln_2.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.mlp.c_fc.weight",
+        "shape": [
+          512,
+          2048
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.mlp.c_fc.bias",
+        "shape": [
+          2048
+        ],
+        "count": 2048
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.mlp.c_proj.weight",
+        "shape": [
+          2048,
+          512
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.0.mlp.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.ln_1.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.ln_1.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.attn.c_attn.weight",
+        "shape": [
+          512,
+          1536
+        ],
+        "count": 786432
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.attn.c_attn.bias",
+        "shape": [
+          1536
+        ],
+        "count": 1536
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.attn.c_proj.weight",
+        "shape": [
+          512,
+          512
+        ],
+        "count": 262144
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.attn.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.ln_2.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.ln_2.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.mlp.c_fc.weight",
+        "shape": [
+          512,
+          2048
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.mlp.c_fc.bias",
+        "shape": [
+          2048
+        ],
+        "count": 2048
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.mlp.c_proj.weight",
+        "shape": [
+          2048,
+          512
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.1.mlp.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.ln_1.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.ln_1.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.attn.c_attn.weight",
+        "shape": [
+          512,
+          1536
+        ],
+        "count": 786432
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.attn.c_attn.bias",
+        "shape": [
+          1536
+        ],
+        "count": 1536
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.attn.c_proj.weight",
+        "shape": [
+          512,
+          512
+        ],
+        "count": 262144
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.attn.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.ln_2.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.ln_2.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.mlp.c_fc.weight",
+        "shape": [
+          512,
+          2048
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.mlp.c_fc.bias",
+        "shape": [
+          2048
+        ],
+        "count": 2048
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.mlp.c_proj.weight",
+        "shape": [
+          2048,
+          512
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.2.mlp.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.ln_1.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.ln_1.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.attn.c_attn.weight",
+        "shape": [
+          512,
+          1536
+        ],
+        "count": 786432
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.attn.c_attn.bias",
+        "shape": [
+          1536
+        ],
+        "count": 1536
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.attn.c_proj.weight",
+        "shape": [
+          512,
+          512
+        ],
+        "count": 262144
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.attn.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.ln_2.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.ln_2.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.mlp.c_fc.weight",
+        "shape": [
+          512,
+          2048
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.mlp.c_fc.bias",
+        "shape": [
+          2048
+        ],
+        "count": 2048
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.mlp.c_proj.weight",
+        "shape": [
+          2048,
+          512
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.3.mlp.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.ln_1.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.ln_1.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.attn.c_attn.weight",
+        "shape": [
+          512,
+          1536
+        ],
+        "count": 786432
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.attn.c_attn.bias",
+        "shape": [
+          1536
+        ],
+        "count": 1536
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.attn.c_proj.weight",
+        "shape": [
+          512,
+          512
+        ],
+        "count": 262144
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.attn.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.ln_2.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.ln_2.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.mlp.c_fc.weight",
+        "shape": [
+          512,
+          2048
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.mlp.c_fc.bias",
+        "shape": [
+          2048
+        ],
+        "count": 2048
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.mlp.c_proj.weight",
+        "shape": [
+          2048,
+          512
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.4.mlp.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_1.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_1.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_attn.weight",
+        "shape": [
+          512,
+          1536
+        ],
+        "count": 786432
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_attn.bias",
+        "shape": [
+          1536
+        ],
+        "count": 1536
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_proj.weight",
+        "shape": [
+          512,
+          512
+        ],
+        "count": 262144
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.attn.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_2.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.ln_2.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_fc.weight",
+        "shape": [
+          512,
+          2048
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_fc.bias",
+        "shape": [
+          2048
+        ],
+        "count": 2048
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_proj.weight",
+        "shape": [
+          2048,
+          512
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "temporal_transformer.decoder.h.5.mlp.c_proj.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.ln_f.weight",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "temporal_transformer.decoder.ln_f.bias",
+        "shape": [
+          512
+        ],
+        "count": 512
+      },
+      {
+        "name": "policy_head.share.0.weight",
+        "shape": [
+          1024,
+          512
+        ],
+        "count": 524288
+      },
+      {
+        "name": "policy_head.share.0.bias",
+        "shape": [
+          1024
+        ],
+        "count": 1024
+      },
+      {
+        "name": "policy_head.share.2.weight",
+        "shape": [
+          1024,
+          1024
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "policy_head.share.2.bias",
+        "shape": [
+          1024
+        ],
+        "count": 1024
+      },
+      {
+        "name": "policy_head.share.4.weight",
+        "shape": [
+          1024,
+          1024
+        ],
+        "count": 1048576
+      },
+      {
+        "name": "policy_head.share.4.bias",
+        "shape": [
+          1024
+        ],
+        "count": 1024
+      },
+      {
+        "name": "policy_head.mean_layer.weight",
+        "shape": [
+          35,
+          1024
+        ],
+        "count": 35840
+      },
+      {
+        "name": "policy_head.mean_layer.bias",
+        "shape": [
+          35
+        ],
+        "count": 35
+      },
+      {
+        "name": "policy_head.logstd_layer.weight",
+        "shape": [
+          35,
+          1024
+        ],
+        "count": 35840
+      },
+      {
+        "name": "policy_head.logstd_layer.bias",
+        "shape": [
+          35
+        ],
+        "count": 35
+      },
+      {
+        "name": "policy_head.logits_layer.weight",
+        "shape": [
+          5,
+          1024
+        ],
+        "count": 5120
+      },
+      {
+        "name": "policy_head.logits_layer.bias",
+        "shape": [
+          5
+        ],
+        "count": 5
+      }
+    ]
+  },
+  "probe_files": [
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/18.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/899.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1435.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/689.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/867.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/785.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/824.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/766.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/407.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/627.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/140.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/631.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1024.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/30.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/641.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/888.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1132.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/283.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/566.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/944.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1328.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/320.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/700.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/68.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/966.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/913.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1479.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/889.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1034.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/620.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/275.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1374.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/90.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1433.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/329.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1097.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/872.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/751.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1353.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/655.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/277.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/128.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/0.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/51.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/846.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1079.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/779.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/468.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/983.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/820.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1217.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/112.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/398.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1123.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/374.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/880.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1119.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/500.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/116.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/731.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/644.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1452.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/286.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/53.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/207.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1203.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/881.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/134.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/878.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1284.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/833.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/416.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/240.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/938.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/681.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/494.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1387.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/496.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/337.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/614.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/216.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1253.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/553.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1274.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1283.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/797.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/25.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/347.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/567.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/55.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1083.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1427.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/426.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/219.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/639.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1068.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/1360.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/563.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/192.pt",
+    "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/7/71.pt"
+  ],
+  "unique_windows": 100,
+  "planned_cache_files": [
+    "0.pt",
+    "1.pt",
+    "100.pt",
+    "1000.pt",
+    "1001.pt",
+    "1002.pt",
+    "1003.pt",
+    "1009.pt",
+    "101.pt",
+    "1011.pt",
+    "1014.pt",
+    "1015.pt",
+    "1018.pt",
+    "102.pt",
+    "1020.pt",
+    "1021.pt",
+    "1023.pt",
+    "1024.pt",
+    "1025.pt",
+    "1032.pt",
+    "1034.pt",
+    "1036.pt",
+    "104.pt",
+    "1040.pt",
+    "1042.pt",
+    "1043.pt",
+    "1045.pt",
+    "1046.pt",
+    "1048.pt",
+    "1052.pt",
+    "1054.pt",
+    "1055.pt",
+    "1056.pt",
+    "1060.pt",
+    "1063.pt",
+    "1064.pt",
+    "1068.pt",
+    "1069.pt",
+    "1070.pt",
+    "1071.pt",
+    "1072.pt",
+    "1074.pt",
+    "1075.pt",
+    "1077.pt",
+    "1079.pt",
+    "1081.pt",
+    "1083.pt",
+    "1084.pt",
+    "109.pt",
+    "1090.pt",
+    "1091.pt",
+    "1096.pt",
+    "1097.pt",
+    "110.pt",
+    "1101.pt",
+    "1102.pt",
+    "1103.pt",
+    "1104.pt",
+    "1105.pt",
+    "1109.pt",
+    "1111.pt",
+    "1113.pt",
+    "1114.pt",
+    "1115.pt",
+    "1119.pt",
+    "112.pt",
+    "1121.pt",
+    "1122.pt",
+    "1123.pt",
+    "1124.pt",
+    "1125.pt",
+    "1126.pt",
+    "1128.pt",
+    "1129.pt",
+    "1130.pt",
+    "1132.pt",
+    "1133.pt",
+    "1136.pt",
+    "1138.pt",
+    "1142.pt",
+    "1143.pt",
+    "1144.pt",
+    "1145.pt",
+    "1148.pt",
+    "115.pt",
+    "1151.pt",
+    "1153.pt",
+    "1155.pt",
+    "1158.pt",
+    "116.pt",
+    "1165.pt",
+    "1168.pt",
+    "117.pt",
+    "1171.pt",
+    "1174.pt",
+    "1176.pt",
+    "1177.pt",
+    "1178.pt",
+    "1179.pt",
+    "1180.pt",
+    "1181.pt",
+    "1183.pt",
+    "1186.pt",
+    "1187.pt",
+    "1188.pt",
+    "1189.pt",
+    "1191.pt",
+    "1192.pt",
+    "1193.pt",
+    "1194.pt",
+    "1195.pt",
+    "1197.pt",
+    "1198.pt",
+    "1199.pt",
+    "12.pt",
+    "120.pt",
+    "1202.pt",
+    "1203.pt",
+    "1204.pt",
+    "1208.pt",
+    "121.pt",
+    "1213.pt",
+    "1217.pt",
+    "1218.pt",
+    "122.pt",
+    "1221.pt",
+    "1222.pt",
+    "1225.pt",
+    "1227.pt",
+    "1229.pt",
+    "123.pt",
+    "1232.pt",
+    "1233.pt",
+    "1236.pt",
+    "1237.pt",
+    "1238.pt",
+    "1239.pt",
+    "1240.pt",
+    "1241.pt",
+    "1245.pt",
+    "1248.pt",
+    "1249.pt",
+    "1250.pt",
+    "1252.pt",
+    "1253.pt",
+    "1254.pt",
+    "1256.pt",
+    "1259.pt",
+    "1260.pt",
+    "1261.pt",
+    "127.pt",
+    "1270.pt",
+    "1272.pt",
+    "1274.pt",
+    "1275.pt",
+    "1278.pt",
+    "128.pt",
+    "1282.pt",
+    "1283.pt",
+    "1284.pt",
+    "1288.pt",
+    "1289.pt",
+    "129.pt",
+    "1291.pt",
+    "1292.pt",
+    "1294.pt",
+    "1295.pt",
+    "1297.pt",
+    "1298.pt",
+    "1299.pt",
+    "13.pt",
+    "1300.pt",
+    "1301.pt",
+    "1303.pt",
+    "1306.pt",
+    "1307.pt",
+    "1308.pt",
+    "1312.pt",
+    "132.pt",
+    "1321.pt",
+    "1323.pt",
+    "1326.pt",
+    "1328.pt",
+    "1335.pt",
+    "1337.pt",
+    "134.pt",
+    "1347.pt",
+    "1348.pt",
+    "1350.pt",
+    "1351.pt",
+    "1353.pt",
+    "1356.pt",
+    "1357.pt",
+    "1360.pt",
+    "1364.pt",
+    "1365.pt",
+    "1366.pt",
+    "1368.pt",
+    "1369.pt",
+    "1370.pt",
+    "1371.pt",
+    "1372.pt",
+    "1373.pt",
+    "1374.pt",
+    "138.pt",
+    "1380.pt",
+    "1384.pt",
+    "1385.pt",
+    "1386.pt",
+    "1387.pt",
+    "1388.pt",
+    "139.pt",
+    "1390.pt",
+    "1391.pt",
+    "1392.pt",
+    "1394.pt",
+    "1399.pt",
+    "14.pt",
+    "140.pt",
+    "1401.pt",
+    "1402.pt",
+    "1403.pt",
+    "1404.pt",
+    "1405.pt",
+    "1407.pt",
+    "1408.pt",
+    "1409.pt",
+    "1411.pt",
+    "1416.pt",
+    "1417.pt",
+    "1418.pt",
+    "1419.pt",
+    "142.pt",
+    "1421.pt",
+    "1422.pt",
+    "1425.pt",
+    "1426.pt",
+    "1427.pt",
+    "1428.pt",
+    "1430.pt",
+    "1433.pt",
+    "1435.pt",
+    "1436.pt",
+    "1437.pt",
+    "1439.pt",
+    "1441.pt",
+    "1444.pt",
+    "1445.pt",
+    "1447.pt",
+    "1448.pt",
+    "1449.pt",
+    "1451.pt",
+    "1452.pt",
+    "1453.pt",
+    "1454.pt",
+    "1455.pt",
+    "1456.pt",
+    "1458.pt",
+    "1460.pt",
+    "1462.pt",
+    "1465.pt",
+    "1467.pt",
+    "1469.pt",
+    "1472.pt",
+    "1475.pt",
+    "1478.pt",
+    "1479.pt",
+    "149.pt",
+    "150.pt",
+    "151.pt",
+    "152.pt",
+    "153.pt",
+    "154.pt",
+    "155.pt",
+    "158.pt",
+    "16.pt",
+    "162.pt",
+    "163.pt",
+    "164.pt",
+    "166.pt",
+    "168.pt",
+    "17.pt",
+    "171.pt",
+    "173.pt",
+    "176.pt",
+    "177.pt",
+    "179.pt",
+    "18.pt",
+    "180.pt",
+    "181.pt",
+    "186.pt",
+    "190.pt",
+    "191.pt",
+    "192.pt",
+    "197.pt",
+    "2.pt",
+    "20.pt",
+    "204.pt",
+    "206.pt",
+    "207.pt",
+    "211.pt",
+    "212.pt",
+    "214.pt",
+    "216.pt",
+    "218.pt",
+    "219.pt",
+    "221.pt",
+    "223.pt",
+    "224.pt",
+    "225.pt",
+    "229.pt",
+    "230.pt",
+    "232.pt",
+    "233.pt",
+    "234.pt",
+    "237.pt",
+    "239.pt",
+    "24.pt",
+    "240.pt",
+    "243.pt",
+    "244.pt",
+    "245.pt",
+    "246.pt",
+    "248.pt",
+    "249.pt",
+    "25.pt",
+    "253.pt",
+    "259.pt",
+    "263.pt",
+    "264.pt",
+    "265.pt",
+    "267.pt",
+    "27.pt",
+    "270.pt",
+    "271.pt",
+    "273.pt",
+    "275.pt",
+    "277.pt",
+    "278.pt",
+    "279.pt",
+    "280.pt",
+    "281.pt",
+    "282.pt",
+    "283.pt",
+    "286.pt",
+    "287.pt",
+    "289.pt",
+    "29.pt",
+    "290.pt",
+    "291.pt",
+    "292.pt",
+    "293.pt",
+    "299.pt",
+    "30.pt",
+    "302.pt",
+    "305.pt",
+    "307.pt",
+    "308.pt",
+    "309.pt",
+    "310.pt",
+    "313.pt",
+    "317.pt",
+    "318.pt",
+    "319.pt",
+    "320.pt",
+    "323.pt",
+    "325.pt",
+    "328.pt",
+    "329.pt",
+    "33.pt",
+    "332.pt",
+    "333.pt",
+    "335.pt",
+    "337.pt",
+    "338.pt",
+    "339.pt",
+    "343.pt",
+    "344.pt",
+    "347.pt",
+    "349.pt",
+    "351.pt",
+    "354.pt",
+    "355.pt",
+    "356.pt",
+    "357.pt",
+    "358.pt",
+    "359.pt",
+    "36.pt",
+    "360.pt",
+    "362.pt",
+    "364.pt",
+    "365.pt",
+    "366.pt",
+    "367.pt",
+    "368.pt",
+    "37.pt",
+    "371.pt",
+    "372.pt",
+    "374.pt",
+    "376.pt",
+    "378.pt",
+    "383.pt",
+    "384.pt",
+    "386.pt",
+    "388.pt",
+    "390.pt",
+    "396.pt",
+    "398.pt",
+    "40.pt",
+    "400.pt",
+    "401.pt",
+    "402.pt",
+    "403.pt",
+    "404.pt",
+    "405.pt",
+    "407.pt",
+    "408.pt",
+    "409.pt",
+    "41.pt",
+    "415.pt",
+    "416.pt",
+    "417.pt",
+    "420.pt",
+    "421.pt",
+    "423.pt",
+    "425.pt",
+    "426.pt",
+    "431.pt",
+    "434.pt",
+    "437.pt",
+    "439.pt",
+    "44.pt",
+    "440.pt",
+    "444.pt",
+    "445.pt",
+    "446.pt",
+    "447.pt",
+    "448.pt",
+    "45.pt",
+    "452.pt",
+    "454.pt",
+    "456.pt",
+    "459.pt",
+    "46.pt",
+    "460.pt",
+    "461.pt",
+    "465.pt",
+    "467.pt",
+    "468.pt",
+    "470.pt",
+    "474.pt",
+    "480.pt",
+    "482.pt",
+    "483.pt",
+    "489.pt",
+    "49.pt",
+    "491.pt",
+    "493.pt",
+    "494.pt",
+    "496.pt",
+    "497.pt",
+    "499.pt",
+    "500.pt",
+    "501.pt",
+    "502.pt",
+    "504.pt",
+    "509.pt",
+    "51.pt",
+    "510.pt",
+    "511.pt",
+    "512.pt",
+    "514.pt",
+    "518.pt",
+    "519.pt",
+    "52.pt",
+    "527.pt",
+    "529.pt",
+    "53.pt",
+    "532.pt",
+    "533.pt",
+    "538.pt",
+    "542.pt",
+    "544.pt",
+    "545.pt",
+    "549.pt",
+    "55.pt",
+    "552.pt",
+    "553.pt",
+    "554.pt",
+    "560.pt",
+    "561.pt",
+    "562.pt",
+    "563.pt",
+    "566.pt",
+    "567.pt",
+    "569.pt",
+    "57.pt",
+    "571.pt",
+    "573.pt",
+    "576.pt",
+    "578.pt",
+    "586.pt",
+    "587.pt",
+    "59.pt",
+    "592.pt",
+    "593.pt",
+    "597.pt",
+    "598.pt",
+    "599.pt",
+    "6.pt",
+    "60.pt",
+    "601.pt",
+    "602.pt",
+    "604.pt",
+    "605.pt",
+    "607.pt",
+    "609.pt",
+    "613.pt",
+    "614.pt",
+    "619.pt",
+    "62.pt",
+    "620.pt",
+    "621.pt",
+    "622.pt",
+    "626.pt",
+    "627.pt",
+    "63.pt",
+    "631.pt",
+    "632.pt",
+    "638.pt",
+    "639.pt",
+    "641.pt",
+    "643.pt",
+    "644.pt",
+    "645.pt",
+    "648.pt",
+    "650.pt",
+    "651.pt",
+    "653.pt",
+    "654.pt",
+    "655.pt",
+    "656.pt",
+    "658.pt",
+    "66.pt",
+    "660.pt",
+    "661.pt",
+    "663.pt",
+    "666.pt",
+    "668.pt",
+    "67.pt",
+    "671.pt",
+    "673.pt",
+    "674.pt",
+    "676.pt",
+    "677.pt",
+    "678.pt",
+    "68.pt",
+    "681.pt",
+    "684.pt",
+    "687.pt",
+    "688.pt",
+    "689.pt",
+    "691.pt",
+    "693.pt",
+    "694.pt",
+    "695.pt",
+    "697.pt",
+    "698.pt",
+    "7.pt",
+    "700.pt",
+    "705.pt",
+    "706.pt",
+    "708.pt",
+    "709.pt",
+    "71.pt",
+    "710.pt",
+    "711.pt",
+    "713.pt",
+    "714.pt",
+    "716.pt",
+    "719.pt",
+    "720.pt",
+    "729.pt",
+    "73.pt",
+    "730.pt",
+    "731.pt",
+    "736.pt",
+    "737.pt",
+    "742.pt",
+    "744.pt",
+    "750.pt",
+    "751.pt",
+    "752.pt",
+    "753.pt",
+    "755.pt",
+    "756.pt",
+    "76.pt",
+    "760.pt",
+    "761.pt",
+    "763.pt",
+    "765.pt",
+    "766.pt",
+    "768.pt",
+    "769.pt",
+    "77.pt",
+    "770.pt",
+    "771.pt",
+    "774.pt",
+    "776.pt",
+    "779.pt",
+    "78.pt",
+    "780.pt",
+    "783.pt",
+    "785.pt",
+    "786.pt",
+    "787.pt",
+    "789.pt",
+    "79.pt",
+    "791.pt",
+    "792.pt",
+    "793.pt",
+    "797.pt",
+    "799.pt",
+    "80.pt",
+    "800.pt",
+    "803.pt",
+    "806.pt",
+    "81.pt",
+    "812.pt",
+    "813.pt",
+    "814.pt",
+    "819.pt",
+    "820.pt",
+    "822.pt",
+    "823.pt",
+    "824.pt",
+    "825.pt",
+    "827.pt",
+    "829.pt",
+    "83.pt",
+    "833.pt",
+    "837.pt",
+    "838.pt",
+    "839.pt",
+    "840.pt",
+    "844.pt",
+    "845.pt",
+    "846.pt",
+    "847.pt",
+    "848.pt",
+    "851.pt",
+    "853.pt",
+    "855.pt",
+    "856.pt",
+    "859.pt",
+    "860.pt",
+    "861.pt",
+    "864.pt",
+    "866.pt",
+    "867.pt",
+    "870.pt",
+    "871.pt",
+    "872.pt",
+    "875.pt",
+    "876.pt",
+    "878.pt",
+    "879.pt",
+    "880.pt",
+    "881.pt",
+    "883.pt",
+    "884.pt",
+    "885.pt",
+    "886.pt",
+    "888.pt",
+    "889.pt",
+    "89.pt",
+    "897.pt",
+    "898.pt",
+    "899.pt",
+    "90.pt",
+    "900.pt",
+    "901.pt",
+    "902.pt",
+    "903.pt",
+    "904.pt",
+    "908.pt",
+    "91.pt",
+    "913.pt",
+    "914.pt",
+    "915.pt",
+    "916.pt",
+    "919.pt",
+    "923.pt",
+    "926.pt",
+    "927.pt",
+    "928.pt",
+    "929.pt",
+    "938.pt",
+    "94.pt",
+    "940.pt",
+    "941.pt",
+    "943.pt",
+    "944.pt",
+    "945.pt",
+    "950.pt",
+    "952.pt",
+    "953.pt",
+    "956.pt",
+    "958.pt",
+    "959.pt",
+    "96.pt",
+    "960.pt",
+    "961.pt",
+    "964.pt",
+    "965.pt",
+    "966.pt",
+    "967.pt",
+    "969.pt",
+    "97.pt",
+    "971.pt",
+    "973.pt",
+    "974.pt",
+    "977.pt",
+    "979.pt",
+    "98.pt",
+    "981.pt",
+    "982.pt",
+    "983.pt",
+    "985.pt",
+    "987.pt",
+    "988.pt",
+    "99.pt",
+    "990.pt",
+    "991.pt",
+    "992.pt",
+    "993.pt",
+    "995.pt",
+    "997.pt",
+    "998.pt",
+    "999.pt"
+  ],
+  "bc_losses": [
+    -14.518012046813965,
+    -14.98325252532959,
+    -13.721709251403809,
+    -14.399667739868164,
+    -14.539291381835938,
+    -15.105125427246094,
+    -12.419755935668945,
+    -15.266761779785156,
+    -13.382758140563965,
+    -13.570611953735352
+  ],
+  "seconds": 1.5354469189999236,
+  "reference_parameter_bytes": 86534444,
+  "signature_bytes": 23415084,
+  "reference_unexpected_checkpoint_keys": [
+    "image_proj.weight",
+    "image_proj.bias",
+    "film_scale.0.weight",
+    "film_scale.0.bias",
+    "film_scale.2.weight",
+    "film_scale.2.bias",
+    "film_shift.0.weight",
+    "film_shift.0.bias",
+    "film_shift.2.weight",
+    "film_shift.2.bias",
+    "image_encoders.base_model.model.clip.vision_model.embeddings.class_embedding",
+    "image_encoders.base_model.model.clip.vision_model.embeddings.position_ids",
+    "image_encoders.base_model.model.clip.vision_model.embeddings.patch_embedding.weight",
+    "image_encoders.base_model.model.clip.vision_model.embeddings.position_embedding.weight",
+    "image_encoders.base_model.model.clip.vision_model.pre_layrnorm.weight",
+    "image_encoders.base_model.model.clip.vision_model.pre_layrnorm.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.0.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.1.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.2.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.3.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.4.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.5.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.6.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.7.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.8.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.9.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.10.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.k_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.k_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.v_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.v_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.v_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.v_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.q_proj.base_layer.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.q_proj.base_layer.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.q_proj.lora_A.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.q_proj.lora_B.default.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.out_proj.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.self_attn.out_proj.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.layer_norm1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.layer_norm1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.mlp.fc1.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.mlp.fc1.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.mlp.fc2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.mlp.fc2.bias",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.layer_norm2.weight",
+    "image_encoders.base_model.model.clip.vision_model.encoder.layers.11.layer_norm2.bias",
+    "image_encoders.base_model.model.clip.vision_model.post_layernorm.weight",
+    "image_encoders.base_model.model.clip.vision_model.post_layernorm.bias",
+    "language_encoder.base_model.model.clip.text_model.embeddings.position_ids",
+    "language_encoder.base_model.model.clip.text_model.embeddings.token_embedding.weight",
+    "language_encoder.base_model.model.clip.text_model.embeddings.position_embedding.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.0.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.1.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.2.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.3.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.4.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.5.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.6.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.7.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.8.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.9.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.10.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.k_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.k_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.v_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.v_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.v_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.v_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.q_proj.base_layer.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.q_proj.base_layer.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.q_proj.lora_A.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.q_proj.lora_B.default.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.out_proj.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.self_attn.out_proj.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.layer_norm1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.layer_norm1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.mlp.fc1.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.mlp.fc1.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.mlp.fc2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.mlp.fc2.bias",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.layer_norm2.weight",
+    "language_encoder.base_model.model.clip.text_model.encoder.layers.11.layer_norm2.bias",
+    "language_encoder.base_model.model.clip.text_model.final_layer_norm.weight",
+    "language_encoder.base_model.model.clip.text_model.final_layer_norm.bias",
+    "state_encoder.0.weight",
+    "state_encoder.0.bias",
+    "state_encoder.2.weight",
+    "state_encoder.2.bias",
+    "state_scale.0.weight",
+    "state_scale.0.bias",
+    "state_scale.2.weight",
+    "state_scale.2.bias",
+    "state_shift.0.weight",
+    "state_shift.0.bias",
+    "state_shift.2.weight",
+    "state_shift.2.bias"
+  ],
+  "trajectory_ids_available": false,
+  "trajectory_balance": "unavailable in original feature cache; user-approved fixed 100 cache windows",
+  "file": "/data/lifelong_mlr_ifa_minrep_20260912/runs/v1_object_tsr/seed42/signatures/task7.pt",
+  "sha256": "6a4eeb51c44ea497c97f6e23165809ac6d923f27e9ab8cf882b88c8534354b5b"
+}

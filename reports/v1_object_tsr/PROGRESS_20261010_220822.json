@@ -1,0 +1,122 @@
+{
+  "checked_at_beijing": "2026-10-10T22:08:22.782276+08:00",
+  "status": "EVALUATING",
+  "training": {
+    "status": "PASS",
+    "seed": 42,
+    "epochs_per_task": 100,
+    "tasks": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "invocation_seconds": 3221.4079134640006,
+    "peak_gpu_bytes": 624034816,
+    "totals": {
+      "steps": 105500,
+      "current_windows": 592100,
+      "old_windows": 460300
+    },
+    "checkpoints": [
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/v1_object_tsr/seed42/checkpoints/mlrifa_6_model_ep99.pth",
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/v1_object_tsr/seed42/checkpoints/mlrifa_7_model_ep99.pth",
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/v1_object_tsr/seed42/checkpoints/mlrifa_8_model_ep99.pth",
+      "/data/lifelong_mlr_ifa_minrep_20260912/runs/v1_object_tsr/seed42/checkpoints/mlrifa_9_model_ep99.pth"
+    ]
+  },
+  "epochs_verified": 400,
+  "stage_commit_count": 4,
+  "evaluation_units": [
+    {
+      "unit": "v1_primary_stage6",
+      "valid_trials": 20,
+      "committed": true,
+      "cells": {
+        "6": {
+          "trials": 20,
+          "successes": 6
+        }
+      }
+    },
+    {
+      "unit": "v1_primary_stage7",
+      "valid_trials": 40,
+      "committed": true,
+      "cells": {
+        "6": {
+          "trials": 20,
+          "successes": 8
+        },
+        "7": {
+          "trials": 20,
+          "successes": 18
+        }
+      }
+    },
+    {
+      "unit": "v1_primary_stage8",
+      "valid_trials": 60,
+      "committed": true,
+      "cells": {
+        "6": {
+          "trials": 20,
+          "successes": 4
+        },
+        "7": {
+          "trials": 20,
+          "successes": 19
+        },
+        "8": {
+          "trials": 20,
+          "successes": 19
+        }
+      }
+    },
+    {
+      "unit": "v1_primary_stage9",
+      "valid_trials": 20,
+      "committed": false,
+      "cells": {
+        "6": {
+          "trials": 20,
+          "successes": 0
+        }
+      }
+    }
+  ],
+  "valid_trials": 140,
+  "total_planned_trials": 640,
+  "remaining_trials": 500,
+  "queue": {
+    "status": "RUNNING",
+    "phase": "EVAL_v1_primary_stage9",
+    "pid": 2228,
+    "child_pid": 3605,
+    "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/v1_object_tsr/seed42/evaluation/v1_primary_stage9/stdout.log",
+    "updated_unix": 1791640625.520062,
+    "e1_enabled": false,
+    "p1_enabled": false,
+    "g1_enabled": false
+  },
+  "completed_eval_seconds_per_trial": [
+    29.71496795165003,
+    29.362375305274988,
+    22.291067184916663
+  ],
+  "remaining_estimate_hours": [
+    3.095981553460648,
+    4.127078882173616
+  ],
+  "estimate_limit": "measured stage6-8 throughput; task difficulty and process bootstrap may change remaining wall time",
+  "disk_free_bytes": {
+    "/data": 60829761536,
+    "/root": 3285762048
+  },
+  "errors_observed": false,
+  "source_commit": "8fcd2e389fc983cd18699d6b4807008efaf15fae",
+  "e1_enabled": false,
+  "p1_enabled": false,
+  "g1_enabled": false,
+  "baseline_training_rerun": false
+}
