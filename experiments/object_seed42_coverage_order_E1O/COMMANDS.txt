@@ -1,0 +1,12 @@
+Actual execution, 2026-10-09 Asia/Shanghai:
+1. /data/mlr_ifa/env/bin/python /data/mlr_ifa/install_e1o_coverage_order.py : exit0,33080 original files hashed.
+2. source /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/protective_e1/env.sh
+   python -B -m unittest discover -s ../tests -v : exit0,56 tests.
+3. python -B -m protective_e1.prepare : exit0,5921 feature hashes match, official pretrain hash match.
+4. python -m torch.distributed.run --nproc_per_node=1 --master_port=37996 -m protective_e1.preflight : exit0,5 GPU optimizer calls,0 rollouts.
+5. python -B check_spawn.py : exit0,0 environment instances/rollouts.
+6. Detached subprocess.Popen(['bash', source+'/protective_e1/pipeline.sh'], stdin=DEVNULL, stdout=pipeline.log, stderr=STDOUT, start_new_session=True, close_fds=True): PID1995.
+   Actual pipeline start21:43:38, train start21:43:41. Fresh formal process PID2030, fresh RNG, empty formal buffer.
+7. /data/mlr_ifa/env/bin/python <output>/monitor_snapshot.py : exit0; stage6 epoch_index6 completed,1099steps, live GPU/process.
+No formal exit code yet. No E0/E1/E1U re-training, extra closed-loop checks, Git push or uploaded weights.
+Local new28 standard-library tests PASS; local combined tests could not import torch. Target56-test PASS is the authoritative software result.

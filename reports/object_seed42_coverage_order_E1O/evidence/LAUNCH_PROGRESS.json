@@ -1,0 +1,97 @@
+{
+  "unix": 1791553456.4651322,
+  "status": {
+    "status": "TRAINING",
+    "stage": 6,
+    "next_epoch": 7,
+    "stage_optimizer_steps": 1099,
+    "optimizer_steps": 1099,
+    "order_totals": {
+      "6": {
+        "schedules": 0,
+        "candidate_gradients": 0,
+        "committed_tasks": 0,
+        "participating_positions": 0,
+        "moved_positions": 0,
+        "cross_batch_moved": 0,
+        "scoring_seconds": 0.0,
+        "management_seconds": 0.0,
+        "io_seconds_nested": 0.0,
+        "fallbacks": {}
+      }
+    },
+    "stage_complete": false,
+    "updated_unix": 1791553453.9931786,
+    "pid": 2030
+  },
+  "contract_sha256": "f7985e2bc3b4d0e551cbebd6e02cb1dd019754e500e09128f0bc10a022805f0d",
+  "frozen_source_files": 171,
+  "frozen_source_unchanged": true,
+  "source_mismatches": [],
+  "complete_epochs": 7,
+  "complete_optimizer_steps": 1099,
+  "latest_epoch": {
+    "seed": "42",
+    "arm": "E1O_coverage_order",
+    "stage": "6",
+    "epoch": "6",
+    "batches": "157",
+    "mean_bc_loss": "-18.62076654859409",
+    "optimizer_step_end": "1099",
+    "lr_end": "9.605921052631579e-05",
+    "scheduler_mode": "batch_step",
+    "batch_size": "10"
+  },
+  "latest_order": {
+    "stage": 6,
+    "epoch": 6,
+    "batches": 157,
+    "all_ids_once": true,
+    "schedules": 0,
+    "actual_slots": 1562
+  },
+  "formal_episodes": {
+    "primary": 0,
+    "secondary": 0
+  },
+  "formal_checkpoints": 0,
+  "recovery_exists": true,
+  "pipeline_exit": null,
+  "processes": [
+    "   1995       00:39 bash /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/protective_e1/pipeline.sh",
+    "   2023       00:35 python -m torch.distributed.run --nproc_per_node=1 --master_port=37995 -m protective_e1.train",
+    "   2030       00:34 /data/mlr_ifa/env/bin/python -u -m protective_e1.train"
+  ],
+  "gpu": "NVIDIA GeForce RTX 4080 SUPER, 1749 MiB, 39 %",
+  "logs": {
+    "prepare.log": {
+      "size": 154,
+      "modified_unix": 1791553421.0733583
+    },
+    "software_tests.log": {
+      "size": 4329,
+      "modified_unix": 1791553283.1553268
+    },
+    "commands.log": {
+      "size": 210,
+      "modified_unix": 1791553421.669378
+    },
+    "train.log": {
+      "size": 158495,
+      "modified_unix": 1791553456.4504805
+    },
+    "preflight.log": {
+      "size": 27741,
+      "modified_unix": 1791553334.0819683
+    },
+    "spawn_import.log": {
+      "size": 863,
+      "modified_unix": 1791553421.661378
+    },
+    "pipeline.log": {
+      "size": 0,
+      "modified_unix": 1791553418.2652643
+    }
+  },
+  "commands": "2026-10-09T21:43:38+08:00 START prepare\n2026-10-09T21:43:41+08:00 EXIT 0 prepare\n2026-10-09T21:43:41+08:00 START spawn_import\n2026-10-09T21:43:41+08:00 EXIT 0 spawn_import\n2026-10-09T21:43:41+08:00 START train\n"
+}

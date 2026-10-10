@@ -1,0 +1,916 @@
+--- a/protective_e1/baseline_loop.py
++++ b/protective_e1/baseline_loop.py
+@@ -1,8 +1,9 @@
+-# Baseline MLR loop; only epoch range changed for recovery.
++# E0 update preserved; epoch recovery and mutable pre-read index plan only.
+ # Source SHA256: 97f8ebb8ffdd54f5596c956c8f125feac70ebdbd913386bc8384c58d4a7463e5
+ from libero.lifelong.algos.mlr import *
+ from libero.lifelong.algos.mlr import _is_rank0
+ from .identity import IdentityDataset
++from .coverage_order import PlannedBatchSampler
+ 
+ class E1EpochLoop(MLR):
+     def learn_all_tasks(self, datasets, benchmark, result_summary,current_task_id):
+@@ -42,13 +43,10 @@
+             shuffle=True,
+         )
+ 
+-        train_dataloader = DataLoader(
+-            dataset,
+-            batch_size=self.cfg.train.batch_size,
+-            num_workers=self.cfg.train.num_workers,
+-            sampler=train_sampler,
+-            persistent_workers=False,
+-        )
++        assert self.cfg.train.num_workers == 0 and dist.get_world_size() == 1
++        self.configure_plan(dataset)
++        train_dataloader = DataLoader(dataset, num_workers=0,
++            batch_sampler=PlannedBatchSampler(self.plan), persistent_workers=False)
+         self.start_task(-1,train_dataloader)
+ 
+         cumulated_counter = 0.0
+@@ -58,7 +56,8 @@
+         # start training
+         for epoch in range(self.e1_start_epoch, self.cfg.train.n_epochs):
+             train_sampler.set_epoch(epoch)
+-            pbar = tqdm(train_dataloader, desc=f"Epoch {epoch}", unit="batch")
++            self.plan.begin_epoch(list(iter(train_sampler)), epoch)
++            pbar = tqdm(self.ordered_batches(train_dataloader), total=len(train_dataloader), desc=f"Epoch {epoch}", unit="batch")
+             t0 = time.time()
+             self.policy.train()
+             training_loss = 0.0
+@@ -103,6 +102,7 @@
+                 ):
+                     break
+                 
++            self.epoch_evidence = self.plan.finish()
+             t1 = time.time()
+ 
+             current_lr = self.optimizer.param_groups[0]["lr"]
+--- a/protective_e1/coverage_order.py
++++ b/protective_e1/coverage_order.py
+@@ -0,0 +1,244 @@
++"""E1-O: mutable future indices, complete coverage, no replacement hook.
++
++This module's plan/permutation machinery needs only the standard library.
++Torch and the inherited scorer are imported only when real scoring is invoked.
++"""
++import copy
++import math
++import random
++import time
++from collections import Counter
++from dataclasses import dataclass, asdict
++
++
++@dataclass(frozen=True)
++class OrderConfig:
++    enabled: bool = True
++    refresh_interval_steps: int = 500
++    refresh_at_stage_start: bool = True
++    max_interval_steps: int = 500
++    cross_epoch: bool = False
++    max_candidates_per_old_task: int = 64
++    reference_per_old_task: int = 16
++    current_reference_size: int = 16
++    gradient_scope: str = 'policy_head'
++    conflict_coefficient: float = 1.0
++    softmax_temperature: float = 1.0
++    numerical_epsilon: float = 1e-8
++    permutation: str = 'weighted_without_replacement'
++    preserve_task_slots: bool = True
++    pin_first_slot: bool = True
++    pin_incomplete_last_batch: bool = True
++    fallback: str = 'original_order'
++
++    def __post_init__(self):
++        expected = dict(refresh_interval_steps=500,refresh_at_stage_start=True,
++            max_interval_steps=500,cross_epoch=False,max_candidates_per_old_task=64,
++            reference_per_old_task=16,current_reference_size=16,gradient_scope='policy_head',
++            conflict_coefficient=1.,softmax_temperature=1.,numerical_epsilon=1e-8,
++            permutation='weighted_without_replacement',preserve_task_slots=True,
++            pin_first_slot=True,pin_incomplete_last_batch=True,fallback='original_order')
++        assert all(getattr(self,k)==v for k,v in expected.items())
++
++
++def weighted_permutation(items, scores, rng, tau=1.):
++    """Sequential Plackett-Luce draws, removing each selected candidate."""
++    assert len(items)==len(scores) and len(set(items))==len(items)
++    assert all(math.isfinite(s) for s in scores) and tau>0
++    remaining=list(range(len(items)));chosen=[]
++    while remaining:
++        peak=max(scores[i]/tau for i in remaining)
++        weights=[math.exp(scores[i]/tau-peak) for i in remaining]
++        i=rng.choices(remaining,weights=weights,k=1)[0]
++        chosen.append(i);remaining.remove(i)
++    return [items[i] for i in chosen],chosen
++
++
++class CoveragePlan:
++    def __init__(self, tasks, ids, batch_size, current_task):
++        self.tasks=list(map(int,tasks));self.ids=list(ids);self.batch_size=batch_size
++        self.current_task=current_task;self.base=[];self.actual=[];self.cursor=0
++        self.epoch=None;self.claimed=set();self.read_rows=[];self.last_batch=None
++        assert len(set(self.ids))==len(self.ids)==len(self.tasks)
++
++    def begin_epoch(self, indices, epoch):
++        assert self.cursor==len(self.actual),'Previous epoch not fully consumed'
++        self.base=list(indices);self.actual=list(indices);self.cursor=0;self.epoch=epoch
++        self.claimed=set();self.read_rows=[];self.last_batch=None
++        assert Counter(self.base)==Counter(range(len(self.ids))), 'Single rank full traversal required'
++
++    def __len__(self):return (len(self.ids)+self.batch_size-1)//self.batch_size
++
++    def pinned(self,p):
++        n=len(self.actual);b=self.batch_size
++        return p%b==0 or (n%b!=0 and p>=n-n%b)
++
++    def verify(self, candidate=None, prefix=None):
++        a=self.actual if candidate is None else candidate
++        assert Counter(a)==Counter(self.base),'ID multiplicity changed'
++        assert a[:self.cursor]==(self.actual if prefix is None else prefix)[:self.cursor], 'Used prefix changed'
++        for p,(original,actual) in enumerate(zip(self.base,a)):
++            assert self.tasks[original]==self.tasks[actual], 'Task slot changed'
++            if self.tasks[original]==self.current_task or self.pinned(p):
++                assert actual==original,'Protected identity changed'
++
++    def candidates(self, stage_step, rng, limit=64):
++        b=self.batch_size;assert self.cursor%b==0
++        end=min(len(self.actual),self.cursor+(500-stage_step%500)*b)
++        selected={}
++        for task in sorted(set(self.tasks)-{self.current_task}):
++            available=[p for p in range(self.cursor,end) if not self.pinned(p)
++                       and self.tasks[self.actual[p]]==task and p not in self.claimed]
++            positions=sorted(rng.sample(available,min(limit,len(available))))
++            selected[task]=positions
++        return selected,end
++
++    def commit(self,positions,ordered,end):
++        before=list(self.actual)
++        try:
++            assert len(set(positions))==len(positions)==len(ordered)
++            assert all(self.cursor<=p<end and p not in self.claimed and not self.pinned(p) for p in positions)
++            assert Counter(before[p] for p in positions)==Counter(ordered)
++            trial=list(before)
++            for p,i in zip(positions,ordered):trial[p]=i
++            self.verify(trial,before)
++        except AssertionError as error:
++            assert self.actual==before
++            return False,str(error)
++        self.actual=trial;self.claimed.update(positions)
++        return True,None
++
++    def record_read(self, identities, tasks, stage_step):
++        start,end=self.last_batch
++        indices=self.actual[start:end];expected=[self.ids[i] for i in indices]
++        assert list(identities)==expected,'DataLoader delivered IDs different from plan'
++        assert list(map(int,tasks))==[self.tasks[i] for i in indices]
++        self.read_rows.append(dict(step=stage_step,start=start,end=end,
++            original_ids=[self.ids[i] for i in self.base[start:end]],actual_ids=list(identities),
++            task_ids=list(map(int,tasks))))
++
++    def finish(self):
++        assert self.cursor==len(self.actual) and len(self.read_rows)==len(self)
++        self.verify()
++        actual=[x for row in self.read_rows for x in row['actual_ids']]
++        original=[self.ids[i] for i in self.base]
++        assert Counter(actual)==Counter(original)==Counter(self.ids)
++        return dict(epoch=self.epoch,base_indices=self.base,actual_indices=self.actual,
++            base_ids=original,actual_ids=actual,batches=self.read_rows,
++            id_multiplicities_equal=True,all_ids_once=True,task_slots_unchanged=True,
++            current_and_pinned_unchanged=True,actual_loader_verified=True)
++
++
++class PlannedBatchSampler:
++    def __init__(self,plan):self.plan=plan
++    def __len__(self):return len(self.plan)
++    def __iter__(self):
++        p=self.plan
++        while p.cursor<len(p.actual):
++            start=p.cursor;end=min(start+p.batch_size,len(p.actual))
++            indices=p.actual[start:end];p.last_batch=(start,end);p.cursor=end
++            yield indices
++
++
++class CoverageOrder:
++    def __init__(self,policy,seed,task,old,current,load,fingerprint,config=None):
++        self.policy=getattr(policy,'module',policy);self.task=task
++        self.old={int(k):tuple(v) for k,v in sorted(old.items())}
++        self.current=tuple(current);self.load=load;self.fingerprint=fingerprint
++        self.config=config or OrderConfig();self.rng=random.Random(seed)
++        self.last_step=None;self.events=[]
++        self.totals=dict(schedules=0,candidate_gradients=0,committed_tasks=0,
++            participating_positions=0,moved_positions=0,cross_batch_moved=0,
++            scoring_seconds=0.,management_seconds=0.,io_seconds_nested=0.,fallbacks={})
++
++    def should_schedule(self,step):
++        return self.config.enabled and bool(self.old) and step%500==0 and self.last_step!=step
++
++    def _payloads(self,ids):
++        start=time.perf_counter();out=[self.load(i) for i in ids]
++        self.totals['io_seconds_nested']+=time.perf_counter()-start
++        return out
++
++    def _score(self,candidates,refs,new_ids):
++        import torch
++        from libero.lifelong.replay_selection import isolated_scoring,head_gradient,unit,protective_score
++        cfg=self.config;result={};meta={}
++        with isolated_scoring(self.policy):
++            h=None
++            for ids in refs.values():
++                g=head_gradient(self.policy,self._payloads(ids)) if ids else None
++                if g is None:return {},dict(reason='INVALID_HISTORICAL_DIRECTION')
++                h=g/len(refs) if h is None else h+g/len(refs)
++            hu=unit(h,cfg.numerical_epsilon)
++            if hu is None:return {},dict(reason='INVALID_HISTORICAL_DIRECTION')
++            n=head_gradient(self.policy,self._payloads(new_ids)) if new_ids else None
++            nu=unit(n,cfg.numerical_epsilon)
++            meta['reason']='OK' if nu is not None else 'HISTORY_ONLY_INVALID_CURRENT_DIRECTION'
++            for task,ids in candidates.items():
++                rows=[]
++                for item in ids:
++                    g=head_gradient(self.policy,self._payloads([item]));self.totals['candidate_gradients']+=1
++                    s=protective_score(g,h,n,cfg.conflict_coefficient,cfg.numerical_epsilon)
++                    gu=unit(g,cfg.numerical_epsilon)
++                    rows.append(dict(id=item,score=s,
++                        history_alignment=None if gu is None else float(torch.dot(gu,hu).item()),
++                        current_alignment=None if gu is None or nu is None else float(torch.dot(gu,nu).item()),
++                        conflict_penalty=None if gu is None else (0. if nu is None else float(torch.clamp(-torch.dot(gu,nu),min=0).item()))))
++                result[task]=rows
++        return result,meta
++
++    def schedule(self,plan,step):
++        if not self.should_schedule(step):return None
++        start=time.perf_counter();self.last_step=step;self.totals['schedules']+=1
++        positions,end=plan.candidates(step,self.rng,self.config.max_candidates_per_old_task)
++        record=dict(step=step,epoch=plan.epoch,start=plan.cursor,end=end,tasks={},references={})
++        candidates={}
++        for task,ps in positions.items():
++            ids=[plan.ids[plan.actual[p]] for p in ps]
++            why='TOO_FEW_POSITIONS' if len(ps)<2 else ('SINGLE_UPDATE_ONLY' if len({p//plan.batch_size for p in ps})<2 else None)
++            record['tasks'][str(task)]=dict(positions=ps,candidates=ids,reason=why,committed=False)
++            if why is None:candidates[task]=ids
++        if candidates:
++            for task,ids in self.old.items():
++                allowed=[i for i in ids if i not in set(record['tasks'][str(task)]['candidates'])]
++                record['references'][task]=self.rng.sample(allowed,min(len(allowed),self.config.reference_per_old_task))
++            new_ids=self.rng.sample(self.current,min(len(self.current),self.config.current_reference_size))
++            record['current_reference']=new_ids
++            scoring=time.perf_counter();scores,meta=self._score(candidates,record['references'],new_ids)
++            duration=time.perf_counter()-scoring;self.totals['scoring_seconds']+=duration
++            record.update(meta);record['scoring_seconds']=duration
++            for task,ids in candidates.items():
++                row=record['tasks'][str(task)];details=scores.get(task,[]);row['score_components']=details
++                values=[x['score'] for x in details]
++                if not details:row['reason']='INVALID_HISTORICAL_DIRECTION'
++                elif any(v is None or not math.isfinite(v) for v in values):row['reason']='INVALID_CANDIDATE_GRADIENT'
++                elif max(values)-min(values)<=self.config.numerical_epsilon:row['reason']='INDISTINGUISHABLE_SCORES'
++                else:
++                    ps=row['positions'];before=[plan.actual[p] for p in ps]
++                    ordered,permutation=weighted_permutation(before,values,self.rng,self.config.softmax_temperature)
++                    ok,why=plan.commit(ps,ordered,end);row.update(committed=ok,reason='OK' if ok else 'CONSTRAINT_ROLLBACK',constraint_error=why)
++                    row['permutation']=permutation
++                    if ok:
++                        row['ordered_ids']=[plan.ids[i] for i in ordered]
++                        original_position={i:p for i,p in zip(before,ps)}
++                        row['movements']=[dict(id=plan.ids[i],from_position=original_position[i],to_position=p,
++                            steps_earlier=original_position[i]//plan.batch_size-p//plan.batch_size) for i,p in zip(ordered,ps)]
++                        self.totals['committed_tasks']+=1;self.totals['participating_positions']+=len(ps)
++                        self.totals['moved_positions']+=sum(i!=j for i,j in zip(before,ordered))
++                        self.totals['cross_batch_moved']+=sum(m['steps_earlier']!=0 for m in row['movements'])
++        else:record['reason']='NO_ELIGIBLE_TASK'
++        for row in record['tasks'].values():
++            if not row['committed']:
++                reason=row['reason'];self.totals['fallbacks'][reason]=self.totals['fallbacks'].get(reason,0)+1
++        plan.verify();self.events.append(record)
++        self.totals['management_seconds']+=time.perf_counter()-start-record.get('scoring_seconds',0.)
++        return record
++
++    def state_dict(self):
++        return copy.deepcopy(dict(version=1,config=asdict(self.config),task=self.task,
++            fingerprint=self.fingerprint,rng=self.rng.getstate(),last_step=self.last_step,totals=self.totals))
++
++    def load_state_dict(self,value):
++        assert value['version']==1 and value['config']==asdict(self.config)
++        assert value['task']==self.task and value['fingerprint']==self.fingerprint
++        self.rng.setstate(value['rng']);self.last_step=value['last_step'];self.totals=copy.deepcopy(value['totals']);self.events=[]
+--- a/protective_e1/e1u_seed42.json
++++ b/protective_e1/e1u_seed42.json
+@@ -0,0 +1,37 @@
++{
++  "fwt": 76.25,
++  "nbt": 7.222,
++  "auc": 73.646,
++  "r": [
++    [
++      35.0,
++      null,
++      null,
++      null
++    ],
++    [
++      55.00000000000001,
++      95.0,
++      null,
++      null
++    ],
++    [
++      15.0,
++      100.0,
++      100.0,
++      null
++    ],
++    [
++      30.0,
++      100.0,
++      75.0,
++      75.0
++    ]
++  ],
++  "selected_epochs": {
++    "6": 99,
++    "7": 99,
++    "8": 99,
++    "9": 99
++  }
++}
+--- a/protective_e1/env.sh
++++ b/protective_e1/env.sh
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
+ source /data/mlr_ifa/activate.sh
+-E1_SOURCE=/data/mlr_ifa/experiment_workspaces/E1U_uniform_pool_20261009/source
+-E1_OUT=/data/mlr_ifa/experiments/E1U_uniform_pool_seed42_20261009
++E1_SOURCE=/data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source
++E1_OUT=/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009
+ export E1_SOURCE E1_OUT
+ export PYTHONPATH="$E1_SOURCE/bootstrap:$E1_SOURCE:$E1_SOURCE/libero"
+ export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONDONTWRITEBYTECODE=1
+--- a/protective_e1/finalize.py
++++ b/protective_e1/finalize.py
+@@ -32,7 +32,7 @@
+     contract=json.loads((O/'CONTRACT.json').read_text())
+     assert all(sha(S/k)==v for k,v in contract['source_sha256'].items())
+     assert sha('/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth')==contract['pretrain_sha256']
+-    original=json.loads((O/'E1_READONLY_BEFORE.json').read_text())
++    original=json.loads((O/'ORIGINAL_READONLY_BEFORE.json').read_text())
+     assert all(sha(k)==v for k,v in original.items()), 'Original E1 input changed'
+     parity=json.loads((O/'FEATURE_PARITY.json').read_text())
+     for t,files in parity['features'].items():
+@@ -40,12 +40,13 @@
+     training=json.loads((O/'TRAINING_COMPLETE.json').read_text())
+     assert all(sha(O/'run_001'/n)==h for n,h in training['checkpoints'].items())
+     baseline=json.loads((S/'protective_e1/e0_seed42.json').read_text());new=json.loads((O/'metrics_primary.json').read_text())
+-    from .uniform_summary import summarize
++    from .order_summary import summarize
+     extra=summarize(O,S)
+-    delta=extra['differences']['E1U_minus_E0']
++    delta=extra['differences']['E1O_minus_E0']
++    new=json.loads((O/'metrics_primary.json').read_text())
+     improved=auc(new['r'])>auc(baseline['r'])
+     result=dict(status='AWAITING_INDEPENDENT_EXIT_AUDIT',
+-      seed=42,baseline=baseline,e1u=new,uniform_audit=extra,difference=delta,primary_auc_improved=improved,
++      seed=42,baseline=baseline,e1o=new,coverage_order_audit=extra,difference=delta,primary_auc_improved=improved,
+       additional_seeds=[43,44] if improved else [],baseline_rerun=False,
+       training_epochs=400,new_optimizer_steps=sum(int(r['batches']) for r in rows),
+       formal_primary_rollouts=200,formal_secondary_rollouts=680,
+--- a/protective_e1/order_summary.py
++++ b/protective_e1/order_summary.py
+@@ -0,0 +1,143 @@
++"""Independent read-only replay of indices and episode aggregation."""
++import csv,json,math,random
++from pathlib import Path
++from collections import Counter,defaultdict
++from datetime import datetime
++from .io import write
++
++def exact(r):
++    return dict(auc=sum(sum(r[k][j] for k in range(j,4))/(4-j) for j in range(4))/4,
++        fwt=sum(r[j][j] for j in range(4))/4,
++        nbt=sum(sum(r[j][j]-r[k][j] for k in range(j+1,4))/(3-j) for j in range(3))/3)
++
++def episode_metrics(O,view):
++    rows=[json.loads(x) for x in (O/('trials_'+view+'.jsonl')).read_text().splitlines()]
++    assert len(rows)==(200 if view=='primary' else 680)
++    groups=defaultdict(list)
++    for row in rows:
++        assert type(row['success']) is bool and row['seed']==42
++        groups[row['stage'],row['epoch'],row['task']].append(row)
++        assert Path(row['checkpoint']).parent==O/'run_001'
++    for key,values in groups.items():
++        assert len(values)==20 and sorted(v['initial_state_index'] for v in values)==list(range(20))
++    selected={s:99 for s in range(6,10)}
++    if view=='secondary':
++        selected={s:max((70,75,80,85,90,95,99),key=lambda e:(sum(x['success'] for x in groups[s,e,s]),e)) for s in range(6,10)}
++    expected={(s,99,t) for s in range(6,10) for t in range(6,s+1)} if view=='primary' else ({(s,e,s) for s in range(6,10) for e in (70,75,80,85,90,95,99)}|{(s,selected[s],t) for s in range(7,10) for t in range(6,s)})
++    assert set(groups)==expected
++    matrix=[[None]*4 for _ in range(4)]
++    for s in range(6,10):
++        for t in range(6,s+1):matrix[s-6][t-6]=sum(x['success'] for x in groups[s,selected[s],t])*5.
++    result=dict(exact(matrix),r=matrix,selected_epochs={str(k):v for k,v in selected.items()})
++    write(O/('metrics_'+view+'.json'),result)
++    attempts=[json.loads(x) for x in (O/('attempts_'+view+'.jsonl')).read_text().splitlines()]
++    starts=[x for x in attempts if x['event']=='vector_attempt_start'];ends=[x for x in attempts if x['event']=='vector_attempt_complete']
++    key=lambda r:(r['stage'],r['epoch'],r['task'],r['group'])
++    assert len(starts)==len(ends)==len(rows)//10
++    assert Counter(map(key,starts))==Counter(map(key,ends)) and all(v==1 for v in Counter(map(key,starts)).values())
++    assert sum(x['event']=='environment_construct_complete' for x in attempts)==len(rows)//20
++    assert sum(x['event']=='environment_closed' for x in attempts)==len(rows)//20
++    return result,dict(formal=len(rows),lane_attempts=len(starts)*10,vector_attempts=len(starts),technical_retries=0,uncommitted=0)
++
++def summarize(O,S):
++    import torch # CPU-only index verification, never constructs a policy/environment
++    totals=Counter();reasons=Counter();movement=[];stage_counts={};score_position=[]
++    for stage,batches in [(6,157),(7,227),(8,309),(9,362)]:
++        catalog=json.loads((O/('catalog_task%d.json'%stage)).read_text())
++        ids=sorted(i for i in catalog if i.startswith('buffer/'))+sorted(i for i in catalog if i.startswith('current/'))
++        random.Random(42).shuffle(ids)
++        expected_ids=set(ids);step=0;events_count=0
++        for epoch in range(100):
++            d=json.loads((O/'order_logs'/('task%d'%stage)/('epoch%03d.json'%epoch)).read_text())
++            assert d['stage']==stage and d['epoch']==epoch and len(d['batches'])==batches
++            gen=torch.Generator();gen.manual_seed(epoch)
++            base=torch.randperm(len(ids),generator=gen).tolist()
++            assert d['base_indices']==base and d['base_ids']==[ids[i] for i in base]
++            assert Counter(d['base_ids'])==Counter(d['actual_ids'])==Counter(expected_ids)
++            reconstructed=list(d['base_ids']);events=d['schedules'];events_count+=len(events)
++            expected_steps=[k for k in range(epoch*batches,(epoch+1)*batches) if k%500==0] if stage>6 else []
++            assert [r['step'] for r in events]==expected_steps
++            for r in events:
++                start=(r['step']-epoch*batches)*10;end=min(len(ids),start+5000)
++                assert r['start']==start and r['end']==end and r['epoch']==epoch
++                totals['schedules']+=1
++                for t,row in r['tasks'].items():
++                    t=int(t);ps=row['positions'];cs=row['candidates'];assert len(ps)==len(set(ps))==len(cs)<=64
++                    assert ps==sorted(ps) and all(start<=p<end for p in ps)
++                    assert cs==[reconstructed[p] for p in ps]
++                    assert all(catalog[i]['task']==t<stage for i in cs)
++                    assert all(p%10!=0 and (len(ids)%10==0 or p<len(ids)-len(ids)%10) for p in ps)
++                    components=row.get('score_components',[]);totals['candidate_gradients']+=len(components)
++                    for c in components:
++                        if c['score'] is not None:
++                            assert math.isclose(c['score'],c['history_alignment']-c['conflict_penalty'],rel_tol=0,abs_tol=2e-7)
++                    if row['committed']:
++                        assert len(set(p//10 for p in ps))>1 and len(components)==len(cs)
++                        values=[x['score'] for x in components];assert max(values)-min(values)>1e-8
++                        assert sorted(row['permutation'])==list(range(len(cs)))
++                        ordered=[cs[i] for i in row['permutation']];assert ordered==row['ordered_ids']
++                        assert Counter(ordered)==Counter(cs)
++                        score_by_id={x['id']:x['score'] for x in components}
++                        oldpos={i:p for i,p in zip(cs,ps)}
++                        for p,item,move in zip(ps,ordered,row['movements']):
++                            advance=oldpos[item]//10-p//10
++                            assert move==dict(id=item,from_position=oldpos[item],to_position=p,steps_earlier=advance)
++                            reconstructed[p]=item;movement.append(advance);score_position.append([score_by_id[item],advance])
++                        totals['committed_tasks']+=1;totals['participating_positions']+=len(ps)
++                    else:reasons[row['reason']]+=1
++                for t,refs in r.get('references',{}).items():
++                    cs=r['tasks'][t]['candidates']
++                    assert len(refs)<=16 and len(refs)==len(set(refs)) and set(refs).isdisjoint(cs)
++                    assert all(catalog[i]['task']==int(t)<stage for i in refs)
++                assert len(r.get('current_reference',[]))<=16
++                assert all(catalog[i]['task']==stage for i in r.get('current_reference',[]))
++            assert reconstructed==d['actual_ids']==[ids[i] for i in d['actual_indices']]
++            actual_stream=[]
++            for batch in d['batches']:
++                assert batch['step']==step;step+=1
++                start=batch['start'];end=batch['end'];assert end-start==len(batch['actual_ids'])<=10
++                assert batch['original_ids']==d['base_ids'][start:end] and batch['actual_ids']==d['actual_ids'][start:end]
++                assert batch['task_ids']==[catalog[i]['task'] for i in batch['original_ids']]==[catalog[i]['task'] for i in batch['actual_ids']]
++                assert batch['original_ids'][0]==batch['actual_ids'][0]
++                if len(batch['actual_ids'])<10:assert batch['original_ids']==batch['actual_ids']
++                for a,b,t in zip(batch['original_ids'],batch['actual_ids'],batch['task_ids']):
++                    if t==stage:assert a==b
++                actual_stream+=batch['actual_ids']
++            assert actual_stream==reconstructed
++            totals['epochs']+=1;totals['actual_slots']+=len(actual_stream)
++        assert step==batches*100;stage_counts[str(stage)]=dict(steps=step,schedules=events_count)
++        bp=json.loads((O/('buffer_pairing_task%d.json'%stage)).read_text())
++        assert bp['members_and_payload_hashes_match'] and bp['count']=={6:781,7:1521,8:2301,9:2961}[stage]
++    assert totals['epochs']==400 and totals['schedules']==181 and totals['candidate_gradients']<=24896
++    primary,attempts_primary=episode_metrics(O,'primary');secondary,attempts_secondary=episode_metrics(O,'secondary')
++    versions={name:json.loads((S/('protective_e1/'+file)).read_text()) for name,file in [('E0','e0_seed42.json'),('E1','e1_seed42.json'),('E1U','e1u_seed42.json')]}
++    versions['E1O']=primary;table={k:dict(exact(v['r']),matrix=v['r']) for k,v in versions.items()}
++    differences={('E1O_minus_'+k):{metric:table['E1O'][metric]-table[k][metric] for metric in ('auc','fwt','nbt')} for k in ('E0','E1','E1U')}
++    train=json.loads((O/'TRAINING_COMPLETE.json').read_text())
++    costs=dict(training_invocation_seconds=train['invocation_seconds'],peak_gpu_bytes=train['peak_gpu_bytes'],
++        scoring_seconds=sum(v['scoring_seconds'] for v in train['order_totals'].values()),
++        reorder_management_seconds=sum(v['management_seconds'] for v in train['order_totals'].values()),
++        io_seconds_nested=sum(v['io_seconds_nested'] for v in train['order_totals'].values()),
++        checkpoint_and_epoch_log_seconds=sum(json.loads(x)['seconds'] for x in (O/'checkpoint_cost.jsonl').read_text().splitlines()))
++    stamps={}
++    for line in (O/'commands.log').read_text().splitlines():
++        parts=line.split();stamp=datetime.fromisoformat(parts[0]).timestamp()
++        if parts[1]=='START':stamps[parts[2]]=stamp
++        elif parts[1]=='EXIT' and parts[-1] in ('evaluate_primary','evaluate_secondary'):costs[parts[-1]+'_seconds']=stamp-stamps[parts[-1]]
++    stats=dict(cross_batch_moved=sum(v!=0 for v in movement),participating=len(movement),
++        mean_absolute_step_movement=sum(abs(v) for v in movement)/max(len(movement),1),
++        mean_signed_score_times_advance=sum(s*a for s,a in score_position)/max(len(score_position),1),
++        metric_note='Within-permutation earlier/later movement; not evidence of closed-loop efficacy')
++    write(O/'order_movement.json',dict(score_and_steps_earlier=score_position,summary=stats))
++    result=dict(versions=table,differences=differences,secondary=secondary,coverage=dict(totals),
++        stages=stage_counts,skips_and_fallbacks=dict(reasons),movement=stats,cost=costs,
++        attempts=dict(primary=attempts_primary,secondary=attempts_secondary),
++        primary_auc_exceeds_E0=table['E1O']['auc']>table['E0']['auc'],
++        limits=['Single seed; no statistically stable efficacy claim.',
++            'Only the fixed limited reordering budget is tested; not all protective sorting methods.',
++            'E1/E1U comparisons change candidate source, frequency allocation and order; not same-pool single-variable pairing.',
++            'E0 RTX4090, E1/E1U RTX3090; current hardware recorded in contract is RTX4080 SUPER.',
++            'E0 historical timing and stage-buffer snapshots unavailable; no reconstruction of author trajectory.'])
++    write(O/'COVERAGE_ORDER_AUDIT.json',result)
++    (O/'FINAL_REPORT.txt').write_text('\n'.join(['E1-O results; pending independent process/exit acceptance',json.dumps(result,indent=2)]))
++    return result
+--- a/protective_e1/pipeline.sh
++++ b/protective_e1/pipeline.sh
+@@ -13,10 +13,10 @@
+ }
+ run_step prepare python -B -m protective_e1.prepare
+ if [[ ! -e "$E1_OUT/REAL_PREFLIGHT.json" ]]; then
+- run_step preflight python -m torch.distributed.run --nproc_per_node=1 --master_port=37984 -m protective_e1.preflight
++ run_step preflight python -m torch.distributed.run --nproc_per_node=1 --master_port=37994 -m protective_e1.preflight
+ fi
+ run_step spawn_import python -B check_spawn.py
+-run_step train python -m torch.distributed.run --nproc_per_node=1 --master_port=37985 -m protective_e1.train
++run_step train python -m torch.distributed.run --nproc_per_node=1 --master_port=37995 -m protective_e1.train
+ run_step evaluate_primary bash protective_e1/evaluate.sh primary
+ run_step evaluate_secondary bash protective_e1/evaluate.sh secondary
+ run_step finalize python -B -m protective_e1.finalize
+--- a/protective_e1/preflight.py
++++ b/protective_e1/preflight.py
+@@ -1,9 +1,5 @@
+-"""Short checks using actual recovered OBJECT payloads and the actual E0 policy."""
+-import copy
+-import hashlib
+-import json
+-import os
+-import time
++"""Five isolated real GPU optimizer calls; no environments or rollouts."""
++import copy,hashlib,json,time
+ from pathlib import Path
+ import torch
+ import torch.distributed as dist
+@@ -13,10 +9,11 @@
+ from .prepare import O,S,config
+ from .train import build
+ from .runtime import capture,restore_rng,rng
++from .coverage_order import CoveragePlan,CoverageOrder,OrderConfig,PlannedBatchSampler
++from .identity import IdentityDataset
+ from .io import write,sha,save
+ from libero.lifelong.algos.mlr import MLR,build_dataset_for_task,update_buffer_equal_quota_10,BUFFER_CAPACITY,build_ifa_similarity_matrix
+ from libero.lifelong.utils import torch_load_model
+-from libero.lifelong.replay_selection import SelectionConfig
+ 
+ def signature(value):
+     h=hashlib.sha256()
+@@ -34,68 +31,79 @@
+     algo.policy.load_state_dict(state['model'],strict=True);algo.optimizer.load_state_dict(state['optimizer'])
+     algo.scheduler.load_state_dict(state['scheduler']);algo._optimizer_step_count=state['optimizer_step'];algo._scheduler_step_count=state['scheduler_step']
+     for n,m in algo.policy.named_modules():m.training=state['modes'][n]
++    for n,p in algo.policy.named_parameters():p.grad=None if state['grads'][n] is None else state['grads'][n].to(p.device)
+     restore_rng(state['rng'])
+ 
+ def main():
+-    root=O/'preflight';assert not root.exists(),'Do not rerun existing real checks silently'
+-    root.mkdir();dist.init_process_group('nccl');torch.cuda.set_device(0)
+-    begin=time.time()
++    root=O/'preflight';assert not root.exists(),'Do not silently repeat GPU checks'
++    root.mkdir();dist.init_process_group('nccl');torch.cuda.set_device(0);begin=time.time()
+     try:
+         cfg=EasyDict(config(root));algo,benchmark=build(cfg)
+         pretrained=torch_load_model(cfg.pretrain)[0]
+         trainable={n:p for n,p in algo.policy.module.named_parameters() if p.requires_grad}
+-        assert trainable and all(n in pretrained and torch.equal(p.detach().cpu(),pretrained[n].cpu()) for n,p in trainable.items())
++        assert all(n in pretrained and torch.equal(p.detach().cpu(),pretrained[n].cpu()) for n,p in trainable.items())
+         loaded_count=len(trainable);del pretrained
+         update_buffer_equal_quota_10(cfg.feature_dir,6,cfg.buffer_dir,capacity=BUFFER_CAPACITY,seed=42,drop_policy='random',rate=.5)
+-        old={6:[]};current=[];catalog={}
++        old={6:[]};current=[];algo.catalog={};algo.stage=7
+         for p in sorted(Path(cfg.buffer_dir).glob('*.pt')):
+-            old[6].append(p.name);catalog[p.name]=dict(path=str(p),sha256=sha(p))
++            key='buffer/'+p.name;old[6].append(key);algo.catalog[key]=dict(path=str(p),sha256=sha(p),task=6)
+         for p in sorted((Path(cfg.feature_dir)/'7').glob('*.pt')):
+-            key='7/'+p.name;current.append(key);catalog[key]=dict(path=str(p),sha256=sha(p))
+-        algo.catalog=catalog;algo.stage=7;algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog),SelectionConfig(pool_weighting='uniform',priority_replace_probability=0.))
++            key='current/7/'+p.name;current.append(key);algo.catalog[key]=dict(path=str(p),sha256=sha(p),task=7)
+         dataset=build_dataset_for_task(cfg.feature_dir,7,cfg.buffer_dir,42,start=6)
+-        loader=DataLoader(dataset,batch_size=10,num_workers=0,sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True))
+-        algo.start_task(-1,loader);algo.policy.train();iterator=iter(loader);batch=next(iterator);second=next(iterator)
++        sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True)
++        native_loader=DataLoader(dataset,batch_size=10,num_workers=0,sampler=sampler)
++        algo.configure_plan(IdentityDataset(dataset));plan=algo.plan
++        loader=DataLoader(IdentityDataset(dataset),num_workers=0,batch_sampler=PlannedBatchSampler(plan))
++        algo.start_task(-1,loader);algo.policy.train();base_rng=copy.deepcopy(rng())
++        sampler.set_epoch(0);native=next(iter(native_loader));native_rng=signature(rng())
++        restore_rng(base_rng);sampler.set_epoch(0);plan.begin_epoch(list(iter(sampler)),0)
++        iterator=iter(loader);batch=next(iterator)
++        assert batch[1]==native[1] and all(torch.equal(batch[0][k],native[0][k]) for k in native[0])
++        assert native_rng==signature(rng()),'Planned loader changes original model RNG'
++        algo.order=CoverageOrder(algo.policy,42,7,old,current,algo.payload,'preflight',OrderConfig(enabled=False));algo.order_stage_step=0
+         ifa=build_ifa_similarity_matrix(current_task_id=7,current_feat_root=cfg.feature_dir,replay_dir=cfg.buffer_dir,language_idx=0,agent_idx=1,top_ratio=.5)
+         initial=capture(algo)
+-        native_loss=MLR.observe(algo,copy.deepcopy(batch),7,0,ifa_info=ifa);native=capture(algo)
+-        restore(algo,initial);e1_loss=algo.observe(copy.deepcopy(batch),7,0,ifa_info=ifa);off=capture(algo)
+-        assert native_loss==e1_loss and signature(native)==signature(off),'ZERO_PROBABILITY_UPDATE_DIVERGED'
+-        restore(algo,initial);algo.configure_e1_stage(7,old,current,algo.payload,signature(catalog),SelectionConfig(pool_weighting='uniform'))
+-        before=capture(algo);refresh=algo.e1_selector.refresh(0);after=capture(algo)
+-        assert signature(before)==signature(after),'SCORING_CHANGED_TRAINING_STATE'
+-        assert refresh['reason']=='OK' and len(algo.e1_selector.distributions[6]['ids'])==64
+-        assert refresh['probabilities']['6'] == [1./64]*64
+-        replacement,events=algo.e1_selector.replace_old_slots(copy.deepcopy(batch))
+-        assert replacement[1]==batch[1]
+-        for i,t in enumerate(batch[1]):
+-            if int(t)==7:
+-                for k in batch[0]:assert torch.equal(replacement[0][k][i],batch[0][k][i])
+-        algo.observe(copy.deepcopy(batch),7,0,ifa_info=ifa)
+-        middle=capture(algo);side=algo.e1_sidecar()
+-        save(root/'resume_check.pth',dict(state=middle,side=side))
+-        expected_loss=algo.observe(copy.deepcopy(second),7,0,ifa_info=ifa);expected=capture(algo)
+-        restored=torch.load(root/'resume_check.pth',map_location='cpu');restore(algo,restored['state']);algo.restore_e1_sidecar(restored['side'])
+-        restored_loss=algo.observe(copy.deepcopy(second),7,0,ifa_info=ifa);actual=capture(algo)
+-        assert expected_loss==restored_loss and signature(expected)==signature(actual),'RESUME_NEXT_UPDATE_DIVERGED'
+-        assert signature(initial['model'])!=signature(actual['model']),'NONZERO_LR_DID_NOT_UPDATE'
+-        from .identity import IdentityDataset
+-        saved_rng=copy.deepcopy(rng());loader.sampler.set_epoch(1);a=next(iter(loader));rng_a=signature(rng())
+-        restore_rng(saved_rng);loader.sampler.set_epoch(1);b=next(iter(loader))
+-        assert a[1]==b[1] and all(torch.equal(a[0][k],b[0][k]) for k in a[0]) and rng_a==signature(rng())
+-        restore_rng(saved_rng)
+-        identity_loader=DataLoader(IdentityDataset(dataset),batch_size=10,num_workers=0,sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True))
+-        identity_loader.sampler.set_epoch(1);c=next(iter(identity_loader))
+-        assert a[1]==c[1] and all(torch.equal(a[0][k],c[0][k]) for k in a[0]) and rng_a==signature(rng())
+-        assert len(c[2])==10 and all(k.startswith(('buffer/','current/')) for k in c[2])
+-        result=dict(identity_sidechannel_loader_payload_rng_parity=True,pool_weighting='uniform',status='PASS',optimizer_calls=5,actual_policy='E0 BriefPolicy/GMMHead',real_payloads=True,
+-          old_buffer_windows=len(old[6]),current_windows=len(current),zero_probability_native_update_parity=True,
+-          refresh_preserves_parameters_optimizer_scheduler_rng_modes=True,only_head_gradient=True,
+-          candidate_count=64,reference_count=16,current_reference_count=16,same_task_slots_current_content=True,
+-          saved_state_next_update_exact=True,next_epoch_loader_rng_exact=True,trainable_pretrain_keys_loaded=loaded_count,
+-          ifa_pairs=ifa['selected_pairs'],formal_state_reused=False,seconds=time.time()-begin,
+-          torch=torch.__version__,cuda=torch.version.cuda,gpu=torch.cuda.get_device_name(),refresh=refresh)
+-        write(O/'REAL_PREFLIGHT.json',result);print(json.dumps(result),flush=True)
++        native_loss=MLR.observe(algo,copy.deepcopy(native),7,0,ifa_info=ifa);expected=capture(algo)
++        restore(algo,initial);off_loss=algo.observe(copy.deepcopy(batch),7,0,ifa_info=ifa);actual=capture(algo)
++        assert native_loss==off_loss and signature(expected)==signature(actual),'Disabled native update differs'
++        algo.plan=CoveragePlan(plan.tasks,plan.ids,10,7);plan=algo.plan
++        sampler.set_epoch(0);plan.begin_epoch(list(iter(sampler)),0)
++        iterator=iter(DataLoader(IdentityDataset(dataset),num_workers=0,batch_sampler=PlannedBatchSampler(plan)))
++        algo.order=CoverageOrder(algo.policy,42,7,old,current,algo.payload,'preflight');algo.order_stage_step=0
++        before=capture(algo);event=algo.order.schedule(plan,0);after=capture(algo)
++        assert signature(before)==signature(after),'Scoring changed params/buffers/optimizer/scheduler/grads/RNG/modes'
++        assert event['reason']=='OK' and event['tasks']['6']['committed']
++        assert algo.order.totals['cross_batch_moved']>0
++        batch=next(iterator)
++        for slot,task in enumerate(batch[1]):
++            if int(task)==7 or slot==0:assert batch[2][slot]==plan.ids[plan.base[slot]]
++        algo.observe(copy.deepcopy(batch),7,0,ifa_info=ifa) # GPU call3
++        # Read remaining payloads without optimizing. This validates an epoch
++        # cursor boundary, NOT a fully trained GPU epoch.
++        for batch in iterator:plan.record_read(batch[2],batch[1],plan.last_batch[0]//10)
++        evidence=plan.finish();algo.order_stage_step=len(plan);algo.order.events=[]
++        boundary=dict(state=capture(algo),side=algo.order_sidecar());save(root/'boundary.pth',boundary)
++        def next_epoch():
++            sampler.set_epoch(1);plan.begin_epoch(list(iter(sampler)),1)
++            it=iter(DataLoader(IdentityDataset(dataset),num_workers=0,batch_sampler=PlannedBatchSampler(plan)))
++            algo.order.schedule(plan,algo.order_stage_step);return next(it)
++        first=next_epoch();loss=algo.observe(copy.deepcopy(first),7,1,ifa_info=ifa);target=capture(algo);target_order=algo.order.state_dict()
++        restored=torch.load(root/'boundary.pth',map_location='cpu');restore(algo,restored['state']);algo.restore_order_sidecar(restored['side'])
++        algo.plan=CoveragePlan(plan.tasks,plan.ids,10,7);plan=algo.plan
++        second=next_epoch();loss2=algo.observe(copy.deepcopy(second),7,1,ifa_info=ifa)
++        assert first[2]==second[2] and loss==loss2 and signature(target)==signature(capture(algo))
++        assert signature(target_order)==signature(algo.order.state_dict())
++        assert signature(initial['model'])!=signature(target['model'])
++        result=dict(status='PASS',optimizer_calls=5,real_payloads=True,formal_state_reused=False,rollouts=0,
++          old_buffer_windows=len(old[6]),current_windows=len(current),trainable_pretrain_keys_loaded=loaded_count,
++          disabled_native_update_exact=True,loader_payload_rng_parity=True,actual_ids_match_plan=True,
++          complete_readonly_epoch_multiplicity=True,read_only_epoch_is_not_training=True,
++          scoring_isolation_includes_parameters_buffers_optimizer_scheduler_grads_rng_modes=True,
++          saved_epoch_boundary_next_update_exact=True,pinned_first_and_current=True,
++          cross_batch_moved=algo.order.totals['cross_batch_moved'],ifa_pairs=ifa['selected_pairs'],
++          seconds=time.time()-begin,torch=torch.__version__,cuda=torch.version.cuda,gpu=torch.cuda.get_device_name(),schedule=event)
++        write(root/'coverage_readcheck.json',evidence);write(O/'REAL_PREFLIGHT.json',result)
++        print(json.dumps(result),flush=True)
+     finally:dist.destroy_process_group()
+ 
+ if __name__=='__main__':main()
+--- a/protective_e1/prepare.py
++++ b/protective_e1/prepare.py
+@@ -7,7 +7,7 @@
+ from .bindings import bind
+ bind()
+ from .io import write,sha
+-from libero.lifelong.replay_selection import SelectionConfig
++from .coverage_order import OrderConfig
+ 
+ S=Path(os.environ['E1_SOURCE']);O=Path(os.environ['E1_OUT'])
+ 
+@@ -20,12 +20,14 @@
+        feature_dir=str(O/'features'),buffer_dir=str(root/'buffer'),experiment_dir=str(root/'run_001'),
+        experiment_root=str(root),folder='/data/mlr_ifa/datasets',bddl_folder=str(S/'libero/libero/bddl_files'),
+        init_states_folder=str(S/'libero/libero/init_files'),e1_root=str(root),e1_contract=str(O/'CONTRACT.json'),
+-       e1_selection=asdict(SelectionConfig(pool_weighting='uniform')),repro_arm='E1U_uniform_pool',use_wandb=False)
++       order_replay=asdict(OrderConfig()),repro_arm='E1O_coverage_order',use_wandb=False)
++    cfg['eval']['n_eval']=20
++    cfg['diagnostic_checkpoint_epochs']=[70,75,80,85,90,95,99]
+     return cfg
+ 
+ def main():
+     assert (O/'features').resolve() == Path('/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008/features').resolve()
+-    assert O.name == 'E1U_uniform_pool_seed42_20261009' and S.parent.name == 'E1U_uniform_pool_20261009'
++    assert O.name == 'E1O_coverage_order_seed42_20261009' and S.parent.name == 'E1O_coverage_order_20261009'
+     import torch
+     assert torch.cuda.is_available(), 'GPU required; no CPU fallback'
+     historical=json.loads((S/'protective_e1/historical_feature_manifest.json').read_text())['42']
+@@ -42,21 +44,21 @@
+        counts={k:len(v) for k,v in actual.items()},historical_manifest_sha256=sha(S/'protective_e1/historical_feature_manifest.json'),features=actual))
+     checkpoint='/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth'
+     assert sha(checkpoint)=='159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b'
+-    contract=dict(name='E1U_uniform_pool',source_commit='e963d8d0f3a4626365d33bdb5c83a60821fff115',
++    contract=dict(name='E1O_coverage_order',source_commit='b3590dfe836c035e799ed246f7c8da3dcf85bf64',
+       diagnostic_commit='d9a355b6fb75d22ece19cb9c324201e2dae55540',
+-      sole_algorithm_change='softmax pool weights replaced by exact uniform weights; scoring and random.choices retained',
++      sole_algorithm_change='Full E0 epoch multiplicities; weighted without-replacement future-index permutation; old replacement hook disabled',
+       device=torch.cuda.get_device_name(),torch_version=torch.__version__,cuda_version=torch.version.cuda,
+       e1_readonly_root='/data/mlr_ifa/experiments/E1_protective_object_seed42_20261008',
+-      readonly_e1_manifest_sha256=sha(O/'E1_READONLY_BEFORE.json'),baseline='final_paper_text_faithful/ifa/seed42',
++      readonly_e1_manifest_sha256=sha(O/'ORIGINAL_READONLY_BEFORE.json'),baseline='final_paper_text_faithful/ifa/seed42',
+       seed=42,feature_parity=sha(O/'FEATURE_PARITY.json'),pretrain_sha256=sha(checkpoint),
+       source_sha256={str(p.relative_to(S)):sha(p) for p in sorted(S.rglob('*')) if p.is_file() and p.suffix in ('.py','.sh','.yaml','.json') and '.hydra' not in p.parts},
+-      settings=asdict(SelectionConfig(pool_weighting='uniform')),tasks=[6,7,8,9],n_epochs=100,train_batch_size=10,
++      settings=asdict(OrderConfig()),tasks=[6,7,8,9],n_epochs=100,train_batch_size=10,
+       primary=dict(checkpoint_epoch=99,cells=10,trials_per_cell=20),
+       secondary=dict(candidate_epochs=[70,75,80,85,90,95,99],cells=34,trials_per_cell=20),
+       primary_endpoint='task-balanced overall AUC',extension_rule='strictly positive unrounded overall AUC difference, then fixed seeds43/44; no baseline retraining',
+-      disclosed_gaps=['Historical baseline ran each seed on one RTX4090; current host has one RTX3090. Precision/library version and GPU count preserved; architecture differs.',
++      disclosed_gaps=['Historical baseline ran each seed on one RTX4090; current GPU is recorded in this contract; inspection found RTX4080 SUPER rather than E1/E1U RTX3090. Precision/library version and GPU count preserved; architecture differs.',
+       'Original stage-buffer snapshots unavailable. Same byte-identical feature files, same deterministic E0 buffer implementation and seed reconstruct membership; actual per-stage hashes will be recorded.',
+-      'E1U reuses the already verified E1 features read-only, with every SHA256 checked against historical E0. No E1U feature export. E1 stage buffer snapshots are directly available; E0 missing historical snapshots limitation remains.'],
++      'E1O reuses the already verified E1 features read-only, with every SHA256 checked against historical E0. No E1O feature export. E1 stage buffer snapshots are directly available; E0 missing historical snapshots limitation remains.'],
+       created_unix=time.time(),baseline_rerun=False)
+     target=O/'CONTRACT.json'
+     if target.exists():
+--- a/protective_e1/runtime.py
++++ b/protective_e1/runtime.py
+@@ -1,4 +1,4 @@
+-"""E0 epoch loop and update with E1 replacement and atomic epoch recovery."""
++"""E0 update with future-index permutation and atomic epoch recovery."""
+ import copy
+ import csv
+ import json
+@@ -13,10 +13,10 @@
+ bind()
+ from .baseline_loop import E1EpochLoop
+ from .io import sha, write, save
+-from .paired_audit import epoch_pairing, buffer_pairing
++from .paired_audit import buffer_pairing
++from .coverage_order import CoveragePlan, CoverageOrder, OrderConfig
+ from libero.lifelong.algos.mlr import MLR, update_buffer_equal_quota_10, BUFFER_CAPACITY
+-from libero.lifelong.replay_selection_hook import ProtectiveSelectionMixin
+-from libero.lifelong.replay_selection import SelectionConfig
++
+ 
+ 
+ def cpu(value):
+@@ -39,20 +39,20 @@
+ def capture(algo):
+     return dict(model=cpu(algo.policy.state_dict()),optimizer=cpu(algo.optimizer.state_dict()),
+       scheduler=cpu(algo.scheduler.state_dict()),optimizer_step=algo._optimizer_step_count,
+-      scheduler_step=algo._scheduler_step_count,rng=cpu(rng()),modes={n:m.training for n,m in algo.policy.named_modules()})
++      scheduler_step=algo._scheduler_step_count,grads={n:None if p.grad is None else cpu(p.grad) for n,p in algo.policy.named_parameters()},rng=cpu(rng()),modes={n:m.training for n,m in algo.policy.named_modules()})
+ 
+ 
+-class SelectionMLR(ProtectiveSelectionMixin,E1EpochLoop):
++class OrderMLR(E1EpochLoop):
+     def __init__(self,*args,**kwargs):
+         super().__init__(*args,**kwargs)
+         self.out=Path(self.cfg.e1_root);self.out.mkdir(parents=True,exist_ok=True)
+         self.recovery=self.out/'recovery/latest.pth';self.resume=None
+         self.e1_start_epoch=0;self.stage=None;self.catalog={};self.verified=set()
+-        self.selection_totals={};self.run_started=time.time()
++        self.order_totals={};self.run_started=time.time();self.plan=None;self.epoch_evidence=None
+         if self.recovery.exists():
+             self.resume=torch.load(self.recovery,map_location='cpu')
+             assert self.resume['contract_sha256']==sha(self.cfg.e1_contract)
+-            self.selection_totals=self.resume['selection_totals']
++            self.order_totals=self.resume['order_totals']
+             folder=Path(self.cfg.buffer_dir).resolve()
+             assert folder==self.out.resolve()/'buffer'
+             expected=self.resume['buffer_hashes'];actual={p.name:p for p in folder.glob('*.pt')}
+@@ -84,32 +84,64 @@
+         if self.resume and self.resume['task']==self.stage:
+             value=self.resume['state'];self.policy.load_state_dict(value['model'],strict=True)
+             self.optimizer.load_state_dict(value['optimizer']);self.scheduler.load_state_dict(value['scheduler'])
++            for n,p in self.policy.named_parameters():p.grad=None if value['grads'][n] is None else value['grads'][n].to(p.device)
+             self._optimizer_step_count=value['optimizer_step'];self._scheduler_step_count=value['scheduler_step']
+             for n,m in self.policy.named_modules():m.training=value['modes'][n]
+-            self.restore_e1_sidecar(self.resume['selector_sidecar']);restore_rng(value['rng'])
++            self.restore_order_sidecar(self.resume['order_sidecar']);restore_rng(value['rng'])
+         elif self.resume and self.resume['task']<self.stage and self.resume['stage_complete']:
+             self.policy.load_state_dict(self.resume['state']['model'],strict=True);restore_rng(self.resume['state']['rng'])
++
++    def configure_plan(self,dataset):
++        paths=dataset.base.file_paths
++        from libero.lifelong.algos.mlr import parse_path
++        tasks=[int(parse_path(p)) for p in paths]
++        ids=[('buffer/'+Path(p).name) if Path(p).name.startswith('t') else ('current/%d/%s'%(t,Path(p).name)) for p,t in zip(paths,tasks)]
++        assert set(ids)==set(self.catalog)
++        self.plan=CoveragePlan(tasks,ids,self.cfg.train.batch_size,self.stage)
++
++    def ordered_batches(self,loader):
++        iterator=iter(loader)  # exactly one DataLoader iterator per epoch
++        while self.plan.cursor<len(self.plan.actual):
++            self.order.schedule(self.plan,self.order_stage_step)
++            yield next(iterator)
++
++    def observe(self,data,current_task_id,epoch,ifa_info=None):
++        assert len(data)==3
++        self.plan.record_read(data[2],data[1],self.order_stage_step)
++        before=self._optimizer_step_count
++        loss=MLR.observe(self,[data[0],data[1]],current_task_id,epoch,ifa_info=ifa_info)
++        assert self._optimizer_step_count==before+1
++        self.order_stage_step+=1
++        return loss
++
++    def order_sidecar(self):
++        assert not self.order.events and self.epoch_evidence is None
++        return dict(stage_optimizer_step=self.order_stage_step,order=self.order.state_dict(),
++            committed_epoch=self.plan.epoch if self.plan else None,
++            completed_cursor=self.plan.cursor if self.plan else None)
++
++    def restore_order_sidecar(self,state):
++        self.order.load_state_dict(state['order']);self.order_stage_step=state['stage_optimizer_step']
++        assert self.order.last_step is None or self.order.last_step<=self.order_stage_step
+ 
+     def _buffer_hashes(self):return {p.name:sha(p) for p in sorted(Path(self.cfg.buffer_dir).glob('*.pt'))}
+ 
+     def checkpoint(self,next_epoch,stage_complete=False):
+         checkpoint_started=time.perf_counter()
+-        events=self.pop_e1_events()
+-        if events:
+-            folder=self.out/'selection_logs'/('task%d'%self.stage);folder.mkdir(parents=True,exist_ok=True)
+-            target=folder/('epoch%03d.jsonl'%(next_epoch-1))
+-            if target.exists():os.replace(target,target.with_suffix('.interrupted_%d.jsonl'%time.time_ns()))
+-            with target.open('x') as f:
+-                for row in events:f.write(json.dumps(row,allow_nan=False)+'\n')
+-            assert all(row['actual_samples'] is not None for row in events)
+-            epoch_pairing(self.out,self.stage,next_epoch-1,events)
+-        self.selection_totals[str(self.stage)]=copy.deepcopy(self.e1_selector.totals)
++        if self.epoch_evidence is not None:
++            folder=self.out/'order_logs'/('task%d'%self.stage);folder.mkdir(parents=True,exist_ok=True)
++            target=folder/('epoch%03d.json'%(next_epoch-1))
++            if target.exists():os.replace(target,target.with_suffix('.interrupted_%d.json'%time.time_ns()))
++            evidence=dict(self.epoch_evidence,stage=self.stage,schedules=self.order.events,
++                stage_optimizer_step=self.order_stage_step)
++            write(target,evidence);self.epoch_evidence=None;self.order.events=[]
++        self.order_totals[str(self.stage)]=copy.deepcopy(self.order.totals)
+         value=dict(state=capture(self),task=self.stage,next_epoch=next_epoch,stage_complete=stage_complete,
+-          selector_sidecar=self.e1_sidecar(),buffer_hashes=self._buffer_hashes(),selection_totals=self.selection_totals,
++          order_sidecar=self.order_sidecar(),buffer_hashes=self._buffer_hashes(),order_totals=self.order_totals,
+           contract_sha256=sha(self.cfg.e1_contract))
+         save(self.recovery,value)
+         write(self.out/'RUN_STATUS.json',dict(status='TRAINING',stage=self.stage,next_epoch=next_epoch,
+-          stage_optimizer_steps=self.e1_stage_step,optimizer_steps=self._optimizer_step_count,selection_totals=self.selection_totals,
++          stage_optimizer_steps=self.order_stage_step,optimizer_steps=self._optimizer_step_count,order_totals=self.order_totals,
+           stage_complete=stage_complete,updated_unix=time.time(),pid=os.getpid()))
+         with (self.out/'checkpoint_cost.jsonl').open('a') as f:
+             f.write(json.dumps(dict(stage=self.stage,next_epoch=next_epoch,stage_complete=stage_complete,seconds=time.perf_counter()-checkpoint_started,included_in_training_total=True))+'\n')
+@@ -133,10 +165,11 @@
+         catalog_path=self.out/('catalog_task%d.json'%current_task_id)
+         if catalog_path.exists():assert json.loads(catalog_path.read_text())==self.catalog
+         else:write(catalog_path,self.catalog)
+-        self.configure_e1_stage(current_task_id,old,new,self.payload,sha(catalog_path),SelectionConfig(**self.cfg.e1_selection))
++        self.order = CoverageOrder(self.policy,self.cfg.seed,current_task_id,old,new,self.payload,sha(catalog_path),OrderConfig(**self.cfg.order_replay))
++        self.order_stage_step=0
+         if self.e1_start_epoch==self.cfg.train.n_epochs:
+             self.policy.load_state_dict(self.resume['state']['model'],strict=True)
+-            restore_rng(self.resume['state']['rng']);self.restore_e1_sidecar(self.resume['selector_sidecar'])
++            restore_rng(self.resume['state']['rng']);self.restore_order_sidecar(self.resume['order_sidecar'])
+             update_buffer_equal_quota_10(self.cfg.feature_dir,current_task_id,self.cfg.buffer_dir,
+                 capacity=BUFFER_CAPACITY,seed=self.cfg.seed,drop_policy='random',rate=self.cfg.past_data_rate)
+             hashes=self._buffer_hashes();buffer_pairing(self.out,current_task_id,hashes)
+--- a/protective_e1/train.py
++++ b/protective_e1/train.py
+@@ -6,7 +6,7 @@
+ import torch.distributed as dist
+ from torch.nn.parallel import DistributedDataParallel as DDP
+ from easydict import EasyDict
+-from .runtime import SelectionMLR
++from .runtime import OrderMLR
+ from .io import sha,write
+ from libero.libero.benchmark import get_benchmark
+ from libero.lifelong.utils import control_seed,get_task_embs
+@@ -19,7 +19,7 @@
+     benchmark=get_benchmark(cfg.benchmark_name)(cfg.data.task_order_index)
+     benchmark.set_task_embs(get_task_embs(cfg,[benchmark.get_task(i).language for i in range(benchmark.n_tasks)]))
+     Path(cfg.experiment_dir).mkdir(parents=True,exist_ok=True);Path(cfg.buffer_dir).mkdir(parents=True,exist_ok=True)
+-    algo=SelectionMLR(1,cfg).cuda();algo.policy=DDP(algo.policy,device_ids=[0],output_device=0)
++    algo=OrderMLR(1,cfg).cuda();algo.policy=DDP(algo.policy,device_ids=[0],output_device=0)
+     return algo,benchmark
+ 
+ def main():
+@@ -37,7 +37,7 @@
+         for task in range(6,10):algo.learn_all_tasks(None,benchmark,{},task)
+         checkpoints=sorted(Path(cfg.experiment_dir).glob('mlrifa_*_model_ep*.pth'));assert len(checkpoints)==28
+         write(done,dict(status='TRAINED_EVAL_PENDING',seed=42,epochs=400,invocation_seconds=time.time()-begin,
+-          peak_gpu_bytes=torch.cuda.max_memory_allocated(),selection_totals=algo.selection_totals,
++          peak_gpu_bytes=torch.cuda.max_memory_allocated(),order_totals=algo.order_totals,
+           checkpoints={p.name:sha(p) for p in checkpoints}))
+         write(O/'RUN_STATUS.json',dict(status='TRAINED_EVAL_PENDING',updated_unix=time.time()))
+     finally:dist.destroy_process_group()

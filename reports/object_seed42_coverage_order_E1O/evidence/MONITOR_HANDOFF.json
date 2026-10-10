@@ -1,0 +1,201 @@
+{
+  "task": "E1-O full-coverage protective order LIBERO-OBJECT seed42",
+  "status": "TRAINING",
+  "read_first": [
+    "USER_PROTOCOL.txt",
+    "PROTOCOL_AUDIT.txt",
+    "RUN_STATUS.json",
+    "launch_evidence/CONTRACT.json"
+  ],
+  "ssh": {
+    "host": "jq1.9gpu.com",
+    "port": 11920,
+    "user": "root",
+    "password_policy": "Existing authorization; memory/getpass only, never files or logs"
+  },
+  "remote_source": "/data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source",
+  "remote_output": "/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009",
+  "base_commit": "b3590dfe836c035e799ed246f7c8da3dcf85bf64",
+  "base_subtree": "experiments/object_seed42_uniform_pool_E1U/source",
+  "contract_sha256": "f7985e2bc3b4d0e551cbebd6e02cb1dd019754e500e09128f0bc10a022805f0d",
+  "pipeline_pid": 1995,
+  "train_pid": 2030,
+  "tests": {
+    "target_software": 56,
+    "software_exit": 0,
+    "GPU_preflight": "PASS",
+    "isolated_actual_optimizer_calls": 5,
+    "preflight_exit": 0,
+    "environment_rollouts": 0,
+    "spawn_import_exit": 0,
+    "isolation": "Parameters, buffers, optimizer, scheduler, gradients, Python/NumPy/CPU/CUDA RNG and module modes",
+    "recovery": "Serialized complete read-only epoch cursor plus training state; exact next-epoch loader RNG and next GPU update. Not a full trained GPU epoch.",
+    "local_note": "28 new stdlib tests PASS; combined local suite lacked torch. All56 ran and passed in target torch1.13/CUDA environment."
+  },
+  "protocol": {
+    "seed": 42,
+    "tasks": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "epochs": 400,
+    "steps": 105500,
+    "batch_size": 10,
+    "stage_steps": {
+      "6": 15700,
+      "7": 22700,
+      "8": 30900,
+      "9": 36200
+    },
+    "checkpoints": 28,
+    "checkpoint_epochs": [
+      70,
+      75,
+      80,
+      85,
+      90,
+      95,
+      99
+    ],
+    "primary_episodes": 200,
+    "secondary_episodes": 680,
+    "OBJECT_use_state": false,
+    "gamma": 0.3,
+    "ifa_weight": 0.1,
+    "stage_schedule_interval": 500,
+    "schedules": 181,
+    "candidate_gradient_cap": 24896,
+    "sampler": "Original DistributedSampler iterated once per epoch; one mutable planned DataLoader iterator; num_workers0",
+    "intervention": "Without-replacement permutation of at most64 pending same-task slots; no old replacement hook",
+    "protected": "Current identity, every position task ID, first slot of each batch and all incomplete-tail slots",
+    "independent_rng": "random.Random(seed42) reset at each stage; E1 head gradient/score, H16/C64/N16, alpha1/tau1/eps1e-8",
+    "extension": "Only unrounded primary AUC strictly exceeds E0 77.70833333333333; then independent43/44 matching existing baseline artifacts; no baseline rerun"
+  },
+  "monitor": [
+    "Check actual PID/GPU/disk/log age/RUN_STATUS/commands.log/pipeline.exit/curve/epoch order logs/recovery/CP/episodes and attempts. No duplicate start.",
+    "Run remote external monitor_snapshot.py. It does not load models or start environments. Save lightweight snapshot locally.",
+    "Source frozen and contract hashed. No additional preflight or rollouts, no source editing/retagging, no push or weights upload or paid resources.",
+    "Source GPU now RTX4080 SUPER rather than E1/E1U RTX3090; torch1.13+cu116/precision unchanged. Disclose difference and missing E0 timing/buffer snapshots.",
+    "Pipeline runs train then original primary200/secondary680 evaluation, read-only finalize. Training alone is not completion.",
+    "Normal healthy progress: save snapshot and end. Check every2h; notify only meaningful change, failure, recovery, completion or action.",
+    "After pipeline.exit0 and no residual processes, execute external independent_acceptance.py at source parent. It reruns only read-only index/episode/hash acceptance.",
+    "Download lightweight evidence/report only, never checkpoints. If overall primary AUC does not exceed E0 stop and pause monitor; otherwise fixed43/44 only after separate input/contract verification."
+  ],
+  "recovery": [
+    "Only after process exit and contract/source/input agreement. Preserve error logs and exits. Never relaunch concurrently.",
+    "Use this run recovery/latest.pth at full epoch boundary; restores model, optimizer, scheduler, grads, all RNG, order RNG/stage step and committed cursor.",
+    "Runner archives uncommitted CSV rows and own extra buffer additions before resuming; prevents duplicate buffer append. Partial epoch order log kept as interrupted on replacement.",
+    "Keep original pipeline.exit/log/commands and stdout from failed attempts before explicit resume; do not overwrite failure evidence.",
+    "Partial evaluation deliberately refuses blind restart. Preserve all committed episodes/attempts and original evaluation RNG sequence; no outcome-based retry.",
+    "Read-only analysis failures may be corrected separately after preserving errors; no training/environment rerun. Scientific protocol changes require BLOCKED."
+  ],
+  "commands": {
+    "launch": "bash /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/protective_e1/pipeline.sh",
+    "monitor": "/data/mlr_ifa/env/bin/python /data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009/monitor_snapshot.py",
+    "independent_acceptance": "/data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/independent_acceptance.py"
+  },
+  "latest_snapshot": {
+    "unix": 1791553456.4651322,
+    "status": {
+      "status": "TRAINING",
+      "stage": 6,
+      "next_epoch": 7,
+      "stage_optimizer_steps": 1099,
+      "optimizer_steps": 1099,
+      "order_totals": {
+        "6": {
+          "schedules": 0,
+          "candidate_gradients": 0,
+          "committed_tasks": 0,
+          "participating_positions": 0,
+          "moved_positions": 0,
+          "cross_batch_moved": 0,
+          "scoring_seconds": 0.0,
+          "management_seconds": 0.0,
+          "io_seconds_nested": 0.0,
+          "fallbacks": {}
+        }
+      },
+      "stage_complete": false,
+      "updated_unix": 1791553453.9931786,
+      "pid": 2030
+    },
+    "contract_sha256": "f7985e2bc3b4d0e551cbebd6e02cb1dd019754e500e09128f0bc10a022805f0d",
+    "frozen_source_files": 171,
+    "frozen_source_unchanged": true,
+    "source_mismatches": [],
+    "complete_epochs": 7,
+    "complete_optimizer_steps": 1099,
+    "latest_epoch": {
+      "seed": "42",
+      "arm": "E1O_coverage_order",
+      "stage": "6",
+      "epoch": "6",
+      "batches": "157",
+      "mean_bc_loss": "-18.62076654859409",
+      "optimizer_step_end": "1099",
+      "lr_end": "9.605921052631579e-05",
+      "scheduler_mode": "batch_step",
+      "batch_size": "10"
+    },
+    "latest_order": {
+      "stage": 6,
+      "epoch": 6,
+      "batches": 157,
+      "all_ids_once": true,
+      "schedules": 0,
+      "actual_slots": 1562
+    },
+    "formal_episodes": {
+      "primary": 0,
+      "secondary": 0
+    },
+    "formal_checkpoints": 0,
+    "recovery_exists": true,
+    "pipeline_exit": null,
+    "processes": [
+      "   1995       00:39 bash /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/protective_e1/pipeline.sh",
+      "   2023       00:35 python -m torch.distributed.run --nproc_per_node=1 --master_port=37995 -m protective_e1.train",
+      "   2030       00:34 /data/mlr_ifa/env/bin/python -u -m protective_e1.train"
+    ],
+    "gpu": "NVIDIA GeForce RTX 4080 SUPER, 1749 MiB, 39 %",
+    "logs": {
+      "prepare.log": {
+        "size": 154,
+        "modified_unix": 1791553421.0733583
+      },
+      "software_tests.log": {
+        "size": 4329,
+        "modified_unix": 1791553283.1553268
+      },
+      "commands.log": {
+        "size": 210,
+        "modified_unix": 1791553421.669378
+      },
+      "train.log": {
+        "size": 158495,
+        "modified_unix": 1791553456.4504805
+      },
+      "preflight.log": {
+        "size": 27741,
+        "modified_unix": 1791553334.0819683
+      },
+      "spawn_import.log": {
+        "size": 863,
+        "modified_unix": 1791553421.661378
+      },
+      "pipeline.log": {
+        "size": 0,
+        "modified_unix": 1791553418.2652643
+      }
+    },
+    "commands": "2026-10-09T21:43:38+08:00 START prepare\n2026-10-09T21:43:41+08:00 EXIT 0 prepare\n2026-10-09T21:43:41+08:00 START spawn_import\n2026-10-09T21:43:41+08:00 EXIT 0 spawn_import\n2026-10-09T21:43:41+08:00 START train\n"
+  },
+  "automation": {
+    "id": "mlr-v2",
+    "status": "ACTIVE",
+    "rrule": "FREQ=HOURLY;INTERVAL=2"
+  }
+}

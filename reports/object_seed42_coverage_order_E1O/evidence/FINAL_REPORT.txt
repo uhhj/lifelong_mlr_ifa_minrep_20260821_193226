@@ -1,0 +1,254 @@
+E1-O results; pending independent process/exit acceptance
+{
+  "versions": {
+    "E0": {
+      "auc": 77.70833333333333,
+      "fwt": 77.5,
+      "nbt": -0.27777777777777785,
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          50.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          40.0,
+          95.0,
+          100.0,
+          null
+        ],
+        [
+          25.0,
+          100.0,
+          100.0,
+          75.0
+        ]
+      ]
+    },
+    "E1": {
+      "auc": 77.29166666666667,
+      "fwt": 76.25,
+      "nbt": -3.3333333333333335,
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          45.0,
+          100.0,
+          null,
+          null
+        ],
+        [
+          35.0,
+          95.0,
+          85.0,
+          null
+        ],
+        [
+          25.0,
+          95.0,
+          100.0,
+          85.0
+        ]
+      ]
+    },
+    "E1U": {
+      "auc": 73.64583333333333,
+      "fwt": 76.25,
+      "nbt": 7.222222222222221,
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          55.00000000000001,
+          95.0,
+          null,
+          null
+        ],
+        [
+          15.0,
+          100.0,
+          100.0,
+          null
+        ],
+        [
+          30.0,
+          100.0,
+          75.0,
+          75.0
+        ]
+      ]
+    },
+    "E1O": {
+      "auc": 62.39583333333333,
+      "fwt": 63.75,
+      "nbt": 1.6666666666666667,
+      "matrix": [
+        [
+          35.0,
+          null,
+          null,
+          null
+        ],
+        [
+          35.0,
+          95.0,
+          null,
+          null
+        ],
+        [
+          20.0,
+          100.0,
+          95.0,
+          null
+        ],
+        [
+          5.0,
+          100.0,
+          100.0,
+          30.0
+        ]
+      ]
+    }
+  },
+  "differences": {
+    "E1O_minus_E0": {
+      "auc": -15.3125,
+      "fwt": -13.75,
+      "nbt": 1.9444444444444446
+    },
+    "E1O_minus_E1": {
+      "auc": -14.895833333333343,
+      "fwt": -12.5,
+      "nbt": 5.0
+    },
+    "E1O_minus_E1U": {
+      "auc": -11.25,
+      "fwt": -12.5,
+      "nbt": -5.5555555555555545
+    }
+  },
+  "secondary": {
+    "auc": 72.5,
+    "fwt": 78.75,
+    "nbt": 11.111111111111112,
+    "r": [
+      [
+        60.0,
+        null,
+        null,
+        null
+      ],
+      [
+        35.0,
+        100.0,
+        null,
+        null
+      ],
+      [
+        20.0,
+        100.0,
+        100.0,
+        null
+      ],
+      [
+        25.0,
+        100.0,
+        100.0,
+        55.0
+      ]
+    ],
+    "selected_epochs": {
+      "6": 80,
+      "7": 99,
+      "8": 99,
+      "9": 70
+    }
+  },
+  "coverage": {
+    "epochs": 400,
+    "actual_slots": 1052400,
+    "schedules": 181,
+    "candidate_gradients": 24032,
+    "committed_tasks": 387,
+    "participating_positions": 24032
+  },
+  "stages": {
+    "6": {
+      "steps": 15700,
+      "schedules": 0
+    },
+    "7": {
+      "steps": 22700,
+      "schedules": 46
+    },
+    "8": {
+      "steps": 30900,
+      "schedules": 62
+    },
+    "9": {
+      "steps": 36200,
+      "schedules": 73
+    }
+  },
+  "skips_and_fallbacks": {
+    "TOO_FEW_POSITIONS": 2
+  },
+  "movement": {
+    "cross_batch_moved": 23458,
+    "participating": 24032,
+    "mean_absolute_step_movement": 58.01672769640479,
+    "mean_signed_score_times_advance": 5.121382360668986,
+    "metric_note": "Within-permutation earlier/later movement; not evidence of closed-loop efficacy"
+  },
+  "cost": {
+    "training_invocation_seconds": 2775.638964176178,
+    "peak_gpu_bytes": 568819712,
+    "scoring_seconds": 155.6715069909999,
+    "reorder_management_seconds": 1.3447127300014472,
+    "io_seconds_nested": 11.026796828992019,
+    "checkpoint_and_epoch_log_seconds": 284.77802717300074,
+    "evaluate_primary_seconds": 3193.0,
+    "evaluate_secondary_seconds": 11124.0
+  },
+  "attempts": {
+    "primary": {
+      "formal": 200,
+      "lane_attempts": 200,
+      "vector_attempts": 20,
+      "technical_retries": 0,
+      "uncommitted": 0
+    },
+    "secondary": {
+      "formal": 680,
+      "lane_attempts": 680,
+      "vector_attempts": 68,
+      "technical_retries": 0,
+      "uncommitted": 0
+    }
+  },
+  "primary_auc_exceeds_E0": false,
+  "limits": [
+    "Single seed; no statistically stable efficacy claim.",
+    "Only the fixed limited reordering budget is tested; not all protective sorting methods.",
+    "E1/E1U comparisons change candidate source, frequency allocation and order; not same-pool single-variable pairing.",
+    "E0 RTX4090, E1/E1U RTX3090; current hardware recorded in contract is RTX4080 SUPER.",
+    "E0 historical timing and stage-buffer snapshots unavailable; no reconstruction of author trajectory."
+  ]
+}
+Independent exit acceptance PASS; status COMPLETED.

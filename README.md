@@ -1,5 +1,16 @@
 # Lifelong Imitation Learning with Multimodal Latent Replay and Incremental Adjustment
 
+## Completed OBJECT seed42 full-coverage E1-O
+
+E1-O completed400 epochs,105500 optimizer steps and880 formal episodes; independent
+acceptance PASS. Exact per-epoch sample counts were preserved while selected pending
+old samples were reordered. Primary AUC62.396 versus E0 77.708 did not meet the
+prespecified improvement condition, so no additional seeds were run.
+
+- [Results, all-task matrices and evidence](reports/object_seed42_coverage_order_E1O/README.md)
+- [Frozen implementation, tests and protocol](experiments/object_seed42_coverage_order_E1O/README.md)
+
+
 ## Completed OBJECT seed42 uniform-pool E1-U
 
 E1-U completed 400 epochs, 105,500 optimizer steps and 880 formal closed-loop

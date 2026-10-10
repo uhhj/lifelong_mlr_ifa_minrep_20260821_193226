@@ -1,0 +1,56 @@
+E1-O LIBERO-OBJECT seed42, prospective protocol audit
+
+Base: b3590dfe836c035e799ed246f7c8da3dcf85bf64, isolated OBJECT E1-U source tree.
+Every copied source/test/fixture Git blob verified by its Git object SHA1.
+Original E0/E1/E1-U and GOAL artifacts remain read-only. No baseline reruns.
+
+Algorithm: disabled replacement hook. Native MLR.observe, BC+IFA and model source
+are byte-identical. Generate original DistributedSampler indices exactly once per
+epoch. A mutable batch sampler reads one slice per next(loader), num_workers0.
+Independent random.Random(seed42), reset per stage like E1, controls position,
+reference and weighted-without-replacement permutation draws. Only stage-step
+multiples of500 schedule; no extra refresh at epoch boundaries. Windows stop at
+next500step or epoch end. Pin each batch first slot and every incomplete-tail slot.
+Current IDs and per-position task IDs remain fixed. Counter equality checked for
+every commit and actual full epoch. Candidate references are legal buffer payloads;
+all candidates excluded from same-task history reference, at most64/16/16.
+
+Unchanged E1 head_gradient and protective_score, equal old-task historical mean,
+conflict1/tau1/epsilon1e-8. Score spread<=1e-8 is explicitly treated as no numerical
+distinction and keeps original order. Invalid historical mean skips all; invalid
+current direction uses history only; any invalid candidate skips its whole task.
+Complete permutations commit atomically. Sampling uses sequential random.choices
+with each chosen element removed. No E1 50% replacement gate remains active.
+
+Recovery is full epoch boundary only: model buffers/parameters, optimizer,
+scheduler, all original RNG and grads, order RNG/stage step and committed cursor.
+Preserve interrupted attempts and roll back only this output's uncommitted logs
+and buffer additions, never prior experiment data. No mid-epoch exact claim.
+
+Prospective preflight:28 new plan tests plus28 inherited scorer/identity tests;
+actual target CUDA test limited to5 isolated optimizer calls, no rollout.
+The GPU boundary test exhausts one epoch's real payload iterator without remaining
+optimizer updates before serializing a complete cursor. It is an index/RNG/state
+boundary test, NOT a fully trained epoch. Formal start uses a fresh process and RNG.
+Preflight PASS must be observed on target before launching formal training.
+
+Inputs: same official OBJECT pretrain hash and5921 historical feature SHA256s.
+No new export. Empty formal buffer; tasks6–9,100epochs each,batch10,105500steps,
+gamma0.3,OBJECT use_state=False,original warmup500/batch-step scheduler/precision.
+Independent work and output roots E1O_coverage_order_20261009 and
+E1O_coverage_order_seed42_20261009. Twenty-eight prescribed checkpoints remain
+70/75/80/85/90/95/99. Primary200 plus secondary680 episodes, original evaluator.
+Actual resolved eval n_eval20. No extra environment smoke. Normal failures kept.
+
+Target inventory2026-10-09: NVIDIA GeForce RTX4080 SUPER reported32760MiB,
+PyTorch1.13.0+cu116,CUDA11.6,driver535.230.02. Existing resource, not newly provisioned.
+This differs from historical E0 RTX4090 and E1/E1-U RTX3090. Do not claim hardware
+matched trajectories. No dependency/precision change. Original E0 timing and stage
+buffer snapshots remain unavailable; deterministic buffer membership compared toE1.
+
+Final read-only audit reconstructs original shuffled dataset order and sampler
+indices, all400 actual streams, every permutation and movement; candidate gradient
+budget<=24896. It aggregates integer successes with original unrounded AUC/FWT/NBT.
+E1-O AUC must strictly exceed77.70833333333333 before seed43/44 extension, otherwise
+stop with the observed result. Auxiliary E1/E1-U differences are not same-pool
+single-variable comparisons. No push, weight upload, new paid resources or E2.

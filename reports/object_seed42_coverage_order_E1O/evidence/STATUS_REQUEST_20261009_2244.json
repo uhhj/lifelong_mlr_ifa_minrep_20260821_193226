@@ -1,0 +1,198 @@
+{
+  "unix": 1791557020.498786,
+  "status": {
+    "status": "TRAINED_EVAL_PENDING",
+    "updated_unix": 1791556201.847348
+  },
+  "contract_sha256": "f7985e2bc3b4d0e551cbebd6e02cb1dd019754e500e09128f0bc10a022805f0d",
+  "frozen_source_files": 171,
+  "frozen_source_unchanged": true,
+  "source_mismatches": [],
+  "complete_epochs": 400,
+  "complete_optimizer_steps": 105500,
+  "latest_epoch": {
+    "seed": "42",
+    "arm": "E1O_coverage_order",
+    "stage": "9",
+    "epoch": "99",
+    "batches": "362",
+    "mean_bc_loss": "-35.091112263294875",
+    "optimizer_step_end": "36200",
+    "lr_end": "0.0",
+    "scheduler_mode": "batch_step",
+    "batch_size": "10"
+  },
+  "latest_order": {
+    "stage": 9,
+    "epoch": 99,
+    "batches": 362,
+    "all_ids_once": true,
+    "schedules": 1,
+    "actual_slots": 3620
+  },
+  "formal_episodes": {
+    "primary": 30,
+    "secondary": 0
+  },
+  "formal_checkpoints": 28,
+  "recovery_exists": true,
+  "pipeline_exit": null,
+  "processes": [
+    "   1995    01:00:03 bash /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/protective_e1/pipeline.sh",
+    "   2090       13:35 python -m protective_e1.evaluate seed=42 benchmark_name=LIBERO_OBJECT policy=complete_policy lifelong=basic folder=/data/mlr_ifa/datasets bddl_folder=/data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/libero/libero/bddl_files init_states_folder=/data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/libero/libero/init_files pretrain=/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth eval.n_eval=20 eval.num_procs=20 +start_task=6 +end_task=10 +aug=true +epoch_dir=/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009/run_001 +test_log_file=/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009/eval_primary.log training=false use_wandb=false hydra.run.dir=/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009/hydra_outputs/primary_1791556205553126609 hydra.job.chdir=false +eval_epochs=[99] +experiment_root=/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009/eval_primary"
+  ],
+  "gpu": "NVIDIA GeForce RTX 4080 SUPER, 8711 MiB, 86 %",
+  "logs": {
+    "eval_primary.log": {
+      "size": 35,
+      "modified_unix": 1791556663.4190495
+    },
+    "prepare.log": {
+      "size": 154,
+      "modified_unix": 1791553421.0733583
+    },
+    "software_tests.log": {
+      "size": 4329,
+      "modified_unix": 1791553283.1553268
+    },
+    "commands.log": {
+      "size": 298,
+      "modified_unix": 1791556205.077547
+    },
+    "train.log": {
+      "size": 17460832,
+      "modified_unix": 1791556197.5857642
+    },
+    "preflight.log": {
+      "size": 27741,
+      "modified_unix": 1791553334.0819683
+    },
+    "spawn_import.log": {
+      "size": 863,
+      "modified_unix": 1791553421.661378
+    },
+    "pipeline.log": {
+      "size": 0,
+      "modified_unix": 1791553418.2652643
+    },
+    "evaluate_primary.log": {
+      "size": 22563,
+      "modified_unix": 1791556666.1748016
+    }
+  },
+  "commands": "2026-10-09T21:43:38+08:00 START prepare\n2026-10-09T21:43:41+08:00 EXIT 0 prepare\n2026-10-09T21:43:41+08:00 START spawn_import\n2026-10-09T21:43:41+08:00 EXIT 0 spawn_import\n2026-10-09T21:43:41+08:00 START train\n2026-10-09T22:30:05+08:00 EXIT 0 train\n2026-10-09T22:30:05+08:00 START evaluate_primary\n",
+  "timing": {
+    "now_beijing": "2026-10-09T22:43:40.519596",
+    "completed_group_durations": [
+      {
+        "key": [
+          6,
+          99,
+          6,
+          0
+        ],
+        "seconds": 226.65838503837585,
+        "end_unix": 1791556443.2473855
+      },
+      {
+        "key": [
+          6,
+          99,
+          6,
+          1
+        ],
+        "seconds": 218.24350953102112,
+        "end_unix": 1791556661.4909518
+      },
+      {
+        "key": [
+          7,
+          99,
+          6,
+          0
+        ],
+        "seconds": 221.7759199142456,
+        "end_unix": 1791556887.7858968
+      }
+    ],
+    "active_attempts": [
+      {
+        "checkpoint": "/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009/run_001/mlrifa_7_model_ep99.pth",
+        "stage": 7,
+        "epoch": 99,
+        "event": "vector_attempt_start",
+        "unix": 1791556887.7859597,
+        "pid": 2090,
+        "task": 6,
+        "group": 1,
+        "env_seed": 43,
+        "initial_indices": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ]
+      }
+    ],
+    "training_seconds": 2775.638964176178,
+    "order_totals": {
+      "6": {
+        "schedules": 0,
+        "candidate_gradients": 0,
+        "committed_tasks": 0,
+        "participating_positions": 0,
+        "moved_positions": 0,
+        "cross_batch_moved": 0,
+        "scoring_seconds": 0.0,
+        "management_seconds": 0.0,
+        "io_seconds_nested": 0.0,
+        "fallbacks": {}
+      },
+      "7": {
+        "schedules": 46,
+        "candidate_gradients": 2928,
+        "committed_tasks": 46,
+        "participating_positions": 2928,
+        "moved_positions": 2880,
+        "cross_batch_moved": 2848,
+        "scoring_seconds": 18.79257107199942,
+        "management_seconds": 0.14847219100056464,
+        "io_seconds_nested": 1.4483641340004851,
+        "fallbacks": {}
+      },
+      "8": {
+        "schedules": 62,
+        "candidate_gradients": 7520,
+        "committed_tasks": 122,
+        "participating_positions": 7520,
+        "moved_positions": 7403,
+        "cross_batch_moved": 7334,
+        "scoring_seconds": 48.296813704002034,
+        "management_seconds": 0.41705116399680264,
+        "io_seconds_nested": 3.4520273429916415,
+        "fallbacks": {
+          "TOO_FEW_POSITIONS": 2
+        }
+      },
+      "9": {
+        "schedules": 73,
+        "candidate_gradients": 13584,
+        "committed_tasks": 219,
+        "participating_positions": 13584,
+        "moved_positions": 13383,
+        "cross_batch_moved": 13276,
+        "scoring_seconds": 88.58212221499844,
+        "management_seconds": 0.7791893750040799,
+        "io_seconds_nested": 6.1264053519998924,
+        "fallbacks": {}
+      }
+    }
+  },
+  "attempt_events": 12
+}

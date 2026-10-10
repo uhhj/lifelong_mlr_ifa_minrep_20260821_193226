@@ -1,0 +1,161 @@
+E1-O LIBERO-OBJECT seed42 最终报告
+
+状态：COMPLETED，独立验收PASS；未达到主AUC改善门槛。
+正式流程：2026-10-09 21:43:38—2026-10-10 02:29:01（北京时间），4小时45分23秒。
+独立验收于2026-10-10用户进度检查时完成；未追加训练或环境执行。
+400 epoch、105500 optimizer step、28规定checkpoint、主200＋次680＝880正式闭环记录。
+正式pipeline和独立验收均exit0；无残留训练/评价进程。
+
+一、主口径：固定各阶段epoch99；所有百分比/百分点按未舍入值计算
+版本             AUC               FWT               NBT
+E0       77.708333333333    77.500000000000    -0.277777777778
+E1       77.291666666667    76.250000000000    -3.333333333333
+E1U      73.645833333333    76.250000000000    7.222222222222
+E1O      62.395833333333    63.750000000000    1.666666666667
+E1O_minus_E0: AUC -15.312500000000, FWT -13.750000000000, NBT 1.944444444444
+E1O_minus_E1: AUC -14.895833333333, FWT -12.500000000000, NBT 5.000000000000
+E1O_minus_E1U: AUC -11.250000000000, FWT -12.500000000000, NBT -5.555555555556
+
+E0 主成功率矩阵：阶段\任务 6 7 8 9
+6  35  —  —  —
+7  50  100  —  —
+8  40  95  100  —
+9  25  100  100  75
+
+E1 主成功率矩阵：阶段\任务 6 7 8 9
+6  35  —  —  —
+7  45  100  —  —
+8  35  95  85  —
+9  25  95  100  85
+
+E1U 主成功率矩阵：阶段\任务 6 7 8 9
+6  35  —  —  —
+7  55  95  —  —
+8  15  100  100  —
+9  30  100  75  75
+
+E1O 主成功率矩阵：阶段\任务 6 7 8 9
+6  35  —  —  —
+7  35  95  —  —
+8  20  100  95  —
+9  5  100  100  30
+
+E1-O相对E0的任务AUC差值（不省略任何任务）：
+任务6: E0=37.500000000, E1-O=23.750000000, 差值=-13.750000000
+任务7: E0=98.333333333, E1-O=98.333333333, 差值=0.000000000
+任务8: E0=100.000000000, E1-O=97.500000000, 差值=-2.500000000
+任务9: E0=75.000000000, E1-O=30.000000000, 差值=-45.000000000
+
+二、次口径：680条独立记录；按当前任务成功率选择、平局选较晚epoch
+{
+  "auc": 72.5,
+  "fwt": 78.75,
+  "nbt": 11.111111111111112,
+  "r": [
+    [
+      60.0,
+      null,
+      null,
+      null
+    ],
+    [
+      35.0,
+      100.0,
+      null,
+      null
+    ],
+    [
+      20.0,
+      100.0,
+      100.0,
+      null
+    ],
+    [
+      25.0,
+      100.0,
+      100.0,
+      55.0
+    ]
+  ],
+  "selected_epochs": {
+    "6": 80,
+    "7": 99,
+    "8": 99,
+    "9": 70
+  }
+}
+次口径不替代主终点，不用于触发追加seed。
+
+三、完整覆盖、评分重排与实际读取审计
+400个epoch逐一重建原数据集shuffle和DistributedSampler序列；原/实际ID Counter完全相等，每ID每epoch恰好一次。
+每位置任务ID、当前任务样本、每批首位和不满末批保持不变。1052400个实际槽位与计划一致。
+原E1/E1-U替换hook未执行。181次调度，387个任务排列实际提交；2个集合因位置不足按规定跳过。
+候选梯度24032次，低于24896上限；候选全部来自本epoch未读区间，历史参考与候选不相交。
+跨batch移动23458个位置；平均绝对移动58.016728个优化步。评分确实改变了更新时机，但闭环总体指标没有改善。
+实际参与位置占460300个旧槽约5.220943%。
+约束、评分分量、排列与逐batch读取可从order_logs/task*/epoch*.json完整复核。
+阶段buffer成员及载荷哈希匹配E1：781、1521、2301、2961。
+171个冻结源码文件、5921特征、官方预训练权重、28本轮checkpoint与33080个原实验文件哈希通过。
+原有E0/E1/E1-U及GOAL/E2/E3均只读，未重新训练。
+
+四、软件/GPU预检、正式尝试与成本
+目标端56项软件测试通过；5次隔离GPU optimizer调用通过；0额外预检rollout。
+评分前后参数/缓冲区/优化器/scheduler/grad/全RNG/模块模式一致；禁用重排更新与原生更新精确一致；保存恢复后下一epoch索引与GPU下一步精确一致。
+恢复预检用完整只读载荷遍历完成epoch cursor，不宣称执行了完整训练epoch。预检状态未进入正式运行。
+{
+  "primary": {
+    "formal": 200,
+    "lane_attempts": 200,
+    "vector_attempts": 20,
+    "technical_retries": 0,
+    "uncommitted": 0
+  },
+  "secondary": {
+    "formal": 680,
+    "lane_attempts": 680,
+    "vector_attempts": 68,
+    "technical_retries": 0,
+    "uncommitted": 0
+  }
+}
+正式880次lane尝试全部提交，无技术重试或未提交尝试；行为失败保留。
+{
+  "training_invocation_seconds": 2775.638964176178,
+  "peak_gpu_bytes": 568819712,
+  "scoring_seconds": 155.6715069909999,
+  "reorder_management_seconds": 1.3447127300014472,
+  "io_seconds_nested": 11.026796828992019,
+  "checkpoint_and_epoch_log_seconds": 284.77802717300074,
+  "evaluate_primary_seconds": 3193.0,
+  "evaluate_secondary_seconds": 11124.0
+}
+训练约46.26分钟，主评估53分13秒，次评估3小时05分24秒。评分与重排、IO、日志开销已包含在训练时间，不能重复相加。
+peak_gpu_bytes是训练进程PyTorch峰值allocated内存，不是整卡峰值。
+
+五、真实命令与退出码
+source /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/source/protective_e1/env.sh
+python -B -m unittest discover -s ../tests -v：exit0，56测试。
+python -m torch.distributed.run --nproc_per_node=1 --master_port=37996 -m protective_e1.preflight：exit0，5次GPU优化调用。
+python -B check_spawn.py：exit0，0环境实例/rollout。
+bash protective_e1/pipeline.sh：exit0。
+python -m torch.distributed.run --nproc_per_node=1 --master_port=37995 -m protective_e1.train：exit0。
+bash protective_e1/evaluate.sh primary：exit0，200条。
+bash protective_e1/evaluate.sh secondary：exit0，680条。
+python -B -m protective_e1.finalize：exit0。
+/data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/E1O_coverage_order_20261009/independent_acceptance.py：exit0，仅只读复算和哈希。
+
+六、解释边界与停止
+E1-O主AUC62.395833，低于E0的77.708333，差值−15.3125个百分点；不扩展seed43/44，不根据结果调参或开启下一实验。
+本轮未达到用户规定的性能改善目标；协议完成验收不等于算法有效。
+仅单seed，且E0用RTX4090、E1/E1-U用RTX3090、本轮用RTX4080 SUPER；不能将全部性能差异归因于重排。
+E0历史耗时和阶段buffer快照缺失；不宣称精确恢复作者原训练轨迹。
+与E1/E1-U比较改变了候选来源、使用频率分配和排序机制，不能称同池单变量配对。
+负结果仅针对固定预算的局部重排，不否定所有保护性排序方法。
+10月10日最终进度查询时nvidia-smi返回exit9，GPU驱动不可用；正式训练及评估此前已GPU执行并exit0。独立验收只用CPU索引算术和文件哈希，没有CPU闭环回退，也没有修改驱动或重跑环境。
+
+七、产物
+远端：/data/mlr_ifa/experiments/E1O_coverage_order_seed42_20261009
+checkpoint留在远端run_001/mlrifa_{6,7,8,9}_model_ep{70,75,80,85,90,95,99}.pth
+本地轻量证据：D:\论文课题研究\MLR+IFA\execution\20261009_E1O_coverage_order\final_20261010\evidence
+源码diff：D:\论文课题研究\MLR+IFA\execution\20261009_E1O_coverage_order\source.patch
+474份轻量证据逐一验证SHA256；未下载权重、buffer张量或特征。
