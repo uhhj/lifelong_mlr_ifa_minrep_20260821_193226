@@ -1,0 +1,97 @@
+{
+  "checked_at_beijing": "2026-10-11T15:07:14.313256+08:00",
+  "queue": {
+    "status": "RUNNING",
+    "phase": "TRAIN_SEED42",
+    "pid": 2194,
+    "child_pid": 2199,
+    "log": "/data/lifelong_mlr_ifa_minrep_20260912/reports/a1_object_v1/TRAIN_seed42.log",
+    "updated_unix": 1791699110.313798,
+    "old_experiment_queues_resumed": false
+  },
+  "state": {
+    "status": "TRAINING",
+    "task": 8,
+    "next_epoch": 58,
+    "seed": 42,
+    "optimizer_step": 17922,
+    "scheduler_step": 17922,
+    "totals": {
+      "steps": 56322,
+      "current_windows": 394680,
+      "old_windows": 166318
+    },
+    "recovery": "/data/lifelong_mlr_ifa_minrep_20260912/runs/a1_object_v1/seed42/recovery/latest.pt",
+    "a1_training_active": true,
+    "e1_enabled": false
+  },
+  "stages": {
+    "6": {
+      "completed_epochs": 100,
+      "checkpoint_ep99": true,
+      "stage_committed": true,
+      "steps_per_epoch": 157,
+      "recent_epoch_seconds_median": 8.713962197303772
+    },
+    "7": {
+      "completed_epochs": 100,
+      "checkpoint_ep99": true,
+      "stage_committed": true,
+      "steps_per_epoch": 227,
+      "recent_epoch_seconds_median": 12.761996269226074
+    },
+    "8": {
+      "completed_epochs": 58,
+      "checkpoint_ep99": false,
+      "stage_committed": false,
+      "steps_per_epoch": 309,
+      "recent_epoch_seconds_median": 18.85399866104126
+    },
+    "9": {
+      "completed_epochs": 0,
+      "checkpoint_ep99": false,
+      "stage_committed": false,
+      "steps_per_epoch": null,
+      "recent_epoch_seconds_median": null
+    }
+  },
+  "completed_epochs": 258,
+  "total_epochs": 400,
+  "primary_trials": 0,
+  "processes": [
+    "   2194       55:24  0.0 python -m a1_object_v1.queue",
+    "   2199       55:24  0.0 /data/conda_envs/mlr_ifa_minrep/bin/python -m torch.distributed.run --nproc_per_node=1 --master_port 45977 -m a1_object_v1.train --seed 42",
+    "   2203       55:23 98.1 /data/conda_envs/mlr_ifa_minrep/bin/python -u -m a1_object_v1.train --seed 42"
+  ],
+  "traceback_count": 0,
+  "failure_dumps": [],
+  "disk_free_gib": {
+    "/data": 55.11105728149414,
+    "/root": 3.052776336669922
+  },
+  "eta": {
+    "task8_remaining_seconds": 791.8679437637329,
+    "task9_expected_batches_per_epoch": 362,
+    "task9_extrapolated_seconds": 2009.206570333736,
+    "training_remaining_minutes_range": [
+      45,
+      60
+    ],
+    "evaluation_remaining_minutes_range": [
+      70,
+      90
+    ],
+    "total_seed42_remaining_minutes_range": [
+      115,
+      150
+    ],
+    "training_basis": "Current task8 epoch intervals; task9 extrapolates current task6 per-update time because both have no selected current-task IFA pairs. Task9 throughput not yet observed.",
+    "evaluation_basis": "Historical same-protocol PRIMARY_EP99 200-trial measurements; current A1 evaluation has not started.",
+    "historical_primary_seconds": {
+      "v1": 5003.594607775999,
+      "baseline": 3870.935298346001
+    },
+    "excludes_conditional_seeds_43_44": true
+  },
+  "old_experiment_queues_resumed": false
+}
