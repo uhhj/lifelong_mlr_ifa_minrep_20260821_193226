@@ -1,0 +1,38 @@
+{
+  "task_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "descriptions": [
+    "pick up the alphabet soup and place it in the basket",
+    "pick up the cream cheese and place it in the basket",
+    "pick up the salad dressing and place it in the basket",
+    "pick up the bbq sauce and place it in the basket",
+    "pick up the ketchup and place it in the basket",
+    "pick up the tomato sauce and place it in the basket"
+  ],
+  "reference_source": "CompletePolicy.language_encoder after pretrained base+LoRA strict load",
+  "checkpoint": "/data/lifelong_mlr_ifa_minrep_20260912/checkpoints/object_multitask_model_ep99.pth",
+  "checkpoint_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+  "language_state_keys": 245,
+  "validation_task": 6,
+  "validation_cache": "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed42/6/0.pt",
+  "cache_direction_error": 7.193560002513399e-07,
+  "errors": {
+    "torch.float64": {
+      "orthogonality_fro": 9.59319335186823e-16,
+      "max_unit_reference_error": 9.109879959100862e-16
+    },
+    "torch.float32": {
+      "orthogonality_fro": 4.000895046374353e-07,
+      "max_unit_reference_error": 2.043368425574954e-07
+    }
+  },
+  "seconds": 9.313020011000049,
+  "future_reference_access": false,
+  "encoder_source": "libero/lifelong/models/complete_policy.py:73-76"
+}
