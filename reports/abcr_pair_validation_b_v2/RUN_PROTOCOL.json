@@ -1,0 +1,38 @@
+{
+  "schema": "ABCR_B_V2_CPU_BASE_VALIDATION",
+  "bindings": {
+    "feature_complete_sha256": "c6c96fffaf9ea3bb6c5131c21c18b432f9bfe65584ab4fb421c3ba0cc849e643",
+    "label_sha256": {
+      "CALIBRATION_AI_LABELS.csv": "e790a6bc84029690a5d85ffca23876ef4dc0222c3e3e97337761ccd21edc2780",
+      "VALIDATION_AI_LABELS.csv": "2cabfe2617948439fbe6647b39c5fafef785d6b715eff02dfa3d46d0f4b415e0",
+      "AI_LABELS.csv": "59b42588ba0d6253983f521af720ac453b44a2d77f4879df6b6ad72ea25fa0aa"
+    },
+    "evaluator_sha256": "1bac3ee02d93ee4b2e1258e28bac50c47667ca08376868020ec6841471b8612b",
+    "amendment_sha256": "7e80379708fb247dd8a8ac66894e5fb2d50b0ebecd4f119458bafe5cd54f5f13"
+  },
+  "physical": {
+    "position_m": 0.03,
+    "orientation_deg": 15.0,
+    "gripper_open_fraction": 0.1,
+    "tau_s": 1.0,
+    "linear_velocity_mps": 0.05,
+    "angular_velocity_radps": 0.35,
+    "fpr_quantile": 0.95,
+    "motion_share": 0.5,
+    "motion_bif": 1.5
+  },
+  "q": 3,
+  "min_calibration_positive": 20,
+  "min_calibration_negative": 40,
+  "action_scale_scope": "Unique calibration-role base anchors only, excludes validation actions",
+  "label_source": "AI_VISUAL_ANNOTATION",
+  "human_verified": false,
+  "data_role": "calibration demo0..24 / validation demo25..49, all tasks0..5",
+  "validation_gate": "Original protocol gives qualitative poor-state-comparability stop, no numerical precision/recall cutoff; do not invent a post-hoc PASS cutoff.",
+  "bootstrap": {
+    "repeats": 2000,
+    "seed": 20261014,
+    "unit": "trajectory within task"
+  },
+  "formal_training_resumed": false
+}

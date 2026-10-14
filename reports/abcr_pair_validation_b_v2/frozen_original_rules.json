@@ -1,0 +1,51 @@
+{
+  "schema": "abcr_experiment_b_v1",
+  "protocol_status": "FROZEN_BASE_ONLY_NO_INCREMENTAL_RETUNING",
+  "physical": {
+    "distance": "max(position_error/pos_tol, rotation_error/rot_tol, gripper_error/grip_tol)",
+    "tau_s": 1.0,
+    "pos_tolerance_m": 0.03,
+    "rot_tolerance_deg": 15.0,
+    "grip_tolerance_fraction": 0.1,
+    "quaternion_order": "xyzw",
+    "frame": "same robot base/world frame",
+    "use_velocity": false,
+    "velocity_tolerance_mps": 0.05,
+    "angular_velocity_tolerance_radps": 0.35,
+    "velocity_limitations": "POSE_ONLY_NOT_FULL_DYNAMIC_STATE"
+  },
+  "visual": {
+    "representation": "two independently normalized, pre-FiLM frozen image embeddings",
+    "similarity": "min(cos(agent),cos(eih))",
+    "tau_v": 0.7752397351730649,
+    "selection": "95th percentile by default of independently labeled hard negatives with ds<=1, BASE tasks only",
+    "negative_quantile": 0.95
+  },
+  "action": {
+    "q": 3,
+    "share_max_motion_distance": 0.5,
+    "bif_min_motion_distance": 1.5,
+    "motion_scale_base_IQR_floor_0p1": [
+      0.6187499761581421,
+      0.3656249940395355,
+      0.3468750094762072,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "gripper_conflict": "any difference in sign of gripper expert command within valid q steps"
+  },
+  "calibration": {
+    "max_base_task": 5,
+    "n_pairs_labeled": 287,
+    "n_physical_positive": 74,
+    "n_physical_negative": 213,
+    "positive_recall_at_tau_v": 0.02702702702702703,
+    "negative_fpr_at_tau_v": 0.046948356807511735,
+    "n_distinct_trajectory_pairs": 287,
+    "records_sha256": "80bd26ac2afc29146b1378e38bdf9e6777658982baf326e72eeac324cd334fab",
+    "labels_csv_sha256": "e790a6bc84029690a5d85ffca23876ef4dc0222c3e3e97337761ccd21edc2780",
+    "encoder_checkpoint_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b"
+  },
+  "limitations": "Heuristic physical tolerances; a frozen calibration threshold is not ground-truth correctness. The score is conditional on physically gated candidates, and calibrated rates do not constitute independent-trajectory confidence intervals."
+}

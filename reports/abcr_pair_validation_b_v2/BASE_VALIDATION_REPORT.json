@@ -1,0 +1,186 @@
+{
+  "label_source": "AI_VISUAL_ANNOTATION",
+  "human_verified": false,
+  "frozen_sha256": "497495fa2c2c87dc19ad42937a2e95b976d7de46f5d5ecf7a03a2e26b3a9841b",
+  "tau_v": 0.7752397351730649,
+  "roles": {
+    "calibration": {
+      "total": 300,
+      "labeled": 287,
+      "unresolved": 13,
+      "physical_pass": 300,
+      "match_pass": 12,
+      "metrics_relative_to_ai": {
+        "tp": 2.0,
+        "fp": 10.0,
+        "tn": 203.0,
+        "fn": 72.0,
+        "precision": 0.16666666666666666,
+        "recall": 0.02702702702702703,
+        "fpr": 0.046948356807511735,
+        "accuracy": 0.7142857142857143
+      },
+      "trajectory_bootstrap": {
+        "method": "within-task trajectory bootstrap; product of endpoint multiplicities",
+        "repeats": 2000,
+        "seed": 20261014,
+        "limitations": "Descriptive intervals for selected physical hard pairs; sparse/zero cells may be degenerate; no population coverage guarantee.",
+        "intervals": {
+          "precision": {
+            "ci95": [
+              0.0,
+              0.6666666666666666
+            ],
+            "valid_repeats": 1993
+          },
+          "recall": {
+            "ci95": [
+              0.0,
+              0.09804725168756022
+            ],
+            "valid_repeats": 2000
+          },
+          "fpr": {
+            "ci95": [
+              0.00640625,
+              0.1028608215818516
+            ],
+            "valid_repeats": 2000
+          },
+          "accuracy": {
+            "ci95": [
+              0.6061691514246259,
+              0.8159810799319728
+            ],
+            "valid_repeats": 2000
+          }
+        }
+      },
+      "categories": {
+        "SHARE": 4,
+        "BIF": 1,
+        "UNCERTAIN_ACTION": 7,
+        "GATE_REJECTED": 288
+      },
+      "score_quantiles": {
+        "0": [
+          0.1926843160751486,
+          0.560006695436183,
+          0.6430375070579386,
+          0.6994639803002254,
+          0.7749765808567393,
+          0.823859655073065
+        ],
+        "1": [
+          0.2357161029224229,
+          0.4264660098063787,
+          0.5188086589370193,
+          0.5729444391313203,
+          0.7375079577292591,
+          0.8087327545444827
+        ],
+        "U": [
+          0.3378015989086288,
+          0.4999276957511393,
+          0.5646451212184546,
+          0.6724982702555742,
+          0.6838784632186798,
+          0.6877782523275614
+        ]
+      }
+    },
+    "validation": {
+      "total": 150,
+      "labeled": 145,
+      "unresolved": 5,
+      "physical_pass": 150,
+      "match_pass": 1,
+      "metrics_relative_to_ai": {
+        "tp": 0.0,
+        "fp": 1.0,
+        "tn": 98.0,
+        "fn": 46.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "fpr": 0.010101010101010102,
+        "accuracy": 0.6758620689655173
+      },
+      "trajectory_bootstrap": {
+        "method": "within-task trajectory bootstrap; product of endpoint multiplicities",
+        "repeats": 2000,
+        "seed": 20261014,
+        "limitations": "Descriptive intervals for selected physical hard pairs; sparse/zero cells may be degenerate; no population coverage guarantee.",
+        "intervals": {
+          "precision": {
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "valid_repeats": 810
+          },
+          "recall": {
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "valid_repeats": 2000
+          },
+          "fpr": {
+            "ci95": [
+              0.0,
+              0.05714285714285714
+            ],
+            "valid_repeats": 2000
+          },
+          "accuracy": {
+            "ci95": [
+              0.5259633614560622,
+              0.8
+            ],
+            "valid_repeats": 2000
+          }
+        }
+      },
+      "categories": {
+        "SHARE": 0,
+        "BIF": 0,
+        "UNCERTAIN_ACTION": 1,
+        "GATE_REJECTED": 149
+      },
+      "score_quantiles": {
+        "0": [
+          0.33504393540539723,
+          0.5757257525690067,
+          0.6308477518062183,
+          0.6915722273038447,
+          0.7583921955548899,
+          0.7778777551156357
+        ],
+        "1": [
+          0.1892027823296122,
+          0.4792970123097969,
+          0.5499813020079163,
+          0.625021783990951,
+          0.6834966442625009,
+          0.7267833824237259
+        ],
+        "U": [
+          0.2659733955782559,
+          0.3512073166361949,
+          0.4301882104023308,
+          0.5453148413906522,
+          0.5525259535897639,
+          0.5543287316395418
+        ]
+      }
+    }
+  },
+  "trajectory_counts": {
+    "calibration": 141,
+    "validation": 118
+  },
+  "trajectory_overlap": 0,
+  "encoder_pretrained_on_base_demonstrations": true,
+  "isolation_scope": "Label calibration/validation trajectories are disjoint; not held out from original encoder pretraining",
+  "formal_training_resumed": false
+}
