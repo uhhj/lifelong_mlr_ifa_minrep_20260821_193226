@@ -1,0 +1,57 @@
+# Frozen experiment specification; live phase in RUN_STATUS.json.
+status: FORMAL_PIPELINE_STARTED
+protocol_version: paper_aligned_coreset_v2
+base_commit: a721807f2f7fa7f9833dcc85c592d78e9accd00b
+benchmark_name: LIBERO_OBJECT
+seed: 42
+tasks: [6, 7, 8, 9]
+pretraining: same_released_official_checkpoint
+policy:
+  use_vision: true
+  use_language: true
+  use_state: true
+  freeze_spatial_frontend: true
+  train_modules: [temporal_transformer, policy_head]
+data:
+  demonstrations_per_task: 10
+  seq_len: 8
+  shared_fresh_export: true
+train:
+  n_epochs: 100
+  batch_size: 10
+  optimizer: AdamW
+  lr: 0.0001
+  scheduler: linear
+  scheduler_step_unit: optimizer_step
+  warmup_steps: 500
+  warmup_provenance: RELEASE_FALLBACK_NOT_PAPER_EXPLICIT
+  scheduler_step_provenance: UNIT_CONSISTENT_IMPLEMENTATION_NOT_PAPER_EXPLICIT
+  actual_starting_lr_note: warmup_starts_below_nominal_lr
+  parameter_continuity_across_tasks: true
+ifa:
+  weight: 0.1
+  gamma: 0.3
+  top_ratio: 0.5
+  pair_reduction: mean
+  current_reference: current_task_own_language
+buffer:
+  past_data_rate: 0.5
+  capacity_in_files: 59660000
+  equal_per_task_counts_between_arms: true
+  train_mixing: original_concat_and_shuffle
+arms:
+  random: {selector: random}
+  coreset: {selector: greedy_kcenter}
+eval:
+  n_eval: 20
+  max_steps: 600
+  epoch_index: 99
+  valid_cells_each: 10
+  episodes_each: 200
+  episodes_total_seed42: 400
+  secondary_checkpoint_selection: false
+extension:
+  seeds: []
+  enabled: false
+  provenance: latest_user_instruction_single_seed42_only
+automation: disabled_by_user

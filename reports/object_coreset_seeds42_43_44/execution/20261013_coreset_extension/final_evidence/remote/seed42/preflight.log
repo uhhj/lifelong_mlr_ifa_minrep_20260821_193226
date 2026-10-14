@@ -1,0 +1,133 @@
+[robosuite WARNING] No private macro file found! (__init__.py:7)
+[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)
+[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['eye_in_hand_rgb', 'agentview_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['joint_states', 'gripper_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1626.30it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1841.50it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1864.35it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 2015.85it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1844.83it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1939.04it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1920.43it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1994.57it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1851.17it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1973.20it/s]
+/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+/data/mlr_ifa/env/lib/python3.8/site-packages/robomimic/utils/dataset.py:516: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  pad_mask = pad_mask[:, None].astype(np.bool)
+[robosuite WARNING] No private macro file found! (__init__.py:7)
+[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)
+[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+Process Process-1:
+Traceback (most recent call last):
+  File "/data/mlr_ifa/env/lib/python3.8/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/data/mlr_ifa/env/lib/python3.8/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/venv.py", line 231, in _worker
+    env = env_fn_wrapper.data()
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/preflight.py", line 51, in <lambda>
+    env=SubprocVectorEnv([lambda:OffScreenRenderEnv(**kwargs)])
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/env_wrapper.py", line 161, in __init__
+    super().__init__(**kwargs)
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/env_wrapper.py", line 56, in __init__
+    self.env = TASK_MAPPING[self.problem_name](
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/problems/libero_floor_manipulation.py", line 37, in __init__
+    super().__init__(bddl_file_name, *args, **kwargs)
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/bddl_base_domain.py", line 135, in __init__
+    super().__init__(
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/environments/manipulation/manipulation_env.py", line 162, in __init__
+    super().__init__(
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/environments/robot_env.py", line 214, in __init__
+    super().__init__(
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/environments/base.py", line 134, in __init__
+    self._load_model()
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/bddl_base_domain.py", line 332, in _load_model
+    mujoco_arena = EmptyArena(
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/arenas/empty_arena.py", line 16, in __init__
+    super().__init__(xml_path_completion(xml))
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/models/arenas/arena.py", line 21, in __init__
+    super().__init__(fname)
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/models/base.py", line 34, in __init__
+    self.tree = ET.parse(fname)
+  File "/data/mlr_ifa/env/lib/python3.8/xml/etree/ElementTree.py", line 1202, in parse
+    tree.parse(source, parser)
+  File "/data/mlr_ifa/env/lib/python3.8/xml/etree/ElementTree.py", line 584, in parse
+    source = open(source, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: '/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/assets/scenes/libero_floor_base_style.xml'
+Traceback (most recent call last):
+  File "/data/mlr_ifa/env/lib/python3.8/runpy.py", line 194, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/mlr_ifa/env/lib/python3.8/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/preflight.py", line 81, in <module>
+    if __name__=='__main__':main()
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/preflight.py", line 53, in main
+    env.seed(42);env.reset();init=torch.load(Path(c.init_states_folder)/task.problem_folder/task.init_states_file)
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/venv.py", line 852, in seed
+    return [w.seed(s) for w, s in zip(self.workers, seed_list)]
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/venv.py", line 852, in <listcomp>
+    return [w.seed(s) for w, s in zip(self.workers, seed_list)]
+  File "/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/libero/libero/envs/venv.py", line 474, in seed
+    ret = self.parent_remote.recv()
+  File "/data/mlr_ifa/env/lib/python3.8/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/data/mlr_ifa/env/lib/python3.8/multiprocessing/connection.py", line 414, in _recv_bytes
+    buf = self._recv(4)
+  File "/data/mlr_ifa/env/lib/python3.8/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+ConnectionResetError: [Errno 104] Connection reset by peer
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 2179) of binary: /data/mlr_ifa/env/bin/python
+Traceback (most recent call last):
+  File "/data/mlr_ifa/env/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/run.py", line 762, in main
+    run(args)
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/run.py", line 753, in run
+    elastic_launch(
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/launcher/api.py", line 132, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/launcher/api.py", line 246, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+coreset_exp.preflight FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-10-13_12:46:12
+  host      : gpu-kvm
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2179)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

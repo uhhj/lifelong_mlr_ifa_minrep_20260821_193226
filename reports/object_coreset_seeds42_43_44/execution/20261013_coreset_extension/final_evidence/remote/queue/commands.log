@@ -1,0 +1,22 @@
+2026-10-13T17:56:55+08:00 START configure_43 python -u -m coreset_exp.configure 
+2026-10-13T17:57:44+08:00 EXIT configure_43 0
+2026-10-13T17:57:44+08:00 START seed_audit_43 python -u /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_extension_20261013/validate_extension.py 
+2026-10-13T17:57:56+08:00 EXIT seed_audit_43 0
+2026-10-13T17:57:56+08:00 START software_43 python -m unittest coreset_exp.test_selector coreset_exp.test_protocol 
+2026-10-13T17:57:58+08:00 EXIT software_43 0
+2026-10-13T17:57:58+08:00 START preflight_43 torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.preflight 
+2026-10-13T17:59:10+08:00 EXIT preflight_43 0
+2026-10-13T17:59:10+08:00 START supervise_43 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source/coreset_exp/supervise.sh 
+2026-10-13T22:13:25+08:00 EXIT supervise_43 0
+2026-10-13T22:13:26+08:00 START configure_44 python -u -m coreset_exp.configure 
+2026-10-13T22:14:01+08:00 EXIT configure_44 0
+2026-10-13T22:14:01+08:00 START seed_audit_44 python -u /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_extension_20261013/validate_extension.py 
+2026-10-13T22:14:11+08:00 EXIT seed_audit_44 0
+2026-10-13T22:14:11+08:00 START software_44 python -m unittest coreset_exp.test_selector coreset_exp.test_protocol 
+2026-10-13T22:14:13+08:00 EXIT software_44 0
+2026-10-13T22:14:13+08:00 START preflight_44 torchrun --nproc_per_node=1 --master_port=38317 -m coreset_exp.preflight 
+2026-10-13T22:14:59+08:00 EXIT preflight_44 0
+2026-10-13T22:14:59+08:00 START supervise_44 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed44_20261013/source/coreset_exp/supervise.sh 
+2026-10-14T02:25:37+08:00 EXIT supervise_44 0
+2026-10-14T02:25:37+08:00 START aggregate python -u /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_extension_20261013/aggregate_three_seeds.py 
+2026-10-14T02:25:37+08:00 EXIT aggregate 0

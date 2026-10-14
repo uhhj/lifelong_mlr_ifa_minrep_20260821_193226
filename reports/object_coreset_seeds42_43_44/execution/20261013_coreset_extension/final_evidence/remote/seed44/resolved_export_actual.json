@@ -1,0 +1,238 @@
+{
+  "seed": 44,
+  "use_wandb": false,
+  "wandb_project": "lifelong learning",
+  "folder": "/data/mlr_ifa/datasets",
+  "bddl_folder": "/data/mlr_ifa/src/libero/libero/bddl_files",
+  "init_states_folder": "/data/mlr_ifa/src/libero/libero/init_files",
+  "load_previous_model": false,
+  "device": "cuda",
+  "task_embedding_format": "clip",
+  "task_embedding_one_hot_offset": 1,
+  "pretrain": "/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth",
+  "pretrain_model_path": "",
+  "benchmark_name": "LIBERO_OBJECT",
+  "training": false,
+  "data": {
+    "data_modality": [
+      "image",
+      "proprio"
+    ],
+    "seq_len": 8,
+    "demo_limit": 10,
+    "frame_stack": 1,
+    "use_eye_in_hand": true,
+    "use_gripper": true,
+    "use_joint": true,
+    "use_ee": false,
+    "max_word_len": 25,
+    "state_dim": null,
+    "num_kp": 64,
+    "img_h": 128,
+    "img_w": 128,
+    "task_group_size": 1,
+    "task_order_index": 0,
+    "shuffle_task": false,
+    "obs": {
+      "modality": {
+        "rgb": [
+          "agentview_rgb",
+          "eye_in_hand_rgb"
+        ],
+        "depth": [],
+        "low_dim": [
+          "gripper_states",
+          "joint_states"
+        ]
+      }
+    },
+    "obs_key_mapping": {
+      "agentview_rgb": "agentview_image",
+      "eye_in_hand_rgb": "robot0_eye_in_hand_image",
+      "gripper_states": "robot0_gripper_qpos",
+      "joint_states": "robot0_joint_pos"
+    },
+    "affine_translate": 4,
+    "action_scale": 1.0,
+    "train_dataset_ratio": 0.8
+  },
+  "policy": {
+    "color_aug": {
+      "_target_": "BatchWiseImgColorJitterAug",
+      "network": "BatchWiseImgColorJitterAug",
+      "prob": 0.9,
+      "network_kwargs": {
+        "brightness": 0.3,
+        "contrast": 0.3,
+        "saturation": 0.3,
+        "hue": 0.3
+      }
+    },
+    "translation_aug": {
+      "_target_": "RandomAffineAug",
+      "network": "RandomAffineAug",
+      "prob": 0.6,
+      "network_kwargs": {
+        "degrees": 15,
+        "translate": 0.1
+      }
+    },
+    "erase_aug": {
+      "_target_": "RandomErasingAug",
+      "network": "RandomErasingAug",
+      "prob": 0.1,
+      "network_kwargs": {
+        "scale": [
+          0.02,
+          0.33
+        ],
+        "ratio": [
+          0.3,
+          3.3
+        ]
+      }
+    },
+    "image_encoder": {
+      "network": "CLIPVisionEncoder",
+      "network_kwargs": {
+        "vision_model_name": "openai/clip-vit-base-patch16",
+        "output_size": 64,
+        "input_shape": null
+      }
+    },
+    "language_encoder": {
+      "network": "CLIPTextEncoder",
+      "network_kwargs": {
+        "text_model_name": "openai/clip-vit-base-patch16",
+        "output_size": 64
+      }
+    },
+    "temporal_position_encoding": {
+      "network": "SinusoidalPositionEncoding",
+      "network_kwargs": {
+        "input_size": null,
+        "inv_freq_factor": 10,
+        "factor_ratio": null
+      }
+    },
+    "policy_head": {
+      "network": "TemporalGMMHead",
+      "network_kwargs": {
+        "hidden_size": 1024,
+        "num_layers": 2,
+        "min_std": 0.0001,
+        "num_modes": 5,
+        "low_eval_noise": false,
+        "activation": "softplus"
+      },
+      "loss_kwargs": {
+        "loss_coef": 1.0
+      }
+    },
+    "policy_type": "CompletePolicy",
+    "extra_num_layers": 0,
+    "extra_hidden_size": 128,
+    "embed_size": 512,
+    "transformer_num_layers": 6,
+    "transformer_num_heads": 8,
+    "transformer_head_output_size": 64,
+    "transformer_mlp_hidden_size": 256,
+    "transformer_dropout": 0.15,
+    "transformer_max_seq_len": 8,
+    "film_hidden_size": 512,
+    "num_tasks": 10,
+    "max_seq_len": 8,
+    "num_gmm_modes": 5,
+    "use_vision": true,
+    "use_language": true,
+    "use_state": true,
+    "rank": 8,
+    "alpha": 8
+  },
+  "train": {
+    "optimizer": {
+      "name": "torch.optim.AdamW",
+      "kwargs": {
+        "lr": 0.0001,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "weight_decay": 0.1
+      }
+    },
+    "scheduler": {
+      "name": "torch.optim.lr_scheduler.LambdaLR",
+      "kwargs": {
+        "warmup_steps": 500,
+        "last_epoch": -1
+      }
+    },
+    "n_epochs": 100,
+    "batch_size": 1,
+    "num_workers": 0,
+    "grad_clip": 100.0,
+    "loss_scale": 1.0,
+    "resume": false,
+    "resume_path": "",
+    "debug": false,
+    "use_augmentation": true
+  },
+  "eval": {
+    "load_path": "",
+    "eval": false,
+    "batch_size": 64,
+    "num_workers": 4,
+    "n_eval": 20,
+    "eval_every": 5,
+    "max_steps": 600,
+    "use_mp": true,
+    "num_procs": 20,
+    "save_sim_states": false,
+    "render": false
+  },
+  "lifelong": {
+    "algo": "Basic"
+  },
+  "start_task": 6,
+  "end_task": 10,
+  "gamma": 0.3,
+  "past_data_rate": 0.5,
+  "aug": true,
+  "feature_dir": "/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed44_20261013/features",
+  "buffer_dir": "/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed44_20261013/export/buffer",
+  "experiment_dir": "/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed44_20261013/export/models",
+  "shape_meta": {
+    "ac_dim": 7,
+    "all_shapes": {
+      "agentview_rgb": [
+        3,
+        128,
+        128
+      ],
+      "eye_in_hand_rgb": [
+        3,
+        128,
+        128
+      ],
+      "gripper_states": [
+        2
+      ],
+      "joint_states": [
+        7
+      ]
+    },
+    "all_obs_keys": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "gripper_states",
+      "joint_states"
+    ],
+    "use_images": true
+  },
+  "selector": "none",
+  "run_root": "/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed44_20261013/export",
+  "contract": "/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed44_20261013/CONTRACT.json",
+  "linear_schedule_unit": "optimizer_step"
+}

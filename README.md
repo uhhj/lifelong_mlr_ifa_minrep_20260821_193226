@@ -1,5 +1,19 @@
 # Lifelong Imitation Learning with Multimodal Latent Replay and Incremental Adjustment
 
+## Completed OBJECT Random vs Greedy Coreset, seeds42/43/44
+
+The state=True comparison completed 2,400 epochs, 633,000 optimizer updates and
+1,200 formal episodes. Mean AUC is 76.354 for Random and 82.917 for Coreset
+(paired difference +6.563 percentage points). Gains vary substantially by seed;
+seed44 has worse NBT. The read-only review preserves negative results, IFA changes,
+evaluation RNG differences and the limits of attributing improvements to coverage.
+
+- [Results, credibility review and original lightweight evidence](reports/object_coreset_seeds42_43_44/README.md)
+- [Frozen source snapshots and protocols](experiments/object_coreset_seeds42_43_44/README.md)
+
+This is a separate paper-description-aligned experiment, not a comparison against
+the older state=False OBJECT baselines. The extension after seed42 is exploratory.
+
 ## Completed OBJECT seed42 full-coverage E1-O
 
 E1-O completed400 epochs,105500 optimizer steps and880 formal episodes; independent
