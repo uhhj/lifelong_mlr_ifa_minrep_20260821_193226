@@ -27,6 +27,8 @@ import torch
 from . import original_probe as probe
 from .batches import compare
 from .io import sha, write, table, read_table
+from .cache import CacheMismatch, freeze_many, make_binding, verify_complete
+from .settings import FROZEN_PARAMETERS, native_args, assert_consistent
 
 NAME = 'abcr_pair_availability_a_v1'
 SEEDS = (42, 43, 44)
@@ -35,6 +37,22 @@ TASKS = (6, 7, 8, 9)
 
 def stamp():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+
+def execution_sources(root):
+    package = Path(__file__).resolve().parent
+    result = {NAME+'/'+p.name:sha(p) for p in sorted(package.glob('*.py'))}
+    for name in ('libero/lifelong/algos/mlr.py', 'libero/lifelong/models/complete_policy.py',
+                 'libero/lifelong/models/base_policy.py', 'libero/lifelong/save_feature.py'):
+        result[name] = sha(root/name)
+    return result
+
+
+def runtime_identity():
+    return dict(python=platform.python_version(), pytorch=torch.__version__,
+        cpu_threads=torch.get_num_threads(), omp=os.environ.get('OMP_NUM_THREADS'),
+        mkl=os.environ.get('MKL_NUM_THREADS'), openblas=os.environ.get('OPENBLAS_NUM_THREADS'),
+        cuda_visible_devices=os.environ.get('CUDA_VISIBLE_DEVICES'))
 
 
 def native_selection(root, feature_root, task, seed):
@@ -76,9 +94,9 @@ def audit(root, out):
                 assert bool((h[0, -1, 1:3].norm(dim=1) > 1e-8).all())
                 entries.append(dict(seed=seed, task=task, file=str(p), size=p.stat().st_size, sha256=sha(p),
                     trajectory_id=None, window_index=None, source_record_index=int(p.stem)))
-    write(out / 'INPUT_MANIFEST.json', dict(files=entries, configurations=configurations,
+    freeze_many({out / 'INPUT_MANIFEST.json': dict(files=entries, configurations=configurations,
         trajectory_mapping='NOT_AVAILABLE: file stems are exported record IDs, not proven trajectory/timestep IDs',
-        all_finite=True, no_dropped_files=True))
+        all_finite=True, no_dropped_files=True)})
     # Existing native selection is append-only at this scale; verify source semantics.
     source = (root/'libero/lifelong/algos/mlr.py').read_text()
     assert 'BUFFER_CAPACITY = 59660000' in source
@@ -125,39 +143,38 @@ def audit(root, out):
                 n_current=len(list((fr/str(task)).glob('*.pt'))), n_old=len(want),
                 old_counts=dict(collections.Counter(str(tid) for tid, _ in selected)),
                 buffer_evidence=evidence, old_files=sorted(want)))
-    write(out/'STAGE_MANIFEST.json', dict(stages=stages))
+    freeze_many({out/'STAGE_MANIFEST.json': dict(stages=stages)})
     return stages
 
 
-def run_stage(stage, out):
+def run_stage(stage, out, code, runtime, parameters=None):
+    parameters = dict(FROZEN_PARAMETERS if parameters is None else parameters)
     key = 'object_seed%d_task%d' % (stage['seed'], stage['task'])
     final = out/key
-    if (final/'COMPLETE.json').exists():
-        record = json.loads((final/'COMPLETE.json').read_text())
-        assert all(sha(final/k) == v for k, v in record['outputs_sha256'].items())
+    binding = make_binding(stage, parameters, code, runtime)
+    if verify_complete(final, binding):
+        print('CACHE_REUSED_BOUND', key, binding['fingerprints']['binding_sha256'], flush=True)
         return
     temp = out/(key+'.incomplete_'+str(time.time_ns()))
     temp.mkdir()
     start = time.perf_counter()
-    args = SimpleNamespace(feature_dir=stage['feature_dir'], buffer_dir=stage['buffer_dir'],
-        current_task=stage['task'], out_dir=str(temp), past_q=1,
-        visual_thresholds='0.7,0.8,0.9,0.95', action_share=0.5, action_bif=1.5,
-        topk=5, batch_new=5, batch_old=5, batch_trials=500,
-        max_current=0, max_old_per_task=0, audit_per_bucket=15, chunk=128, seed=stage['seed'])
+    write(temp/'STAGE_BINDING.json', binding)
+    args = native_args(stage, temp, parameters)
     probe.run(args)
     report = json.loads((temp/'manifest.json').read_text())
     assert report['dropped_current'] == report['dropped_old'] == 0
     new_paths = sorted((Path(args.feature_dir)/str(args.current_task)).glob('*.pt'))
     old_paths = sorted(Path(args.buffer_dir).glob('*.pt'))
-    nv, na, nk, nd = probe._load(new_paths, 1)
-    ov, oa, ok, od = probe._load(old_paths, 1)
+    nv, na, nk, nd = probe._load(new_paths, parameters['past_q'])
+    ov, oa, ok, od = probe._load(old_paths, parameters['past_q'])
     assert not nd and not od
     tasks = torch.tensor([int(Path(p).name.split('__')[0][1:]) for p in ok])
     assert bool((tasks < args.current_task).all())
     scale = probe._action_stats(na, oa)
     assert scale.tolist() == report['scale_motion_iqr_floor_0p1']
     tick = time.perf_counter()
-    rows, batch_summaries = compare(nv, ov, na, oa, scale, tasks, seed=stage['seed'], trials=500)
+    assert_consistent(args, parameters)
+    rows, batch_summaries = compare(nv, ov, na, oa, scale, tasks, seed=stage['seed'], parameters=parameters)
     table(temp/'batch_trials.csv', rows)
     table(temp/'batch_comparison.csv', batch_summaries)
     summary = read_table(temp/'summary.csv')
@@ -178,9 +195,11 @@ def run_stage(stage, out):
     for name in ('retrieved_candidates.csv', 'audit_sample.csv'):
         if not (temp/name).exists():
             table(temp/name, [], fields)
+    if make_binding(stage, parameters, code, runtime) != binding:
+        raise CacheMismatch('INPUT_CHANGED_DURING_STAGE: no completion record published')
     files = {p.name:sha(p) for p in temp.iterdir() if p.is_file()}
     write(temp/'COMPLETE.json', dict(status='COMPLETE', outputs_sha256=files, time=stamp(),
-        seconds=time.perf_counter()-start, formal_training_resumed=False))
+        seconds=time.perf_counter()-start, binding=binding['fingerprints'], formal_training_resumed=False))
     assert not final.exists()
     os.replace(temp, final)
     print('STAGE_COMPLETE',key,round(time.perf_counter()-start,2),'seconds',flush=True)
@@ -241,17 +260,27 @@ def summarize(out, stages):
 
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1]);args=ap.parse_args()
-    root=args.root.resolve();out=root/'reports'/NAME;out.mkdir(parents=True,exist_ok=True)
+    ap=argparse.ArgumentParser();ap.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1])
+    ap.add_argument('--output',type=Path,help='Use a NEW directory for schema2; legacy unbound results are read-only')
+    args=ap.parse_args()
+    root=args.root.resolve();out=args.output.resolve() if args.output else root/'reports'/NAME
+    out.mkdir(parents=True,exist_ok=True)
+    # Serialize checks/publication for this output; a second runner fails closed.
+    import fcntl
+    lock=(out/'.runner.lock').open('a')
+    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     torch.set_num_threads(1);torch.set_num_interop_threads(1)
-    sources={str(p.relative_to(root)):sha(p) for p in (root/NAME).glob('*.py')}
-    protocol=dict(name=NAME,seeds=list(SEEDS),tasks=list(TASKS),past_q=1,action_share=.5,action_bif=1.5,
-        both_idle_raw_rms=.05,scale='per-stage pooled current+old IQR, min0.1',visual_thresholds=[.7,.8,.9,.95],
-        topk=5,batch_new=5,batch_old=5,batch_trials=500,subsample_files=False,cpu_threads=1,
-        sources=sources,user_protocol_sha256=sha(root/NAME/'USER_PROTOCOL.md'),
+    sources=execution_sources(root)
+    parameters=dict(FROZEN_PARAMETERS)
+    runtime=runtime_identity()
+    protocol=dict(name=NAME,seeds=list(SEEDS),tasks=list(TASKS),parameters=parameters,cache_schema=2,
+        both_idle_raw_rms=.05,scale='per-stage pooled current+old IQR, min0.1',
+        subsample_files=False,cpu_threads=1,runtime=runtime,
+        sources=sources,user_protocol_sha256=sha(Path(__file__).resolve().parent/'USER_PROTOCOL.md'),
         training=False,formal_training_resumed=False,experiment_b=False)
     if (out/'PROTOCOL.json').exists():
-        assert json.loads((out/'PROTOCOL.json').read_text()) == protocol, 'Frozen protocol/code changed'
+        if json.loads((out/'PROTOCOL.json').read_text()) != protocol:
+            raise CacheMismatch('FROZEN_PROTOCOL_CODE_MISMATCH: use new output directory, do not relabel legacy results')
     else:
         write(out/'PROTOCOL.json',protocol)
     context=dict(time=stamp(),git_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),
@@ -263,13 +292,29 @@ def main():
         feature_roots=sorted(p.name for p in (root/'features').iterdir() if p.is_dir()),
         formal_training_resumed=False,formal_sources_modified=False,
         source_sha256={str(p):sha(root/p) for p in ['libero/lifelong/algos/mlr.py','libero/lifelong/models/complete_policy.py','libero/lifelong/models/base_policy.py','libero/lifelong/save_feature.py']})
-    write(out/'EXPERIMENT_CONTEXT.json',context)
-    write(out/'STATUS.json',dict(status='INPUT_AUDIT',time=stamp(),formal_training_resumed=False))
+    # Do not regenerate missing audit records around previously completed stages.
+    if list(out.glob('object_seed*_task*/COMPLETE.json')):
+        for name in ('INPUT_MANIFEST.json','STAGE_MANIFEST.json','EXPERIMENT_CONTEXT.json'):
+            if not (out/name).is_file():
+                raise CacheMismatch('COMPLETED_RUN_AUDIT_RECORD_MISSING:'+name)
+    # Existing context/status/manifests remain untouched if any input check fails.
     stages=audit(root,out)
+    if not (out/'EXPERIMENT_CONTEXT.json').exists():
+        write(out/'EXPERIMENT_CONTEXT.json',context)
+    ready=[s for s in stages if s['status']=='READY']
+    reused=[]
+    for s in ready:
+        final=out/('object_seed%d_task%d'%(s['seed'],s['task']))
+        reused.append(verify_complete(final,make_binding(s,parameters,sources,runtime)))
+    if all(reused):
+        print('ALL_BOUND_STAGES_REUSED',len(ready),'no report overwritten',flush=True)
+        return
     for s in stages:
         if s['status']=='READY':
             write(out/'STATUS.json',dict(status='RUNNING',seed=s['seed'],task=s['task'],time=stamp(),formal_training_resumed=False))
-            run_stage(s,out)
+            if execution_sources(root) != sources:
+                raise CacheMismatch('SOURCE_CHANGED_DURING_RUN')
+            run_stage(s,out,sources,runtime,parameters)
     summarize(out,stages)
     write(out/'STATUS.json',dict(status='COMPLETE_AVAILABLE_ASSETS',time=stamp(),formal_training_resumed=False))
 

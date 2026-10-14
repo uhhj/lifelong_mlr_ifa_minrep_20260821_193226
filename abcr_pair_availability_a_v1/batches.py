@@ -2,17 +2,19 @@
 import random
 import torch
 from .original_probe import _similarities
+from .settings import FROZEN_PARAMETERS, validate
 
 
-def labels(v, d, grip, threshold):
+def labels(v, d, grip, threshold, action_share=FROZEN_PARAMETERS['action_share'], action_bif=FROZEN_PARAMETERS['action_bif']):
+    assert action_share < action_bif
     match = v >= threshold
-    share = match & (d <= 0.5) & ~grip
-    bif = match & ((d >= 1.5) | grip)
+    share = match & (d <= action_share) & ~grip
+    bif = match & ((d >= action_bif) | grip)
     assert not (share & bif).any()
     return match, share, bif
 
 
-def compare(nv, ov, na, oa, scale, old_tasks, seed, trials=500):
+def compare(nv, ov, na, oa, scale, old_tasks, seed, trials=None, parameters=None):
     """Same five anchors per trial across strategies and visual thresholds.
 
     Retrieval returns five neighbors per anchor (up to 25 unique old windows),
@@ -21,12 +23,19 @@ def compare(nv, ov, na, oa, scale, old_tasks, seed, trials=500):
     Trajectory deduplication is unavailable from original feature/actions files.
     """
     rng = random.Random(seed)
+    parameters = dict(FROZEN_PARAMETERS if parameters is None else parameters)
+    validate(parameters)
+    if trials is not None:
+        assert trials == parameters['batch_trials'], 'BATCH_TRIALS_PARAMETER_MISMATCH'
+    trials = parameters['batch_trials']
+    k = parameters['topk']; bn = parameters['batch_new']; bo = parameters['batch_old']
+    chunk = parameters['chunk']; thresholds = parameters['visual_thresholds']
     n, m = len(nv), len(ov)
-    assert n >= 5 and m >= 5
+    assert n >= bn and m >= max(bo, k)
     top_v, top_d, top_g, top_ids = [], [], [], []
-    for start in range(0, n, 128):
-        v, d, grip, _ = _similarities(nv[start:start+128], ov, na[start:start+128], oa, scale)
-        ids = torch.topk(v, k=5, dim=1).indices
+    for start in range(0, n, chunk):
+        v, d, grip, _ = _similarities(nv[start:start+chunk], ov, na[start:start+chunk], oa, scale)
+        ids = torch.topk(v, k=k, dim=1).indices
         top_ids.append(ids)
         top_v.append(v.gather(1, ids))
         top_d.append(d.gather(1, ids))
@@ -34,15 +43,15 @@ def compare(nv, ov, na, oa, scale, old_tasks, seed, trials=500):
     top_ids, top_v, top_d, top_g = [torch.cat(x) for x in (top_ids, top_v, top_d, top_g)]
     rows = []
     for trial in range(trials):
-        ci = torch.tensor(rng.sample(range(n), 5))
-        oi = torch.tensor(rng.sample(range(m), 5))
+        ci = torch.tensor(rng.sample(range(n), bn))
+        oi = torch.tensor(rng.sample(range(m), bo))
         rv, rd, rg, _ = _similarities(nv[ci], ov[oi], na[ci], oa[oi], scale)
-        for threshold in (0.7, 0.8, 0.9, 0.95):
+        for threshold in thresholds:
             for strategy, v, d, g, ids in (
-                ('RANDOM_5_PLUS_5', rv, rd, rg, oi[None, :].expand(5, -1)),
-                ('RETRIEVE_TOP5_PER_ANCHOR', top_v[ci], top_d[ci], top_g[ci], top_ids[ci]),
+                ('RANDOM_%d_PLUS_%d' % (bn, bo), rv, rd, rg, oi[None, :].expand(bn, -1)),
+                ('RETRIEVE_TOP%d_PER_ANCHOR' % k, top_v[ci], top_d[ci], top_g[ci], top_ids[ci]),
             ):
-                match, share, bif = labels(v, d, g, threshold)
+                match, share, bif = labels(v, d, g, threshold, parameters['action_share'], parameters['action_bif'])
                 useful = share | bif
                 cols = ids[useful]
                 anchors = ci[:, None].expand_as(ids)[useful]
@@ -60,11 +69,11 @@ def compare(nv, ov, na, oa, scale, old_tasks, seed, trials=500):
                     unique_useful_window_pairs=unique_pairs,
                     old_tasks_sampled=int(old_tasks[ids].unique().numel()),
                     old_tasks_useful=int(old_tasks[cols].unique().numel()),
-                    evaluated_pairs=25, search_cosines=5*m if strategy.startswith('RETRIEVE') else 25,
+                    evaluated_pairs=int(v.numel()), search_cosines=bn*m if strategy.startswith('RETRIEVE') else bn*bo,
                     unique_trajectory_pairs=None))
     summaries = []
-    for threshold in (0.7, 0.8, 0.9, 0.95):
-        for strategy in ('RANDOM_5_PLUS_5', 'RETRIEVE_TOP5_PER_ANCHOR'):
+    for threshold in thresholds:
+        for strategy in ('RANDOM_%d_PLUS_%d' % (bn, bo), 'RETRIEVE_TOP%d_PER_ANCHOR' % k):
             group = [r for r in rows if r['visual_threshold'] == threshold and r['strategy'] == strategy]
             out = dict(visual_threshold=threshold, strategy=strategy, trials=trials)
             for src, dst in [('has_share', 'fraction_batches_with_share'), ('has_bif', 'fraction_batches_with_bif'),
