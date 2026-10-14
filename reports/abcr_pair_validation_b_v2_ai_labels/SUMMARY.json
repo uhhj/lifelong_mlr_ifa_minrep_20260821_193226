@@ -1,0 +1,42 @@
+{
+  "status": "AI_ANNOTATION_COMPLETE_NOT_EXPERIMENT_B_PASS",
+  "protocol_version": "ABCR_B_V2_AI_LABELS",
+  "label_source": "AI_VISUAL_ANNOTATION",
+  "human_verified": false,
+  "pairs_total": 450,
+  "counts": {
+    "calibration": {
+      "1": 74,
+      "0": 213,
+      "U": 13
+    },
+    "validation": {
+      "1": 46,
+      "0": 99,
+      "U": 5
+    }
+  },
+  "binary_label_count": 432,
+  "uncertain_count": 18,
+  "trajectory_counts": {
+    "calibration": 141,
+    "validation": 118
+  },
+  "trajectory_overlap": 0,
+  "minimum_calibration_label_counts_satisfied": true,
+  "tau_v": null,
+  "visual_calibration": "NOT_RUN",
+  "incremental_screen": "NOT_RUN",
+  "unmodulated_features": "PENDING_EXPORT",
+  "eligible_for_v2_ai_calibration": true,
+  "eligible_for_original_human_calibration": false,
+  "next_step": "Export and verify frozen pre-FiLM features, then apply v2 calibration",
+  "formal_training_resumed": false,
+  "limitations": [
+    "Single AI annotator, no independent human verification or inter-rater evidence",
+    "Static RGB supports visual comparability judgments, not dynamic physical equivalence",
+    "Task/demo/time identifiers and split roles were visible; score/action evidence was not used",
+    "Uncertain pairs remain in coverage denominators and are excluded from binary calibration",
+    "Label counts do not establish visual gate accuracy or authorize ABCR training"
+  ]
+}

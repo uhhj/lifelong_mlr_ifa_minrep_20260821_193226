@@ -1,4 +1,26 @@
-# 实验 B：人工标注准备
+# 实验 B：标注准备与 v2 AI 标签
+
+2026-10-14 用户授权本轮采用 AI 视觉标注，现行标签来源修订见
+`PROTOCOL_V2_AI_LABELS.md`。AI 标签不能冒充人工真值；
+`human_verified=false`。历史 v1 文件与空白人工包保留。
+新结果见 `reports/abcr_pair_validation_b_v2_ai_labels/`。
+
+复核/重新导出既有决定（不重新生成标签）：
+
+```bash
+python -m unittest abcr_pair_validation_b_v1.test_ai_labels -v
+python -m abcr_pair_validation_b_v1.export_ai_labels \
+  --pack /path/to/original/annotation_pack \
+  --decisions reports/abcr_pair_validation_b_v2_ai_labels/DECISIONS.json \
+  --protocol abcr_pair_validation_b_v1/PROTOCOL_V2_AI_LABELS.md \
+  --receipt reports/abcr_pair_validation_b_v1/PACK_COMPLETE.json \
+  --out /path/to/new/export
+```
+
+导出会验证原始图像和输入清单哈希，保留不确定项，拒绝覆盖不同结果。
+校准和验证 CSV 保留来源、理由和协议SHA；不得丢弃伴随的PROVENANCE来充当人工数据。
+
+## 以下为 v1 历史准备说明（人工来源要求已被 v2 明确替代）
 
 `original_experiment_b.py` 和 `USER_PROTOCOL.md` 是用户提供文件的原样副本。
 尚无人工基础标签，因此当前只执行输入审计、合同测试和基础任务标注包准备。
