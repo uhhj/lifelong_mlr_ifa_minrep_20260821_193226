@@ -1,0 +1,63 @@
+{
+  "status": "screening_only_not_ground_truth_state_matching",
+  "data_limitations": [
+    "visual features may be FiLM conditioned on task language",
+    "no unmodulated state, trajectory_id, or forward-looking actions in original pt",
+    "past-q>1 compares past action windows, not future actions",
+    "sample windows are not independent demonstrations"
+  ],
+  "n_current_used": 1560,
+  "n_old_used": 1521,
+  "raw_file_counts": {
+    "new_total": 1560,
+    "old_per_task_total": {
+      "6": 781,
+      "7": 740
+    }
+  },
+  "dropped_current": 0,
+  "dropped_old": 0,
+  "used_old_task_counts": {
+    "6": 781,
+    "7": 740
+  },
+  "scale_motion_iqr_floor_0p1": [
+    0.20357142388820648,
+    0.675000011920929,
+    0.5705357193946838,
+    0.10000000149011612,
+    0.10000000149011612,
+    0.10000000149011612
+  ],
+  "parameters": {
+    "feature_dir": "/data/lifelong_mlr_ifa_minrep_20260912/features/object_seed43",
+    "buffer_dir": "/data/lifelong_mlr_ifa_minrep_20260912/runs/abcr_pair_availability_a_v1/seed43/task8/old_view",
+    "current_task": 8,
+    "out_dir": "/data/lifelong_mlr_ifa_minrep_20260912/reports/abcr_pair_availability_a_v1/object_seed43_task8",
+    "past_q": 1,
+    "visual_thresholds": "0.7,0.8,0.9,0.95",
+    "action_share": 0.5,
+    "action_bif": 1.5,
+    "topk": 5,
+    "batch_new": 5,
+    "batch_old": 5,
+    "batch_trials": 500,
+    "max_current": 0,
+    "max_old_per_task": 0,
+    "audit_per_bucket": 15,
+    "chunk": 128,
+    "seed": 43
+  },
+  "stage_provenance": {
+    "kind": "DETERMINISTIC_NATIVE_RECONSTRUCTION",
+    "note": "Original corrected-baseline buffer directory no longer present. Exact native selection replayed from surviving per-seed features and original config; not a surviving historical buffer snapshot."
+  },
+  "execution": {
+    "cpu_only": true,
+    "cuda_visible_devices": "",
+    "cuda_initialized": false,
+    "torch_threads": 1,
+    "seconds_total": 8.953540368999938,
+    "supplemental_batch_seconds": 1.0685979370000496
+  }
+}
