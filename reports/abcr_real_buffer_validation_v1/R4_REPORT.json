@@ -1,0 +1,60 @@
+{
+  "status": "INCONCLUSIVE_SMALL_SELECTED_SAMPLE",
+  "groups": [
+    {
+      "task": 7,
+      "label": "SHARE",
+      "n": 1,
+      "harm": 0,
+      "benefit": 1,
+      "neutral": 0,
+      "mean_gradient_cosine": 0.0010537420015668574
+    },
+    {
+      "task": 7,
+      "label": "BIF",
+      "n": 0,
+      "harm": 0,
+      "benefit": 0,
+      "neutral": 0,
+      "mean_gradient_cosine": null
+    },
+    {
+      "task": 8,
+      "label": "SHARE",
+      "n": 0,
+      "harm": 0,
+      "benefit": 0,
+      "neutral": 0,
+      "mean_gradient_cosine": null
+    },
+    {
+      "task": 8,
+      "label": "BIF",
+      "n": 4,
+      "harm": 3,
+      "benefit": 1,
+      "neutral": 0,
+      "mean_gradient_cosine": 0.14019798900288707
+    }
+  ],
+  "n_pairs": 5,
+  "complete_states": 2,
+  "seed": 45,
+  "tasks": [
+    7,
+    8
+  ],
+  "task9": "NOT_RUN_NO_COMPLETE_OPTIMIZER_STATE",
+  "actual_displacement_sign_matches": 4,
+  "negative_gradient_cosine_sign_matches": 3,
+  "limitations": [
+    "Two shared anchor states; five pairs are not five independent training runs.",
+    "Single-new-window BC diagnostic with original AdamW moments; not a submitted 10-window mixed MLR+IFA update.",
+    "Deterministic CPU eval; no claim of bitwise historical GPU training-trajectory reproduction.",
+    "Only retained, uniquely matched historical plan windows used; no replacement after eligibility failures.",
+    "Action labels describe genuine future actions after terminal observation; official BC target is native aligned terminal expert action.",
+    "A BIF pair that decreases old NLL disproves a universal BIF=>optimization-harm rule; rates are not estimated reliably."
+  ],
+  "formal_training_resumed": false
+}
