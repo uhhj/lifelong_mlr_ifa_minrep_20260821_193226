@@ -1,0 +1,55 @@
+"""R5 isolated, preregistered CPU study. No formal training commits."""
+import csv, hashlib, json, os
+from pathlib import Path
+import numpy as np
+from abcr_real_buffer_validation_v1.common import sha, read, write, table, save
+
+PROTOCOL = {
+ 'experiment':'abcr_r5_validation_v1', 'version':1, 'suite':'OBJECT',
+ 'user_amendment':'2026-10-14: user authorized AI instead of independent human annotation, and investigator-defined ABCR loss. AI is never labeled human.',
+ 'A':{'sample':'Reuse all 72 preregistered R2 pairs, stages7/8/9 x SHARE/BIF x physical gate. No resampling by outcomes.',
+      'frames':[-4,0,4], 'views':['agentview_rgb','eye_in_hand_rgb'],
+      'blinding':'New hashed IDs; hide SHARE/BIF, score, physical gate, previous AI labels, and all optimization outcomes.',
+      'simulator':'Load original per-demo XML and states[t+1], forward only; no rollout or training. Record target/gripper contacts and object/EEF motion. Missing/unalignable state means UNKNOWN.',
+      'labels':['COMPARABLE','NOT_COMPARABLE','UNCERTAIN'],
+      'criterion':'Comparable target-relative geometry, manipulation phase, motion and contact configuration. Object identity alone is not rejection; identical action is not a criterion.',
+      'precision_gate':{'comparable_fraction_min':.80,'wilson95_lower_min':.60,'uncertain_counts_as_failure':True,'scope':'Each SHARE/BIF class within physical-PASS stratum. Stratified diversity sample, not unbiased population precision.'}},
+ 'B':{'seeds':[45,46,47],'tasks':[7,8],
+      'anchors':'First and last directly saved complete anchor per seed/task, 12 total; no replay; Task9 unavailable.',
+      'pairs':'All old R2 pairs in task7/8 uniquely present in each seed native plan; preserve both physical strata. Primary subset physical PASS; AI-certified subset secondary; no replacement.',
+      'update':'New-window official terminal GMM BC only, native full decoder+head AdamW moments, LR, clipping; CPU deterministic eval. Per-pair complete restore.',
+      'predictors':['q4_action_distance','physical_state_distance','negative_raw_BC_gradient_cosine','old_gradient_dot_actual_AdamW_displacement'],
+      'outcome':'old-window actual NLL difference after the candidate FP32 update, never action-label agreement',
+      'cv':'Leave one checkpoint out AND exclude any training row sharing either task-qualified trajectory with each test row. Per-row training-fold standardization; fixed ridge=1, intercept unpenalized; no tuning.',
+      'models':{'action':['action_distance'],'physical':['state_distance','eef_m','rotation_deg','gripper_difference','object_relative_m'],'physical_plus_action':['state_distance','eef_m','rotation_deg','gripper_difference','object_relative_m','action_distance'],'gradient':['negative_gradient_cosine'],'actual_update':['h_dot_d']},
+      'minimum_train_rows':20,'minimum_train_checkpoints':4,
+      'incremental_gate':{'delta_spearman_min':.10,'cluster_bootstrap_lower_gt':0,'consistent_seed_task_cells_min':5,'n_cells':6,'minimum_evaluable_checkpoints':8},
+      'bootstrap':'2000 fixed-seed samples at checkpoint level, plus separate trajectory-pair clustering sensitivity; repeated windows never independent samples.'},
+ 'C':{'anchors':'Same12', 'batch_size':10,'batch':'Exact saved native record_indices; preserve variable old/new slots; no retrieval or added samples.',
+      'arms':['MLR','SHARE_ONLY','BIF_ONLY','ABCR'],
+      'base_loss':'Original mean terminal GMM NLL on exact mixed batch (saved MLR anchors have IFA disabled). No new IFA added.',
+      'z':'L2-normalized native temporal decoder terminal representation, before GMM head, 512 dimensions.',
+      'pair_gate':'Same pre-FiLM beta0.5 visual/state frozen stage thresholds, q4 command thresholds and physical gate as R1-R4. Exact source identity, complete future, no label from loss.',
+      'share_loss':'mean(1 - dot(z_new, stop_gradient(z_old))) over eligible SHARE pairs; zero when none',
+      'bif_loss':'mean(relu(dot(z_new, stop_gradient(z_old)) - 0.5)) over eligible BIF pairs; zero when none',
+      'lambda_share':.05,'lambda_bif':.05,'bif_cosine_margin':.5,
+      'status':'Investigator-defined exploratory ABCR-v1 under explicit user authorization; not a published or previously validated ABCR implementation.',
+      'randomness':'Restore same saved CPU RNG and native training modes before each branch. Evaluation deterministic eval. No extra forward to build auxiliary loss; reuse compute_loss last_feat.',
+      'probes':'Up to12 old +12 new per start, balanced task/trajectory, exact identities. Trajectories disjoint from all batch trajectories within each task. No same-trajectory substitution.',
+      'efficacy_gate':{'median_old_positive_damage_relative_reduction_min':.10,'checkpoint_bootstrap95_excludes_zero':True,'same_direction_cells_min':5,'new_improvement_retention_min':.90,'active_checkpoints_min':8},
+      'no_activation':'Return exact MLR parity, report no intervention evidence; never fabricate active pairs.',
+      'full_training':'Not authorized by this diagnostic. Failure of B incremental gate means no recommendation for full BIF training.'},
+ 'deadband':'32*float32eps*max(1,abs(base_NLL)) fixed for predicted/measured signs',
+ 'cpu_threads':1,'random_seed':51427,'formal_training_resumed':False,'training_active':False,
+ 'formal_source_modified':False,'new_algorithm_installed_into_formal_runtime':False
+}
+
+def stable(x):return hashlib.sha256(json.dumps(x,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def bind(out, files):
+    return {'protocol':sha(Path(out)/'PROTOCOL.json'),'files':{str(p):sha(p) for p in files}}
+def atomic_text(path, value):
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_name(path.name+'.tmp')
+    with tmp.open('w',encoding='utf-8') as f:f.write(value);f.flush();os.fsync(f.fileno())
+    os.replace(tmp,path)
+def qualified_trajectory(task,demo):return '%d:%d'%(task,demo)
+def deadband(loss):return 32*np.finfo(np.float32).eps*max(1,abs(loss))
