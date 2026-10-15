@@ -1,0 +1,215 @@
+{
+  "unix": 1791884828.3099885,
+  "status": {
+    "status": "COMPLETED",
+    "seed": 42,
+    "arms": [
+      "random",
+      "coreset"
+    ],
+    "epochs": 800,
+    "formal_records": 400,
+    "updated_unix": 1791883603.1009781
+  },
+  "commands": "2026-10-13T12:48:53+08:00 START export torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.export \n2026-10-13T12:57:05+08:00 EXIT export 0\n2026-10-13T12:57:05+08:00 START train_random torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train random \n2026-10-13T13:50:24+08:00 EXIT train_random 0\n2026-10-13T13:50:24+08:00 START train_coreset torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train coreset \n2026-10-13T14:49:38+08:00 EXIT train_coreset 0\n2026-10-13T14:49:38+08:00 START evaluate_random python -u -m coreset_exp.evaluate random \n2026-10-13T16:05:56+08:00 EXIT evaluate_random 0\n2026-10-13T16:05:56+08:00 START evaluate_coreset python -u -m coreset_exp.evaluate coreset \n2026-10-13T17:24:35+08:00 EXIT evaluate_coreset 0\n2026-10-13T17:24:35+08:00 START summarize python -u -m coreset_exp.summarize \n2026-10-13T17:26:29+08:00 EXIT summarize 0\n",
+  "pipeline_exit": "0\n",
+  "supervisor_exit": "0\n",
+  "features": {
+    "6": 1562,
+    "7": 1480,
+    "8": 1560,
+    "9": 1319
+  },
+  "arms": {
+    "random": {
+      "epochs": 400,
+      "last_epoch": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 362,
+        "steps": 105500,
+        "loss": -34.60870829208121,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 9.78662896156311
+      },
+      "checkpoints": [
+        "random/models/mlrifa_7_model_ep99.pth",
+        "random/models/mlrifa_9_model_ep99.pth",
+        "random/models/mlrifa_8_model_ep99.pth",
+        "random/models/mlrifa_6_model_ep99.pth"
+      ],
+      "formal_records": 200
+    },
+    "coreset": {
+      "epochs": 400,
+      "last_epoch": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 362,
+        "steps": 105500,
+        "loss": -33.87929029622789,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 9.812397241592407
+      },
+      "checkpoints": [
+        "coreset/models/mlrifa_7_model_ep99.pth",
+        "coreset/models/mlrifa_9_model_ep99.pth",
+        "coreset/models/mlrifa_8_model_ep99.pth",
+        "coreset/models/mlrifa_6_model_ep99.pth"
+      ],
+      "formal_records": 200
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 10 MiB, 0 %",
+  "disk": "\u6587\u4ef6\u7cfb\u7edf        \u5bb9\u91cf  \u5df2\u7528  \u53ef\u7528 \u5df2\u7528% \u6302\u8f7d\u70b9\n/dev/vdb         69G   47G   19G   72% /data",
+  "processes": [],
+  "logs": {
+    "train_random.log": {
+      "bytes": 90709,
+      "mtime": 1791870616.7466488,
+      "tail": [
+        "{\"task\": 9, \"epoch\": 92, \"batches\": 362, \"steps\": 102966, \"loss\": -33.709437307073266, \"lr_first\": 8.11204481792717e-06, \"lr_after\": 7.0980392156862755e-06, \"seconds\": 9.943866729736328}",
+        "{\"task\": 9, \"epoch\": 93, \"batches\": 362, \"steps\": 103328, \"loss\": -33.8580539450461, \"lr_first\": 7.0980392156862755e-06, \"lr_after\": 6.084033613445379e-06, \"seconds\": 10.103376626968384}",
+        "{\"task\": 9, \"epoch\": 94, \"batches\": 362, \"steps\": 103690, \"loss\": -33.89366957100715, \"lr_first\": 6.084033613445379e-06, \"lr_after\": 5.070028011204482e-06, \"seconds\": 9.66300106048584}",
+        "{\"task\": 9, \"epoch\": 95, \"batches\": 362, \"steps\": 104052, \"loss\": -34.076534787594284, \"lr_first\": 5.070028011204482e-06, \"lr_after\": 4.056022408963585e-06, \"seconds\": 9.635868310928345}",
+        "{\"task\": 9, \"epoch\": 96, \"batches\": 362, \"steps\": 104414, \"loss\": -34.21158639897299, \"lr_first\": 4.056022408963585e-06, \"lr_after\": 3.0420168067226894e-06, \"seconds\": 10.136171340942383}",
+        "{\"task\": 9, \"epoch\": 97, \"batches\": 362, \"steps\": 104776, \"loss\": -34.37546137815022, \"lr_first\": 3.0420168067226894e-06, \"lr_after\": 2.0280112044817926e-06, \"seconds\": 10.035462141036987}",
+        "{\"task\": 9, \"epoch\": 98, \"batches\": 362, \"steps\": 105138, \"loss\": -34.406086547598655, \"lr_first\": 2.0280112044817926e-06, \"lr_after\": 1.0140056022408963e-06, \"seconds\": 10.047175645828247}",
+        "{\"task\": 9, \"epoch\": 99, \"batches\": 362, \"steps\": 105500, \"loss\": -34.60870829208121, \"lr_first\": 1.0140056022408963e-06, \"lr_after\": 0.0, \"seconds\": 9.78662896156311}"
+      ]
+    },
+    "configure.log": {
+      "bytes": 56,
+      "mtime": 1791866620.3463795,
+      "tail": [
+        "[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
+      ]
+    },
+    "summarize.log": {
+      "bytes": 0,
+      "mtime": 1791883475.6475818,
+      "tail": []
+    },
+    "software_tests.log": {
+      "bytes": 117,
+      "mtime": 1791866618.998026,
+      "tail": [
+        "..................",
+        "----------------------------------------------------------------------",
+        "Ran 18 tests in 0.201s",
+        "",
+        "OK"
+      ]
+    },
+    "evaluate_coreset.log": {
+      "bytes": 68062,
+      "mtime": 1791883466.7012353,
+      "tail": [
+        "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+        "Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.",
+        "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+        "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+        "Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.",
+        "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+        "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+        "[info] evaluate task 9 takes 584.5 seconds"
+      ]
+    },
+    "commands.log": {
+      "bytes": 891,
+      "mtime": 1791883589.4814408,
+      "tail": [
+        "2026-10-13T13:50:24+08:00 START train_coreset torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train coreset ",
+        "2026-10-13T14:49:38+08:00 EXIT train_coreset 0",
+        "2026-10-13T14:49:38+08:00 START evaluate_random python -u -m coreset_exp.evaluate random ",
+        "2026-10-13T16:05:56+08:00 EXIT evaluate_random 0",
+        "2026-10-13T16:05:56+08:00 START evaluate_coreset python -u -m coreset_exp.evaluate coreset ",
+        "2026-10-13T17:24:35+08:00 EXIT evaluate_coreset 0",
+        "2026-10-13T17:24:35+08:00 START summarize python -u -m coreset_exp.summarize ",
+        "2026-10-13T17:26:29+08:00 EXIT summarize 0"
+      ]
+    },
+    "supervisor.log": {
+      "bytes": 0,
+      "mtime": 1791866932.616289,
+      "tail": []
+    },
+    "preflight_attempt2.log": {
+      "bytes": 7985,
+      "mtime": 1791866860.5133762,
+      "tail": [
+        "policy_head.share.4.weight",
+        "policy_head.share.4.bias",
+        "policy_head.mean_layer.weight",
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias"
+      ]
+    },
+    "preflight.log": {
+      "bytes": 10221,
+      "mtime": 1791866772.5062916,
+      "tail": [
+        "[0]:",
+        "  time      : 2026-10-13_12:46:12",
+        "  host      : gpu-kvm",
+        "  rank      : 0 (local_rank: 0)",
+        "  exitcode  : 1 (pid: 2179)",
+        "  error_file: <N/A>",
+        "  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html",
+        "============================================================"
+      ]
+    },
+    "independent_acceptance.log": {
+      "bytes": 0,
+      "mtime": 1791883589.493444,
+      "tail": []
+    },
+    "train_coreset.log": {
+      "bytes": 90779,
+      "mtime": 1791874171.2109966,
+      "tail": [
+        "{\"task\": 9, \"epoch\": 92, \"batches\": 362, \"steps\": 102966, \"loss\": -32.96965565338978, \"lr_first\": 8.11204481792717e-06, \"lr_after\": 7.0980392156862755e-06, \"seconds\": 9.905345916748047}",
+        "{\"task\": 9, \"epoch\": 93, \"batches\": 362, \"steps\": 103328, \"loss\": -33.22107829309959, \"lr_first\": 7.0980392156862755e-06, \"lr_after\": 6.084033613445379e-06, \"seconds\": 9.623125076293945}",
+        "{\"task\": 9, \"epoch\": 94, \"batches\": 362, \"steps\": 103690, \"loss\": -33.27370505570048, \"lr_first\": 6.084033613445379e-06, \"lr_after\": 5.070028011204482e-06, \"seconds\": 9.81491208076477}",
+        "{\"task\": 9, \"epoch\": 95, \"batches\": 362, \"steps\": 104052, \"loss\": -33.458338969320224, \"lr_first\": 5.070028011204482e-06, \"lr_after\": 4.056022408963585e-06, \"seconds\": 9.946269035339355}",
+        "{\"task\": 9, \"epoch\": 96, \"batches\": 362, \"steps\": 104414, \"loss\": -33.45201859553216, \"lr_first\": 4.056022408963585e-06, \"lr_after\": 3.0420168067226894e-06, \"seconds\": 10.283860683441162}",
+        "{\"task\": 9, \"epoch\": 97, \"batches\": 362, \"steps\": 104776, \"loss\": -33.67501971734821, \"lr_first\": 3.0420168067226894e-06, \"lr_after\": 2.0280112044817926e-06, \"seconds\": 10.093128204345703}",
+        "{\"task\": 9, \"epoch\": 98, \"batches\": 362, \"steps\": 105138, \"loss\": -33.75063669088796, \"lr_first\": 2.0280112044817926e-06, \"lr_after\": 1.0140056022408963e-06, \"seconds\": 9.960840463638306}",
+        "{\"task\": 9, \"epoch\": 99, \"batches\": 362, \"steps\": 105500, \"loss\": -33.87929029622789, \"lr_first\": 1.0140056022408963e-06, \"lr_after\": 0.0, \"seconds\": 9.812397241592407}"
+      ]
+    },
+    "evaluate_random.log": {
+      "bytes": 68063,
+      "mtime": 1791878739.441259,
+      "tail": [
+        "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+        "Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.",
+        "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+        "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+        "Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.",
+        "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+        "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+        "[info] evaluate task 9 takes 591.2 seconds"
+      ]
+    },
+    "export.log": {
+      "bytes": 4679,
+      "mtime": 1791867315.5287282,
+      "tail": [
+        "policy_head.share.4.weight",
+        "policy_head.share.4.bias",
+        "policy_head.mean_layer.weight",
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias"
+      ]
+    }
+  }
+}

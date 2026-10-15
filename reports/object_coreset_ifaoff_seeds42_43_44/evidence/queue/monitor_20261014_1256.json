@@ -1,0 +1,117 @@
+{
+  "time": "2026-10-14T04:55:56.933012+00:00",
+  "queue_exit": null,
+  "commands": "2026-10-14T12:53:41+08:00 START seed42_pipeline\n",
+  "disk": {
+    "total": 73659547648,
+    "used": 55781699584,
+    "free": 14296268800
+  },
+  "gpu": "name, utilization.gpu [%], memory.used [MiB], memory.total [MiB]\nNVIDIA GeForce RTX 3090, 47 %, 1760 MiB, 24576 MiB",
+  "seeds": {
+    "42": {
+      "status": {
+        "status": "TRAINING",
+        "arm": "random",
+        "task": 6,
+        "completed_epoch": 16,
+        "optimizer_steps": 2669,
+        "updated_unix": 1791953756.1344953,
+        "pid": 3205
+      },
+      "pipeline_exit": null,
+      "commands": "2026-10-14T12:53:41+08:00 START contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T12:54:02+08:00 EXIT contract 0\n2026-10-14T12:54:02+08:00 START software_tests /data/mlr_ifa/env/bin/python -m unittest discover -s coreset_exp -t . -p test_\\*.py -v \n2026-10-14T12:54:04+08:00 EXIT software_tests 0\n2026-10-14T12:54:04+08:00 START spawn_check /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/spawn_check.py \n2026-10-14T12:54:06+08:00 EXIT spawn_check 0\n2026-10-14T12:54:06+08:00 START gpu_preflight /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/preflight_noifa.py \n2026-10-14T12:54:33+08:00 EXIT gpu_preflight 0\n2026-10-14T12:54:33+08:00 START train_random /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train random \n",
+      "preflight": {
+        "status": "PASS",
+        "seed": 42,
+        "isolated_optimizer_calls": 4,
+        "ifa_pair_invariance_actual_tensors": true,
+        "optimizer_scheduler_all_rng_recovery_exact": true,
+        "formal_steps": 0,
+        "environment_episodes": 0
+      },
+      "random": {
+        "epochs": 17,
+        "steps": 2669,
+        "last": {
+          "task": 6,
+          "epoch": 16,
+          "batches": 157,
+          "steps": 2669,
+          "loss": -20.926875181258865,
+          "lr_first": 8.676315789473685e-05,
+          "lr_after": 8.573026315789475e-05,
+          "seconds": 3.3906993865966797
+        },
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null,
+        "estimated_training_remaining_hours": 0.6149076517989934,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      },
+      "coreset": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      }
+    },
+    "43": {
+      "status": {
+        "status": "PREPARED_ORIGINAL_EVAL_IFA_OFF",
+        "seed": 43,
+        "training_epochs": 0,
+        "formal_episodes": 0
+      },
+      "pipeline_exit": null,
+      "commands": null,
+      "preflight": null,
+      "random": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      },
+      "coreset": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      }
+    },
+    "44": {
+      "status": {
+        "status": "PREPARED_ORIGINAL_EVAL_IFA_OFF",
+        "seed": 44,
+        "training_epochs": 0,
+        "formal_episodes": 0
+      },
+      "pipeline_exit": null,
+      "commands": null,
+      "preflight": null,
+      "random": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      },
+      "coreset": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      }
+    }
+  },
+  "processes": "   3113       1    3113       02:16 bash /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/queue.sh\n   3122    3113    3113       02:16 bash /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/seed_pipeline.sh 42\n   3197    3122    3113       01:24 /data/mlr_ifa/env/bin/python /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train random\n   3205    3197    3113       01:23 /data/mlr_ifa/env/bin/python -u -m coreset_exp.train random"
+}

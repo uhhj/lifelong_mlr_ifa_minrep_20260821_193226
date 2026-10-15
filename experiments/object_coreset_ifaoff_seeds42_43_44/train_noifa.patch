@@ -1,0 +1,12 @@
+--- original/coreset_exp/train.py
++++ noifa/coreset_exp/train.py
+@@ -37,7 +37,8 @@
+         mask=torch.tensor([int(x)==current_task_id for x in data[1]],device=last.device)
+         pairs=ifa_info['selected_pairs'];olds=[self.refs[j if k==current_task_id else k] for j,k in pairs]
+         extra=angular_mean(last[mask],self.refs[current_task_id],olds,self.cfg.gamma) if mask.any() else last.sum()*0
+-        loss=bc+.1*extra;assert torch.isfinite(loss)
++        assert self.cfg.ifa_weight==0.0
++        loss=bc;assert torch.isfinite(loss)
+         (self.loss_scale*loss).backward()
+         if self.cfg.train.grad_clip is not None:torch.nn.utils.clip_grad_norm_(self.policy.parameters(),self.cfg.train.grad_clip)
+         self.optimizer.step();self.scheduler.step()

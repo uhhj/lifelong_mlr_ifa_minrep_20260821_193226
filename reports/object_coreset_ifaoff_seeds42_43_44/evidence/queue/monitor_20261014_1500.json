@@ -1,0 +1,148 @@
+{
+  "time": "2026-10-14T07:00:55.855316+00:00",
+  "queue_exit": null,
+  "commands": "2026-10-14T12:53:41+08:00 START seed42_pipeline\n",
+  "disk": {
+    "total": 73659547648,
+    "used": 57239220224,
+    "free": 12838748160
+  },
+  "gpu": "name, utilization.gpu [%], memory.used [MiB], memory.total [MiB]\nNVIDIA GeForce RTX 3090, 100 %, 10095 MiB, 24576 MiB",
+  "seeds": {
+    "42": {
+      "status": {
+        "status": "EVALUATING",
+        "arm": "random",
+        "stage": 8,
+        "task": 7,
+        "updated_unix": 1791961131.4612958
+      },
+      "pipeline_exit": null,
+      "commands": "2026-10-14T12:53:41+08:00 START contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T12:54:02+08:00 EXIT contract 0\n2026-10-14T12:54:02+08:00 START software_tests /data/mlr_ifa/env/bin/python -m unittest discover -s coreset_exp -t . -p test_\\*.py -v \n2026-10-14T12:54:04+08:00 EXIT software_tests 0\n2026-10-14T12:54:04+08:00 START spawn_check /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/spawn_check.py \n2026-10-14T12:54:06+08:00 EXIT spawn_check 0\n2026-10-14T12:54:06+08:00 START gpu_preflight /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/preflight_noifa.py \n2026-10-14T12:54:33+08:00 EXIT gpu_preflight 0\n2026-10-14T12:54:33+08:00 START train_random /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train random \n2026-10-14T13:37:41+08:00 EXIT train_random 0\n2026-10-14T13:37:41+08:00 START train_coreset /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train coreset \n2026-10-14T14:20:55+08:00 EXIT train_coreset 0\n2026-10-14T14:20:55+08:00 START training_accept /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/accept_noifa_training.py 42 \n2026-10-14T14:20:58+08:00 EXIT training_accept 0\n2026-10-14T14:20:58+08:00 START eval_contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T14:21:06+08:00 EXIT eval_contract 0\n2026-10-14T14:21:06+08:00 START evaluate_random /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate random \n",
+      "preflight": {
+        "status": "PASS",
+        "seed": 42,
+        "isolated_optimizer_calls": 4,
+        "ifa_pair_invariance_actual_tensors": true,
+        "optimizer_scheduler_all_rng_recovery_exact": true,
+        "formal_steps": 0,
+        "environment_episodes": 0
+      },
+      "random": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -34.54284346564699,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.665625333786011
+        },
+        "trials": 110,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2573.189366579056,
+          "summed_epoch_seconds": 2266.3415343761444,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "55600c4da76aecd7553e48ce009b37366b69c04bc6d26b4f54c8b86a740361a6",
+            "mlrifa_7_model_ep99.pth": "fcef36964271f9fd67920a2dbacfaee4645b83c0f6c23849e3cedec84645d631",
+            "mlrifa_8_model_ep99.pth": "d4655a62eb1f3e5404fa23414f895188d8f2b8f466fcf463bfed55fe747a4f86",
+            "mlrifa_9_model_ep99.pth": "4d6cf4c7ea109ebb0c592736f4fc7b91d6f5853fa7c5a4b68ab219f77af54636"
+          }
+        },
+        "evaluation_complete": null,
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      },
+      "coreset": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -33.85626594796365,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.989659786224365
+        },
+        "trials": 0,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2582.2648112773895,
+          "summed_epoch_seconds": 2258.9558367729187,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "4960fb2a817661f36c18a172006dbf32f84a58ddacae686aa2d0ff71cd9de83a",
+            "mlrifa_7_model_ep99.pth": "e782120743be40d0c3be98424756fda30fe6b156457ee17e97f265c6f41a690d",
+            "mlrifa_8_model_ep99.pth": "f1f62b2fab82870205edf38844eed529f5e49c7bbfd5d2d507d67d1f9486c580",
+            "mlrifa_9_model_ep99.pth": "f1d40823a43ffa8540f2ec745269b40d15ba3d79aec716d352b57a07ddec906d"
+          }
+        },
+        "evaluation_complete": null,
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      }
+    },
+    "43": {
+      "status": {
+        "status": "PREPARED_ORIGINAL_EVAL_IFA_OFF",
+        "seed": 43,
+        "training_epochs": 0,
+        "formal_episodes": 0
+      },
+      "pipeline_exit": null,
+      "commands": null,
+      "preflight": null,
+      "random": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      },
+      "coreset": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      }
+    },
+    "44": {
+      "status": {
+        "status": "PREPARED_ORIGINAL_EVAL_IFA_OFF",
+        "seed": 44,
+        "training_epochs": 0,
+        "formal_episodes": 0
+      },
+      "pipeline_exit": null,
+      "commands": null,
+      "preflight": null,
+      "random": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      },
+      "coreset": {
+        "epochs": 0,
+        "steps": 0,
+        "last": null,
+        "trials": 0,
+        "training_complete": null,
+        "evaluation_complete": null
+      }
+    }
+  },
+  "processes": "   3113       1    3113    02:07:15 bash /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/queue.sh\n   3122    3113    3113    02:07:15 bash /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/seed_pipeline.sh 42\n   3353    3122    3113       39:49 /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate random\n   4682    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=58) --multiprocessing-fork\n   4683    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=61) --multiprocessing-fork\n   4687    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=64) --multiprocessing-fork\n   4693    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=67) --multiprocessing-fork\n   4697    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=70) --multiprocessing-fork\n   4702    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=73) --multiprocessing-fork\n   4707    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=76) --multiprocessing-fork\n   4713    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=79) --multiprocessing-fork\n   4718    3353    3113       02:02 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=82) --multiprocessing-fork\n   4722    3353    3113       02:01 /data/mlr_ifa/env/bin/python -B -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=13, pipe_handle=85) --multiprocessing-fork"
+}

@@ -1,0 +1,284 @@
+{
+  "time": "2026-10-15T04:53:32.264431+00:00",
+  "queue_exit": "0\n",
+  "commands": "2026-10-14T12:53:41+08:00 START seed42_pipeline\n2026-10-14T16:40:27+08:00 EXIT seed42_pipeline 0\n2026-10-14T16:40:27+08:00 START seed42_acceptance\n2026-10-14T16:40:38+08:00 EXIT seed42_acceptance 0\n2026-10-14T16:40:38+08:00 START seed43_pipeline\n2026-10-14T20:38:53+08:00 EXIT seed43_pipeline 0\n2026-10-14T20:38:53+08:00 START seed43_acceptance\n2026-10-14T20:39:06+08:00 EXIT seed43_acceptance 0\n2026-10-14T20:39:06+08:00 START seed44_pipeline\n2026-10-15T00:36:34+08:00 EXIT seed44_pipeline 0\n2026-10-15T00:36:34+08:00 START seed44_acceptance\n2026-10-15T00:36:47+08:00 EXIT seed44_acceptance 0\n2026-10-15T00:36:47+08:00 START compare\n2026-10-15T00:36:47+08:00 EXIT compare 0\n",
+  "disk": {
+    "total": 73659547648,
+    "used": 61723930624,
+    "free": 8354037760
+  },
+  "gpu": "NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.\n",
+  "seeds": {
+    "42": {
+      "status": {
+        "status": "COMPLETED",
+        "seed": 42,
+        "arms": [
+          "random",
+          "coreset"
+        ],
+        "epochs": 800,
+        "formal_records": 400,
+        "updated_unix": 1791967237.8126848
+      },
+      "pipeline_exit": "0\n",
+      "commands": "2026-10-14T12:53:41+08:00 START contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T12:54:02+08:00 EXIT contract 0\n2026-10-14T12:54:02+08:00 START software_tests /data/mlr_ifa/env/bin/python -m unittest discover -s coreset_exp -t . -p test_\\*.py -v \n2026-10-14T12:54:04+08:00 EXIT software_tests 0\n2026-10-14T12:54:04+08:00 START spawn_check /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/spawn_check.py \n2026-10-14T12:54:06+08:00 EXIT spawn_check 0\n2026-10-14T12:54:06+08:00 START gpu_preflight /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/preflight_noifa.py \n2026-10-14T12:54:33+08:00 EXIT gpu_preflight 0\n2026-10-14T12:54:33+08:00 START train_random /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train random \n2026-10-14T13:37:41+08:00 EXIT train_random 0\n2026-10-14T13:37:41+08:00 START train_coreset /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train coreset \n2026-10-14T14:20:55+08:00 EXIT train_coreset 0\n2026-10-14T14:20:55+08:00 START training_accept /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/accept_noifa_training.py 42 \n2026-10-14T14:20:58+08:00 EXIT training_accept 0\n2026-10-14T14:20:58+08:00 START eval_contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T14:21:06+08:00 EXIT eval_contract 0\n2026-10-14T14:21:06+08:00 START evaluate_random /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate random \n2026-10-14T15:33:57+08:00 EXIT evaluate_random 0\n2026-10-14T15:33:57+08:00 START evaluate_coreset /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate coreset \n2026-10-14T16:38:39+08:00 EXIT evaluate_coreset 0\n2026-10-14T16:38:39+08:00 START summarize /data/mlr_ifa/env/bin/python -m coreset_exp.summarize \n2026-10-14T16:40:27+08:00 EXIT summarize 0\n",
+      "preflight": {
+        "status": "PASS",
+        "seed": 42,
+        "isolated_optimizer_calls": 4,
+        "ifa_pair_invariance_actual_tensors": true,
+        "optimizer_scheduler_all_rng_recovery_exact": true,
+        "formal_steps": 0,
+        "environment_episodes": 0
+      },
+      "random": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -34.54284346564699,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.665625333786011
+        },
+        "trials": 200,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2573.189366579056,
+          "summed_epoch_seconds": 2266.3415343761444,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "55600c4da76aecd7553e48ce009b37366b69c04bc6d26b4f54c8b86a740361a6",
+            "mlrifa_7_model_ep99.pth": "fcef36964271f9fd67920a2dbacfaee4645b83c0f6c23849e3cedec84645d631",
+            "mlrifa_8_model_ep99.pth": "d4655a62eb1f3e5404fa23414f895188d8f2b8f466fcf463bfed55fe747a4f86",
+            "mlrifa_9_model_ep99.pth": "4d6cf4c7ea109ebb0c592736f4fc7b91d6f5853fa7c5a4b68ab219f77af54636"
+          }
+        },
+        "evaluation_complete": {
+          "status": "EVALUATED",
+          "episodes": 200
+        },
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      },
+      "coreset": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -33.85626594796365,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.989659786224365
+        },
+        "trials": 200,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2582.2648112773895,
+          "summed_epoch_seconds": 2258.9558367729187,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "4960fb2a817661f36c18a172006dbf32f84a58ddacae686aa2d0ff71cd9de83a",
+            "mlrifa_7_model_ep99.pth": "e782120743be40d0c3be98424756fda30fe6b156457ee17e97f265c6f41a690d",
+            "mlrifa_8_model_ep99.pth": "f1f62b2fab82870205edf38844eed529f5e49c7bbfd5d2d507d67d1f9486c580",
+            "mlrifa_9_model_ep99.pth": "f1d40823a43ffa8540f2ec745269b40d15ba3d79aec716d352b57a07ddec906d"
+          }
+        },
+        "evaluation_complete": {
+          "status": "EVALUATED",
+          "episodes": 200
+        },
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      }
+    },
+    "43": {
+      "status": {
+        "status": "COMPLETED",
+        "seed": 43,
+        "arms": [
+          "random",
+          "coreset"
+        ],
+        "epochs": 800,
+        "formal_records": 400,
+        "updated_unix": 1791981545.7685666
+      },
+      "pipeline_exit": "0\n",
+      "commands": "2026-10-14T16:40:39+08:00 START contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T16:40:50+08:00 EXIT contract 0\n2026-10-14T16:40:50+08:00 START software_tests /data/mlr_ifa/env/bin/python -m unittest discover -s coreset_exp -t . -p test_\\*.py -v \n2026-10-14T16:40:51+08:00 EXIT software_tests 0\n2026-10-14T16:40:51+08:00 START spawn_check /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/spawn_check.py \n2026-10-14T16:40:53+08:00 EXIT spawn_check 0\n2026-10-14T16:40:53+08:00 START gpu_preflight /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/preflight_noifa.py \n2026-10-14T16:41:19+08:00 EXIT gpu_preflight 0\n2026-10-14T16:41:19+08:00 START train_random /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train random \n2026-10-14T17:24:58+08:00 EXIT train_random 0\n2026-10-14T17:24:58+08:00 START train_coreset /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train coreset \n2026-10-14T18:08:11+08:00 EXIT train_coreset 0\n2026-10-14T18:08:11+08:00 START training_accept /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/accept_noifa_training.py 43 \n2026-10-14T18:08:15+08:00 EXIT training_accept 0\n2026-10-14T18:08:15+08:00 START eval_contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T18:08:24+08:00 EXIT eval_contract 0\n2026-10-14T18:08:24+08:00 START evaluate_random /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate random \n2026-10-14T19:21:21+08:00 EXIT evaluate_random 0\n2026-10-14T19:21:21+08:00 START evaluate_coreset /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate coreset \n2026-10-14T20:36:58+08:00 EXIT evaluate_coreset 0\n2026-10-14T20:36:58+08:00 START summarize /data/mlr_ifa/env/bin/python -m coreset_exp.summarize \n2026-10-14T20:38:53+08:00 EXIT summarize 0\n",
+      "preflight": {
+        "status": "PASS",
+        "seed": 43,
+        "isolated_optimizer_calls": 4,
+        "ifa_pair_invariance_actual_tensors": true,
+        "optimizer_scheduler_all_rng_recovery_exact": true,
+        "formal_steps": 0,
+        "environment_episodes": 0
+      },
+      "random": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -34.68543584834146,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.838809013366699
+        },
+        "trials": 200,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2606.23925280571,
+          "summed_epoch_seconds": 2297.922880411148,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "406de0ba0b4185ac465f3d2b83a79d1591e13a3c23abea0ba620aeb46d400b03",
+            "mlrifa_7_model_ep99.pth": "7175f2f9401d5caf24476c12043541994dab4a8bb06772624fc772c00699dd1e",
+            "mlrifa_8_model_ep99.pth": "ffeef8893415e693bcab33509621b45f808b1d72f33e53362a113a21948ced7c",
+            "mlrifa_9_model_ep99.pth": "700b559bcc5d5e43e0fe631d3cf1e66a88d56435445111884e4c5142bb9f3c86"
+          }
+        },
+        "evaluation_complete": {
+          "status": "EVALUATED",
+          "episodes": 200
+        },
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      },
+      "coreset": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -33.76046594862121,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.719749689102173
+        },
+        "trials": 200,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2579.474910259247,
+          "summed_epoch_seconds": 2274.488200902939,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "d6557e3e08c15705378d46688aec00dc151ac03ec6f88e32fa58d7b432d7598a",
+            "mlrifa_7_model_ep99.pth": "4412ac31d11d60fe29e68d18b293a3e20a5e3e6736424764521147fe8d24385f",
+            "mlrifa_8_model_ep99.pth": "f09d89b9644fd82eb383514a48a27f898c7950a26992053ba30660bf3cd45089",
+            "mlrifa_9_model_ep99.pth": "f8ab849e929ab5ce5ee03f8b2761123cf34dea79def3fbe2f39149a32433f65f"
+          }
+        },
+        "evaluation_complete": {
+          "status": "EVALUATED",
+          "episodes": 200
+        },
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      }
+    },
+    "44": {
+      "status": {
+        "status": "COMPLETED",
+        "seed": 44,
+        "arms": [
+          "random",
+          "coreset"
+        ],
+        "epochs": 800,
+        "formal_records": 400,
+        "updated_unix": 1791995807.1388073
+      },
+      "pipeline_exit": "0\n",
+      "commands": "2026-10-14T20:39:07+08:00 START contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T20:39:19+08:00 EXIT contract 0\n2026-10-14T20:39:19+08:00 START software_tests /data/mlr_ifa/env/bin/python -m unittest discover -s coreset_exp -t . -p test_\\*.py -v \n2026-10-14T20:39:20+08:00 EXIT software_tests 0\n2026-10-14T20:39:20+08:00 START spawn_check /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/spawn_check.py \n2026-10-14T20:39:22+08:00 EXIT spawn_check 0\n2026-10-14T20:39:22+08:00 START gpu_preflight /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/preflight_noifa.py \n2026-10-14T20:39:49+08:00 EXIT gpu_preflight 0\n2026-10-14T20:39:49+08:00 START train_random /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train random \n2026-10-14T21:24:13+08:00 EXIT train_random 0\n2026-10-14T21:24:13+08:00 START train_coreset /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train coreset \n2026-10-14T22:07:46+08:00 EXIT train_coreset 0\n2026-10-14T22:07:46+08:00 START training_accept /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/accept_noifa_training.py 44 \n2026-10-14T22:07:49+08:00 EXIT training_accept 0\n2026-10-14T22:07:49+08:00 START eval_contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py \n2026-10-14T22:07:58+08:00 EXIT eval_contract 0\n2026-10-14T22:07:58+08:00 START evaluate_random /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate random \n2026-10-14T23:12:37+08:00 EXIT evaluate_random 0\n2026-10-14T23:12:37+08:00 START evaluate_coreset /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate coreset \n2026-10-15T00:34:41+08:00 EXIT evaluate_coreset 0\n2026-10-15T00:34:41+08:00 START summarize /data/mlr_ifa/env/bin/python -m coreset_exp.summarize \n2026-10-15T00:36:34+08:00 EXIT summarize 0\n",
+      "preflight": {
+        "status": "PASS",
+        "seed": 44,
+        "isolated_optimizer_calls": 4,
+        "ifa_pair_invariance_actual_tensors": true,
+        "optimizer_scheduler_all_rng_recovery_exact": true,
+        "formal_steps": 0,
+        "environment_episodes": 0
+      },
+      "random": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -34.63636664922725,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.696178674697876
+        },
+        "trials": 200,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2648.780075073242,
+          "summed_epoch_seconds": 2308.89502286911,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "1b3a0c7f6739f0945c7fdb526fe86093c96affe19b4537a2306aa4acb44bd2a8",
+            "mlrifa_7_model_ep99.pth": "89d0bcfe75d8383abb751df698fd910c34dc6f18111065828faac2e3d2f15448",
+            "mlrifa_8_model_ep99.pth": "55d4964fb782bb0b6dc95d0baf2855f5e0033123861aba4bf49c84f287dff2bc",
+            "mlrifa_9_model_ep99.pth": "d8d335ca19e0be7ee3f8ce9cc5bc9336a0b110f9779afcfd3f6d6593f619a7b9"
+          }
+        },
+        "evaluation_complete": {
+          "status": "EVALUATED",
+          "episodes": 200
+        },
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      },
+      "coreset": {
+        "epochs": 400,
+        "steps": 105500,
+        "last": {
+          "task": 9,
+          "epoch": 99,
+          "batches": 362,
+          "steps": 105500,
+          "loss": -33.96154813608412,
+          "lr_first": 1.0140056022408963e-06,
+          "lr_after": 0.0,
+          "seconds": 7.841783046722412
+        },
+        "trials": 200,
+        "training_complete": {
+          "epochs": 400,
+          "steps": 105500,
+          "seconds_this_invocation": 2599.0956869125366,
+          "summed_epoch_seconds": 2287.2246417999268,
+          "checkpoints": {
+            "mlrifa_6_model_ep99.pth": "98bfadb624f6912647b441eea58204a633c2f3a515c457e85bc21b482ddf3251",
+            "mlrifa_7_model_ep99.pth": "2550ceec2ec6d8bf04dd2354ad1644d91ed9c45a86e20538355fb30fd6deba3e",
+            "mlrifa_8_model_ep99.pth": "6deb62cb2a77549e6869f55853ed0cb93bb9faca194f17171f5eb1e11ff4b311",
+            "mlrifa_9_model_ep99.pth": "0f4b9106df57afacd9bb3bd28cb6c1675fe90c7a6d23a3c67decfff525fc44d1"
+          }
+        },
+        "evaluation_complete": {
+          "status": "EVALUATED",
+          "episodes": 200
+        },
+        "estimated_training_remaining_hours": 0.0,
+        "eta_basis": "Recent completed epoch seconds per optimizer step; storage/IFA startup overhead excluded"
+      }
+    }
+  },
+  "processes": ""
+}

@@ -1,0 +1,142 @@
+{
+  "unix": 1791892750.7473853,
+  "status": {
+    "status": "TRAINING",
+    "arm": "coreset",
+    "task": 9,
+    "completed_epoch": 99,
+    "optimizer_steps": 105500,
+    "updated_unix": 1791892162.0065892,
+    "pid": 9443
+  },
+  "commands": "2026-10-13T17:59:11+08:00 START export torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.export \n2026-10-13T18:07:40+08:00 EXIT export 0\n2026-10-13T18:07:40+08:00 START train_random torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.train random \n2026-10-13T18:58:53+08:00 EXIT train_random 0\n2026-10-13T18:58:53+08:00 START train_coreset torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.train coreset \n2026-10-13T19:49:32+08:00 EXIT train_coreset 0\n2026-10-13T19:49:32+08:00 START evaluate_random python -u -m coreset_exp.evaluate random \n",
+  "pipeline_exit": null,
+  "supervisor_exit": null,
+  "features": {
+    "6": 1562,
+    "7": 1480,
+    "8": 1560,
+    "9": 1319
+  },
+  "arms": {
+    "random": {
+      "epochs": 400,
+      "last_epoch": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 362,
+        "steps": 105500,
+        "loss": -34.65700756515587,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 8.942212104797363
+      },
+      "checkpoints": [
+        "random/models/mlrifa_7_model_ep99.pth",
+        "random/models/mlrifa_9_model_ep99.pth",
+        "random/models/mlrifa_8_model_ep99.pth",
+        "random/models/mlrifa_6_model_ep99.pth"
+      ],
+      "formal_records": 10
+    },
+    "coreset": {
+      "epochs": 400,
+      "last_epoch": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 362,
+        "steps": 105500,
+        "loss": -33.83145628976558,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 9.388633251190186
+      },
+      "checkpoints": [
+        "coreset/models/mlrifa_7_model_ep99.pth",
+        "coreset/models/mlrifa_9_model_ep99.pth",
+        "coreset/models/mlrifa_8_model_ep99.pth",
+        "coreset/models/mlrifa_6_model_ep99.pth"
+      ],
+      "formal_records": 0
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 8485 MiB, 81 %",
+  "disk": "\u6587\u4ef6\u7cfb\u7edf        \u5bb9\u91cf  \u5df2\u7528  \u53ef\u7528 \u5df2\u7528% \u6302\u8f7d\u70b9\n/dev/vdb         69G   49G   17G   75% /data",
+  "processes": [
+    "   9126       1    02:02:22 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_extension_20261013/run_queue.sh",
+    "   9230    9126    02:00:06 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source/coreset_exp/supervise.sh",
+    "   9234    9230    02:00:06 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source/coreset_exp/pipeline.sh",
+    "   9491    9234       09:39 python -u -m coreset_exp.evaluate random"
+  ],
+  "logs": {
+    "train_random.log": {
+      "bytes": 90730,
+      "mtime": 1791889125.9543638,
+      "tail": [
+        "{\"task\": 9, \"epoch\": 92, \"batches\": 362, \"steps\": 102966, \"loss\": -33.74305153419958, \"lr_first\": 8.11204481792717e-06, \"lr_after\": 7.0980392156862755e-06, \"seconds\": 8.77027416229248}",
+        "{\"task\": 9, \"epoch\": 93, \"batches\": 362, \"steps\": 103328, \"loss\": -33.802557086417686, \"lr_first\": 7.0980392156862755e-06, \"lr_after\": 6.084033613445379e-06, \"seconds\": 8.690896034240723}",
+        "{\"task\": 9, \"epoch\": 94, \"batches\": 362, \"steps\": 103690, \"loss\": -33.98240907679605, \"lr_first\": 6.084033613445379e-06, \"lr_after\": 5.070028011204482e-06, \"seconds\": 8.642093896865845}",
+        "{\"task\": 9, \"epoch\": 95, \"batches\": 362, \"steps\": 104052, \"loss\": -34.16496165681281, \"lr_first\": 5.070028011204482e-06, \"lr_after\": 4.056022408963585e-06, \"seconds\": 9.207942962646484}",
+        "{\"task\": 9, \"epoch\": 96, \"batches\": 362, \"steps\": 104414, \"loss\": -34.20515777524663, \"lr_first\": 4.056022408963585e-06, \"lr_after\": 3.0420168067226894e-06, \"seconds\": 9.09566879272461}",
+        "{\"task\": 9, \"epoch\": 97, \"batches\": 362, \"steps\": 104776, \"loss\": -34.357499712738544, \"lr_first\": 3.0420168067226894e-06, \"lr_after\": 2.0280112044817926e-06, \"seconds\": 9.046147584915161}",
+        "{\"task\": 9, \"epoch\": 98, \"batches\": 362, \"steps\": 105138, \"loss\": -34.55773935792196, \"lr_first\": 2.0280112044817926e-06, \"lr_after\": 1.0140056022408963e-06, \"seconds\": 9.10574197769165}",
+        "{\"task\": 9, \"epoch\": 99, \"batches\": 362, \"steps\": 105500, \"loss\": -34.65700756515587, \"lr_first\": 1.0140056022408963e-06, \"lr_after\": 0.0, \"seconds\": 8.942212104797363}"
+      ]
+    },
+    "commands.log": {
+      "bytes": 579,
+      "mtime": 1791892172.249417,
+      "tail": [
+        "2026-10-13T17:59:11+08:00 START export torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.export ",
+        "2026-10-13T18:07:40+08:00 EXIT export 0",
+        "2026-10-13T18:07:40+08:00 START train_random torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.train random ",
+        "2026-10-13T18:58:53+08:00 EXIT train_random 0",
+        "2026-10-13T18:58:53+08:00 START train_coreset torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.train coreset ",
+        "2026-10-13T19:49:32+08:00 EXIT train_coreset 0",
+        "2026-10-13T19:49:32+08:00 START evaluate_random python -u -m coreset_exp.evaluate random "
+      ]
+    },
+    "train_coreset.log": {
+      "bytes": 90710,
+      "mtime": 1791892162.0067306,
+      "tail": [
+        "{\"task\": 9, \"epoch\": 92, \"batches\": 362, \"steps\": 102966, \"loss\": -32.92683448053855, \"lr_first\": 8.11204481792717e-06, \"lr_after\": 7.0980392156862755e-06, \"seconds\": 9.568042755126953}",
+        "{\"task\": 9, \"epoch\": 93, \"batches\": 362, \"steps\": 103328, \"loss\": -33.06721999236892, \"lr_first\": 7.0980392156862755e-06, \"lr_after\": 6.084033613445379e-06, \"seconds\": 10.480622053146362}",
+        "{\"task\": 9, \"epoch\": 94, \"batches\": 362, \"steps\": 103690, \"loss\": -33.183086748281234, \"lr_first\": 6.084033613445379e-06, \"lr_after\": 5.070028011204482e-06, \"seconds\": 9.900574684143066}",
+        "{\"task\": 9, \"epoch\": 95, \"batches\": 362, \"steps\": 104052, \"loss\": -33.37929462201029, \"lr_first\": 5.070028011204482e-06, \"lr_after\": 4.056022408963585e-06, \"seconds\": 9.796857833862305}",
+        "{\"task\": 9, \"epoch\": 96, \"batches\": 362, \"steps\": 104414, \"loss\": -33.462900293466134, \"lr_first\": 4.056022408963585e-06, \"lr_after\": 3.0420168067226894e-06, \"seconds\": 9.733732223510742}",
+        "{\"task\": 9, \"epoch\": 97, \"batches\": 362, \"steps\": 104776, \"loss\": -33.592869316016774, \"lr_first\": 3.0420168067226894e-06, \"lr_after\": 2.0280112044817926e-06, \"seconds\": 9.213888168334961}",
+        "{\"task\": 9, \"epoch\": 98, \"batches\": 362, \"steps\": 105138, \"loss\": -33.74994937622745, \"lr_first\": 2.0280112044817926e-06, \"lr_after\": 1.0140056022408963e-06, \"seconds\": 9.561107635498047}",
+        "{\"task\": 9, \"epoch\": 99, \"batches\": 362, \"steps\": 105500, \"loss\": -33.83145628976558, \"lr_first\": 1.0140056022408963e-06, \"lr_after\": 0.0, \"seconds\": 9.388633251190186}"
+      ]
+    },
+    "evaluate_random.log": {
+      "bytes": 5683,
+      "mtime": 1791892189.5579572,
+      "tail": [
+        "[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)",
+        "[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)",
+        "[robosuite WARNING] No private macro file found! (__init__.py:7)",
+        "[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)",
+        "[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)",
+        "[robosuite WARNING] No private macro file found! (__init__.py:7)",
+        "[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)",
+        "[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)"
+      ]
+    },
+    "export.log": {
+      "bytes": 4679,
+      "mtime": 1791885948.3521805,
+      "tail": [
+        "policy_head.share.4.weight",
+        "policy_head.share.4.bias",
+        "policy_head.mean_layer.weight",
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+2026-10-14T12:53:41+08:00 START contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py 
+2026-10-14T12:54:02+08:00 EXIT contract 0
+2026-10-14T12:54:02+08:00 START software_tests /data/mlr_ifa/env/bin/python -m unittest discover -s coreset_exp -t . -p test_\*.py -v 
+2026-10-14T12:54:04+08:00 EXIT software_tests 0
+2026-10-14T12:54:04+08:00 START spawn_check /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/spawn_check.py 
+2026-10-14T12:54:06+08:00 EXIT spawn_check 0
+2026-10-14T12:54:06+08:00 START gpu_preflight /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/preflight_noifa.py 
+2026-10-14T12:54:33+08:00 EXIT gpu_preflight 0
+2026-10-14T12:54:33+08:00 START train_random /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train random 
+2026-10-14T13:37:41+08:00 EXIT train_random 0
+2026-10-14T13:37:41+08:00 START train_coreset /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m coreset_exp.train coreset 
+2026-10-14T14:20:55+08:00 EXIT train_coreset 0
+2026-10-14T14:20:55+08:00 START training_accept /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/accept_noifa_training.py 42 
+2026-10-14T14:20:58+08:00 EXIT training_accept 0
+2026-10-14T14:20:58+08:00 START eval_contract /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/Coreset_validation_20261014/original_protocol/guard.py 
+2026-10-14T14:21:06+08:00 EXIT eval_contract 0
+2026-10-14T14:21:06+08:00 START evaluate_random /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate random 
+2026-10-14T15:33:57+08:00 EXIT evaluate_random 0
+2026-10-14T15:33:57+08:00 START evaluate_coreset /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate coreset 
+2026-10-14T16:38:39+08:00 EXIT evaluate_coreset 0
+2026-10-14T16:38:39+08:00 START summarize /data/mlr_ifa/env/bin/python -m coreset_exp.summarize 
+2026-10-14T16:40:27+08:00 EXIT summarize 0

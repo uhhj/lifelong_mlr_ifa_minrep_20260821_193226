@@ -1,0 +1,93 @@
+--- ifa_on/coreset_exp/common.py
++++ ifa_off/coreset_exp/common.py
+@@ -5,7 +5,7 @@
+ S=Path(__file__).resolve().parents[1]
+ O=Path(os.environ['CORESET_OUT'])
+ SEED=int(os.environ['CORESET_SEED'])
+-assert SEED in (43,44), 'Only explicitly authorized extension seeds'
++assert SEED in (42,43,44), 'Authorized no-IFA seeds'
+ SELECTOR_SEED=42 # Frozen calibration/reference subset setting, not training RNG
+ def sha(p):
+     h=hashlib.sha256()
+@@ -33,12 +33,16 @@
+ def source_hashes():return {str(p.relative_to(S)):sha(p) for p in sorted(S.rglob('*')) if p.is_file() and p.suffix in ('.py','.yaml','.sh') and '__pycache__' not in p.parts}
+ def verify():
+     c=json.loads((O/'CONTRACT.json').read_text())
+-    assert source_hashes()==c['source_sha256'],'Frozen source mismatch'
++    assert c['ifa_weight']==0.0 and c['seed']==SEED
++    assert source_hashes()==c['source_sha256']
+     assert sha(O/'MODAL_CONTRACT.json')==c['modal_sha256']
+-    assert sha(O/'OLD_INPUTS_READONLY.json')==c['old_readonly_sha256']
++    parent=Path(c['parent_run'])
++    assert sha(parent/'CONTRACT.json')==c['parent_contract_sha256']
++    assert sha(O/'FEATURES.json')==sha(parent/'FEATURES.json')==c['feature_manifest_sha256']
++    assert sha(parent/'MODAL_CONTRACT.json')==c['modal_sha256']
++    m=json.loads((O/'FEATURES.json').read_text())
++    assert m['contract_sha256']==c['parent_contract_sha256']
++    assert m['modal_sha256']==c['modal_sha256'] and hashes(O/'features')==m['hashes']
+     for p,h in c['inputs'].items():assert sha(p)==h,p
+     for p,h in c['configs'].items():assert sha(p)==h,p
+-    if (O/'FEATURES.json').exists():
+-        m=json.loads((O/'FEATURES.json').read_text());assert hashes(O/'features')==m['hashes']
+-        assert m['modal_sha256']==c['modal_sha256'] and m['contract_sha256']==sha(O/'CONTRACT.json')
+     return c
+--- ifa_on/coreset_exp/pipeline.sh
++++ ifa_off/coreset_exp/pipeline.sh
+@@ -1,27 +1,3 @@
+ #!/usr/bin/env bash
+-set -euo pipefail
+-source /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed44_20261013/source/coreset_exp/env.sh
+-exec 9>"$CORESET_OUT/pipeline.lock"
+-flock -n 9 || exit 70
+-test ! -e "$CORESET_OUT/pipeline.started"
+-date -Is > "$CORESET_OUT/pipeline.started"
+-echo $$ > "$CORESET_OUT/pipeline.pid"
+-trap 'rc=$?; printf "%s\n" "$rc" > "$CORESET_OUT/pipeline.exit"' EXIT
+-run() {
+-  label="$1"; shift
+-  printf '%s START %s ' "$(date -Is)" "$label" >> "$CORESET_OUT/commands.log"
+-  printf '%q ' "$@" >> "$CORESET_OUT/commands.log"
+-  printf '\n' >> "$CORESET_OUT/commands.log"
+-  set +e
+-  "$@" > "$CORESET_OUT/$label.log" 2>&1
+-  rc=$?
+-  set -e
+-  printf '%s EXIT %s %s\n' "$(date -Is)" "$label" "$rc" >> "$CORESET_OUT/commands.log"
+-  test "$rc" = 0 || exit "$rc"
+-}
+-run export torchrun --nproc_per_node=1 --master_port=38317 -m coreset_exp.export
+-run train_random torchrun --nproc_per_node=1 --master_port=38317 -m coreset_exp.train random
+-run train_coreset torchrun --nproc_per_node=1 --master_port=38317 -m coreset_exp.train coreset
+-run evaluate_random python -u -m coreset_exp.evaluate random
+-run evaluate_coreset python -u -m coreset_exp.evaluate coreset
+-run summarize python -u -m coreset_exp.summarize
++echo "Use the authorized no-IFA queue, not the old driver" >&2
++exit 64
+--- ifa_on/coreset_exp/supervise.sh
++++ ifa_off/coreset_exp/supervise.sh
+@@ -1,11 +1,3 @@
+ #!/usr/bin/env bash
+-set -uo pipefail
+-source /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed44_20261013/source/coreset_exp/env.sh
+-bash "$CORESET_SOURCE/coreset_exp/pipeline.sh"
+-rc=$?
+-if test "$rc" = 0; then
+-  python -u -m coreset_exp.acceptance > "$CORESET_OUT/independent_acceptance.log" 2>&1
+-  rc=$?
+-fi
+-printf '%s\n' "$rc" > "$CORESET_OUT/supervisor.exit"
+-exit "$rc"
++echo "Use the authorized no-IFA queue, not the old driver" >&2
++exit 64
+--- ifa_on/coreset_exp/train.py
++++ ifa_off/coreset_exp/train.py
+@@ -38,7 +38,8 @@
+         mask=torch.tensor([int(x)==current_task_id for x in data[1]],device=last.device)
+         pairs=ifa_info['selected_pairs'];olds=[self.refs[j if k==current_task_id else k] for j,k in pairs]
+         extra=angular_mean(last[mask],self.refs[current_task_id],olds,self.cfg.gamma) if mask.any() else last.sum()*0
+-        loss=bc+.1*extra;assert torch.isfinite(loss)
++        assert self.cfg.ifa_weight==0.0
++        loss=bc;assert torch.isfinite(loss)
+         (self.loss_scale*loss).backward()
+         if self.cfg.train.grad_clip is not None:torch.nn.utils.clip_grad_norm_(self.policy.parameters(),self.cfg.train.grad_clip)
+         self.optimizer.step();self.scheduler.step()

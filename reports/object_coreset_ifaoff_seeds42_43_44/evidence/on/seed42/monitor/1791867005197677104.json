@@ -1,0 +1,114 @@
+{
+  "unix": 1791867005.1675804,
+  "status": {
+    "status": "EXPORTING",
+    "task": 6,
+    "updated_unix": 1791866953.7042165,
+    "pid": 2407
+  },
+  "commands": "2026-10-13T12:48:53+08:00 START export torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.export \n",
+  "pipeline_exit": null,
+  "supervisor_exit": null,
+  "features": {
+    "6": 614,
+    "7": 0,
+    "8": 0,
+    "9": 0
+  },
+  "arms": {
+    "random": {
+      "epochs": 0,
+      "last_epoch": null,
+      "checkpoints": [],
+      "formal_records": 0
+    },
+    "coreset": {
+      "epochs": 0,
+      "last_epoch": null,
+      "checkpoints": [],
+      "formal_records": 0
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 3707 MiB, 66 %",
+  "disk": "\u6587\u4ef6\u7cfb\u7edf        \u5bb9\u91cf  \u5df2\u7528  \u53ef\u7528 \u5df2\u7528% \u6302\u8f7d\u70b9\n/dev/vdb         69G   45G   21G   68% /data",
+  "processes": [
+    "   2386       1       01:12 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/supervise.sh",
+    "   2391    2386       01:12 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/pipeline.sh",
+    "   2400    2391       01:11 /data/mlr_ifa/env/bin/python /data/mlr_ifa/env/bin/torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.export",
+    "   2407    2400       01:11 /data/mlr_ifa/env/bin/python -u -m coreset_exp.export"
+  ],
+  "logs": {
+    "configure.log": {
+      "bytes": 56,
+      "mtime": 1791866620.3463795,
+      "tail": [
+        "[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
+      ]
+    },
+    "software_tests.log": {
+      "bytes": 117,
+      "mtime": 1791866618.998026,
+      "tail": [
+        "..................",
+        "----------------------------------------------------------------------",
+        "Ran 18 tests in 0.201s",
+        "",
+        "OK"
+      ]
+    },
+    "commands.log": {
+      "bytes": 110,
+      "mtime": 1791866933.5285282,
+      "tail": [
+        "2026-10-13T12:48:53+08:00 START export torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.export "
+      ]
+    },
+    "supervisor.log": {
+      "bytes": 0,
+      "mtime": 1791866932.616289,
+      "tail": []
+    },
+    "preflight_attempt2.log": {
+      "bytes": 7985,
+      "mtime": 1791866860.5133762,
+      "tail": [
+        "policy_head.share.4.weight",
+        "policy_head.share.4.bias",
+        "policy_head.mean_layer.weight",
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias"
+      ]
+    },
+    "preflight.log": {
+      "bytes": 10221,
+      "mtime": 1791866772.5062916,
+      "tail": [
+        "[0]:",
+        "  time      : 2026-10-13_12:46:12",
+        "  host      : gpu-kvm",
+        "  rank      : 0 (local_rank: 0)",
+        "  exitcode  : 1 (pid: 2179)",
+        "  error_file: <N/A>",
+        "  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html",
+        "============================================================"
+      ]
+    },
+    "export.log": {
+      "bytes": 3665,
+      "mtime": 1791866953.709822,
+      "tail": [
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias",
+        "/data/mlr_ifa/env/lib/python3.8/site-packages/robomimic/utils/dataset.py:516: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.",
+        "Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations",
+        "  pad_mask = pad_mask[:, None].astype(np.bool)"
+      ]
+    }
+  }
+}

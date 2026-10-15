@@ -1,0 +1,142 @@
+{
+  "unix": 1791867849.8705993,
+  "status": {
+    "status": "TRAINING",
+    "arm": "random",
+    "task": 6,
+    "completed_epoch": 85,
+    "optimizer_steps": 13502,
+    "updated_unix": 1791867845.6731722,
+    "pid": 2524
+  },
+  "commands": "2026-10-13T12:48:53+08:00 START export torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.export \n2026-10-13T12:57:05+08:00 EXIT export 0\n2026-10-13T12:57:05+08:00 START train_random torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train random \n",
+  "pipeline_exit": null,
+  "supervisor_exit": null,
+  "features": {
+    "6": 1562,
+    "7": 1480,
+    "8": 1560,
+    "9": 1319
+  },
+  "arms": {
+    "random": {
+      "epochs": 87,
+      "last_epoch": {
+        "task": 6,
+        "epoch": 86,
+        "batches": 157,
+        "steps": 13659,
+        "loss": -29.98846388166877,
+        "lr_first": 1.4460526315789474e-05,
+        "lr_after": 1.342763157894737e-05,
+        "seconds": 3.623112916946411
+      },
+      "checkpoints": [],
+      "formal_records": 0
+    },
+    "coreset": {
+      "epochs": 0,
+      "last_epoch": null,
+      "checkpoints": [],
+      "formal_records": 0
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 1759 MiB, 0 %",
+  "disk": "\u6587\u4ef6\u7cfb\u7edf        \u5bb9\u91cf  \u5df2\u7528  \u53ef\u7528 \u5df2\u7528% \u6302\u8f7d\u70b9\n/dev/vdb         69G   46G   20G   70% /data",
+  "processes": [
+    "   2386       1       15:17 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/supervise.sh",
+    "   2391    2386       15:17 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/pipeline.sh",
+    "   2517    2391       07:05 /data/mlr_ifa/env/bin/python /data/mlr_ifa/env/bin/torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train random",
+    "   2524    2517       07:04 /data/mlr_ifa/env/bin/python -u -m coreset_exp.train random"
+  ],
+  "logs": {
+    "train_random.log": {
+      "bytes": 20796,
+      "mtime": 1791867845.6717865,
+      "tail": [
+        "{\"task\": 6, \"epoch\": 78, \"batches\": 157, \"steps\": 12403, \"loss\": -28.818739046716388, \"lr_first\": 2.2723684210526316e-05, \"lr_after\": 2.169078947368421e-05, \"seconds\": 3.8033835887908936}",
+        "{\"task\": 6, \"epoch\": 79, \"batches\": 157, \"steps\": 12560, \"loss\": -28.886133449092792, \"lr_first\": 2.169078947368421e-05, \"lr_after\": 2.0657894736842107e-05, \"seconds\": 3.734724998474121}",
+        "{\"task\": 6, \"epoch\": 80, \"batches\": 157, \"steps\": 12717, \"loss\": -29.11076854292754, \"lr_first\": 2.0657894736842107e-05, \"lr_after\": 1.9625000000000003e-05, \"seconds\": 3.6556975841522217}",
+        "{\"task\": 6, \"epoch\": 81, \"batches\": 157, \"steps\": 12874, \"loss\": -29.104353327660043, \"lr_first\": 1.9625000000000003e-05, \"lr_after\": 1.85921052631579e-05, \"seconds\": 3.670358896255493}",
+        "{\"task\": 6, \"epoch\": 82, \"batches\": 157, \"steps\": 13031, \"loss\": -29.506925327762676, \"lr_first\": 1.85921052631579e-05, \"lr_after\": 1.755921052631579e-05, \"seconds\": 3.7036657333374023}",
+        "{\"task\": 6, \"epoch\": 83, \"batches\": 157, \"steps\": 13188, \"loss\": -29.55553800740819, \"lr_first\": 1.755921052631579e-05, \"lr_after\": 1.6526315789473683e-05, \"seconds\": 3.6186625957489014}",
+        "{\"task\": 6, \"epoch\": 84, \"batches\": 157, \"steps\": 13345, \"loss\": -29.664381841185747, \"lr_first\": 1.6526315789473683e-05, \"lr_after\": 1.549342105263158e-05, \"seconds\": 3.6452720165252686}",
+        "{\"task\": 6, \"epoch\": 85, \"batches\": 157, \"steps\": 13502, \"loss\": -29.899502881772957, \"lr_first\": 1.549342105263158e-05, \"lr_after\": 1.4460526315789474e-05, \"seconds\": 3.608018636703491}"
+      ]
+    },
+    "configure.log": {
+      "bytes": 56,
+      "mtime": 1791866620.3463795,
+      "tail": [
+        "[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
+      ]
+    },
+    "software_tests.log": {
+      "bytes": 117,
+      "mtime": 1791866618.998026,
+      "tail": [
+        "..................",
+        "----------------------------------------------------------------------",
+        "Ran 18 tests in 0.201s",
+        "",
+        "OK"
+      ]
+    },
+    "commands.log": {
+      "bytes": 272,
+      "mtime": 1791867425.0734622,
+      "tail": [
+        "2026-10-13T12:48:53+08:00 START export torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.export ",
+        "2026-10-13T12:57:05+08:00 EXIT export 0",
+        "2026-10-13T12:57:05+08:00 START train_random torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train random "
+      ]
+    },
+    "supervisor.log": {
+      "bytes": 0,
+      "mtime": 1791866932.616289,
+      "tail": []
+    },
+    "preflight_attempt2.log": {
+      "bytes": 7985,
+      "mtime": 1791866860.5133762,
+      "tail": [
+        "policy_head.share.4.weight",
+        "policy_head.share.4.bias",
+        "policy_head.mean_layer.weight",
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias"
+      ]
+    },
+    "preflight.log": {
+      "bytes": 10221,
+      "mtime": 1791866772.5062916,
+      "tail": [
+        "[0]:",
+        "  time      : 2026-10-13_12:46:12",
+        "  host      : gpu-kvm",
+        "  rank      : 0 (local_rank: 0)",
+        "  exitcode  : 1 (pid: 2179)",
+        "  error_file: <N/A>",
+        "  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html",
+        "============================================================"
+      ]
+    },
+    "export.log": {
+      "bytes": 4679,
+      "mtime": 1791867315.5287282,
+      "tail": [
+        "policy_head.share.4.weight",
+        "policy_head.share.4.bias",
+        "policy_head.mean_layer.weight",
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias"
+      ]
+    }
+  }
+}

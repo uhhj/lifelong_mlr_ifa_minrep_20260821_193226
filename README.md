@@ -187,5 +187,10 @@ If you find this work useful, please consider citing:
 ```
 ## TODO
 
+Completed LIBERO-OBJECT IFA-off comparison (seeds42/43/44, Random vs Coreset):
+[results, all task matrices and offline verification](reports/object_coreset_ifaoff_seeds42_43_44/README.md),
+[frozen experiment code](experiments/object_coreset_ifaoff_seeds42_43_44/README.md).
+This archive contains code and lightweight evidence only; weights and dataset payloads are excluded.
+
 - [ ] Upload multitask pretraining scripts.
 - [ ] Upload scripts and configs for LIBERO-50.

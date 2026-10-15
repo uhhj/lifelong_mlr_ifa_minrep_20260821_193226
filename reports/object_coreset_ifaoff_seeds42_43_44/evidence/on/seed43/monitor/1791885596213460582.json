@@ -1,0 +1,64 @@
+{
+  "unix": 1791885596.1866758,
+  "status": {
+    "status": "EXPORTING",
+    "task": 6,
+    "updated_unix": 1791885580.6185482,
+    "pid": 9248
+  },
+  "commands": "2026-10-13T17:59:11+08:00 START export torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.export \n",
+  "pipeline_exit": null,
+  "supervisor_exit": null,
+  "features": {
+    "6": 167,
+    "7": 0,
+    "8": 0,
+    "9": 0
+  },
+  "arms": {
+    "random": {
+      "epochs": 0,
+      "last_epoch": null,
+      "checkpoints": [],
+      "formal_records": 0
+    },
+    "coreset": {
+      "epochs": 0,
+      "last_epoch": null,
+      "checkpoints": [],
+      "formal_records": 0
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 3708 MiB, 62 %",
+  "disk": "\u6587\u4ef6\u7cfb\u7edf        \u5bb9\u91cf  \u5df2\u7528  \u53ef\u7528 \u5df2\u7528% \u6302\u8f7d\u70b9\n/dev/vdb         69G   47G   19G   72% /data",
+  "processes": [
+    "   9126       1       03:01 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_extension_20261013/run_queue.sh",
+    "   9230    9126       00:45 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source/coreset_exp/supervise.sh",
+    "   9234    9230       00:45 bash /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source/coreset_exp/pipeline.sh",
+    "   9241    9234       00:44 /data/mlr_ifa/env/bin/python /data/mlr_ifa/env/bin/torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.export",
+    "   9248    9241       00:41 /data/mlr_ifa/env/bin/python -u -m coreset_exp.export"
+  ],
+  "logs": {
+    "commands.log": {
+      "bytes": 110,
+      "mtime": 1791885551.7001371,
+      "tail": [
+        "2026-10-13T17:59:11+08:00 START export torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.export "
+      ]
+    },
+    "export.log": {
+      "bytes": 3665,
+      "mtime": 1791885580.6557324,
+      "tail": [
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias",
+        "/data/mlr_ifa/env/lib/python3.8/site-packages/robomimic/utils/dataset.py:516: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.",
+        "Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations",
+        "  pad_mask = pad_mask[:, None].astype(np.bool)"
+      ]
+    }
+  }
+}
