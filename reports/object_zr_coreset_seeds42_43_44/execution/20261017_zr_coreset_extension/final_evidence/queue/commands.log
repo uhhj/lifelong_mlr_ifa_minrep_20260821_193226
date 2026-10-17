@@ -1,0 +1,30 @@
+2026-10-17T18:39:25+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_extension_20261017/seed43/admission.py
+2026-10-17T18:39:42+08:00 EXIT 0 admission_43
+2026-10-17T18:39:42+08:00 START python -m zrg_exp.prepare
+2026-10-17T18:39:55+08:00 EXIT 0 prepare_43
+2026-10-17T18:39:55+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_extension_20261017/seed43/test_metrics.py
+2026-10-17T18:39:55+08:00 EXIT 0 tests_43
+2026-10-17T18:39:55+08:00 START torchrun --standalone --nnodes=1 --nproc_per_node=1 -m zrg_exp.integration_check
+2026-10-17T18:40:27+08:00 EXIT 0 integration_43
+2026-10-17T18:40:27+08:00 START python -m zrg_exp.native_action_check
+2026-10-17T18:40:45+08:00 EXIT 0 native_43
+2026-10-17T18:40:45+08:00 START python -m zrg_exp.freeze
+2026-10-17T18:40:56+08:00 EXIT 0 freeze_43
+2026-10-17T18:40:56+08:00 START bash /root/mlr_ifa/experiment_workspaces/ZR_coreset_extension_20261017/seed43/supervise.sh
+2026-10-17T20:37:49+08:00 EXIT 0 supervise_43
+2026-10-17T20:37:50+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_extension_20261017/seed44/admission.py
+2026-10-17T20:38:06+08:00 EXIT 0 admission_44
+2026-10-17T20:38:06+08:00 START python -m zrg_exp.prepare
+2026-10-17T20:38:19+08:00 EXIT 0 prepare_44
+2026-10-17T20:38:19+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_extension_20261017/seed44/test_metrics.py
+2026-10-17T20:38:19+08:00 EXIT 0 tests_44
+2026-10-17T20:38:19+08:00 START torchrun --standalone --nnodes=1 --nproc_per_node=1 -m zrg_exp.integration_check
+2026-10-17T20:38:50+08:00 EXIT 0 integration_44
+2026-10-17T20:38:50+08:00 START python -m zrg_exp.native_action_check
+2026-10-17T20:39:07+08:00 EXIT 0 native_44
+2026-10-17T20:39:07+08:00 START python -m zrg_exp.freeze
+2026-10-17T20:39:17+08:00 EXIT 0 freeze_44
+2026-10-17T20:39:17+08:00 START bash /root/mlr_ifa/experiment_workspaces/ZR_coreset_extension_20261017/seed44/supervise.sh
+2026-10-17T22:33:02+08:00 EXIT 0 supervise_44
+2026-10-17T22:33:02+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_extension_20261017/aggregate_three_seeds.py
+2026-10-17T22:33:02+08:00 EXIT 0 aggregate

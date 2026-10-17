@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "optimizer_calls": 4,
+  "effective_steps": 3,
+  "formal_steps": 0,
+  "environment_steps": 0,
+  "tests": {
+    "initial_public_and_rng_exact": true,
+    "zero_output_and_native_grad_parity": true,
+    "old_branch_z_gradient_nonzero": true,
+    "exact_serialized_optimizer_scheduler_rng_recovery": true,
+    "single_mixed_no_current_finite": true,
+    "old_branch_frozen": true,
+    "current_U_V_gradients": true
+  },
+  "bounded_update_phase_evidence": "v2 integration_check.py assertions completed before serialized stage7 checkpoint creation; checkpoint and 4-call ledger bound in recovery evidence",
+  "recovery": {
+    "reason": "Repeated full-front-end digest inside per-key assertion; serialized stage7 reached after all four update and recovery assertions",
+    "pid": 3095,
+    "command": "/data/mlr_ifa/env/bin/python -u -m zrg_exp.integration_check ",
+    "optimizer_call_ledger": [
+      "{\"event\": \"before_call\", \"number\": 1}",
+      "{\"event\": \"before_call\", \"number\": 2}",
+      "{\"event\": \"before_call\", \"number\": 3}",
+      "{\"event\": \"before_call\", \"number\": 4}"
+    ],
+    "checkpoint_sha256": "75d6ad45c799c5652cfc9cb40173eeae2113d1fd849cc97ee2d91181036176ad",
+    "source_before_sha256": "d1b5d3b4f35cc5655b7d38fe5d3fe77eff7ed625c07991f369f16b8b1cda6412",
+    "integration_source_sha256": "68e1b4fc2a7e7c65d5eb1b336101c59672e81de6243778122f0db41645bf41bc",
+    "unix": 1792222144.9875515,
+    "resume_scope": "native load/forward/action only; zero additional optimizer calls"
+  },
+  "continuation_optimizer_calls": 0,
+  "continuation_seconds": 14.49487829208374,
+  "seconds": 57.1132595539093,
+  "strict_native_load_and_action": "NATIVE_ACTION_CHECK.json",
+  "serialized_test_checkpoint_sha256": "75d6ad45c799c5652cfc9cb40173eeae2113d1fd849cc97ee2d91181036176ad"
+}
