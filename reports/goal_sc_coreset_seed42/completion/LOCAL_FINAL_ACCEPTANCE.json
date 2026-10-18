@@ -1,0 +1,397 @@
+{
+  "status": "PASS",
+  "engineering": "COMPLETED",
+  "metric_gate": false,
+  "criteria": {
+    "AUC": false,
+    "OldFinal": true
+  },
+  "decision": "NO_EXTENSION",
+  "epochs": 400,
+  "optimizer_steps": 76100,
+  "checkpoints": [
+    {
+      "task": 6,
+      "sha256": "9239b6577aa7ae705c3e24fe13f34e822fde95a507782e9c7a20f42a8946bf21",
+      "loaded_keys": 100
+    },
+    {
+      "task": 7,
+      "sha256": "8666874354a363b3f94df82a57cfb2d124d12608361a8da6ed965995698e1b57",
+      "loaded_keys": 100
+    },
+    {
+      "task": 8,
+      "sha256": "c62efb990bf6e46b0e26beff2897a8dd93eaea8e45ddcc2fbe4b3ce6f59c6612",
+      "loaded_keys": 100
+    },
+    {
+      "task": 9,
+      "sha256": "591ab8941cd238691fdaac6d2351fdaf0fa4b986229f943e1b228db9163ae130",
+      "loaded_keys": 100
+    }
+  ],
+  "formal_records": 200,
+  "completed_vector_attempts": 20,
+  "technical_exceptions": 0,
+  "baseline_records_readonly": 400,
+  "input_package_files": 128,
+  "initial_model_and_rng_identical": true,
+  "task6_model_tensors_equal": true,
+  "metrics": {
+    "sc_coreset": {
+      "AUC": {
+        "fraction": "47/64",
+        "percent": 73.4375
+      },
+      "FWT": {
+        "fraction": "61/80",
+        "percent": 76.25
+      },
+      "NBT": {
+        "fraction": "13/180",
+        "percent": 7.222222222222222
+      },
+      "OldFinal": {
+        "fraction": "7/10",
+        "percent": 70.0
+      },
+      "FinalAll": {
+        "fraction": "7/10",
+        "percent": 70.0
+      }
+    },
+    "coreset": {
+      "AUC": {
+        "fraction": "63/80",
+        "percent": 78.75
+      },
+      "FWT": {
+        "fraction": "13/16",
+        "percent": 81.25
+      },
+      "NBT": {
+        "fraction": "1/18",
+        "percent": 5.555555555555555
+      },
+      "OldFinal": {
+        "fraction": "41/60",
+        "percent": 68.33333333333333
+      },
+      "FinalAll": {
+        "fraction": "59/80",
+        "percent": 73.75
+      }
+    },
+    "random": {
+      "AUC": {
+        "fraction": "259/320",
+        "percent": 80.9375
+      },
+      "FWT": {
+        "fraction": "33/40",
+        "percent": 82.5
+      },
+      "NBT": {
+        "fraction": "2/45",
+        "percent": 4.444444444444445
+      },
+      "OldFinal": {
+        "fraction": "23/30",
+        "percent": 76.66666666666667
+      },
+      "FinalAll": {
+        "fraction": "4/5",
+        "percent": 80.0
+      }
+    }
+  },
+  "delta_vs_coreset": {
+    "AUC": {
+      "fraction": "-17/320",
+      "percent": -5.3125
+    },
+    "FWT": {
+      "fraction": "-1/20",
+      "percent": -5.0
+    },
+    "NBT": {
+      "fraction": "1/60",
+      "percent": 1.6666666666666667
+    },
+    "OldFinal": {
+      "fraction": "1/60",
+      "percent": 1.6666666666666667
+    },
+    "FinalAll": {
+      "fraction": "-3/80",
+      "percent": -3.75
+    }
+  },
+  "matrix": [
+    {
+      "stage": 6,
+      "task": 6,
+      "random": 65.0,
+      "coreset": 65.0,
+      "sc_coreset": 65.0
+    },
+    {
+      "stage": 7,
+      "task": 6,
+      "random": 70.0,
+      "coreset": 65.0,
+      "sc_coreset": 70.0
+    },
+    {
+      "stage": 7,
+      "task": 7,
+      "random": 100.0,
+      "coreset": 100.0,
+      "sc_coreset": 100.0
+    },
+    {
+      "stage": 8,
+      "task": 6,
+      "random": 60.0,
+      "coreset": 65.0,
+      "sc_coreset": 60.0
+    },
+    {
+      "stage": 8,
+      "task": 7,
+      "random": 100.0,
+      "coreset": 100.0,
+      "sc_coreset": 100.0
+    },
+    {
+      "stage": 8,
+      "task": 8,
+      "random": 75.0,
+      "coreset": 70.0,
+      "sc_coreset": 70.0
+    },
+    {
+      "stage": 9,
+      "task": 6,
+      "random": 70.0,
+      "coreset": 45.0,
+      "sc_coreset": 60.0
+    },
+    {
+      "stage": 9,
+      "task": 7,
+      "random": 100.0,
+      "coreset": 100.0,
+      "sc_coreset": 100.0
+    },
+    {
+      "stage": 9,
+      "task": 8,
+      "random": 60.0,
+      "coreset": 60.0,
+      "sc_coreset": 50.0
+    },
+    {
+      "stage": 9,
+      "task": 9,
+      "random": 90.0,
+      "coreset": 90.0,
+      "sc_coreset": 70.0
+    }
+  ],
+  "task_auc_contribution_pp": {
+    "6": 0.9375,
+    "7": 0.0,
+    "8": -1.25,
+    "9": -5.0
+  },
+  "storage": {
+    "6": {
+      "minimum_swaps": 70,
+      "radius_before": 0.2787688810494581,
+      "radius_after": 0.3376563008211976,
+      "demo_full": {
+        "demo_6": 110,
+        "demo_1": 113,
+        "demo_3": 104,
+        "demo_7": 95,
+        "demo_0": 92,
+        "demo_8": 99,
+        "demo_2": 103,
+        "demo_5": 92,
+        "demo_4": 94,
+        "demo_9": 95
+      },
+      "demo_original": {
+        "demo_3": 53,
+        "demo_2": 69,
+        "demo_8": 40,
+        "demo_7": 50,
+        "demo_6": 51,
+        "demo_1": 47,
+        "demo_0": 54,
+        "demo_9": 48,
+        "demo_5": 44,
+        "demo_4": 43
+      },
+      "demo_final": {
+        "demo_3": 48,
+        "demo_2": 69,
+        "demo_8": 42,
+        "demo_7": 48,
+        "demo_6": 54,
+        "demo_1": 45,
+        "demo_0": 50,
+        "demo_9": 53,
+        "demo_5": 46,
+        "demo_4": 44
+      },
+      "seconds": 4.6741206029983005
+    },
+    "7": {
+      "minimum_swaps": 38,
+      "radius_before": 0.26126398880820695,
+      "radius_after": 0.2932652446149676,
+      "demo_full": {
+        "demo_5": 92,
+        "demo_4": 93,
+        "demo_8": 86,
+        "demo_1": 96,
+        "demo_0": 80,
+        "demo_9": 77,
+        "demo_7": 96,
+        "demo_6": 94,
+        "demo_2": 89,
+        "demo_3": 86
+      },
+      "demo_original": {
+        "demo_0": 44,
+        "demo_9": 52,
+        "demo_2": 50,
+        "demo_4": 39,
+        "demo_7": 45,
+        "demo_8": 41,
+        "demo_3": 48,
+        "demo_6": 44,
+        "demo_5": 40,
+        "demo_1": 42
+      },
+      "demo_final": {
+        "demo_0": 45,
+        "demo_9": 58,
+        "demo_2": 50,
+        "demo_4": 37,
+        "demo_7": 41,
+        "demo_8": 40,
+        "demo_3": 49,
+        "demo_6": 44,
+        "demo_5": 40,
+        "demo_1": 41
+      },
+      "seconds": 2.875194887004909
+    },
+    "8": {
+      "minimum_swaps": 38,
+      "radius_before": 0.29089817528218204,
+      "radius_after": 0.32238033751992246,
+      "demo_full": {
+        "demo_6": 105,
+        "demo_8": 84,
+        "demo_7": 92,
+        "demo_1": 88,
+        "demo_5": 89,
+        "demo_4": 80,
+        "demo_0": 90,
+        "demo_3": 94,
+        "demo_2": 92,
+        "demo_9": 90
+      },
+      "demo_original": {
+        "demo_3": 55,
+        "demo_5": 46,
+        "demo_6": 57,
+        "demo_8": 39,
+        "demo_0": 39,
+        "demo_7": 39,
+        "demo_2": 55,
+        "demo_4": 35,
+        "demo_1": 44,
+        "demo_9": 43
+      },
+      "demo_final": {
+        "demo_3": 54,
+        "demo_5": 44,
+        "demo_6": 56,
+        "demo_8": 43,
+        "demo_0": 37,
+        "demo_7": 41,
+        "demo_2": 57,
+        "demo_4": 33,
+        "demo_1": 46,
+        "demo_9": 41
+      },
+      "seconds": 2.7062905030034017
+    },
+    "9": {
+      "minimum_swaps": 39,
+      "radius_before": 0.24195749415989193,
+      "radius_after": 0.26276184498186533,
+      "demo_full": {
+        "demo_0": 347,
+        "demo_6": 152,
+        "demo_5": 170,
+        "demo_9": 169,
+        "demo_7": 156,
+        "demo_3": 258,
+        "demo_1": 174,
+        "demo_2": 184,
+        "demo_4": 158,
+        "demo_8": 201
+      },
+      "demo_original": {
+        "demo_8": 97,
+        "demo_3": 125,
+        "demo_2": 106,
+        "demo_5": 78,
+        "demo_6": 77,
+        "demo_1": 78,
+        "demo_0": 191,
+        "demo_9": 88,
+        "demo_7": 75,
+        "demo_4": 70
+      },
+      "demo_final": {
+        "demo_8": 97,
+        "demo_3": 125,
+        "demo_2": 103,
+        "demo_5": 77,
+        "demo_6": 79,
+        "demo_1": 81,
+        "demo_0": 188,
+        "demo_9": 88,
+        "demo_7": 79,
+        "demo_4": 68
+      },
+      "seconds": 11.48005530401133
+    }
+  },
+  "timings": [
+    {
+      "phase": "train",
+      "seconds": 2483.6012473106384,
+      "exit": 0
+    },
+    {
+      "phase": "evaluate",
+      "seconds": 4361.036769390106,
+      "exit": 0
+    },
+    {
+      "phase": "audit",
+      "seconds": 16.587769985198975,
+      "exit": 0
+    }
+  ],
+  "parent_evidence_provenance": "Existing GOAL seed42 final evidence; every file matches the preregistered CONTRACT hash."
+}
