@@ -1,0 +1,11 @@
+--- final_process_audit.original.py
++++ final_process_audit_fixed.py
+@@ -4,7 +4,7 @@
+ O=Path('/root/mlr_ifa/experiments/ZRv2_OBJECT_seed43_20261018')
+ def main():
+     assert (O/'pipeline.exit').read_text().strip()=='0'
+-    pid=int((O/'pipeline.pid').read_text());assert not Path('/proc'/str(pid)).exists()
++    pid=int((O/'pipeline.pid').read_text());assert not (Path('/proc')/str(pid)).exists()
+     matches=[]
+     for line in subprocess.check_output(['ps','-eo','pid,args'],text=True).splitlines():
+         if 'python' in line and ('-m zr2_exp.calibrate' in line or '-m zr2_exp.evaluate' in line or '-m zr2_exp.audit' in line):matches.append(line)

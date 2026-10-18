@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "epochs": 40,
+  "optimizer_steps": 10550,
+  "sample_exposures": 105240,
+  "checkpoints": 4,
+  "episodes": 200,
+  "vector_attempts": 20,
+  "structure_checks": 16,
+  "metric_gate": false,
+  "cost": {
+    "optimizer_steps": 10550,
+    "sample_exposures": 105240,
+    "epoch_seconds": 185.89958572387695,
+    "extra_T0_bytes": 75735064,
+    "residual_parameters": 16608,
+    "peak_gpu_bytes": 215967744,
+    "latency": [
+      {
+        "batch": 10,
+        "history": 1,
+        "parent_temporal_head_ms": 4.817971038818359,
+        "zrv2_temporal_head_ms": 9.343990325927734,
+        "overhead_ms": 4.526019287109375
+      },
+      {
+        "batch": 10,
+        "history": 4,
+        "parent_temporal_head_ms": 4.422735977172851,
+        "zrv2_temporal_head_ms": 9.238829040527344,
+        "overhead_ms": 4.816093063354493
+      },
+      {
+        "batch": 10,
+        "history": 8,
+        "parent_temporal_head_ms": 4.363555145263672,
+        "zrv2_temporal_head_ms": 9.287001800537109,
+        "overhead_ms": 4.923446655273437
+      }
+    ]
+  },
+  "notes": [
+    "Three-seed/five-seed expansion is conditional on all metrics and process acceptance.",
+    "Historical RTX4090 parent vs current RTX3090; global action RNG not isolated.",
+    "Public policy was not retrained; extra calibration compute is not equal-budget comparison."
+  ]
+}
