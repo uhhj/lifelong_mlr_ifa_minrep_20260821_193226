@@ -1,0 +1,448 @@
+--- /dev/null
++++ b/source/zr2_exp/__init__.py
+@@ -0,0 +1 @@
++"""Isolated ZR-v2 calibration; parent experiment is read-only."""
+--- /dev/null
++++ b/source/zr2_exp/audit.py
+@@ -0,0 +1,41 @@
++"""Read-only scientific acceptance; process exit is checked separately."""
++from .common import *
++from compare_metrics import compare
++
++def main():
++    verify();cal=js(O/'CALIBRATED.json');assert cal['epochs']==40 and cal['optimizer_steps']==10550 and cal['exposures']==105240
++    rows=js(O/'epochs.json');assert len(rows)==40
++    assert {(r['task'],r['epoch']) for r in rows}=={(t,e) for t in range(6,10) for e in range(10)}
++    assert sum(r['batches'] for r in rows)==10550 and sum(r['samples'] for r in rows)==105240
++    logs=[json.loads(s) for s in (O/'calibration_batches.jsonl').read_text().splitlines()]
++    # Successful fresh execution: any resumed duplicate physical computation must be audited separately.
++    assert len(logs)==10550 and len({r['logical_step'] for r in logs})==10550
++    counts={}
++    for r in logs:
++        assert len(r['samples'])==len(r['indices']);key=(r['stage'],r['epoch']);counts.setdefault(key,[]).extend(r['indices'])
++    for (t,e),v in counts.items():assert sorted(v)==list(range([1562,2261,3081,3620][t-6]))
++    for t in range(6,10):
++        for task in range(6,t+1):
++            expected=sum(task in r['active'] for r in logs if r['stage']==t)
++            assert rows[(t-6)*10+9]['branch_steps'][str(task)]==expected
++        assert js(O/f'buffer_after_task{t}.json')['hashes']==js(P/'coreset'/f'buffer_after_task{t}.json')['hashes']
++    structure=[json.loads(s) for s in (O/'STRUCTURE.jsonl').read_text().splitlines()]
++    assert len(structure)==16 and all(r['passed'] for r in structure)
++    assert len({r['T0_hash'] for r in structure})==1
++    attempts=[]
++    for f in (O/'evaluation').glob('attempts*.jsonl'):attempts.extend(json.loads(s) for s in f.read_text().splitlines())
++    for event,n in [('vector_attempt_start',20),('vector_attempt_complete',20),('environment_construct_start',10),('environment_construct_complete',10),('environment_closed',10)]:assert sum(r['event']==event for r in attempts)==n
++    assert not any(r['event']=='technical_exception' for r in attempts)
++    comparison=compare(P/'coreset/evaluation',O/'evaluation');write(O/'METRIC_COMPARISON.json',comparison)
++    setup();p,t0=new_public();loaded=[]
++    for t in range(6,10):
++        f=O/'models'/f'zrv2_stage{t}_calibration_ep9.pth';s=torch.load(f,map_location='cpu');assert sha(f)==cal['checkpoints'][f.name]
++        assert s['next_epoch']==10 and s['task']==t and s['contract_sha256']==sha(O/'CONTRACT.json')
++        load_stage(p,t);assert tensor_hash(p)==s['public_hash'];assert tensor_hash(t0)==s['T0_hash']
++        b,_=make_bank(t);b.load_state_dict(s['bank'],strict=True);assert b.gate_w.dtype==torch.float64
++        loaded.append(dict(stage=t,checkpoint_sha256=sha(f),public_hash=s['public_hash'],T0_hash=s['T0_hash'],parameters=sum(v.numel() for v in b.parameters())))
++    write(O/'CHECKPOINT_LOAD_ACCEPTANCE.json',dict(status='PASS',rows=loaded))
++    write(O/'AUDIT.json',dict(status='PASS',epochs=40,optimizer_steps=10550,sample_exposures=105240,checkpoints=4,episodes=200,vector_attempts=20,structure_checks=16,metric_gate=comparison['metric_gate'],cost=dict(optimizer_steps=10550,sample_exposures=105240,epoch_seconds=sum(r['seconds'] for r in rows),extra_T0_bytes=js(O/'INTEGRATION.json')['T0_bytes'],residual_parameters=16608,peak_gpu_bytes=cal['gpu_peak_allocated'],latency=js(O/'COST_ISOLATION.json')['latency']),notes=['Three-seed/five-seed expansion is conditional on all metrics and process acceptance.','Historical RTX4090 parent vs current RTX3090; global action RNG not isolated.','Public policy was not retrained; extra calibration compute is not equal-budget comparison.']))
++    status('AWAITING_PROCESS_EXIT_ACCEPTANCE',metric_gate=comparison['metric_gate'])
++    print(json.dumps(dict(status='AUDIT_PASS',metric_gate=comparison['metric_gate'])),flush=True)
++if __name__=='__main__':main()
+--- /dev/null
++++ b/source/zr2_exp/calibrate.py
+@@ -0,0 +1,77 @@
++import argparse,shutil
++from .diagnostics import *
++from torch.utils.data import DataLoader,DistributedSampler
++from libero.lifelong.algos.mlr import build_dataset_for_task
++
++def store(t):
++    src=P/'coreset/storage'/f'task{t}.json';m=js(src);target=O/'storage'/f'task{t}.json'
++    if target.exists():assert js(target)['parent_manifest_sha256']==sha(src)
++    else:write(target,dict(parent_manifest_sha256=sha(src),selected=m['selected'],task=t))
++    directory=O/'buffer';directory.mkdir(exist_ok=True)
++    for r in m['selected']:
++        s=Path(r['source']);dst=directory/r['destination'];assert sha(s)==r['sha256']
++        if dst.exists():assert sha(dst)==r['sha256']
++        else:
++            tmp=dst.with_suffix('.copying');shutil.copy2(s,tmp);assert sha(tmp)==r['sha256'];tmp.replace(dst)
++    actual={p.name:sha(p) for p in sorted(directory.glob('*.pt'))}
++    expected=js(P/'coreset'/f'buffer_after_task{t}.json')['hashes'];assert actual==expected
++    write(O/f'buffer_after_task{t}.json',dict(hashes=actual,parent_manifest_sha256=sha(src),count=len(actual)))
++
++def main():
++    ap=argparse.ArgumentParser();ap.add_argument('--resume',action='store_true');args=ap.parse_args()
++    verify();assert js(O/'INTEGRATION.json')['status']=='PASS';assert not (O/'CALIBRATED.json').exists()
++    cp=O/'recovery/latest.pth';assert args.resume or not cp.exists(),'Explicit resume required'
++    setup();p,t0=new_public();t0_hash=tensor_hash(t0);assert t0_hash==js(O/'INTEGRATION.json')['T0_hash']
++    (O/'buffer').mkdir(exist_ok=True);res=torch.load(cp,map_location='cpu') if args.resume else None
++    if res:assert res['contract_sha256']==sha(O/'CONTRACT.json')
++    else:assert not list((O/'buffer').glob('*.pt'))
++    previous=None;epochs=[];globalstep=0;exposures=0
++    if res:
++        previous,_=make_bank(res['task']);previous.load_state_dict(res['bank'],strict=True)
++        actual={f.name:sha(f) for f in (O/'buffer').glob('*.pt')}
++        assert all(actual.get(n)==h for n,h in res['buffer_hashes'].items())
++        if actual!=res['buffer_hashes']:assert res['next_epoch']==10,'Uncommitted buffer outside stage boundary'
++        epochs=res['epochs'];globalstep=res['globalstep'];exposures=res['exposures']
++        # Committed epoch checkpoint is authority; all raw batch attempts remain append-only.
++        if (O/'epochs.json').exists() and js(O/'epochs.json')!=epochs:write(O/f'interrupted_epochs_{time.time_ns()}.json',js(O/'epochs.json'))
++    for t in range(6,10):
++        if res and t<res['task']:continue
++        if res and t==res['task'] and res['next_epoch']==10:
++            store(t);res=None;continue
++        parent=load_stage(p,t);ph=tensor_hash(p)
++        bank,geometry=make_bank(t,previous)
++        dataset=build_dataset_for_task(str(P/'features'),t,str(O/'buffer'),43,start=6)
++        assert len(dataset)==[1562,2261,3081,3620][t-6]
++        sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True,seed=0)
++        loader=DataLoader(dataset,batch_size=10,sampler=sampler,num_workers=0,drop_last=False)
++        assert len(loader)==[157,227,309,362][t-6]
++        order=[Path(f).name for f in dataset.file_paths];write(O/f'dataset_stage{t}.json',dict(order=order,sha256=hashlib.sha256(json.dumps(order).encode()).hexdigest()))
++        write(O/f'gates_stage{t}.json',dict(geometry=geometry,canonical_prefix=list(range(t+1)),FP64=True))
++        opt,sch=optimizer(bank,10*len(loader));start_epoch=0
++        if res:
++            bank.load_state_dict(res['bank'],strict=True);opt.load_state_dict(res['optimizer']);sch.load_state_dict(res['scheduler'])
++            for n,v in bank.named_parameters():v.grad=None if res['grads'][n] is None else res['grads'][n].cuda()
++            for n,m in bank.named_modules():m.training=res['modes'][n]
++            assert ph==res['public_hash'] and t0_hash==res['T0_hash'];restore_rng(res['rng']);start_epoch=res['next_epoch'];res=None
++        check(p,t0,bank,dataset,'stage_start',ph,t0_hash)
++        for epoch in range(start_epoch,10):
++            sampler.set_epoch(epoch);tic=time.time();losses=[];firstlr=opt.param_groups[0]['lr'];sample_order=list(iter(sampler));offset=0
++            for bi,(samples,tasks) in enumerate(loader):
++                ids=torch.tensor([int(x) for x in tasks],device='cuda');h=samples['feature'].squeeze(1).cuda();a=samples['actions'].squeeze(1).cuda()
++                row=update(p,t0,bank,opt,sch,h,a,ids);globalstep+=1;exposures+=len(h);losses.append(row['loss'])
++                indices=sample_order[offset:offset+len(h)];offset+=len(h)
++                append(O/'calibration_batches.jsonl',dict(stage=t,epoch=epoch,batch=bi,logical_step=globalstep,indices=indices,samples=[order[i] for i in indices],**row))
++            assert offset==len(dataset)
++            torch.cuda.synchronize();seconds=time.time()-tic
++            branch_steps={n:int(opt.state[b.U].get('step',0)) for n,b in bank.branches.items()}
++            row=dict(task=t,epoch=epoch,batches=len(loader),samples=len(dataset),optimizer_steps=globalstep,exposures=exposures,loss=float(np.mean(losses)),lr_first=firstlr,lr_after=opt.param_groups[0]['lr'],branch_steps=branch_steps,seconds=seconds)
++            if epoch in (0,9):check(p,t0,bank,dataset,f'epoch{epoch}',ph,t0_hash)
++            epochs.append(row);write(O/'epochs.json',epochs)
++            snapshot=dict(task=t,next_epoch=epoch+1,bank=cpu(bank.state_dict()),optimizer=cpu(opt.state_dict()),scheduler=cpu(sch.state_dict()),grads={n:cpu(v.grad) for n,v in bank.named_parameters()},modes={n:m.training for n,m in bank.named_modules()},rng=cpu(rng()),globalstep=globalstep,exposures=exposures,epochs=epochs,parent=parent,public_hash=ph,T0_hash=t0_hash,contract_sha256=sha(O/'CONTRACT.json'),dataset_order_sha256=hashlib.sha256(json.dumps(order).encode()).hexdigest(),buffer_hashes={f.name:sha(f) for f in (O/'buffer').glob('*.pt')})
++            if epoch==9:save(O/'models'/f'zrv2_stage{t}_calibration_ep9.pth',snapshot)
++            save(cp,snapshot);status('CALIBRATING',task=t,epoch=epoch,optimizer_steps=globalstep,exposures=exposures);print(json.dumps(row),flush=True)
++        check(p,t0,bank,dataset,'stage_end',ph,t0_hash);store(t);previous=bank
++    assert len(epochs)==40 and globalstep==10550 and exposures==105240
++    write(O/'CALIBRATED.json',dict(status='CALIBRATED',epochs=40,optimizer_steps=globalstep,exposures=exposures,checkpoints={f.name:sha(f) for f in (O/'models').glob('*.pth')},summed_epoch_seconds=sum(r['seconds'] for r in epochs),T0_hash=t0_hash,gpu_peak_allocated=torch.cuda.max_memory_allocated()))
++    status('CALIBRATED')
++if __name__=='__main__':main()
+--- /dev/null
++++ b/source/zr2_exp/common.py
+@@ -0,0 +1,67 @@
++import os,sys,json,copy,time,hashlib
++from pathlib import Path
++W=Path('/root/mlr_ifa/experiment_workspaces/ZRv2_OBJECT_seed43_20261018')
++O=Path('/root/mlr_ifa/experiments/ZRv2_OBJECT_seed43_20261018')
++P=Path('/data/mlr_ifa/experiments/Seed43_Random_Coreset_repeat_20261016_v1')
++S=Path('/data/mlr_ifa/experiment_workspaces/Seed43_three_arm_repeat_20261016_v1/rc/source')
++os.environ.update(CORESET_OUT=str(P),CORESET_SEED='43',PYTHONDONTWRITEBYTECODE='1')
++sys.dont_write_bytecode=True
++sys.path[:0]=[str(W/'attachment'),str(S)]
++import numpy as np
++import torch
++from coreset_exp.common import sha,write,save,rng,restore_rng
++from coreset_exp.model import cfg,strict_downstream
++from libero.lifelong.utils import control_seed,make_linear_schedule_with_warmup
++from libero.lifelong.models.brief import BriefPolicy
++from reference_core import MeanCalibrationBank,corrected_gmm,extend_gates
++
++def js(p):return json.loads(Path(p).read_text())
++def append(p,x):
++    p=Path(p);p.parent.mkdir(parents=True,exist_ok=True)
++    with p.open('a') as f:f.write(json.dumps(x,allow_nan=False)+'\n');f.flush();os.fsync(f.fileno())
++def status(s,**kw):write(O/'RUN_STATUS.json',dict(status=s,time=time.time(),pid=os.getpid(),**kw))
++def tensor_hash(model):
++    h=hashlib.sha256()
++    for n,v in sorted(model.state_dict().items()):
++        a=v.detach().cpu().contiguous();h.update(n.encode());h.update(str((a.dtype,tuple(a.shape))).encode());h.update(a.numpy().tobytes())
++    return h.hexdigest()
++def cpu(x):
++    if torch.is_tensor(x):return x.detach().cpu().clone()
++    if isinstance(x,dict):return {k:cpu(v) for k,v in x.items()}
++    if isinstance(x,list):return [cpu(v) for v in x]
++    if isinstance(x,tuple):return tuple(cpu(v) for v in x)
++    return copy.deepcopy(x)
++def setup():
++    assert torch.cuda.is_available();torch.set_num_threads(4);control_seed(43)
++    flags=js(O/'ADMISSION.json')['numeric_flags']
++    torch.backends.cuda.matmul.allow_tf32=flags['tf32_matmul'];torch.backends.cudnn.allow_tf32=flags['tf32_cudnn'];torch.backends.cudnn.benchmark=flags['cudnn_benchmark']
++    torch.use_deterministic_algorithms(flags['deterministic'])
++def verify():
++    c=js(O/'CONTRACT.json')
++    for p,h in c['files'].items():assert sha(p)==h,('Frozen source/input mismatch',p)
++    return c
++def new_public():
++    c=cfg('coreset');c.aug=False;c.train.use_augmentation=False
++    p=BriefPolicy(c,None).cuda().eval().requires_grad_(False);strict_downstream(p,c.pretrain)
++    t0=copy.deepcopy(p.temporal_transformer).eval().requires_grad_(False)
++    assert all(a.data_ptr()!=b.data_ptr() for a,b in zip(p.temporal_transformer.parameters(),t0.parameters()))
++    return p,t0
++def load_stage(p,t):
++    b=js(O/'PARENT_BINDING.json')['checkpoints'][str(t)];assert sha(b['path'])==b['sha256'];strict_downstream(p,b['path']);p.eval().requires_grad_(False)
++    return b
++def make_bank(t,previous=None):
++    # Previously admitted canonical data; construction is still strictly prefix-only.
++    e=np.load(W/'language_and_gates.npz')['canonical'];w=np.empty((0,512));reports=[]
++    for k in range(6,t+1):w,r=extend_gates(e[:k],e[k],w);reports.append(r)
++    before=cpu(rng());b=MeanCalibrationBank(range(6,t+1),w).cuda()
++    if previous is not None:
++        for n,v in previous.branches.items():
++            b.branches[n].load_state_dict(v.state_dict(),strict=True)
++            assert all(torch.equal(a,c) for a,c in zip(v.parameters(),b.branches[n].parameters()))
++    assert torch.equal(before['cpu'],torch.get_rng_state())
++    assert all(torch.equal(a,b) for a,b in zip(before['cuda'],torch.cuda.get_rng_state_all()))
++    return b,reports
++def optimizer(bank,total):
++    opt=torch.optim.AdamW(bank.parameters(),lr=1e-4,betas=(.9,.999),eps=1e-8,weight_decay=.1)
++    sch=torch.optim.lr_scheduler.LambdaLR(opt,make_linear_schedule_with_warmup(500,total))
++    return opt,sch
+--- /dev/null
++++ b/source/zr2_exp/cost_and_isolation.py
+@@ -0,0 +1,28 @@
++"""Read-only supplement using saved isolation update; zero optimizer/environment calls."""
++from .model import *
++def main():
++    assert not (O/'COST_ISOLATION.json').exists();setup();p,t0=new_public();load_stage(p,7)
++    baseline,_=make_bank(7);trained=copy.deepcopy(baseline)
++    s=torch.load(O/'integration_recovery.pth',map_location='cpu');trained.load_state_dict(s['bank'])
++    assert all(torch.equal(a,b) for a,b in zip(baseline.branches['6'].parameters(),trained.branches['6'].parameters()))
++    assert any(not torch.equal(a,b) for a,b in zip(baseline.branches['7'].parameters(),trained.branches['7'].parameters()))
++    h=torch.cat([torch.load(f,map_location='cpu')['feature'] for f in sorted((P/'coreset/buffer').glob('t6__*.pt'))[:10]]).cuda()
++    with torch.no_grad():
++        before=decode(p,t0,baseline,h);after=decode(p,t0,trained,h)
++        diff=float((before['means']-after['means']).abs().max());dd=float((before['delta']-after['delta']).abs().max())
++        assert max(diff,dd)<=1e-6
++        latencies=[]
++        for length in [1,4,8]:
++            hh=h[:,:length].contiguous()
++            for _ in range(3):decode(p,t0,trained,hh)
++            def measure(fn):
++                begin=torch.cuda.Event(enable_timing=True);end=torch.cuda.Event(enable_timing=True)
++                begin.record()
++                for _ in range(10):fn()
++                end.record();torch.cuda.synchronize();return begin.elapsed_time(end)/10
++            a=measure(lambda:p.policy_head(p.temporal_encode(hh)[:,-1],train=False))
++            b=measure(lambda:selected_dist(decode(p,t0,trained,hh)))
++            latencies.append(dict(batch=10,history=length,parent_temporal_head_ms=a,zrv2_temporal_head_ms=b,overhead_ms=b-a))
++    write(O/'COST_ISOLATION.json',dict(status='PASS',actual_task7_only_update_other_task6_mean_max=diff,cross_delta_max=dd,latency=latencies,note='Real retained latent, no spatial encoder or environment in timing; ten repeated forwards, zero optimizer calls.',T0_parameters=sum(p.numel() for p in t0.parameters()),T0_bytes=sum(v.numel()*v.element_size() for v in t0.state_dict().values()),gpu_peak_allocated=torch.cuda.max_memory_allocated(),optimizer_calls=0,environment_steps=0))
++    print('COST_ISOLATION PASS; zero updates/rollouts')
++if __name__=='__main__':main()
+--- /dev/null
++++ b/source/zr2_exp/diagnostics.py
+@@ -0,0 +1,30 @@
++from .model import *
++
++@torch.no_grad()
++def check(p,t0,bank,dataset,label,public_hash,t0_hash):
++    state=cpu(rng());start=time.time();maxgate=0.;selferr=0.;cross=0.;amp=0.;sat=0;count=0
++    from torch.utils.data import DataLoader
++    try:
++        assert tensor_hash(p)==public_hash and tensor_hash(t0)==t0_hash
++        for samples,tasks in DataLoader(dataset,batch_size=32,shuffle=False,num_workers=0):
++            h=samples['feature'].squeeze(1).cuda();ids=torch.tensor([int(t) for t in tasks],device='cuda')
++            out=decode(p,t0,bank,h);e=h[:,-1,0].double();response=(e/e.norm(dim=-1,keepdim=True))@bank.gate_w.T
++            expected=torch.stack([ids==t for t in bank.task_ids],1)
++            if (~expected).any():maxgate=max(maxgate,float(response[~expected].abs().max()))
++            selferr=max(selferr,float((response[expected]-1).abs().max()))
++            values=torch.stack([bank.branches[str(t)](out['q']).double()*response[:,j,None] for j,t in enumerate(bank.task_ids)],1)
++            total=values.sum(1)
++            for j,t in enumerate(bank.task_ids):
++                foreign=ids!=t
++                if foreign.any():
++                    without=(.1*torch.tanh(total-values[:,j])).float()
++                    diff=(out['delta'][foreign]-without[foreign]).abs().max();cross=max(cross,float(diff))
++                    means=(out['b'][foreign]+without[foreign,None,:]).tanh()
++                    cross=max(cross,float((out['means'][foreign]-means).abs().max()))
++            amp=max(amp,float(out['delta'].abs().max()));sat+=int((out['delta'].abs()>=.099).sum());count+=len(h)*7
++            assert float((out['means']-out['base_means']).abs().max())<=.100001
++        report=dict(label=label,stage=max(bank.task_ids),samples=len(dataset),off_gate=maxgate,self_gate_error=selferr,cross_contribution_and_mean=cross,delta_max=amp,saturation_fraction=sat/count,public_hash=public_hash,T0_hash=t0_hash,gate_hash=hashlib.sha256(bank.gate_w.cpu().numpy().tobytes()).hexdigest(),branch_norms={n:{k:float(v.norm()) for k,v in branch.named_parameters()} for n,branch in bank.branches.items()},seconds=time.time()-start)
++        report['passed']=maxgate<=1e-6 and selferr<=1e-5 and cross<=1e-6
++        append(O/'STRUCTURE.jsonl',report);assert report['passed'],('FAIL_RUNTIME',report)
++        return report
++    finally:restore_rng(state)
+--- /dev/null
++++ b/source/zr2_exp/evaluate.py
+@@ -0,0 +1,40 @@
++"""Original parent rollout function, only a new policy readout and provenance."""
++from .model import *
++from coreset_exp.model import data_setup
++from coreset_exp import evaluate as context
++from libero.lifelong.algos.basic import Basic
++
++def main():
++    verify();assert (O/'CALIBRATED.json').exists();setup()
++    root=O/'evaluation';root.mkdir(exist_ok=True)
++    assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG/environment recovery'
++    c=cfg('eval');c.experiment_dir=str(root);control_seed(43);b,ds,shape=data_setup(c,True);c.shape_meta=shape
++    write(root/'resolved_actual.json',dict(c));torch.backends.cudnn.benchmark=True
++    from coreset_exp.eval_metric import evaluate_one_task_success
++    t0=None
++    for stage in range(6,10):
++        control_seed(43)
++        cp=O/'models'/f'zrv2_stage{stage}_calibration_ep9.pth';snap=torch.load(cp,map_location='cpu')
++        assert snap['task']==stage and snap['next_epoch']==10 and snap['contract_sha256']==sha(O/'CONTRACT.json')
++        parent=snap['parent'];assert sha(parent['path'])==parent['sha256']
++        for taskid in range(6,stage+1):
++            algo=Basic(10,c).cuda();n=strict_downstream(algo.policy,parent['path']);algo.eval();algo.requires_grad_(False)
++            r=cpu(rng())
++            if t0 is None:
++                temp,t0=new_public();del temp
++            bank,_=make_bank(stage);bank.load_state_dict(snap['bank'],strict=True);bank.requires_grad_(False)
++            assert tensor_hash(t0)==snap['T0_hash'];ctx=install_native(algo.policy,t0,bank);algo.eval();restore_rng(r)
++            task=b.get_task(taskid);init_path=Path(c.init_states_folder)/task.problem_folder/task.init_states_file;init=torch.load(init_path)
++            context.CONTEXT.clear();context.CONTEXT.update(arm='coreset_ifa_zrv2',stage=stage,parent_epoch=99,calibration_epoch=9,
++                parent_checkpoint_sha256=parent['sha256'],checkpoint_sha256=sha(cp),T0_hash=snap['T0_hash'],gate_hash=hashlib.sha256(bank.gate_w.cpu().numpy().tobytes()).hexdigest(),
++                modal_sha256=sha(P/'MODAL_CONTRACT.json'),loaded_downstream_keys=n,initial_file_sha256=sha(init_path),initial_hashes=[hashlib.sha256(np.asarray(v).tobytes()).hexdigest() for v in init[:20]],
++                trial_log=str(root/f'trials_stage{stage}_task{taskid}.jsonl'),attempt_log=str(root/f'attempts_stage{stage}_task{taskid}.jsonl'))
++            save(root/f'rng_before_stage{stage}_task{taskid}.pth',rng())
++            status('EVALUATING',stage=stage,task=taskid)
++            try:
++                instr,mask=b.get_task_emb(taskid);tic=time.time();result=evaluate_one_task_success(c,algo,task,instr,mask,taskid,see=43)
++                write(root/f'cell_stage{stage}_task{taskid}.json',dict(success_rate=float(result),seconds=time.time()-tic,spatial_calls=ctx['spatial_calls'],**context.CONTEXT))
++            except BaseException as exc:context.ledger('technical_exception',exception=repr(exc));raise
++            finally:del algo,bank;torch.cuda.empty_cache()
++    write(root/'EVALUATION_COMPLETE.json',dict(status='EVALUATED',episodes=200));status('EVALUATED')
++if __name__=='__main__':main()
+--- /dev/null
++++ b/source/zr2_exp/freeze.py
+@@ -0,0 +1,11 @@
++from .common import *
++def main():
++    assert not (O/'CONTRACT.json').exists();assert js(O/'INTEGRATION.json')['status']=='PASS';assert js(O/'COST_ISOLATION.json')['status']=='PASS'
++    files=js(O/'INPUT_SHA256.json')
++    for p in list((W/'source').rglob('*.py'))+list((W/'attachment').glob('*'))+[W/'admission.py',W/'language_and_gates.npz',W/'pipeline.py',W/'env.sh']:
++        if p.is_file():files[str(p)]=sha(p)
++    for name in ['ADMISSION.json','PARENT_BINDING.json','INTEGRATION.json','COST_ISOLATION.json']:files[str(O/name)]=sha(O/name)
++    write(O/'CONTRACT.json',dict(name='ZR_v2_OBJECT_seed43_repeat1_parent',seed=43,files=files,epochs=40,optimizer_steps=10550,sample_exposures=105240,formal_episodes=200,conditional_extension='all four exact metric criteria and all engineering acceptance; user 2026-10-18 authorization'))
++    write(O/'resolved_calibration.json',dict(parent_cfg=cfg('coreset'),spec=__import__('yaml').safe_load((W/'attachment/spec.yaml').read_text()),actual=dict(seed=43,batch=10,epochs_per_stage=10,workers=0,drop_last=False,sampler_seed=0,optimizer='AdamW_UV_only',lr=1e-4,weight_decay=.1,warmup500=True,common_eval_frozen=True,T0_eval_frozen=True,output=str(O))))
++    status('READY')
++if __name__=='__main__':main()
+--- /dev/null
++++ b/source/zr2_exp/integration.py
+@@ -0,0 +1,65 @@
++"""Exactly four isolated optimizer calls, no environment construction/steps."""
++from .model import *
++from torch.utils.data import DataLoader,Subset
++from coreset_exp.model import data_setup,complete
++import robomimic.utils.tensor_utils as TU
++
++def main():
++    assert not (O/'INTEGRATION.json').exists() and not (O/'integration_calls.jsonl').exists()
++    assert js(O/'ADMISSION.json')['status']=='PASS';setup();start=time.time()
++    p,t0=new_public();load_stage(p,7);bank,geometry=make_bank(7)
++    public_before=tensor_hash(p);t0_before=tensor_hash(t0)
++    def data(t):
++        # Task6 integration probes are retained parent memory, not discarded windows.
++        files=sorted((P/'coreset/buffer').glob('t6__*.pt')) if t==6 else sorted((P/'features/7').glob('*.pt'))
++        rows=[torch.load(f,map_location='cpu') for f in files[:10]]
++        return torch.cat([r['feature'] for r in rows]).cuda(),torch.cat([r['actions'] for r in rows]).cuda()
++    h6,a6=data(6);h7,a7=data(7)
++    h=torch.cat([h6[:5],h7[:5]]);a=torch.cat([a6[:5],a7[:5]]);ids=torch.tensor([6]*5+[7]*5,device='cuda')
++    with torch.no_grad():
++        native=p.policy_head(p.temporal_encode(h)[:,-1]);zero=decode(p,t0,bank,h)
++        assert torch.equal(native.component_distribution.base_dist.loc,zero['means'])
++        assert torch.equal(native.component_distribution.base_dist.scale,zero['scales'])
++        assert torch.equal(native.mixture_distribution.probs,zero['gmm'].mixture_distribution.probs)
++        # Nonzero synthetic positive control, never enters formal initialization.
++        positive=copy.deepcopy(bank);positive.branches['6'].U.fill_(.1)
++        plus=decode(p,t0,positive,h);assert float((plus['means'][:5]-zero['means'][:5]).abs().max())>1e-5
++        assert float((plus['means'][5:]-zero['means'][5:]).abs().max())<=1e-6
++        assert float((plus['means']-zero['means']).abs().max())<=.100001
++        assert torch.equal(plus['scales'],zero['scales']) and torch.equal(plus['logits'],zero['logits'])
++        assert torch.equal(plus['selected'],zero['selected'])
++    opt,sch=optimizer(bank,2270)
++    def call(hh,aa,ii):
++        append(O/'integration_calls.jsonl',dict(event='before_optimizer_call',index=len((O/'integration_calls.jsonl').read_text().splitlines()) if (O/'integration_calls.jsonl').exists() else 0,time=time.time()))
++        return update(p,t0,bank,opt,sch,hh,aa,ii)
++    r0=call(h6,a6,torch.full((10,),6,device='cuda'))
++    r1=call(h7,a7,torch.full((10,),7,device='cuda'))
++    snap=dict(bank=cpu(bank.state_dict()),optimizer=cpu(opt.state_dict()),scheduler=cpu(sch.state_dict()),rng=cpu(rng()))
++    save(O/'integration_recovery.pth',snap)
++    r2=call(h,a,ids);after=cpu(bank.state_dict());after_opt=cpu(opt.state_dict())
++    saved=torch.load(O/'integration_recovery.pth',map_location='cpu');bank.load_state_dict(saved['bank']);opt.load_state_dict(saved['optimizer']);sch.load_state_dict(saved['scheduler']);restore_rng(saved['rng'])
++    r3=call(h,a,ids)
++    for n,v in after.items():assert torch.equal(v,bank.state_dict()[n].cpu()),n
++    for key,v in after_opt['state'].items():
++        for field,value in v.items():assert torch.equal(value,opt.state_dict()['state'][key][field].cpu())
++    assert tensor_hash(p)==public_before and tensor_hash(t0)==t0_before
++    # Actual CompletePolicy.get_action, real demonstration images, no simulator.
++    c=cfg('eval');b,_,shape=data_setup(c,False);c.shape_meta=shape
++    from libero.lifelong.datasets import get_dataset,SequenceVLDataset
++    d,_=get_dataset(str(Path(c.folder)/b.get_task_demonstration(7)),c.data.obs.modality,initialize_obs_utils=False,seq_len=8,demo_limit=10,train=False)
++    tok,mask=b.get_task_emb(7);d=SequenceVLDataset(d,tok,mask)
++    rawdata=TU.map_tensor(next(iter(DataLoader(Subset(d,[0]),batch_size=1))),lambda x:x.cuda())
++    full=complete(c,shape).eval().requires_grad_(False);strict_downstream(full,js(O/'PARENT_BINDING.json')['checkpoints']['7']['path'])
++    ctx=install_native(full,t0,bank);native_rows=[]
++    with torch.no_grad():
++        for length in [1,4,8]:
++            batch=copy.deepcopy(rawdata);batch['obs']={k:v[:,:length].contiguous() for k,v in batch['obs'].items()}
++            r=cpu(rng());action=full.get_action(batch);out=ctx['out'];hh=ctx['h'];separate=decode(p,t0,bank,hh)
++            for key in ['means','scales','logits','selected']:assert torch.equal(out[key],separate[key]),(length,key)
++            restore_rng(r);expected=selected_dist(separate).sample().cpu().numpy();assert np.array_equal(action,expected)
++            native_rows.append(dict(length=length,distribution_exact=True,sampled_action_exact=True))
++    assert ctx['spatial_calls']==3
++    assert tensor_hash(p)==public_before and tensor_hash(t0)==t0_before
++    write(O/'INTEGRATION.json',dict(status='PASS',optimizer_calls=4,environment_steps=0,real_history=native_rows,updates=[r0,r1,r2,r3],recovery_tensor_and_optimizer_exact=True,absent_branch_none_and_adam_unchanged=True,public_hash=public_before,T0_hash=t0_before,T0_bytes=sum(v.numel()*v.element_size() for v in t0.state_dict().values()),public_parameters_frozen=True,mean_bound=.1,seconds=time.time()-start))
++    print('INTEGRATION PASS: four optimizer calls, zero environment steps',flush=True)
++if __name__=='__main__':main()
+--- /dev/null
++++ b/source/zr2_exp/model.py
+@@ -0,0 +1,58 @@
++import types
++from .common import *
++from torch import nn
++from torch.distributions import Independent,Normal
++
++def temporal(t0,h):
++    b,t,m,e=h.shape
++    return t0(h.reshape(b,t*m,e)).reshape(b,t,m,e)[:,-1,0]
++
++def raw(head,z):
++    assert not head.low_eval_noise
++    x=head.share(z)
++    return (head.mean_layer(x).view(-1,5,7),head.actv(head.logstd_layer(x).view(-1,5,7))+head.min_std,head.logits_layer(x))
++
++def decode(p,t0,bank,h,ids=None):
++    with torch.no_grad():
++        z=p.temporal_encode(h)[:,-1];b,s,l=raw(p.policy_head,z);q=temporal(t0,h)
++    delta=bank(q,h[:,-1,0],ids)
++    out=corrected_gmm(b,s,l,delta);out.update(delta=delta,base_means=b.tanh(),q=q,b=b)
++    return out
++
++def selected_dist(out):
++    ix=torch.arange(len(out['means']))
++    return Independent(Normal(out['means'][ix,out['selected']],out['scales'][ix,out['selected']]),1)
++
++class NativeHead(nn.Module):
++    def __init__(self,base,t0,bank,ctx):
++        super().__init__();self.base=base;self.t0=t0;self.bank=bank;self.ctx=ctx
++    def forward(self,z,train=False):
++        h=self.ctx['h'];b,s,l=raw(self.base,z);q=temporal(self.t0,h)
++        out=corrected_gmm(b,s,l,self.bank(q,h[:,-1,0]));self.ctx['out']=out
++        return out['gmm'] if train else selected_dist(out)
++
++def install_native(p,t0,bank):
++    ctx={};original=p.spatial_encode;base=p.policy_head
++    def spatial(data):
++        h=original(data);ctx['h']=h;ctx['spatial_calls']=ctx.get('spatial_calls',0)+1;return h
++    p.spatial_encode=spatial;p.policy_head=NativeHead(base,t0,bank,ctx)
++    return ctx
++
++def update(p,t0,bank,opt,sch,h,actions,ids):
++    opt.zero_grad(set_to_none=True);out=decode(p,t0,bank,h,ids)
++    loss=-out['gmm'].log_prob(actions[:,-1]).mean();assert torch.isfinite(loss);loss.backward()
++    present=set(ids.tolist());absent=[]
++    for t in bank.task_ids:
++        pars=list(bank.branches[str(t)].parameters())
++        if t not in present:
++            assert all(v.grad is None for v in pars);absent.extend((v,v.detach().clone(),cpu(opt.state.get(v,{}))) for v in pars)
++        else:assert all(v.grad is not None and torch.isfinite(v.grad).all() for v in pars)
++    assert all(v.grad is None for v in p.parameters()) and all(v.grad is None for v in t0.parameters())
++    norm=torch.nn.utils.clip_grad_norm_(bank.parameters(),100.)
++    assert torch.isfinite(norm)
++    opt.step();sch.step()
++    for v,b,s in absent:
++        assert torch.equal(v,b);now=opt.state.get(v,{})
++        assert set(now)==set(s)
++        for key in s:assert torch.equal(now[key].cpu(),s[key]) if torch.is_tensor(s[key]) else now[key]==s[key]
++    return dict(loss=float(loss.detach()),grad_norm=float(norm),delta_max=float(out['delta'].abs().max()),active=sorted(present))
