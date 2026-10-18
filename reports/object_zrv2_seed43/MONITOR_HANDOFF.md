@@ -1,5 +1,7 @@
 # ZR-v2 seed43 运行与后续判定
 
+最新已核实：2026-10-18 15:45:31 CST，四阶段40epoch/10550step/105240曝光已完成，4快照已保存、16结构检查全部PASS、calibrate.exit=0；evaluate PID36038已启动原200条闭环。15:47观察GPU100%、stage6/task6正常，尚未提交完成向量组。不得重训或重复集成。自动化ID为zr-v2-seed43，每2小时检查。外置final_process_audit.py额外核验父200条episode文件SHA与准入绑定相同；未改冻结运行源码。
+
 2026-10-18新任务。先读附件 PROTOCOL.md/spec.yaml、EXECUTION_DECISIONS.md、launch_evidence及最新进度。用户授权有效后继续其他seed，已授权本轮及扩展新产物放系统盘。不得因附件旧“不自动扩展”再请求已经给出的权限。
 
 SSH root@jq1.9gpu.com:11920 已授权，凭据仅内存/getpass，不进入文件或日志。Python /data/mlr_ifa/env/bin/python。
