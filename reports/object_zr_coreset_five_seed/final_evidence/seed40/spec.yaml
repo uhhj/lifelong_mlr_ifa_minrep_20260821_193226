@@ -1,0 +1,197 @@
+name: coreset_ifa_zero_response_residual_OBJECT_seed40_v1
+status: EXECUTION_DESIGN_NOT_RUN
+source:
+  repository: uhhj/lifelong_mlr_ifa_minrep_20260821_193226
+  commit: 1ed6e0dd25cb5748ee5e887444619483bd9bdc31
+  parent_source: /data/mlr_ifa/experiment_workspaces/Seeds40_41_three_arm_20261016/seed40/rc/source
+  parent_run: /data/mlr_ifa/experiments/Seeds40_41_three_arm_20261016/seed40/rc
+  official_pretrain: /data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth
+  prototype_run: /data/mlr_ifa/analyses/Zero_response_residual_prototype_20261017
+  prototype_acceptance_status_required: PASS_PROTOTYPE
+  prototype_actual_code_and_gate_hashes_required: true
+  import_prototype_trained_residual_weights: false
+  overwrite_historical_artifacts: false
+experiment:
+  benchmark: LIBERO_OBJECT
+  task_order_index: 0
+  seed: 40
+  tasks: [6, 7, 8, 9]
+  main_arm: coreset_ifa_zr
+  historical_baseline_arm: coreset
+  baseline_retraining: false
+  baseline_reevaluation: false
+  new_formal_training_arms: 1
+  auto_extend: false
+  new_formal_epochs: 400
+  expected_optimizer_steps: 105500
+  final_checkpoints: 4
+  formal_episodes: 200
+  integrated_smoke_optimizer_calls_max: 4
+  integrated_smoke_environment_steps: 0
+  official_six_task_model_is_training_start: true
+  do_not_reuse_task6_trained_checkpoint: true
+memory:
+  parent_seed40_state_true_features_readonly: true
+  use_same_frozen_spatial_features: true
+  new_feature_export: false
+  cached_feature_shape: [1, 8, 4, 512]
+  cached_action_shape: [1, 8, 7]
+  selector: visual_action_kcenter_v1_unchanged
+  selector_seed: 42
+  past_data_rate: 0.5
+  same_member_ids_payload_names_and_dataset_order: true
+  on_selector_mismatch: STOP_DO_NOT_SUBSTITUTE_SELECTION
+  capacity_files: 59660000
+  unexpected_capacity_branch: STOP
+  current_counts: {6: 1562, 7: 1480, 8: 1560, 9: 1319}
+  admission_counts: {6: 781, 7: 740, 8: 780, 9: 660}
+  total_buffer_after_stage: {6: 781, 7: 1521, 8: 2301, 9: 2961}
+  expected_epoch_batches: {6: 157, 7: 227, 8: 309, 9: 362}
+  reread_discarded_old_demonstrations_for_training: false
+  event_or_priority_selection: false
+model:
+  use_vision: true
+  use_language: true
+  use_state: true
+  frontend_frozen: true
+  shared_temporal_and_public_head_trainable: true
+  shared_training_dropout: INHERIT_PARENT
+  public_head_state_dict_keys_unchanged: true
+  no_precomputed_or_detached_temporal_z_in_training: true
+  residual:
+    rank: 8
+    input_dimension: 512
+    raw_output_dimension: 75
+    raw_layout: [means_35, scale_preactivations_35, mixture_logits_5]
+    bias: false
+    V_initialization: normal_std_0.02
+    U_initialization: zeros
+    initialization_rng: local_cpu_generator_seed_42_plus_task
+    initialize_before_first_update_of_each_task: true
+    previous_branch_parameters_frozen_and_excluded_from_optimizer: true
+    previous_branch_forward_keeps_gradient_to_shared_z: true
+    residual_dtype: float32
+    no_branch_dropout: true
+    apply_all_existing_branches_in_creation_order: true
+    no_reinitializing_old_branches: true
+  gate:
+    source: actual_frozen_language_token_H_last_time_modality0
+    normalize_inside_gate_only: true
+    per_branch_protected_ids: "0..k-1, including the six base-task instructions"
+    dtype: float64
+    multiply_dtype: float64_then_contribution_cast_to_float32
+    reuse_passed_gate_vectors_if_hash_and_encoder_match: true
+    never_update_old_gate_vectors: true
+    construct_using_future_task_instructions: false
+    train_gate: false
+    id_routing_mask: false
+    canonical_embedding_lookup_at_runtime: false
+    sigmoid_softmax_clipping_or_zero_snapping: false
+    on_runtime_numerical_violation: STOP_WITH_RECORD_NO_THRESHOLD_CHANGE
+training:
+  epochs_per_task: 100
+  batch_size: 10
+  dataloader_workers: 0
+  dataset: unchanged_parent_current_all_plus_old_buffer
+  sampler: unchanged_parent_DistributedSampler_single_rank
+  sampler_seed: 0
+  sampler_set_epoch: true
+  loss: batch_mean_GMM_NLL_plus_0.1_original_mean_IFA
+  direct_BC_target: last_step_expert_action_only
+  ifa_weight: 0.1
+  ifa_gamma: 0.3
+  ifa_input: shared_temporal_last_before_residual
+  ifa_pairs_and_language_references: unchanged_parent_function_on_same_buffer
+  ifa_pair_identity_required: true
+  extra_distillation_or_residual_target_loss: false
+  optimizer:
+    name: AdamW
+    parameters: shared_temporal_plus_public_head_plus_current_residual_only
+    lr: 1.0e-4
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0.1
+    same_hyperparameters_for_shared_and_new_residual: true
+  max_grad_norm: 100.0
+  loss_scale: 1.0
+  scheduler:
+    kind: parent_linear_lambda
+    warmup_optimizer_steps: 500
+    total_steps_per_task: actual_loader_length_times_100
+    step_once_per_optimizer_step: true
+    reset_optimizer_and_scheduler_at_task_boundary: true
+  distributed:
+    processes: 1
+    gpus: 1
+    rebuild_DDP_after_registration_and_freezing_at_task_boundary: true
+    never_add_parameters_to_existing_DDP_wrapper: true
+  precision:
+    shared_model_dtype: float32
+    AMP: false
+    formal_global_numeric_flags: restore_audited_parent_training_and_evaluation_separately
+    do_not_inherit_prototype_global_flags_without_check: true
+    restore_old_shared_parameters_on_every_new_task: false
+  resume:
+    explicit_flag_required: true
+    authoritative_checkpoint_cursor: true
+    preserve_rng_optimizer_scheduler_gradients_modes_and_branch_registry: true
+    admission_precommit_atomic_copy: true
+    partial_epoch_logs_preserved_not_double_counted: true
+    no_unaudited_mid_episode_retry: true
+evaluation:
+  checkpoint_rule: final_completed_epoch_index99
+  seen_incremental_tasks_only: true
+  trials_per_cell: 20
+  initial_state_indices: [0, 19]  # inclusive range, not a two-item sample list
+  vector_lanes: 10
+  groups_per_cell: 2
+  environment_seeds: [40, 41]
+  initial_zero_action_steps: 5
+  policy_step_limit: 600
+  action_rule: argmax_GMM_component_then_independent_Normal_sample
+  low_eval_noise: false
+  stage_seed_reset: 40
+  within_stage_global_action_rng: inherit_parent_no_per_trial_reset
+  cudnn_benchmark: true
+  history: parent_external_observation_queue_max8
+  do_not_add_second_internal_queue: true
+  model_loading: strict_expected_shared_and_all_stage_residual_keys_plus_frozen_frontend_validation
+  gate_source: actual_language_token_from_spatial_encode
+  future_branches_in_stage_checkpoint: false
+  no_post_hoc_best_epoch_or_best_rollout_selection: true
+structural_checks:
+  numerical_tolerances: inherit_accepted_prototype_v1_and_actual_acceptance
+  old_gate_abs_max: 1.0e-6
+  current_gate_error_max: 1.0e-5
+  newly_added_channel_old_raw_contribution_abs_max: 1.0e-6
+  old_distribution_atol: 1.0e-6
+  old_distribution_rtol: 1.0e-6
+  old_selected_component_equal_when_newer_channels_disabled: true
+  compare_newer_channels_on_off_at_same_shared_parameters: true
+  require_old_full_outputs_equal_across_training: false
+  frequency: task_start_and_epoch99_full_available_old_memory; fixed_probes_every_10_epochs
+  diagnostics_do_not_change_training_or_choose_samples: true
+  preserve_training_rng_and_modes_around_diagnostics: true
+metrics:
+  formulas: parent_exact_task_balanced_AUC_FWT_signed_NBT
+  additional_reports: [OldFinal, FinalAll, full_matrix, per_task_initial_success]
+  reference_fractions:
+    AUC: 109/160
+    FWT: 13/20
+    NBT: -7/120
+    OldFinal: 11/15
+    FinalAll: 53/80
+  progression_gate:
+    AUC: strictly_greater_than_baseline
+    FWT: greater_or_equal_to_baseline
+    NBT: strictly_less_than_baseline
+    OldFinal: greater_or_equal_to_baseline
+    OldFinal_guard_provenance: newly_prespecified_for_this_plan
+  gate_requires_complete_implementation_and_runtime_audit: true
+  single_seed_statistical_significance_claim: false
+  successful_gate_starts_other_seeds_automatically: false
+
+seed_extension:
+  governing_addendum: EXTENSION_PROTOCOL.md
+  corresponding_baseline_metrics: PARENT_BINDING.json
+  residual_initializer_seed_base_frozen: 42

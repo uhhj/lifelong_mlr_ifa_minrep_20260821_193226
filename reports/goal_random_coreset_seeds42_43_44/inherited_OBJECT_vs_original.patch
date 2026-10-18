@@ -1,0 +1,1151 @@
+--- /dev/null
++++ b/coreset_exp/__init__.py
+@@ -0,0 +1 @@
++"""Preparation for isolated Random/Coreset paper-aligned experiment."""
+--- /dev/null
++++ b/coreset_exp/acceptance.py
+@@ -0,0 +1,24 @@
++"""Independent process-exit and actual final-tensor load acceptance. No rollouts."""
++import json,os,subprocess,time
++import torch
++from .common import O,write,sha,verify
++from .model import cfg,strict_downstream
++from libero.lifelong.models.brief import BriefPolicy
++def main():
++    verify();assert (O/'pipeline.exit').read_text().strip()=='0'
++    lines=subprocess.check_output(['ps','-eo','pid,args'],text=True).splitlines()
++    assert not [x for x in lines if any(' -m coreset_exp.'+m in x for m in ('export','train','evaluate','summarize')) and 'ps -eo' not in x]
++    loaded={}
++    for arm in ('random','coreset'):
++        p=BriefPolicy(cfg(arm),None).cpu()
++        for t in range(6,10):
++            file=O/arm/'models'/f'mlrifa_{t}_model_ep99.pth'
++            raw=torch.load(file,map_location='cpu');assert raw['epoch_index']==99 and raw['task']==t
++            assert raw['contract_sha256']==sha(O/'CONTRACT.json') and raw['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
++            loaded[f'{arm}_{t}']=strict_downstream(p,file)
++    summary=json.loads((O/'SUMMARY.json').read_text());assert summary['formal_records']==400 and summary['old_inputs_unchanged']
++    write(O/'INDEPENDENT_ACCEPTANCE.json',dict(status='PASS',pipeline_exit=0,loaded_downstream_keys=loaded,
++        final_checkpoints=8,formal_records=400,source_verified=True,updated_unix=time.time()))
++    with (O/'REPORT.md').open('a') as f:f.write('\n最终验收：COMPLETED；pipeline.exit=0，无训练/评估残留进程，8个最终checkpoint实际张量完整加载通过。\n')
++    write(O/'RUN_STATUS.json',dict(status='COMPLETED',seed=42,arms=['random','coreset'],epochs=800,formal_records=400,updated_unix=time.time()))
++if __name__=='__main__':main()
+--- /dev/null
++++ b/coreset_exp/common.py
+@@ -0,0 +1,41 @@
++import hashlib,json,os,random,copy
++from pathlib import Path
++import numpy as np
++import torch
++S=Path(__file__).resolve().parents[1]
++O=Path(os.environ['CORESET_OUT'])
++def sha(p):
++    h=hashlib.sha256()
++    with open(p,'rb') as f:
++        for b in iter(lambda:f.read(8*1024*1024),b''):h.update(b)
++    return h.hexdigest()
++def write(p,obj):
++    p=Path(p);p.parent.mkdir(parents=True,exist_ok=True);tmp=p.with_suffix(p.suffix+'.tmp')
++    with tmp.open('w') as f:json.dump(obj,f,indent=2,allow_nan=False);f.write('\n');f.flush();os.fsync(f.fileno())
++    os.replace(tmp,p)
++def save(p,obj):
++    p=Path(p);p.parent.mkdir(parents=True,exist_ok=True);tmp=p.with_suffix(p.suffix+'.tmp')
++    with tmp.open('wb') as f:torch.save(obj,f);f.flush();os.fsync(f.fileno())
++    os.replace(tmp,p)
++def jsonable(x):
++    if torch.is_tensor(x):return x.detach().cpu().tolist()
++    if isinstance(x,np.ndarray):return x.tolist()
++    if isinstance(x,dict):return {str(k):jsonable(v) for k,v in x.items()}
++    if isinstance(x,(list,tuple)):return [jsonable(v) for v in x]
++    return x
++def rng():return dict(python=random.getstate(),numpy=np.random.get_state(),cpu=torch.get_rng_state(),cuda=torch.cuda.get_rng_state_all())
++def restore_rng(r):
++    random.setstate(r['python']);np.random.set_state(r['numpy']);torch.set_rng_state(r['cpu']);torch.cuda.set_rng_state_all(r['cuda'])
++def hashes(root,pattern='*.pt'):return {str(p.relative_to(root)):sha(p) for p in sorted(Path(root).rglob(pattern))}
++def source_hashes():return {str(p.relative_to(S)):sha(p) for p in sorted(S.rglob('*')) if p.is_file() and p.suffix in ('.py','.yaml','.sh') and '__pycache__' not in p.parts}
++def verify():
++    c=json.loads((O/'CONTRACT.json').read_text())
++    assert source_hashes()==c['source_sha256'],'Frozen source mismatch'
++    assert sha(O/'MODAL_CONTRACT.json')==c['modal_sha256']
++    assert sha(O/'OLD_INPUTS_READONLY.json')==c['old_readonly_sha256']
++    for p,h in c['inputs'].items():assert sha(p)==h,p
++    for p,h in c['configs'].items():assert sha(p)==h,p
++    if (O/'FEATURES.json').exists():
++        m=json.loads((O/'FEATURES.json').read_text());assert hashes(O/'features')==m['hashes']
++        assert m['modal_sha256']==c['modal_sha256'] and m['contract_sha256']==sha(O/'CONTRACT.json')
++    return c
+--- /dev/null
++++ b/coreset_exp/configure.py
+@@ -0,0 +1,71 @@
++import json,os,time,inspect,shutil
++from pathlib import Path
++from hydra import initialize_config_dir,compose
++from omegaconf import OmegaConf
++from easydict import EasyDict
++from .common import S,O,write,sha,source_hashes
++
++def make_config(kind,arm=None):
++    train=kind=='train'
++    overrides=['seed=42','benchmark_name=LIBERO_OBJECT',
++        'policy='+('BriefPolicy' if train else 'complete_policy'),'lifelong='+('mlr' if train else 'basic'),
++        'pretrain=/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth',
++        'folder=/data/mlr_ifa/datasets','bddl_folder=/data/mlr_ifa/src/libero/libero/bddl_files',
++        'init_states_folder=/data/mlr_ifa/src/libero/libero/init_files',
++        '+start_task=6','+end_task=10','+gamma=0.3','+past_data_rate=0.5',
++        '+aug='+('false' if train else 'true'),'training='+('true' if train else 'false'),
++        '++policy.use_vision=true','++policy.use_language=true','++policy.use_state=true',
++        'train.batch_size='+('1' if kind=='export' else '10'),'train.n_epochs=100','train.num_workers=0',
++        'eval.n_eval=20','eval.max_steps=600','+feature_dir='+str(O/'features'),
++        '+buffer_dir='+str(O/(arm or kind)/'buffer'),
++        '+experiment_dir='+str(O/(arm or kind)/'models')]
++    with initialize_config_dir(config_dir=str(S/'libero/configs'),version_base=None):
++        c=compose(config_name='config_adaption' if kind!='eval' else 'test',overrides=overrides)
++    cfg=OmegaConf.to_container(c,resolve=True)
++    cfg['shape_meta']=None;cfg['selector']=arm or 'none';cfg['run_root']=str(O/(arm or kind))
++    cfg['contract']=str(O/'CONTRACT.json');cfg['linear_schedule_unit']='optimizer_step'
++    for k in ('use_vision','use_language','use_state'):assert cfg['policy'][k] is True
++    return cfg,overrides
++
++def main():
++    import torch,robomimic.utils.dataset
++    from libero.libero.benchmark import get_benchmark
++    assert torch.cuda.is_available();O.mkdir(parents=True,exist_ok=True)
++    assert not (O/'CONTRACT.json').exists(),'Do not overwrite frozen contract'
++    b=get_benchmark('LIBERO_OBJECT')(0);inputs={};tasks={}
++    for t in range(10):
++        task=b.get_task(t);paths=[Path('/data/mlr_ifa/datasets')/b.get_task_demonstration(t),
++            Path('/data/mlr_ifa/src/libero/libero/bddl_files')/task.problem_folder/task.bddl_file,
++            Path('/data/mlr_ifa/src/libero/libero/init_files')/task.problem_folder/task.init_states_file]
++        for p in paths:assert p.is_file(),str(p);inputs[str(p)]=sha(p)
++        tasks[str(t)]=dict(name=task.name,paths=list(map(str,paths)))
++    pt=Path('/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth');inputs[str(pt)]=sha(pt)
++    assert inputs[str(pt)]=='159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b'
++    parser=Path(inspect.getfile(robomimic.utils.dataset));inputs[str(parser)]=sha(parser)
++    configs={};commands={}
++    for kind,arm in [('export',None),('train','random'),('train','coreset'),('eval',None)]:
++        c,cmd=make_config(kind,arm);name=arm or kind;p=O/f'resolved_{name}.json';write(p,c);configs[str(p)]=sha(p);commands[name]=cmd
++    checkpoint=torch.load(pt,map_location='cpu');pcfg=checkpoint.get('cfg',{});pp=pcfg.get('policy',{})
++    write(O/'PRETRAIN_METADATA.json',dict(pretrain_policy={k:str(v) for k,v in pp.items()},
++        pretrain_use_state=pp.get('use_state','unknown'),effective_use_state=True,
++        gap='DISCLOSED_GAP' if 'use_state' not in pp else None))
++    write(O/'CONFIG_COMMANDS.json',commands);write(O/'TASKS.json',tasks)
++    modal=dict(flags=dict(vision=True,language=True,state=True),token_order=['language','agentview','eye_in_hand','state'],
++        state_fields=['joint_states','gripper_states'],state_dims=[7,2],window=8,embedding=512,
++        frontend_sha256=inputs[str(pt)],base_commit='a721807f2f7fa7f9833dcc85c592d78e9accd00b',
++        source_sha256=source_hashes(),export_preprocessing='native BasePolicy augmentation, Basic.learn_one_task train mode, batch1 RandomSampler',
++        evaluation_preprocessing='native CompletePolicy.get_action with eval mode (augment group identity)')
++    write(O/'MODAL_CONTRACT.json',modal)
++    protected={}
++    for root in ('/data/mlr_ifa/experiments','/data/mlr_ifa/analyses'):
++        for p in Path(root).rglob('*'):
++            if p.is_file() and O not in p.parents and p.suffix in ('.json','.jsonl','.csv','.pth'):
++                protected[str(p)]=sha(p)
++    write(O/'OLD_INPUTS_READONLY.json',protected)
++    write(O/'CONTRACT.json',dict(protocol='paper_aligned_seed42_only_v2',seed=42,arms=['random','coreset'],
++        tasks=[6,7,8,9],epochs_each=100,batch=10,gamma=.3,ifa_weight=.1,formal_rollouts=400,
++        source_sha256=source_hashes(),inputs=inputs,configs=configs,modal_sha256=sha(O/'MODAL_CONTRACT.json'),
++        old_readonly_sha256=sha(O/'OLD_INPUTS_READONLY.json'),torch=torch.__version__,gpu=torch.cuda.get_device_name(),
++        extensions=[],warmup_provenance='500 release fallback; scheduler each optimizer step is disclosed engineering interpretation',created_unix=time.time()))
++    write(O/'RUN_STATUS.json',dict(status='PREPARED',updated_unix=time.time()))
++if __name__=='__main__':main()
+--- /dev/null
++++ b/coreset_exp/env.sh
+@@ -0,0 +1,8 @@
++#!/usr/bin/env bash
++source /data/mlr_ifa/activate.sh
++export CORESET_SOURCE=/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source
++export CORESET_OUT=/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed42_20261013
++export PYTHONPATH="$CORESET_SOURCE"
++export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES=0
++export OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4 OMP_NUM_THREADS=4
++cd "$CORESET_SOURCE"
+--- /dev/null
++++ b/coreset_exp/eval_metric.py
+@@ -0,0 +1,125 @@
++"""Exact baseline rollout function, plus per-trial recording only."""
++from libero.lifelong.metric import *
++import gc
++from .evaluate import record_trial
++
++def evaluate_one_task_success(
++    cfg, algo, task, instr, mask, task_id, sim_states=None, task_str="", render = True,see=None
++):
++    """
++    Evaluate a single task's success rate
++    sim_states: if not None, will keep track of all simulated states during
++                evaluation, mainly for visualization and debugging purpose
++    task_str:   the key to access sim_states dictionary
++    """
++    # render = cfg.eval.render
++    with Timer() as t:
++        if cfg.lifelong.algo == "PackNet":  # need preprocess weights for PackNet
++            algo = algo.get_eval_algo(task_id)
++
++        algo.eval()
++        env_num =  10
++        eval_loop_num = (cfg.eval.n_eval + env_num - 1) // env_num
++
++        # initiate evaluation envs
++        env_args = {
++            "bddl_file_name": os.path.join(
++                cfg.bddl_folder, task.problem_folder, task.bddl_file
++            ),
++            "camera_heights": cfg.data.img_h,
++            "camera_widths": cfg.data.img_w,
++        }
++
++        # Try to handle the frame buffer issue
++
++        from coreset_exp.evaluate import ledger
++        ledger('environment_construct_start',task=task_id,lanes=env_num)
++        env = SubprocVectorEnv(
++            [lambda: OffScreenRenderEnv(**env_args) for _ in range(env_num)]
++        )
++
++        ledger('environment_construct_complete',task=task_id,lanes=env_num)
++        ### Evaluation loop
++        # get fixed init states to control the experiment randomness
++        init_states_path = os.path.join(
++            cfg.init_states_folder, task.problem_folder, task.init_states_file
++        )
++        init_states = torch.load(init_states_path)
++        ####################################################################################################################
++        num_success = 0
++        for i in range(eval_loop_num):
++            seed = see + i
++            ledger('vector_attempt_start',task=task_id,group=i,env_seed=seed,initial_indices=list(range(i*env_num,(i+1)*env_num)))
++            env.seed(seed)
++            env.reset()
++            env.seed(seed) 
++            indices = np.arange(i * env_num, (i + 1) * env_num) % init_states.shape[0]
++            init_states_ = init_states[indices]
++
++            dones = [False] * env_num
++            steps = 0
++            algo.reset()
++            obs = env.set_init_state(init_states_)
++            history_buffer = []
++           
++            # dummy actions [env_num, 7] all zeros for initial physics simulation
++            dummy = np.zeros((env_num, 7))
++            for _ in range(5):
++                obs, _, _, _ = env.step(dummy)
++
++            frames = []
++            with torch.no_grad():
++
++                while steps < cfg.eval.max_steps:
++                    steps += 1
++
++                    data = raw_obs_to_tensor_obs(obs, instr, mask, cfg)
++
++                    history_buffer.append(data)
++                    if len(history_buffer) > 8:
++                        history_buffer.pop(0)
++
++                    sliding_window = history_buffer.copy()
++
++
++                    def stack_trajectory(data_buffer):
++                        assert len(data_buffer) > 0
++                        result = {
++                            "obs": {},
++                            "task_emb": data_buffer[0]["task_emb"],  # 不变
++                            "masks": data_buffer[0]["masks"],  # 不变
++                        }
++                        obs_keys = data_buffer[0]["obs"].keys()
++                        for key in obs_keys:
++                            result["obs"][key] = torch.stack(
++                                [step["obs"][key] for step in data_buffer],
++                                dim=1  # 这里就是 B,T,C,H,W
++                            )
++                        return result
++
++                    batch_data = stack_trajectory(sliding_window)
++
++                    actions = algo.policy.get_action(batch_data)
++
++                    obs, reward, done, info = env.step(actions)
++
++                    # check whether succeed
++                    for k in range(env_num):
++                        dones[k] = dones[k] or done[k]
++
++                    if all(dones):
++                        break
++
++                # a new form of success record
++                for k in range(env_num):
++                    if i * env_num + k < cfg.eval.n_eval:
++                        record_trial(cfg, task_id, see, i * env_num + k, int(indices[k]), bool(dones[k]), steps)
++                        num_success += int(dones[k])
++
++            ledger('vector_attempt_complete',task=task_id,group=i,env_seed=seed,steps=steps,successes=[bool(x) for x in dones],lanes=env_num)
++        success_rate = num_success / cfg.eval.n_eval
++        env.close()
++        ledger('environment_closed',task=task_id,lanes=env_num)
++        gc.collect()
++    print(f"[info] evaluate task {task_id} takes {t.get_elapsed_time():.1f} seconds")
++    return success_rate
+--- /dev/null
++++ b/coreset_exp/evaluate.py
+@@ -0,0 +1,48 @@
++import argparse,json,os,time,random,hashlib
++from pathlib import Path
++import numpy as np
++import torch
++from .common import O,write,save,sha,verify,rng
++from .model import cfg,data_setup,complete,strict_downstream
++from libero.lifelong.algos.basic import Basic
++from libero.lifelong.utils import control_seed
++CONTEXT={}
++def append(path,row):
++    with Path(path).open('a') as f:f.write(json.dumps(row,allow_nan=False)+'\n');f.flush();os.fsync(f.fileno())
++def ledger(event,**fields):append(CONTEXT['attempt_log'],dict(CONTEXT,event=event,unix=time.time(),**fields))
++def record_trial(c,task,seed,trial,initial_state,success,steps):
++    append(CONTEXT['trial_log'],dict(CONTEXT,task=task,seed=seed,trial=trial,initial_state_index=initial_state,
++        initial_state_sha256=CONTEXT['initial_hashes'][initial_state],success=success,vector_group_steps=steps))
++def main():
++    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);args=ap.parse_args()
++    verify();assert (O/args.arm/'TRAINING_COMPLETE.json').exists()
++    root=O/args.arm/'evaluation';root.mkdir(exist_ok=True)
++    assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG-preserving recovery'
++    c=cfg('eval');c.experiment_dir=str(root);control_seed(42);b,ds,shape=data_setup(c,True);c.shape_meta=shape
++    write(root/'resolved_actual.json',dict(c));torch.backends.cudnn.benchmark=True
++    from . import evaluate as context
++    from .eval_metric import evaluate_one_task_success
++    for stage in range(6,10):
++        control_seed(42)
++        for t in range(6,stage+1):
++            checkpoint=O/args.arm/'models'/f'mlrifa_{stage}_model_ep99.pth'
++            raw=torch.load(checkpoint,map_location='cpu');assert raw['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
++            assert raw['contract_sha256']==sha(O/'CONTRACT.json')
++            algo=Basic(10,c).cuda();n=strict_downstream(algo.policy,checkpoint);algo.eval()
++            task=b.get_task(t);init_path=Path(c.init_states_folder)/task.problem_folder/task.init_states_file
++            init=torch.load(init_path);assert len(init)>=20
++            context.CONTEXT.clear();context.CONTEXT.update(arm=args.arm,stage=stage,epoch=99,checkpoint_sha256=sha(checkpoint),
++                modal_sha256=sha(O/'MODAL_CONTRACT.json'),loaded_downstream_keys=n,
++                initial_file_sha256=sha(init_path),initial_hashes=[hashlib.sha256(np.asarray(v).tobytes()).hexdigest() for v in init[:20]],
++                trial_log=str(root/f'trials_stage{stage}_task{t}.jsonl'),attempt_log=str(root/f'attempts_stage{stage}_task{t}.jsonl'))
++            save(root/f'rng_before_stage{stage}_task{t}.pth',rng())
++            try:
++                instr,mask=b.get_task_emb(t)
++                result=evaluate_one_task_success(c,algo,task,instr,mask,t,see=42)
++                write(root/f'cell_stage{stage}_task{t}.json',dict(success_rate=float(result),**context.CONTEXT))
++            except BaseException as e:
++                context.ledger('technical_exception',exception=repr(e));raise
++            finally:del algo;torch.cuda.empty_cache()
++            write(O/'RUN_STATUS.json',dict(status='EVALUATING',arm=args.arm,stage=stage,task=t,updated_unix=time.time()))
++    write(root/'EVALUATION_COMPLETE.json',dict(status='EVALUATED',episodes=200))
++if __name__=='__main__':main()
+--- /dev/null
++++ b/coreset_exp/export.py
+@@ -0,0 +1,37 @@
++import json,time
++from pathlib import Path
++import torch
++import torch.distributed as dist
++from torch.nn.parallel import DistributedDataParallel as DDP
++from .common import O,sha,write,verify,hashes
++from .model import cfg,data_setup,complete
++from libero.lifelong.algos.basic import Basic
++from libero.lifelong.utils import control_seed
++
++def main():
++    verify();assert json.loads((O/'GPU_PREFLIGHT.json').read_text())['status']=='PASS'
++    assert not list((O/'features').rglob('*.pt')),'Partial export: refuse blind overwrite'
++    assert not (O/'FEATURES.json').exists()
++    c=cfg('export');control_seed(42);b,ds,shape=data_setup(c,True);c.shape_meta=shape
++    write(O/'resolved_export_actual.json',dict(c));control_seed(42)
++    dist.init_process_group('nccl');torch.cuda.set_device(0);begin=time.time()
++    try:
++        a=Basic(10,c).cuda();strict=complete(c,shape) # explicit equality audit without changing formal RNG below
++        del strict
++        # Rebuild from exactly reset seed after the loading audit, like released exporter.
++        del a;control_seed(42);a=Basic(10,c).cuda();a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train()
++        counts={};demos={}
++        for t in range(6,10):
++            write(O/'RUN_STATUS.json',dict(status='EXPORTING',task=t,updated_unix=time.time(),pid=__import__('os').getpid()))
++            a.learn_one_task(ds[t],t,b,{},save_feature=True,saving_dir=str(O/'features'))
++            paths=list((O/'features'/str(t)).glob('*.pt'));assert len(paths)==len(ds[t])
++            demos[str(t)]=list(ds[t].sequence_dataset.demos);counts[str(t)]=len(paths)
++            for p in paths:
++                x=torch.load(p,map_location='cpu');assert x['feature'].shape==(1,8,4,512) and x['actions'].shape==(1,8,7)
++                assert torch.isfinite(x['feature']).all() and torch.isfinite(x['actions']).all()
++        write(O/'FEATURES.json',dict(counts=counts,demos=demos,hashes=hashes(O/'features'),
++            modal_sha256=sha(O/'MODAL_CONTRACT.json'),seconds=time.time()-begin,
++            contract_sha256=sha(O/'CONTRACT.json'),export_mode='native train mode with original augmentation'))
++        write(O/'RUN_STATUS.json',dict(status='FEATURES_READY',counts=counts,updated_unix=time.time()))
++    finally:dist.destroy_process_group()
++if __name__=='__main__':main()
+--- /dev/null
++++ b/coreset_exp/model.py
+@@ -0,0 +1,50 @@
++import copy,json
++import torch
++import torch.nn.functional as F
++from easydict import EasyDict
++from .common import O,S,write,sha
++from libero.libero.benchmark import get_benchmark
++from libero.lifelong.datasets import get_dataset,SequenceVLDataset
++from libero.lifelong.utils import get_task_embs,control_seed,torch_load_model
++from libero.lifelong.models.complete_policy import CompletePolicy
++from libero.lifelong.models.brief import BriefPolicy
++
++def cfg(name):return EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))
++def data_setup(c,all_datasets=False):
++    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)
++    datasets=[];shape=None
++    # Same dataset and tokenization order as released exporter/evaluator.
++    for t in range(10 if all_datasets else 1):
++        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),
++            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)
++        datasets.append(d)
++    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)
++    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape
++def strict_downstream(model,path):
++    sd=torch_load_model(path)[0];target=model.state_dict()
++    wanted={k:v for k,v in sd.items() if k.startswith(('temporal_transformer.','policy_head.'))}
++    expected={k for k in target if k.startswith(('temporal_transformer.','policy_head.'))}
++    assert set(wanted)==expected,'Incomplete downstream checkpoint'
++    for k in expected:assert target[k].shape==wanted[k].shape,k
++    result=model.load_state_dict(wanted,strict=False)
++    assert not result.unexpected_keys and not (set(result.missing_keys)&expected)
++    for k in expected:assert torch.equal(model.state_dict()[k].cpu(),wanted[k].cpu()),k
++    return len(expected)
++def complete(c,shape):
++    p=CompletePolicy(c,shape).cuda() # Native constructor strict=True on full official weight.
++    raw=torch_load_model(c.pretrain)[0];actual=p.state_dict()
++    assert set(raw)==set(actual)
++    for k in raw:assert torch.equal(raw[k].cpu(),actual[k].cpu()),k
++    return p
++def angular_mean(global_current,own_reference,old_references,gamma):
++    if not old_references:return global_current.sum()*0
++    g=F.normalize(global_current,dim=-1,eps=1e-8)
++    own=F.normalize(own_reference,dim=-1,eps=1e-8)
++    theta_pos=torch.acos((g*own).sum(-1).clamp(-1+1e-6,1-1e-6))
++    losses=[]
++    for ref in old_references:
++        old=F.normalize(ref,dim=-1,eps=1e-8)
++        neg=torch.acos((g*old).sum(-1).clamp(-1+1e-6,1-1e-6))
++        phi=torch.acos((own*old).sum(-1).clamp(-1+1e-6,1-1e-6))
++        losses.append(torch.relu(theta_pos-neg+gamma*phi).mean())
++    return torch.stack(losses).mean()
+--- /dev/null
++++ b/coreset_exp/pipeline.sh
+@@ -0,0 +1,27 @@
++#!/usr/bin/env bash
++set -euo pipefail
++source /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/env.sh
++exec 9>"$CORESET_OUT/pipeline.lock"
++flock -n 9 || exit 70
++test ! -e "$CORESET_OUT/pipeline.started"
++date -Is > "$CORESET_OUT/pipeline.started"
++echo $$ > "$CORESET_OUT/pipeline.pid"
++trap 'rc=$?; printf "%s\n" "$rc" > "$CORESET_OUT/pipeline.exit"' EXIT
++run() {
++  label="$1"; shift
++  printf '%s START %s ' "$(date -Is)" "$label" >> "$CORESET_OUT/commands.log"
++  printf '%q ' "$@" >> "$CORESET_OUT/commands.log"
++  printf '\n' >> "$CORESET_OUT/commands.log"
++  set +e
++  "$@" > "$CORESET_OUT/$label.log" 2>&1
++  rc=$?
++  set -e
++  printf '%s EXIT %s %s\n' "$(date -Is)" "$label" "$rc" >> "$CORESET_OUT/commands.log"
++  test "$rc" = 0 || exit "$rc"
++}
++run export torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.export
++run train_random torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train random
++run train_coreset torchrun --nproc_per_node=1 --master_port=38315 -m coreset_exp.train coreset
++run evaluate_random python -u -m coreset_exp.evaluate random
++run evaluate_coreset python -u -m coreset_exp.evaluate coreset
++run summarize python -u -m coreset_exp.summarize
+--- /dev/null
++++ b/coreset_exp/preflight.py
+@@ -0,0 +1,81 @@
++import copy,json,os,time
++from pathlib import Path
++import torch
++import torch.distributed as dist
++from torch.utils.data import DataLoader
++import robomimic.utils.tensor_utils as TU
++from .common import O,write,save,sha,verify,rng,restore_rng
++from .model import cfg,data_setup,complete,strict_downstream,angular_mean
++from .train import build,capture,restore,cpu
++from libero.lifelong.models.brief import BriefPolicy
++from libero.lifelong.utils import control_seed
++
++def main():
++    verify();assert not (O/'GPU_PREFLIGHT.json').exists(),'Do not repeat successful preflight'
++    start=time.time();assert torch.cuda.is_available();control_seed(42)
++    c=cfg('export');b,ds,shape=data_setup(c,True);c.shape_meta=shape
++    p=complete(c,shape);p.eval();tests={}
++    raw=next(iter(DataLoader(ds[6],batch_size=1,num_workers=0)))
++    data=TU.map_tensor(raw,lambda x:x.cuda());prepared=p.preprocess_input(copy.deepcopy(data))
++    captured={};hooks=[]
++    for name in ('state_encoder','state_scale','state_shift'):
++        def hook(module,args,value,name=name):captured[name]=value.detach().clone()
++        hooks.append(getattr(p,name).register_forward_hook(hook))
++    with torch.no_grad():x=p.spatial_encode(copy.deepcopy(prepared))
++    expected=((1+captured['state_scale'])*captured['state_encoder']+captured['state_shift']).reshape(1,8,512)
++    assert torch.equal(x[:,:,3,:],expected);tests['state_token_exact']=True
++    for h in hooks:h.remove()
++    changed=copy.deepcopy(prepared);changed['obs']['joint_states']+=.37;changed['obs']['gripper_states']-=.21
++    with torch.no_grad():y=p.spatial_encode(changed)
++    assert torch.equal(x[:,:,:3],y[:,:,:3]);delta=float((x[:,:,3]-y[:,:,3]).abs().max());assert delta>1e-5
++    tests['state_response_max']=delta;tests['other_tokens_invariant']=True
++    p.cfg.policy.use_state=False
++    with torch.no_grad():f=p.spatial_encode(copy.deepcopy(prepared));g=p.spatial_encode(copy.deepcopy(changed))
++    assert torch.equal(f,g);tests['false_negative_control']=True;p.cfg.policy.use_state=True
++    bc=cfg('random');brief=BriefPolicy(bc,None).cuda().eval();strict_downstream(brief,bc.pretrain)
++    with torch.no_grad():
++        left=p.policy_head.forward_fn(p.temporal_encode(x)[:,-1]);right=brief.policy_head.forward_fn(brief.temporal_encode(x)[:,-1])
++    assert all(torch.equal(a,b_) for a,b_ in zip(left,right));tests['gmm_parameters_exact']=True
++    payload=[]
++    with torch.no_grad():
++        for task in (6,7):
++            for index in range(5):
++                row=next(iter(DataLoader(torch.utils.data.Subset(ds[task],[index]),batch_size=1,num_workers=0)))
++                row=TU.map_tensor(row,lambda x:x.cuda());latent=p.spatial_encode(p.preprocess_input(row))
++                payload.append((dict(feature=latent.cpu(),actions=row['actions'].cpu()),str(task)))
++    torch.save(payload,O/'preflight_real_payload.pth')
++    # Render/seed/initial-state interface check only: one env, one zero-action physics step; no policy rollout.
++    from libero.libero.envs import OffScreenRenderEnv,SubprocVectorEnv
++    task=b.get_task(6)
++    kwargs=dict(bddl_file_name=str(Path(c.bddl_folder)/task.problem_folder/task.bddl_file),camera_heights=128,camera_widths=128)
++    env=SubprocVectorEnv([lambda:OffScreenRenderEnv(**kwargs)])
++    try:
++        env.seed(42);env.reset();init=torch.load(Path(c.init_states_folder)/task.problem_folder/task.init_states_file)
++        assert len(init)>=20;env.set_init_state(init[:1]);obs,*_=env.step(__import__('numpy').zeros((1,7)))
++        assert obs[0]['agentview_image'].shape==(128,128,3);tests['spawn_render_reset_one_zero_step']=True
++    finally:env.close()
++    del p,brief;torch.cuda.empty_cache()
++    # Actual native-size latent batch, corrected shared IFA, four isolated optimizer calls.
++    dist.init_process_group('nccl');torch.cuda.set_device(0)
++    try:
++        bc.run_root=str(O/'smoke');bc.experiment_dir=str(O/'smoke/models');bc.buffer_dir=str(O/'smoke/buffer')
++        a,_=build(bc);loader=DataLoader(payload,batch_size=10,num_workers=0);a.start_task(-1,loader)
++        a.refs={6:payload[0][0]['feature'][0,0,0].cuda(),7:payload[5][0]['feature'][0,0,0].cuda()}
++        info={'selected_pairs':[(6,7)]}
++        a.observe(next(iter(loader)),7,0,info);a.observe(next(iter(loader)),7,0,info)
++        snap=capture(a);save(O/'smoke/recovery_test.pth',snap)
++        first=a.observe(next(iter(loader)),7,0,info);expect=cpu(a.policy.state_dict())
++        restore(a,torch.load(O/'smoke/recovery_test.pth',map_location='cpu'))
++        second=a.observe(next(iter(loader)),7,0,info)
++        assert first==second and all(torch.equal(v,expect[k]) for k,v in cpu(a.policy.state_dict()).items())
++        tests['optimizer_scheduler_rng_recovery_exact']=True;tests['isolated_optimizer_calls']=4
++        assert a.scheduler.last_epoch==3 and a.step==3
++        g=torch.randn(3,512,device='cuda');own=a.refs[7];old=a.refs[6]
++        one=angular_mean(g,own,[old],.3);two=angular_mean(g,own,[old,old],.3)
++        assert torch.equal(one,two);assert angular_mean(g,own,[],.3).item()==0
++        tests['ifa_pair_mean_and_empty']=True
++    finally:dist.destroy_process_group()
++    verify();write(O/'GPU_PREFLIGHT.json',dict(status='PASS',tests=tests,seconds=time.time()-start,
++        formal_rollouts=0,environment_interface_checks=1,torch=torch.__version__,gpu=torch.cuda.get_device_name(),
++        modal_sha256=sha(O/'MODAL_CONTRACT.json'),contract_sha256=sha(O/'CONTRACT.json')))
++if __name__=='__main__':main()
+--- /dev/null
++++ b/coreset_exp/storage.py
+@@ -0,0 +1,43 @@
++import json,random,math,shutil,time
++from pathlib import Path
++import numpy as np
++import h5py
++from .common import O,sha,write,hashes
++from libero.lifelong.algos import mlr
++from libero.lifelong.selectors.greedy_kcenter import greedy_kcenter_select
++
++def store(c,t,benchmark):
++    start=time.monotonic();root=Path(c.run_root);mfile=root/'storage'/f'task{t}.json'
++    paths=mlr._list_pt(str(O/'features'/str(t)));k=max(1,math.ceil(.5*len(paths)))
++    if mfile.exists():
++        manifest=json.loads(mfile.read_text());assert manifest['contract_sha256']==sha(O/'CONTRACT.json')
++        assert manifest['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
++    else:
++        before=hashes(Path(c.buffer_dir));assert not any(n.startswith(f't{t}__') for n in before)
++        assert len(before)+k<=mlr.BUFFER_CAPACITY,'Unexpected capacity branch; stop before changing quotas'
++        if c.selector=='random':selected=mlr._sample(paths,k,random.Random(42));report={'selector':'random'}
++        else:
++            demo_ids=json.loads((O/'FEATURES.json').read_text())['demos'][str(t)]
++            with h5py.File(str(Path(c.folder)/benchmark.get_task_demonstration(t)),'r') as f:
++                population=np.concatenate([f['data'][d]['actions'][:] for d in demo_ids])
++            selected,report=greedy_kcenter_select(paths,k,42,population)
++        assert len(selected)==len(set(selected))==k
++        manifest=dict(task=t,K=k,current_count=len(paths),before=before,
++            selected=[dict(source=p,destination=f't{t}__{Path(p).name}',sha256=sha(p)) for p in selected],
++            selection=report,contract_sha256=sha(O/'CONTRACT.json'),modal_sha256=sha(O/'MODAL_CONTRACT.json'))
++        write(mfile,manifest) # Precommit before copies: task-boundary retries cannot resample.
++    buffer=Path(c.buffer_dir);buffer.mkdir(parents=True,exist_ok=True)
++    allowed=dict(manifest['before']);allowed.update({r['destination']:r['sha256'] for r in manifest['selected']})
++    actual=hashes(buffer);assert set(actual)<=set(allowed) and all(allowed[n]==h for n,h in actual.items())
++    for r in manifest['selected']:
++        src=Path(r['source']);dst=buffer/r['destination'];assert sha(src)==r['sha256']
++        if dst.exists():assert sha(dst)==r['sha256']
++        else:
++            tmp=dst.with_suffix('.copying');shutil.copy2(src,tmp);assert sha(tmp)==r['sha256'];tmp.replace(dst)
++    after=hashes(buffer);assert after==allowed
++    counts={str(i):sum(n.startswith(f't{i}__') for n in after) for i in range(6,t+1)}
++    result=dict(counts=counts,total=len(after),hashes=after,modal_sha256=sha(O/'MODAL_CONTRACT.json'),
++                seconds=time.monotonic()-start,metadata_bytes=mfile.stat().st_size)
++    if c.selector=='coreset':assert counts==json.loads((O/'random'/f'buffer_after_task{t}.json').read_text())['counts']
++    write(root/f'buffer_after_task{t}.json',result)
++    return result
+--- /dev/null
++++ b/coreset_exp/summarize.py
+@@ -0,0 +1,70 @@
++"""Read-only numerical audit. No environment execution or optimizer creation."""
++import json,math,time,csv
++from fractions import Fraction as F
++from .common import O,sha,write,verify,hashes
++def metrics(r):
++    fwt=sum(r[j,j] for j in range(6,10))/4
++    nbt=sum(sum(r[j,j]-r[i,j] for i in range(j+1,10))/(9-j) for j in range(6,9))/3
++    auc=sum(sum(r[i,j] for i in range(j,10))/(10-j) for j in range(6,10))/4
++    return {n:dict(fraction=str(v),percent=float(v*100)) for n,v in dict(AUC=auc,FWT=fwt,NBT=nbt).items()}
++def readlines(p):return [json.loads(x) for x in p.read_text().splitlines() if x.strip()]
++def main():
++    c=verify();features=json.loads((O/'FEATURES.json').read_text());result={};allrows=[];attempt_counts={}
++    assert json.loads((O/'GPU_PREFLIGHT.json').read_text())['status']=='PASS'
++    assert json.loads((O/'TASK6_TENSOR_PARITY.json').read_text())['equal']
++    assert (O/'random/INITIAL_STATE.json').read_bytes()==(O/'coreset/INITIAL_STATE.json').read_bytes()
++    expected_counts={int(t):n for t,n in features['counts'].items()}
++    totalsteps=100*sum(math.ceil((expected_counts[t]+sum(math.ceil(.5*expected_counts[j]) for j in range(6,t)))/10) for t in range(6,10))
++    for arm in ('random','coreset'):
++        root=O/arm;epochs=json.loads((root/'epochs.json').read_text());assert len(epochs)==400
++        assert [(x['task'],x['epoch']) for x in epochs]==[(t,e) for t in range(6,10) for e in range(100)]
++        assert epochs[-1]['steps']==totalsteps
++        prior=0
++        for row in epochs:
++            assert row['steps']==prior+row['batches'];prior=row['steps']
++            assert row['batches']==math.ceil((expected_counts[row['task']]+sum(math.ceil(.5*expected_counts[j]) for j in range(6,row['task'])))/10)
++        training=json.loads((root/'TRAINING_COMPLETE.json').read_text());assert training['steps']==totalsteps
++        assert training['checkpoints']==hashes(root/'models','*.pth') and len(training['checkpoints'])==4
++        r={};trialkeys=set();events=[];coverage=[]
++        for t in range(6,10):
++            m=json.loads((root/'storage'/f'task{t}.json').read_text());assert m['K']==math.ceil(expected_counts[t]*.5)
++            assert len({x['destination'] for x in m['selected']})==m['K']
++            assert m['contract_sha256']==sha(O/'CONTRACT.json') and m['modal_sha256']==c['modal_sha256']
++            for x in m['selected']:assert sha(x['source'])==x['sha256']==sha(root/'buffer'/x['destination'])
++            coverage.append(dict(task=t,K=m['K'],selection=m['selection']))
++            for j in range(6,t+1):
++                p=root/'evaluation'/f'trials_stage{t}_task{j}.jsonl';rows=readlines(p)
++                assert len(rows)==20 and {x['trial'] for x in rows}==set(range(20))
++                for row in rows:
++                    assert row['arm']==arm and row['stage']==t and row['task']==j and row['seed']==42
++                    assert row['epoch']==99 and row['initial_state_index']==row['trial']
++                    assert isinstance(row['success'],bool) and 1<=row['vector_group_steps']<=600
++                    assert row['checkpoint_sha256']==sha(root/'models'/f'mlrifa_{t}_model_ep99.pth')
++                    assert row['modal_sha256']==c['modal_sha256']
++                    key=(t,j,row['trial']);assert key not in trialkeys;trialkeys.add(key)
++                r[t,j]=F(sum(x['success'] for x in rows),20);allrows.extend(rows)
++                cell=json.loads((root/'evaluation'/f'cell_stage{t}_task{j}.json').read_text());assert cell['success_rate']==float(r[t,j])
++                ev=readlines(root/'evaluation'/f'attempts_stage{t}_task{j}.jsonl');events.extend(ev)
++                assert [x['event'] for x in ev]==['environment_construct_start','environment_construct_complete','vector_attempt_start','vector_attempt_complete','vector_attempt_start','vector_attempt_complete','environment_closed']
++                assert [x['env_seed'] for x in ev if x['event']=='vector_attempt_start']==[42,43]
++        assert len(trialkeys)==200
++        attempt_counts[arm]=dict(vector_attempts=20,environment_lanes=200,technical_exceptions=0,formal_records=200)
++        result[arm]=dict(metrics=metrics(r),matrix=[[float(r[i,j]*100) if (i,j) in r else None for j in range(6,10)] for i in range(6,10)],
++            epochs=400,steps=totalsteps,training_seconds=training['summed_epoch_seconds'],coverage=coverage)
++    left={(x['stage'],x['task'],x['trial']):x for x in allrows if x['arm']=='random'}
++    for x in allrows:
++        if x['arm']=='coreset':assert x['initial_state_sha256']==left[x['stage'],x['task'],x['trial']]['initial_state_sha256']
++    for p,h in json.loads((O/'OLD_INPUTS_READONLY.json').read_text()).items():assert sha(p)==h,p
++    delta={n:result['coreset']['metrics'][n]['percent']-result['random']['metrics'][n]['percent'] for n in ('AUC','FWT','NBT')}
++    write(O/'SUMMARY.json',dict(arms=result,delta_coreset_minus_random_percentage_points=delta,attempts=attempt_counts,
++        formal_records=400,old_inputs_unchanged=True,seed=42,extensions=[],export_seconds=features['seconds']))
++    report=['# Seed42 Random vs Coreset','', '仅一个训练seed；按论文描述启用状态模态，官方checkpoint原始模态配置缺失时仍记未知。', '',
++        '| 方法 | AUC (%) | FWT (%) | NBT (%) |','|---|---:|---:|---:|']
++    for arm in result:report.append('| '+arm+' | '+' | '.join(f"{result[arm]['metrics'][n]['percent']:.6f}" for n in ('AUC','FWT','NBT'))+' |')
++    report.extend(['','400正式闭环；每组400epoch、'+str(totalsteps)+'步、4个ep99最终checkpoint。',
++        '状态：数值与输入审计通过，仍需独立进程退出和权重加载验收。',
++        '限制：单seed不能判断统计显著性；RTX3090与论文A100不同；预训练模态元数据、warmup/调度及最终checkpoint选择细节未公开；IFA随buffer变化，不能独立归因于几何覆盖。',
++        '不扩展seed，不更新旧实验指标，不执行后续调参。'])
++    (O/'REPORT.md').write_text('\n'.join(report)+'\n')
++    write(O/'RUN_STATUS.json',dict(status='AWAITING_INDEPENDENT_EXIT_AUDIT',updated_unix=time.time()))
++if __name__=='__main__':main()
+--- /dev/null
++++ b/coreset_exp/supervise.sh
+@@ -0,0 +1,11 @@
++#!/usr/bin/env bash
++set -uo pipefail
++source /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed42_20261013/source/coreset_exp/env.sh
++bash "$CORESET_SOURCE/coreset_exp/pipeline.sh"
++rc=$?
++if test "$rc" = 0; then
++  python -u -m coreset_exp.acceptance > "$CORESET_OUT/independent_acceptance.log" 2>&1
++  rc=$?
++fi
++printf '%s\n' "$rc" > "$CORESET_OUT/supervisor.exit"
++exit "$rc"
+--- /dev/null
++++ b/coreset_exp/test_protocol.py
+@@ -0,0 +1,25 @@
++import unittest
++import torch
++from fractions import Fraction as F
++from .model import angular_mean
++from .summarize import metrics
++class ProtocolTests(unittest.TestCase):
++    def test_ifa_own_reference(self):
++        g=torch.tensor([[1.,0.]],requires_grad=True);own=torch.tensor([1.,0.]);old=torch.tensor([0.,1.])
++        self.assertEqual(angular_mean(g,own,[old],.3).item(),0.)
++        self.assertGreater(angular_mean(g,old,[own],.3).item(),1.)
++    def test_mean_pair_not_sum(self):
++        g=torch.tensor([[0.,1.]],requires_grad=True);own=torch.tensor([1.,0.]);old=torch.tensor([0.,1.])
++        self.assertTrue(torch.equal(angular_mean(g,own,[old],.3),angular_mean(g,own,[old,old],.3)))
++    def test_empty_differentiable(self):
++        g=torch.ones(2,2,requires_grad=True);z=angular_mean(g,g[0],[],.3);z.backward();self.assertEqual(g.grad.abs().sum().item(),0)
++    def test_metrics_exact_perfect(self):
++        r={(i,j):F(1) for i in range(6,10) for j in range(6,i+1)};m=metrics(r)
++        self.assertEqual(m['AUC']['fraction'],'1');self.assertEqual(m['NBT']['fraction'],'0')
++    def test_metrics_task_balanced(self):
++        r={(i,j):F(int(j==9)) for i in range(6,10) for j in range(6,i+1)};m=metrics(r)
++        self.assertEqual(m['AUC']['fraction'],'1/4');self.assertEqual(m['FWT']['fraction'],'1/4')
++    def test_forgetting_sign(self):
++        r={(i,j):F(int(i==j)) for i in range(6,10) for j in range(6,i+1)}
++        self.assertEqual(metrics(r)['NBT']['fraction'],'1')
++if __name__=='__main__':unittest.main()
+--- /dev/null
++++ b/coreset_exp/test_selector.py
+@@ -0,0 +1,35 @@
++import unittest,random,importlib.util
++from pathlib import Path
++import numpy as np
++spec=importlib.util.spec_from_file_location('kc',Path(__file__).resolve().parents[1]/'libero/lifelong/selectors/greedy_kcenter.py')
++kc=importlib.util.module_from_spec(spec);spec.loader.exec_module(kc)
++class Tests(unittest.TestCase):
++    def setUp(self):
++        g=np.random.RandomState(17);self.v=g.normal(size=(15,8,2,6));self.a=g.normal(size=(15,7));self.ids=[f'{i:03}.pt' for i in range(15)]
++    def select(self,k=7,block=3):return kc.select_arrays(self.ids,self.v,self.a,self.a,k,42,block)
++    def test_quota_unique(self):self.assertEqual(len(set(self.select()[0])),7)
++    def test_all(self):self.assertEqual(set(self.select(15)[0]),set(self.ids))
++    def test_permutation(self):
++        b=kc.select_arrays(self.ids[::-1],self.v[::-1],self.a[::-1],self.a,7,42,3)
++        self.assertEqual(self.select()[0],b[0])
++    def test_block(self):self.assertEqual(self.select(block=1)[0],self.select(block=50)[0])
++    def test_rng(self):
++        p=random.getstate();n=np.random.get_state();self.select();self.assertEqual(p,random.getstate());self.assertTrue(np.array_equal(n[1],np.random.get_state()[1]))
++    def test_monotone(self):self.assertTrue(np.all(np.diff(self.select()[1]['covering_radius'])<=1e-10))
++    def test_greedy_oracle(self):
++        chosen,r=self.select();d=kc.Distance(self.v,self.a,self.a);matrix=d.distances(range(15));selected=[self.ids.index(chosen[0])]
++        for x in chosen[1:]:
++            nearest=matrix[:,selected].min(axis=1);nearest[selected]=-np.inf
++            self.assertEqual(self.ids[int(nearest.argmax())],x);selected.append(self.ids.index(x))
++    def test_ties(self):
++        v=np.ones_like(self.v);a=np.zeros_like(self.a);ids,_=kc.select_arrays(self.ids,v,a,a,7)
++        self.assertEqual(ids,self.ids[:7])
++    def test_scale_constant(self):self.assertTrue(np.array_equal(kc.robust_scale(np.zeros((8,7))),np.ones(7)))
++    def test_bad_k(self):
++        with self.assertRaises(AssertionError):self.select(16)
++    def test_bad_feature(self):
++        self.v[:]=np.nan
++        with self.assertRaises(AssertionError):self.select()
++    def test_pairs(self):
++        p=kc.reference_pairs(5);self.assertEqual(len(p),10);self.assertTrue((p[:,0]<p[:,1]).all());self.assertEqual(len(kc.reference_pairs(100)),4096)
++if __name__=='__main__':unittest.main()
+--- /dev/null
++++ b/coreset_exp/train.py
+@@ -0,0 +1,129 @@
++import argparse,copy,json,os,time,csv,hashlib,pickle
++from pathlib import Path
++import numpy as np
++import torch
++import torch.distributed as dist
++from torch.nn.parallel import DistributedDataParallel as DDP
++from torch.utils.data import DataLoader,DistributedSampler
++from .common import O,write,save,sha,verify,rng,restore_rng,hashes,jsonable
++from .model import cfg,angular_mean,strict_downstream
++from .storage import store
++from libero.lifelong.algos.mlr import MLR,build_dataset_for_task,build_ifa_similarity_matrix
++from libero.lifelong.utils import control_seed,get_task_embs
++from libero.libero.benchmark import get_benchmark
++
++def cpu(x):
++    if torch.is_tensor(x):return x.detach().cpu().clone()
++    if isinstance(x,dict):return {k:cpu(v) for k,v in x.items()}
++    if isinstance(x,list):return [cpu(v) for v in x]
++    if isinstance(x,tuple):return tuple(cpu(v) for v in x)
++    return copy.deepcopy(x)
++def references(c,t):
++    out={};maxdev={}
++    for task in range(6,t+1):
++        files=sorted((O/'features'/str(t)).glob('*.pt')) if task==t else sorted(Path(c.buffer_dir).glob(f't{task}__*.pt'))
++        assert files;ref=None;dev=0.
++        for p in files:
++            v=torch.load(p,map_location='cpu')['feature'][0,:,0,:]
++            if ref is None:ref=v[0].clone()
++            dev=max(dev,float((v-ref).abs().max()))
++        assert dev<1e-4,('Non-stable language references: protocol decision needed',task,dev)
++        out[task]=ref.cuda();maxdev[task]=dev
++    return out,maxdev
++class PaperMLR(MLR):
++    def observe(self,data,current_task_id,epoch,ifa_info=None):
++        data[0]=self.map_tensor_to_device(data[0]);self.optimizer.zero_grad()
++        bc,last=self.policy.module.compute_loss(data[0],None,None)
++        mask=torch.tensor([int(x)==current_task_id for x in data[1]],device=last.device)
++        pairs=ifa_info['selected_pairs'];olds=[self.refs[j if k==current_task_id else k] for j,k in pairs]
++        extra=angular_mean(last[mask],self.refs[current_task_id],olds,self.cfg.gamma) if mask.any() else last.sum()*0
++        loss=bc+.1*extra;assert torch.isfinite(loss)
++        (self.loss_scale*loss).backward()
++        if self.cfg.train.grad_clip is not None:torch.nn.utils.clip_grad_norm_(self.policy.parameters(),self.cfg.train.grad_clip)
++        self.optimizer.step();self.scheduler.step()
++        self.step+=1;return float(loss.detach())
++def build(c):
++    control_seed(42);b=get_benchmark('LIBERO_OBJECT')(0)
++    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))
++    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)
++    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)
++    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)
++    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0
++    return a,b
++def capture(a):
++    return dict(model=cpu(a.policy.state_dict()),optimizer=cpu(a.optimizer.state_dict()),scheduler=cpu(a.scheduler.state_dict()),
++        grads={n:cpu(p.grad) if p.grad is not None else None for n,p in a.policy.named_parameters()},
++        modes={n:m.training for n,m in a.policy.named_modules()},rng=cpu(rng()),step=a.step)
++def restore(a,x):
++    a.policy.load_state_dict(x['model'],strict=True);a.optimizer.load_state_dict(x['optimizer']);a.scheduler.load_state_dict(x['scheduler']);a.step=x['step']
++    for n,p in a.policy.named_parameters():p.grad=None if x['grads'][n] is None else x['grads'][n].to(p.device)
++    for n,m in a.policy.named_modules():m.training=x['modes'][n]
++    restore_rng(x['rng'])
++def checkpoint(a,root,t,epoch,complete=False):
++    save(root/'recovery/latest.pth',dict(state=capture(a),task=t,next_epoch=epoch,stage_complete=complete,
++        contract_sha256=sha(O/'CONTRACT.json'),modal_sha256=sha(O/'MODAL_CONTRACT.json'),buffer_hashes=hashes(Path(a.cfg.buffer_dir))))
++def main():
++    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()
++    verify();assert json.loads((O/'GPU_PREFLIGHT.json').read_text())['status']=='PASS'
++    assert (O/'FEATURES.json').is_file();c=cfg(args.arm);root=Path(c.run_root)
++    assert not (root/'TRAINING_COMPLETE.json').exists(),'Already complete'
++    cp=root/'recovery/latest.pth';assert args.resume or not cp.exists(),'Explicit resume required'
++    resumed=torch.load(cp,map_location='cpu') if args.resume else None
++    dist.init_process_group('nccl');torch.cuda.set_device(0);begin=time.time()
++    try:
++        a,b=build(c);history=[]
++        if not resumed:
++            r=rng()
++            digest={k:hashlib.sha256(pickle.dumps(v) if k in ('python','numpy') else b''.join(x.cpu().numpy().tobytes() for x in (v if isinstance(v,list) else [v]))).hexdigest() for k,v in r.items()}
++            model_digest={k:hashlib.sha256(v.detach().cpu().numpy().tobytes()).hexdigest() for k,v in a.policy.state_dict().items()}
++            evidence=dict(rng=digest,tensors=model_digest)
++            write(root/'INITIAL_STATE.json',evidence)
++            if args.arm=='coreset':assert evidence==json.loads((O/'random/INITIAL_STATE.json').read_text()),'Initialization differs'
++        if resumed:
++            assert resumed['contract_sha256']==sha(O/'CONTRACT.json') and resumed['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
++            a.policy.load_state_dict(resumed['state']['model'],strict=True);a.step=resumed['state']['step'];restore_rng(resumed['state']['rng'])
++            actual=hashes(Path(c.buffer_dir));expected=resumed['buffer_hashes']
++            assert all(actual.get(n)==h for n,h in expected.items())
++            if actual!=expected:assert resumed['next_epoch']==100 and not resumed['stage_complete']
++            history=json.loads((root/'epochs.json').read_text())
++            # Recovery cp is commit authority; preserve uncommitted log tail as evidence.
++            keep=[x for x in history if x['task']<resumed['task'] or x['task']==resumed['task'] and x['epoch']<resumed['next_epoch']]
++            if history!=keep:write(root/f'interrupted_epochs_{time.time_ns()}.json',history);history=keep
++        else:assert not list(Path(c.buffer_dir).glob('*.pt'))
++        for t in range(6,10):
++            if resumed and (t<resumed['task'] or t==resumed['task'] and resumed['stage_complete']):continue
++            start=resumed['next_epoch'] if resumed and t==resumed['task'] else 0
++            if start==100:
++                store(c,t,b);resumed['stage_complete']=True;resumed['buffer_hashes']=hashes(Path(c.buffer_dir));save(cp,resumed);continue
++            info=build_ifa_similarity_matrix(t,c.feature_dir,c.buffer_dir);a.refs,dev=references(c,t)
++            write(root/f'ifa_task{t}.json',dict(info=jsonable(info),reference_max_deviation=dev))
++            dataset=build_dataset_for_task(c.feature_dir,t,c.buffer_dir,42,start=6)
++            sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True)
++            loader=DataLoader(dataset,batch_size=10,num_workers=c.train.num_workers,sampler=sampler,persistent_workers=False)
++            a.start_task(-1,loader)
++            if resumed and t==resumed['task']:restore(a,resumed['state'])
++            for epoch in range(start,100):
++                sampler.set_epoch(epoch);a.policy.train();loss=0.;tic=time.time();lr_first=a.optimizer.param_groups[0]['lr']
++                for batch in loader:loss+=a.observe(batch,t,epoch,info)
++                row=dict(task=t,epoch=epoch,batches=len(loader),steps=a.step,loss=loss/len(loader),
++                    lr_first=lr_first,lr_after=a.optimizer.param_groups[0]['lr'],seconds=time.time()-tic)
++                history.append(row);write(root/'epochs.json',history)
++                if epoch==99:
++                    final=root/'models'/f'mlrifa_{t}_model_ep99.pth'
++                    save(final,dict(state_dict=cpu(a.policy.state_dict()),cfg=c,task=t,epoch_index=99,
++                        modal_sha256=sha(O/'MODAL_CONTRACT.json'),contract_sha256=sha(O/'CONTRACT.json')))
++                    if t==6 and args.arm=='coreset':
++                        old=torch.load(O/'random/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())
++                        diff={k:float((now[k].double()-old[k].double()).abs().max()) for k in now}
++                        same=set(old)==set(now) and all(v==0 for v in diff.values())
++                        write(O/'TASK6_TENSOR_PARITY.json',dict(equal=same,max_abs_diff=diff,compared='actual state_dict tensors, no file metadata'))
++                        assert same,'Task6 models differ before selection; stop C before task7'
++                checkpoint(a,root,t,epoch+1)
++                write(O/'RUN_STATUS.json',dict(status='TRAINING',arm=args.arm,task=t,completed_epoch=epoch,optimizer_steps=a.step,updated_unix=time.time(),pid=os.getpid()))
++                print(json.dumps(row),flush=True)
++            store(c,t,b);checkpoint(a,root,t,100,True);resumed=None
++        assert len(history)==400 and all(sum(r['task']==t for r in history)==100 for t in range(6,10))
++        write(root/'TRAINING_COMPLETE.json',dict(epochs=400,steps=a.step,seconds_this_invocation=time.time()-begin,
++            summed_epoch_seconds=sum(x['seconds'] for x in history),checkpoints=hashes(root/'models','*.pth')))
++    finally:dist.destroy_process_group()
++if __name__=='__main__':main()
+--- /dev/null
++++ b/libero/__init__.py
+@@ -0,0 +1,2 @@
++"""Resolve the release's sibling lifelong/libero packages without external installs."""
++from .libero import get_libero_path, set_libero_default_path
+--- /dev/null
++++ b/libero/libero/bddl_files/libero_10/tasks_info.txt
+@@ -0,0 +1,10 @@
++libero/bddl_files/libero_10/KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it.bddl
++libero/bddl_files/libero_10/KITCHEN_SCENE4_put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it.bddl
++libero/bddl_files/libero_10/KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it.bddl
++libero/bddl_files/libero_10/KITCHEN_SCENE8_put_both_moka_pots_on_the_stove.bddl
++libero/bddl_files/libero_10/LIVING_ROOM_SCENE1_put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket.bddl
++libero/bddl_files/libero_10/LIVING_ROOM_SCENE2_put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket.bddl
++libero/bddl_files/libero_10/LIVING_ROOM_SCENE2_put_both_the_cream_cheese_box_and_the_butter_in_the_basket.bddl
++libero/bddl_files/libero_10/LIVING_ROOM_SCENE5_put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate.bddl
++libero/bddl_files/libero_10/LIVING_ROOM_SCENE6_put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate.bddl
++libero/bddl_files/libero_10/STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy.bddl
+--- /dev/null
++++ b/libero/libero/bddl_files/libero_90/tasks_info.txt
+@@ -0,0 +1,90 @@
++libero/bddl_files/libero_90/KITCHEN_SCENE1_open_the_top_drawer_of_the_cabinet_and_put_the_bowl_in_it.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE1_put_the_black_bowl_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE1_put_the_black_bowl_on_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE1_open_the_top_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE1_open_the_bottom_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE3_turn_on_the_stove_and_put_the_frying_pan_on_it.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE3_put_the_frying_pan_on_the_stove.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE3_put_the_moka_pot_on_the_stove.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE3_turn_on_the_stove.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE4_close_the_bottom_drawer_of_the_cabinet_and_open_the_top_drawer.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE4_put_the_wine_bottle_on_the_wine_rack.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE4_put_the_black_bowl_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE4_put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE4_put_the_wine_bottle_in_the_bottom_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE4_close_the_bottom_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE6_put_the_yellow_and_white_mug_to_the_front_of_the_white_mug.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE6_close_the_microwave.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE8_put_the_right_moka_pot_on_the_stove.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE8_turn_off_the_stove.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE9_turn_on_the_stove_and_put_the_frying_pan_on_it.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE9_put_the_frying_pan_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE9_put_the_white_bowl_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE9_put_the_frying_pan_on_the_cabinet_shelf.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE9_put_the_frying_pan_under_the_cabinet_shelf.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE9_turn_on_the_stove.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE10_close_the_top_drawer_of_the_cabinet_and_put_the_black_bowl_on_top_of_it.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE10_put_the_butter_at_the_front_in_the_top_drawer_of_the_cabinet_and_close_it.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE10_put_the_butter_at_the_back_in_the_top_drawer_of_the_cabinet_and_close_it.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE10_put_the_chocolate_pudding_in_the_top_drawer_of_the_cabinet_and_close_it.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE10_put_the_black_bowl_in_the_top_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE10_close_the_top_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE1_pick_up_the_ketchup_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE1_pick_up_the_cream_cheese_box_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE1_pick_up_the_alphabet_soup_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE1_pick_up_the_tomato_sauce_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE2_pick_up_the_orange_juice_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE2_pick_up_the_milk_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE2_pick_up_the_butter_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE2_pick_up_the_alphabet_soup_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE2_pick_up_the_tomato_sauce_and_put_it_in_the_basket.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE4_stack_the_left_bowl_on_the_right_bowl_and_place_them_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE4_stack_the_right_bowl_on_the_left_bowl_and_place_them_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE4_pick_up_the_black_bowl_on_the_left_and_put_it_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE4_pick_up_the_salad_dressing_and_put_it_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE4_pick_up_the_chocolate_pudding_and_put_it_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE5_put_the_white_mug_on_the_left_plate.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE5_put_the_yellow_and_white_mug_on_the_right_plate.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE5_put_the_red_mug_on_the_left_plate.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE5_put_the_red_mug_on_the_right_plate.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE6_put_the_white_mug_on_the_plate.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE6_put_the_red_mug_on_the_plate.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE6_put_the_chocolate_pudding_to_the_left_of_the_plate.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE6_put_the_chocolate_pudding_to_the_right_of_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE2_put_the_black_bowl_at_the_back_on_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE2_put_the_black_bowl_at_the_front_on_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE2_put_the_middle_black_bowl_on_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE2_put_the_middle_black_bowl_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE2_open_the_top_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE2_stack_the_middle_black_bowl_on_the_back_black_bowl.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE2_stack_the_black_bowl_at_the_front_on_the_black_bowl_in_the_middle.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE5_put_the_black_bowl_in_the_top_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE5_put_the_black_bowl_on_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE5_put_the_ketchup_in_the_top_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE5_put_the_black_bowl_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE5_close_the_top_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE7_put_the_white_bowl_on_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE7_put_the_white_bowl_to_the_right_of_the_plate.bddl
++libero/bddl_files/libero_90/KITCHEN_SCENE7_open_the_microwave.bddl
++libero/bddl_files/libero_90/STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_left_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_right_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_front_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE1_pick_up_the_yellow_and_white_mug_and_place_it_to_the_right_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_left_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_right_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_front_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE2_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE3_pick_up_the_book_and_place_it_in_the_left_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE3_pick_up_the_book_and_place_it_in_the_right_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE3_pick_up_the_book_and_place_it_in_the_front_compartment_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE3_pick_up_the_white_mug_and_place_it_to_the_right_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE3_pick_up_the_red_mug_and_place_it_to_the_right_of_the_caddy.bddl
++libero/bddl_files/libero_90/STUDY_SCENE4_pick_up_the_book_on_the_right_and_place_it_under_the_cabinet_shelf.bddl
++libero/bddl_files/libero_90/STUDY_SCENE4_pick_up_the_book_in_the_middle_and_place_it_on_the_cabinet_shelf.bddl
++libero/bddl_files/libero_90/STUDY_SCENE4_pick_up_the_book_on_the_left_and_place_it_on_top_of_the_shelf.bddl
++libero/bddl_files/libero_90/STUDY_SCENE4_pick_up_the_book_on_the_right_and_place_it_on_the_cabinet_shelf.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE3_pick_up_the_alphabet_soup_and_put_it_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE3_pick_up_the_tomato_sauce_and_put_it_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE3_pick_up_the_butter_and_put_it_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE3_pick_up_the_cream_cheese_and_put_it_in_the_tray.bddl
++libero/bddl_files/libero_90/LIVING_ROOM_SCENE3_pick_up_the_ketchup_and_put_it_in_the_tray.bddl
+--- /dev/null
++++ b/libero/libero/bddl_files/libero_goal/tasks_info.txt
+@@ -0,0 +1,10 @@
++libero/bddl_files/libero_goal/put_the_wine_bottle_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_goal/open_the_top_drawer_and_put_the_bowl_inside.bddl
++libero/bddl_files/libero_goal/turn_on_the_stove.bddl
++libero/bddl_files/libero_goal/put_the_bowl_on_top_of_the_cabinet.bddl
++libero/bddl_files/libero_goal/put_the_bowl_on_the_plate.bddl
++libero/bddl_files/libero_goal/put_the_wine_bottle_on_the_rack.bddl
++libero/bddl_files/libero_goal/put_the_cream_cheese_in_the_bowl.bddl
++libero/bddl_files/libero_goal/open_the_middle_drawer_of_the_cabinet.bddl
++libero/bddl_files/libero_goal/push_the_plate_to_the_front_of_the_stove.bddl
++libero/bddl_files/libero_goal/put_the_bowl_on_the_stove.bddl
+--- /dev/null
++++ b/libero/libero/bddl_files/libero_object/tasks_info.txt
+@@ -0,0 +1,10 @@
++libero/bddl_files/libero_object/pick_up_the_alphabet_soup_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_cream_cheese_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_milk_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_tomato_sauce_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_butter_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_orange_juice_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_chocolate_pudding_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_bbq_sauce_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_ketchup_and_place_it_in_the_basket.bddl
++libero/bddl_files/libero_object/pick_up_the_salad_dressing_and_place_it_in_the_basket.bddl
+--- /dev/null
++++ b/libero/libero/bddl_files/libero_spatial/tasks_info.txt
+@@ -0,0 +1,10 @@
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_from_table_center_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_next_to_the_cookie_box_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_next_to_the_plate_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_on_the_ramekin_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_on_the_wooden_cabinet_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.bddl
++libero/bddl_files/libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.bddl
+--- /dev/null
++++ b/libero/lifelong/selectors/__init__.py
+@@ -0,0 +1 @@
++"""Current-task memory membership selectors."""
+--- /dev/null
++++ b/libero/lifelong/selectors/greedy_kcenter.py
+@@ -0,0 +1,93 @@
++"""Frozen exploratory distance; no global RNG or evaluation information."""
++import random
++import time
++from pathlib import Path
++import numpy as np
++
++SETTINGS = dict(version='visual_action_kcenter_v1', vision_tokens=[1, 2],
++    time_positions=8, visual_weight=0.5, action_weight=0.5, calibration_pairs=4096,
++    reference_count=256, seed=42, block_size=256, numeric_dtype='float64',
++    action_scale='MAD*1.4826; then IQR/1.349; then range; then 1',
++    action_distance='RMS standardized last-step action difference',
++    distance_scale='median strictly positive calibration distances, or 1 if all zero',
++    center='minimum mean combined distance to seeded reference subset',
++    tie_break='lexicographic filename; absolute float64 tie tolerance 1e-12', clipping=False)
++
++def robust_scale(actions):
++    a=np.asarray(actions,dtype=np.float64)
++    med=np.median(a,axis=0)
++    candidates=[np.median(np.abs(a-med),axis=0)*1.4826,
++                (np.percentile(a,75,axis=0)-np.percentile(a,25,axis=0))/1.349,
++                np.ptp(a,axis=0),np.ones(a.shape[1])]
++    out=candidates[0].copy()
++    for c in candidates[1:]:out=np.where(out>1e-12,out,c)
++    return out
++
++def reference_pairs(n,seed=42,limit=4096):
++    total=n*(n-1)//2
++    flat=sorted(random.Random(seed).sample(range(total),min(limit,total)))
++    rows=[];i=0;offset=0
++    for q in flat:
++        while q>=offset+n-i-1:offset+=n-i-1;i+=1
++        rows.append((i,i+1+q-offset))
++    return np.asarray(rows,dtype=np.int64).reshape(-1,2)
++
++class Distance:
++    def __init__(self,vision,actions,action_population,seed=42,block=256):
++        v=np.asarray(vision,dtype=np.float64);a=np.asarray(actions,dtype=np.float64)
++        assert v.ndim==4 and v.shape[1:3]==(8,2) and a.shape==(len(v),7)
++        assert len(v)>0 and np.isfinite(v).all() and np.isfinite(a).all()
++        norms=np.linalg.norm(v,axis=-1,keepdims=True)
++        assert (norms>1e-12).all(),'Undefined cosine: zero visual token'
++        self.v=(v/norms).reshape(len(v),-1);self.block=block
++        self.action_scale=robust_scale(action_population)
++        self.a=a/self.action_scale
++        self.pairs=reference_pairs(len(v),seed)
++        if len(self.pairs):
++            i,j=self.pairs.T
++            vh=np.maximum(0,1-np.sum(self.v[i]*self.v[j],axis=1)/16)
++            da=np.sqrt(np.mean((self.a[i]-self.a[j])**2,axis=1))
++        else:vh=da=np.zeros(0)
++        self.hs=float(np.median(vh[vh>1e-12])) if np.any(vh>1e-12) else 1.
++        self.as_=float(np.median(da[da>1e-12])) if np.any(da>1e-12) else 1.
++    def distances(self,ids):
++        ids=np.asarray(ids,dtype=np.int64);out=np.empty((len(self.v),len(ids)))
++        for start in range(0,len(self.v),self.block):
++            end=min(start+self.block,len(self.v))
++            vh=np.maximum(0,1-self.v[start:end]@self.v[ids].T/16)
++            da=np.sqrt(np.mean((self.a[start:end,None,:]-self.a[ids][None,:,:])**2,axis=-1))
++            out[start:end]=.5*vh/self.hs+.5*da/self.as_
++        out[ids,np.arange(len(ids))]=0.
++        return out
++
++def select_arrays(ids,vision,actions,action_population,k,seed=42,block=256):
++    assert len(ids)==len(set(ids)) and 1<=k<=len(ids)
++    order=np.argsort(np.asarray(ids));ids=[ids[i] for i in order]
++    d=Distance(np.asarray(vision)[order],np.asarray(actions)[order],action_population,seed,block)
++    refs=sorted(random.Random(seed).sample(range(len(ids)),min(256,len(ids))))
++    centrality=d.distances(refs).mean(axis=1)
++    center=int(np.flatnonzero(centrality<=centrality.min()+1e-12)[0])
++    chosen=[center];nearest=d.distances([center])[:,0];radii=[float(nearest.max())]
++    while len(chosen)<k:
++        nearest[chosen]=-np.inf
++        nxt=int(np.flatnonzero(nearest>=nearest.max()-1e-12)[0]);chosen.append(nxt)
++        nearest=np.minimum(nearest,d.distances([nxt])[:,0])
++        rest=np.ones(len(ids),dtype=bool);rest[chosen]=False
++        radii.append(float(nearest[rest].max()) if rest.any() else 0.)
++    return [ids[i] for i in chosen],dict(settings=SETTINGS,initial_center=ids[center],
++        reference_ids=[ids[i] for i in refs],calibration_pair_ids=[[ids[i],ids[j]] for i,j in d.pairs],
++        action_scale=d.action_scale.tolist(),visual_scale=d.hs,action_distance_scale=d.as_,
++        covering_radius=radii)
++
++def greedy_kcenter_select(paths,k,seed=42,action_population=None):
++    import torch
++    begin=time.monotonic();paths=sorted(paths,key=lambda p:Path(p).name)
++    assert action_population is not None,'Raw current-task demonstration actions required'
++    vv=[];aa=[]
++    for path in paths:
++        x=torch.load(path,map_location='cpu');v=x['feature'].detach().cpu().numpy();a=x['actions'].detach().cpu().numpy()
++        assert v.shape==(1,8,4,512) and a.shape==(1,8,7)
++        vv.append(v[0,:,1:3,:]);aa.append(a[0,-1,:])
++    names,report=select_arrays([Path(p).name for p in paths],vv,aa,action_population,k,seed)
++    lookup={Path(p).name:p for p in paths};report['seconds']=time.monotonic()-begin
++    return [lookup[n] for n in names],report
+--- a/libero/lifelong/utils.py
++++ b/libero/lifelong/utils.py
+@@ -31,7 +31,7 @@
+         if torch.cuda.is_available():
+             return x.to(device)
+         else:
+-            return x.cpu()
++            raise RuntimeError('CUDA required; CPU fallback prohibited')
+ 
+ 
+ class NpEncoder(json.JSONEncoder):
+@@ -62,6 +62,7 @@
+     first_key = next(iter(state_dict))
+     if first_key.startswith("module."):
+         return OrderedDict((k[7:], v) for k, v in state_dict.items())
++    return state_dict
+ 
+ def torch_load_model(model_path, map_location="cpu"):
+ 
+@@ -241,4 +242,4 @@
+             0.0,
+             float(total_steps - step) / float(max(1, total_steps - warmup_steps))
+         )
+-    return lr_fn+    return lr_fn

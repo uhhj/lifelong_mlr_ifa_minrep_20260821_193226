@@ -1,0 +1,193 @@
+--- seed42/zrg_exp/common.py
++++ seed41/zrg_exp/common.py
+@@ -6,6 +6,7 @@
+ from coreset_exp.train import cpu
+ O=Path(os.environ['ZR_RUN']);S=Path(__file__).resolve().parents[1]
+ P=Path(os.environ['PARENT_RUN']);PROTO=Path(os.environ['PROTOTYPE_RUN'])
++SEED=int(os.environ['ZR_SEED']);assert SEED in (40,41)
+ ARM='coreset_ifa_zr';ROOT=O/ARM
+ def sources():
+     return {str(p.relative_to(S)):sha(p) for p in sorted(S.rglob('*')) if p.is_file() and p.suffix in ('.py','.yaml','.sh') and '__pycache__' not in p.parts}
+--- seed42/zrg_exp/evaluate.py
++++ seed41/zrg_exp/evaluate.py
+@@ -4,7 +4,7 @@
+ import torch
+ from .common import O,write,save,sha,verify,rng
+ from .model import cfg,data_setup,complete,load_stage
+-from .common import P,ROOT,ARM,numeric,assert_parent_numeric
++from .common import P,ROOT,ARM,numeric,assert_parent_numeric,SEED
+ from libero.lifelong.utils import torch_load_model
+ from libero.lifelong.algos.basic import Basic
+ from libero.lifelong.utils import control_seed
+@@ -20,12 +20,12 @@
+     verify();assert (O/args.arm/'TRAINING_COMPLETE.json').exists()
+     root=O/args.arm/'evaluation';root.mkdir(exist_ok=True)
+     assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG-preserving recovery'
+-    c=cfg('eval');c.experiment_dir=str(root);control_seed(42);b,ds,shape=data_setup(c,True);c.shape_meta=shape
++    c=cfg('eval');c.experiment_dir=str(root);control_seed(SEED);b,ds,shape=data_setup(c,True);c.shape_meta=shape
+     write(root/'resolved_actual.json',dict(c));torch.backends.cudnn.benchmark=True;write(O/'NUMERIC_EVAL.json',assert_parent_numeric(True));started=time.time()
+     from . import evaluate as context
+     from .eval_metric import evaluate_one_task_success
+     for stage in range(6,10):
+-        control_seed(42)
++        control_seed(SEED)
+         for t in range(6,stage+1):
+             checkpoint=O/args.arm/'models'/f'mlrifa_{stage}_model_ep99.pth'
+             raw=torch.load(checkpoint,map_location='cpu');assert raw['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
+@@ -44,7 +44,7 @@
+             save(root/f'rng_before_stage{stage}_task{t}.pth',rng())
+             try:
+                 instr,mask=b.get_task_emb(t)
+-                result=evaluate_one_task_success(c,algo,task,instr,mask,t,see=42)
++                result=evaluate_one_task_success(c,algo,task,instr,mask,t,see=SEED)
+                 latency=algo.policy.action_latency
+                 write(root/f'cell_stage{stage}_task{t}.json',dict(success_rate=float(result),get_action_calls=len(latency),get_action_seconds_sum=sum(latency),get_action_seconds_mean=float(np.mean(latency)),get_action_seconds_p95=float(np.percentile(latency,95)),**context.CONTEXT))
+             except BaseException as e:
+--- seed42/zrg_exp/finalize.py
++++ seed41/zrg_exp/finalize.py
+@@ -30,7 +30,7 @@
+     cost=dict(training=json.loads((ROOT/'TRAINING_COMPLETE.json').read_text()),evaluation=json.loads((ev/'EVALUATION_COMPLETE.json').read_text()),integration=json.loads((O/'INTEGRATION.json').read_text())['seconds'],structural_diagnostic_seconds=sum(r['seconds'] for r in isolation),residual_fp32_parameters=18784,residual_parameter_bytes=75136,gate_fp64_bytes=16384,buffer_bytes=sum(p.stat().st_size for p in (ROOT/'buffer').glob('*.pt')),model_bytes=sum(p.stat().st_size for p in (ROOT/'models').glob('*.pth')))
+     write(O/'COST.json',cost);verify()
+     write(O/'FINAL_AUDIT.json',dict(status='PASS_AWAITING_PROCESS_EXIT',epochs=400,steps=105500,checkpoints=4,formal_episodes=200,vector_attempts=20,inputs_unchanged=True,buffer_members_order_payloads_equal=True,IFA_identity_equal=True,structural_checks_pass=True,optimizer_integration_calls=4,automatic_extension=False))
+-    report=['# Seed42 Coreset + IFA + zero-response residual','', 'Status: scientific/engineering audits passed; process exit must be verified separately.','', '| Stage | Task6 | Task7 | Task8 | Task9 |','|---|---:|---:|---:|---:|']
++    report=[f'# Seed{SEED} Coreset + IFA + zero-response residual','', 'Status: scientific/engineering audits passed; process exit must be verified separately.','', '| Stage | Task6 | Task7 | Task8 | Task9 |','|---|---:|---:|---:|---:|']
+     for s in range(6,10):report.append('| '+str(s)+' | '+' | '.join(str(metrics['new_counts'][f'{s},{t}']*5)+'%' if t<=s else '—' for t in range(6,10))+' |')
+     report+=['','| Metric | Coreset baseline % | New % | Difference pp |','|---|---:|---:|---:|']
+     for k in metrics['new']:report.append(f"| {k} | {metrics['baseline'][k]['percent']:.8f} | {metrics['new'][k]['percent']:.8f} | {metrics['delta_pp'][k]:+.8f} |")
+--- seed42/zrg_exp/freeze.py
++++ seed41/zrg_exp/freeze.py
+@@ -2,7 +2,7 @@
+ def main():
+     verify(False);assert not(O/'CONTRACT.json').exists();assert json.loads((O/'INTEGRATION.json').read_text())['status']=='PASS'
+     configs={str(O/n):sha(O/n) for n in ('spec.yaml','resolved_train.json','resolved_eval.json','MODEL_CONTRACT.json','MODAL_CONTRACT.json','INPUT_SHA256.json','PROTOTYPE_BINDING.json','PARENT_BINDING.json','INTEGRATION.json','NATIVE_ACTION_CHECK.json','NATIVE_PATH_PARITY.json')}
+-    configs.update({str(S.parent/n):sha(S.parent/n) for n in ('env.sh','pipeline.sh','supervise.sh','final_process_audit.py','admission.py','NUMERIC_ADMISSION.json')})
++    configs.update({str(S.parent/n):sha(S.parent/n) for n in ('env.sh','pipeline.sh','supervise.sh','final_process_audit.py','admission.py','NUMERIC_ADMISSION.json','EXTENSION_PROTOCOL.md','SEED_AUDIT.json')})
+     write(O/'CONTRACT.json',dict(source_sha256=sources(),configs=configs,formal_epochs=400,formal_steps=105500,episodes=200,integration_calls_max=4,parent_sha256=sha(P/'CONTRACT.json')))
+     print('FROZEN',sha(O/'CONTRACT.json'))
+ if __name__=='__main__':main()
+--- seed42/zrg_exp/metrics.py
++++ seed41/zrg_exp/metrics.py
+@@ -1,4 +1,5 @@
+-import json
++import json,os
++SEED=int(os.environ.get("ZR_SEED","42"))
+ from fractions import Fraction as F
+ from pathlib import Path
+ EXPECTED={(6,6):6,(7,6):14,(7,7):17,(8,6):4,(8,7):19,(8,8):20,(9,6):6,(9,7):18,(9,8):20,(9,9):9}
+@@ -14,13 +15,15 @@
+             rows=[json.loads(l) for l in (Path(root)/f'trials_stage{s}_task{t}.jsonl').read_text().splitlines()]
+             assert len(rows)==20 and {r['initial_state_index'] for r in rows}==set(range(20))
+             for r in rows:
+-                assert r['stage']==s and r['task']==t and r['epoch']==99 and r['seed']==42 and type(r['success']) is bool
++                assert r['stage']==s and r['task']==t and r['epoch']==99 and r['seed']==SEED and type(r['success']) is bool
+                 records[s,t,r['initial_state_index']]=r
+             counts[s,t]=sum(r['success'] for r in rows)
+     return counts,records
+ def serial(metrics):return {k:dict(fraction=str(v),percent=float(v*100)) for k,v in metrics.items()}
+ def comparison(base,new):
+-    a,ar=read(base);b,br=read(new);assert a==EXPECTED
++    a,ar=read(base);b,br=read(new)
++    binding=json.loads((Path(os.environ["ZR_RUN"])/"PARENT_BINDING.json").read_text())
++    assert {f"{s},{t}":v for (s,t),v in a.items()}==binding["baseline_counts"]
+     for k in ar:
+         for name in ('initial_state_sha256','modal_sha256'):assert ar[k][name]==br[k][name],(k,name)
+     am=calculate(a);bm=calculate(b)
+--- seed42/zrg_exp/model.py
++++ seed41/zrg_exp/model.py
+@@ -57,7 +57,11 @@
+     after=digest(p.state_dict())
+     assert all(after[n]==v for n,v in before.items()) and rng_digest()==r
+     return dict(task=t,global_rng_unchanged=True,existing_tensors_unchanged=True,new_tensors=digest(ch.state_dict()),protected=list(range(t)),trainable=[n for n,v in p.named_parameters() if v.requires_grad])
+-def cfg(name):return EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))
++def cfg(name):
++    from .common import SEED
++    c=EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))
++    assert c.seed==SEED and all(c.policy[k] is True for k in ('use_state','use_language','use_vision'))
++    return c
+ def load_stage(p,path,stage):
+     raw=torch.load(path,map_location='cpu');assert raw['task']==stage and raw['epoch_index']==99
+     assert raw['branches']==list(range(6,stage+1))
+--- seed42/zrg_exp/native_action_check.py
++++ seed41/zrg_exp/native_action_check.py
+@@ -11,7 +11,7 @@
+ from libero.lifelong.models.brief import BriefPolicy
+ from libero.lifelong.utils import control_seed
+ def main():
+-    assert not(O/'NATIVE_ACTION_CHECK.json').exists();control_seed(42);torch.backends.cudnn.benchmark=True
++    assert not(O/'NATIVE_ACTION_CHECK.json').exists();control_seed(SEED);torch.backends.cudnn.benchmark=True
+     c=cfg('eval');b,ds,shape=data_setup(c,True);c.shape_meta=shape;p=complete(c,shape);load_stage(p,O/'integration/stage7.pth',7);p.eval()
+     brief=BriefPolicy(cfg('train'),None).cuda();load_stage(brief,O/'integration/stage7.pth',7);brief.eval()
+     choices=json.loads((PROTO/'SAMPLE_IDS.json').read_text());rows=[]
+--- seed42/zrg_exp/prepare.py
++++ seed41/zrg_exp/prepare.py
+@@ -7,6 +7,12 @@
+     parent=json.loads((P/'CONTRACT.json').read_text());passed=json.loads((PROTO/'PROTO_FINAL.json').read_text());assert passed['status']=='PASS_PROTOTYPE'
+     for n,h in parent['source_sha256'].items():assert sha(S/n)==h,('parent source',n)
+     inputs=json.loads((PROTO/'INPUT_SHA256.json').read_text())
++    inputs.update(parent['inputs']);inputs.update(parent['configs'])
++    fm=json.loads((P/'FEATURES.json').read_text())
++    assert fm['contract_sha256']==sha(P/'CONTRACT.json') and fm['modal_sha256']==sha(P/'MODAL_CONTRACT.json')
++    inputs.update({str(P/'features'/n):h for n,h in fm['hashes'].items()})
++    for f in (P/'coreset').glob('buffer_after_task*.json'):inputs[str(f)]=sha(f)
++    inputs[str(P/'RUN_STATUS.json')]=sha(P/'RUN_STATUS.json')
+     for f in list(P.glob('resolved_*.json'))+[P/'CONTRACT.json',P/'MODAL_CONTRACT.json',P/'FEATURES.json']+list((P/'coreset/storage').glob('*.json'))+list((P/'coreset/evaluation').glob('*.jsonl'))+list((P/'coreset').glob('ifa_*.json'))+[P/'coreset/INITIAL_STATE.json']:
+         inputs[str(f)]=sha(f)
+     for f in (PROTO/'PROTO_FINAL.json',PROTO/'FINAL_ACCEPTANCE.json',PROTO/'residual.py',PROTO/'gate_core.py',PROTO/'geometry/gates.npz',PROTO/'instruction_bank.npz',PROTO/'SAMPLE_IDS.json'):
+@@ -18,12 +24,13 @@
+     train=json.loads((P/'resolved_coreset.json').read_text());evaluation=json.loads((P/'resolved_eval.json').read_text())
+     original=dict(train)
+     train.update(run_root=str(ROOT),experiment_dir=str(ROOT/'models'),buffer_dir=str(ROOT/'buffer'),feature_dir=str(P/'features'))
++    assert train['seed']==evaluation['seed']==SEED
+     assert train['policy']['use_state'] is True and train['train']['batch_size']==10 and train['gamma']==.3
+     write(O/'resolved_train.json',train);write(O/'resolved_eval.json',evaluation)
+     (O/'features').symlink_to(P/'features',target_is_directory=True)
+-    counts,_=read(P/'coreset/evaluation');assert counts==EXPECTED
++    counts,_=read(P/'coreset/evaluation')
+     admission=json.loads((S.parent/'NUMERIC_ADMISSION.json').read_text());assert admission['status']=='PASS'
+-    write(O/'PARENT_BINDING.json',dict(commit='1ed6e0dd25cb5748ee5e887444619483bd9bdc31',path=str(P),contract_sha256=sha(P/'CONTRACT.json'),original_source_verified=True,baseline=serial(calculate(counts))))
++    write(O/'PARENT_BINDING.json',dict(upstream_commit='1ed6e0dd25cb5748ee5e887444619483bd9bdc31',actual_source_identity='parent CONTRACT source_sha256',path=str(P),contract_sha256=sha(P/'CONTRACT.json'),original_source_verified=True,baseline=serial(calculate(counts)),seed=SEED,baseline_counts={f"{s},{t}":v for (s,t),v in counts.items()}))
+     write(O/'PROTOTYPE_BINDING.json',dict(path=str(PROTO),status=passed['status'],trained_residuals_imported=False,gate_sha256=sha(PROTO/'geometry/gates.npz'),source_sha256={n:sha(PROTO/n) for n in ('residual.py','gate_core.py')},acceptance_sha256=sha(PROTO/'PROTO_FINAL.json')))
+     write(O/'GATES_AND_PROTECTION.json',dict(gates_sha256=sha(PROTO/'geometry/gates.npz'),protected={str(k):list(range(k)) for k in range(6,10)},future_instruction_gate_construction=False))
+     model=dict(rank=8,U_shape=[75,8],V_shape=[8,512],raw_layout=['means35','scales35','logits5'],gate_dtype='float64',residual_dtype='float32',init='local CPU generator 42+task; U zero',trainable='shared temporal/public head/current UV',old_branch_jacobian_to_z=True,parent_modal_sha256=sha(O/'MODAL_CONTRACT.json'))
+@@ -31,7 +38,7 @@
+     # Capacity includes the largest recovery atomic replacement, all finals and copied buffer.
+     required=sum(p.stat().st_size for p in (P/'coreset/models').glob('*.pth'))+2*(P/'coreset/recovery/latest.pth').stat().st_size+sum(p.stat().st_size for p in (P/'coreset/buffer').glob('*.pt'))+160*1024**2
+     free=shutil.disk_usage(O).free
+-    write(O/'REUSE_AUDIT.json',dict(status='PASS' if free>required else 'BLOCKED_SPACE',admission=admission,hardware=subprocess.check_output(['nvidia-smi','--query-gpu=name,driver_version,memory.total','--format=csv,noheader']).decode(),historical_gpu=json.loads((P/'GPU_PREFLIGHT.json').read_text())['gpu'],disk_free=free,estimated_atomic_peak_bytes=required,parent_numeric_source='control_seed: cudnn deterministic true; fresh torch1.13 defaults, parent evaluate benchmark true',original_train_config=original,change_scope='new residual and freeze rule; output paths only otherwise',disclosed_gaps=['pretrain use_state unknown','single exploratory seed','global action RNG not per-trajectory isolated','historical driver not independently archived']))
++    write(O/'REUSE_AUDIT.json',dict(status='PASS' if free>required else 'BLOCKED_SPACE',admission=admission,hardware=subprocess.check_output(['nvidia-smi','--query-gpu=name,driver_version,memory.total','--format=csv,noheader']).decode(),historical_gpu=json.loads((P/'GPU_PREFLIGHT.json').read_text())['gpu'],disk_free=free,estimated_atomic_peak_bytes=required,parent_numeric_source='control_seed: cudnn deterministic true; fresh torch1.13 defaults, parent evaluate benchmark true',original_train_config=original,change_scope='Same seed42 residual/loss/model protocol; corresponding seed baseline/features/order; new output on user-authorized system disk',disclosed_gaps=['pretrain use_state unknown','single exploratory seed','global action RNG not per-trajectory isolated','historical driver not independently archived']))
+     assert free>required,'Data disk cannot accommodate atomic peak'
+     write(O/'RUN_STATUS.json',dict(status='PREPARED',formal_steps=0,formal_episodes=0))
+     print('PREPARED',free,required)
+--- seed42/zrg_exp/train.py
++++ seed41/zrg_exp/train.py
+@@ -18,7 +18,7 @@
+         self.optimizer=torch.optim.AdamW(params,**self.cfg.train.optimizer.kwargs)
+         self.scheduler=torch.optim.lr_scheduler.LambdaLR(self.optimizer,make_linear_schedule_with_warmup(500,100*len(loader)),last_epoch=-1)
+ def build(c):
+-    control_seed(42);b=get_benchmark('LIBERO_OBJECT')(0);b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))
++    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(0);b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))
+     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)
+     a=ZRMLR(1,c).cuda();strict_downstream(a.policy,c.pretrain);attach(a.policy);a.train();a.step=0
+     return a,b
+@@ -87,17 +87,17 @@
+             if not continuing:append(O/'BRANCH_BIRTH.jsonl',stage(a,t))
+             old_digest=digest({n:v for n,v in a.policy.module.state_dict().items() if n.startswith('residual_bank.') and not n.startswith(f'residual_bank.{t}.')})
+             info=build_ifa_similarity_matrix(t,c.feature_dir,c.buffer_dir);a.refs,dev=refs(c,t)
+-            evidence=dict(info=jsonable(info),reference_max_deviation=dev);assert evidence==json.loads((P/'coreset'/f'ifa_task{t}.json').read_text()),'IFA identity mismatch'
++            evidence=dict(info=jsonable(info),reference_max_deviation={str(k):v for k,v in dev.items()});assert evidence==json.loads((P/'coreset'/f'ifa_task{t}.json').read_text()),'IFA identity mismatch'
+             write(ROOT/f'ifa_task{t}.json',evidence);write(ROOT/f'ifa_references_task{t}.json',digest({str(k):v for k,v in a.refs.items()}))
+-            dataset=build_dataset_for_task(c.feature_dir,t,c.buffer_dir,42,start=6)
++            dataset=build_dataset_for_task(c.feature_dir,t,c.buffer_dir,SEED,start=6)
+             sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True);loader=DataLoader(dataset,batch_size=10,num_workers=0,sampler=sampler,persistent_workers=False)
+             assert len(loader)=={6:157,7:227,8:309,9:362}[t]
+             # Compare logical file sequence without instantiating/iterating a second sampler.
+-            parent_ds=build_dataset_for_task(str(P/'features'),t,str(P/'coreset/buffer'),42,start=6) if t==6 else None
++            parent_ds=build_dataset_for_task(str(P/'features'),t,str(P/'coreset/buffer'),SEED,start=6) if t==6 else None
+             parent_paths=sorted(str(v) for v in (P/'features'/str(t)).glob('*.pt'))
+             if t>6:parent_paths=sorted(str(P/'coreset/buffer'/n) for n in json.loads((P/'coreset/storage'/f'task{t}.json').read_text())['before'])+parent_paths
+             import random
+-            random.Random(42).shuffle(parent_paths)
++            random.Random(SEED).shuffle(parent_paths)
+             logical=[Path(v).name for v in dataset.file_paths];assert logical==[Path(v).name for v in parent_paths]
+             write(ROOT/f'dataset_task{t}.json',dict(length=len(dataset),batches=len(loader),logical_order=logical,sha256=hashlib.sha256('\n'.join(logical).encode()).hexdigest(),parent_order_equal=True,sampler_seed=sampler.seed))
+             a.start_task(t,loader)

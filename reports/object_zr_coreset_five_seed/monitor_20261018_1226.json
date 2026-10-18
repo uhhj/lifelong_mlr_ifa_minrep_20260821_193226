@@ -1,0 +1,185 @@
+{
+  "unix": 1792297571.8149793,
+  "queue_exit": "0\n",
+  "commands_tail": [
+    "2026-10-18T01:04:53+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/seed41/test_metrics.py",
+    "2026-10-18T01:04:53+08:00 EXIT 0 tests_41",
+    "2026-10-18T01:04:53+08:00 START torchrun --standalone --nnodes=1 --nproc_per_node=1 -m zrg_exp.integration_check",
+    "2026-10-18T01:05:24+08:00 EXIT 0 integration_41",
+    "2026-10-18T01:05:24+08:00 START python -m zrg_exp.native_action_check",
+    "2026-10-18T01:05:42+08:00 EXIT 0 native_41",
+    "2026-10-18T01:05:42+08:00 START python -m zrg_exp.freeze",
+    "2026-10-18T01:05:54+08:00 EXIT 0 freeze_41",
+    "2026-10-18T01:05:54+08:00 START bash /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/seed41/supervise.sh",
+    "2026-10-18T03:18:27+08:00 EXIT 0 supervise_41",
+    "2026-10-18T03:18:27+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/aggregate_five_seeds.py",
+    "2026-10-18T03:18:27+08:00 EXIT 0 aggregate"
+  ],
+  "seeds": [
+    {
+      "seed": 40,
+      "status": {
+        "status": "COMPLETED",
+        "epochs": 400,
+        "steps": 105500,
+        "checkpoints": 4,
+        "episodes": 200,
+        "unix": 1792256662.4053695
+      },
+      "epochs": 400,
+      "steps": 105500,
+      "last_epoch": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 362,
+        "steps": 105500,
+        "loss": -33.81292668758835,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 9.9817955493927
+      },
+      "episodes": 200,
+      "attempt_starts": 20,
+      "attempt_completes": 20,
+      "structural_checks": 44,
+      "structural_all_pass": true,
+      "pipeline_exit": "0\n",
+      "supervisor_exit": "0\n",
+      "integration": {
+        "status": "PASS",
+        "optimizer_calls": 4,
+        "environment_steps": 0
+      },
+      "baseline_binding": {
+        "upstream_commit": "1ed6e0dd25cb5748ee5e887444619483bd9bdc31",
+        "actual_source_identity": "parent CONTRACT source_sha256",
+        "path": "/data/mlr_ifa/experiments/Seeds40_41_three_arm_20261016/seed40/rc",
+        "contract_sha256": "1229bd3491e0d929956ed6d6a00807bda3d79baac4ac77c6a34b4baafebd4837",
+        "original_source_verified": true,
+        "baseline": {
+          "AUC": {
+            "fraction": "779/960",
+            "percent": 81.14583333333333
+          },
+          "FWT": {
+            "fraction": "3/4",
+            "percent": 75.0
+          },
+          "NBT": {
+            "fraction": "-13/120",
+            "percent": -10.833333333333334
+          },
+          "OldFinal": {
+            "fraction": "43/60",
+            "percent": 71.66666666666667
+          },
+          "FinalAll": {
+            "fraction": "31/40",
+            "percent": 77.5
+          }
+        },
+        "seed": 40,
+        "baseline_counts": {
+          "6,6": 1,
+          "7,6": 10,
+          "7,7": 20,
+          "8,6": 10,
+          "8,7": 20,
+          "8,8": 20,
+          "9,6": 4,
+          "9,7": 19,
+          "9,8": 20,
+          "9,9": 19
+        }
+      },
+      "remaining_training_compute_seconds": 0.0,
+      "remaining_eval_seconds_estimate": 0.0
+    },
+    {
+      "seed": 41,
+      "status": {
+        "status": "COMPLETED",
+        "epochs": 400,
+        "steps": 105500,
+        "checkpoints": 4,
+        "episodes": 200,
+        "unix": 1792264707.0154078
+      },
+      "epochs": 400,
+      "steps": 105500,
+      "last_epoch": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 362,
+        "steps": 105500,
+        "loss": -33.85064715179949,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 9.257954597473145
+      },
+      "episodes": 200,
+      "attempt_starts": 20,
+      "attempt_completes": 20,
+      "structural_checks": 44,
+      "structural_all_pass": true,
+      "pipeline_exit": "0\n",
+      "supervisor_exit": "0\n",
+      "integration": {
+        "status": "PASS",
+        "optimizer_calls": 4,
+        "environment_steps": 0
+      },
+      "baseline_binding": {
+        "upstream_commit": "1ed6e0dd25cb5748ee5e887444619483bd9bdc31",
+        "actual_source_identity": "parent CONTRACT source_sha256",
+        "path": "/root/mlr_ifa_new_experiments/Seeds40_41_three_arm_20261016/seed41/rc",
+        "contract_sha256": "7e30efef352f9086bcb79efa9fb6af2475b21401f2e70c37b27997eaed03fd09",
+        "original_source_verified": true,
+        "baseline": {
+          "AUC": {
+            "fraction": "673/960",
+            "percent": 70.10416666666667
+          },
+          "FWT": {
+            "fraction": "27/40",
+            "percent": 67.5
+          },
+          "NBT": {
+            "fraction": "-1/18",
+            "percent": -5.555555555555555
+          },
+          "OldFinal": {
+            "fraction": "43/60",
+            "percent": 71.66666666666667
+          },
+          "FinalAll": {
+            "fraction": "53/80",
+            "percent": 66.25
+          }
+        },
+        "seed": 41,
+        "baseline_counts": {
+          "6,6": 10,
+          "7,6": 16,
+          "7,7": 16,
+          "8,6": 9,
+          "8,7": 18,
+          "8,8": 18,
+          "9,6": 6,
+          "9,7": 18,
+          "9,8": 19,
+          "9,9": 10
+        }
+      },
+      "remaining_training_compute_seconds": 0.0,
+      "remaining_eval_seconds_estimate": 0.0
+    }
+  ],
+  "processes": [
+    "  29989       00:00 bash -c /data/mlr_ifa/env/bin/python /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/monitor_snapshot.py > /tmp/zr_check.json /data/mlr_ifa/env/bin/python /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/monitor_snapshot.py > /tmp/goal_check.json /data/mlr_ifa/env/bin/python - <<'PY' import json for name in ['zr','goal']:  d=json.load(open('/tmp/'+name+'_check.json'));print(name,json.dumps(d,ensure_ascii=True)) PY",
+    "  29990       00:00 /data/mlr_ifa/env/bin/python /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/monitor_snapshot.py"
+  ],
+  "gpu": "NVIDIA GeForce RTX 3090, 41 %, 1760 MiB, 24576 MiB\n",
+  "system_free_bytes": 24074407936,
+  "data_free_bytes": 1021804544
+}
