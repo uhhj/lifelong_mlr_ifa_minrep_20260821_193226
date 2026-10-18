@@ -1,0 +1,28 @@
+{
+  "time": 1792337595.813864,
+  "status": {
+    "status": "FROZEN_AWAITING_PREFLIGHT",
+    "time": 1792337480.7399564
+  },
+  "epochs": 0,
+  "latest_epoch": null,
+  "records": 0,
+  "completed_vectors": 0,
+  "technical_exceptions": 0,
+  "exits": {
+    "train": null,
+    "evaluate": null,
+    "audit": null,
+    "pipeline": null
+  },
+  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 10 MiB, 0 %\n",
+  "processes": [
+    "  48915       00:02 /data/mlr_ifa/env/bin/python -u /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed42_20261018/pipeline.py",
+    "  48916       00:02 /data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m coreset_exp.train ra_coreset",
+    "  48924       00:01 /data/mlr_ifa/env/bin/python -u -m coreset_exp.train ra_coreset"
+  ],
+  "free_bytes": {
+    "/root": 20804505600,
+    "/data": 1021706240
+  }
+}

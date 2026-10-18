@@ -1,0 +1,585 @@
+--- a/coreset_exp/evaluate.py
++++ b/coreset_exp/evaluate.py
+@@ -15,7 +15,7 @@
+     append(CONTEXT['trial_log'],dict(CONTEXT,task=task,seed=seed,trial=trial,initial_state_index=initial_state,
+         initial_state_sha256=CONTEXT['initial_hashes'][initial_state],success=success,vector_group_steps=steps))
+ def main():
+-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['sc_coreset']);args=ap.parse_args()
++    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);args=ap.parse_args()
+     verify();assert (O/args.arm/'TRAINING_COMPLETE.json').exists()
+     root=O/args.arm/'evaluation';root.mkdir(exist_ok=True)
+     assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG-preserving recovery'
+--- a/coreset_exp/train.py
++++ b/coreset_exp/train.py
+@@ -8,7 +8,7 @@
+ from torch.utils.data import DataLoader,DistributedSampler
+ from .common import O,write,save,sha,verify,rng,restore_rng,hashes,jsonable
+ from .model import cfg,angular_mean,strict_downstream
+-from sc_exp.storage import store
++from ra_exp.storage import store
+ from libero.lifelong.algos.mlr import MLR,build_dataset_for_task,build_ifa_similarity_matrix
+ from libero.lifelong.utils import control_seed,get_task_embs
+ from libero.libero.benchmark import get_benchmark
+@@ -64,7 +64,7 @@
+     save(root/'recovery/latest.pth',dict(state=capture(a),task=t,next_epoch=epoch,stage_complete=complete,
+         contract_sha256=sha(O/'CONTRACT.json'),modal_sha256=sha(O/'MODAL_CONTRACT.json'),buffer_hashes=hashes(Path(a.cfg.buffer_dir))))
+ def main():
+-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['sc_coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()
++    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()
+     verify();assert json.loads((O/'GPU_PREFLIGHT.json').read_text())['status']=='PASS'
+     assert (O/'FEATURES.json').is_file();c=cfg(args.arm);root=Path(c.run_root)
+     assert not (root/'TRAINING_COMPLETE.json').exists(),'Already complete'
+@@ -79,7 +79,7 @@
+             model_digest={k:hashlib.sha256(v.detach().cpu().numpy().tobytes()).hexdigest() for k,v in a.policy.state_dict().items()}
+             evidence=dict(rng=digest,tensors=model_digest)
+             write(root/'INITIAL_STATE.json',evidence)
+-            assert evidence==json.loads((Path(os.environ['SC_PARENT'])/'coreset/INITIAL_STATE.json').read_text()),'Initialization differs from parent'
++            assert evidence==json.loads((Path(os.environ['RA_PARENT'])/'coreset/INITIAL_STATE.json').read_text()),'Initialization differs from parent'
+         if resumed:
+             assert resumed['contract_sha256']==sha(O/'CONTRACT.json') and resumed['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
+             a.policy.load_state_dict(resumed['state']['model'],strict=True);a.step=resumed['state']['step'];restore_rng(resumed['state']['rng'])
+@@ -114,7 +114,7 @@
+                     save(final,dict(state_dict=cpu(a.policy.state_dict()),cfg=c,task=t,epoch_index=99,
+                         modal_sha256=sha(O/'MODAL_CONTRACT.json'),contract_sha256=sha(O/'CONTRACT.json')))
+                     if t==6:
+-                        old=torch.load(Path(os.environ['SC_PARENT'])/'coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())
++                        old=torch.load(Path(os.environ['RA_PARENT'])/'coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())
+                         diff={k:float((now[k].double()-old[k].double()).abs().max()) for k in now}
+                         same=set(old)==set(now) and all(v==0 for v in diff.values())
+                         write(O/'TASK6_TENSOR_PARITY.json',dict(equal=same,max_abs_diff=diff,compared='actual state_dict tensors, no file metadata'))
+--- a/ra_exp/audit.py
++++ b/ra_exp/audit.py
+@@ -0,0 +1,60 @@
++"""Frozen post-run accounting and exact comparison; no rollouts or training."""
++import os,json,time
++from pathlib import Path
++from fractions import Fraction as F
++from collections import Counter
++import torch
++from coreset_exp.common import O,verify,write,sha,hashes
++from coreset_exp.model import cfg,strict_downstream
++from libero.lifelong.models.brief import BriefPolicy
++from ra_exp.validation import same_witness
++
++def js(p):return json.loads(p.read_text())
++def matrix(root,arm):
++    rates={};records={}
++    for s in range(6,10):
++        for t in range(6,s+1):
++            rows=[json.loads(x) for x in (root/arm/'evaluation'/f'trials_stage{s}_task{t}.jsonl').read_text().splitlines()]
++            assert len(rows)==20 and {r['trial'] for r in rows}==set(range(20))
++            assert all(r['seed']==42 and r['stage']==s and r['task']==t and r['arm']==arm and type(r['success']) is bool for r in rows)
++            rates[s,t]=F(sum(r['success'] for r in rows),20)
++            for r in rows:records[s,t,r['trial']]=r
++    return rates,records
++def metrics(r):return dict(AUC=sum(sum(r[s,t] for s in range(t,10))/(10-t) for t in range(6,10))/4,FWT=sum(r[t,t] for t in range(6,10))/4,NBT=sum(sum(r[t,t]-r[s,t] for s in range(t+1,10))/(9-t) for t in range(6,9))/3,OldFinal=sum(r[9,t] for t in range(6,9))/3,FinalAll=sum(r[9,t] for t in range(6,10))/4)
++def pack(m):return {k:dict(fraction=str(v),percent=float(100*v)) for k,v in m.items()}
++def main():
++    verify();P=Path(os.environ['RA_PARENT']);root=O/'ra_coreset';binding=js(O/'PARENT_BINDING.json')
++    assert all(sha(p)==h for p,h in binding['protected'].items())
++    epochs=js(root/'epochs.json');assert len(epochs)==400 and {(r['task'],r['epoch']) for r in epochs}=={(t,e) for t in range(6,10) for e in range(100)}
++    assert sum(r['batches'] for r in epochs)==76100 and epochs[-1]['steps']==76100
++    assert js(O/'TASK6_TENSOR_PARITY.json')['equal']
++    p=BriefPolicy(cfg('ra_coreset'),None).cpu();loaded=[];selections={};ifa={}
++    for t in range(6,10):
++        cp=root/'models'/f'mlrifa_{t}_model_ep99.pth';raw=torch.load(cp,map_location='cpu')
++        assert raw['epoch_index']==99 and raw['task']==t and raw['contract_sha256']==sha(O/'CONTRACT.json') and raw['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
++        loaded.append(dict(task=t,sha256=sha(cp),loaded_keys=strict_downstream(p,cp)))
++        m=js(root/'storage'/f'task{t}.json');b=js(O/'bindings'/f'task{t}.json')['windows'];selected=m['selected'];report=m['selection'];n=len(b);k=m['K']
++        assert k==[499,445,452,985][t-6] and len(selected)==len({r['destination'] for r in selected})==k
++        offline=js(O/'offline_selection'/f'task{t}.json')
++        assert report['selected_ids']==offline['selected_ids']
++        assert [Path(r['source']).name for r in selected]==report['selected_ids']
++        assert report['anchor_ids']==offline['anchor_ids'] and set(report['anchor_ids'])<=set(report['selected_ids'])
++        assert report['swap_count']==len(set(report['anchor_ids'])-set(report['original_ids']))
++        same_witness(report['swaps'],offline['swaps'])
++        for key in ['max_before','max_after','mean_before','mean_after']:assert report[key]==offline[key]
++        for r in selected:assert sha(r['source'])==sha(root/'buffer'/r['destination'])==r['sha256']
++        selections[str(t)]={k:report[k] for k in ['anchor_count','intersection_with_parent','swap_count','max_before','max_after','mean_before','mean_after','swaps','seconds','demo_full','demo_original','demo_final']}
++        current=js(root/f'ifa_task{t}.json');parent=js(P/'coreset'/f'ifa_task{t}.json');ifa[str(t)]=dict(current=current,parent=parent,equal=current==parent)
++    assert hashes(root/'buffer')==js(root/'buffer_after_task9.json')['hashes']
++    r,new=matrix(O,'ra_coreset');c,old=matrix(P,'coreset');random,_=matrix(P,'random')
++    for key,row in new.items():
++        assert row['initial_state_sha256']==old[key]['initial_state_sha256'] and row['modal_sha256']==old[key]['modal_sha256']
++        assert row['checkpoint_sha256']==loaded[row['stage']-6]['sha256']
++    events=Counter()
++    for f in (root/'evaluation').glob('attempts*.jsonl'):
++        for line in f.read_text().splitlines():events[json.loads(line)['event']]+=1
++    assert events==Counter(vector_attempt_start=20,vector_attempt_complete=20,environment_construct_start=10,environment_construct_complete=10,environment_closed=10)
++    nm,cm,rm=metrics(r),metrics(c),metrics(random);criteria=dict(AUC=nm['AUC']>cm['AUC'],FWT=nm['FWT']>=cm['FWT'],OldFinal=nm['OldFinal']>=cm['OldFinal'])
++    write(O/'AUDIT.json',dict(status='PASS',epochs=400,optimizer_steps=76100,formal_records=200,vector_attempts=20,checkpoints=loaded,inputs_unchanged=True,criteria=criteria,metric_gate=all(criteria.values()),metrics=dict(ra_coreset=pack(nm),coreset=pack(cm),random=pack(rm)),delta_vs_coreset=pack({k:nm[k]-cm[k] for k in nm}),matrix=[dict(stage=s,task=t,random=float(random[s,t]*100),coreset=float(c[s,t]*100),ra_coreset=float(r[s,t]*100)) for s,t in r],selection=selections,ifa=ifa,updated=time.time()))
++    write(O/'RUN_STATUS.json',dict(status='AWAITING_PROCESS_EXIT_ACCEPTANCE',metric_gate=all(criteria.values()),time=time.time()))
++if __name__=='__main__':main()
+--- a/ra_exp/freeze.py
++++ b/ra_exp/freeze.py
+@@ -0,0 +1,12 @@
++import json,time,os
++from pathlib import Path
++from coreset_exp.common import O,S,sha,write,source_hashes
++def main():
++    assert not (O/'CONTRACT.json').exists()
++    assert json.loads((O/'OFFLINE_ACCEPTANCE.json').read_text())['status']=='PASS'
++    binding=json.loads((O/'PARENT_BINDING.json').read_text());P=Path(binding['parent']);pc=json.loads((P/'CONTRACT.json').read_text())
++    files={str(p):sha(p) for p in [O/'OFFLINE_ACCEPTANCE.json',O/'PARENT_BINDING.json',O/'resolved_ra_coreset.json',O/'resolved_eval.json',O/'FEATURES.json',O/'MODAL_CONTRACT.json',*sorted((O/'bindings').glob('*.json')),*sorted((O/'offline_selection').glob('*.json')),*sorted(S.parent.glob('*.py')),*sorted(S.parent.glob('*.sh')),S.parent/'PROTOCOL.md',S.parent/'ACTUAL_SPEC.yaml']}
++    files.update(pc['inputs']);files.update(binding['protected'])
++    write(O/'CONTRACT.json',dict(version='RA_GOAL_seed42_legacy_protocol_v1',seed=42,source_sha256=source_hashes(),files=files,modal_sha256=binding['modal_sha256'],parent_contract=binding['contract_sha256'],epochs=400,optimizer_steps=76100,final_checkpoints=4,formal_records=200,vector_attempts=20,progression=dict(AUC='strictly greater than same-seed Coreset',FWT='not less than same-seed Coreset',OldFinal='not less than same-seed Coreset'),created=time.time()))
++    write(O/'RUN_STATUS.json',dict(status='FROZEN_AWAITING_PREFLIGHT',time=time.time()))
++if __name__=='__main__':main()
+--- a/ra_exp/preflight.py
++++ b/ra_exp/preflight.py
+@@ -0,0 +1,49 @@
++"""Actual SC payload/selection and four isolated native optimizer calls; zero env steps."""
++import os,json,time,pickle,hashlib
++from pathlib import Path
++import numpy as np,torch,h5py
++import torch.distributed as dist
++from torch.utils.data import DataLoader
++from coreset_exp.common import O,sha,write,save,verify,rng
++from coreset_exp.model import cfg,angular_mean
++from coreset_exp.train import build,capture,restore,cpu
++from ra_exp.storage import select
++from ra_exp.validation import same_witness
++
++def main():
++    verify();assert not (O/'GPU_PREFLIGHT.json').exists();assert torch.cuda.is_available();torch.set_num_threads(4)
++    begin=time.time();P=Path(os.environ['RA_PARENT']);fm=json.loads((O/'FEATURES.json').read_text());tasks=json.loads((O/'TASKS.json').read_text());out={}
++    for t in range(6,10):
++        paths=[str(p) for p in sorted((O/'features'/str(t)).glob('*.pt'))]
++        with h5py.File(tasks[str(t)]['paths'][0]) as f:population=np.concatenate([f['data'][d]['actions'][:] for d in fm['demos'][str(t)]])
++        binding=json.loads((O/'bindings'/f'task{t}.json').read_text())['windows']
++        before=rng();chosen,report=select(paths,(len(paths)+1)//2,population,binding);after=rng()
++        assert before['python']==after['python'] and torch.equal(before['cpu'],after['cpu']) and all(torch.equal(a,b) for a,b in zip(before['cuda'],after['cuda']))
++        assert pickle.dumps(before['numpy'])==pickle.dumps(after['numpy'])
++        parent=json.loads((P/'coreset/storage'/f'task{t}.json').read_text())
++        assert report['original_ids']==[Path(r['source']).name for r in parent['selected']]
++        offline=json.loads((O/'offline_selection'/f'task{t}.json').read_text())
++        assert report['selected_ids']==offline['selected_ids']
++        assert report['original_ids']==offline['original_ids']
++        assert report['anchor_ids']==offline['anchor_ids'] and report['random_draw_ids']==offline['random_draw_ids']
++        for key in ['max_before','max_after','mean_before','mean_after']:assert report[key]==offline[key]
++        same_witness(report['swaps'],offline['swaps'])
++        write(O/'selection_preflight'/f'task{t}.json',report)
++        out[str(t)]=dict(N=len(paths),K=len(chosen),swaps=len(report['swaps']),original_matches_parent=True,offline_exact=True)
++        print(json.dumps(dict(task=t,**out[str(t)])),flush=True)
++    # Native latent batch and unchanged BC+IFA updates; clone updates are discarded.
++    payload=[]
++    for t in (6,7):
++        for p in sorted((O/'features'/str(t)).glob('*.pt'))[:5]:payload.append((torch.load(p,map_location='cpu'),str(t)))
++    dist.init_process_group('nccl');torch.cuda.set_device(0)
++    try:
++        c=cfg('ra_coreset');c.run_root=str(O/'smoke');c.experiment_dir=str(O/'smoke/models');c.buffer_dir=str(O/'smoke/buffer')
++        a,_=build(c);loader=DataLoader(payload,batch_size=10,num_workers=0);a.start_task(-1,loader)
++        a.refs={6:payload[0][0]['feature'][0,0,0].cuda(),7:payload[5][0]['feature'][0,0,0].cuda()};info={'selected_pairs':[(6,7)]}
++        a.observe(next(iter(loader)),7,0,info);a.observe(next(iter(loader)),7,0,info);state=capture(a);save(O/'smoke/recovery.pth',state)
++        x=a.observe(next(iter(loader)),7,0,info);expected=capture(a);restore(a,torch.load(O/'smoke/recovery.pth',map_location='cpu'));y=a.observe(next(iter(loader)),7,0,info)
++        assert x==y and all(torch.equal(v,expected['model'][k]) for k,v in cpu(a.policy.state_dict()).items())
++        assert a.step==3 and a.scheduler.last_epoch==3
++    finally:dist.destroy_process_group()
++    verify();write(O/'GPU_PREFLIGHT.json',dict(status='PASS',isolated_optimizer_calls=4,formal_rollouts=0,environment_steps=0,selection=out,gpu=torch.cuda.get_device_name(),torch=torch.__version__,seconds=time.time()-begin,modal_semantics='Inherited unchanged complete_policy/model/eval_metric with parent PASS; real latent GPU update tested here',contract_sha256=sha(O/'CONTRACT.json')))
++if __name__=='__main__':main()
+--- a/ra_exp/prepare.py
++++ b/ra_exp/prepare.py
+@@ -0,0 +1,31 @@
++"""Read-only parent/resource binding; new experiment directories only."""
++import json,os,shutil,time
++from pathlib import Path
++from coreset_exp.common import O,sha,write,hashes
++def main():
++    P=Path(os.environ['RA_PARENT']);PS=Path(os.environ['RA_PARENT_SOURCE'])
++    assert not O.exists(),'Do not repeat preparation of an existing run'
++    pc=json.loads((P/'CONTRACT.json').read_text());fm=json.loads((P/'FEATURES.json').read_text())
++    assert json.loads((P/'INDEPENDENT_ACCEPTANCE.json').read_text())['status']=='PASS'
++    assert sha(P/'MODAL_CONTRACT.json')==pc['modal_sha256']
++    assert hashes(P/'features')==fm['hashes'] and fm['contract_sha256']==sha(P/'CONTRACT.json')
++    for n,h in {**pc['inputs'],**pc['configs']}.items():assert sha(n)==h,n
++    for n,h in pc['source_sha256'].items():assert sha(PS/n)==h,n
++    protected={str(p):sha(p) for p in P.rglob('*') if p.is_file() and p.suffix in ('.json','.jsonl','.pth') and not {'features','buffer'}&set(p.parts)}
++    O.mkdir(parents=True)
++    for n in ['MODAL_CONTRACT.json','FEATURES.json','TASKS.json','PRETRAIN_METADATA.json']:shutil.copy2(P/n,O/n)
++    (O/'features').symlink_to(P/'features',target_is_directory=True)
++    BS=Path(os.environ['SC_BINDING_SOURCE']);bc=json.loads((BS/'CONTRACT.json').read_text());bindings={}
++    for t in range(6,10):
++        p=BS/'bindings'/f'task{t}.json';h=sha(p);assert bc['files'][str(p)]==h
++        obj=json.loads(p.read_text());assert len(obj['windows'])==[997,889,904,1969][t-6]
++        for name,r in obj['windows'].items():assert sha(O/'features'/str(t)/name)==r['sha256']
++        (O/'bindings').mkdir(exist_ok=True);shutil.copy2(p,O/'bindings'/p.name);bindings[str(p)]=h
++    for name,src in [('ra_coreset','coreset'),('eval','eval')]:
++        c=json.loads((P/f'resolved_{src}.json').read_text())
++        c.update(run_root=str(O/'ra_coreset'),feature_dir=str(O/'features'),buffer_dir=str(O/'ra_coreset/buffer'),experiment_dir=str(O/'ra_coreset/models'),contract=str(O/'CONTRACT.json'),selector='ra_coreset')
++        write(O/f'resolved_{name}.json',c)
++    write(O/'PARENT_BINDING.json',dict(parent=str(P),source=str(PS),contract_sha256=sha(P/'CONTRACT.json'),feature_manifest_sha256=sha(P/'FEATURES.json'),modal_sha256=sha(P/'MODAL_CONTRACT.json'),protected={**protected,**bindings},pretrain_use_state='unknown',effective_use_state=True))
++    write(O/'RUN_STATUS.json',dict(status='PREPARED_NOT_FROZEN',time=time.time()))
++    print('PREPARED: all original input/feature/source and binding hashes verified')
++if __name__=='__main__':main()
+--- a/ra_exp/select_offline.py
++++ b/ra_exp/select_offline.py
+@@ -0,0 +1,52 @@
++"""Real payload admission, with independent all-removal-cost verification."""
++import os,json,time,random,pickle
++from pathlib import Path
++import numpy as np,torch,h5py
++from coreset_exp.common import O,sha,write,hashes,rng
++from ra_exp.storage import select
++from libero.lifelong.selectors.greedy_kcenter import Distance
++def independent_verify(ids,report,D):
++    lookup={n:i for i,n in enumerate(ids)};chosen=[lookup[n] for n in report['original_ids']];anchors=set(report['anchor_ids'])
++    pending=[n for n in report['anchor_ids'] if n not in report['original_ids']]
++    assert len(pending)==len(report['swaps'])
++    for name,swap in zip(pending,report['swaps']):
++        assert name==swap['incoming'];x=lookup[name];aug=chosen+[x]
++        block=D[:,aug];owner=block.argmin(axis=1);ordered=np.sort(block,axis=1);first=ordered[:,0];second=ordered[:,1]
++        winner=None
++        for pos,old in sorted(enumerate(chosen),key=lambda z:ids[z[1]]):
++            if ids[old] in anchors:continue
++            nearest=np.where(owner==pos,second,first)
++            r,m=float(nearest.max()),float(nearest.mean());oldname=ids[old]
++            if winner is None or r<winner[0]-1e-12 or (abs(r-winner[0])<=1e-12 and m<winner[1]-1e-12) or (abs(r-winner[0])<=1e-12 and abs(m-winner[1])<=1e-12 and oldname<winner[2]):winner=(r,m,oldname,pos)
++        assert winner[2]==swap['outgoing'] and winner[3]==swap['parent_center_slot']
++        chosen[winner[3]]=x;v=D[:,chosen].min(axis=1)
++        assert abs(float(v.max())-swap['radius_after'])<1e-12 and abs(float(v.mean())-swap['mean_after'])<1e-12
++    assert [ids[i] for i in chosen]==report['selected_ids']
++    assert len(set(report['selected_ids'])-set(report['original_ids']))==len(pending)
++def main():
++    assert not (O/'OFFLINE_ACCEPTANCE.json').exists()
++    start=time.time();P=Path(os.environ['RA_PARENT']);fm=json.loads((O/'FEATURES.json').read_text());tasks=json.loads((O/'TASKS.json').read_text());results={};before_hash=hashes(O/'features')
++    for t in range(6,10):
++        paths=[str(p) for p in sorted((O/'features'/str(t)).glob('*.pt'))];ids=[Path(p).name for p in paths];q=(len(paths)+1)//2
++        with h5py.File(tasks[str(t)]['paths'][0]) as f:population=np.concatenate([f['data'][d]['actions'][:] for d in fm['demos'][str(t)]])
++        binding=json.loads((O/'bindings'/f'task{t}.json').read_text())['windows']
++        rb=rng();chosen,report=select(paths,q,population,binding);ra=rng()
++        assert rb['python']==ra['python'] and pickle.dumps(rb['numpy'])==pickle.dumps(ra['numpy'])
++        assert torch.equal(rb['cpu'],ra['cpu']) and all(torch.equal(a,b) for a,b in zip(rb['cuda'],ra['cuda']))
++        old=json.loads((P/'coreset/storage'/f'task{t}.json').read_text());rnd=json.loads((P/'random/storage'/f'task{t}.json').read_text())
++        assert report['original_ids']==[Path(x['source']).name for x in old['selected']]
++        assert report['random_draw_ids']==[Path(x['source']).name for x in rnd['selected']]==random.Random(42).sample(ids,q)
++        data=[torch.load(p,map_location='cpu') for p in paths]
++        d=Distance(np.array([x['feature'][0,:,1:3,:].numpy() for x in data]),np.array([x['actions'][0,-1,:].numpy() for x in data]),population,42)
++        independent_verify(ids,report,d.distances(np.arange(len(ids))))
++        def desc(names):
++            rr=[binding[n] for n in names]
++            return dict(n=len(rr),positive=sum(r['last_action'][-1]>0 for r in rr),negative=sum(r['last_action'][-1]<0 for r in rr),zero=sum(r['last_action'][-1]==0 for r in rr),unique_times=len({(r['demo_id'],r['target']) for r in rr}),endpoint_windows=sum(r['target']==r['length']-1 for r in rr),demo_support=len({r['demo_id'] for r in rr}))
++        report['diagnostics']={n:desc(v) for n,v in [('full',ids),('original',report['original_ids']),('selected',report['selected_ids']),('anchors',report['anchor_ids'])]}
++        write(O/'offline_selection'/f'task{t}.json',report)
++        results[str(t)]=dict(N=len(ids),q=q,anchors=report['anchor_count'],swaps=report['swap_count'],radius_before=report['max_before'],radius_after=report['max_after'],mean_before=report['mean_before'],mean_after=report['mean_after'],independent_all_removal_choices=True,random_parent_order=True,coreset_parent_order=True)
++        print(json.dumps(dict(task=t,**results[str(t)])),flush=True)
++    assert hashes(O/'features')==before_hash==fm['hashes']
++    assert sum(results[str(t)]['swaps'] for t in (6,7,8))>0
++    write(O/'OFFLINE_ACCEPTANCE.json',dict(status='PASS',tasks=results,inputs_unchanged=True,model_forward=0,optimizer_calls=0,environment_steps=0,seconds=time.time()-start))
++if __name__=='__main__':main()
+--- a/ra_exp/selector_reference.py
++++ b/ra_exp/selector_reference.py
+@@ -0,0 +1,146 @@
++"""RA-Coreset CPU reference: original K-Center + uniform anchors + exact min-radius exchange.
++
++Input IDs are stable original train-window file basenames (unique within a task).
++Distances come ONLY from the frozen original visual-action Distance implementation;
++this standalone module does not compute embeddings, gradients, scores, or rollouts.
++No global random state is consumed. The real integration must verify the parent
++Coreset and Random manifests, bytes and parent distance calibration first.
++"""
++from __future__ import annotations
++
++import random
++from typing import Sequence, Mapping, Any
++import numpy as np
++
++TIE_TOL = 1e-12
++
++
++def anchor_ids(all_ids: Sequence[str], quota: int, seed: int) -> list[str]:
++    """Exact prefix of the parent Random arm's size-quota draw."""
++    ids = sorted(all_ids)
++    if len(set(ids)) != len(ids) or not (1 <= quota <= len(ids)):
++        raise ValueError('Invalid population or quota')
++    return random.Random(seed).sample(ids, quota)[: quota // 2]
++
++
++def _deletion_scores(D: np.ndarray, augmented: list[int]) -> tuple[np.ndarray,np.ndarray]:
++    """Exact max/mean nearest-neighbor distance after deleting each center.
++
++    Handles nearest-center ties without approximation: if two nearest centers are
++    tied, second-nearest distance equals first and deletion penalty is zero.
++    """
++    sub = D[:, augmented]
++    first_at = np.argmin(sub, axis=1)
++    first = sub[np.arange(len(sub)), first_at]
++    second = np.partition(sub, 1, axis=1)[:, 1]
++    summed = np.bincount(first_at, weights=second-first, minlength=len(augmented))
++    worse = np.zeros(len(augmented), dtype=np.float64)
++    np.maximum.at(worse, first_at, second)
++    radius = np.maximum(float(first.max()), worse)
++    mean = float(first.mean()) + summed / len(sub)
++    return radius, mean
++
++
++def select_anchor_repair(
++    all_ids: Sequence[str], parent_centers: Sequence[str],
++    D: np.ndarray, *, seed: int, expected_random: Sequence[str] | None = None,
++) -> tuple[list[str], dict[str, Any]]:
++    """Enforce uniform anchors via exactly necessary swaps from original Coreset.
++
++    For each missing anchor, choose the removable non-anchor center minimizing
++    (maximum coverage distance, average coverage distance, fixed filename ID).
++    No threshold tuned on success rates or supervised loss is used.
++    """
++    ids = list(all_ids)
++    n = len(ids)
++    if ids != sorted(ids) or len(set(ids)) != n:
++        raise ValueError('IDs must be unique and sorted')
++    centers = list(parent_centers)
++    quota = len(centers)
++    if not (1 <= quota <= n) or len(set(centers)) != quota:
++        raise ValueError('Invalid parent Coreset')
++    index = {name: i for i, name in enumerate(ids)}
++    if any(x not in index for x in centers):
++        raise ValueError('Parent centers missing from population')
++    D = np.asarray(D, dtype=np.float64)
++    if D.shape != (n, n) or not np.isfinite(D).all() or np.any(D < -TIE_TOL):
++        raise ValueError('Invalid frozen Distance matrix')
++    if np.max(np.abs(np.diag(D))) > TIE_TOL:
++        raise ValueError('Center self-distances must be zero')
++    anchors = anchor_ids(ids, quota, seed)
++    random_draw = random.Random(seed).sample(ids, quota)
++    if expected_random is not None and list(expected_random) != random_draw:
++        raise ValueError('Random parent selection does not match same-seed draw')
++    protected = set(anchors)
++    chosen = [index[x] for x in centers]
++    replaced = []
++    for name in anchors:
++        x = index[name]
++        if x in chosen:
++            continue
++        augmented = chosen + [x]
++        radii, means = _deletion_scores(D, augmented)
++        # No anchor may ever be deleted, including anchors previously in S_C.
++        removable = [(p, ids[old]) for p, old in enumerate(chosen) if ids[old] not in protected]
++        if not removable:
++            raise AssertionError('Anchor insertion has no legal removable center')
++        # Parent-style absolute tolerance. Stable tie order by original IDs.
++        winner = None
++        for p, old_name in sorted(removable, key=lambda it: it[1]):
++            r, m = float(radii[p]), float(means[p])
++            if winner is None or r < winner[0]-TIE_TOL or (
++                abs(r-winner[0]) <= TIE_TOL and m < winner[1]-TIE_TOL
++            ) or (
++                abs(r-winner[0]) <= TIE_TOL and abs(m-winner[1]) <= TIE_TOL
++                and old_name < winner[2]
++            ):
++                winner = (r, m, old_name, p)
++        _, _, removed, position = winner
++        chosen[position] = x
++        replaced.append({'incoming': name, 'outgoing': removed,
++                         'parent_center_slot': position,
++                         'radius_after': winner[0], 'mean_after': winner[1]})
++    result = [ids[i] for i in chosen]
++    if len(set(result)) != quota or not protected.issubset(result):
++        raise AssertionError('Quota, uniqueness or anchor requirement failed')
++    if len(replaced) != len(set(anchors)-set(centers)):
++        raise AssertionError('Not the minimum possible number of anchor additions')
++    baseline = D[:, [index[x] for x in centers]].min(axis=1)
++    final = D[:, chosen].min(axis=1)
++    report = dict(version='RA_v1_half_quota_uniform_anchor_minimax_exchange',
++                  population=n,quota=quota,anchor_count=len(anchors),
++                  random_draw_ids=random_draw,anchor_ids=anchors,
++                  intersection_with_parent=len(protected & set(centers)),
++                  swaps=replaced,swap_count=len(replaced),
++                  original_ids=centers,selected_ids=result,
++                  max_before=float(baseline.max()),max_after=float(final.max()),
++                  mean_before=float(baseline.mean()),mean_after=float(final.mean()))
++    return result, report
++
++
++def stable_slots(parent_sorted_buffer_ids: Sequence[str],
++                 candidate_buffer_ids: Sequence[str]) -> tuple[list[str],list[dict[str,str|int]]]:
++    """Preserve every common original member at the same pre-shuffle index.
++
++    parent_sorted_buffer_ids are source identities in EXACT parent filename sort
++    order, which may be different from parent K-Center selection order. Incoming
++    identities occupy only the deleted parent slots; no files are renamed.
++    """
++    old = list(parent_sorted_buffer_ids)
++    new = list(candidate_buffer_ids)
++    if len(old) != len(new) or len(set(old)) != len(old) or len(set(new)) != len(new):
++        raise ValueError('Population must be unique and quota-preserving')
++    if old != sorted(old):
++        raise ValueError('Parent slot order must match the parent sorted-file order')
++    incoming = sorted(set(new)-set(old))
++    removed_slots = [i for i, name in enumerate(old) if name not in set(new)]
++    if len(incoming) != len(removed_slots):
++        raise AssertionError('Symmetric set difference must be equal-size')
++    result = old.copy()
++    replacements=[]
++    for i, name in zip(removed_slots,incoming):
++        replacements.append(dict(slot=i,removed=old[i],incoming=name))
++        result[i] = name
++    if set(result) != set(new) or any(result[i] != x for i,x in enumerate(old) if x in set(new)):
++        raise AssertionError('Common-member slot invariance failed')
++    return result, replacements
+--- a/ra_exp/storage.py
++++ b/ra_exp/storage.py
+@@ -0,0 +1,59 @@
++import json,math,time,random,shutil
++from pathlib import Path
++from collections import Counter
++import numpy as np
++import torch,h5py
++from coreset_exp.common import O,SEED,SELECTOR_SEED,write,sha,hashes,rng,restore_rng
++from libero.lifelong.algos import mlr
++from libero.lifelong.selectors.greedy_kcenter import greedy_kcenter_select,Distance
++from .selector_reference import select_anchor_repair
++
++def select(paths,k,population,binding):
++    begin=time.monotonic();saved=rng()
++    try:
++        s0,original=greedy_kcenter_select(paths,k,SELECTOR_SEED,population)
++        ordered=sorted(paths,key=lambda p:Path(p).name);ids=[Path(p).name for p in ordered]
++        data=[torch.load(p,map_location='cpu') for p in ordered]
++        vv=np.array([x['feature'][0,:,1:3,:].numpy() for x in data]);aa=np.array([x['actions'][0,-1,:].numpy() for x in data])
++        for p,a in zip(ordered,aa):
++            row=binding[Path(p).name];assert sha(p)==row['sha256']
++            assert np.array_equal(a,np.asarray(row['last_action'],dtype=np.float32))
++        d=Distance(vv,aa,population,SELECTOR_SEED);D=d.distances(np.arange(len(ids)))
++        assert d.hs==original['visual_scale'] and d.as_==original['action_distance_scale']
++        names,report=select_anchor_repair(ids,[Path(p).name for p in s0],D,seed=SEED)
++        idx={n:p for n,p in zip(ids,ordered)}
++        report.update(original_selection=original,original_ids=[Path(p).name for p in s0],selected_ids=names,
++                      demo_full=dict(Counter(binding[n]['demo_id'] for n in ids)),
++                      demo_original=dict(Counter(binding[Path(p).name]['demo_id'] for p in s0)),
++                      demo_final=dict(Counter(binding[n]['demo_id'] for n in names)),seconds=time.monotonic()-begin)
++        return [idx[n] for n in names],report
++    finally:restore_rng(saved)
++
++def store(c,t,benchmark):
++    begin=time.monotonic();root=Path(c.run_root);mfile=root/'storage'/f'task{t}.json'
++    paths=mlr._list_pt(str(O/'features'/str(t)));k=math.ceil(.5*len(paths))
++    if mfile.exists():
++        m=json.loads(mfile.read_text());assert m['contract_sha256']==sha(O/'CONTRACT.json') and m['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
++    else:
++        before=hashes(Path(c.buffer_dir));assert not any(n.startswith(f't{t}__') for n in before)
++        assert len(before)+k<=mlr.BUFFER_CAPACITY
++        demos=json.loads((O/'FEATURES.json').read_text())['demos'][str(t)]
++        with h5py.File(str(Path(c.folder)/benchmark.get_task_demonstration(t))) as f:population=np.concatenate([f['data'][d]['actions'][:] for d in demos])
++        binding=json.loads((O/'bindings'/f'task{t}.json').read_text())['windows']
++        selected,report=select(paths,k,population,binding)
++        preflight=json.loads((O/'selection_preflight'/f'task{t}.json').read_text())
++        assert report['original_ids']==preflight['original_ids'] and report['selected_ids']==preflight['selected_ids']
++        assert len(set(selected))==len(selected)==k
++        m=dict(task=t,K=k,current_count=len(paths),before=before,selected=[dict(source=p,destination=f't{t}__{Path(p).name}',sha256=sha(p)) for p in selected],selection=report,contract_sha256=sha(O/'CONTRACT.json'),modal_sha256=sha(O/'MODAL_CONTRACT.json'))
++        write(mfile,m)
++    buffer=Path(c.buffer_dir);buffer.mkdir(parents=True,exist_ok=True)
++    allowed=dict(m['before']);allowed.update({r['destination']:r['sha256'] for r in m['selected']})
++    actual=hashes(buffer);assert set(actual)<=set(allowed) and all(allowed[n]==h for n,h in actual.items())
++    for r in m['selected']:
++        src=Path(r['source']);dst=buffer/r['destination'];assert sha(src)==r['sha256']
++        if dst.exists():assert sha(dst)==r['sha256']
++        else:
++            tmp=dst.with_suffix('.copying');shutil.copy2(src,tmp);assert sha(tmp)==r['sha256'];tmp.replace(dst)
++    after=hashes(buffer);assert after==allowed
++    result=dict(counts={str(i):sum(n.startswith(f't{i}__') for n in after) for i in range(6,t+1)},total=len(after),hashes=after,modal_sha256=sha(O/'MODAL_CONTRACT.json'),seconds=time.monotonic()-begin)
++    write(root/f'buffer_after_task{t}.json',result);return result
+--- a/ra_exp/test_reference.py
++++ b/ra_exp/test_reference.py
+@@ -0,0 +1,86 @@
++"""Pure synthetic CPU tests; no claims about real LIBERO success."""
++import random
++import unittest
++import numpy as np
++from ra_exp.selector_reference import select_anchor_repair, stable_slots, anchor_ids, _deletion_scores
++
++class Tests(unittest.TestCase):
++    def test_uniform_draw_matches_parent_random_prefix(self):
++        ids = ['%03d.pt' % i for i in range(21)]
++        for seed in (42,43,44):
++            self.assertEqual(anchor_ids(ids,11,seed),random.Random(seed).sample(ids,11)[:5])
++
++    def test_inclusion_and_minimum_swaps(self):
++        rnd=np.random.RandomState(4)
++        for n,q in [(2,1),(8,4),(21,11),(38,20)]:
++            ids = ['%03d.pt' % i for i in range(n)]
++            a = rnd.normal(size=(n,4)); D=np.sqrt(np.sum((a[:,None]-a[None])**2,axis=-1));np.fill_diagonal(D,0)
++            centers=ids[::max(1,n//q)][:q]
++            out,rep=select_anchor_repair(ids,centers,D,seed=42)
++            self.assertEqual(len(out),q)
++            self.assertTrue(set(anchor_ids(ids,q,42)).issubset(out))
++            self.assertEqual(rep['swap_count'],len(set(rep['anchor_ids'])-set(centers)))
++
++    def test_exact_deletion_scores_against_brute(self):
++        rnd=np.random.RandomState(11)
++        for n,q in [(6,3),(17,8),(30,12)]:
++            x=rnd.normal(size=(n,3));D=np.sqrt(np.sum((x[:,None]-x[None])**2,axis=-1))
++            for _ in range(10):
++                aug=list(rnd.choice(n,size=q,replace=False))
++                r,m=_deletion_scores(D,aug)
++                for i in range(q):
++                    chosen=aug[:i]+aug[i+1:]
++                    v=D[:,chosen].min(axis=1)
++                    self.assertAlmostEqual(r[i],v.max(),places=11)
++                    self.assertAlmostEqual(m[i],v.mean(),places=11)
++
++    def test_exact_self_parity(self):
++        ids=['%03d.pt'%i for i in range(10)]
++        D=np.abs(np.arange(10)[:,None]-np.arange(10)[None,:]).astype(float)
++        parent=ids[:5]
++        a=anchor_ids(ids,5,42)
++        # A design requiring anchors already inside S0 should return same list.
++        eligible=[x for x in ids if x not in a]
++        centers=a+eligible[:3]
++        result,report=select_anchor_repair(ids,centers,D,seed=42)
++        self.assertEqual(result,centers)
++        self.assertEqual(report['swap_count'],0)
++
++    def test_reject_invalid_parent_random(self):
++        ids=['%03d.pt'%i for i in range(10)]
++        D=np.abs(np.arange(10)[:,None]-np.arange(10)[None,:]).astype(float)
++        with self.assertRaises(ValueError):
++            select_anchor_repair(ids,ids[:5],D,seed=42,expected_random=ids[-5:])
++
++    def test_slot_alignment_invariant(self):
++        old=['t6__%03d.pt'%i for i in range(10)]
++        new=old[:2]+old[3:7]+old[8:]+['t6__010.pt','t6__011.pt']
++        result,changes=stable_slots(old,new)
++        self.assertEqual(len(changes),2)
++        self.assertEqual(result[2],'t6__010.pt')
++        self.assertEqual(result[7],'t6__011.pt')
++        for i,x in enumerate(old):
++            if x in new:self.assertEqual(x,result[i])
++        self.assertEqual(stable_slots(old,old),(old,[]))
++
++    def test_exact_batch_invariance_outside_changed_slots(self):
++        old=['t6__%03d.pt'%i for i in range(40)]
++        changed=old[1:]+['t6__077.pt']
++        new,changes=stable_slots(old,changed)
++        changed_slots={c['slot'] for c in changes}
++        old_mix=old+['current_%03d.pt'%i for i in range(30)]
++        new_mix=new+['current_%03d.pt'%i for i in range(30)]
++        for epoch in range(20):
++            perm=list(range(len(old_mix))); random.Random(42+epoch).shuffle(perm)
++            for i in perm:
++                if i not in changed_slots:self.assertEqual(old_mix[i],new_mix[i])
++        self.assertEqual(len(changes),1)
++
++    def test_no_global_rng_consumption(self):
++        before=random.getstate()
++        ids=['%03d.pt'%i for i in range(12)]
++        D=np.abs(np.arange(12)[:,None]-np.arange(12)[None,:]).astype(float)
++        select_anchor_repair(ids,ids[:6],D,seed=42)
++        self.assertEqual(before,random.getstate())
++
++if __name__=='__main__':unittest.main(verbosity=2)
+--- a/ra_exp/validation.py
++++ b/ra_exp/validation.py
+@@ -0,0 +1,14 @@
++"""Numeric witnesses use the original FP64 tolerance; identities remain exact."""
++import json
++def same_witness(a,b):
++    a=json.loads(json.dumps(a));b=json.loads(json.dumps(b))
++    def check(x,y):
++        if isinstance(x,dict):
++            assert x.keys()==y.keys()
++            for k in x:check(x[k],y[k])
++        elif isinstance(x,list):
++            assert len(x)==len(y)
++            for u,v in zip(x,y):check(u,v)
++        elif isinstance(x,float):assert abs(x-y)<=1e-12
++        else:assert x==y
++    check(a,b)

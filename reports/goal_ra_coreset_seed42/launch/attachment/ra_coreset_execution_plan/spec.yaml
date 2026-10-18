@@ -1,0 +1,179 @@
+name: RA_Coreset_MLR_IFA_v1
+status: DESIGN_NOT_EXECUTED
+created_for: frozen_results_comparison_after_SCv1_SCv2_Event_ZRv1_ZRv2
+source:
+  repository: uhhj/lifelong_mlr_ifa_minrep_20260821_193226
+  report_ref: 95503d6799b14862d5d5d21ab065c8ba252863b2
+  GOAL_parent: reports/goal_random_coreset_seeds42_43_44/final_evidence/queue/seed42/source
+  OBJECT_parent: experiments/object_coreset_seeds42_43_44/seed42/source
+  use_actual_per_seed_parent_source_when_expanding: true
+  verify_original_manifest_payload_hashes: true
+  never_load_IFA_OFF_as_parent: true
+algorithm:
+  name: UniformReservoirAnchors_MinimaxExchange_KCenter
+  baseline_selector: frozen_original_greedy_kcenter
+  reference_distance: frozen_full_task_visual_action_Distance
+  selector_seed_for_kcenter: 42
+  anchor_seed: training_seed
+  anchor_sampling: prefix_of_parent_Random_sample_without_replacement
+  anchor_count: floor(task_memory_quota / 2)
+  fixed_anchor_fraction_of_quota: 0.5
+  quota: ceil(current_task_window_count * 0.5)
+  initial_subset: original_Coreset_selected_members_exact_order
+  anchors_are_hard_inclusion: true
+  swap_count: exactly_anchor_members_missing_from_original_Coreset
+  incoming_order: parent_Random_draw_order
+  removal_candidates: selected_members_not_in_any_anchor
+  removal_choice: lexicographic_min_over_post_swap_max_D_and_mean_D_then_original_file_ID
+  tie_abs_tol: 1.0e-12
+  coverage_guard: none
+  frequency_quota: none
+  event_quota: none
+  action_sign_or_time_bin_constraint: none
+  task_loss_gradient_uncertainty_for_selection: none
+  add_legacy_padding_or_new_windows: false
+  select_from_current_task_only: true
+  old_task_reselection: false
+  action_value_provenance: original_feature_file_last_expert_action
+  record_diagnostics_not_as_performance_gates: [radius, mean_distance, selected_gripper_sign, time_distribution, distinct_real_target_steps, demo_support, end_step_multiplicity]
+training_data:
+  budget_unit: original_pt_window_file
+  prior_cumulative_memory_membership: no_future_task_members
+  capacity: 59660000
+  keep_prior_append_only_under_capacity: true
+  task_features: original_state_true_cache_per_seed
+  preserve_original_pt_bytes: true
+  preserve_original_task_labels_and_replay_fraction: true
+  sampler: exact_parent_DistributedSampler_seed_0_set_epoch
+  shuffle: exact_parent_random_Random_training_seed_shuffle
+  stable_slots:
+    reference: original_same_seed_Coreset_sorted_legacy_buffer_names_before_parent_shuffle
+    common_members_remain_in_same_reference_dataset_index: true
+    newly_selected_members_fill_only_removed_reference_slots: true
+    do_not_rename_payload_or_change_task_prefix: true
+    same_method_if_no_member_change_matches_parent_loader_every_epoch: true
+    original_current_task_member_positions_unchanged: true
+    old_member_replay_count_each_epoch_unchanged: true
+    original_loader_baseline_parity_is_hard_prerequisite: true
+    expected_different_batch_sets_not_forced_zero: true
+study:
+  first_suite: LIBERO_GOAL
+  first_seed: 42
+  first_tasks: [6,7,8,9]
+  goal:
+    benchmark: LIBERO_GOAL
+    gamma: 0.7
+    pretrained: goal_multitask_model_ep96.pth
+    use_state: true
+    task_windows: {6: 997, 7: 889, 8: 904, 9: 1969}
+    task_memory_quota: {6: 499, 7: 445, 8: 452, 9: 985}
+    anchor_count: {6: 249,7: 222,8: 226,9: 492}
+    per_epoch_batches: {6: 100,7: 139,8: 185,9: 337}
+    total_updates_per_arm: 76100
+  object:
+    benchmark: LIBERO_OBJECT
+    gamma: 0.3
+    pretrained: object_multitask_model_ep99.pth
+    use_state: true
+    task_windows: {6: 1562, 7: 1480, 8: 1560, 9: 1319}
+    task_memory_quota: {6: 781, 7: 740, 8: 780, 9: 660}
+    anchor_count: {6: 390,7: 370,8: 390,9: 330}
+    per_epoch_batches: {6: 157,7: 227,8: 309,9: 362}
+    total_updates_per_arm: 105500
+  seed_extension_if_accepted: [43, 44]
+  object_additional_seeds_after_gates: [40, 41]
+  first_seed_new_arm_only: true
+  first_seed_existing_base_models: [Coreset, Random]
+  do_not_retrain_existing_baselines_if_identity_loader_parity_verified: true
+  parity_failure: stop_strict_reuse_and_require_new_common_baseline_training
+train:
+  tasks: [6, 7, 8, 9]
+  demonstration_count_each_task: 10
+  seq_len: 8
+  batch_size: 10
+  num_workers: 0
+  epochs_per_task: 100
+  world_size: 1
+  model: original_temporal_decoder_and_GMM_head
+  frozen_frontend: true
+  optimizer: original_AdamW_config_per_suite_and_seed
+  warmup: 500
+  scheduler: exact_parent_optimizer_step_linear
+  loss: original_BC_last_expert_action_plus_0.1_mean_IFA
+  IFA_pair_selection_and_references: original_algorithm_on_actual_selected_memory
+  optimizer_rebuild_at_each_task_boundary: true
+  checkpoint_policy: epoch_99_last
+  no_new_losses_or_model_parameters: true
+  no_gradient_based_sample_selection: true
+  global_rng_not_consumed_by_selection_or_audit: true
+  no_training_time_environment_rollouts: true
+  no_loss_based_early_stopping: true
+shared_evaluation_E1:
+  new_protocol_not_original_report_protocol: true
+  each_evaluated_arm_must_use_same_E1: true
+  primary_comparison_arms: [old_Coreset_checkpoint, new_RA_checkpoint]
+  optional_Random_context_checkpoint: true
+  trials_per_stage_task: 20
+  valid_cells: 10
+  trial_indices: '0..19'
+  vector_group_size: 10
+  vector_group_environment_seeds: '[seed,seed+1]'
+  step_limit: 600
+  initial_zero_action_steps: 5
+  keep_native_argmax_GMM_component: true
+  action_noise_distribution: independent_standard_Normal_each_action_dimension
+  noise_bank: deterministic_cpu_float32_20_by_600_by_7_per_stage_task
+  independent_episode_stream_keys: [suite,train_seed,stage,task,trial]
+  seed_hash: SHA256_of_FROZEN_E1_message_without_method_name
+  pass_per_episode_step_noise_to_native_action_head: true
+  native_distribution_and_action_postprocessing_parity: required
+  no_global_CUDA_rng_for_policy_action_noise: true
+  no_parameter_changes_during_evaluation: true
+  no_merging_E1_metrics_with_legacy_original_RNG_metrics: true
+  reward_and_success_function: exact_parent
+  episode_records_and_noise_hashes: required
+  checkpoint_and_modal_identity: strict
+acceptance:
+  preflight:
+    - exact_original_Coreset_selector_parity
+    - exact_parent_Random_draw_parity
+    - original_cached_tensor_hash_identity
+    - same_input_or_parent_seed_config
+    - stable_slot_passthrough_loader_parity_for_all_4_tasks_all_100_epochs
+    - common_members_keep_indices_after_any_swaps
+    - fixed_teacher_forcing_sample_counts_and_task_labels
+    - no_global_rng_consumption_from_selection
+    - IFA_algorithm_and_model_train_code_identity
+    - E1_original_action_distribution_semantics_test
+    - E1_noise_is_method_independent_and_episode_independent
+    - isolated_optimizer_step_parity_on_no_change_buffer
+  technical_failure: stop_no_automatic_retuning
+  first_seed_success_gate:
+    primary: RA_E1_AUC_gt_C_E1_AUC
+    new_learning: RA_E1_FWT_ge_C_E1_FWT
+    absolute_old: RA_E1_OldFinal_ge_C_E1_OldFinal
+    engineering: all_required_checks_pass
+  random_reference_target: RA_E1_AUC_ge_Random_E1_AUC_to_claim_GOAL_gap_closed
+  metrics: [task_balanced_AUC, FWT, signed_NBT, OldFinal, FinalAll, complete_success_matrix]
+  eval_normal_failure_retry: false
+  use_exact_success_counts_Fraction: true
+  independent_validation_only_after_first_gate: true
+  no_automatic_extension: true
+budgets:
+  GOAL_first_arm_epochs: 400
+  GOAL_first_arm_optimizer_updates: 76100
+  GOAL_E1_evaluation_episodes_main_C_plus_RA: 400
+  GOAL_E1_optional_Random_episodes: 200
+  OBJECT_first_arm_optimizer_updates_if_GOAL_passes: 105500
+  OBJECT_first_arm_epochs_if_GOAL_passes: 400
+  OBJECT_E1_main_C_plus_RA_episodes_if_GOAL_passes: 400
+  baseline_retraining_if_prerequisite_parity_passes: 0
+  model_parameter_increase: 0
+  checkpoint_count_for_new_arm: 4
+  external_prototype_or_expensive_trajectory_diagnosis: false
+commands:
+  new_namespace: ra_exp
+  status: interfaces_to_implement_not_current_repository_APIs
+  launch_any_experiment_now: false
+  push_any_remote_change_now: false
+  create_automation_now: false

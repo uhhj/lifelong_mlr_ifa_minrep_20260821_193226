@@ -1,0 +1,43 @@
+{
+  "time": 1792337747.720504,
+  "status": {
+    "status": "TRAINING",
+    "arm": "ra_coreset",
+    "task": 6,
+    "completed_epoch": 36,
+    "optimizer_steps": 3700,
+    "updated_unix": 1792337744.8575165,
+    "pid": 48924
+  },
+  "epochs": 38,
+  "latest_epoch": {
+    "task": 6,
+    "epoch": 37,
+    "batches": 100,
+    "steps": 3800,
+    "loss": -22.392260665893556,
+    "lr_first": 6.631578947368421e-05,
+    "lr_after": 6.526315789473685e-05,
+    "seconds": 2.7578887939453125
+  },
+  "records": 0,
+  "completed_vectors": 0,
+  "technical_exceptions": 0,
+  "exits": {
+    "train": null,
+    "evaluate": null,
+    "audit": null,
+    "pipeline": null
+  },
+  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 1760 MiB, 32 %\n",
+  "processes": [
+    "  48915       02:34 /data/mlr_ifa/env/bin/python -u /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed42_20261018/pipeline.py",
+    "  48916       02:34 /data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m coreset_exp.train ra_coreset",
+    "  48924       02:33 /data/mlr_ifa/env/bin/python -u -m coreset_exp.train ra_coreset"
+  ],
+  "free_bytes": {
+    "/root": 20453486592,
+    "/data": 1021706240
+  },
+  "frozen_hash_check": "PASS"
+}
