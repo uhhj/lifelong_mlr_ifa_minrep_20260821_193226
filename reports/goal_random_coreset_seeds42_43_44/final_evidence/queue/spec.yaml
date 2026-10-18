@@ -1,0 +1,73 @@
+protocol_version: paper_aligned_GOAL_three_seed_v1
+base_commit: a721807f2f7fa7f9833dcc85c592d78e9accd00b
+benchmark_name: LIBERO_GOAL
+seeds: [42,43,44]
+arms: [random,coreset]
+tasks: [6,7,8,9]
+official_pretrain: /data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth
+pretrain_use_state: unknown
+effective_modalities: {vision: true, language: true, state: true}
+frontend: frozen_including_lora
+token_order: [language,agentview,eye_in_hand,state]
+state_fields: [joint_states,gripper_states]
+state_dims: [7,2]
+window: 8
+embedding: 512
+data: {demos_per_task: 10, fresh_export_per_seed: true, same_seed_shared_export: true}
+training:
+  epochs_per_task: 100
+  batch_size: 10
+  loss: BC_plus_mean_IFA
+  ifa_weight: 0.1
+  gamma: 0.7
+  optimizer: AdamW
+  nominal_lr: 0.0001
+  scheduler: linear_per_optimizer_step
+  warmup_steps: 500
+  reset_optimizer_each_task: true
+  model_continuity: true
+  sampler_seed: 0
+buffer:
+  storage_rate: 0.5
+  quota_rule: ceil
+  mixing: original_concat_shuffle
+  expected_quotas: [499,445,452,985]
+coreset:
+  distance: visual_cosine_plus_final_expert_action_robust_scaled_rms
+  modality_weights: [0.5,0.5]
+  visual_token_indices: [1,2]
+  calibration_seed: 42
+  calibration_pairs: 4096
+  references: 256
+  block: 256
+  precision: float64
+  tie_tolerance: 1.0e-12
+evaluation:
+  final_epoch_index: 99
+  initial_indices: [0,19]
+  episodes_per_cell: 20
+  lanes: 10
+  groups: 2
+  max_steps: 600
+  dummy_steps: 5
+  action_rule: argmax_component_then_Normal_sample
+  action_rng: global_reset_per_stage_not_isolated_per_trajectory
+  environment_seed_rule: [training_seed,training_seed_plus_one]
+  cudnn_benchmark: true
+budgets:
+  expected_windows: [997,889,904,1969]
+  batches_per_epoch: [100,139,185,337]
+  steps_per_arm: 76100
+  epochs_total: 2400
+  optimizer_steps_total: 456600
+  final_checkpoints: 24
+  formal_episodes: 1200
+  vector_attempts: 120
+preflight_per_seed:
+  software_tests: 18
+  isolated_optimizer_calls_max: 4
+  single_zero_action_interface_checks: 1
+  policy_rollouts: 0
+storage: system_disk_explicitly_authorized
+gpu_scheduling: wait_for_existing_ZR40_41_queue_success_and_release
+historical_goal_baseline: readonly_reference_not_reused_as_paired_control

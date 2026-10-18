@@ -1,0 +1,129 @@
+{
+  "unix": 1792250462.6812541,
+  "queue_exit": null,
+  "commands_tail": [
+    "2026-10-17T22:56:44+08:00 EXIT 0 admission_40",
+    "2026-10-17T22:56:44+08:00 START python -m zrg_exp.prepare",
+    "2026-10-17T22:56:57+08:00 EXIT 0 prepare_40",
+    "2026-10-17T22:56:57+08:00 START python /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/seed40/test_metrics.py",
+    "2026-10-17T22:56:58+08:00 EXIT 0 tests_40",
+    "2026-10-17T22:56:58+08:00 START torchrun --standalone --nnodes=1 --nproc_per_node=1 -m zrg_exp.integration_check",
+    "2026-10-17T22:57:29+08:00 EXIT 0 integration_40",
+    "2026-10-17T22:57:29+08:00 START python -m zrg_exp.native_action_check",
+    "2026-10-17T22:57:46+08:00 EXIT 0 native_40",
+    "2026-10-17T22:57:46+08:00 START python -m zrg_exp.freeze",
+    "2026-10-17T22:57:58+08:00 EXIT 0 freeze_40",
+    "2026-10-17T22:57:58+08:00 START bash /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/seed40/supervise.sh"
+  ],
+  "seeds": [
+    {
+      "seed": 40,
+      "status": {
+        "status": "TRAINING",
+        "task": 8,
+        "completed_epoch": 16,
+        "optimizer_steps": 43653,
+        "updated_unix": 1792250455.7083757,
+        "pid": 12488
+      },
+      "epochs": 217,
+      "steps": 43653,
+      "last_epoch": {
+        "task": 8,
+        "epoch": 16,
+        "batches": 309,
+        "steps": 43653,
+        "loss": -23.669091641324236,
+        "lr_first": 8.538157894736843e-05,
+        "lr_after": 8.436513157894737e-05,
+        "seconds": 8.325016260147095
+      },
+      "episodes": 0,
+      "attempt_starts": 0,
+      "attempt_completes": 0,
+      "structural_checks": 24,
+      "structural_all_pass": true,
+      "pipeline_exit": null,
+      "supervisor_exit": null,
+      "integration": {
+        "status": "PASS",
+        "optimizer_calls": 4,
+        "environment_steps": 0
+      },
+      "baseline_binding": {
+        "upstream_commit": "1ed6e0dd25cb5748ee5e887444619483bd9bdc31",
+        "actual_source_identity": "parent CONTRACT source_sha256",
+        "path": "/data/mlr_ifa/experiments/Seeds40_41_three_arm_20261016/seed40/rc",
+        "contract_sha256": "1229bd3491e0d929956ed6d6a00807bda3d79baac4ac77c6a34b4baafebd4837",
+        "original_source_verified": true,
+        "baseline": {
+          "AUC": {
+            "fraction": "779/960",
+            "percent": 81.14583333333333
+          },
+          "FWT": {
+            "fraction": "3/4",
+            "percent": 75.0
+          },
+          "NBT": {
+            "fraction": "-13/120",
+            "percent": -10.833333333333334
+          },
+          "OldFinal": {
+            "fraction": "43/60",
+            "percent": 71.66666666666667
+          },
+          "FinalAll": {
+            "fraction": "31/40",
+            "percent": 77.5
+          }
+        },
+        "seed": 40,
+        "baseline_counts": {
+          "6,6": 1,
+          "7,6": 10,
+          "7,7": 20,
+          "8,6": 10,
+          "8,7": 20,
+          "8,8": 20,
+          "9,6": 4,
+          "9,7": 19,
+          "9,8": 20,
+          "9,9": 19
+        }
+      },
+      "remaining_training_compute_seconds": 1669.1303042607713,
+      "remaining_eval_seconds_estimate": 4394
+    },
+    {
+      "seed": 41,
+      "status": null,
+      "epochs": 0,
+      "steps": 0,
+      "last_epoch": null,
+      "episodes": 0,
+      "attempt_starts": 0,
+      "attempt_completes": 0,
+      "structural_checks": 0,
+      "structural_all_pass": true,
+      "pipeline_exit": null,
+      "supervisor_exit": null,
+      "integration": null,
+      "baseline_binding": null,
+      "remaining_training_compute_seconds": null,
+      "remaining_eval_seconds_estimate": 4394
+    }
+  ],
+  "processes": [
+    "  12370       24:35 bash /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/run_queue.sh",
+    "  12473       23:04 bash /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/seed40/supervise.sh",
+    "  12474       23:04 bash /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/seed40/pipeline.sh",
+    "  12480       23:04 /data/mlr_ifa/env/bin/python /data/mlr_ifa/env/bin/torchrun --standalone --nnodes=1 --nproc_per_node=1 -m zrg_exp.train",
+    "  12488       23:03 /data/mlr_ifa/env/bin/python -u -m zrg_exp.train",
+    "  12680       00:00 bash -c Q=/root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017 /data/mlr_ifa/env/bin/python \"$Q/package_evidence.py\" /data/mlr_ifa/env/bin/python /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/monitor_snapshot.py > \"$Q/predecessor_snapshot.json\" /data/mlr_ifa/env/bin/python - <<'PY' import json,pathlib Q=pathlib.Path('/root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017') d=json.loads((Q/'predecessor_snapshot.json').read_text()) print(json.dumps({'predecessor': [{'seed':x['seed'],'epochs':x['epochs'],'episodes':x['episodes'],'status':x['status'],'remaining_training_compute_seconds':x.get('remaining_training_compute_seconds'),'remaining_eval_seconds_estimate':x.get('remaining_eval_seconds_estimate')} for x in d['seeds']],'gpu':d['gpu'],'goal_queue_pid':(Q/'queue.pid').read_text().strip(),'goal_queue_status':json.loads((Q/'RUN_STATUS.json').read_text())})) PY",
+    "  12682       00:00 /data/mlr_ifa/env/bin/python /root/mlr_ifa/experiment_workspaces/ZR_coreset_seeds40_41_20261017/monitor_snapshot.py"
+  ],
+  "gpu": "NVIDIA GeForce RTX 3090, 40 %, 1760 MiB, 24576 MiB\n",
+  "system_free_bytes": 32396427264,
+  "data_free_bytes": 1022033920
+}

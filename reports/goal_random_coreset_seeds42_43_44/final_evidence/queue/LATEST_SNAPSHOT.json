@@ -1,0 +1,471 @@
+{
+  "unix": 1792306568.3570664,
+  "queue_status": {
+    "status": "ADMITTED",
+    "free_system_bytes": 31127093248,
+    "predecessor_exit": 0,
+    "unix": 1792264783.5690942
+  },
+  "queue_exit": null,
+  "wrapper_exit": null,
+  "commands": "2026-10-17T23:17:34+08:00 START wait_predecessor /data/mlr_ifa/env/bin/python -u /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/admission.py \n2026-10-18T03:19:43+08:00 EXIT wait_predecessor 0\n2026-10-18T03:19:44+08:00 START configure_42 python -u -m coreset_exp.configure \n2026-10-18T03:20:28+08:00 EXIT configure_42 0\n2026-10-18T03:20:28+08:00 START suite_audit_42 python -u /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/audit_suite.py \n2026-10-18T03:20:43+08:00 EXIT suite_audit_42 0\n2026-10-18T03:20:43+08:00 START preflight_42 torchrun --nproc_per_node=1 --master_port=39342 -m coreset_exp.preflight \n2026-10-18T03:21:24+08:00 EXIT preflight_42 0\n2026-10-18T03:21:24+08:00 START supervise_42 bash /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed42/source/coreset_exp/supervise.sh \n2026-10-18T07:12:50+08:00 EXIT supervise_42 0\n2026-10-18T07:12:51+08:00 START configure_43 python -u -m coreset_exp.configure \n2026-10-18T07:13:09+08:00 EXIT configure_43 0\n2026-10-18T07:13:09+08:00 START suite_audit_43 python -u /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/audit_suite.py \n2026-10-18T07:13:25+08:00 EXIT suite_audit_43 0\n2026-10-18T07:13:25+08:00 START preflight_43 torchrun --nproc_per_node=1 --master_port=39343 -m coreset_exp.preflight \n2026-10-18T07:14:01+08:00 EXIT preflight_43 0\n2026-10-18T07:14:01+08:00 START supervise_43 bash /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed43/source/coreset_exp/supervise.sh \n2026-10-18T11:03:13+08:00 EXIT supervise_43 0\n2026-10-18T11:03:14+08:00 START configure_44 python -u -m coreset_exp.configure \n2026-10-18T11:03:32+08:00 EXIT configure_44 0\n2026-10-18T11:03:32+08:00 START suite_audit_44 python -u /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/audit_suite.py \n2026-10-18T11:03:49+08:00 EXIT suite_audit_44 0\n2026-10-18T11:03:49+08:00 START preflight_44 torchrun --nproc_per_node=1 --master_port=39344 -m coreset_exp.preflight \n2026-10-18T11:04:25+08:00 EXIT preflight_44 0\n2026-10-18T11:04:25+08:00 START supervise_44 bash /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed44/source/coreset_exp/supervise.sh \n",
+  "seeds": {
+    "42": {
+      "status": {
+        "status": "COMPLETED",
+        "seed": 42,
+        "arms": [
+          "random",
+          "coreset"
+        ],
+        "epochs": 800,
+        "formal_records": 400,
+        "updated_unix": 1792278770.4334996
+      },
+      "pipeline_exit": "0\n",
+      "supervisor_exit": "0\n",
+      "preflight": {
+        "status": "PASS",
+        "tests": {
+          "state_token_exact": true,
+          "state_response_max": 0.3657964766025543,
+          "other_tokens_invariant": true,
+          "false_negative_control": true,
+          "gmm_parameters_exact": true,
+          "spawn_render_reset_one_zero_step": true,
+          "optimizer_scheduler_rng_recovery_exact": true,
+          "isolated_optimizer_calls": 4,
+          "ifa_pair_mean_and_empty": true
+        },
+        "seconds": 27.40185856819153,
+        "formal_rollouts": 0,
+        "environment_interface_checks": 1,
+        "torch": "1.13.0+cu116",
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "modal_sha256": "5facd55bf09f8100456c229d8d5da77c27206a77ad6db07fd64f72b9c96ccfda",
+        "contract_sha256": "aa2bc7e84bdb06cff3828154e988563a99775d98c8bd59fff64527ad555aeec6"
+      },
+      "arms": {
+        "random": {
+          "epochs": 400,
+          "last": {
+            "task": 9,
+            "epoch": 99,
+            "batches": 337,
+            "steps": 76100,
+            "loss": -30.83298229251488,
+            "lr_first": 1.0150602409638555e-06,
+            "lr_after": 0.0,
+            "seconds": 9.436886548995972
+          },
+          "checkpoints": [
+            "mlrifa_9_model_ep99.pth",
+            "mlrifa_7_model_ep99.pth",
+            "mlrifa_6_model_ep99.pth",
+            "mlrifa_8_model_ep99.pth"
+          ],
+          "formal_records": 200,
+          "attempt_events": 70,
+          "recent_epoch_seconds": 9.02533597946167
+        },
+        "coreset": {
+          "epochs": 400,
+          "last": {
+            "task": 9,
+            "epoch": 99,
+            "batches": 337,
+            "steps": 76100,
+            "loss": -30.420620530578432,
+            "lr_first": 1.0150602409638555e-06,
+            "lr_after": 0.0,
+            "seconds": 8.617747068405151
+          },
+          "checkpoints": [
+            "mlrifa_9_model_ep99.pth",
+            "mlrifa_7_model_ep99.pth",
+            "mlrifa_6_model_ep99.pth",
+            "mlrifa_8_model_ep99.pth"
+          ],
+          "formal_records": 200,
+          "attempt_events": 70,
+          "recent_epoch_seconds": 8.70158519744873
+        }
+      },
+      "source_unchanged": true,
+      "config_unchanged": true,
+      "modal_unchanged": true,
+      "logs": {
+        "export.log": {
+          "bytes": 4679,
+          "mtime": 1792265122.8716528,
+          "tail": [
+            "policy_head.logstd_layer.bias",
+            "policy_head.logits_layer.weight",
+            "policy_head.logits_layer.bias"
+          ]
+        },
+        "commands.log": {
+          "bytes": 891,
+          "mtime": 1792278759.5405836,
+          "tail": [
+            "2026-10-18T07:11:26+08:00 EXIT evaluate_coreset 0",
+            "2026-10-18T07:11:26+08:00 START summarize python -u -m coreset_exp.summarize ",
+            "2026-10-18T07:12:39+08:00 EXIT summarize 0"
+          ]
+        },
+        "summarize.log": {
+          "bytes": 0,
+          "mtime": 1792278686.4107285,
+          "tail": []
+        },
+        "independent_acceptance.log": {
+          "bytes": 0,
+          "mtime": 1792278759.552584,
+          "tail": []
+        },
+        "evaluate_random.log": {
+          "bytes": 68061,
+          "mtime": 1792274592.4883857,
+          "tail": [
+            "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+            "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+            "[info] evaluate task 9 takes 563.6 seconds"
+          ]
+        },
+        "train_random.log": {
+          "bytes": 90426,
+          "mtime": 1792267858.5323741,
+          "tail": [
+            "{\"task\": 9, \"epoch\": 97, \"batches\": 337, \"steps\": 75426, \"loss\": -30.628532036121946, \"lr_first\": 3.0451807228915664e-06, \"lr_after\": 2.030120481927711e-06, \"seconds\": 9.05324935913086}",
+            "{\"task\": 9, \"epoch\": 98, \"batches\": 337, \"steps\": 75763, \"loss\": -30.663603904339254, \"lr_first\": 2.030120481927711e-06, \"lr_after\": 1.0150602409638555e-06, \"seconds\": 9.073545694351196}",
+            "{\"task\": 9, \"epoch\": 99, \"batches\": 337, \"steps\": 76100, \"loss\": -30.83298229251488, \"lr_first\": 1.0150602409638555e-06, \"lr_after\": 0.0, \"seconds\": 9.436886548995972}"
+          ]
+        },
+        "train_coreset.log": {
+          "bytes": 90385,
+          "mtime": 1792270292.362331,
+          "tail": [
+            "{\"task\": 9, \"epoch\": 97, \"batches\": 337, \"steps\": 75426, \"loss\": -30.241273195170507, \"lr_first\": 3.0451807228915664e-06, \"lr_after\": 2.030120481927711e-06, \"seconds\": 8.445969104766846}",
+            "{\"task\": 9, \"epoch\": 98, \"batches\": 337, \"steps\": 75763, \"loss\": -30.27512183599727, \"lr_first\": 2.030120481927711e-06, \"lr_after\": 1.0150602409638555e-06, \"seconds\": 8.725518226623535}",
+            "{\"task\": 9, \"epoch\": 99, \"batches\": 337, \"steps\": 76100, \"loss\": -30.420620530578432, \"lr_first\": 1.0150602409638555e-06, \"lr_after\": 0.0, \"seconds\": 8.617747068405151}"
+          ]
+        },
+        "evaluate_coreset.log": {
+          "bytes": 68060,
+          "mtime": 1792278684.9986908,
+          "tail": [
+            "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+            "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+            "[info] evaluate task 9 takes 385.3 seconds"
+          ]
+        }
+      }
+    },
+    "43": {
+      "status": {
+        "status": "COMPLETED",
+        "seed": 43,
+        "arms": [
+          "random",
+          "coreset"
+        ],
+        "epochs": 800,
+        "formal_records": 400,
+        "updated_unix": 1792292593.0615244
+      },
+      "pipeline_exit": "0\n",
+      "supervisor_exit": "0\n",
+      "preflight": {
+        "status": "PASS",
+        "tests": {
+          "state_token_exact": true,
+          "state_response_max": 0.3657964766025543,
+          "other_tokens_invariant": true,
+          "false_negative_control": true,
+          "gmm_parameters_exact": true,
+          "spawn_render_reset_one_zero_step": true,
+          "optimizer_scheduler_rng_recovery_exact": true,
+          "isolated_optimizer_calls": 4,
+          "ifa_pair_mean_and_empty": true
+        },
+        "seconds": 23.296420335769653,
+        "formal_rollouts": 0,
+        "environment_interface_checks": 1,
+        "torch": "1.13.0+cu116",
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "modal_sha256": "68009afd228a9c4804e3e543568d4147720613bc8d02c57608f7dd7d49527391",
+        "contract_sha256": "ee3c702ea6a33d42b9650ff55e545ccec27d7d7decad842534f0cf5e7474f927"
+      },
+      "arms": {
+        "random": {
+          "epochs": 400,
+          "last": {
+            "task": 9,
+            "epoch": 99,
+            "batches": 337,
+            "steps": 76100,
+            "loss": -30.85960964916014,
+            "lr_first": 1.0150602409638555e-06,
+            "lr_after": 0.0,
+            "seconds": 8.679088354110718
+          },
+          "checkpoints": [
+            "mlrifa_9_model_ep99.pth",
+            "mlrifa_7_model_ep99.pth",
+            "mlrifa_6_model_ep99.pth",
+            "mlrifa_8_model_ep99.pth"
+          ],
+          "formal_records": 200,
+          "attempt_events": 70,
+          "recent_epoch_seconds": 8.564757466316223
+        },
+        "coreset": {
+          "epochs": 400,
+          "last": {
+            "task": 9,
+            "epoch": 99,
+            "batches": 337,
+            "steps": 76100,
+            "loss": -30.57767166228252,
+            "lr_first": 1.0150602409638555e-06,
+            "lr_after": 0.0,
+            "seconds": 8.59923768043518
+          },
+          "checkpoints": [
+            "mlrifa_9_model_ep99.pth",
+            "mlrifa_7_model_ep99.pth",
+            "mlrifa_6_model_ep99.pth",
+            "mlrifa_8_model_ep99.pth"
+          ],
+          "formal_records": 200,
+          "attempt_events": 70,
+          "recent_epoch_seconds": 8.748717641830444
+        }
+      },
+      "source_unchanged": true,
+      "config_unchanged": true,
+      "modal_unchanged": true,
+      "logs": {
+        "export.log": {
+          "bytes": 4679,
+          "mtime": 1792279072.734884,
+          "tail": [
+            "policy_head.logstd_layer.bias",
+            "policy_head.logits_layer.weight",
+            "policy_head.logits_layer.bias"
+          ]
+        },
+        "commands.log": {
+          "bytes": 891,
+          "mtime": 1792292581.9126687,
+          "tail": [
+            "2026-10-18T11:01:37+08:00 EXIT evaluate_coreset 0",
+            "2026-10-18T11:01:37+08:00 START summarize python -u -m coreset_exp.summarize ",
+            "2026-10-18T11:03:01+08:00 EXIT summarize 0"
+          ]
+        },
+        "summarize.log": {
+          "bytes": 0,
+          "mtime": 1792292497.9425871,
+          "tail": []
+        },
+        "independent_acceptance.log": {
+          "bytes": 0,
+          "mtime": 1792292581.924669,
+          "tail": []
+        },
+        "evaluate_random.log": {
+          "bytes": 68062,
+          "mtime": 1792287935.7506335,
+          "tail": [
+            "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+            "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+            "[info] evaluate task 9 takes 569.4 seconds"
+          ]
+        },
+        "train_random.log": {
+          "bytes": 90462,
+          "mtime": 1792281494.8372817,
+          "tail": [
+            "{\"task\": 9, \"epoch\": 97, \"batches\": 337, \"steps\": 75426, \"loss\": -30.565273879189874, \"lr_first\": 3.0451807228915664e-06, \"lr_after\": 2.030120481927711e-06, \"seconds\": 8.803158283233643}",
+            "{\"task\": 9, \"epoch\": 98, \"batches\": 337, \"steps\": 75763, \"loss\": -30.76556667588231, \"lr_first\": 2.030120481927711e-06, \"lr_after\": 1.0150602409638555e-06, \"seconds\": 8.821072816848755}",
+            "{\"task\": 9, \"epoch\": 99, \"batches\": 337, \"steps\": 76100, \"loss\": -30.85960964916014, \"lr_first\": 1.0150602409638555e-06, \"lr_after\": 0.0, \"seconds\": 8.679088354110718}"
+          ]
+        },
+        "train_coreset.log": {
+          "bytes": 90415,
+          "mtime": 1792283813.4099698,
+          "tail": [
+            "{\"task\": 9, \"epoch\": 97, \"batches\": 337, \"steps\": 75426, \"loss\": -30.321339253502007, \"lr_first\": 3.0451807228915664e-06, \"lr_after\": 2.030120481927711e-06, \"seconds\": 8.512206792831421}",
+            "{\"task\": 9, \"epoch\": 98, \"batches\": 337, \"steps\": 75763, \"loss\": -30.48790635694736, \"lr_first\": 2.030120481927711e-06, \"lr_after\": 1.0150602409638555e-06, \"seconds\": 8.622294902801514}",
+            "{\"task\": 9, \"epoch\": 99, \"batches\": 337, \"steps\": 76100, \"loss\": -30.57767166228252, \"lr_first\": 1.0150602409638555e-06, \"lr_after\": 0.0, \"seconds\": 8.59923768043518}"
+          ]
+        },
+        "evaluate_coreset.log": {
+          "bytes": 68061,
+          "mtime": 1792292494.6945,
+          "tail": [
+            "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+            "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+            "[info] evaluate task 9 takes 570.3 seconds"
+          ]
+        }
+      }
+    },
+    "44": {
+      "status": {
+        "status": "EVALUATING",
+        "arm": "coreset",
+        "stage": 9,
+        "task": 9,
+        "updated_unix": 1792306487.4719188
+      },
+      "pipeline_exit": null,
+      "supervisor_exit": null,
+      "preflight": {
+        "status": "PASS",
+        "tests": {
+          "state_token_exact": true,
+          "state_response_max": 0.3657964766025543,
+          "other_tokens_invariant": true,
+          "false_negative_control": true,
+          "gmm_parameters_exact": true,
+          "spawn_render_reset_one_zero_step": true,
+          "optimizer_scheduler_rng_recovery_exact": true,
+          "isolated_optimizer_calls": 4,
+          "ifa_pair_mean_and_empty": true
+        },
+        "seconds": 24.459815502166748,
+        "formal_rollouts": 0,
+        "environment_interface_checks": 1,
+        "torch": "1.13.0+cu116",
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "modal_sha256": "b5b73db6e8b7fc582e331c83f45c09bcb983c408858c3103887057fd0307b2f9",
+        "contract_sha256": "00704e39d35812aaca611886f93e387792a8e4d3e36748ea75fcb421cabae3f2"
+      },
+      "arms": {
+        "random": {
+          "epochs": 400,
+          "last": {
+            "task": 9,
+            "epoch": 99,
+            "batches": 337,
+            "steps": 76100,
+            "loss": -30.731361462737404,
+            "lr_first": 1.0150602409638555e-06,
+            "lr_after": 0.0,
+            "seconds": 8.253376007080078
+          },
+          "checkpoints": [
+            "mlrifa_9_model_ep99.pth",
+            "mlrifa_7_model_ep99.pth",
+            "mlrifa_6_model_ep99.pth",
+            "mlrifa_8_model_ep99.pth"
+          ],
+          "formal_records": 200,
+          "attempt_events": 70,
+          "recent_epoch_seconds": 8.082331919670105
+        },
+        "coreset": {
+          "epochs": 400,
+          "last": {
+            "task": 9,
+            "epoch": 99,
+            "batches": 337,
+            "steps": 76100,
+            "loss": -30.357796275651065,
+            "lr_first": 1.0150602409638555e-06,
+            "lr_after": 0.0,
+            "seconds": 8.982583284378052
+          },
+          "checkpoints": [
+            "mlrifa_9_model_ep99.pth",
+            "mlrifa_7_model_ep99.pth",
+            "mlrifa_6_model_ep99.pth",
+            "mlrifa_8_model_ep99.pth"
+          ],
+          "formal_records": 200,
+          "attempt_events": 70,
+          "recent_epoch_seconds": 8.843234491348266
+        }
+      },
+      "source_unchanged": true,
+      "config_unchanged": true,
+      "modal_unchanged": true,
+      "logs": {
+        "export.log": {
+          "bytes": 4679,
+          "mtime": 1792292905.9463534,
+          "tail": [
+            "policy_head.logstd_layer.bias",
+            "policy_head.logits_layer.weight",
+            "policy_head.logits_layer.bias"
+          ]
+        },
+        "commands.log": {
+          "bytes": 848,
+          "mtime": 1792306488.8073447,
+          "tail": [
+            "2026-10-18T13:41:48+08:00 START evaluate_coreset python -u -m coreset_exp.evaluate coreset ",
+            "2026-10-18T14:54:48+08:00 EXIT evaluate_coreset 0",
+            "2026-10-18T14:54:48+08:00 START summarize python -u -m coreset_exp.summarize "
+          ]
+        },
+        "summarize.log": {
+          "bytes": 0,
+          "mtime": 1792306488.8073447,
+          "tail": []
+        },
+        "evaluate_random.log": {
+          "bytes": 68062,
+          "mtime": 1792302106.1006742,
+          "tail": [
+            "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+            "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+            "[info] evaluate task 9 takes 457.6 seconds"
+          ]
+        },
+        "train_random.log": {
+          "bytes": 90390,
+          "mtime": 1792295383.3217149,
+          "tail": [
+            "{\"task\": 9, \"epoch\": 97, \"batches\": 337, \"steps\": 75426, \"loss\": -30.570540821516904, \"lr_first\": 3.0451807228915664e-06, \"lr_after\": 2.030120481927711e-06, \"seconds\": 8.119913339614868}",
+            "{\"task\": 9, \"epoch\": 98, \"batches\": 337, \"steps\": 75763, \"loss\": -30.685465736275965, \"lr_first\": 2.030120481927711e-06, \"lr_after\": 1.0150602409638555e-06, \"seconds\": 8.031123399734497}",
+            "{\"task\": 9, \"epoch\": 99, \"batches\": 337, \"steps\": 76100, \"loss\": -30.731361462737404, \"lr_first\": 1.0150602409638555e-06, \"lr_after\": 0.0, \"seconds\": 8.253376007080078}"
+          ]
+        },
+        "train_coreset.log": {
+          "bytes": 90424,
+          "mtime": 1792297778.0552936,
+          "tail": [
+            "{\"task\": 9, \"epoch\": 97, \"batches\": 337, \"steps\": 75426, \"loss\": -30.135056000435036, \"lr_first\": 3.0451807228915664e-06, \"lr_after\": 2.030120481927711e-06, \"seconds\": 9.012269020080566}",
+            "{\"task\": 9, \"epoch\": 98, \"batches\": 337, \"steps\": 75763, \"loss\": -30.281448466134, \"lr_first\": 2.030120481927711e-06, \"lr_after\": 1.0150602409638555e-06, \"seconds\": 8.918508291244507}",
+            "{\"task\": 9, \"epoch\": 99, \"batches\": 337, \"steps\": 76100, \"loss\": -30.357796275651065, \"lr_first\": 1.0150602409638555e-06, \"lr_after\": 0.0, \"seconds\": 8.982583284378052}"
+          ]
+        },
+        "evaluate_coreset.log": {
+          "bytes": 68061,
+          "mtime": 1792306487.3313363,
+          "tail": [
+            "Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.",
+            "See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.",
+            "[info] evaluate task 9 takes 578.9 seconds"
+          ]
+        }
+      }
+    }
+  },
+  "orchestration_unchanged": true,
+  "processes": [
+    "  12667       1    15:38:35 bash /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/supervise_queue.sh",
+    "  12670   12667    15:38:35 bash /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/run_queue.sh",
+    "  29697   12670    03:51:43 bash /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed44/source/coreset_exp/supervise.sh",
+    "  29701   29697    03:51:43 bash /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed44/source/coreset_exp/pipeline.sh",
+    "  35499   29701       01:20 python -u -m coreset_exp.summarize"
+  ],
+  "gpu": "NVIDIA GeForce RTX 3090, 10 MiB, 0 %",
+  "free_bytes": {
+    "/root": 23912247296,
+    "/data": 1021804544
+  }
+}

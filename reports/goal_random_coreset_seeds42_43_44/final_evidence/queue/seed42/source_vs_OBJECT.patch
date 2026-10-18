@@ -1,0 +1,196 @@
+--- OBJECT/coreset_exp\common.py
++++ GOAL/coreset_exp\common.py
+@@ -5,7 +5,7 @@
+ S=Path(__file__).resolve().parents[1]
+ O=Path(os.environ['CORESET_OUT'])
+ SEED=int(os.environ['CORESET_SEED'])
+-assert SEED in (43,44), 'Only explicitly authorized extension seeds'
++assert SEED in (42,43,44), 'Only explicitly authorized extension seeds'
+ SELECTOR_SEED=42 # Frozen calibration/reference subset setting, not training RNG
+ def sha(p):
+     h=hashlib.sha256()
+@@ -34,6 +34,9 @@
+ def verify():
+     c=json.loads((O/'CONTRACT.json').read_text())
+     assert source_hashes()==c['source_sha256'],'Frozen source mismatch'
++    orchestration=S.parents[1]/'ORCHESTRATION_SHA256.json'
++    assert sha(orchestration)==c['orchestration_sha256']
++    for p,h in json.loads(orchestration.read_text()).items():assert sha(p)==h,p
+     assert sha(O/'MODAL_CONTRACT.json')==c['modal_sha256']
+     assert sha(O/'OLD_INPUTS_READONLY.json')==c['old_readonly_sha256']
+     for p,h in c['inputs'].items():assert sha(p)==h,p
+--- OBJECT/coreset_exp\configure.py
++++ GOAL/coreset_exp\configure.py
+@@ -8,12 +8,12 @@
+ 
+ def make_config(kind,arm=None):
+     train=kind=='train'
+-    overrides=[f'seed={SEED}','benchmark_name=LIBERO_OBJECT',
++    overrides=[f'seed={SEED}','benchmark_name=LIBERO_GOAL','data.task_order_index=0','data.demo_limit=10','data.seq_len=8',
+         'policy='+('BriefPolicy' if train else 'complete_policy'),'lifelong='+('mlr' if train else 'basic'),
+-        'pretrain=/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth',
++        'pretrain=/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth',
+         'folder=/data/mlr_ifa/datasets','bddl_folder=/data/mlr_ifa/src/libero/libero/bddl_files',
+         'init_states_folder=/data/mlr_ifa/src/libero/libero/init_files',
+-        '+start_task=6','+end_task=10','+gamma=0.3','+past_data_rate=0.5',
++        '+start_task=6','+end_task=10','+gamma=0.7','+past_data_rate=0.5',
+         '+aug='+('false' if train else 'true'),'training='+('true' if train else 'false'),
+         '++policy.use_vision=true','++policy.use_language=true','++policy.use_state=true',
+         'train.batch_size='+('1' if kind=='export' else '10'),'train.n_epochs=100','train.num_workers=0',
+@@ -33,15 +33,15 @@
+     from libero.libero.benchmark import get_benchmark
+     assert torch.cuda.is_available();O.mkdir(parents=True,exist_ok=True)
+     assert not (O/'CONTRACT.json').exists(),'Do not overwrite frozen contract'
+-    b=get_benchmark('LIBERO_OBJECT')(0);inputs={};tasks={}
++    b=get_benchmark('LIBERO_GOAL')(0);inputs={};tasks={}
+     for t in range(10):
+         task=b.get_task(t);paths=[Path('/data/mlr_ifa/datasets')/b.get_task_demonstration(t),
+             Path('/data/mlr_ifa/src/libero/libero/bddl_files')/task.problem_folder/task.bddl_file,
+             Path('/data/mlr_ifa/src/libero/libero/init_files')/task.problem_folder/task.init_states_file]
+         for p in paths:assert p.is_file(),str(p);inputs[str(p)]=sha(p)
+         tasks[str(t)]=dict(name=task.name,paths=list(map(str,paths)))
+-    pt=Path('/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth');inputs[str(pt)]=sha(pt)
+-    assert inputs[str(pt)]=='159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b'
++    pt=Path('/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth');inputs[str(pt)]=sha(pt)
++    assert inputs[str(pt)]=='241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7'
+     parser=Path(inspect.getfile(robomimic.utils.dataset));inputs[str(parser)]=sha(parser)
+     configs={};commands={}
+     for kind,arm in [('export',None),('train','random'),('train','coreset'),('eval',None)]:
+@@ -58,15 +58,15 @@
+         evaluation_preprocessing='native CompletePolicy.get_action with eval mode (augment group identity)')
+     write(O/'MODAL_CONTRACT.json',modal)
+     protected={}
+-    for root in ('/data/mlr_ifa/experiments','/data/mlr_ifa/analyses'):
++    for root in ('/data/mlr_ifa/experiments/goal_seed42_mlr_ifa_paper_aligned_state_v2/run', *[f'/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed{s}_20261013' for s in (42,43,44)]):
+         for p in Path(root).rglob('*'):
+             if p.is_file() and O not in p.parents and p.suffix in ('.json','.jsonl','.csv','.pth'):
+                 protected[str(p)]=sha(p)
+     write(O/'OLD_INPUTS_READONLY.json',protected)
+-    write(O/'CONTRACT.json',dict(protocol='paper_aligned_seed_extension_v2',seed=SEED,arms=['random','coreset'],
+-        tasks=[6,7,8,9],epochs_each=100,batch=10,gamma=.3,ifa_weight=.1,formal_rollouts=400,
++    write(O/'CONTRACT.json',dict(protocol='paper_aligned_GOAL_three_seed_v1',seed=SEED,arms=['random','coreset'],
++        tasks=[6,7,8,9],epochs_each=100,batch=10,gamma=.7,ifa_weight=.1,formal_rollouts=400,
+         source_sha256=source_hashes(),inputs=inputs,configs=configs,modal_sha256=sha(O/'MODAL_CONTRACT.json'),
+         old_readonly_sha256=sha(O/'OLD_INPUTS_READONLY.json'),torch=torch.__version__,gpu=torch.cuda.get_device_name(),
+-        extensions=[43,44],selector_seed=SELECTOR_SEED,extension_authorization='User requested remaining two seeds after seed42 completion; no other scientific changes',warmup_provenance='500 release fallback; scheduler each optimizer step is disclosed engineering interpretation',created_unix=time.time()))
++        extensions=[42,43,44],selector_seed=SELECTOR_SEED,extension_authorization='User authorized GOAL Random/Coreset seeds42/43/44; system disk outputs; fresh paired baselines due disclosed historical differences',warmup_provenance='500 release fallback; scheduler each optimizer step is disclosed engineering interpretation',created_unix=time.time(),suite='LIBERO_GOAL',expected_windows=[997,889,904,1969],expected_steps_per_arm=76100,orchestration_sha256=sha(S.parents[1]/'ORCHESTRATION_SHA256.json')))
+     write(O/'RUN_STATUS.json',dict(status='PREPARED',updated_unix=time.time()))
+ if __name__=='__main__':main()
+--- OBJECT/coreset_exp\env.sh
++++ GOAL/coreset_exp\env.sh
+@@ -1,8 +1,8 @@
+ #!/usr/bin/env bash
+ source /data/mlr_ifa/activate.sh
+-export CORESET_SOURCE=/data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source
+-export CORESET_OUT=/data/mlr_ifa/experiments/Coreset_paper_OBJECT_seed43_20261013
+-export CORESET_SEED=43
++export CORESET_SOURCE=/root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed42/source
++export CORESET_OUT=/root/mlr_ifa/experiments/Coreset_paper_GOAL_seed42_20261017
++export CORESET_SEED=42
+ export PYTHONPATH="$CORESET_SOURCE"
+ export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES=0
+ export OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4 OMP_NUM_THREADS=4
+--- OBJECT/coreset_exp\export.py
++++ GOAL/coreset_exp\export.py
+@@ -30,6 +30,7 @@
+             for p in paths:
+                 x=torch.load(p,map_location='cpu');assert x['feature'].shape==(1,8,4,512) and x['actions'].shape==(1,8,7)
+                 assert torch.isfinite(x['feature']).all() and torch.isfinite(x['actions']).all()
++        assert counts=={'6':997,'7':889,'8':904,'9':1969},counts
+         write(O/'FEATURES.json',dict(counts=counts,demos=demos,hashes=hashes(O/'features'),
+             modal_sha256=sha(O/'MODAL_CONTRACT.json'),seconds=time.time()-begin,
+             contract_sha256=sha(O/'CONTRACT.json'),export_mode='native train mode with original augmentation'))
+--- OBJECT/coreset_exp\model.py
++++ GOAL/coreset_exp\model.py
+@@ -12,6 +12,7 @@
+ def cfg(name):
+     from .common import SEED
+     c=EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))
++    assert c.benchmark_name=='LIBERO_GOAL' and c.gamma==.7 and c.pretrain.endswith('goal_multitask_model_ep96.pth')
+     assert c.seed==SEED and all(c.policy[k] is True for k in ('use_vision','use_language','use_state'))
+     return c
+ def data_setup(c,all_datasets=False):
+--- OBJECT/coreset_exp\pipeline.sh
++++ GOAL/coreset_exp\pipeline.sh
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env bash
+ set -euo pipefail
+-source /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source/coreset_exp/env.sh
++source /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed42/source/coreset_exp/env.sh
+ exec 9>"$CORESET_OUT/pipeline.lock"
+ flock -n 9 || exit 70
+ test ! -e "$CORESET_OUT/pipeline.started"
+@@ -19,9 +19,9 @@
+   printf '%s EXIT %s %s\n' "$(date -Is)" "$label" "$rc" >> "$CORESET_OUT/commands.log"
+   test "$rc" = 0 || exit "$rc"
+ }
+-run export torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.export
+-run train_random torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.train random
+-run train_coreset torchrun --nproc_per_node=1 --master_port=38316 -m coreset_exp.train coreset
++run export torchrun --nproc_per_node=1 --master_port=39342 -m coreset_exp.export
++run train_random torchrun --nproc_per_node=1 --master_port=39342 -m coreset_exp.train random
++run train_coreset torchrun --nproc_per_node=1 --master_port=39342 -m coreset_exp.train coreset
+ run evaluate_random python -u -m coreset_exp.evaluate random
+ run evaluate_coreset python -u -m coreset_exp.evaluate coreset
+ run summarize python -u -m coreset_exp.summarize
+--- OBJECT/coreset_exp\preflight.py
++++ GOAL/coreset_exp\preflight.py
+@@ -72,8 +72,8 @@
+         tests['optimizer_scheduler_rng_recovery_exact']=True;tests['isolated_optimizer_calls']=4
+         assert a.scheduler.last_epoch==3 and a.step==3
+         g=torch.randn(3,512,device='cuda');own=a.refs[7];old=a.refs[6]
+-        one=angular_mean(g,own,[old],.3);two=angular_mean(g,own,[old,old],.3)
+-        assert torch.equal(one,two);assert angular_mean(g,own,[],.3).item()==0
++        one=angular_mean(g,own,[old],.7);two=angular_mean(g,own,[old,old],.7)
++        assert torch.equal(one,two);assert angular_mean(g,own,[],.7).item()==0
+         tests['ifa_pair_mean_and_empty']=True
+     finally:dist.destroy_process_group()
+     verify();write(O/'GPU_PREFLIGHT.json',dict(status='PASS',tests=tests,seconds=time.time()-start,
+--- OBJECT/coreset_exp\summarize.py
++++ GOAL/coreset_exp\summarize.py
+@@ -16,6 +16,7 @@
+     assert (O/'random/INITIAL_STATE.json').read_bytes()==(O/'coreset/INITIAL_STATE.json').read_bytes()
+     expected_counts={int(t):n for t,n in features['counts'].items()}
+     totalsteps=100*sum(math.ceil((expected_counts[t]+sum(math.ceil(.5*expected_counts[j]) for j in range(6,t)))/10) for t in range(6,10))
++    assert totalsteps==76100
+     for arm in ('random','coreset'):
+         root=O/arm;epochs=json.loads((root/'epochs.json').read_text());assert len(epochs)==400
+         assert [(x['task'],x['epoch']) for x in epochs]==[(t,e) for t in range(6,10) for e in range(100)]
+@@ -58,14 +59,14 @@
+     for p,h in json.loads((O/'OLD_INPUTS_READONLY.json').read_text()).items():assert sha(p)==h,p
+     delta={n:result['coreset']['metrics'][n]['percent']-result['random']['metrics'][n]['percent'] for n in ('AUC','FWT','NBT')}
+     write(O/'SUMMARY.json',dict(arms=result,delta_coreset_minus_random_percentage_points=delta,attempts=attempt_counts,
+-        formal_records=400,old_inputs_unchanged=True,seed=SEED,extensions=[],export_seconds=features['seconds']))
++        formal_records=400,old_inputs_unchanged=True,seed=SEED,extensions=[42,43,44],export_seconds=features['seconds']))
+     report=[f'# Seed{SEED} Random vs Coreset','', '仅一个训练seed；按论文描述启用状态模态，官方checkpoint原始模态配置缺失时仍记未知。', '',
+         '| 方法 | AUC (%) | FWT (%) | NBT (%) |','|---|---:|---:|---:|']
+     for arm in result:report.append('| '+arm+' | '+' | '.join(f"{result[arm]['metrics'][n]['percent']:.6f}" for n in ('AUC','FWT','NBT'))+' |')
+     report.extend(['','400正式闭环；每组400epoch、'+str(totalsteps)+'步、4个ep99最终checkpoint。',
+         '状态：数值与输入审计通过，仍需独立进程退出和权重加载验收。',
+         '限制：单seed不能判断统计显著性；RTX3090与论文A100不同；预训练模态元数据、warmup/调度及最终checkpoint选择细节未公开；IFA随buffer变化，不能独立归因于几何覆盖。',
+-        '仅执行用户授权的43/44扩展；不更新旧实验指标，不执行后续调参。'])
++        '仅执行用户授权的GOAL三seed42/43/44；不更新旧实验指标，不执行后续调参。'])
+     (O/'REPORT.md').write_text('\n'.join(report)+'\n')
+     write(O/'RUN_STATUS.json',dict(status='AWAITING_INDEPENDENT_EXIT_AUDIT',updated_unix=time.time()))
+ if __name__=='__main__':main()
+--- OBJECT/coreset_exp\supervise.sh
++++ GOAL/coreset_exp\supervise.sh
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env bash
+ set -uo pipefail
+-source /data/mlr_ifa/experiment_workspaces/Coreset_paper_OBJECT_seed43_20261013/source/coreset_exp/env.sh
++source /root/mlr_ifa/experiment_workspaces/Coreset_paper_GOAL_three_seed_20261017/seed42/source/coreset_exp/env.sh
+ bash "$CORESET_SOURCE/coreset_exp/pipeline.sh"
+ rc=$?
+ if test "$rc" = 0; then
+--- OBJECT/coreset_exp\train.py
++++ GOAL/coreset_exp\train.py
+@@ -44,7 +44,7 @@
+         self.optimizer.step();self.scheduler.step()
+         self.step+=1;return float(loss.detach())
+ def build(c):
+-    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(0)
++    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(0)
+     b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))
+     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)
+     a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)

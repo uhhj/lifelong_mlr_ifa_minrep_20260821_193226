@@ -1,0 +1,22 @@
+{
+  "formal_optimizer_calls": 0,
+  "formal_rollouts": 0,
+  "repairs": [
+    {
+      "item": "local generator parenthesis syntax",
+      "evidence": "draft_seed42_syntax_failure",
+      "resolution": "fixed before uploading; freshly compiled all sources"
+    },
+    {
+      "item": "shell default python missing",
+      "exit": 1,
+      "resolution": "explicit /data/mlr_ifa/env/bin/python; no workspace created on failure"
+    },
+    {
+      "item": "Windows path separators in source manifest",
+      "exit": 1,
+      "evidence": "prelaunch_failures/resource_43_windows_manifest_separator.log",
+      "resolution": "POSIX relative paths; payload hashes unchanged; before contract freeze"
+    }
+  ]
+}
