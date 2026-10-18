@@ -1,0 +1,481 @@
+--- a/sc_exp/audit.py
++++ b/sc_exp/audit.py
+@@ -7,6 +7,7 @@
+ from coreset_exp.common import O,verify,write,sha,hashes
+ from coreset_exp.model import cfg,strict_downstream
+ from libero.lifelong.models.brief import BriefPolicy
++from sc_exp.validation import same_witness
+ 
+ def js(p):return json.loads(p.read_text())
+ def matrix(root,arm):
+@@ -34,12 +35,16 @@
+         loaded.append(dict(task=t,sha256=sha(cp),loaded_keys=strict_downstream(p,cp)))
+         m=js(root/'storage'/f'task{t}.json');b=js(O/'bindings'/f'task{t}.json')['windows'];selected=m['selected'];report=m['selection'];n=len(b);k=m['K']
+         assert k==[499,445,452,985][t-6] and len(selected)==len({r['destination'] for r in selected})==k
+-        counts=Counter(str(b[Path(r['source']).name]['group']) for r in selected)
+-        for g,c in report['population'].items():assert counts[g]==report['target'][g] and abs(counts[g]*n-k*c)<n
+-        assert len(report['swaps'])==report['minimum_swaps']
+-        original=set(report['original_ids']);final=set(report['selected_ids']);assert len(original-final)==report['minimum_swaps']
++        offline=js(O/'offline_selection'/f'task{t}.json')
++        assert report['selected_ids']==offline['selected_ids']
++        assert [Path(r['source']).name for r in selected]==report['selected_ids']
++        same_witness(report['before'],offline['before']);same_witness(report['after'],offline['after'])
++        same_witness(report['swaps'],offline['swaps'])
++        assert report['after']['radius']<=report['before']['radius']+1e-12
++        assert report['after']['mean']<=report['before']['mean']+1e-12
++        assert report['after']['unique_times']>=report['before']['unique_times']
+         for r in selected:assert sha(r['source'])==sha(root/'buffer'/r['destination'])==r['sha256']
+-        selections[str(t)]={k:report[k] for k in ['population','original','target','final','minimum_swaps','retained_original','radius_before','radius_after','mean_distance_before','mean_distance_after','demo_full','demo_original','demo_final','seconds']}
++        selections[str(t)]={k:report[k] for k in ['before','after','swaps','retained_original','seconds','demo_full','demo_original','demo_final']}
+         current=js(root/f'ifa_task{t}.json');parent=js(P/'coreset'/f'ifa_task{t}.json');ifa[str(t)]=dict(current=current,parent=parent,equal=current==parent)
+     assert hashes(root/'buffer')==js(root/'buffer_after_task9.json')['hashes']
+     r,new=matrix(O,'sc_coreset');c,old=matrix(P,'coreset');random,_=matrix(P,'random')
+--- a/sc_exp/freeze.py
++++ b/sc_exp/freeze.py
+@@ -4,8 +4,8 @@
+ def main():
+     assert not (O/'CONTRACT.json').exists()
+     binding=json.loads((O/'PARENT_BINDING.json').read_text());P=Path(binding['parent']);pc=json.loads((P/'CONTRACT.json').read_text())
+-    files={str(p):sha(p) for p in [O/'PARENT_BINDING.json',O/'resolved_sc_coreset.json',O/'resolved_eval.json',O/'FEATURES.json',O/'MODAL_CONTRACT.json',*sorted((O/'bindings').glob('*.json')),*sorted(S.parent.glob('*.py')),*sorted(S.parent.glob('*.sh')),S.parent/'PROTOCOL.md']}
++    files={str(p):sha(p) for p in [O/'PARENT_BINDING.json',O/'resolved_sc_coreset.json',O/'resolved_eval.json',O/'FEATURES.json',O/'MODAL_CONTRACT.json',*sorted((O/'bindings').glob('*.json')),*sorted((O/'offline_selection').glob('*.json')),*sorted(S.parent.glob('*.py')),*sorted(S.parent.glob('*.sh')),S.parent/'PROTOCOL.md']}
+     files.update(pc['inputs']);files.update(binding['protected'])
+-    write(O/'CONTRACT.json',dict(version='SC_GOAL_seed42_v1',seed=42,source_sha256=source_hashes(),files=files,modal_sha256=binding['modal_sha256'],parent_contract=binding['contract_sha256'],epochs=400,optimizer_steps=76100,final_checkpoints=4,formal_records=200,vector_attempts=20,progression=dict(AUC='strictly greater than same-seed Coreset',OldFinal='not less than same-seed Coreset'),created=time.time()))
++    write(O/'CONTRACT.json',dict(version='SCv2_GOAL_seed42_v1',seed=42,source_sha256=source_hashes(),files=files,modal_sha256=binding['modal_sha256'],parent_contract=binding['contract_sha256'],epochs=400,optimizer_steps=76100,final_checkpoints=4,formal_records=200,vector_attempts=20,progression=dict(AUC='strictly greater than same-seed Coreset',OldFinal='not less than same-seed Coreset'),created=time.time()))
+     write(O/'RUN_STATUS.json',dict(status='FROZEN_AWAITING_PREFLIGHT',time=time.time()))
+ if __name__=='__main__':main()
+--- a/sc_exp/preflight.py
++++ b/sc_exp/preflight.py
+@@ -8,6 +8,7 @@
+ from coreset_exp.model import cfg,angular_mean
+ from coreset_exp.train import build,capture,restore,cpu
+ from sc_exp.storage import select
++from sc_exp.validation import same_witness
+ 
+ def main():
+     verify();assert not (O/'GPU_PREFLIGHT.json').exists();assert torch.cuda.is_available();torch.set_num_threads(4)
+@@ -21,21 +22,13 @@
+         assert pickle.dumps(before['numpy'])==pickle.dumps(after['numpy'])
+         parent=json.loads((P/'coreset/storage'/f'task{t}.json').read_text())
+         assert report['original_ids']==[Path(r['source']).name for r in parent['selected']]
+-        # Independent brute-force checks for every actual deletion, from same frozen distance.
+-        from libero.lifelong.selectors.greedy_kcenter import Distance
+-        data=[torch.load(p,map_location='cpu') for p in paths];D=Distance(np.array([x['feature'][0,:,1:3,:].numpy() for x in data]),np.array([x['actions'][0,-1].numpy() for x in data]),population).distances(np.arange(len(paths)))
+-        ids=[Path(p).name for p in paths];index={n:i for i,n in enumerate(ids)};s=[index[n] for n in report['original_ids']];g=[binding[n]['group'] for n in ids];q=report['target']
+-        for swap in report['swaps']:
+-            x=index[swap['added']];y=index[swap['removed']];eligible=[i for i in range(len(ids)) if i not in set(s) and sum(g[j]==g[i] for j in s)<q[g[i]]]
+-            near=D[:,s].min(1);far=max(near[i] for i in eligible);assert x==min(i for i in eligible if near[i]>=far-1e-12)
+-            # Direct computation for removed center and fixed ID neighbors, plus full radius vector oracle.
+-            augmented=s+[x];ds=D[:,augmented];order=np.argsort(ds,axis=1,kind='stable')[:,:2];first=ds[np.arange(len(ids)),order[:,0]];second=ds[np.arange(len(ids)),order[:,1]]
+-            eligible_remove=[i for i in s if sum(g[j]==g[i] for j in s)>q[g[i]]]
+-            costs={i:float(np.where(order[:,0]==augmented.index(i),second,first).max()) for i in eligible_remove}
+-            best=min(costs.values());assert y==min(i for i in eligible_remove if costs[i]<=best+1e-12)
+-            direct=float(D[:,[i for i in augmented if i!=y]].min(1).max());assert abs(direct-swap['radius_after'])<1e-12
+-            s[s.index(y)]=x
+-        write(O/'selection_preflight'/f'task{t}.json',report);out[str(t)]=dict(N=len(paths),K=len(chosen),swaps=len(report['swaps']),radius_before=report['radius_before'],radius_after=report['radius_after'],original_matches_parent=True)
++        offline=json.loads((O/'offline_selection'/f'task{t}.json').read_text())
++        assert report['selected_ids']==offline['selected_ids']
++        assert report['original_ids']==offline['original_ids']
++        same_witness(report['before'],offline['before']);same_witness(report['after'],offline['after'])
++        same_witness(report['swaps'],offline['swaps'])
++        write(O/'selection_preflight'/f'task{t}.json',report)
++        out[str(t)]=dict(N=len(paths),K=len(chosen),swaps=len(report['swaps']),original_matches_parent=True,offline_exact=True)
+         print(json.dumps(dict(task=t,**out[str(t)])),flush=True)
+     # Native latent batch and unchanged BC+IFA updates; clone updates are discarded.
+     payload=[]
+--- a/sc_exp/prepare.py
++++ b/sc_exp/prepare.py
+@@ -3,7 +3,7 @@
+ from pathlib import Path
+ import numpy as np,torch,h5py
+ from coreset_exp.common import O,S,SEED,sha,write,source_hashes,hashes
+-from sc_exp.selection import group_id
++from sc_exp.selection import prepare
+ 
+ def main():
+     P=Path(os.environ['SC_PARENT']);assert not (O/'CONTRACT.json').exists();O.mkdir(exist_ok=True,parents=True)
+@@ -19,25 +19,20 @@
+     for name in ['MODAL_CONTRACT.json','FEATURES.json','TASKS.json','PRETRAIN_METADATA.json']:
+         shutil.copy2(P/name,O/name)
+     (O/'features').symlink_to(P/'features',target_is_directory=True)
++    binding_source=Path(os.environ['SC_BINDING_SOURCE'])
++    offline=Path(os.environ['SCV2_OFFLINE'])
++    assert json.loads((offline/'ACCEPTANCE.json').read_text())['status']=='OFFLINE_PASS'
++    assert json.loads((offline/'INDEPENDENT_GEOMETRY.json').read_text())['status']=='PASS'
+     summaries={}
+-    torch.set_num_threads(1)
+     for t in range(6,10):
+-        hdf=tasks[str(t)]['paths'][0];candidates=collections.defaultdict(list)
+-        with h5py.File(hdf) as h:
+-            for demo in fm['demos'][str(t)]:
+-                a=h['data'][demo]['actions'][:].astype(np.float32)
+-                for start in range(len(a)):
+-                    ix=np.minimum(np.arange(start,start+8),len(a)-1)
+-                    candidates[a[ix].tobytes()].append(dict(demo_id=demo,start=start,target=int(ix[-1]),length=len(a)))
+-        windows={};ambiguous=0
+-        for p in sorted((P/'features'/str(t)).glob('*.pt')):
+-            a=torch.load(p,map_location='cpu')['actions'][0].numpy().astype(np.float32);hits=candidates[a.tobytes()];assert hits,(t,p.name)
+-            identity={(r['demo_id'],r['target'],r['length']) for r in hits};assert len(identity)==1,('Ambiguous supervision identity',t,p.name,hits)
+-            demo,target,length=next(iter(identity));ambiguous+=len(hits)>1
+-            windows[p.name]=dict(sample_id=p.name,sha256=sha(p),demo_id=demo,target=target,length=length,last_action=a[-1].tolist(),group=group_id(target,length,float(a[-1,-1])),possible_starts=[r['start'] for r in hits],binding='exact complete 8x7 float32 action window; unique demo/target/length')
+-        assert len(windows)==[997,889,904,1969][t-6]
+-        write(O/'bindings'/f'task{t}.json',dict(task=t,hdf5=hdf,hdf5_sha256=sha(hdf),windows=windows,ambiguous_start_but_unique_target=ambiguous))
+-        summaries[str(t)]=dict(n=len(windows),groups=dict(collections.Counter(r['group'] for r in windows.values())),ambiguous_start_but_unique_target=ambiguous)
++        p=binding_source/'bindings'/f'task{t}.json'
++        expected=json.loads((offline/'INPUT_HASHES.json').read_text())[str(p)]
++        assert sha(p)==expected
++        (O/'bindings').mkdir(exist_ok=True);shutil.copy2(p,O/'bindings'/p.name)
++        result=json.loads((offline/f'task{t}.json').read_text())
++        assert result['original_ids']==[Path(x['source']).name for x in json.loads((P/'coreset/storage'/f'task{t}.json').read_text())['selected']]
++        write(O/'offline_selection'/f'task{t}.json',result)
++        summaries[str(t)]={k:result[k] for k in ['N','q','before','after','retained_original']}
+     # Keep the feature/modal provenance bytes unchanged; SC has a separate training contract.
+     for name,parent_name in [('sc_coreset','coreset'),('eval','eval')]:
+         c=json.loads((P/f'resolved_{parent_name}.json').read_text())
+--- a/sc_exp/selection.py
++++ b/sc_exp/selection.py
+@@ -1,65 +1,163 @@
+-"""SC-Coreset: exact proportional joint quotas and minimum-count geometric swaps."""
+-import itertools,time
++"""SC-v2 offline selector. Exact integer E; exhaustive legal one-swap search.
++
++No model, optimizer, environment or RNG calls. Coverage ties use the parent's
++absolute 1e-12 tolerance; E comparisons use integer numerators without tolerance.
++"""
+ from collections import Counter
++import time
+ import numpy as np
+ 
+-def group_id(target,length,grip):
+-    assert 0<=target<length and np.isfinite(grip)
+-    # Integer arithmetic avoids boundary rounding; length=1 is a true endpoint.
+-    time_bin=4 if target==length-1 else min(3,4*target//max(1,length-1))
+-    sign=0 if grip<0 else (1 if grip==0 else 2)
+-    return time_bin*3+sign
++TOL = 1e-12
+ 
+-def quotas(groups,selected):
+-    n=len(groups);q=len(selected);counts=Counter(groups);old=Counter(groups[i] for i in selected)
+-    gids=sorted(counts);lo={g:q*counts[g]//n for g in gids};hi={g:(q*counts[g]+n-1)//n for g in gids}
+-    flexible=[g for g in gids if lo[g]!=hi[g]];needed=q-sum(lo.values());best=None
+-    for upper in itertools.combinations(flexible,needed):
+-        z=dict(lo)
+-        for g in upper:z[g]+=1
+-        l1=sum(abs(old[g]-z[g]) for g in gids)
+-        # All denominators are n, so this is exact total absolute rounding error.
+-        err=sum(abs(z[g]*n-q*counts[g]) for g in gids)
+-        key=(l1,err,tuple(-z[g] for g in gids))
+-        if best is None or key<best[0]:best=(key,z)
+-    assert best is not None and best[0][0]%2==0
+-    return best[1],dict(population=dict(counts),original=dict(old),lower=lo,upper=hi,
+-                        minimum_swaps=best[0][0]//2,rounding_error_numerator=best[0][1],
+-                        rounding_tie='min L1; min total absolute ideal error; earlier group ID receives ceil')
+ 
+-def repair(ids,groups,original,D):
+-    assert ids==sorted(ids) and len(ids)==len(set(ids)) and len(groups)==len(ids)
+-    lookup={n:i for i,n in enumerate(ids)};chosen=[lookup[n] for n in original]
++def prepare(ids, rows):
++    assert ids == sorted(ids) and len(ids) == len(set(ids))
++    uids, groups, demos, endpoints = [], [], [], []
++    identities = {}
++    for name in ids:
++        r = rows[name]
++        t, length = r['target'], r['length']
++        assert 0 <= t < length
++        sign = r['group'] % 3  # Verified against actual last action by remote reader.
++        quartile = min(3, 4*t // max(1, length-1)) if length > 1 else 3
++        uid = (r['demo_id'], t)
++        group = quartile*3 + sign
++        signature = (group, length)
++        assert uid not in identities or identities[uid] == signature
++        identities[uid] = signature
++        uids.append(uid); groups.append(group); demos.append(r['demo_id'])
++        endpoints.append(t == length-1)
++    ref = Counter(v[0] for v in identities.values())
++    return dict(uids=uids, groups=np.asarray(groups), demos=demos,
++                endpoints=endpoints, reference=ref, U=len(identities))
++
++
++def error_num(chosen, meta):
++    n = Counter(int(meta['groups'][i]) for i in chosen)
++    return sum(abs(n[g]*meta['U']-len(chosen)*v) for g,v in meta['reference'].items())
++
++
++def describe(chosen, meta, D):
++    near = D[:, chosen].min(axis=1)
++    return dict(E_numerator=error_num(chosen,meta), E_denominator=2*len(chosen)*meta['U'],
++                E=error_num(chosen,meta)/(2*len(chosen)*meta['U']),
++                radius=float(near.max()), mean=float(near.mean()),
++                unique_times=len({meta['uids'][i] for i in chosen}),
++                group_counts=dict(Counter(int(meta['groups'][i]) for i in chosen)),
++                demo_counts=dict(Counter(meta['demos'][i] for i in chosen)),
++                endpoint_demos=sorted({meta['demos'][i] for i in chosen if meta['endpoints'][i]}),
++                endpoint_windows=sum(meta['endpoints'][i] for i in chosen))
++
++
++def candidates(chosen, meta, protected_demo, protected_end):
++    g = meta['groups']; U = meta['U']; q = len(chosen)
++    counts = Counter(int(g[i]) for i in chosen)
++    deficit = {k for k,v in meta['reference'].items() if counts[k]*U < q*v}
++    surplus = {k for k,v in meta['reference'].items() if counts[k]*U > q*v}
++    present = {meta['uids'][i] for i in chosen}
++    xs = [i for i in range(len(g)) if g[i] in deficit and meta['uids'][i] not in present]
++    ys = sorted(i for i in chosen if g[i] in surplus)
++    base_error = error_num(chosen,meta)
++    changes = {}
++    for a in deficit:
++        for b in surplus:
++            av=counts[a]*U-q*meta['reference'][a]; bv=counts[b]*U-q*meta['reference'][b]
++            changes[a,b] = base_error-abs(av)-abs(bv)+abs(av+U)+abs(bv-U)
++    dcounts=Counter(meta['demos'][i] for i in chosen)
++    ecounts=Counter(meta['demos'][i] for i in chosen if meta['endpoints'][i])
++    valid=np.ones((len(ys),len(xs)),dtype=bool)
++    errs=np.empty(valid.shape,dtype=np.int64)
++    for j,y in enumerate(ys):
++        for k,x in enumerate(xs):
++            errs[j,k]=changes[int(g[x]),int(g[y])]
++            valid[j,k] = errs[j,k]<base_error
++            if meta['demos'][y] in protected_demo and dcounts[meta['demos'][y]] == 1:
++                valid[j,k] &= meta['demos'][x] == meta['demos'][y]
++            if meta['endpoints'][y] and meta['demos'][y] in protected_end and ecounts[meta['demos'][y]] == 1:
++                # x cannot have the same endpoint UID, because it is already represented.
++                valid[j,k] = False
++    return xs,ys,valid,errs
++
++
++def choose_pair(xs,ys,valid,errs,radii,means):
++    if not valid.any(): return None
++    e=int(errs[valid].min()); mask=valid & (errs==e)
++    r=float(radii[mask].min()); mask &= radii<=r+TOL
++    m=float(means[mask].min()); mask &= means<=m+TOL
++    pairs=[(xs[k],ys[j],j,k) for j,k in zip(*np.nonzero(mask))]
++    x,y,j,k=min(pairs)  # ids are lexicographically sorted: added ID, then removed ID.
++    return x,y,dict(E_numerator=e,radius=float(radii[j,k]),mean=float(means[j,k]))
++
++
++def search(chosen,meta,D,R0,M0,protected_demo,protected_end):
++    xs,ys,valid,errs=candidates(chosen,meta,protected_demo,protected_end)
++    info=dict(unseen_time_add_candidates=len(xs),surplus_remove_candidates=len(ys),
++              pairs_total=len(xs)*len(ys),support_and_E_legal=int(valid.sum()))
++    if not valid.any():
++        info.update(coverage_legal=0); return None,info
++    # For each candidate x, compute all deletion costs simultaneously. If y owns
++    # a point's nearest center, removing y replaces its distance by min(second,Dx).
++    # All other points keep min(first,Dx). Thus all pairs are evaluated exactly.
++    dist=D[:,chosen]; owner=np.argmin(dist,axis=1)
++    first=dist[np.arange(len(D)),owner]
++    second=np.partition(dist,1,axis=1)[:,1] if len(chosen)>1 else np.full(len(D),np.inf)
++    order=np.argsort(owner,kind='stable'); labels,starts=np.unique(owner[order],return_index=True)
++    z=np.minimum(first[:,None],D[:,xs]); alt=np.minimum(second[:,None],D[:,xs])
++    base_max=z.max(axis=0); base_sum=z.sum(axis=0)
++    all_max=np.broadcast_to(base_max,(len(chosen),len(xs))).copy()
++    all_sum=np.broadcast_to(base_sum,(len(chosen),len(xs))).copy()
++    all_max[labels]=np.maximum(base_max,np.maximum.reduceat(alt[order],starts,axis=0))
++    all_sum[labels]+=np.add.reduceat((alt-z)[order],starts,axis=0)
++    slots=[chosen.index(y) for y in ys]
++    radii=all_max[slots]; means=all_sum[slots]/len(D)
++    valid &= (radii<=R0+TOL) & (means<=M0+TOL)
++    info['coverage_legal']=int(valid.sum())
++    return choose_pair(xs,ys,valid,errs,radii,means),info
++
++
++def brute_search(chosen,meta,D,R0,M0,pdemo,pend):
++    """Independent direct-nearest calculation for small synthetic verification."""
++    xs,ys,valid,errs=candidates(chosen,meta,pdemo,pend)
++    radii=np.zeros(valid.shape);means=np.zeros(valid.shape)
++    for j,y in enumerate(ys):
++        for k,x in enumerate(xs):
++            if valid[j,k]:
++                seq=[x if s==y else s for s in chosen]
++                d=D[:,seq].min(axis=1);radii[j,k]=d.max();means[j,k]=d.mean()
++                valid[j,k] &= radii[j,k]<=R0+TOL and means[j,k]<=M0+TOL
++    return choose_pair(xs,ys,valid,errs,radii,means)
++
++
++def repair(ids,rows,original,D,progress=None,verify_brute=False):
++    begin=time.monotonic();meta=prepare(ids,rows);lookup={n:i for i,n in enumerate(ids)}
++    chosen=[lookup[n] for n in original]
+     assert len(chosen)==len(set(chosen)) and D.shape==(len(ids),len(ids)) and np.isfinite(D).all()
+-    q,report=quotas(groups,chosen);counts=Counter(groups[i] for i in chosen);original_set=set(chosen)
+-    before=D[:,chosen].min(1);swaps=[]
+-    for step in range(report['minimum_swaps']):
+-        nearest=D[:,chosen].min(1)
+-        eligible=[i for i in range(len(ids)) if i not in set(chosen) and counts[groups[i]]<q[groups[i]]]
+-        far=max(nearest[i] for i in eligible)
+-        x=next(i for i in eligible if nearest[i]>=far-1e-12)
+-        augmented=chosen+[x];dist=D[:,augmented]
+-        # Exact leave-one-center-out radius from nearest/second-nearest distances.
+-        order=np.argsort(dist,axis=1,kind='stable')[:,:2]
+-        first=dist[np.arange(len(ids)),order[:,0]];second=dist[np.arange(len(ids)),order[:,1]]
+-        deletion=np.full(len(augmented),float(first.max()))
+-        np.maximum.at(deletion,order[:,0],second)
+-        candidates=sorted((i for i in chosen if counts[groups[i]]>q[groups[i]]))
+-        costs={i:float(deletion[augmented.index(i)]) for i in candidates}
+-        best=min(costs.values());y=next(i for i in candidates if costs[i]<=best+1e-12)
+-        slot=chosen.index(y);chosen[slot]=x;counts[groups[y]]-=1;counts[groups[x]]+=1
+-        swaps.append(dict(step=step,added=ids[x],removed=ids[y],slot=slot,
+-                          added_nearest_distance=float(nearest[x]),radius_after=costs[y]))
+-    assert all(counts[g]==q[g] for g in q) and len(chosen)==len(set(chosen))
+-    assert len(original_set-set(chosen))==report['minimum_swaps']
+-    for g in q:
+-        if report['original'].get(g,0)<=q[g]:assert all(i in chosen for i in original_set if groups[i]==g)
+-        assert abs(counts[g]*len(ids)-len(chosen)*report['population'][g])<len(ids)
+-    after=D[:,chosen].min(1)
+-    report.update(target=q,final=dict(counts),swaps=swaps,identity_noop=not swaps,
+-                  retained_original=len(original_set&set(chosen)),
+-                  radius_before=float(before.max()),radius_after=float(after.max()),
+-                  mean_distance_before=float(before.mean()),mean_distance_after=float(after.mean()),
+-                  p95_before=float(np.quantile(before,.95)),p95_after=float(np.quantile(after,.95)),
+-                  order_rule='replace removed member in its existing slot; otherwise preserve original order')
+-    return [ids[i] for i in chosen],report
++    before=describe(chosen,meta,D);R0=before['radius'];M0=before['mean']
++    pdemo=set(before['demo_counts']);pend=set(before['endpoint_demos']);swaps=[]
++    while True:
++        best,info=search(chosen,meta,D,R0,M0,pdemo,pend)
++        if verify_brute:
++            brute=brute_search(chosen,meta,D,R0,M0,pdemo,pend)
++            assert (None if best is None else best[:2]) == (None if brute is None else brute[:2])
++        if best is None: break
++        x,y,cost=best;slot=chosen.index(y);old=describe(chosen,meta,D)
++        assert meta['uids'][x] not in {meta['uids'][i] for i in chosen}
++        chosen[slot]=x;new=describe(chosen,meta,D)
++        assert new['E_numerator']<old['E_numerator'] and new['E_numerator']==cost['E_numerator']
++        assert abs(new['radius']-cost['radius'])<TOL and abs(new['mean']-cost['mean'])<TOL
++        assert new['unique_times']>=old['unique_times']
++        assert pdemo<=set(new['demo_counts']) and pend<=set(new['endpoint_demos'])
++        assert new['radius']<=R0+TOL and new['mean']<=M0+TOL
++        swaps.append(dict(step=len(swaps),added=ids[x],removed=ids[y],slot=slot,
++                          after=new,search=info))
++        if progress:progress(len(swaps),new)
++    result=dict(original_ids=original,selected_ids=[ids[i] for i in chosen],
++                reference_unique_counts=dict(meta['reference']),reference_unique_total=meta['U'],
++                before=before,after=describe(chosen,meta,D),swaps=swaps,
++                terminal_search=info,stop_reason='exhausted all legal one-swap improvements',
++                no_intervention=not swaps,retained_original=len(set(original)&{ids[i] for i in chosen}),
++                seconds=time.monotonic()-begin,tolerance=TOL,
++                order_rule='replace removed slot, preserve all other positions',
++                tie_rule='exact E numerator; radius within 1e-12; mean within 1e-12; added then removed lexicographic ID')
++    if not swaps:assert result['selected_ids']==original
++    return result
+--- a/sc_exp/storage.py
++++ b/sc_exp/storage.py
+@@ -20,7 +20,8 @@
+             assert np.array_equal(a,np.asarray(row['last_action'],dtype=np.float32))
+         d=Distance(vv,aa,population,SELECTOR_SEED);D=d.distances(np.arange(len(ids)))
+         assert d.hs==original['visual_scale'] and d.as_==original['action_distance_scale']
+-        names,report=repair(ids,[binding[n]['group'] for n in ids],[Path(p).name for p in s0],D)
++        report=repair(ids,binding,[Path(p).name for p in s0],D)
++        names=report['selected_ids']
+         idx={n:p for n,p in zip(ids,ordered)}
+         report.update(original_selection=original,original_ids=[Path(p).name for p in s0],selected_ids=names,
+                       demo_full=dict(Counter(binding[n]['demo_id'] for n in ids)),
+--- a/sc_exp/test_selection.py
++++ b/sc_exp/test_selection.py
+@@ -1,38 +1,55 @@
+-import unittest,itertools
++"""Pure synthetic selector verification; not evidence of experimental performance."""
++import unittest
+ import numpy as np
+-from sc_exp.selection import group_id,quotas,repair
++from sc_exp.selection import prepare,repair,describe,search,brute_search
+ 
+-class Tests(unittest.TestCase):
+-    def test_time_and_sign(self):
+-        self.assertEqual([group_id(t,9,-1)//3 for t in range(9)],[0,0,1,1,2,2,3,3,4])
+-        self.assertEqual([group_id(0,1,g) for g in [-1,0,1]],[12,13,14])
+-    def test_quota_exhaustive(self):
+-        rng=np.random.RandomState(4)
+-        for n in range(2,18):
+-            g=rng.randint(0,5,n).tolist()
+-            for k in range(1,n+1):
+-                s=rng.choice(n,k,False).tolist();q,r=quotas(g,s)
+-                allq=[v for v in itertools.product(*[range(r['lower'][x],r['upper'][x]+1) for x in sorted(q)]) if sum(v)==k]
+-                def key(v):return (sum(abs(gsum-vv) for gsum,vv in zip([r['original'].get(x,0) for x in sorted(q)],v)),sum(abs(vv*n-k*g.count(x)) for x,vv in zip(sorted(q),v)),tuple(-vv for vv in v))
+-                self.assertEqual(tuple(q[x] for x in sorted(q)),min(allq,key=key))
+-    def test_swap_against_bruteforce(self):
+-        rng=np.random.RandomState(17)
+-        for repeat in range(30):
+-            n=20;ids=['%03d'%x for x in range(n)];g=rng.randint(0,6,n).tolist();z=rng.randn(n,4);D=np.linalg.norm(z[:,None]-z[None,:],axis=2)
+-            original=rng.choice(n,10,False).tolist();result,r=repair(ids,g,[ids[i] for i in original],D)
+-            chosen=original[:];q=r['target']
+-            for sw in r['swaps']:
+-                deficits=[i for i in range(n) if i not in chosen and sum(g[j]==g[i] for j in chosen)<q[g[i]]]
+-                near=D[:,chosen].min(1);mx=max(near[i] for i in deficits);x=min(i for i in deficits if near[i]>=mx-1e-12)
+-                excess=[j for j in chosen if sum(g[i]==g[j] for i in chosen)>q[g[j]]]
+-                costs={j:D[:,[i for i in chosen+[x] if i!=j]].min(1).max() for j in excess};mn=min(costs.values());y=min(j for j in excess if costs[j]<=mn+1e-12)
+-                self.assertEqual((sw['added'],sw['removed']),(ids[x],ids[y]));chosen[chosen.index(y)]=x
+-            self.assertEqual([ids[i] for i in chosen],result)
+-    def test_noop_and_ties(self):
+-        ids=list('abcdefgh');g=[0]*4+[1]*4;D=np.ones((8,8))-np.eye(8)
+-        self.assertEqual(repair(ids,g,['b','a','f','e'],D)[0],['b','a','f','e'])
+-        x,r=repair(ids,g,list('abcd'),D);self.assertEqual(x,['e','f','c','d']);self.assertEqual(r['minimum_swaps'],2)
+-    def test_rare_zero_quota(self):
+-        ids=list('abcdef');g=[0]*5+[1];D=np.ones((6,6))-np.eye(6)
+-        self.assertEqual(repair(ids,g,['a','b'],D)[0],['a','b'])
+-if __name__=='__main__':unittest.main()
++
++class SelectionTest(unittest.TestCase):
++    def test_exact_search_against_direct_enumeration(self):
++        rng=np.random.RandomState(42)
++        for trial in range(100):
++            n=12;ids=[f'{i:03d}.pt' for i in range(n)]
++            rows={name:dict(demo_id=f'd{i//6}',target=i%6,length=6,
++                            group=int(rng.choice([0,2]))) for i,name in enumerate(ids)}
++            a=rng.normal(size=(n,3));D=np.linalg.norm(a[:,None]-a[None,:],axis=-1)
++            if trial%2:D+=rng.uniform(0,.01,(n,n));np.fill_diagonal(D,0)
++            original=[ids[i] for i in rng.choice(n,6,replace=False)]
++            result=repair(ids,rows,original,D,verify_brute=True)
++            self.assertLessEqual(result['after']['radius'],result['before']['radius']+1e-12)
++            self.assertGreaterEqual(result['after']['unique_times'],result['before']['unique_times'])
++
++    def test_duplicate_targets_reference_and_endpoint(self):
++        ids=['a','b','c','d'];rows={
++            'a':dict(demo_id='d0',target=0,length=4,group=0),
++            'b':dict(demo_id='d0',target=3,length=4,group=14),
++            'c':dict(demo_id='d0',target=3,length=4,group=14),
++            'd':dict(demo_id='d0',target=2,length=4,group=2)}
++        m=prepare(ids,rows)
++        self.assertEqual(m['U'],3);self.assertEqual(m['groups'][1],11)
++        D=np.array([[0,1,1,.5],[1,0,0,.5],[1,0,0,.5],[.5,.5,.5,0]])
++        r=repair(ids,rows,['a','b'],D,verify_brute=True)
++        self.assertIn('d0',r['after']['endpoint_demos'])
++        self.assertNotIn('c',r['selected_ids'])
++
++    def test_noop_preserves_order(self):
++        ids=['a','b','c'];rows={s:dict(demo_id='d',target=i,length=3,group=2) for i,s in enumerate(ids)}
++        D=np.eye(3)*-1+1
++        r=repair(ids,rows,['c','b','a'],D,verify_brute=True)
++        self.assertEqual(r['selected_ids'],['c','b','a']);self.assertEqual(r['swaps'],[])
++
++    def test_mean_floor_is_independent_of_radius(self):
++        # Run exact comparisons on arbitrary nonmetric distances with many equal radii.
++        rng=np.random.RandomState(12)
++        for _ in range(50):
++            ids=[str(i) for i in range(8)]
++            rows={s:dict(demo_id='d',target=i,length=8,group=2*(i%2)) for i,s in enumerate(ids)}
++            D=rng.randint(0,4,(8,8)).astype(float);np.fill_diagonal(D,0)
++            repair(ids,rows,['0','1','2','7'],D,verify_brute=True)
++
++    def test_identity_conflict_rejected(self):
++        rows={'a':dict(demo_id='d',target=1,length=3,group=0),
++              'b':dict(demo_id='d',target=1,length=3,group=2)}
++        with self.assertRaises(AssertionError):prepare(['a','b'],rows)
++
++
++if __name__=='__main__':unittest.main(verbosity=2)
+--- a/sc_exp/validation.py
++++ b/sc_exp/validation.py
+@@ -0,0 +1,14 @@
++"""Numeric witnesses use the original FP64 tolerance; identities remain exact."""
++import json
++def same_witness(a,b):
++    a=json.loads(json.dumps(a));b=json.loads(json.dumps(b))
++    def check(x,y):
++        if isinstance(x,dict):
++            assert x.keys()==y.keys()
++            for k in x:check(x[k],y[k])
++        elif isinstance(x,list):
++            assert len(x)==len(y)
++            for u,v in zip(x,y):check(u,v)
++        elif isinstance(x,float):assert abs(x-y)<=1e-12
++        else:assert x==y
++    check(a,b)
