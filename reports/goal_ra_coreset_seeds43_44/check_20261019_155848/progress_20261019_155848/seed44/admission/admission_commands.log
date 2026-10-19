@@ -1,0 +1,5 @@
+/data/mlr_ifa/env/bin/python -m unittest ra_exp.test_reference -v
+/data/mlr_ifa/env/bin/python -m ra_exp.prepare
+/data/mlr_ifa/env/bin/python -u -m ra_exp.select_offline
+/data/mlr_ifa/env/bin/python -m ra_exp.freeze
+/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m ra_exp.preflight
