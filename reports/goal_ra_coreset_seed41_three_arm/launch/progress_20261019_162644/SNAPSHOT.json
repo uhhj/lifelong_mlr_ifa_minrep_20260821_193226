@@ -1,0 +1,87 @@
+{
+  "time": 1792398405.211239,
+  "queue_exit": null,
+  "wrapper_exit": null,
+  "failure": null,
+  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 13 MiB, 0 %\n",
+  "free_bytes": {
+    "/root": 17397698560,
+    "/data": 31431700480
+  },
+  "arms": {
+    "random": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "exits": {
+        "pipeline": null,
+        "supervisor": null
+      },
+      "preflight": null
+    },
+    "coreset": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "exits": {
+        "pipeline": null,
+        "supervisor": null
+      },
+      "preflight": null
+    },
+    "ra_coreset": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "exits": {
+        "pipeline": null,
+        "supervisor": null
+      },
+      "preflight": null
+    }
+  },
+  "phase_exits": {
+    "baseline_software.exit": "0"
+  },
+  "logs": {
+    "baseline_configure.log": {
+      "size": 0,
+      "mtime": 1792398366.4637945,
+      "tail": []
+    },
+    "launcher.log": {
+      "size": 0,
+      "mtime": 1792398363.927679,
+      "tail": []
+    },
+    "queue.log": {
+      "size": 0,
+      "mtime": 1792398363.9316792,
+      "tail": []
+    },
+    "baseline_software.log": {
+      "size": 1198,
+      "mtime": 1792398366.1797817,
+      "tail": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 18 tests in 0.245s",
+        "",
+        "OK"
+      ]
+    }
+  },
+  "processes": [
+    "   9005       00:41 bash /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/supervise_queue.sh",
+    "   9007       00:41 /data/mlr_ifa/env/bin/python -u /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/queue.py",
+    "   9023       00:38 /data/mlr_ifa/env/bin/python -m coreset_exp.configure",
+    "   9095       00:00 /data/mlr_ifa/env/bin/python /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/monitor_snapshot.py"
+  ],
+  "final_acceptance": null
+}

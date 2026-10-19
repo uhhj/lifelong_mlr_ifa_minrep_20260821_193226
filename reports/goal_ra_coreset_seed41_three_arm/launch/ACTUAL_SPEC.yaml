@@ -1,0 +1,66 @@
+status: PREPARING
+seed: 41
+suite: LIBERO_GOAL
+arms:
+- random
+- coreset
+- ra_coreset
+baseline_status: No existing GOAL41 baseline; explicit user authorization to create
+  both
+official_pretrain: /data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth
+use_state: true
+tasks:
+- 6
+- 7
+- 8
+- 9
+demos_per_task: 10
+seq_len: 8
+batch: 10
+epochs_per_task: 100
+steps_per_arm: 76100
+total_epochs: 1200
+total_steps: 228300
+final_checkpoints: 12
+formal_episodes: 600
+vector_attempts: 60
+gamma: 0.7
+ifa_weight: 0.1
+scheduler: optimizer-step linear warmup500
+sampler_seed: 0
+selector_seed: 42
+anchor_seed: 41
+quotas:
+- 499
+- 445
+- 452
+- 985
+anchors:
+- 249
+- 222
+- 226
+- 492
+algorithm: same RA hard random anchors and minimal geometric exchanges
+evaluation:
+  initial_states: 0..19
+  n_per_cell: 20
+  lanes: 10
+  max_steps: 600
+  zero_steps: 5
+  global_rng_reset_per_stage: 41
+  environment_seeds:
+  - 41
+  - 42
+  action: argmax component then Normal; shared global RNG
+preflight:
+  baseline_software: 18
+  baseline_optimizer_calls: 4
+  baseline_zero_action_interface: 1
+  baseline_policy_rollouts: 0
+  RA_software: 8
+  RA_optimizer_calls: 4
+  RA_environment_calls: 0
+baseline_out: /root/mlr_ifa/experiments/Coreset_paper_GOAL_seed41_20261019
+ra_out: /root/mlr_ifa/experiments/RA_Coreset_GOAL_seed41_20261019
+queue: /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019
+auto_extend: false

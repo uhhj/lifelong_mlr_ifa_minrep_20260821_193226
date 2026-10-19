@@ -1,0 +1,6 @@
+{
+  "command": "/data/mlr_ifa/env/bin/python - <<'PY'\n\nfrom pathlib import Path\nimport json,shutil,subprocess,time\nroots=['/root/mlr_ifa/experiments','/data/mlr_ifa/experiments','/root/mlr_ifa_new_experiments','/root/mlr_ifa/experiment_workspaces','/data/mlr_ifa/experiment_workspaces']\nmatches=[]\nfor root in roots:\n p=Path(root)\n if not p.exists():continue\n for q in p.iterdir():\n  if not q.is_dir():continue\n  if '41' in q.name or 'GOAL' in q.name or 'goal' in q.name:\n   children=[x.name for x in q.iterdir() if x.is_dir() and ('41' in x.name or x.name in ['random','coreset','ra_coreset','features'])]\n   matches.append(dict(path=str(q),children=children,status=json.loads((q/'RUN_STATUS.json').read_text()) if (q/'RUN_STATUS.json').exists() else None))\nout=dict(time=time.time(),matches=matches,free_bytes={x:shutil.disk_usage(x).free for x in ['/root','/data']},gpu=subprocess.check_output(['nvidia-smi','--query-gpu=name,memory.used,utilization.gpu','--format=csv'],text=True),scientific_processes=[x for x in subprocess.check_output(['ps','-eo','pid,etime,args'],text=True).splitlines() if ' -m coreset_exp.' in x],new_training_or_rollouts=0)\nprint(json.dumps(out,indent=2))\n\nPY",
+  "exit_code": 0,
+  "stderr": "",
+  "local_time": "2026-10-19T16:16:07.998356+08:00"
+}
