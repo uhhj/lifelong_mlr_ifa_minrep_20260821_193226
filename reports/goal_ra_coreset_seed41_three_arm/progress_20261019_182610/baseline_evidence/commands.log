@@ -1,0 +1,7 @@
+2026-10-19T16:28:21+08:00 START export torchrun --nproc_per_node=1 --master_port=39441 -m coreset_exp.export 
+2026-10-19T16:35:08+08:00 EXIT export 0
+2026-10-19T16:35:08+08:00 START train_random torchrun --nproc_per_node=1 --master_port=39441 -m coreset_exp.train random 
+2026-10-19T17:15:22+08:00 EXIT train_random 0
+2026-10-19T17:15:22+08:00 START train_coreset torchrun --nproc_per_node=1 --master_port=39441 -m coreset_exp.train coreset 
+2026-10-19T17:56:20+08:00 EXIT train_coreset 0
+2026-10-19T17:56:20+08:00 START evaluate_random python -u -m coreset_exp.evaluate random 
