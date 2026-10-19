@@ -1,0 +1,117 @@
+--- seed42/ra_exp/audit.py
++++ extension/ra_exp/audit.py
+@@ -4,7 +4,7 @@
+ from fractions import Fraction as F
+ from collections import Counter
+ import torch
+-from coreset_exp.common import O,verify,write,sha,hashes
++from coreset_exp.common import O,SEED,verify,write,sha,hashes
+ from coreset_exp.model import cfg,strict_downstream
+ from libero.lifelong.models.brief import BriefPolicy
+ from ra_exp.validation import same_witness
+@@ -16,7 +16,7 @@
+         for t in range(6,s+1):
+             rows=[json.loads(x) for x in (root/arm/'evaluation'/f'trials_stage{s}_task{t}.jsonl').read_text().splitlines()]
+             assert len(rows)==20 and {r['trial'] for r in rows}==set(range(20))
+-            assert all(r['seed']==42 and r['stage']==s and r['task']==t and r['arm']==arm and type(r['success']) is bool for r in rows)
++            assert all(r['seed']==SEED and r['stage']==s and r['task']==t and r['arm']==arm and type(r['success']) is bool for r in rows)
+             rates[s,t]=F(sum(r['success'] for r in rows),20)
+             for r in rows:records[s,t,r['trial']]=r
+     return rates,records
+--- seed42/ra_exp/freeze.py
++++ extension/ra_exp/freeze.py
+@@ -1,12 +1,16 @@
+ import json,time,os
+ from pathlib import Path
+-from coreset_exp.common import O,S,sha,write,source_hashes
++from coreset_exp.common import O,S,SEED,sha,write,source_hashes
+ def main():
+     assert not (O/'CONTRACT.json').exists()
+     assert json.loads((O/'OFFLINE_ACCEPTANCE.json').read_text())['status']=='PASS'
+     binding=json.loads((O/'PARENT_BINDING.json').read_text());P=Path(binding['parent']);pc=json.loads((P/'CONTRACT.json').read_text())
+     files={str(p):sha(p) for p in [O/'OFFLINE_ACCEPTANCE.json',O/'PARENT_BINDING.json',O/'resolved_ra_coreset.json',O/'resolved_eval.json',O/'FEATURES.json',O/'MODAL_CONTRACT.json',*sorted((O/'bindings').glob('*.json')),*sorted((O/'offline_selection').glob('*.json')),*sorted(S.parent.glob('*.py')),*sorted(S.parent.glob('*.sh')),S.parent/'PROTOCOL.md',S.parent/'ACTUAL_SPEC.yaml']}
+     files.update(pc['inputs']);files.update(binding['protected'])
+-    write(O/'CONTRACT.json',dict(version='RA_GOAL_seed42_legacy_protocol_v1',seed=42,source_sha256=source_hashes(),files=files,modal_sha256=binding['modal_sha256'],parent_contract=binding['contract_sha256'],epochs=400,optimizer_steps=76100,final_checkpoints=4,formal_records=200,vector_attempts=20,progression=dict(AUC='strictly greater than same-seed Coreset',FWT='not less than same-seed Coreset',OldFinal='not less than same-seed Coreset'),created=time.time()))
++    queue=S.parent.parent;orchestration=json.loads((queue/'ORCHESTRATION_SHA256.json').read_text())
++    for name,h in orchestration.items():assert sha(queue/name)==h,name
++    files.update({str(queue/name):h for name,h in orchestration.items()})
++    files[str(queue/'ORCHESTRATION_SHA256.json')]=sha(queue/'ORCHESTRATION_SHA256.json')
++    write(O/'CONTRACT.json',dict(version='RA_GOAL_extension_legacy_protocol_v1',seed=SEED,source_sha256=source_hashes(),files=files,modal_sha256=binding['modal_sha256'],parent_contract=binding['contract_sha256'],epochs=400,optimizer_steps=76100,final_checkpoints=4,formal_records=200,vector_attempts=20,progression=dict(AUC='strictly greater than same-seed Coreset',FWT='not less than same-seed Coreset',OldFinal='not less than same-seed Coreset'),created=time.time()))
+     write(O/'RUN_STATUS.json',dict(status='FROZEN_AWAITING_PREFLIGHT',time=time.time()))
+ if __name__=='__main__':main()
+--- seed42/ra_exp/prepare.py
++++ extension/ra_exp/prepare.py
+@@ -1,11 +1,13 @@
+ """Read-only parent/resource binding; new experiment directories only."""
+-import json,os,shutil,time
++import json,os,shutil,time,collections
++import numpy as np,torch,h5py
+ from pathlib import Path
+-from coreset_exp.common import O,sha,write,hashes
++from coreset_exp.common import O,SEED,sha,write,hashes
+ def main():
+     P=Path(os.environ['RA_PARENT']);PS=Path(os.environ['RA_PARENT_SOURCE'])
+     assert not O.exists(),'Do not repeat preparation of an existing run'
+     pc=json.loads((P/'CONTRACT.json').read_text());fm=json.loads((P/'FEATURES.json').read_text())
++    assert SEED in (43,44) and pc['seed']==SEED
+     assert json.loads((P/'INDEPENDENT_ACCEPTANCE.json').read_text())['status']=='PASS'
+     assert sha(P/'MODAL_CONTRACT.json')==pc['modal_sha256']
+     assert hashes(P/'features')==fm['hashes'] and fm['contract_sha256']==sha(P/'CONTRACT.json')
+@@ -15,14 +17,29 @@
+     O.mkdir(parents=True)
+     for n in ['MODAL_CONTRACT.json','FEATURES.json','TASKS.json','PRETRAIN_METADATA.json']:shutil.copy2(P/n,O/n)
+     (O/'features').symlink_to(P/'features',target_is_directory=True)
+-    BS=Path(os.environ['SC_BINDING_SOURCE']);bc=json.loads((BS/'CONTRACT.json').read_text());bindings={}
++    # Seed-specific cached windows must be bound to their own actual payloads.
++    tasks=json.loads((P/'TASKS.json').read_text());bindings={};torch.set_num_threads(1)
+     for t in range(6,10):
+-        p=BS/'bindings'/f'task{t}.json';h=sha(p);assert bc['files'][str(p)]==h
+-        obj=json.loads(p.read_text());assert len(obj['windows'])==[997,889,904,1969][t-6]
+-        for name,r in obj['windows'].items():assert sha(O/'features'/str(t)/name)==r['sha256']
+-        (O/'bindings').mkdir(exist_ok=True);shutil.copy2(p,O/'bindings'/p.name);bindings[str(p)]=h
++        hdf=tasks[str(t)]['paths'][0];candidates=collections.defaultdict(list)
++        with h5py.File(hdf) as h:
++            for demo in fm['demos'][str(t)]:
++                a=h['data'][demo]['actions'][:].astype(np.float32)
++                for start in range(len(a)):
++                    ix=np.minimum(np.arange(start,start+8),len(a)-1)
++                    candidates[a[ix].tobytes()].append(dict(demo_id=demo,start=start,target=int(ix[-1]),length=len(a)))
++        windows={};ambiguous=0
++        for p in sorted((P/'features'/str(t)).glob('*.pt')):
++            a=torch.load(p,map_location='cpu')['actions'][0].numpy().astype(np.float32)
++            hits=candidates[a.tobytes()];assert hits,(t,p.name)
++            identity={(r['demo_id'],r['target'],r['length']) for r in hits}
++            assert len(identity)==1,('Ambiguous target identity',t,p.name,hits)
++            demo,target,length=next(iter(identity));ambiguous+=len(hits)>1
++            windows[p.name]=dict(sample_id=p.name,sha256=sha(p),demo_id=demo,target=target,length=length,last_action=a[-1].tolist(),possible_starts=[r['start'] for r in hits],binding='exact complete 8x7 float32 window; unique demo/target/length')
++        assert len(windows)==[997,889,904,1969][t-6]
++        write(O/'bindings'/f'task{t}.json',dict(task=t,hdf5=hdf,hdf5_sha256=sha(hdf),windows=windows,ambiguous_start_but_unique_target=ambiguous))
+     for name,src in [('ra_coreset','coreset'),('eval','eval')]:
+         c=json.loads((P/f'resolved_{src}.json').read_text())
++        assert c['seed']==SEED and c['gamma']==.7 and c['policy']['use_state'] is True
+         c.update(run_root=str(O/'ra_coreset'),feature_dir=str(O/'features'),buffer_dir=str(O/'ra_coreset/buffer'),experiment_dir=str(O/'ra_coreset/models'),contract=str(O/'CONTRACT.json'),selector='ra_coreset')
+         write(O/f'resolved_{name}.json',c)
+     write(O/'PARENT_BINDING.json',dict(parent=str(P),source=str(PS),contract_sha256=sha(P/'CONTRACT.json'),feature_manifest_sha256=sha(P/'FEATURES.json'),modal_sha256=sha(P/'MODAL_CONTRACT.json'),protected={**protected,**bindings},pretrain_use_state='unknown',effective_use_state=True))
+--- seed42/ra_exp/select_offline.py
++++ extension/ra_exp/select_offline.py
+@@ -2,7 +2,7 @@
+ import os,json,time,random,pickle
+ from pathlib import Path
+ import numpy as np,torch,h5py
+-from coreset_exp.common import O,sha,write,hashes,rng
++from coreset_exp.common import O,SEED,SELECTOR_SEED,sha,write,hashes,rng
+ from ra_exp.storage import select
+ from libero.lifelong.selectors.greedy_kcenter import Distance
+ def independent_verify(ids,report,D):
+@@ -35,9 +35,9 @@
+         assert torch.equal(rb['cpu'],ra['cpu']) and all(torch.equal(a,b) for a,b in zip(rb['cuda'],ra['cuda']))
+         old=json.loads((P/'coreset/storage'/f'task{t}.json').read_text());rnd=json.loads((P/'random/storage'/f'task{t}.json').read_text())
+         assert report['original_ids']==[Path(x['source']).name for x in old['selected']]
+-        assert report['random_draw_ids']==[Path(x['source']).name for x in rnd['selected']]==random.Random(42).sample(ids,q)
++        assert report['random_draw_ids']==[Path(x['source']).name for x in rnd['selected']]==random.Random(SEED).sample(ids,q)
+         data=[torch.load(p,map_location='cpu') for p in paths]
+-        d=Distance(np.array([x['feature'][0,:,1:3,:].numpy() for x in data]),np.array([x['actions'][0,-1,:].numpy() for x in data]),population,42)
++        d=Distance(np.array([x['feature'][0,:,1:3,:].numpy() for x in data]),np.array([x['actions'][0,-1,:].numpy() for x in data]),population,SELECTOR_SEED)
+         independent_verify(ids,report,d.distances(np.arange(len(ids))))
+         def desc(names):
+             rr=[binding[n] for n in names]

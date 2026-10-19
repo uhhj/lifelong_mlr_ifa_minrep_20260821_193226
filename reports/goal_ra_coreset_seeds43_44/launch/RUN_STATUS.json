@@ -1,0 +1,115 @@
+{
+  "status": "PARTIAL",
+  "observation_time": "2026-10-19T12:24:41.976604+08:00",
+  "queue_exit": null,
+  "wrapper_exit": null,
+  "seeds": {
+    "43": {
+      "status": {
+        "status": "TRAINING",
+        "arm": "ra_coreset",
+        "task": 6,
+        "completed_epoch": 14,
+        "optimizer_steps": 1500,
+        "updated_unix": 1792383881.1342294,
+        "pid": 2454
+      },
+      "epochs": 15,
+      "latest": {
+        "task": 6,
+        "epoch": 14,
+        "batches": 100,
+        "steps": 1500,
+        "loss": -19.25814449310303,
+        "lr_first": 9.052631578947369e-05,
+        "lr_after": 8.947368421052632e-05,
+        "seconds": 2.721299648284912
+      },
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": null,
+        "evaluate": null,
+        "audit": null,
+        "pipeline": null,
+        "supervisor": null
+      },
+      "admission_exit": "0",
+      "gpu_preflight": {
+        "status": "PASS",
+        "isolated_optimizer_calls": 4,
+        "formal_rollouts": 0,
+        "environment_steps": 0,
+        "selection": {
+          "6": {
+            "N": 997,
+            "K": 499,
+            "swaps": 121,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "7": {
+            "N": 889,
+            "K": 445,
+            "swaps": 106,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "8": {
+            "N": 904,
+            "K": 452,
+            "swaps": 100,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "9": {
+            "N": 1969,
+            "K": 985,
+            "swaps": 249,
+            "original_matches_parent": true,
+            "offline_exact": true
+          }
+        },
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "torch": "1.13.0+cu116",
+        "seconds": 46.006651878356934,
+        "modal_semantics": "Inherited unchanged complete_policy/model/eval_metric with parent PASS; real latent GPU update tested here",
+        "contract_sha256": "181faae5d0b674ce5ec3124835c791b0112ead6c5714b00e56d52bec7030717d"
+      },
+      "frozen_hash_check": "PASS"
+    },
+    "44": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": null,
+        "evaluate": null,
+        "audit": null,
+        "pipeline": null,
+        "supervisor": null
+      },
+      "admission_exit": null,
+      "gpu_preflight": null
+    }
+  },
+  "local_launch_evidence": "PARTIAL_LAUNCH_EVIDENCE_PASS",
+  "automation": "ra-coreset-goal-seed43-44-seed",
+  "plan": {
+    "new_seeds": [
+      43,
+      44
+    ],
+    "new_epochs": 800,
+    "new_optimizer_steps": 152200,
+    "new_final_checkpoints": 8,
+    "new_episodes": 400,
+    "baselines_retrained": false,
+    "baselines_reevaluated": false
+  },
+  "eta_basis": "Seed42 measured training 40.56min + evaluation 68.73min per seed; total two seeds ~3.5-4.5h from formal start, contingent on current GPU throughput"
+}
