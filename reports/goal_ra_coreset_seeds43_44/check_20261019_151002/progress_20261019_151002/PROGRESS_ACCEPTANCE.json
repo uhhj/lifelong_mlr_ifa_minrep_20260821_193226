@@ -1,0 +1,284 @@
+{
+  "status": "PARTIAL_READONLY_AUDIT_PASS",
+  "observation_time": 1792393957.1446788,
+  "completed": {
+    "43": {
+      "status": "PASS",
+      "epochs": 400,
+      "steps": 76100,
+      "records": 200,
+      "vector_attempts": 20,
+      "technical_exceptions": 0,
+      "strict_checkpoint_loads": 4,
+      "metrics": {
+        "ra_coreset": {
+          "AUC": {
+            "fraction": "271/320",
+            "percent": 84.6875
+          },
+          "FWT": {
+            "fraction": "67/80",
+            "percent": 83.75
+          },
+          "NBT": {
+            "fraction": "-1/30",
+            "percent": -3.3333333333333335
+          },
+          "OldFinal": {
+            "fraction": "17/20",
+            "percent": 85.0
+          },
+          "FinalAll": {
+            "fraction": "69/80",
+            "percent": 86.25
+          }
+        },
+        "coreset": {
+          "AUC": {
+            "fraction": "251/320",
+            "percent": 78.4375
+          },
+          "FWT": {
+            "fraction": "67/80",
+            "percent": 83.75
+          },
+          "NBT": {
+            "fraction": "7/60",
+            "percent": 11.666666666666666
+          },
+          "OldFinal": {
+            "fraction": "11/15",
+            "percent": 73.33333333333333
+          },
+          "FinalAll": {
+            "fraction": "61/80",
+            "percent": 76.25
+          }
+        },
+        "random": {
+          "AUC": {
+            "fraction": "253/320",
+            "percent": 79.0625
+          },
+          "FWT": {
+            "fraction": "61/80",
+            "percent": 76.25
+          },
+          "NBT": {
+            "fraction": "-1/15",
+            "percent": -6.666666666666667
+          },
+          "OldFinal": {
+            "fraction": "53/60",
+            "percent": 88.33333333333333
+          },
+          "FinalAll": {
+            "fraction": "67/80",
+            "percent": 83.75
+          }
+        }
+      },
+      "delta_vs_coreset": {
+        "AUC": {
+          "fraction": "1/16",
+          "percent": 6.25
+        },
+        "FWT": {
+          "fraction": "0",
+          "percent": 0.0
+        },
+        "NBT": {
+          "fraction": "-3/20",
+          "percent": -15.0
+        },
+        "OldFinal": {
+          "fraction": "7/60",
+          "percent": 11.666666666666666
+        },
+        "FinalAll": {
+          "fraction": "1/10",
+          "percent": 10.0
+        }
+      },
+      "delta_vs_random": {
+        "AUC": {
+          "fraction": "9/160",
+          "percent": 5.625
+        },
+        "FWT": {
+          "fraction": "3/40",
+          "percent": 7.5
+        },
+        "NBT": {
+          "fraction": "1/30",
+          "percent": 3.3333333333333335
+        },
+        "OldFinal": {
+          "fraction": "-1/30",
+          "percent": -3.3333333333333335
+        },
+        "FinalAll": {
+          "fraction": "1/40",
+          "percent": 2.5
+        }
+      },
+      "matrix": [
+        {
+          "stage": 6,
+          "task": 6,
+          "ra_coreset": 80.0,
+          "coreset": 80.0,
+          "random": 80.0
+        },
+        {
+          "stage": 7,
+          "task": 6,
+          "ra_coreset": 80.0,
+          "coreset": 55.0,
+          "random": 80.0
+        },
+        {
+          "stage": 7,
+          "task": 7,
+          "ra_coreset": 100.0,
+          "coreset": 100.0,
+          "random": 100.0
+        },
+        {
+          "stage": 8,
+          "task": 6,
+          "ra_coreset": 70.0,
+          "coreset": 70.0,
+          "random": 80.0
+        },
+        {
+          "stage": 8,
+          "task": 7,
+          "ra_coreset": 100.0,
+          "coreset": 100.0,
+          "random": 100.0
+        },
+        {
+          "stage": 8,
+          "task": 8,
+          "ra_coreset": 65.0,
+          "coreset": 70.0,
+          "random": 55.0
+        },
+        {
+          "stage": 9,
+          "task": 6,
+          "ra_coreset": 75.0,
+          "coreset": 70.0,
+          "random": 95.0
+        },
+        {
+          "stage": 9,
+          "task": 7,
+          "ra_coreset": 100.0,
+          "coreset": 100.0,
+          "random": 100.0
+        },
+        {
+          "stage": 9,
+          "task": 8,
+          "ra_coreset": 80.0,
+          "coreset": 50.0,
+          "random": 70.0
+        },
+        {
+          "stage": 9,
+          "task": 9,
+          "ra_coreset": 90.0,
+          "coreset": 85.0,
+          "random": 70.0
+        }
+      ],
+      "storage": {
+        "6": {
+          "quota": 499,
+          "swaps": 121,
+          "ordered_offline_match": true
+        },
+        "7": {
+          "quota": 445,
+          "swaps": 106,
+          "ordered_offline_match": true
+        },
+        "8": {
+          "quota": 452,
+          "swaps": 100,
+          "ordered_offline_match": true
+        },
+        "9": {
+          "quota": 985,
+          "swaps": 249,
+          "ordered_offline_match": true
+        }
+      },
+      "task6_tensor_equal": true,
+      "initial_rng_equal": true,
+      "all_exits": 0,
+      "timings": [
+        {
+          "phase": "train",
+          "seconds": 2403.7302861213684,
+          "exit": 0
+        },
+        {
+          "phase": "evaluate",
+          "seconds": 4157.7302350997925,
+          "exit": 0
+        },
+        {
+          "phase": "audit",
+          "seconds": 30.978013515472412,
+          "exit": 0
+        }
+      ]
+    }
+  },
+  "partial": {
+    "44": {
+      "package_files": 55,
+      "epochs": 400,
+      "steps": 76100,
+      "task6_tensor_equal": true,
+      "storage": {
+        "6": {
+          "quota": 499,
+          "swaps": 129,
+          "ordered_offline_match": true
+        },
+        "7": {
+          "quota": 445,
+          "swaps": 102,
+          "ordered_offline_match": true
+        },
+        "8": {
+          "quota": 452,
+          "swaps": 108,
+          "ordered_offline_match": true
+        },
+        "9": {
+          "quota": 985,
+          "swaps": 246,
+          "ordered_offline_match": true
+        }
+      },
+      "records": 30
+    }
+  },
+  "eta": {
+    "training_remaining_minutes": 0.0,
+    "evaluation_reference_minutes": 69.29550391832987,
+    "training_recent_rate_ratio": 1.0191534474212403,
+    "total_remaining_range_minutes": [
+      64,
+      85
+    ],
+    "basis": "seed43 per-task epoch times scaled by seed44 last20 matching epochs; seed43 observed full evaluation wall time; overhead allowance"
+  },
+  "new_training_or_evaluation_calls": 0,
+  "inputs_and_packages_hash_verified": true
+}
