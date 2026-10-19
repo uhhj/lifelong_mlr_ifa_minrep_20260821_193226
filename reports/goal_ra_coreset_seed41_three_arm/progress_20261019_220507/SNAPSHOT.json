@@ -1,0 +1,269 @@
+{
+  "time": 1792418709.2151494,
+  "queue_exit": null,
+  "wrapper_exit": null,
+  "failure": null,
+  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 9965 MiB, 100 %\n",
+  "free_bytes": {
+    "/root": 13779324928,
+    "/data": 31431602176
+  },
+  "arms": {
+    "random": {
+      "status": {
+        "status": "COMPLETED",
+        "seed": 41,
+        "arms": [
+          "random",
+          "coreset"
+        ],
+        "epochs": 800,
+        "formal_records": 400,
+        "updated_unix": 1792412654.0787182
+      },
+      "epochs": 400,
+      "latest": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 337,
+        "steps": 76100,
+        "loss": -30.61074840421139,
+        "lr_first": 1.0150602409638555e-06,
+        "lr_after": 0.0,
+        "seconds": 9.640047550201416
+      },
+      "records": 200,
+      "completed_vectors": 20,
+      "exits": {
+        "pipeline": "0",
+        "supervisor": "0"
+      },
+      "preflight": {
+        "status": "PASS",
+        "tests": {
+          "state_token_exact": true,
+          "state_response_max": 0.3657964766025543,
+          "other_tokens_invariant": true,
+          "false_negative_control": true,
+          "gmm_parameters_exact": true,
+          "spawn_render_reset_one_zero_step": true,
+          "optimizer_scheduler_rng_recovery_exact": true,
+          "isolated_optimizer_calls": 4,
+          "ifa_pair_mean_and_empty": true
+        },
+        "seconds": 26.407698392868042,
+        "formal_rollouts": 0,
+        "environment_interface_checks": 1,
+        "torch": "1.13.0+cu116",
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "modal_sha256": "a87f4ce726551117b24f4935cc435844832cd3c4aea10562de496925ae1ee87c",
+        "contract_sha256": "9f06e0bc8e2eba9d1ad841700ad86680dcc2065e593c1c61f7912e24516e6aad"
+      }
+    },
+    "coreset": {
+      "status": {
+        "status": "COMPLETED",
+        "seed": 41,
+        "arms": [
+          "random",
+          "coreset"
+        ],
+        "epochs": 800,
+        "formal_records": 400,
+        "updated_unix": 1792412654.0787182
+      },
+      "epochs": 400,
+      "latest": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 337,
+        "steps": 76100,
+        "loss": -30.38473193794047,
+        "lr_first": 1.0150602409638555e-06,
+        "lr_after": 0.0,
+        "seconds": 7.932031154632568
+      },
+      "records": 200,
+      "completed_vectors": 20,
+      "exits": {
+        "pipeline": "0",
+        "supervisor": "0"
+      },
+      "preflight": {
+        "status": "PASS",
+        "tests": {
+          "state_token_exact": true,
+          "state_response_max": 0.3657964766025543,
+          "other_tokens_invariant": true,
+          "false_negative_control": true,
+          "gmm_parameters_exact": true,
+          "spawn_render_reset_one_zero_step": true,
+          "optimizer_scheduler_rng_recovery_exact": true,
+          "isolated_optimizer_calls": 4,
+          "ifa_pair_mean_and_empty": true
+        },
+        "seconds": 26.407698392868042,
+        "formal_rollouts": 0,
+        "environment_interface_checks": 1,
+        "torch": "1.13.0+cu116",
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "modal_sha256": "a87f4ce726551117b24f4935cc435844832cd3c4aea10562de496925ae1ee87c",
+        "contract_sha256": "9f06e0bc8e2eba9d1ad841700ad86680dcc2065e593c1c61f7912e24516e6aad"
+      }
+    },
+    "ra_coreset": {
+      "status": {
+        "status": "EVALUATING",
+        "arm": "ra_coreset",
+        "stage": 9,
+        "task": 7,
+        "updated_unix": 1792418531.579493
+      },
+      "epochs": 400,
+      "latest": {
+        "task": 9,
+        "epoch": 99,
+        "batches": 337,
+        "steps": 76100,
+        "loss": -30.470869777464372,
+        "lr_first": 1.0150602409638555e-06,
+        "lr_after": 0.0,
+        "seconds": 9.395272493362427
+      },
+      "records": 160,
+      "completed_vectors": 16,
+      "exits": {
+        "pipeline": null,
+        "supervisor": null
+      },
+      "preflight": {
+        "status": "PASS",
+        "isolated_optimizer_calls": 4,
+        "formal_rollouts": 0,
+        "environment_steps": 0,
+        "selection": {
+          "6": {
+            "N": 997,
+            "K": 499,
+            "swaps": 119,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "7": {
+            "N": 889,
+            "K": 445,
+            "swaps": 107,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "8": {
+            "N": 904,
+            "K": 452,
+            "swaps": 112,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "9": {
+            "N": 1969,
+            "K": 985,
+            "swaps": 244,
+            "original_matches_parent": true,
+            "offline_exact": true
+          }
+        },
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "torch": "1.13.0+cu116",
+        "seconds": 41.61164450645447,
+        "modal_semantics": "Inherited unchanged complete_policy/model/eval_metric with parent PASS; real latent GPU update tested here",
+        "contract_sha256": "58f19939df0e81b427f16f6189cdc56fc090a079e8b33b3ba5f5701a57d0747f"
+      }
+    }
+  },
+  "phase_exits": {
+    "baseline_supervise.exit": "0",
+    "baseline_configure.exit": "0",
+    "baseline_suite_audit.exit": "0",
+    "ra_admission.exit": "0",
+    "baseline_software.exit": "0",
+    "baseline_preflight.exit": "0"
+  },
+  "logs": {
+    "baseline_preflight.log": {
+      "size": 7985,
+      "mtime": 1792398488.8373652,
+      "tail": [
+        "policy_head.mean_layer.bias",
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias"
+      ]
+    },
+    "ra_supervise.log": {
+      "size": 0,
+      "mtime": 1792412806.985141,
+      "tail": []
+    },
+    "baseline_supervise.log": {
+      "size": 0,
+      "mtime": 1792398501.0179195,
+      "tail": []
+    },
+    "baseline_configure.log": {
+      "size": 56,
+      "mtime": 1792398440.5471668,
+      "tail": [
+        "[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
+      ]
+    },
+    "launcher.log": {
+      "size": 0,
+      "mtime": 1792398363.927679,
+      "tail": []
+    },
+    "queue.log": {
+      "size": 0,
+      "mtime": 1792398363.9316792,
+      "tail": []
+    },
+    "baseline_suite_audit.log": {
+      "size": 166,
+      "mtime": 1792398458.8319993,
+      "tail": [
+        "[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        "PASS CPU resource/config audit 41 4759 windows, 76100 steps/arm; GPU preflight pending or separately recorded"
+      ]
+    },
+    "baseline_software.log": {
+      "size": 1198,
+      "mtime": 1792398366.1797817,
+      "tail": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 18 tests in 0.245s",
+        "",
+        "OK"
+      ]
+    },
+    "ra_admission.log": {
+      "size": 3128,
+      "mtime": 1792412806.9811409,
+      "tail": [
+        "policy_head.logstd_layer.weight",
+        "policy_head.logstd_layer.bias",
+        "policy_head.logits_layer.weight",
+        "policy_head.logits_layer.bias",
+        "ADMISSION_PASS_NOT_LAUNCHED"
+      ]
+    }
+  },
+  "processes": [
+    "   9005    05:39:05 bash /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/supervise_queue.sh",
+    "   9007    05:39:05 /data/mlr_ifa/env/bin/python -u /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/queue.py",
+    "  15030    01:38:22 bash /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/ra/supervise.sh",
+    "  15037    01:38:21 /data/mlr_ifa/env/bin/python -u /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/ra/pipeline.py",
+    "  15334       56:53 /data/mlr_ifa/env/bin/python -u -m coreset_exp.evaluate ra_coreset",
+    "  17880       00:00 /data/mlr_ifa/env/bin/python /root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed41_three_arm_20261019/monitor_snapshot.py"
+  ],
+  "final_acceptance": null
+}
