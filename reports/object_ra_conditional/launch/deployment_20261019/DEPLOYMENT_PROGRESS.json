@@ -1,0 +1,71 @@
+{
+  "status": "PARTIAL",
+  "time": 1792423846.953184,
+  "frozen_controller_hashes": "PASS",
+  "processes": {
+    "AUTONOMOUS_LAUNCH.json": {
+      "pid": 19302,
+      "alive": true
+    },
+    "wrapper.started": {
+      "pid": 19302,
+      "alive": true
+    },
+    "controller.started": {
+      "pid": 19303,
+      "alive": true
+    },
+    "recovery_launch.json": {
+      "pid": 19218,
+      "alive": true
+    }
+  },
+  "seeds": {
+    "41": {
+      "epochs": 239,
+      "logical_steps": 50451,
+      "last_epoch": {
+        "task": 8,
+        "epoch": 38,
+        "batches": 309,
+        "steps": 50451,
+        "loss": -26.103705779634247,
+        "lr_first": 6.301973684210528e-05,
+        "lr_after": 6.200328947368421e-05,
+        "seconds": 7.539079427719116
+      },
+      "episode_files": 0,
+      "records": 0,
+      "external_exits": {}
+    },
+    "42": {
+      "epochs": 0,
+      "logical_steps": 0,
+      "last_epoch": null,
+      "episode_files": 0,
+      "records": 0,
+      "external_exits": {}
+    },
+    "43": {
+      "epochs": 0,
+      "logical_steps": 0,
+      "last_epoch": null,
+      "episode_files": 0,
+      "records": 0,
+      "external_exits": {}
+    }
+  },
+  "controller_status": {
+    "status": "WAITING_OR_RUNNING_STAGE1",
+    "time": 1792423821.108606
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 39 %, 1780 MiB, 24576 MiB",
+  "disk": "\u6587\u4ef6\u7cfb\u7edf        \u5bb9\u91cf  \u5df2\u7528  \u53ef\u7528 \u5df2\u7528% \u6302\u8f7d\u70b9\n/dev/vdb         99G   66G   28G   71% /data\n/dev/vda5        59G   43G   13G   77% /\n",
+  "workers": [
+    "  19218       1       17:43 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_driver.py 41",
+    "  19219   19218       17:41 /data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py train ra_coreset --resume",
+    "  19232   19219       17:40 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py train ra_coreset --resume",
+    "  19302       1       00:26 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/supervisor.py",
+    "  19303   19302       00:26 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/controller.py"
+  ]
+}

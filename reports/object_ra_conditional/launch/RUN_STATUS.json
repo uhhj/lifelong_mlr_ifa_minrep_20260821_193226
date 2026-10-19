@@ -1,19 +1,53 @@
 {
-  "status": "BLOCKED_TASK6_TENSOR_PARITY",
-  "time": "2026-10-19T23:05:42.961124+08:00",
-  "seed": 41,
-  "task": 6,
-  "epochs_executed": 100,
-  "optimizer_steps_executed": 15700,
-  "recovery_committed_steps": 15543,
-  "formal_records": 0,
-  "storage_transactions": 0,
-  "queue_exit": 1,
-  "wrapper_exit": 1,
-  "branch_deployment": "STOPPED_BEFORE_DEPLOYMENT_UNSAFE_BLOCKER",
+  "status": "PARTIAL_RUNNING_AUTONOMOUS",
+  "time": "2026-10-19T23:34:32.286699+08:00",
+  "observation_time": 1792423846.953184,
+  "server_controller": "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019",
+  "supervisor_pid": 19302,
+  "controller_pid": 19303,
+  "recovery_driver_pid": 19218,
+  "seed_progress": {
+    "41": {
+      "epochs": 239,
+      "logical_steps": 50451,
+      "last_epoch": {
+        "task": 8,
+        "epoch": 38,
+        "batches": 309,
+        "steps": 50451,
+        "loss": -26.103705779634247,
+        "lr_first": 6.301973684210528e-05,
+        "lr_after": 6.200328947368421e-05,
+        "seconds": 7.539079427719116
+      },
+      "episode_files": 0,
+      "records": 0,
+      "external_exits": {}
+    },
+    "42": {
+      "epochs": 0,
+      "logical_steps": 0,
+      "last_epoch": null,
+      "episode_files": 0,
+      "records": 0,
+      "external_exits": {}
+    },
+    "43": {
+      "epochs": 0,
+      "logical_steps": 0,
+      "last_epoch": null,
+      "episode_files": 0,
+      "records": 0,
+      "external_exits": {}
+    }
+  },
+  "original_failures_preserved": true,
+  "protocol_audit": "PASS_NO_PROTOCOL_DEVIATION_FOUND",
+  "cross_hardware_final_parity": "DISCLOSED_NOT_STOP",
+  "initial_model_all_rng_equality": "REQUIRED_PASS",
+  "deployment_acceptance": "AUTONOMOUS_LOCAL_ACCEPTANCE.json",
+  "branch_deployment": "ALL_AUTHORIZED_BRANCHES_DEPLOYED_AND_CONTROLLER_RUNNING",
   "performance_gate_evaluated": false,
-  "automatic_restart_allowed": false,
-  "diagnosis": "TASK6_READONLY_DIAGNOSIS.json",
-  "evidence": "progress_20261019_230336",
-  "frozen_source_unchanged": true
+  "engineering_recovery": "User authorizes agent to diagnose repair validate and continue remaining work at each check; no scientific changes or blind restart",
+  "final_experiment_acceptance": false
 }

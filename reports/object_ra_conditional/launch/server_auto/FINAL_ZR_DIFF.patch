@@ -1,0 +1,351 @@
+--- prior/admission.py
++++ current/admission.py
+@@ -1,11 +1,8 @@
+ """Read-only parent binding and real CUDA language gate admission; zero updates/env."""
+ import os,sys,json,hashlib,time,traceback
+ from pathlib import Path
+-W=Path('/root/mlr_ifa/experiment_workspaces/ZRv2_OBJECT_seed43_20261018')
+-O=Path('/root/mlr_ifa/experiments/ZRv2_OBJECT_seed43_20261018')
+-P=Path('/data/mlr_ifa/experiments/Seed43_Random_Coreset_repeat_20261016_v1')
+-S=Path('/data/mlr_ifa/experiment_workspaces/Seed43_three_arm_repeat_20261016_v1/rc/source')
+-os.environ.update(CORESET_OUT=str(P),CORESET_SEED='43',PYTHONDONTWRITEBYTECODE='1')
++from zr2_exp.params import *
++os.environ.update(CORESET_OUT=str(P),CORESET_SEED=str(SEED),PYTHONDONTWRITEBYTECODE='1')
+ sys.dont_write_bytecode=True
+ sys.path[:0]=[str(W/'attachment'),str(S)]
+ import numpy as np
+@@ -14,30 +11,34 @@
+ from coreset_exp.model import cfg,data_setup,complete
+ from libero.lifelong.utils import control_seed
+ from reference_core import extend_gates,normalize_rows
+-from compare_metrics import load_records,metrics,LOCKED
++from branch_metrics import load_records,metrics
+ 
+ def main():
+     tic=time.time();assert not (O/'ADMISSION.json').exists()
+     rows=[];binding={};write(O/'RUN_STATUS.json',dict(status='ADMISSION',pid=os.getpid(),time=time.time()))
+     try:
+-        c=verify();rates,records,ep_hashes=load_records(P/'coreset/evaluation',False)
+-        assert metrics(rates)==LOCKED
+-        binding.update(parent=str(P),source=str(S),contract_sha256=sha(P/'CONTRACT.json'),modal_sha256=sha(P/'MODAL_CONTRACT.json'),episode_hashes=ep_hashes,metrics={k:str(v) for k,v in metrics(rates).items()},checkpoints={})
+-        assert binding['modal_sha256']=='c379b9930387abc9eed54e8a9f83394f2f8be80ee1536921a53ce2cab66ea78d'
+-        inputs={str(P/n):sha(P/n) for n in ['CONTRACT.json','MODAL_CONTRACT.json','FEATURES.json','resolved_eval.json','resolved_coreset.json']}
++        c=verify();rates,records,ep_hashes=load_records(P/PARM/'evaluation',False)
++        assert SPEC['parent_engineering_file'] and json.loads(Path(SPEC['parent_engineering_file']).read_text())['status']=='PASS'
++        binding.update(parent=str(P),parent_arm=PARM,seed=SEED,suite=SUITE,source=str(S),contract_sha256=sha(P/'CONTRACT.json'),modal_sha256=sha(P/'MODAL_CONTRACT.json'),episode_hashes=ep_hashes,metrics={k:str(v) for k,v in metrics(rates).items()},checkpoints={})
++        assert cfg(PARM).benchmark_name==SUITE and cfg(PARM).seed==SEED
++        assert all(cfg(PARM).policy[k] is True for k in ('use_vision','use_language','use_state'))
++        assert cfg(PARM).gamma==(.3 if SUITE=='LIBERO_OBJECT' else .7)
++        inputs={str(P/n):sha(P/n) for n in ['CONTRACT.json','MODAL_CONTRACT.json','FEATURES.json','resolved_eval.json','resolved_'+PARM+'.json']}
+         for t in range(6,10):
+-            cp=P/'coreset/models'/f'mlrifa_{t}_model_ep99.pth';h=sha(cp)
++            cp=P/PARM/'models'/f'mlrifa_{t}_model_ep99.pth';h=sha(cp)
+             assert h==records[t,t,0]['checkpoint_sha256'];inputs[str(cp)]=h
+             binding['checkpoints'][str(t)]=dict(path=str(cp),sha256=h)
+-            sm=P/'coreset/storage'/f'task{t}.json';m=json.loads(sm.read_text());inputs[str(sm)]=sha(sm)
+-            assert m['K']==[781,740,780,660][t-6]
++            sm=P/PARM/'storage'/f'task{t}.json';m=json.loads(sm.read_text());inputs[str(sm)]=sha(sm)
++            assert m['K']==QUOTAS[t-6]
+             for r in m['selected']:
+                 assert sha(r['source'])==r['sha256']
+-                q=P/'coreset/buffer'/r['destination'];assert sha(q)==r['sha256'];inputs[str(q)]=r['sha256']
+-        inputs.update(c['inputs']);inputs.update({str(S/n):h for n,h in c['source_sha256'].items()})
+-        fm=json.loads((P/'FEATURES.json').read_text());inputs.update({str(P/'features'/n):h for n,h in fm['hashes'].items()})
++                q=P/PARM/'buffer'/r['destination'];assert sha(q)==r['sha256'];inputs[str(q)]=r['sha256']
++        inputs.update(c.get('inputs',{}));inputs.update(c.get('files',{}));inputs[SPEC['parent_engineering_file']]=sha(SPEC['parent_engineering_file']);inputs.update({str(S/n):h for n,h in c['source_sha256'].items()})
++        fm=json.loads((P/'FEATURES.json').read_text());assert [fm['counts'][str(t)] for t in range(6,10)]==COUNTS;inputs.update({str(P/'features'/n):h for n,h in fm['hashes'].items()})
++        inputs.update({str(P/PARM/'evaluation'/n):h for n,h in ep_hashes.items()})
++        for extra in SPEC.get('parent_amendment_files',[]):inputs[extra]=sha(extra)
+         write(O/'PARENT_BINDING.json',binding);write(O/'INPUT_SHA256.json',inputs)
+-        torch.set_num_threads(4);control_seed(43);torch.backends.cudnn.benchmark=True
++        torch.set_num_threads(4);control_seed(SEED);torch.backends.cudnn.benchmark=True
+         ce=cfg('eval');b,ds,shape=data_setup(ce,False);ce.shape_meta=shape
+         p=complete(ce,shape).eval().requires_grad_(False)
+         # Tokens for all tasks are metadata only; each gate construction uses its prefix.
+--- prior/pipeline.py
++++ current/pipeline.py
+@@ -1,7 +1,7 @@
+ """Finite background pipeline; no baseline execution or automatic blind restart."""
+ import os,sys,time,json,subprocess,traceback
+ from pathlib import Path
+-W=Path(__file__).resolve().parent;O=Path('/root/mlr_ifa/experiments/ZRv2_OBJECT_seed43_20261018')
++W=Path(__file__).resolve().parent;O=Path(json.loads((W/'RUN_SPEC.json').read_text())['output'])
+ def write(p,x):p.write_text(json.dumps(x,indent=2)+'\n')
+ def main():
+     assert not (O/'pipeline.started').exists() and not (O/'pipeline.exit').exists()
+--- prior/attachment\branch_metrics.py
++++ current/attachment\branch_metrics.py
+@@ -0,0 +1,36 @@
++"""Exact record-only per-parent comparison. The multi-seed controller owns the gate."""
++from pathlib import Path
++from fractions import Fraction
++import hashlib,json
++from zr2_exp.params import SEED,PARM,ARM
++from compare_metrics import metrics,_sha_field
++def load_records(folder,is_new):
++ folder=Path(folder);expected={'trials_stage%d_task%d.jsonl'%(s,t) for s in range(6,10) for t in range(6,s+1)}
++ assert {p.name for p in folder.glob('trials*.jsonl')}==expected
++ rates={};records={};hashes={};stages={};modals={}
++ for s in range(6,10):
++  for t in range(6,s+1):
++   f=folder/('trials_stage%d_task%d.jsonl'%(s,t));raw=f.read_bytes();hashes[f.name]=hashlib.sha256(raw).hexdigest()
++   rows=[json.loads(l) for l in raw.decode('utf-8-sig').splitlines() if l.strip()]
++   assert len(rows)==20 and {r['trial'] for r in rows}==set(range(20))
++   assert {r['initial_state_index'] for r in rows}==set(range(20))
++   for r in rows:
++    assert (r['seed'],r['stage'],r['task'],r['arm'])==(SEED,s,t,ARM if is_new else PARM)
++    assert type(r['success']) is bool and r['trial']==r['initial_state_index']
++    for k in ['checkpoint_sha256','initial_state_sha256','modal_sha256']:_sha_field(r[k],k)
++    if is_new:
++     assert r['parent_epoch']==99 and r['calibration_epoch']==9
++     cp=_sha_field(r['parent_checkpoint_sha256'],'parent_checkpoint_sha256')
++    else:assert r['epoch']==99;cp=r['checkpoint_sha256']
++    assert s not in stages or stages[s]==cp;stages[s]=cp
++    assert s not in modals or modals[s]==r['modal_sha256'];modals[s]=r['modal_sha256']
++    records[s,t,r['trial']]=r
++   rates[s,t]=Fraction(sum(r['success'] for r in rows),20)
++ return rates,records,hashes
++def compare(baseline,new):
++ br,b,bh=load_records(baseline,False);nr,n,nh=load_records(new,True);bm=metrics(br);nm=metrics(nr)
++ for key in b:
++  for f in ['initial_state_index','initial_state_sha256','modal_sha256']:assert b[key][f]==n[key][f]
++  assert b[key]['checkpoint_sha256']==n[key]['parent_checkpoint_sha256']
++ pack=lambda m:{k:dict(fraction=str(v),percent=float(v*100)) for k,v in m.items()}
++ return dict(status='PASS_RECORD_COMPARISON',baseline=pack(bm),new=pack(nm),delta_pp=pack({k:nm[k]-bm[k] for k in bm}),metric_gate=nm['AUC']>bm['AUC'],metric_gate_scope='per-seed AUC diagnostic only; full three-seed mean and 2/3 plus all engineering gate evaluated by controller',baseline_files_sha256=bh,new_files_sha256=nh,matrices={name:[[float(rates[s,t]*100) if t<=s else None for t in range(6,10)] for s in range(6,10)] for name,rates in [('parent',br),('new',nr)]})
+--- prior/source\zr2_exp\audit.py
++++ current/source\zr2_exp\audit.py
+@@ -1,24 +1,24 @@
+ """Read-only scientific acceptance; process exit is checked separately."""
+ from .common import *
+-from compare_metrics import compare
++from branch_metrics import compare
+ 
+ def main():
+-    verify();cal=js(O/'CALIBRATED.json');assert cal['epochs']==40 and cal['optimizer_steps']==10550 and cal['exposures']==105240
++    verify();cal=js(O/'CALIBRATED.json');assert cal['epochs']==40 and cal['optimizer_steps']==STEPS and cal['exposures']==EXPOSURES
+     rows=js(O/'epochs.json');assert len(rows)==40
+     assert {(r['task'],r['epoch']) for r in rows}=={(t,e) for t in range(6,10) for e in range(10)}
+-    assert sum(r['batches'] for r in rows)==10550 and sum(r['samples'] for r in rows)==105240
++    assert sum(r['batches'] for r in rows)==STEPS and sum(r['samples'] for r in rows)==EXPOSURES
+     logs=[json.loads(s) for s in (O/'calibration_batches.jsonl').read_text().splitlines()]
+     # Successful fresh execution: any resumed duplicate physical computation must be audited separately.
+-    assert len(logs)==10550 and len({r['logical_step'] for r in logs})==10550
++    assert len(logs)==STEPS and len({r['logical_step'] for r in logs})==STEPS
+     counts={}
+     for r in logs:
+         assert len(r['samples'])==len(r['indices']);key=(r['stage'],r['epoch']);counts.setdefault(key,[]).extend(r['indices'])
+-    for (t,e),v in counts.items():assert sorted(v)==list(range([1562,2261,3081,3620][t-6]))
++    for (t,e),v in counts.items():assert sorted(v)==list(range(LENS[t-6]))
+     for t in range(6,10):
+         for task in range(6,t+1):
+             expected=sum(task in r['active'] for r in logs if r['stage']==t)
+             assert rows[(t-6)*10+9]['branch_steps'][str(task)]==expected
+-        assert js(O/f'buffer_after_task{t}.json')['hashes']==js(P/'coreset'/f'buffer_after_task{t}.json')['hashes']
++        assert js(O/f'buffer_after_task{t}.json')['hashes']==js(P/PARM/f'buffer_after_task{t}.json')['hashes']
+     structure=[json.loads(s) for s in (O/'STRUCTURE.jsonl').read_text().splitlines()]
+     assert len(structure)==16 and all(r['passed'] for r in structure)
+     assert len({r['T0_hash'] for r in structure})==1
+@@ -26,7 +26,7 @@
+     for f in (O/'evaluation').glob('attempts*.jsonl'):attempts.extend(json.loads(s) for s in f.read_text().splitlines())
+     for event,n in [('vector_attempt_start',20),('vector_attempt_complete',20),('environment_construct_start',10),('environment_construct_complete',10),('environment_closed',10)]:assert sum(r['event']==event for r in attempts)==n
+     assert not any(r['event']=='technical_exception' for r in attempts)
+-    comparison=compare(P/'coreset/evaluation',O/'evaluation');write(O/'METRIC_COMPARISON.json',comparison)
++    comparison=compare(P/PARM/'evaluation',O/'evaluation');write(O/'METRIC_COMPARISON.json',comparison)
+     setup();p,t0=new_public();loaded=[]
+     for t in range(6,10):
+         f=O/'models'/f'zrv2_stage{t}_calibration_ep9.pth';s=torch.load(f,map_location='cpu');assert sha(f)==cal['checkpoints'][f.name]
+@@ -35,7 +35,7 @@
+         b,_=make_bank(t);b.load_state_dict(s['bank'],strict=True);assert b.gate_w.dtype==torch.float64
+         loaded.append(dict(stage=t,checkpoint_sha256=sha(f),public_hash=s['public_hash'],T0_hash=s['T0_hash'],parameters=sum(v.numel() for v in b.parameters())))
+     write(O/'CHECKPOINT_LOAD_ACCEPTANCE.json',dict(status='PASS',rows=loaded))
+-    write(O/'AUDIT.json',dict(status='PASS',epochs=40,optimizer_steps=10550,sample_exposures=105240,checkpoints=4,episodes=200,vector_attempts=20,structure_checks=16,metric_gate=comparison['metric_gate'],cost=dict(optimizer_steps=10550,sample_exposures=105240,epoch_seconds=sum(r['seconds'] for r in rows),extra_T0_bytes=js(O/'INTEGRATION.json')['T0_bytes'],residual_parameters=16608,peak_gpu_bytes=cal['gpu_peak_allocated'],latency=js(O/'COST_ISOLATION.json')['latency']),notes=['Three-seed/five-seed expansion is conditional on all metrics and process acceptance.','Historical RTX4090 parent vs current RTX3090; global action RNG not isolated.','Public policy was not retrained; extra calibration compute is not equal-budget comparison.']))
++    write(O/'AUDIT.json',dict(status='PASS',epochs=40,optimizer_steps=STEPS,sample_exposures=EXPOSURES,checkpoints=4,episodes=200,vector_attempts=20,structure_checks=16,metric_gate=comparison['metric_gate'],cost=dict(optimizer_steps=STEPS,sample_exposures=EXPOSURES,epoch_seconds=sum(r['seconds'] for r in rows),extra_T0_bytes=js(O/'INTEGRATION.json')['T0_bytes'],residual_parameters=16608,peak_gpu_bytes=cal['gpu_peak_allocated'],latency=js(O/'COST_ISOLATION.json')['latency']),notes=['Whole-three-seed gate: mean AUC delta positive and at least two positive seed deltas; engineering all PASS.','Historical hardware may differ; global action RNG not isolated; see parent binding.','Public policy was not retrained; extra calibration compute is not equal-budget comparison.']))
+     status('AWAITING_PROCESS_EXIT_ACCEPTANCE',metric_gate=comparison['metric_gate'])
+     print(json.dumps(dict(status='AUDIT_PASS',metric_gate=comparison['metric_gate'])),flush=True)
+ if __name__=='__main__':main()
+--- prior/source\zr2_exp\calibrate.py
++++ current/source\zr2_exp\calibrate.py
+@@ -4,7 +4,7 @@
+ from libero.lifelong.algos.mlr import build_dataset_for_task
+ 
+ def store(t):
+-    src=P/'coreset/storage'/f'task{t}.json';m=js(src);target=O/'storage'/f'task{t}.json'
++    src=P/PARM/'storage'/f'task{t}.json';m=js(src);target=O/'storage'/f'task{t}.json'
+     if target.exists():assert js(target)['parent_manifest_sha256']==sha(src)
+     else:write(target,dict(parent_manifest_sha256=sha(src),selected=m['selected'],task=t))
+     directory=O/'buffer';directory.mkdir(exist_ok=True)
+@@ -14,7 +14,7 @@
+         else:
+             tmp=dst.with_suffix('.copying');shutil.copy2(s,tmp);assert sha(tmp)==r['sha256'];tmp.replace(dst)
+     actual={p.name:sha(p) for p in sorted(directory.glob('*.pt'))}
+-    expected=js(P/'coreset'/f'buffer_after_task{t}.json')['hashes'];assert actual==expected
++    expected=js(P/PARM/f'buffer_after_task{t}.json')['hashes'];assert actual==expected
+     write(O/f'buffer_after_task{t}.json',dict(hashes=actual,parent_manifest_sha256=sha(src),count=len(actual)))
+ 
+ def main():
+@@ -40,11 +40,11 @@
+             store(t);res=None;continue
+         parent=load_stage(p,t);ph=tensor_hash(p)
+         bank,geometry=make_bank(t,previous)
+-        dataset=build_dataset_for_task(str(P/'features'),t,str(O/'buffer'),43,start=6)
+-        assert len(dataset)==[1562,2261,3081,3620][t-6]
++        dataset=build_dataset_for_task(str(P/'features'),t,str(O/'buffer'),SEED,start=6)
++        assert len(dataset)==LENS[t-6]
+         sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True,seed=0)
+         loader=DataLoader(dataset,batch_size=10,sampler=sampler,num_workers=0,drop_last=False)
+-        assert len(loader)==[157,227,309,362][t-6]
++        assert len(loader)==BATCHES[t-6]
+         order=[Path(f).name for f in dataset.file_paths];write(O/f'dataset_stage{t}.json',dict(order=order,sha256=hashlib.sha256(json.dumps(order).encode()).hexdigest()))
+         write(O/f'gates_stage{t}.json',dict(geometry=geometry,canonical_prefix=list(range(t+1)),FP64=True))
+         opt,sch=optimizer(bank,10*len(loader));start_epoch=0
+@@ -71,7 +71,7 @@
+             if epoch==9:save(O/'models'/f'zrv2_stage{t}_calibration_ep9.pth',snapshot)
+             save(cp,snapshot);status('CALIBRATING',task=t,epoch=epoch,optimizer_steps=globalstep,exposures=exposures);print(json.dumps(row),flush=True)
+         check(p,t0,bank,dataset,'stage_end',ph,t0_hash);store(t);previous=bank
+-    assert len(epochs)==40 and globalstep==10550 and exposures==105240
++    assert len(epochs)==40 and globalstep==STEPS and exposures==EXPOSURES
+     write(O/'CALIBRATED.json',dict(status='CALIBRATED',epochs=40,optimizer_steps=globalstep,exposures=exposures,checkpoints={f.name:sha(f) for f in (O/'models').glob('*.pth')},summed_epoch_seconds=sum(r['seconds'] for r in epochs),T0_hash=t0_hash,gpu_peak_allocated=torch.cuda.max_memory_allocated()))
+     status('CALIBRATED')
+ if __name__=='__main__':main()
+--- prior/source\zr2_exp\common.py
++++ current/source\zr2_exp\common.py
+@@ -1,10 +1,7 @@
+ import os,sys,json,copy,time,hashlib
+ from pathlib import Path
+-W=Path('/root/mlr_ifa/experiment_workspaces/ZRv2_OBJECT_seed43_20261018')
+-O=Path('/root/mlr_ifa/experiments/ZRv2_OBJECT_seed43_20261018')
+-P=Path('/data/mlr_ifa/experiments/Seed43_Random_Coreset_repeat_20261016_v1')
+-S=Path('/data/mlr_ifa/experiment_workspaces/Seed43_three_arm_repeat_20261016_v1/rc/source')
+-os.environ.update(CORESET_OUT=str(P),CORESET_SEED='43',PYTHONDONTWRITEBYTECODE='1')
++from .params import *
++os.environ.update(CORESET_OUT=str(P),CORESET_SEED=str(SEED),PYTHONDONTWRITEBYTECODE='1')
+ sys.dont_write_bytecode=True
+ sys.path[:0]=[str(W/'attachment'),str(S)]
+ import numpy as np
+@@ -32,7 +29,7 @@
+     if isinstance(x,tuple):return tuple(cpu(v) for v in x)
+     return copy.deepcopy(x)
+ def setup():
+-    assert torch.cuda.is_available();torch.set_num_threads(4);control_seed(43)
++    assert torch.cuda.is_available();torch.set_num_threads(4);control_seed(SEED)
+     flags=js(O/'ADMISSION.json')['numeric_flags']
+     torch.backends.cuda.matmul.allow_tf32=flags['tf32_matmul'];torch.backends.cudnn.allow_tf32=flags['tf32_cudnn'];torch.backends.cudnn.benchmark=flags['cudnn_benchmark']
+     torch.use_deterministic_algorithms(flags['deterministic'])
+@@ -41,7 +38,7 @@
+     for p,h in c['files'].items():assert sha(p)==h,('Frozen source/input mismatch',p)
+     return c
+ def new_public():
+-    c=cfg('coreset');c.aug=False;c.train.use_augmentation=False
++    c=cfg(PARM);c.aug=False;c.train.use_augmentation=False
+     p=BriefPolicy(c,None).cuda().eval().requires_grad_(False);strict_downstream(p,c.pretrain)
+     t0=copy.deepcopy(p.temporal_transformer).eval().requires_grad_(False)
+     assert all(a.data_ptr()!=b.data_ptr() for a,b in zip(p.temporal_transformer.parameters(),t0.parameters()))
+@@ -53,7 +50,7 @@
+     # Previously admitted canonical data; construction is still strictly prefix-only.
+     e=np.load(W/'language_and_gates.npz')['canonical'];w=np.empty((0,512));reports=[]
+     for k in range(6,t+1):w,r=extend_gates(e[:k],e[k],w);reports.append(r)
+-    before=cpu(rng());b=MeanCalibrationBank(range(6,t+1),w).cuda()
++    before=cpu(rng());b=MeanCalibrationBank(range(6,t+1),w,experiment_seed=SEED).cuda()
+     if previous is not None:
+         for n,v in previous.branches.items():
+             b.branches[n].load_state_dict(v.state_dict(),strict=True)
+--- prior/source\zr2_exp\cost_and_isolation.py
++++ current/source\zr2_exp\cost_and_isolation.py
+@@ -6,7 +6,7 @@
+     s=torch.load(O/'integration_recovery.pth',map_location='cpu');trained.load_state_dict(s['bank'])
+     assert all(torch.equal(a,b) for a,b in zip(baseline.branches['6'].parameters(),trained.branches['6'].parameters()))
+     assert any(not torch.equal(a,b) for a,b in zip(baseline.branches['7'].parameters(),trained.branches['7'].parameters()))
+-    h=torch.cat([torch.load(f,map_location='cpu')['feature'] for f in sorted((P/'coreset/buffer').glob('t6__*.pt'))[:10]]).cuda()
++    h=torch.cat([torch.load(f,map_location='cpu')['feature'] for f in sorted((P/PARM/'buffer').glob('t6__*.pt'))[:10]]).cuda()
+     with torch.no_grad():
+         before=decode(p,t0,baseline,h);after=decode(p,t0,trained,h)
+         diff=float((before['means']-after['means']).abs().max());dd=float((before['delta']-after['delta']).abs().max())
+--- prior/source\zr2_exp\evaluate.py
++++ current/source\zr2_exp\evaluate.py
+@@ -8,12 +8,12 @@
+     verify();assert (O/'CALIBRATED.json').exists();setup()
+     root=O/'evaluation';root.mkdir(exist_ok=True)
+     assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG/environment recovery'
+-    c=cfg('eval');c.experiment_dir=str(root);control_seed(43);b,ds,shape=data_setup(c,True);c.shape_meta=shape
++    c=cfg('eval');c.experiment_dir=str(root);control_seed(SEED);b,ds,shape=data_setup(c,True);c.shape_meta=shape
+     write(root/'resolved_actual.json',dict(c));torch.backends.cudnn.benchmark=True
+     from coreset_exp.eval_metric import evaluate_one_task_success
+     t0=None
+     for stage in range(6,10):
+-        control_seed(43)
++        control_seed(SEED)
+         cp=O/'models'/f'zrv2_stage{stage}_calibration_ep9.pth';snap=torch.load(cp,map_location='cpu')
+         assert snap['task']==stage and snap['next_epoch']==10 and snap['contract_sha256']==sha(O/'CONTRACT.json')
+         parent=snap['parent'];assert sha(parent['path'])==parent['sha256']
+@@ -25,14 +25,14 @@
+             bank,_=make_bank(stage);bank.load_state_dict(snap['bank'],strict=True);bank.requires_grad_(False)
+             assert tensor_hash(t0)==snap['T0_hash'];ctx=install_native(algo.policy,t0,bank);algo.eval();restore_rng(r)
+             task=b.get_task(taskid);init_path=Path(c.init_states_folder)/task.problem_folder/task.init_states_file;init=torch.load(init_path)
+-            context.CONTEXT.clear();context.CONTEXT.update(arm='coreset_ifa_zrv2',stage=stage,parent_epoch=99,calibration_epoch=9,
++            context.CONTEXT.clear();context.CONTEXT.update(arm=ARM,stage=stage,parent_epoch=99,calibration_epoch=9,
+                 parent_checkpoint_sha256=parent['sha256'],checkpoint_sha256=sha(cp),T0_hash=snap['T0_hash'],gate_hash=hashlib.sha256(bank.gate_w.cpu().numpy().tobytes()).hexdigest(),
+                 modal_sha256=sha(P/'MODAL_CONTRACT.json'),loaded_downstream_keys=n,initial_file_sha256=sha(init_path),initial_hashes=[hashlib.sha256(np.asarray(v).tobytes()).hexdigest() for v in init[:20]],
+                 trial_log=str(root/f'trials_stage{stage}_task{taskid}.jsonl'),attempt_log=str(root/f'attempts_stage{stage}_task{taskid}.jsonl'))
+             save(root/f'rng_before_stage{stage}_task{taskid}.pth',rng())
+             status('EVALUATING',stage=stage,task=taskid)
+             try:
+-                instr,mask=b.get_task_emb(taskid);tic=time.time();result=evaluate_one_task_success(c,algo,task,instr,mask,taskid,see=43)
++                instr,mask=b.get_task_emb(taskid);tic=time.time();result=evaluate_one_task_success(c,algo,task,instr,mask,taskid,see=SEED)
+                 write(root/f'cell_stage{stage}_task{taskid}.json',dict(success_rate=float(result),seconds=time.time()-tic,spatial_calls=ctx['spatial_calls'],**context.CONTEXT))
+             except BaseException as exc:context.ledger('technical_exception',exception=repr(exc));raise
+             finally:del algo,bank;torch.cuda.empty_cache()
+--- prior/source\zr2_exp\freeze.py
++++ current/source\zr2_exp\freeze.py
+@@ -2,10 +2,10 @@
+ def main():
+     assert not (O/'CONTRACT.json').exists();assert js(O/'INTEGRATION.json')['status']=='PASS';assert js(O/'COST_ISOLATION.json')['status']=='PASS'
+     files=js(O/'INPUT_SHA256.json')
+-    for p in list((W/'source').rglob('*.py'))+list((W/'attachment').glob('*'))+[W/'admission.py',W/'language_and_gates.npz',W/'pipeline.py',W/'env.sh']:
++    for p in list((W/'source').rglob('*.py'))+list((W/'attachment').glob('*'))+[W/'admission.py',W/'language_and_gates.npz',W/'pipeline.py',W/'env.sh',W/'RUN_SPEC.json',Path(SPEC['controller_contract'])]:
+         if p.is_file():files[str(p)]=sha(p)
+     for name in ['ADMISSION.json','PARENT_BINDING.json','INTEGRATION.json','COST_ISOLATION.json']:files[str(O/name)]=sha(O/name)
+-    write(O/'CONTRACT.json',dict(name='ZR_v2_OBJECT_seed43_repeat1_parent',seed=43,files=files,epochs=40,optimizer_steps=10550,sample_exposures=105240,formal_episodes=200,conditional_extension='all four exact metric criteria and all engineering acceptance; user 2026-10-18 authorization'))
+-    write(O/'resolved_calibration.json',dict(parent_cfg=cfg('coreset'),spec=__import__('yaml').safe_load((W/'attachment/spec.yaml').read_text()),actual=dict(seed=43,batch=10,epochs_per_stage=10,workers=0,drop_last=False,sampler_seed=0,optimizer='AdamW_UV_only',lr=1e-4,weight_decay=.1,warmup500=True,common_eval_frozen=True,T0_eval_frozen=True,output=str(O))))
++    write(O/'CONTRACT.json',dict(name=ARM+'_'+SUITE+'_seed'+str(SEED),seed=SEED,files=files,epochs=40,optimizer_steps=STEPS,sample_exposures=EXPOSURES,formal_episodes=200,conditional_extension='User 2026-10-19 whole-three-seed mean AUC positive and at least 2/3 positive; all engineering PASS'))
++    write(O/'resolved_calibration.json',dict(parent_cfg=cfg(PARM),spec=SPEC,actual=dict(seed=SEED,batch=10,epochs_per_stage=10,workers=0,drop_last=False,sampler_seed=0,optimizer='AdamW_UV_only',lr=1e-4,weight_decay=.1,warmup500=True,common_eval_frozen=True,T0_eval_frozen=True,output=str(O))))
+     status('READY')
+ if __name__=='__main__':main()
+--- prior/source\zr2_exp\integration.py
++++ current/source\zr2_exp\integration.py
+@@ -11,7 +11,7 @@
+     public_before=tensor_hash(p);t0_before=tensor_hash(t0)
+     def data(t):
+         # Task6 integration probes are retained parent memory, not discarded windows.
+-        files=sorted((P/'coreset/buffer').glob('t6__*.pt')) if t==6 else sorted((P/'features/7').glob('*.pt'))
++        files=sorted((P/PARM/'buffer').glob('t6__*.pt')) if t==6 else sorted((P/'features/7').glob('*.pt'))
+         rows=[torch.load(f,map_location='cpu') for f in files[:10]]
+         return torch.cat([r['feature'] for r in rows]).cuda(),torch.cat([r['actions'] for r in rows]).cuda()
+     h6,a6=data(6);h7,a7=data(7)
+@@ -28,7 +28,7 @@
+         assert float((plus['means']-zero['means']).abs().max())<=.100001
+         assert torch.equal(plus['scales'],zero['scales']) and torch.equal(plus['logits'],zero['logits'])
+         assert torch.equal(plus['selected'],zero['selected'])
+-    opt,sch=optimizer(bank,2270)
++    opt,sch=optimizer(bank,10*BATCHES[1])
+     def call(hh,aa,ii):
+         append(O/'integration_calls.jsonl',dict(event='before_optimizer_call',index=len((O/'integration_calls.jsonl').read_text().splitlines()) if (O/'integration_calls.jsonl').exists() else 0,time=time.time()))
+         return update(p,t0,bank,opt,sch,hh,aa,ii)
+--- prior/source\zr2_exp\params.py
++++ current/source\zr2_exp\params.py
+@@ -0,0 +1,16 @@
++"""Frozen run provenance and suite arithmetic, no scientific algorithm changes."""
++import json
++from pathlib import Path
++W=Path(__file__).resolve().parents[2]
++SPEC=json.loads((W/'RUN_SPEC.json').read_text())
++O=Path(SPEC['output']);P=Path(SPEC['parent']);S=Path(SPEC['parent_source'])
++SEED=SPEC['seed'];SUITE=SPEC['suite'];PARM=SPEC['parent_arm'];ARM=SPEC['arm']
++assert SEED in [41,42,43,44] and SUITE in ['LIBERO_OBJECT','LIBERO_GOAL']
++assert PARM in ['coreset','ra_coreset'] and ARM==PARM+'_ifa_zrv2'
++COUNTS=[1562,1480,1560,1319] if SUITE=='LIBERO_OBJECT' else [997,889,904,1969]
++QUOTAS=[(n+1)//2 for n in COUNTS]
++LENS=[n+sum(QUOTAS[:i]) for i,n in enumerate(COUNTS)]
++BATCHES=[(n+9)//10 for n in LENS]
++STEPS=10*sum(BATCHES);EXPOSURES=10*sum(LENS)
++assert STEPS==(10550 if SUITE=='LIBERO_OBJECT' else 7610)
++assert SPEC['optimizer_steps']==STEPS and SPEC['exposures']==EXPOSURES

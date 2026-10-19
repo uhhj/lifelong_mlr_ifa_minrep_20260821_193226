@@ -1,5 +1,23 @@
 # OBJECT RA → ZR-v2 条件实验交接
 
+## 当前最高优先级：2026-10-19 23:30部署与最新工程恢复授权
+
+先读AUTONOMOUS_DEPLOYMENT_REPORT.md、AUTONOMOUS_LOCAL_ACCEPTANCE.json、RUN_STATUS.json、server_auto/AUTHORIZATION.json、RECOVERY_CONTRACT.json、AUTONOMOUS_CONTRACT.json与deployment_20261019证据。下文23:05的BLOCKED及“后续未部署”只作历史，已被本节覆盖；旧报告/exit1不能删除或改写。
+
+用户授权在无真实协议偏差时取消跨硬件末端逐元素一致停止条件。seed41协议核查PASS；初始模型/全部RNG及源码/输入/配置/预算一致仍强制。外置恢复已启动，23:30:46为Task8 epoch38、239epoch/50451逻辑步、0正式记录。完整点next_epoch99/15543步恢复，重做157未提交步骤单独计物理成本。原冻结科学源码/缓存合同未改，历史87/100张量差异留证；硬件并非已证明的唯一原因。
+
+新服务器总控N=/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019，supervisor PID19302、controller PID19303，seed41 recovery driver PID19218。总控已真实脱离SSH启动，拥有全部三条已授权条件路径；不能再启动旧Q队列、重复prepare/freeze/pre检或手工并发分支。先运行N/deployment_snapshot.py（外部只读监控）并查N/STATUS.json、controller/wrapper/supervisor退出、stage1/{seed}与zr_ledger，实际worker/GPU/磁盘和冻结合同。旧Q仍是科学源码/父路径，N才是当前调度和恢复证据。
+
+第一阶段RA对Random，第二阶段OBJECT RA+ZR-v2对本轮RA；均三seed均值AUC严格上升且至少2/3上升、工程全PASS。第一关性能FAIL才GOAL Coreset+ZR-v2四seed；第一关PASS后第二关PASS才GOAL RA+ZR-v2三seed，第二关FAIL停止。工程失败不等于性能FAIL。每组准入/4次隔离GPU更新0环境在被选中后运行，不重复已通过步骤。七个既有GOAL父资源只读核验PASS，但不能冒称新ZR-v2 GPU准入已通过。
+
+新用户持续授权：每次自动检查遇到工程错误，主动选择最合适的修复并继续推进，无需再为常规工程修复询问。先确认相关进程状态、防止重复启动、保留原失败和输入/合同哈希，验证修复后仅推进未完成工作。可以外置版本化恢复/只读分析适配，不悄改冻结科学代码或重贴合同。训练只从完整epoch恢复all state，存储预提交幂等；已完成正常失败rollout不重试，部分global RNG评估必须保原RNG/环境顺序。若必须改科学协议、预算、门槛，或无法保证状态/证据完整，才BLOCKED并说明。总控当前未知错误留证停止；代理下次检查根据此授权诊断修复后显式部署仅剩阶段的恢复队列，禁止盲重启原controller。每个恢复记录新合同、实际命令退出码和原错误，计入额外物理成本。
+
+已知Python3.8只读适配器ast.unparse兼容问题的严格限定恢复已在controller中部署：seed41 train/eval均0且只读audit出现该精确错误时仅重跑纠正后的只读审计。原失败不覆盖；42/43用兼容审计。不要为了提前规避该已处理问题中断当前训练。
+
+服务器完成后要求controller/wrapper/supervisor及final_audit/package_light退出0（工程恢复则保留原非0及新的完整验收）、FINAL_SERVER_ACCEPTANCE PASS和无残留科学worker。只取N/light包中允许的轻量文件并按manifest核验，再本地独立复算全分支各seed全部任务/指标/配对差/均值样本SD/成本。完成前PARTIAL。每次检查按AGENTS推送本轮精确审查的代码报告轻量证据；不得发布权重/RNG二进制/latent/buffer/actions/语言数组或凭据。完整交付后删除自动化。电脑关闭服务器继续，需新诊断的恢复与本地发布待代理可用。
+
+以下为原始交接，冲突处以以上授权和部署合同为准。
+
 先完整读PROTOCOL.md、DECISION_GRAPH.json、PARENTS.json、各seed ACTUAL_SPEC、SOURCE_DIFF、RUN_STATUS、最新进度和恢复补充。用户最新确认第一关比较Random+IFA，不能用原RA GOAL默认Coreset门槛。两关仅三seed平均AUC严格提高且至少2/3个seed提高、全部工程PASS；OldFinal/FWT/NBT仅报告。不得事后删seed或改门槛。seed43 OBJECT始终repeat1，首次高分不参与。
 
 凭据沿本对话SSH root@jq1.9gpu.com:11920，仅内存/getpass；不写任何文件日志或自动化。W/Q=/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019，O=/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed{s}_20261019，s41/42/43。本轮数据盘约29GiB，旧数据/root资产只读。无需另问本轮数据盘存储。

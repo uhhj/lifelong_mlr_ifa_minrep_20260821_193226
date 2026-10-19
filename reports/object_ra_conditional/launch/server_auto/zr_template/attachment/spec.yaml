@@ -1,0 +1,245 @@
+name: ZR_v2_stable_bidirectional_mean_calibration_OBJECT_seed43
+status: DESIGN_NOT_EXECUTED
+source:
+  repository: uhhj/lifelong_mlr_ifa_minrep_20260821_193226
+  inspected_commit: d4a2420e7b5fe6cbd15dddf9a6ada1b6279ccdd1
+  archived_parent_source_reference: experiments/object_coreset_seeds42_43_44/seed43/source
+  actual_repeat1_source_and_config_must_be_bound: true
+  parent_run_id: Seed43_Random_Coreset_repeat_20261016_v1
+  recorded_parent_root: /data/mlr_ifa/experiments/Seed43_Random_Coreset_repeat_20261016_v1
+  parent_arm: coreset
+  repeat1_episode_directory: reports/object_five_seed_summary/evidence/20261016_seed43_three_arm_repeat_v1/completion_evidence/RC/coreset/evaluation
+  stage6_parent_checkpoint_sha256_from_episode: 73fa1a2b1f0b295a4c078bef18d0e423d64ca04858b902ab0119f37ffd398763
+  parent_modal_sha256_from_episode: c379b9930387abc9eed54e8a9f83394f2f8be80ee1536921a53ce2cab66ea78d
+  parent_root_relocation_allowed_only_with_identical_hashes: true
+  stage7_to9_checkpoint_hashes: RESOLVE_FROM_REPEAT1_EPISODES_AND_VALIDATE_FILES
+  official_pretrain: RESOLVE_FROM_REPEAT1_CONTRACT
+  accepted_prototype_run: REQUIRED_FOR_LANGUAGE_SOURCE_AND_NUMERICAL_CONTRACT
+  import_ZRv1_or_prototype_trained_residual_weights: false
+  original_seed43_baseline_is_context_only: true
+  no_posthoc_parent_substitution: true
+  overwrite_old_files: false
+scope:
+  benchmark: LIBERO_OBJECT
+  task_order_index: 0
+  seed: 43
+  tasks: [6, 7, 8, 9]
+  arm: coreset_ifa_zrv2
+  additional_seeds: []
+  common_backbone_training_runs: 0
+  baseline_new_rollouts: 0
+  new_calibration_arms: 1
+  new_calibration_epochs: 40
+  new_optimizer_steps: 10550
+  new_calibration_sample_exposures: 105240
+  calibrated_stage_snapshots: 4
+  new_formal_rollouts: 200
+  auto_extend: false
+  integrated_smoke_optimizer_calls_max: 4
+  integrated_smoke_environment_steps: 0
+parent_common_policy:
+  mode: REUSE_EXACT_REPEAT1_STAGE6_TO9_EP99_CHECKPOINTS
+  meaning: equivalent_stage_outputs_only_because_residual_is_excluded_from_common_training
+  use_state: true
+  use_language: true
+  use_vision: true
+  window_length: 8
+  demonstrations_per_current_task: 10
+  original_epochs_per_task: 100
+  original_batch_size: 10
+  original_optimizer: AdamW
+  original_lr: 1.0e-4
+  original_betas: [0.9, 0.999]
+  original_eps: 1.0e-8
+  original_weight_decay: 0.1
+  original_warmup_steps: 500
+  original_schedule: linear_per_optimizer_step
+  ifa_weight: 0.1
+  ifa_gamma: 0.3
+  exact_stage_payload_hashes_required: true
+  calibration_updates_to_public_parameters_or_buffers: false
+  residual_in_common_BC_forward: false
+memory:
+  feature_source: exact_repeat1_state_true_cache
+  feature_shape: [1, 8, 4, 512]
+  actions_shape: [1, 8, 7]
+  current_counts: {6: 1562, 7: 1480, 8: 1560, 9: 1319}
+  admission_counts: {6: 781, 7: 740, 8: 780, 9: 660}
+  old_buffer_before_stage: {6: 0, 7: 781, 8: 1521, 9: 2301}
+  calibration_dataset_lengths: {6: 1562, 7: 2261, 8: 3081, 9: 3620}
+  epoch_batches: {6: 157, 7: 227, 8: 309, 9: 362}
+  reuse_repeat1_members_payload_names_order_and_manifest: true
+  admission_timing: after_current_stage_calibration_snapshot
+  reread_discarded_old_demonstrations: false
+  future_task_payloads_available_to_current_stage: false
+  selector_change_or_event_quota: false
+  base0to5_action_data_used_for_calibration: false
+  permanent_auxiliary_feature_cache: false
+fixed_reference:
+  input: same_existing_spatial_latent_H
+  encoder: official_pretrained_temporal_transformer_only_T0
+  output: last_temporal_language_position_512
+  distinct_parameter_storage_from_public_Ck: true
+  all_parameters_and_buffers_frozen: true
+  always_eval: true
+  common_and_reference_forward_under: torch.no_grad
+  inferencemode_constants_used_for_backprop: false
+  previous_stage_or_current_public_Tk_as_reference: false
+  per_task_full_model_copies: false
+residual:
+  rank: 8
+  input_dimension: 512
+  output_dimension: 7
+  branches: [6, 7, 8, 9]
+  V_init: normal_std_0.02
+  U_init: zeros
+  bias: false
+  local_init_seed: 43_plus_task_id
+  U_shape: [7, 8]
+  V_shape: [8, 512]
+  old_UV: warm_start_and_recalibrate_with_own_coreset_each_stage
+  residual_dtype: float32
+  dropout: false
+  shared_delta_for_all_five_components: true
+  correction: delta=0.1*tanh(sum_j(h_j(e)*U_j*V_j*q))
+  correction_is_added_to: original_mean_preactivations
+  mean_change_inf_bound: 0.1
+  scale_and_logits_residuals: false
+  physical_safety_guarantee: false
+language_gates:
+  canonical_source: frozen_loaded_original_language_encoder_output
+  runtime_source: actual_H_last_time_modality0_normalized_only_inside_gate
+  protect_base_instructions: [0, 1, 2, 3, 4, 5]
+  construction_prefix_only: true
+  new_gate: orthogonal_projection_against_all_old_canonical_instructions
+  update_old_gate: w_j_new=w_j_old-(w_j_old_dot_e_k)*g_k_vector
+  gate_learning_by_gradient: false
+  prototype_old_gates_reused_without_bidirectional_update: false
+  dtype: float64
+  rank_rtol: 1.0e-10
+  rank_atol: 1.0e-12
+  reject_singular_values_within_factor10_of_rank_threshold: true
+  min_novelty_norm: 1.0e-2
+  max_l2_gain_each_updated_gate: 100.0
+  canonical_response_atol: 1.0e-10
+  actual_offdiagonal_gate_atol: 1.0e-6
+  actual_own_gate_error_atol: 1.0e-5
+  on_violation: STOP_NO_TUNING_OR_ZERO_SNAPPING
+  task_id_or_canonical_lookup_at_inference: false
+calibration:
+  epochs_each_stage: 10
+  final_calibration_epoch_index: 9
+  batch_size: 10
+  num_workers: 0
+  device: one_CUDA_device_required
+  distributed_training: false
+  dataset: unchanged_parent_order_of_current_all_plus_legal_old_memory
+  sampler: DistributedSampler_num_replicas1_rank0_shuffleTrue_used_without_DDP
+  sampler_seed: 0
+  sampler_epoch_indices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  sampler_seed_must_match_parent_source_default: true
+  drop_last: false
+  loss: batch_mean_final_GMM_NLL_on_true_last_step_expert_actions
+  extra_IFA_backward: false
+  public_IFA_model_still_used: true
+  task_gradient_ownership: stop_grad_other_branches_per_training_row_without_changing_forward_values
+  runtime_forward_values_use_all_actual_numeric_gates: true
+  task_id_use: labelled_training_gradient_ownership_and_audit_only
+  zero_grad_set_to_none: true
+  absent_branch_grad_must_be_None_and_AdamW_state_unchanged: true
+  clip_joint_active_grad_norm: 100.0
+  optimizer:
+    name: AdamW
+    parameters: all_arrived_residual_UV_only
+    lr: 1.0e-4
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0.1
+    reset_at_each_stage: true
+  scheduler:
+    kind: exact_parent_make_linear_schedule_with_warmup
+    warmup_steps: 500
+    total_steps: actual_epoch_batches_times_10
+    initial_step: 0
+    advance_once_after_each_optimizer_step: true
+    reset_at_each_stage: true
+  expected_stage_steps: {6: 1570, 7: 2270, 8: 3090, 9: 3620}
+  prototype_extra_fit_or_checkpoint_selection: false
+  no_freezing_old_UV_across_calibration_stages: true
+  full_training_protocol_provenance: new_fixed_calibration_protocol_not_in_original_paper
+numerical_and_reuse:
+  common_dtype: float32
+  AMP: false
+  numeric_flags: inherit_and_record_repeat1_actual_inference_flags
+  calibration_fixed_network_modes: eval
+  do_not_upgrade_parent_libraries: true
+  preferred_gpu: same_type_as_repeat1_RTX4090
+  hardware_mismatch: disclose_historical_comparison_not_exact_paired_trajectory
+  off_residual_native_path_parity_required_before_training: true
+  source_and_input_mismatch: BLOCK_NO_AUTOMATIC_BASELINE_RERUN
+structural_audit:
+  canonical_geometry_all_stages_required: true
+  variants_layouts: [1, 10, 32]
+  real_history_lengths: [1, 4, 8]
+  fixed_T0_hash_unchanged_through_all_stages: true
+  frozen_Ck_hash_unchanged_within_stage: true
+  gate_update_preserves_previous_UV_weights: true
+  own_task_recalibration_may_change_own_output: true
+  cross_task_delta_and_mean_atol: 1.0e-6
+  fixed_public_scale_logits_and_argmax_equal: true
+  bound_tolerance: 1.0e-6
+  branch_activation_thresholds_are_diagnostic_not_performance_gates: true
+  checkpoint_epoch_checks: [0, 9]
+  direct_diagnostics_do_not_tune_training: true
+  preserve_training_rng_and_model_modes: true
+evaluation:
+  scope: each_stage_all_seen_incremental_tasks_only
+  parent_epoch: 99
+  calibration_epoch: 9
+  trials_per_cell: 20
+  initial_indices: inclusive_0_to_19
+  vector_lanes: 10
+  vector_groups: 2
+  environment_seeds: [43, 44]
+  initial_zero_action_steps: 5
+  max_policy_steps: 600
+  action: original_argmax_mixture_component_then_Independent_Normal_sample
+  low_eval_noise: false
+  stage_rng_reset: 43
+  no_new_per_episode_rng_reset: true
+  extra_module_construction_preserves_parent_rng: true
+  history: exact_parent_external_observation_queue_max8
+  parent_model_checkpoint_sha_logged_in_every_trial: true
+  calibrated_checkpoint_sha_logged_separately: true
+  no_test_time_memory_retrieval: true
+  no_retrospective_update_of_previous_stage_snapshots: true
+  normal_failed_episode_retry: false
+  partial_evaluation_recovery: explicit_audited_rng_and_environment_state_only
+metrics:
+  canonical_parent_run: seed43_repeat1_Coreset_IFA
+  parent_fractions:
+    AUC: 151/192
+    FWT: 7/10
+    NBT: -61/360
+    OldFinal: 13/15
+    FinalAll: 63/80
+  progression:
+    AUC: strictly_greater
+    FWT: greater_or_equal
+    NBT: strictly_less
+    OldFinal: greater_or_equal
+  requires_engineering_acceptance: true
+  auto_start_other_seeds: false
+  single_seed_significance_claim: false
+  equal_compute_advantage_claim: false
+artifacts:
+  separate_new_output_root: required
+  per_stage_parent_snapshot_and_manifest_binding: required
+  per_stage_gates_and_UV_snapshots: required
+  full_instruction_prefix_hashes: required
+  exact_sample_exposure_logs: required
+  per_branch_AdamW_step_counts: required
+  input_and_source_manifests: required
+  recovery_state: model_optimizer_scheduler_rng_epoch_cursor_stage_memory_transaction
+  formal_episode_records: required
+  true_T0_param_bytes_latency_memory_overhead: required
