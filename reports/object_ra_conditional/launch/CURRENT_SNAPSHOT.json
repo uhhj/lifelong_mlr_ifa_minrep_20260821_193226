@@ -1,11 +1,11 @@
 {
-  "time": 1792421280.8622386,
-  "queue_exit": null,
-  "wrapper_exit": null,
-  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 1760 MiB, 35 %\n",
+  "time": 1792422231.479941,
+  "queue_exit": "1",
+  "wrapper_exit": "1",
+  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 10 MiB, 0 %\n",
   "free_bytes": {
-    "/root": 13762060288,
-    "/data": 30727077888
+    "/root": 13762043904,
+    "/data": 30634082304
   },
   "seeds": {
     "41": {
@@ -13,31 +13,31 @@
         "status": "TRAINING",
         "arm": "ra_coreset",
         "task": 6,
-        "completed_epoch": 0,
-        "optimizer_steps": 157,
-        "updated_unix": 1792421277.507421,
+        "completed_epoch": 98,
+        "optimizer_steps": 15543,
+        "updated_unix": 1792421737.5728903,
         "pid": 18954
       },
-      "epochs": 1,
+      "epochs": 100,
       "latest": {
         "task": 6,
-        "epoch": 0,
+        "epoch": 99,
         "batches": 157,
-        "steps": 157,
-        "loss": -16.454869367514448,
-        "lr_first": 0.0,
-        "lr_after": 3.1400000000000004e-05,
-        "seconds": 4.96391224861145
+        "steps": 15700,
+        "loss": -32.05045442520433,
+        "lr_first": 1.0328947368421052e-06,
+        "lr_after": 0.0,
+        "seconds": 3.5500333309173584
       },
       "records": 0,
       "completed_vectors": 0,
       "technical_exceptions": 0,
       "exits": {
-        "train": null,
+        "train": "1",
         "evaluate": null,
         "audit": null,
-        "pipeline": null,
-        "supervisor": null
+        "pipeline": "1",
+        "supervisor": "1"
       },
       "admission_exit": "0",
       "gpu_preflight": {
@@ -118,14 +118,11 @@
       "gpu_preflight": null
     }
   },
-  "queue_failure": null,
+  "queue_failure": {
+    "time": 1792421742.2099326,
+    "traceback": "Traceback (most recent call last):\n  File \"/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/queue.py\", line 13, in main\n    (Q/(tag+'.exit')).write_text(str(r.returncode)+'\\n');assert r.returncode==0,(tag,r.returncode)\nAssertionError: ('seed41_supervise', 1)\n"
+  },
   "processes": [
-    "  18767       03:30 bash /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/supervise_queue.sh",
-    "  18769       03:30 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/queue.py",
-    "  18938       00:26 bash /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/supervise.sh",
-    "  18945       00:25 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/pipeline.py",
-    "  18946       00:25 /data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m coreset_exp.train ra_coreset",
-    "  18954       00:24 /data/mlr_ifa/env/bin/python -u -m coreset_exp.train ra_coreset",
-    "  19034       00:00 /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/monitor_snapshot.py"
+    "  19153       00:00 /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/monitor_snapshot.py"
   ]
 }

@@ -1,0 +1,128 @@
+{
+  "time": 1792422231.479941,
+  "queue_exit": "1",
+  "wrapper_exit": "1",
+  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 10 MiB, 0 %\n",
+  "free_bytes": {
+    "/root": 13762043904,
+    "/data": 30634082304
+  },
+  "seeds": {
+    "41": {
+      "status": {
+        "status": "TRAINING",
+        "arm": "ra_coreset",
+        "task": 6,
+        "completed_epoch": 98,
+        "optimizer_steps": 15543,
+        "updated_unix": 1792421737.5728903,
+        "pid": 18954
+      },
+      "epochs": 100,
+      "latest": {
+        "task": 6,
+        "epoch": 99,
+        "batches": 157,
+        "steps": 15700,
+        "loss": -32.05045442520433,
+        "lr_first": 1.0328947368421052e-06,
+        "lr_after": 0.0,
+        "seconds": 3.5500333309173584
+      },
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": "1",
+        "evaluate": null,
+        "audit": null,
+        "pipeline": "1",
+        "supervisor": "1"
+      },
+      "admission_exit": "0",
+      "gpu_preflight": {
+        "status": "PASS",
+        "isolated_optimizer_calls": 4,
+        "formal_rollouts": 0,
+        "environment_steps": 0,
+        "selection": {
+          "6": {
+            "N": 1562,
+            "K": 781,
+            "swaps": 199,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "7": {
+            "N": 1480,
+            "K": 740,
+            "swaps": 191,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "8": {
+            "N": 1560,
+            "K": 780,
+            "swaps": 196,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "9": {
+            "N": 1319,
+            "K": 660,
+            "swaps": 167,
+            "original_matches_parent": true,
+            "offline_exact": true
+          }
+        },
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "torch": "1.13.0+cu116",
+        "seconds": 39.77954339981079,
+        "modal_semantics": "Inherited unchanged complete_policy/model/eval_metric with parent PASS; real latent GPU update tested here",
+        "contract_sha256": "39f96bbf8aeee2e05bb46bdefb7dbbd00c414a94a9fdfd0b48e42c267ace7e26"
+      },
+      "frozen_hash_check": "PASS"
+    },
+    "42": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": null,
+        "evaluate": null,
+        "audit": null,
+        "pipeline": null,
+        "supervisor": null
+      },
+      "admission_exit": null,
+      "gpu_preflight": null
+    },
+    "43": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": null,
+        "evaluate": null,
+        "audit": null,
+        "pipeline": null,
+        "supervisor": null
+      },
+      "admission_exit": null,
+      "gpu_preflight": null
+    }
+  },
+  "queue_failure": {
+    "time": 1792421742.2099326,
+    "traceback": "Traceback (most recent call last):\n  File \"/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/queue.py\", line 13, in main\n    (Q/(tag+'.exit')).write_text(str(r.returncode)+'\\n');assert r.returncode==0,(tag,r.returncode)\nAssertionError: ('seed41_supervise', 1)\n"
+  },
+  "processes": [
+    "  19153       00:00 /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/monitor_snapshot.py"
+  ]
+}

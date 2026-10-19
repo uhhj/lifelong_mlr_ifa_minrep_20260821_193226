@@ -27,3 +27,7 @@ GOAL父RA41=/root/mlr_ifa/experiments/RA_Coreset_GOAL_seed41_20261019；42=/root
 ZR-v2机制全部不变：每阶段正确父Ck和固定官方T0冻结eval，FP64按已见规范语言构建双向门（真实batch1/10/32及所有合法缓存语言准入），rank8UV局部seed=s+task、七维0.1*tanh均值前激活修正、共享所有GMM分量、scale/logits不改；旧UV仅自身buffer样本重新校准。任务标签只限制反向归属，推理全语言门，无taskID路由。旧支路无本任务监督grad=None及Adam状态不更新，公共无梯度。每阶段10完整epoch、batch10、末端NLL、AdamW1e-4原参数、warmup500逐step、sampler0，末轮ep9，0早停。新增预算/固定T0开销要计量。GOAL真实门未验收前不能承诺通过，失败BLOCKED不硬归零/放宽阈值。每新seed最多4隔离GPU优化器预检、0环境，不追加闭环smoke。原0–19/20cell/10lane/env[s,s+1]/600/5zero/stage global RNG/argmaxNormal，独立进程200正式；不恢复9000或新增680/独立Generator。
 
 每次检查/审计和实验轮次按AGENTS用publish_mlr_branch提交本轮review过的代码、报告和轻量证据至MLR，精确stage、审查类型大小secret/hash、不forcepush并核对远端SHA存receipt。不要发布source zip、checkpoint、RNG二进制、latent、buffer、原actions、语言门数组。保持旧结果和用户修改。正常运行保存轻量快照与实测ETA即结束，不守候；通常2小时，临近分支/最终验收可30分钟同自动化，不建重复。仅实质变化/失败/恢复/完成/需用户行动通知；未完成不假报COMPLETED。全部授权分支真实验收和发布后删除自动化并停止，不擅自新增seed/套件/调参或付费资源。
+
+
+## 2026-10-19 23:05最新覆盖
+用户要求后续分支服务器自动部署；部署前发现第一阶段Task6实际张量断言已失败。见BLOCKED.md及TASK6_READONLY_DIAGNOSIS.json。依“无法安全恢复则停止”已停止部署及自动推进。不得自动resume、不能触发fallback；需先解决当前冻结合同的真实张量差异。原初始和更新代码/配置一致，根因未证实。原exit1保留。

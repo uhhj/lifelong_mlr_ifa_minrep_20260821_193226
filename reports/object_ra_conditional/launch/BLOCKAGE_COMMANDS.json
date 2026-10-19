@@ -1,0 +1,26 @@
+{
+  "time": "2026-10-19T23:06:34.669828+08:00",
+  "commands": [
+    {
+      "command": "source /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/env.sh && /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019_blockage_audit.py /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_blocked_20261019",
+      "exit_code": 0,
+      "optimizer_calls": 0,
+      "environment_steps": 0
+    },
+    {
+      "command": "python execution/20261019_ra_object_conditional/check_progress.py --package",
+      "exit_code": 0
+    },
+    {
+      "command": "python execution/20261019_ra_object_conditional/verify_local_launch.py --check-only",
+      "exit_code": 0,
+      "acceptance_scope": "source and existing admission metadata, NOT formal experiment acceptance"
+    }
+  ],
+  "initial_monitor_command_error": {
+    "command": "python Q/monitor_snapshot.py",
+    "exit_code": 127,
+    "reason": "remote python not in PATH; retried explicit /data/mlr_ifa/env/bin/python successfully"
+  },
+  "automatic_branch_deployment": "not completed; stopped on unsafe frozen-protocol blocker"
+}
