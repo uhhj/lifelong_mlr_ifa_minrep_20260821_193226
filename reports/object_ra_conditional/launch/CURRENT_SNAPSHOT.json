@@ -1,0 +1,131 @@
+{
+  "time": 1792421280.8622386,
+  "queue_exit": null,
+  "wrapper_exit": null,
+  "gpu": "name, memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 3090, 1760 MiB, 35 %\n",
+  "free_bytes": {
+    "/root": 13762060288,
+    "/data": 30727077888
+  },
+  "seeds": {
+    "41": {
+      "status": {
+        "status": "TRAINING",
+        "arm": "ra_coreset",
+        "task": 6,
+        "completed_epoch": 0,
+        "optimizer_steps": 157,
+        "updated_unix": 1792421277.507421,
+        "pid": 18954
+      },
+      "epochs": 1,
+      "latest": {
+        "task": 6,
+        "epoch": 0,
+        "batches": 157,
+        "steps": 157,
+        "loss": -16.454869367514448,
+        "lr_first": 0.0,
+        "lr_after": 3.1400000000000004e-05,
+        "seconds": 4.96391224861145
+      },
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": null,
+        "evaluate": null,
+        "audit": null,
+        "pipeline": null,
+        "supervisor": null
+      },
+      "admission_exit": "0",
+      "gpu_preflight": {
+        "status": "PASS",
+        "isolated_optimizer_calls": 4,
+        "formal_rollouts": 0,
+        "environment_steps": 0,
+        "selection": {
+          "6": {
+            "N": 1562,
+            "K": 781,
+            "swaps": 199,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "7": {
+            "N": 1480,
+            "K": 740,
+            "swaps": 191,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "8": {
+            "N": 1560,
+            "K": 780,
+            "swaps": 196,
+            "original_matches_parent": true,
+            "offline_exact": true
+          },
+          "9": {
+            "N": 1319,
+            "K": 660,
+            "swaps": 167,
+            "original_matches_parent": true,
+            "offline_exact": true
+          }
+        },
+        "gpu": "NVIDIA GeForce RTX 3090",
+        "torch": "1.13.0+cu116",
+        "seconds": 39.77954339981079,
+        "modal_semantics": "Inherited unchanged complete_policy/model/eval_metric with parent PASS; real latent GPU update tested here",
+        "contract_sha256": "39f96bbf8aeee2e05bb46bdefb7dbbd00c414a94a9fdfd0b48e42c267ace7e26"
+      },
+      "frozen_hash_check": "PASS"
+    },
+    "42": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": null,
+        "evaluate": null,
+        "audit": null,
+        "pipeline": null,
+        "supervisor": null
+      },
+      "admission_exit": null,
+      "gpu_preflight": null
+    },
+    "43": {
+      "status": null,
+      "epochs": 0,
+      "latest": null,
+      "records": 0,
+      "completed_vectors": 0,
+      "technical_exceptions": 0,
+      "exits": {
+        "train": null,
+        "evaluate": null,
+        "audit": null,
+        "pipeline": null,
+        "supervisor": null
+      },
+      "admission_exit": null,
+      "gpu_preflight": null
+    }
+  },
+  "queue_failure": null,
+  "processes": [
+    "  18767       03:30 bash /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/supervise_queue.sh",
+    "  18769       03:30 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/queue.py",
+    "  18938       00:26 bash /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/supervise.sh",
+    "  18945       00:25 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/pipeline.py",
+    "  18946       00:25 /data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m coreset_exp.train ra_coreset",
+    "  18954       00:24 /data/mlr_ifa/env/bin/python -u -m coreset_exp.train ra_coreset",
+    "  19034       00:00 /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/monitor_snapshot.py"
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "41": {
+    "exists": true,
+    "files": {
+      "coreset_exp/train.py": {
+        "sha256": "636d9bc83b856840a04015534f9138096c228405db12c94741f0436e0465fcb6",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -8,7 +8,7 @@\n from torch.utils.data import DataLoader,DistributedSampler\n from .common import O,write,save,sha,verify,rng,restore_rng,hashes,jsonable\n from .model import cfg,angular_mean,strict_downstream\n-from ra_exp.storage import store\n+from .storage import store\n from libero.lifelong.algos.mlr import MLR,build_dataset_for_task,build_ifa_similarity_matrix\n from libero.lifelong.utils import control_seed,get_task_embs\n from libero.libero.benchmark import get_benchmark\n@@ -44,7 +44,7 @@\n         self.optimizer.step();self.scheduler.step()\n         self.step+=1;return float(loss.detach())\n def build(c):\n-    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(0)\n+    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(0)\n     b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n     a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n@@ -64,7 +64,7 @@\n     save(root/'recovery/latest.pth',dict(state=capture(a),task=t,next_epoch=epoch,stage_complete=complete,\n         contract_sha256=sha(O/'CONTRACT.json'),modal_sha256=sha(O/'MODAL_CONTRACT.json'),buffer_hashes=hashes(Path(a.cfg.buffer_dir))))\n def main():\n-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()\n+    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()\n     verify();assert json.loads((O/'GPU_PREFLIGHT.json').read_text())['status']=='PASS'\n     assert (O/'FEATURES.json').is_file();c=cfg(args.arm);root=Path(c.run_root)\n     assert not (root/'TRAINING_COMPLETE.json').exists(),'Already complete'\n@@ -79,7 +79,7 @@\n             model_digest={k:hashlib.sha256(v.detach().cpu().numpy().tobytes()).hexdigest() for k,v in a.policy.state_dict().items()}\n             evidence=dict(rng=digest,tensors=model_digest)\n             write(root/'INITIAL_STATE.json',evidence)\n-            assert evidence==json.loads((Path(os.environ['RA_PARENT'])/'coreset/INITIAL_STATE.json').read_text()),'Initialization differs from parent'\n+            if args.arm=='coreset':assert evidence==json.loads((O/'random/INITIAL_STATE.json').read_text()),'Initialization differs'\n         if resumed:\n             assert resumed['contract_sha256']==sha(O/'CONTRACT.json') and resumed['modal_sha256']==sha(O/'MODAL_CONTRACT.json')\n             a.policy.load_state_dict(resumed['state']['model'],strict=True);a.step=resumed['state']['step'];restore_rng(resumed['state']['rng'])\n@@ -113,8 +113,8 @@\n                     final=root/'models'/f'mlrifa_{t}_model_ep99.pth'\n                     save(final,dict(state_dict=cpu(a.policy.state_dict()),cfg=c,task=t,epoch_index=99,\n                         modal_sha256=sha(O/'MODAL_CONTRACT.json'),contract_sha256=sha(O/'CONTRACT.json')))\n-                    if t==6:\n-                        old=torch.load(Path(os.environ['RA_PARENT'])/'coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())\n+                    if t==6 and args.arm=='coreset':\n+                        old=torch.load(O/'random/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())\n                         diff={k:float((now[k].double()-old[k].double()).abs().max()) for k in now}\n                         same=set(old)==set(now) and all(v==0 for v in diff.values())\n                         write(O/'TASK6_TENSOR_PARITY.json',dict(equal=same,max_abs_diff=diff,compared='actual state_dict tensors, no file metadata'))\n"
+      },
+      "coreset_exp/model.py": {
+        "sha256": "49aa301355773c21fd8fdde301b9c5b066916326e7a699fa492ecf25b493e50a",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -12,7 +12,6 @@\n def cfg(name):\n     from .common import SEED\n     c=EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))\n-    assert c.benchmark_name=='LIBERO_GOAL' and c.gamma==.7 and c.pretrain.endswith('goal_multitask_model_ep96.pth')\n     assert c.seed==SEED and all(c.policy[k] is True for k in ('use_vision','use_language','use_state'))\n     return c\n def data_setup(c,all_datasets=False):\n"
+      },
+      "coreset_exp/evaluate.py": {
+        "sha256": "452fbd500e4f1719bca677c04647ec54f8b99605113ecca436e5bd8e2e6cf591",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -15,7 +15,7 @@\n     append(CONTEXT['trial_log'],dict(CONTEXT,task=task,seed=seed,trial=trial,initial_state_index=initial_state,\n         initial_state_sha256=CONTEXT['initial_hashes'][initial_state],success=success,vector_group_steps=steps))\n def main():\n-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);args=ap.parse_args()\n+    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);args=ap.parse_args()\n     verify();assert (O/args.arm/'TRAINING_COMPLETE.json').exists()\n     root=O/args.arm/'evaluation';root.mkdir(exist_ok=True)\n     assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG-preserving recovery'\n"
+      },
+      "coreset_exp/eval_metric.py": {
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/algos/mlr.py": {
+        "sha256": "887009eae2c466d9fab4c63ed43745a41810d6a6b1ac8a36371daeb8e788cd54",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/datasets.py": {
+        "sha256": "bbe99e5d3478d6c2cc87422b819d0a5a1944b28a740d4c3c23209d49fd0dcfdf",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/models/brief.py": {
+        "sha256": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/selectors/greedy_kcenter.py": {
+        "sha256": "7c6640474c786fb73ee6b9aaedfa04a152280880489010d69e014ebe2430610e",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/utils.py": {
+        "sha256": "e855fdedaee8fdf8e23677a6e75c7016cc227209f96d24cb52de53e0126395ed",
+        "equal_to_ra_template": true,
+        "diff": ""
+      }
+    }
+  },
+  "42": {
+    "exists": true,
+    "files": {
+      "coreset_exp/train.py": {
+        "sha256": "3c8776434fee5fca48325c959404c5e4a5e4bd2fef8a56614782c67aa4fb8c0f",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -1,4 +1,3 @@\n-from .common import SEED,SELECTOR_SEED\n import argparse,copy,json,os,time,csv,hashlib,pickle\n from pathlib import Path\n import numpy as np\n@@ -8,7 +7,7 @@\n from torch.utils.data import DataLoader,DistributedSampler\n from .common import O,write,save,sha,verify,rng,restore_rng,hashes,jsonable\n from .model import cfg,angular_mean,strict_downstream\n-from ra_exp.storage import store\n+from .storage import store\n from libero.lifelong.algos.mlr import MLR,build_dataset_for_task,build_ifa_similarity_matrix\n from libero.lifelong.utils import control_seed,get_task_embs\n from libero.libero.benchmark import get_benchmark\n@@ -44,7 +43,7 @@\n         self.optimizer.step();self.scheduler.step()\n         self.step+=1;return float(loss.detach())\n def build(c):\n-    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(0)\n+    control_seed(42);b=get_benchmark('LIBERO_OBJECT')(0)\n     b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n     a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n@@ -64,7 +63,7 @@\n     save(root/'recovery/latest.pth',dict(state=capture(a),task=t,next_epoch=epoch,stage_complete=complete,\n         contract_sha256=sha(O/'CONTRACT.json'),modal_sha256=sha(O/'MODAL_CONTRACT.json'),buffer_hashes=hashes(Path(a.cfg.buffer_dir))))\n def main():\n-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()\n+    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()\n     verify();assert json.loads((O/'GPU_PREFLIGHT.json').read_text())['status']=='PASS'\n     assert (O/'FEATURES.json').is_file();c=cfg(args.arm);root=Path(c.run_root)\n     assert not (root/'TRAINING_COMPLETE.json').exists(),'Already complete'\n@@ -79,7 +78,7 @@\n             model_digest={k:hashlib.sha256(v.detach().cpu().numpy().tobytes()).hexdigest() for k,v in a.policy.state_dict().items()}\n             evidence=dict(rng=digest,tensors=model_digest)\n             write(root/'INITIAL_STATE.json',evidence)\n-            assert evidence==json.loads((Path(os.environ['RA_PARENT'])/'coreset/INITIAL_STATE.json').read_text()),'Initialization differs from parent'\n+            if args.arm=='coreset':assert evidence==json.loads((O/'random/INITIAL_STATE.json').read_text()),'Initialization differs'\n         if resumed:\n             assert resumed['contract_sha256']==sha(O/'CONTRACT.json') and resumed['modal_sha256']==sha(O/'MODAL_CONTRACT.json')\n             a.policy.load_state_dict(resumed['state']['model'],strict=True);a.step=resumed['state']['step'];restore_rng(resumed['state']['rng'])\n@@ -98,7 +97,7 @@\n                 store(c,t,b);resumed['stage_complete']=True;resumed['buffer_hashes']=hashes(Path(c.buffer_dir));save(cp,resumed);continue\n             info=build_ifa_similarity_matrix(t,c.feature_dir,c.buffer_dir);a.refs,dev=references(c,t)\n             write(root/f'ifa_task{t}.json',dict(info=jsonable(info),reference_max_deviation=dev))\n-            dataset=build_dataset_for_task(c.feature_dir,t,c.buffer_dir,SEED,start=6)\n+            dataset=build_dataset_for_task(c.feature_dir,t,c.buffer_dir,42,start=6)\n             sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True)\n             loader=DataLoader(dataset,batch_size=10,num_workers=c.train.num_workers,sampler=sampler,persistent_workers=False)\n             a.start_task(-1,loader)\n@@ -113,8 +112,8 @@\n                     final=root/'models'/f'mlrifa_{t}_model_ep99.pth'\n                     save(final,dict(state_dict=cpu(a.policy.state_dict()),cfg=c,task=t,epoch_index=99,\n                         modal_sha256=sha(O/'MODAL_CONTRACT.json'),contract_sha256=sha(O/'CONTRACT.json')))\n-                    if t==6:\n-                        old=torch.load(Path(os.environ['RA_PARENT'])/'coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())\n+                    if t==6 and args.arm=='coreset':\n+                        old=torch.load(O/'random/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())\n                         diff={k:float((now[k].double()-old[k].double()).abs().max()) for k in now}\n                         same=set(old)==set(now) and all(v==0 for v in diff.values())\n                         write(O/'TASK6_TENSOR_PARITY.json',dict(equal=same,max_abs_diff=diff,compared='actual state_dict tensors, no file metadata'))\n"
+      },
+      "coreset_exp/model.py": {
+        "sha256": "781cebf4917f5d60cc1ed7f52d776e21558feab940d10e1ab17da91a770afaf5",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -9,12 +9,7 @@\n from libero.lifelong.models.complete_policy import CompletePolicy\n from libero.lifelong.models.brief import BriefPolicy\n \n-def cfg(name):\n-    from .common import SEED\n-    c=EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))\n-    assert c.benchmark_name=='LIBERO_GOAL' and c.gamma==.7 and c.pretrain.endswith('goal_multitask_model_ep96.pth')\n-    assert c.seed==SEED and all(c.policy[k] is True for k in ('use_vision','use_language','use_state'))\n-    return c\n+def cfg(name):return EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))\n def data_setup(c,all_datasets=False):\n     b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n     datasets=[];shape=None\n"
+      },
+      "coreset_exp/evaluate.py": {
+        "sha256": "b6f69d06178350f1e2ff1fdf92736997def4b3b55d317ce5fe0afd9c77a0eb33",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -1,4 +1,3 @@\n-from .common import SEED,SELECTOR_SEED\n import argparse,json,os,time,random,hashlib\n from pathlib import Path\n import numpy as np\n@@ -15,16 +14,16 @@\n     append(CONTEXT['trial_log'],dict(CONTEXT,task=task,seed=seed,trial=trial,initial_state_index=initial_state,\n         initial_state_sha256=CONTEXT['initial_hashes'][initial_state],success=success,vector_group_steps=steps))\n def main():\n-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);args=ap.parse_args()\n+    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);args=ap.parse_args()\n     verify();assert (O/args.arm/'TRAINING_COMPLETE.json').exists()\n     root=O/args.arm/'evaluation';root.mkdir(exist_ok=True)\n     assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG-preserving recovery'\n-    c=cfg('eval');c.experiment_dir=str(root);control_seed(SEED);b,ds,shape=data_setup(c,True);c.shape_meta=shape\n+    c=cfg('eval');c.experiment_dir=str(root);control_seed(42);b,ds,shape=data_setup(c,True);c.shape_meta=shape\n     write(root/'resolved_actual.json',dict(c));torch.backends.cudnn.benchmark=True\n     from . import evaluate as context\n     from .eval_metric import evaluate_one_task_success\n     for stage in range(6,10):\n-        control_seed(SEED)\n+        control_seed(42)\n         for t in range(6,stage+1):\n             checkpoint=O/args.arm/'models'/f'mlrifa_{stage}_model_ep99.pth'\n             raw=torch.load(checkpoint,map_location='cpu');assert raw['modal_sha256']==sha(O/'MODAL_CONTRACT.json')\n@@ -39,7 +38,7 @@\n             save(root/f'rng_before_stage{stage}_task{t}.pth',rng())\n             try:\n                 instr,mask=b.get_task_emb(t)\n-                result=evaluate_one_task_success(c,algo,task,instr,mask,t,see=SEED)\n+                result=evaluate_one_task_success(c,algo,task,instr,mask,t,see=42)\n                 write(root/f'cell_stage{stage}_task{t}.json',dict(success_rate=float(result),**context.CONTEXT))\n             except BaseException as e:\n                 context.ledger('technical_exception',exception=repr(e));raise\n"
+      },
+      "coreset_exp/eval_metric.py": {
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/algos/mlr.py": {
+        "sha256": "887009eae2c466d9fab4c63ed43745a41810d6a6b1ac8a36371daeb8e788cd54",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/datasets.py": {
+        "sha256": "bbe99e5d3478d6c2cc87422b819d0a5a1944b28a740d4c3c23209d49fd0dcfdf",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/models/brief.py": {
+        "sha256": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/selectors/greedy_kcenter.py": {
+        "sha256": "7c6640474c786fb73ee6b9aaedfa04a152280880489010d69e014ebe2430610e",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/utils.py": {
+        "sha256": "e855fdedaee8fdf8e23677a6e75c7016cc227209f96d24cb52de53e0126395ed",
+        "equal_to_ra_template": true,
+        "diff": ""
+      }
+    }
+  },
+  "43": {
+    "exists": true,
+    "files": {
+      "coreset_exp/train.py": {
+        "sha256": "636d9bc83b856840a04015534f9138096c228405db12c94741f0436e0465fcb6",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -8,7 +8,7 @@\n from torch.utils.data import DataLoader,DistributedSampler\n from .common import O,write,save,sha,verify,rng,restore_rng,hashes,jsonable\n from .model import cfg,angular_mean,strict_downstream\n-from ra_exp.storage import store\n+from .storage import store\n from libero.lifelong.algos.mlr import MLR,build_dataset_for_task,build_ifa_similarity_matrix\n from libero.lifelong.utils import control_seed,get_task_embs\n from libero.libero.benchmark import get_benchmark\n@@ -44,7 +44,7 @@\n         self.optimizer.step();self.scheduler.step()\n         self.step+=1;return float(loss.detach())\n def build(c):\n-    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(0)\n+    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(0)\n     b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n     a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n@@ -64,7 +64,7 @@\n     save(root/'recovery/latest.pth',dict(state=capture(a),task=t,next_epoch=epoch,stage_complete=complete,\n         contract_sha256=sha(O/'CONTRACT.json'),modal_sha256=sha(O/'MODAL_CONTRACT.json'),buffer_hashes=hashes(Path(a.cfg.buffer_dir))))\n def main():\n-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()\n+    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);ap.add_argument('--resume',action='store_true');args=ap.parse_args()\n     verify();assert json.loads((O/'GPU_PREFLIGHT.json').read_text())['status']=='PASS'\n     assert (O/'FEATURES.json').is_file();c=cfg(args.arm);root=Path(c.run_root)\n     assert not (root/'TRAINING_COMPLETE.json').exists(),'Already complete'\n@@ -79,7 +79,7 @@\n             model_digest={k:hashlib.sha256(v.detach().cpu().numpy().tobytes()).hexdigest() for k,v in a.policy.state_dict().items()}\n             evidence=dict(rng=digest,tensors=model_digest)\n             write(root/'INITIAL_STATE.json',evidence)\n-            assert evidence==json.loads((Path(os.environ['RA_PARENT'])/'coreset/INITIAL_STATE.json').read_text()),'Initialization differs from parent'\n+            if args.arm=='coreset':assert evidence==json.loads((O/'random/INITIAL_STATE.json').read_text()),'Initialization differs'\n         if resumed:\n             assert resumed['contract_sha256']==sha(O/'CONTRACT.json') and resumed['modal_sha256']==sha(O/'MODAL_CONTRACT.json')\n             a.policy.load_state_dict(resumed['state']['model'],strict=True);a.step=resumed['state']['step'];restore_rng(resumed['state']['rng'])\n@@ -113,8 +113,8 @@\n                     final=root/'models'/f'mlrifa_{t}_model_ep99.pth'\n                     save(final,dict(state_dict=cpu(a.policy.state_dict()),cfg=c,task=t,epoch_index=99,\n                         modal_sha256=sha(O/'MODAL_CONTRACT.json'),contract_sha256=sha(O/'CONTRACT.json')))\n-                    if t==6:\n-                        old=torch.load(Path(os.environ['RA_PARENT'])/'coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())\n+                    if t==6 and args.arm=='coreset':\n+                        old=torch.load(O/'random/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];now=cpu(a.policy.state_dict())\n                         diff={k:float((now[k].double()-old[k].double()).abs().max()) for k in now}\n                         same=set(old)==set(now) and all(v==0 for v in diff.values())\n                         write(O/'TASK6_TENSOR_PARITY.json',dict(equal=same,max_abs_diff=diff,compared='actual state_dict tensors, no file metadata'))\n"
+      },
+      "coreset_exp/model.py": {
+        "sha256": "49aa301355773c21fd8fdde301b9c5b066916326e7a699fa492ecf25b493e50a",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -12,7 +12,6 @@\n def cfg(name):\n     from .common import SEED\n     c=EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))\n-    assert c.benchmark_name=='LIBERO_GOAL' and c.gamma==.7 and c.pretrain.endswith('goal_multitask_model_ep96.pth')\n     assert c.seed==SEED and all(c.policy[k] is True for k in ('use_vision','use_language','use_state'))\n     return c\n def data_setup(c,all_datasets=False):\n"
+      },
+      "coreset_exp/evaluate.py": {
+        "sha256": "452fbd500e4f1719bca677c04647ec54f8b99605113ecca436e5bd8e2e6cf591",
+        "equal_to_ra_template": false,
+        "diff": "--- \n+++ \n@@ -15,7 +15,7 @@\n     append(CONTEXT['trial_log'],dict(CONTEXT,task=task,seed=seed,trial=trial,initial_state_index=initial_state,\n         initial_state_sha256=CONTEXT['initial_hashes'][initial_state],success=success,vector_group_steps=steps))\n def main():\n-    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['ra_coreset']);args=ap.parse_args()\n+    ap=argparse.ArgumentParser();ap.add_argument('arm',choices=['random','coreset']);args=ap.parse_args()\n     verify();assert (O/args.arm/'TRAINING_COMPLETE.json').exists()\n     root=O/args.arm/'evaluation';root.mkdir(exist_ok=True)\n     assert not list(root.glob('trials*.jsonl')) and not list(root.glob('attempts*.jsonl')),'Partial evaluation requires audited RNG-preserving recovery'\n"
+      },
+      "coreset_exp/eval_metric.py": {
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/algos/mlr.py": {
+        "sha256": "887009eae2c466d9fab4c63ed43745a41810d6a6b1ac8a36371daeb8e788cd54",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/datasets.py": {
+        "sha256": "bbe99e5d3478d6c2cc87422b819d0a5a1944b28a740d4c3c23209d49fd0dcfdf",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/models/brief.py": {
+        "sha256": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/selectors/greedy_kcenter.py": {
+        "sha256": "7c6640474c786fb73ee6b9aaedfa04a152280880489010d69e014ebe2430610e",
+        "equal_to_ra_template": true,
+        "diff": ""
+      },
+      "libero/lifelong/utils.py": {
+        "sha256": "e855fdedaee8fdf8e23677a6e75c7016cc227209f96d24cb52de53e0126395ed",
+        "equal_to_ra_template": true,
+        "diff": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+status: PREPARING
+suite: LIBERO_OBJECT
+seed: 43
+arm: ra_coreset
+parent: /data/mlr_ifa/experiments/Seed43_Random_Coreset_repeat_20261016_v1
+parent_source: /data/mlr_ifa/experiment_workspaces/Seed43_three_arm_repeat_20261016_v1/rc/source
+official_pretrain: /data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth
+use_state: true
+tasks:
+- 6
+- 7
+- 8
+- 9
+batch: 10
+epochs_each: 100
+optimizer_steps: 105500
+final_checkpoints: 4
+episodes: 200
+vector_attempts: 20
+gamma: 0.3
+ifa_weight: 0.1
+warmup500_step_linear: true
+windows:
+- 1562
+- 1480
+- 1560
+- 1319
+quota:
+- 781
+- 740
+- 780
+- 660
+anchors:
+- 390
+- 370
+- 390
+- 330
+selector_calibration_seed: 42
+sampler_seed: 0
+anchor_training_eval_seed: 43
+env_seeds:
+- 43
+- 44
+evaluation: original 0-19 / 10lane / 600 / 5zero / per-stage global RNG / argmax component
+  Normal
+selector: unchanged RA half quota anchors minimal geometric removal
+identity_ambiguity: explicit diagnostic-only unknown; no guessed target
+task6_exact_tensor_parity_required: true
+gate: 'DECISION_GRAPH.json: three seed RA vs Random mean AUC positive; >=2 individual
+  positive; engineering PASS'

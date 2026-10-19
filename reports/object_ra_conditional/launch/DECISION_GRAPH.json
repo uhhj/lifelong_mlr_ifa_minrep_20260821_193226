@@ -1,0 +1,51 @@
+{
+  "version": "user-confirmed-20261019",
+  "seeds": [
+    41,
+    42,
+    43
+  ],
+  "stage1": {
+    "suite": "LIBERO_OBJECT",
+    "method": "RA_Coreset_IFA",
+    "comparator": "Random_IFA"
+  },
+  "stage2_if_stage1_pass": {
+    "suite": "LIBERO_OBJECT",
+    "method": "RA_Coreset_ZRv2_IFA",
+    "comparator": "RA_Coreset_IFA"
+  },
+  "gate": {
+    "mean_AUC_delta": "strictly_positive_exact_fraction",
+    "positive_seed_AUC_deltas": "at_least_2_of_3",
+    "engineering": "all_PASS",
+    "OldFinal_FWT_NBT": "report_only"
+  },
+  "stage3_if_stage2_pass": {
+    "suite": "LIBERO_GOAL",
+    "method": "RA_Coreset_ZRv2_IFA",
+    "seeds": [
+      41,
+      42,
+      43
+    ]
+  },
+  "fallback_if_stage1_fail": {
+    "suite": "LIBERO_GOAL",
+    "method": "Coreset_ZRv2_IFA",
+    "seeds": [
+      41,
+      42,
+      43,
+      44
+    ]
+  },
+  "stage2_fail": "STOP",
+  "seed43_object_baseline": "repeat1_for_both_Random_and_Coreset",
+  "no_baseline_retrain": true,
+  "evaluation": "original_200_per_arm_stage_global_RNG",
+  "selection": "unchanged_RA_half_quota_anchor_minimal_damage",
+  "residual": "unchanged_ZRv2_10_calibration_epochs_per_stage_frozen_parent_T0",
+  "outputs": "new_data_disk_directories",
+  "execution": "fixed_all_three_seeds_before_any_metric_branch"
+}

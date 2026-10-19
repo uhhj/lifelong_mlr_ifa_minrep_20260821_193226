@@ -1,0 +1,124 @@
+--- RA_GOAL/coreset_exp/common.py
++++ RA_OBJECT/coreset_exp/common.py
+@@ -5,7 +5,7 @@
+ S=Path(__file__).resolve().parents[1]
+ O=Path(os.environ['CORESET_OUT'])
+ SEED=int(os.environ['CORESET_SEED'])
+-assert SEED == 41, 'Only explicitly authorized extension seeds'
++assert SEED in (41,42,43), 'Only explicitly authorized extension seeds'
+ SELECTOR_SEED=42 # Frozen calibration/reference subset setting, not training RNG
+ def sha(p):
+     h=hashlib.sha256()
+--- RA_GOAL/coreset_exp/model.py
++++ RA_OBJECT/coreset_exp/model.py
+@@ -12,7 +12,7 @@
+ def cfg(name):
+     from .common import SEED
+     c=EasyDict(json.loads((O/f'resolved_{name}.json').read_text()))
+-    assert c.benchmark_name=='LIBERO_GOAL' and c.gamma==.7 and c.pretrain.endswith('goal_multitask_model_ep96.pth')
++    assert c.benchmark_name=='LIBERO_OBJECT' and c.gamma==.3 and c.pretrain.endswith('object_multitask_model_ep99.pth')
+     assert c.seed==SEED and all(c.policy[k] is True for k in ('use_vision','use_language','use_state'))
+     return c
+ def data_setup(c,all_datasets=False):
+--- RA_GOAL/coreset_exp/train.py
++++ RA_OBJECT/coreset_exp/train.py
+@@ -44,7 +44,7 @@
+         self.optimizer.step();self.scheduler.step()
+         self.step+=1;return float(loss.detach())
+ def build(c):
+-    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(0)
++    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(0)
+     b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))
+     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)
+     a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)
+--- RA_GOAL/ra_exp/audit.py
++++ RA_OBJECT/ra_exp/audit.py
+@@ -26,7 +26,7 @@
+     verify();P=Path(os.environ['RA_PARENT']);root=O/'ra_coreset';binding=js(O/'PARENT_BINDING.json')
+     assert all(sha(p)==h for p,h in binding['protected'].items())
+     epochs=js(root/'epochs.json');assert len(epochs)==400 and {(r['task'],r['epoch']) for r in epochs}=={(t,e) for t in range(6,10) for e in range(100)}
+-    assert sum(r['batches'] for r in epochs)==76100 and epochs[-1]['steps']==76100
++    assert sum(r['batches'] for r in epochs)==105500 and epochs[-1]['steps']==105500
+     assert js(O/'TASK6_TENSOR_PARITY.json')['equal']
+     p=BriefPolicy(cfg('ra_coreset'),None).cpu();loaded=[];selections={};ifa={}
+     for t in range(6,10):
+@@ -34,7 +34,7 @@
+         assert raw['epoch_index']==99 and raw['task']==t and raw['contract_sha256']==sha(O/'CONTRACT.json') and raw['modal_sha256']==sha(O/'MODAL_CONTRACT.json')
+         loaded.append(dict(task=t,sha256=sha(cp),loaded_keys=strict_downstream(p,cp)))
+         m=js(root/'storage'/f'task{t}.json');b=js(O/'bindings'/f'task{t}.json')['windows'];selected=m['selected'];report=m['selection'];n=len(b);k=m['K']
+-        assert k==[499,445,452,985][t-6] and len(selected)==len({r['destination'] for r in selected})==k
++        assert k==[781,740,780,660][t-6] and len(selected)==len({r['destination'] for r in selected})==k
+         offline=js(O/'offline_selection'/f'task{t}.json')
+         assert report['selected_ids']==offline['selected_ids']
+         assert [Path(r['source']).name for r in selected]==report['selected_ids']
+@@ -54,7 +54,7 @@
+     for f in (root/'evaluation').glob('attempts*.jsonl'):
+         for line in f.read_text().splitlines():events[json.loads(line)['event']]+=1
+     assert events==Counter(vector_attempt_start=20,vector_attempt_complete=20,environment_construct_start=10,environment_construct_complete=10,environment_closed=10)
+-    nm,cm,rm=metrics(r),metrics(c),metrics(random);criteria=dict(AUC=nm['AUC']>cm['AUC'],FWT=nm['FWT']>=cm['FWT'],OldFinal=nm['OldFinal']>=cm['OldFinal'])
+-    write(O/'AUDIT.json',dict(status='PASS',epochs=400,optimizer_steps=76100,formal_records=200,vector_attempts=20,checkpoints=loaded,inputs_unchanged=True,criteria=criteria,metric_gate=all(criteria.values()),metrics=dict(ra_coreset=pack(nm),coreset=pack(cm),random=pack(rm)),delta_vs_coreset=pack({k:nm[k]-cm[k] for k in nm}),matrix=[dict(stage=s,task=t,random=float(random[s,t]*100),coreset=float(c[s,t]*100),ra_coreset=float(r[s,t]*100)) for s,t in r],selection=selections,ifa=ifa,updated=time.time()))
++    nm,cm,rm=metrics(r),metrics(c),metrics(random);criteria=dict(AUC_vs_Random=nm['AUC']>rm['AUC'])
++    write(O/'AUDIT.json',dict(status='PASS',epochs=400,optimizer_steps=105500,formal_records=200,vector_attempts=20,checkpoints=loaded,inputs_unchanged=True,criteria=criteria,metric_gate=all(criteria.values()),metrics=dict(ra_coreset=pack(nm),coreset=pack(cm),random=pack(rm)),delta_vs_coreset=pack({k:nm[k]-cm[k] for k in nm}),matrix=[dict(stage=s,task=t,random=float(random[s,t]*100),coreset=float(c[s,t]*100),ra_coreset=float(r[s,t]*100)) for s,t in r],selection=selections,ifa=ifa,updated=time.time()))
+     write(O/'RUN_STATUS.json',dict(status='AWAITING_PROCESS_EXIT_ACCEPTANCE',metric_gate=all(criteria.values()),time=time.time()))
+ if __name__=='__main__':main()
+--- RA_GOAL/ra_exp/freeze.py
++++ RA_OBJECT/ra_exp/freeze.py
+@@ -11,6 +11,6 @@
+     for name,h in orchestration.items():assert sha(queue/name)==h,name
+     files.update({str(queue/name):h for name,h in orchestration.items()})
+     files[str(queue/'ORCHESTRATION_SHA256.json')]=sha(queue/'ORCHESTRATION_SHA256.json')
+-    write(O/'CONTRACT.json',dict(version='RA_GOAL_extension_legacy_protocol_v1',seed=SEED,source_sha256=source_hashes(),files=files,modal_sha256=binding['modal_sha256'],parent_contract=binding['contract_sha256'],epochs=400,optimizer_steps=76100,final_checkpoints=4,formal_records=200,vector_attempts=20,progression=dict(AUC='strictly greater than same-seed Coreset',FWT='not less than same-seed Coreset',OldFinal='not less than same-seed Coreset'),created=time.time()))
++    write(O/'CONTRACT.json',dict(version='RA_OBJECT_conditional_legacy_protocol_v1',seed=SEED,source_sha256=source_hashes(),files=files,modal_sha256=binding['modal_sha256'],parent_contract=binding['contract_sha256'],epochs=400,optimizer_steps=105500,final_checkpoints=4,formal_records=200,vector_attempts=20,progression=dict(authority='queue DECISION_GRAPH.json',first_comparator='same-seed Random',gate='three-seed exact mean AUC delta positive and at least two positive seed deltas; engineering all PASS'),created=time.time()))
+     write(O/'RUN_STATUS.json',dict(status='FROZEN_AWAITING_PREFLIGHT',time=time.time()))
+ if __name__=='__main__':main()
+--- RA_GOAL/ra_exp/prepare.py
++++ RA_OBJECT/ra_exp/prepare.py
+@@ -7,10 +7,10 @@
+     P=Path(os.environ['RA_PARENT']);PS=Path(os.environ['RA_PARENT_SOURCE'])
+     assert not O.exists(),'Do not repeat preparation of an existing run'
+     pc=json.loads((P/'CONTRACT.json').read_text());fm=json.loads((P/'FEATURES.json').read_text())
+-    assert SEED == 41 and pc['seed']==SEED
++    assert SEED in (41,42,43) and pc['seed']==SEED
+     assert json.loads((P/'INDEPENDENT_ACCEPTANCE.json').read_text())['status']=='PASS'
+     assert sha(P/'MODAL_CONTRACT.json')==pc['modal_sha256']
+-    assert hashes(P/'features')==fm['hashes'] and fm['contract_sha256']==sha(P/'CONTRACT.json')
++    assert hashes(P/'features')==fm['hashes'] and fm['contract_sha256']==pc.get('feature_origin_contract_sha256',sha(P/'CONTRACT.json'))
+     for n,h in {**pc['inputs'],**pc['configs']}.items():assert sha(n)==h,n
+     for n,h in pc['source_sha256'].items():assert sha(PS/n)==h,n
+     protected={str(p):sha(p) for p in P.rglob('*') if p.is_file() and p.suffix in ('.json','.jsonl','.pth') and not {'features','buffer'}&set(p.parts)}
+@@ -32,14 +32,18 @@
+             a=torch.load(p,map_location='cpu')['actions'][0].numpy().astype(np.float32)
+             hits=candidates[a.tobytes()];assert hits,(t,p.name)
+             identity={(r['demo_id'],r['target'],r['length']) for r in hits}
+-            assert len(identity)==1,('Ambiguous target identity',t,p.name,hits)
+-            demo,target,length=next(iter(identity));ambiguous+=len(hits)>1
+-            windows[p.name]=dict(sample_id=p.name,sha256=sha(p),demo_id=demo,target=target,length=length,last_action=a[-1].tolist(),possible_starts=[r['start'] for r in hits],binding='exact complete 8x7 float32 window; unique demo/target/length')
+-        assert len(windows)==[997,889,904,1969][t-6]
+-        write(O/'bindings'/f'task{t}.json',dict(task=t,hdf5=hdf,hdf5_sha256=sha(hdf),windows=windows,ambiguous_start_but_unique_target=ambiguous))
++            unique=len(identity)==1
++            demos={r[0] for r in identity};lengths={r[2] for r in identity}
++            demo=next(iter(demos)) if len(demos)==1 else 'AMBIGUOUS'
++            target=next(iter(identity))[1] if unique else None
++            length=next(iter(lengths)) if len(lengths)==1 else None
++            ambiguous+=not unique
++            windows[p.name]=dict(sample_id=p.name,sha256=sha(p),demo_id=demo,target=target,length=length,last_action=a[-1].tolist(),possible_starts=[r['start'] for r in hits],candidate_identities=[list(x) for x in sorted(identity)],identity_unique=unique,binding='exact complete 8x7 float32 payload; ambiguous target remains unknown and unused by selection')
++        assert len(windows)==[1562,1480,1560,1319][t-6]
++        write(O/'bindings'/f'task{t}.json',dict(task=t,hdf5=hdf,hdf5_sha256=sha(hdf),windows=windows,ambiguous_target_identity=ambiguous))
+     for name,src in [('ra_coreset','coreset'),('eval','eval')]:
+         c=json.loads((P/f'resolved_{src}.json').read_text())
+-        assert c['seed']==SEED and c['gamma']==.7 and c['policy']['use_state'] is True
++        assert c['seed']==SEED and c['gamma']==.3 and c['benchmark_name']=='LIBERO_OBJECT' and c['policy']['use_state'] is True
+         c.update(run_root=str(O/'ra_coreset'),feature_dir=str(O/'features'),buffer_dir=str(O/'ra_coreset/buffer'),experiment_dir=str(O/'ra_coreset/models'),contract=str(O/'CONTRACT.json'),selector='ra_coreset')
+         write(O/f'resolved_{name}.json',c)
+     write(O/'PARENT_BINDING.json',dict(parent=str(P),source=str(PS),contract_sha256=sha(P/'CONTRACT.json'),feature_manifest_sha256=sha(P/'FEATURES.json'),modal_sha256=sha(P/'MODAL_CONTRACT.json'),protected={**protected,**bindings},pretrain_use_state='unknown',effective_use_state=True))
+--- RA_GOAL/ra_exp/select_offline.py
++++ RA_OBJECT/ra_exp/select_offline.py
+@@ -41,7 +41,7 @@
+         independent_verify(ids,report,d.distances(np.arange(len(ids))))
+         def desc(names):
+             rr=[binding[n] for n in names]
+-            return dict(n=len(rr),positive=sum(r['last_action'][-1]>0 for r in rr),negative=sum(r['last_action'][-1]<0 for r in rr),zero=sum(r['last_action'][-1]==0 for r in rr),unique_times=len({(r['demo_id'],r['target']) for r in rr}),endpoint_windows=sum(r['target']==r['length']-1 for r in rr),demo_support=len({r['demo_id'] for r in rr}))
++            return dict(n=len(rr),positive=sum(r['last_action'][-1]>0 for r in rr),negative=sum(r['last_action'][-1]<0 for r in rr),zero=sum(r['last_action'][-1]==0 for r in rr),unique_times_known=len({(r['demo_id'],r['target']) for r in rr if r['identity_unique']}),unknown_target_windows=sum(not r['identity_unique'] for r in rr),endpoint_windows_known=sum(r['target']==r['length']-1 for r in rr if r['identity_unique']),demo_support_known=len({r['demo_id'] for r in rr if r['demo_id']!='AMBIGUOUS'}))
+         report['diagnostics']={n:desc(v) for n,v in [('full',ids),('original',report['original_ids']),('selected',report['selected_ids']),('anchors',report['anchor_ids'])]}
+         write(O/'offline_selection'/f'task{t}.json',report)
+         results[str(t)]=dict(N=len(ids),q=q,anchors=report['anchor_count'],swaps=report['swap_count'],radius_before=report['max_before'],radius_after=report['max_after'],mean_before=report['mean_before'],mean_after=report['mean_after'],independent_all_removal_choices=True,random_parent_order=True,coreset_parent_order=True)
