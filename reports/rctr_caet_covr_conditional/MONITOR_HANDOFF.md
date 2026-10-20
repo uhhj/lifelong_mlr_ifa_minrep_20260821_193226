@@ -2,6 +2,8 @@
 
 用户要求持续推进、自动获取缺失数据、自主选推荐工程方案，不只轮询。当前PARTIAL，不可把部署或CPU测试称为实验完成。先读BRANCH_RULES.md、proposals三份全文、RUN_STATUS.json、REPORT.md及progress_20261021_server_queue/AUDIT.json。
 
+最新检查2026-10-21 02:31 CST：见progress_20261021_022912。RCTR仍collect6，178个已提交辅助分支、正式0条，训练100epoch/15700步不变；176源码及全部冻结输入核验PASS。当前实测约44.05秒/分支，Task6剩余探索上限约3.40小时，确认最多另0.59小时；非整队列ETA。没有服务器工程恢复或重复启动。旧通用SSH桥本地调用被审批策略拒绝，固定只读SSH客户端check_progress_readonly.py已正常连接（主机密钥已固定，getpass内存凭据）。先调用该脚本保存新快照，再用--details指向该新目录核查冻结hash及committed；audit_progress_readonly.py复算本轮。不要为绕过工具审批复用通用桥。
+
 ## 科学顺序
 
 旧RCTR A2已按用户要求停止，不恢复。RCTR→CAET→COVR：各OBJECT42精确AUC严格高于同seed RA且工程PASS，才固定补OBJECT41/43；三个OBJECT等权平均AUC严格高于对应RA平均，才执行该方法GOAL41/42/43，随后下一方法。没有OldFinal或2/3附加门槛。最后RA+IFA LIBERO50 41/42/43。旧基线全部只读。
