@@ -1,0 +1,75 @@
+--- frozen/runner.py
++++ external/recovery_runner.py
+@@ -12,7 +12,8 @@
+ from libero.lifelong.utils import control_seed
+ 
+ W=Path("/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020")
+-O=Path("/data/mlr_ifa/experiments/RCTR_GOAL_seed42_stageA2_20261020")
++ORIGINAL=Path("/data/mlr_ifa/experiments/RCTR_GOAL_seed42_stageA2_20261020")
++O=ORIGINAL/"engineering_recovery/dedicated_env_v1"
+ P=Path("/root/mlr_ifa/experiments/RA_Coreset_GOAL_seed42_20261018")
+ CP=P/"ra_coreset/models/mlrifa_6_model_ep99.pth"
+ S=Path(os.environ["CORESET_SOURCE"])
+@@ -180,6 +181,10 @@
+ 
+ def main():
+  assert not (O/"CONTRACT.json").exists(),"No blind partial restart"
++ assert (ORIGINAL/"runner.exit").read_text().strip()=="1"
++ old_contract=json.loads((ORIGINAL/"CONTRACT.json").read_text())
++ for path,h in old_contract["files"].items():assert sha(path)==h,path
++ expected={r["initial_index"]:r for r in json.loads((ORIGINAL/"SNAPSHOT_INVENTORY.json").read_text())}
+  assert mujoco.__version__=="3.2.3"
+  assert torch.cuda.is_available()
+  torch.backends.cudnn.benchmark=True
+@@ -200,12 +205,13 @@
+  policy=complete(c,shape);loaded=strict_downstream(policy,CP);policy.eval();policy.requires_grad_(False)
+  states=torch.load(initial_path);assert len(states)>22
+  write("MODEL_ADMISSION.json",dict(status="PASS",downstream_keys=loaded,parent_sha256=sha(CP),state=True))
+- env=None;snapshots={};gates=[];inventory=[]
++ env=None;environments={};snapshots={};gates=[];inventory=[]
+  try:
+-  ledger("environment_construct_start")
+-  env=OffScreenRenderEnv(bddl_file_name=str(bddl),camera_heights=c.data.img_h,camera_widths=c.data.img_w)
+-  ledger("environment_construct_complete")
+   for index in (20,21,22):
++   ledger("environment_construct_start",initial_index=index)
++   env=OffScreenRenderEnv(bddl_file_name=str(bddl),camera_heights=c.data.img_h,camera_widths=c.data.img_w)
++   environments[index]=env
++   ledger("environment_construct_complete",initial_index=index)
+    status("STATE_COLLECTION",initial_index=index)
+    env.seed(42);env.reset();env.seed(42);policy.reset()
+    obs=env.set_init_state(states[index]);history=[];already=False
+@@ -222,17 +228,23 @@
+     history_length=len(history)+1,control_frequency=float(env.env.control_freq),
+     joint_norm=float(np.linalg.norm(obs["robot0_joint_pos"])),gripper_norm=float(np.linalg.norm(obs["robot0_gripper_qpos"])),
+     contact_count=int(env.sim.data.ncon))
++   for key in ("physical_sha256","observation_hashes","prefix_noise_sha256","initial_sha256","eligible"):
++    assert row[key]==expected[index][key],("recollected_identity",index,key)
++   row["recollected_identity"]="EXACT_MATCH_ORIGINAL"
+    inventory.append(row)
+    if not already:
+     snapshots[index]=snapshot(env,policy,obs,history)
+-    gates.append(gate(env,policy,snapshots[index],index,instr,mask,c))
++    # Gate all snapshots only after every environment has been constructed.
+    write("SNAPSHOT_INVENTORY.json",inventory);write("ENGINEERING_GATE.json",dict(status="PARTIAL",states=gates))
+   assert snapshots,"No eligible fixed snapshot; no replacement sampling allowed"
++  for index,snap in snapshots.items():
++   gates.append(gate(environments[index],policy,snap,index,instr,mask,c))
+   assert COUNTS["engineering_steps"]<=48 and COUNTS["prefix_steps"]<=135
+   write("ENGINEERING_GATE.json",dict(status="PASS",states=gates,eligible_states=list(snapshots)))
+   # Source and parent identity must still match before any branch starts.
+   for p,h in hashes.items():assert sha(p)==h,p
+   for index,snap in snapshots.items():
++   env=environments[index]
+    for rep in range(3):
+     table=noise(42040000+100*index+rep)
+     for cand in candidates():branch(env,policy,snap,index,rep,cand,table,instr,mask,c)
+@@ -247,5 +259,6 @@
+   write("FAILURE.json",dict(error=repr(e),traceback=traceback.format_exc(),counts=COUNTS))
+   status("BLOCKED",error=repr(e));raise
+  finally:
+-  if env is not None:env.close();ledger("environment_closed")
++  for index,env in environments.items():
++   env.close();ledger("environment_closed",initial_index=index)
+ if __name__=="__main__":main()
+

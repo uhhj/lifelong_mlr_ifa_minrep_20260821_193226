@@ -1,0 +1,59 @@
+[robosuite WARNING] No private macro file found! (__init__.py:7)
+[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)
+[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']
+using obs modality: depth with keys: []
+using obs modality: low_dim with keys: ['joint_states', 'gripper_states']
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1478.05it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1696.22it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1688.32it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1734.86it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1754.97it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1718.33it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1756.32it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1758.10it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1775.55it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/50 [00:00<?, ?it/s]100%|██████████| 50/50 [00:00<00:00, 1760.79it/s]
+/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020/runner.py", line 251, in <module>
+    if __name__=="__main__":main()
+  File "/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020/runner.py", line 238, in main
+    for cand in candidates():branch(env,policy,snap,index,rep,cand,table,instr,mask,c)
+  File "/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020/runner.py", line 168, in branch
+    obs,success=envstep(env,action,"screening");steps+=1
+  File "/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020/runner.py", line 94, in envstep
+    o,_,done,_=env.step(action)
+  File "/root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed42_20261018/source/libero/libero/envs/env_wrapper.py", line 88, in step
+    return self.env.step(action)
+  File "/root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed42_20261018/source/libero/libero/envs/bddl_base_domain.py", line 806, in step
+    obs, reward, done, info = super().step(action)
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/environments/base.py", line 392, in step
+    self._update_observables()
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/environments/base.py", line 321, in _update_observables
+    observable.update(timestep=self.model_timestep, obs_cache=self._obs_cache, force=force)
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/utils/observables.py", line 234, in update
+    obs = np.array(self._filter(self._corrupter(self._sensor(obs_cache))))
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/robots/robot.py", line 187, in joint_pos
+    return np.array([self.sim.data.qpos[x] for x in self._ref_joint_pos_indexes])
+  File "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/robots/robot.py", line 187, in <listcomp>
+    return np.array([self.sim.data.qpos[x] for x in self._ref_joint_pos_indexes])
+AttributeError: 'MjSim' object has no attribute 'data'

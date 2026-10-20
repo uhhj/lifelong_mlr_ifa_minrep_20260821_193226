@@ -1,0 +1,11 @@
+{
+  "error": "AttributeError(\"'MjSim' object has no attribute 'data'\")",
+  "traceback": "Traceback (most recent call last):\n  File \"/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020/runner.py\", line 238, in main\n    for cand in candidates():branch(env,policy,snap,index,rep,cand,table,instr,mask,c)\n  File \"/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020/runner.py\", line 168, in branch\n    obs,success=envstep(env,action,\"screening\");steps+=1\n  File \"/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA2_20261020/runner.py\", line 94, in envstep\n    o,_,done,_=env.step(action)\n  File \"/root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed42_20261018/source/libero/libero/envs/env_wrapper.py\", line 88, in step\n    return self.env.step(action)\n  File \"/root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed42_20261018/source/libero/libero/envs/bddl_base_domain.py\", line 806, in step\n    obs, reward, done, info = super().step(action)\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/environments/base.py\", line 392, in step\n    self._update_observables()\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/environments/base.py\", line 321, in _update_observables\n    observable.update(timestep=self.model_timestep, obs_cache=self._obs_cache, force=force)\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/utils/observables.py\", line 234, in update\n    obs = np.array(self._filter(self._corrupter(self._sensor(obs_cache))))\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/robots/robot.py\", line 187, in joint_pos\n    return np.array([self.sim.data.qpos[x] for x in self._ref_joint_pos_indexes])\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/robots/robot.py\", line 187, in <listcomp>\n    return np.array([self.sim.data.qpos[x] for x in self._ref_joint_pos_indexes])\nAttributeError: 'MjSim' object has no attribute 'data'\n",
+  "counts": {
+    "prefix_steps": 135,
+    "engineering_steps": 48,
+    "screening_steps": 0,
+    "optimizer_calls": 0,
+    "completed_branches": 0
+  }
+}
