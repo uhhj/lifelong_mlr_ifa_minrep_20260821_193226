@@ -1,0 +1,4 @@
+{"phase": "train", "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py train ra_coreset --resume", "time": 1792422785.4260805}
+{"phase": "evaluate", "command": "/data/mlr_ifa/env/bin/python -m coreset_exp.evaluate ra_coreset", "time": 1792425509.8081727}
+{"phase": "audit", "command": "/data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py audit", "time": 1792430291.1985474}
+{"phase": "audit_python38_fix", "command": ["bash", "-c", "source /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/env.sh && /data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_audit.py"], "time": 1792430306.6123538}

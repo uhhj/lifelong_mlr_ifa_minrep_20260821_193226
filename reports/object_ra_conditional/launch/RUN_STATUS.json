@@ -1,53 +1,44 @@
 {
-  "status": "PARTIAL_RUNNING_AUTONOMOUS",
-  "time": "2026-10-19T23:34:32.286699+08:00",
-  "observation_time": 1792423846.953184,
-  "server_controller": "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019",
-  "supervisor_pid": 19302,
-  "controller_pid": 19303,
-  "recovery_driver_pid": 19218,
-  "seed_progress": {
-    "41": {
-      "epochs": 239,
-      "logical_steps": 50451,
-      "last_epoch": {
-        "task": 8,
-        "epoch": 38,
-        "batches": 309,
-        "steps": 50451,
-        "loss": -26.103705779634247,
-        "lr_first": 6.301973684210528e-05,
-        "lr_after": 6.200328947368421e-05,
-        "seconds": 7.539079427719116
-      },
-      "episode_files": 0,
-      "records": 0,
-      "external_exits": {}
-    },
-    "42": {
-      "epochs": 0,
-      "logical_steps": 0,
-      "last_epoch": null,
-      "episode_files": 0,
-      "records": 0,
-      "external_exits": {}
-    },
-    "43": {
-      "epochs": 0,
-      "logical_steps": 0,
-      "last_epoch": null,
-      "episode_files": 0,
-      "records": 0,
-      "external_exits": {}
-    }
+  "status": "COMPLETED",
+  "time": "2026-10-20T12:21:09.331494+08:00",
+  "server_completed": "2026-10-20T10:21:08.983066+08:00",
+  "executed": [
+    "OBJECT_RA_IFA",
+    "OBJECT_RA_ZRv2_IFA"
+  ],
+  "new_formal_records": 1200,
+  "strict_checkpoints": 24,
+  "logical_optimizer_steps": 348150,
+  "extra_replayed_physical_steps": 157,
+  "stage1_gate": {
+    "passed": true,
+    "mean_auc_delta_pp": 4.930555555555555,
+    "mean_fraction": "71/1440",
+    "positive_seeds": 3,
+    "paired_delta_pp": [
+      6.145833333333333,
+      5.416666666666667,
+      3.2291666666666665
+    ],
+    "paired_sample_SD_pp": 1.5178814579440552
   },
+  "stage2_gate": {
+    "passed": false,
+    "mean_auc_delta_pp": -1.1805555555555556,
+    "mean_fraction": "-17/1440",
+    "positive_seeds": 1,
+    "paired_delta_pp": [
+      -4.583333333333333,
+      -0.5208333333333334,
+      1.5625
+    ],
+    "paired_sample_SD_pp": 3.125578650129948
+  },
+  "GOAL_started": false,
+  "stop_reason": "STAGE2_METRIC_GATE_NOT_MET",
+  "local_acceptance": "completion_20261020/LOCAL_FINAL_ACCEPTANCE.json",
+  "final_report": "FINAL_REPORT_20261020.md",
   "original_failures_preserved": true,
-  "protocol_audit": "PASS_NO_PROTOCOL_DEVIATION_FOUND",
-  "cross_hardware_final_parity": "DISCLOSED_NOT_STOP",
-  "initial_model_all_rng_equality": "REQUIRED_PASS",
-  "deployment_acceptance": "AUTONOMOUS_LOCAL_ACCEPTANCE.json",
-  "branch_deployment": "ALL_AUTHORIZED_BRANCHES_DEPLOYED_AND_CONTROLLER_RUNNING",
-  "performance_gate_evaluated": false,
-  "engineering_recovery": "User authorizes agent to diagnose repair validate and continue remaining work at each check; no scientific changes or blind restart",
-  "final_experiment_acceptance": false
+  "publication": "pending",
+  "automation": "delete_after_publication"
 }

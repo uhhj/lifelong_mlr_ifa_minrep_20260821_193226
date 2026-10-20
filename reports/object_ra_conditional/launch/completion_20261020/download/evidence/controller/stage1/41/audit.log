@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py", line 37, in <module>
+    if __name__=='__main__':main()
+  File "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py", line 36, in main
+    sys.argv[0]=str(p);exec(compile(transform(p.read_text(),phase),str(p),'exec'),ns)
+  File "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py", line 24, in transform
+    elif phase=='audit' and ast.unparse(node.test)=="js(O / 'TASK6_TENSOR_PARITY.json')['equal']":pass
+AttributeError: module 'ast' has no attribute 'unparse'

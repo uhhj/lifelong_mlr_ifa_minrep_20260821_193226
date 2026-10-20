@@ -1,5 +1,15 @@
 # OBJECT RA → ZR-v2 条件实验交接
 
+## 2026-10-20 最终覆盖：已完成，按第二关失败停止
+
+先读FINAL_REPORT_20261020.md、completion_20261020/LOCAL_FINAL_ACCEPTANCE.json与RUN_STATUS.json。服务器已自动完成OBJECT RA＋IFA与OBJECT RA＋ZR-v2＋IFA两阶段各41/42/43，1200新增正式记录、120完成vector attempt、24最终CP严格加载，348150正式逻辑更新（另157未提交重放步骤），全部工程验收PASS。controller/wrapper/supervisor/final_audit/package_light均退出0，无残留worker。
+
+本地从真实记录独立复算：第一关RA−Random平均AUC +4.93055556pp，3/3提升，PASS；第二关ZR-v2组合−RA平均−1.18055556pp，只有1/3提升，FAIL。按既定分支停止；没有GOAL组合或备用分支，不能因负结果自动改为另一方案。本次授权工作已完成，不得恢复旧队列或追加训练评估。
+
+轻量包前缀重名曾覆盖包内部分顶层RA元数据；原始服务器产物和episode未变。原包保留，用supplement_ra_metadata.py外置只读补采43份独立命名元数据，并由audit_completion_local.py核验622份主证据＋43份补充的哈希及真实记录。没有修改冻结源码/合同或重跑模型环境。原失败exit1全部保留。
+
+完成发布后删除ra-object-zr-v2自动化；如果旧提醒仍触发，只核实已发布回执并删除旧自动化，不启动任何工作。以下均为历史运行交接。
+
 ## 当前最高优先级：2026-10-19 23:30部署与最新工程恢复授权
 
 先读AUTONOMOUS_DEPLOYMENT_REPORT.md、AUTONOMOUS_LOCAL_ACCEPTANCE.json、RUN_STATUS.json、server_auto/AUTHORIZATION.json、RECOVERY_CONTRACT.json、AUTONOMOUS_CONTRACT.json与deployment_20261019证据。下文23:05的BLOCKED及“后续未部署”只作历史，已被本节覆盖；旧报告/exit1不能删除或改写。

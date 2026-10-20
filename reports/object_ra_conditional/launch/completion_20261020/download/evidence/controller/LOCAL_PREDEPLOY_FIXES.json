@@ -1,0 +1,17 @@
+{
+  "status": "PREDEPLOY_ONLY",
+  "issues": [
+    {
+      "test": "unmodified_model_bytes",
+      "first_exit": 1,
+      "cause": "Windows generated CRLF while normalized source reference hash uses LF",
+      "fix": "Normalize new ZRv2 template text to LF before deployment; no scientific code changed"
+    },
+    {
+      "issue": "Python3.8 ast.unparse unavailable for read-only audit adapter",
+      "fix": "Separate ra_audit.py uses AST structural match; original recovery adapter preserved; known read-only-only recovery is explicitly handled if seed41 old driver reaches it",
+      "training_or_evaluation_retries": 0
+    }
+  ],
+  "time": "2026-10-19T23:24:21.179894+08:00"
+}

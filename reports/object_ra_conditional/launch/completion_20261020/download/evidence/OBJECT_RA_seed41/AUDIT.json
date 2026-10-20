@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "epochs": 40,
+  "optimizer_steps": 10550,
+  "sample_exposures": 105240,
+  "checkpoints": 4,
+  "episodes": 200,
+  "vector_attempts": 20,
+  "structure_checks": 16,
+  "metric_gate": false,
+  "cost": {
+    "optimizer_steps": 10550,
+    "sample_exposures": 105240,
+    "epoch_seconds": 179.978253364563,
+    "extra_T0_bytes": 75735064,
+    "residual_parameters": 16608,
+    "peak_gpu_bytes": 215984640,
+    "latency": [
+      {
+        "batch": 10,
+        "history": 1,
+        "parent_temporal_head_ms": 4.116719818115234,
+        "zrv2_temporal_head_ms": 8.486022186279296,
+        "overhead_ms": 4.369302368164062
+      },
+      {
+        "batch": 10,
+        "history": 4,
+        "parent_temporal_head_ms": 4.880889511108398,
+        "zrv2_temporal_head_ms": 14.455328369140625,
+        "overhead_ms": 9.574438858032227
+      },
+      {
+        "batch": 10,
+        "history": 8,
+        "parent_temporal_head_ms": 4.634070587158203,
+        "zrv2_temporal_head_ms": 9.847151947021484,
+        "overhead_ms": 5.21308135986328
+      }
+    ]
+  },
+  "notes": [
+    "Whole-three-seed gate: mean AUC delta positive and at least two positive seed deltas; engineering all PASS.",
+    "Historical hardware may differ; global action RNG not isolated; see parent binding.",
+    "Public policy was not retrained; extra calibration compute is not equal-budget comparison."
+  ]
+}

@@ -1,0 +1,6 @@
+{"phase": "driver_v2", "command": ["/data/mlr_ifa/env/bin/python", "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_driver_v2.py", "42"], "time": 1792430354.8211265}
+{"phase": "admission", "command": "bash /data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed42/admission.sh", "time": 1792430354.8542469}
+{"phase": "protocol_audit", "command": "/data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/protocol_audit.py", "time": 1792430521.613112}
+{"phase": "train", "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py train ra_coreset", "time": 1792430534.5254285}
+{"phase": "evaluate", "command": "/data/mlr_ifa/env/bin/python -m coreset_exp.evaluate ra_coreset", "time": 1792433644.1499171}
+{"phase": "audit", "command": "/data/mlr_ifa/env/bin/python /data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_audit.py", "time": 1792438576.7211225}

@@ -1,0 +1,305 @@
+{
+  "parent_cfg": {
+    "seed": 42,
+    "use_wandb": false,
+    "wandb_project": "lifelong learning",
+    "folder": "/data/mlr_ifa/datasets",
+    "bddl_folder": "/data/mlr_ifa/src/libero/libero/bddl_files",
+    "init_states_folder": "/data/mlr_ifa/src/libero/libero/init_files",
+    "load_previous_model": false,
+    "device": "cuda",
+    "task_embedding_format": "clip",
+    "task_embedding_one_hot_offset": 1,
+    "pretrain": "/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth",
+    "pretrain_model_path": "",
+    "benchmark_name": "LIBERO_OBJECT",
+    "training": true,
+    "data": {
+      "data_modality": [
+        "image",
+        "proprio"
+      ],
+      "seq_len": 8,
+      "demo_limit": 10,
+      "frame_stack": 1,
+      "use_eye_in_hand": true,
+      "use_gripper": true,
+      "use_joint": true,
+      "use_ee": false,
+      "max_word_len": 25,
+      "state_dim": null,
+      "num_kp": 64,
+      "img_h": 128,
+      "img_w": 128,
+      "task_group_size": 1,
+      "task_order_index": 0,
+      "shuffle_task": false,
+      "obs": {
+        "modality": {
+          "rgb": [
+            "agentview_rgb",
+            "eye_in_hand_rgb"
+          ],
+          "depth": [],
+          "low_dim": [
+            "gripper_states",
+            "joint_states"
+          ]
+        }
+      },
+      "obs_key_mapping": {
+        "agentview_rgb": "agentview_image",
+        "eye_in_hand_rgb": "robot0_eye_in_hand_image",
+        "gripper_states": "robot0_gripper_qpos",
+        "joint_states": "robot0_joint_pos"
+      },
+      "affine_translate": 4,
+      "action_scale": 1.0,
+      "train_dataset_ratio": 0.8
+    },
+    "policy": {
+      "color_aug": {
+        "_target_": "BatchWiseImgColorJitterAug",
+        "network": "BatchWiseImgColorJitterAug",
+        "prob": 0.9,
+        "network_kwargs": {
+          "brightness": 0.3,
+          "contrast": 0.3,
+          "saturation": 0.3,
+          "hue": 0.3
+        }
+      },
+      "translation_aug": {
+        "_target_": "RandomAffineAug",
+        "network": "RandomAffineAug",
+        "prob": 0.6,
+        "network_kwargs": {
+          "degrees": 15,
+          "translate": 0.1
+        }
+      },
+      "erase_aug": {
+        "_target_": "RandomErasingAug",
+        "network": "RandomErasingAug",
+        "prob": 0.1,
+        "network_kwargs": {
+          "scale": [
+            0.02,
+            0.33
+          ],
+          "ratio": [
+            0.3,
+            3.3
+          ]
+        }
+      },
+      "image_encoder": {
+        "network": "CLIPVisionEncoder",
+        "network_kwargs": {
+          "vision_model_name": "openai/clip-vit-base-patch16",
+          "output_size": 64,
+          "input_shape": null
+        }
+      },
+      "language_encoder": {
+        "network": "CLIPTextEncoder",
+        "network_kwargs": {
+          "text_model_name": "openai/clip-vit-base-patch16",
+          "output_size": 64
+        }
+      },
+      "temporal_position_encoding": {
+        "network": "SinusoidalPositionEncoding",
+        "network_kwargs": {
+          "input_size": null,
+          "inv_freq_factor": 10,
+          "factor_ratio": null
+        }
+      },
+      "policy_head": {
+        "network": "TemporalGMMHead",
+        "network_kwargs": {
+          "hidden_size": 1024,
+          "num_layers": 2,
+          "min_std": 0.0001,
+          "num_modes": 5,
+          "low_eval_noise": false,
+          "activation": "softplus"
+        },
+        "loss_kwargs": {
+          "loss_coef": 1.0
+        }
+      },
+      "policy_type": "BriefPolicy",
+      "extra_num_layers": 0,
+      "extra_hidden_size": 128,
+      "embed_size": 512,
+      "transformer_num_layers": 6,
+      "transformer_num_heads": 8,
+      "transformer_head_output_size": 64,
+      "transformer_mlp_hidden_size": 256,
+      "transformer_dropout": 0.15,
+      "transformer_max_seq_len": 8,
+      "film_hidden_size": 512,
+      "num_tasks": 10,
+      "max_seq_len": 8,
+      "num_gmm_modes": 5,
+      "rank": 8,
+      "alpha": 8,
+      "use_vision": true,
+      "use_language": true,
+      "use_state": true
+    },
+    "train": {
+      "optimizer": {
+        "name": "torch.optim.AdamW",
+        "kwargs": {
+          "lr": 0.0001,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.1
+        }
+      },
+      "scheduler": {
+        "name": "torch.optim.lr_scheduler.LambdaLR",
+        "kwargs": {
+          "warmup_steps": 500,
+          "last_epoch": -1
+        }
+      },
+      "n_epochs": 100,
+      "batch_size": 10,
+      "num_workers": 0,
+      "grad_clip": 100.0,
+      "loss_scale": 1.0,
+      "resume": false,
+      "resume_path": "",
+      "debug": false,
+      "use_augmentation": true
+    },
+    "eval": {
+      "load_path": "",
+      "eval": false,
+      "batch_size": 64,
+      "num_workers": 4,
+      "n_eval": 20,
+      "eval_every": 5,
+      "max_steps": 600,
+      "use_mp": true,
+      "num_procs": 20,
+      "save_sim_states": false,
+      "render": false
+    },
+    "lifelong": {
+      "algo": "MLR",
+      "eval_in_train": false
+    },
+    "start_task": 6,
+    "end_task": 10,
+    "gamma": 0.3,
+    "past_data_rate": 0.5,
+    "aug": false,
+    "feature_dir": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed42_20261019/features",
+    "buffer_dir": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed42_20261019/ra_coreset/buffer",
+    "experiment_dir": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed42_20261019/ra_coreset/models",
+    "shape_meta": null,
+    "selector": "ra_coreset",
+    "run_root": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed42_20261019/ra_coreset",
+    "contract": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed42_20261019/CONTRACT.json",
+    "linear_schedule_unit": "optimizer_step"
+  },
+  "spec": {
+    "parent": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed42_20261019",
+    "parent_source": "/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed42/source",
+    "parent_env": "/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed42/env.sh",
+    "parent_arm": "ra_coreset",
+    "parent_engineering_file": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed42_20261019/AUTONOMOUS_EXIT_ACCEPTANCE.json",
+    "seed": 42,
+    "branch": "OBJECT_RA",
+    "suite": "LIBERO_OBJECT",
+    "arm": "ra_coreset_ifa_zrv2",
+    "output": "/data/mlr_ifa/experiments/Conditional_ZRv2_OBJECT_RA_seed42_20261019",
+    "counts": [
+      1562,
+      1480,
+      1560,
+      1319
+    ],
+    "quotas": [
+      781,
+      740,
+      780,
+      660
+    ],
+    "epochs": 40,
+    "optimizer_steps": 10550,
+    "exposures": 105240,
+    "formal_episodes": 200,
+    "controller_contract": "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/AUTONOMOUS_CONTRACT.json",
+    "baseline_metrics": {
+      "AUC": {
+        "fraction": "229/320",
+        "percent": 71.5625
+      },
+      "FWT": {
+        "fraction": "7/10",
+        "percent": 70.0
+      },
+      "NBT": {
+        "fraction": "-11/360",
+        "percent": -3.0555555555555554
+      },
+      "OldFinal": {
+        "fraction": "13/20",
+        "percent": 65.0
+      },
+      "FinalAll": {
+        "fraction": "51/80",
+        "percent": 63.75
+      }
+    },
+    "baseline_episode_hashes": {
+      "trials_stage6_task6.jsonl": "4fdc7c10984d2f5b5f865cb39cc5bf08d781f9e3838306712c48c11b2f1717da",
+      "trials_stage7_task6.jsonl": "f55788b9e088c0e5d163f875484569f7e5fea2a29f498fc074aa26d579c033fb",
+      "trials_stage7_task7.jsonl": "478c8a122b06efe76778d1d737ebafddbd231709e75ad6f3550865f52adaa9b6",
+      "trials_stage8_task6.jsonl": "aaf76ba5e9e2762a0df18acd673ec97ed7144e69974d10e9ca21c0cc4c3ae436",
+      "trials_stage8_task7.jsonl": "e7a79f2e1e7d55210a4848d76aa6f6f0945a3591d195657fcd440e9df2cb048e",
+      "trials_stage8_task8.jsonl": "838ec8e8c58247566d56566a09b8972b9159178e42b7a08eb4d5ae828d7506e1",
+      "trials_stage9_task6.jsonl": "4b8ba84c70efb0ac9bab574ba994bae5475499c9362e839c4d288e999ac52bb8",
+      "trials_stage9_task7.jsonl": "f585dce7566908f6b6df88f25dad9292d0a44a15d0a5af457418c31f9ab50ec9",
+      "trials_stage9_task8.jsonl": "f002d103198af81419fb58fe7b320d3a886946b97ea3166180a6cd4b3b82ed6f",
+      "trials_stage9_task9.jsonl": "5b902012f37c355a034564dfc337df94417c72ff1ec7957ab73a7a92fec0f2e4"
+    },
+    "parent_source_contract_sha256": "000b9712774898bae696d5f21aa9727a3d30f82657e9c86eca9893ec86d665a4",
+    "additional_public_training": 0,
+    "local_residual_seed": "experiment_seed + task_id",
+    "evaluation": "original 0-19/20 per cell/10 lanes/env[s,s+1]/600/5zero/stage global RNG/argmax component Normal",
+    "created": 1792452153.2682436,
+    "parent_amendment_files": [
+      "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/RECOVERY_CONTRACT.json",
+      "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/AUTHORIZATION.json",
+      "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py",
+      "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_audit.py",
+      "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/stage1/42/PROTOCOL_EQUIVALENCE.json",
+      "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/stage1/42/TASK6_POLICY_ACCEPTANCE.json"
+    ]
+  },
+  "actual": {
+    "seed": 42,
+    "batch": 10,
+    "epochs_per_stage": 10,
+    "workers": 0,
+    "drop_last": false,
+    "sampler_seed": 0,
+    "optimizer": "AdamW_UV_only",
+    "lr": 0.0001,
+    "weight_decay": 0.1,
+    "warmup500": true,
+    "common_eval_frozen": true,
+    "T0_eval_frozen": true,
+    "output": "/data/mlr_ifa/experiments/Conditional_ZRv2_OBJECT_RA_seed42_20261019"
+  }
+}
