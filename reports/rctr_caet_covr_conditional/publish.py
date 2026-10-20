@@ -35,6 +35,7 @@ def main():
     manifest = {}
     for p in sorted(R.rglob("*")):
         if (not p.is_file() or p.suffix not in allowed or p.name in exclude or
+                ("BUNDLE" in p.name and p.suffix == ".json") or
                 p.name.startswith("PUBLICATION_RECEIPT") or
                 {"__pycache__", "asset_sources"} & set(p.relative_to(R).parts)):
             continue

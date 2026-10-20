@@ -1,0 +1,72 @@
+{
+  "unix": 1792516043.4927742,
+  "runs": {
+    "RCTR_OBJECT_42": {
+      "status": {
+        "status": "RUNNING",
+        "phase": "collect6",
+        "unix": 1792513336.2961988,
+        "pid": 46522
+      },
+      "epochs": 100,
+      "optimizer_steps": 15700,
+      "last_epoch": {
+        "task": 6,
+        "epoch": 99,
+        "batches": 157,
+        "steps": 15700,
+        "loss": -31.924616212298158,
+        "lr_first": 1.0328947368421052e-06,
+        "lr_after": 0.0,
+        "seconds": 4.952332496643066
+      },
+      "exits": {
+        "train6.exit": "0"
+      },
+      "formal_records": 0,
+      "formal_attempt_events": 0,
+      "collections": [
+        {
+          "stage": "task6",
+          "method": "rctr",
+          "branches": 64,
+          "successful_branches": 0,
+          "committed_policy_steps": 33760,
+          "acceptance": null
+        }
+      ]
+    }
+  },
+  "queue_status": {
+    "status": "RUNNING",
+    "key": "RCTR_OBJECT_42",
+    "unix": 1792516040.3613389
+  },
+  "decision": {
+    "action": "RUN_IF_ADMITTED",
+    "method": "RCTR",
+    "suite": "OBJECT",
+    "seed": 42,
+    "decisions": [],
+    "unix": 1792516040.3533273
+  },
+  "disk": {
+    "/data": {
+      "total": 105358065664,
+      "used": 77159735296,
+      "free": 23328292864
+    },
+    "/root": {
+      "total": 62559989760,
+      "used": 46176731136,
+      "free": 13279731712
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 49 %, 3006 MiB",
+  "processes": [
+    "  46522   46513       55:16 python -u -m rctr_exp.pipeline",
+    "  46593   46522       45:07 /data/mlr_ifa/env/bin/python -m rctr_exp.collect 6",
+    "  46680       1       21:04 bash -c cd /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020 && test ! -e controller.pid.json && nohup /data/mlr_ifa/env/bin/python -u queue_controller.py /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020 > controller.log 2>&1 < /dev/null &",
+    "  46681   46680       21:04 /data/mlr_ifa/env/bin/python -u queue_controller.py /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020"
+  ]
+}

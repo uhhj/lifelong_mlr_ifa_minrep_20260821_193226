@@ -1,0 +1,64 @@
+"""Finite stage transactions. No blind restart of collection or evaluation."""
+import argparse
+import fcntl
+import json
+import os
+import subprocess
+import sys
+import time
+from pathlib import Path
+from coreset_exp.common import O, verify, write, sha
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--resume-training", action="store_true")
+    args = ap.parse_args()
+    verify()
+    lock = (O/"pipeline.lock").open("a")
+    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    assert not (O/"pipeline.exit").exists(), "Preserve original exit; external recovery required"
+    write(O/"pipeline.pid.json", dict(pid=os.getpid(), start=time.time()))
+    phases=[]
+    def train(task,epoch,resume):
+        command=[sys.executable,"-m","torch.distributed.run","--standalone","--nproc_per_node=1",
+                 "-m","covr_exp.train","ra_coreset","--through-task",str(task),"--through-epoch",str(epoch)]
+        if resume:command.append("--resume")
+        return command
+    phases.append(("train6",train(6,99,args.resume_training)))
+    for task in (7,8,9):
+        phases.append(("train%d_first50"%task,train(task,49,True)))
+        phases.append(("collect%d"%task,[sys.executable,"-m","covr_exp.collect",str(task)]))
+        phases.append(("train%d_last50"%task,train(task,99,True)))
+    phases.extend([("evaluate",[sys.executable,"-m","coreset_exp.evaluate","ra_coreset"]),
+                   ("audit",[sys.executable,"-m","covr_exp.audit"])])
+    result = 1
+    try:
+        for name, command in phases:
+            assert not (O/(name+".exit")).exists(), "No repeated phase"
+            write(O/"RUN_STATUS.json", dict(status="RUNNING", phase=name,
+                                           unix=time.time(), pid=os.getpid()))
+            with (O/"commands.jsonl").open("a") as ledger:
+                ledger.write(json.dumps(dict(event="start", phase=name, argv=command,
+                    unix=time.time(), contract_sha256=sha(O/"CONTRACT.json")))+"\n")
+            with (O/(name+".log")).open("x") as log:
+                p = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
+                write(O/(name+".pid.json"), dict(pid=p.pid, argv=command, unix=time.time()))
+                rc = p.wait()
+            (O/(name+".exit")).write_text(str(rc)+"\n")
+            with (O/"commands.jsonl").open("a") as ledger:
+                ledger.write(json.dumps(dict(event="exit", phase=name, code=rc,
+                                             unix=time.time()))+"\n")
+            if rc:
+                write(O/"RUN_STATUS.json", dict(status="BLOCKED_ENGINEERING",
+                    phase=name, exit=rc, failed_evidence_preserved=True))
+                result = rc
+                return rc
+        result = 0
+        return 0
+    finally:
+        (O/"pipeline.exit").write_text(str(result)+"\n")
+
+
+if __name__ == "__main__":
+    sys.exit(main())
