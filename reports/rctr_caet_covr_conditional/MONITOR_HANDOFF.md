@@ -21,6 +21,8 @@ W=/data/mlr_ifa/experiment_workspaces/RCTR_OBJECT_seed42_full_20261021；O=/data
 
 ## LIBERO-50
 
+最新2026-10-21 01:58 CST：50/50已全部无损获取，libero50_acquisition.exit=0；额外完整SHA/示范/BDDL/初态审计LIBERO50_FULL_ASSET_AUDIT.exit=0，READINESS_20261021.json为DATA_AND_CPU_READINESS_PASS_NOT_GPU_ADMITTED。共享预训练实际1,941,000步；每seed下游859,400步，5阶段每epoch880/1071/1684/2057/2902个batch。合计4,519,200步，不含隔离预检。不要再重复下载或完整数据哈希审计，仅在新准入合同要求时核验。GPU耗时尚未实测，不能沿用OBJECT的小时级估计。RCTR当前134采集分支/0正式记录，继续正常运行。
+
 服务器acquire_libero50.sh PID46818负责自动获取，查LIBERO50_SERVER_STATUS.json、CURRENT、libero50_acquisition.exit及libero50_acquisition/*.json。固定HF revision f13aa24a3da8c43c7225569f28c562979fa0e35a。数据位于/data/mlr_ifa/datasets/libero50_acquired及/root/mlr_ifa_datasets/libero50_acquired，逻辑路径用链接统一。只对自己的临时下载做逐数组/属性无损验证后删除raw，原实验数据不能删。本地重复下载25160已停且文件保留。
 LIBERO50_PARTITION.json为LOTUS固定25预训练+25新增任务，全部BDDL/初态已找到。论文公开代码未提供完整50预训练权重；事前工程选择见libero50_preparation/IMPLEMENTATION_DECISIONS.md。共享新预训练seed42、25任务50演示、100epoch、batch10、FP32、CLIP base冻结而LoRA8/alpha8及新投影/FiLM/state/T/head训练，最终ep99，不能冒充官方checkpoint。三个下游seed使用同一份。当前未运行预训练。
 LIBERO50_SOURCE_BUNDLE_final.json SHA370dd4645bb319f0f1739fa13b5a84fa82d86c7c0e0078be0da28d8caad718ae，196文件。14CPU性质PASS及真实数据CPU完整→Brief GMM history1/4/8完全一致，0更新/0环境/0CUDA字节；不是GPU验收。新正式入口自动prepare→4隔离GPU恢复更新（下游另1零动作接口步）→pipeline。预训练另4隔离更新0环境。未通过不能训练。

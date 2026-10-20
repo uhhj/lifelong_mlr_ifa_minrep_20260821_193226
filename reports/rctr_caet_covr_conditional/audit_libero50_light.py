@@ -18,6 +18,12 @@ def audit(root,seed):
         assert (root/name).read_text().strip()=="0"
     acceptance=json.loads((root/"PROCESS_EXIT_ACCEPTANCE.json").read_text())
     remote=json.loads((root/"AUDIT.json").read_text())
+    partition_path=Path(__file__).resolve().parent/"libero50_preparation/PARTITION.json"
+    partition=json.loads(partition_path.read_text())
+    tasks=sum(partition["lifelong_stages"],[])
+    contract=json.loads((root/"CONTRACT.json").read_text())
+    expected_partition=[h for p,h in contract["files"].items() if Path(p).name=="PARTITION.json"]
+    assert expected_partition==[sha(partition_path)]
     assert acceptance["status"]==remote["status"]=="PASS"
     assert acceptance["audit_sha256"]==sha(root/"AUDIT.json")
     epochs=json.loads((root/"ra_coreset/epochs.json").read_text())
@@ -46,7 +52,8 @@ def audit(root,seed):
                 assert start["initial_indices"]==list(range(10*j,10*(j+1)))
                 assert done["successes"]==[next(x["success"] for x in trials if x["trial"]==10*j+i) for i in range(10)]
             successes=sum(x["success"] for x in trials);rates[s,t]=F(successes,20);total+=20
-            rows.append(dict(seed=seed,stage=s,task=t,successes=successes,trials=20,percent=5*successes))
+            rows.append(dict(seed=seed,stage=s,task=t,task_name=tasks[t]["name"],
+                successes=successes,trials=20,percent=5*successes))
     assert total==1500 and len(rows)==75
     auc=sum((sum((rates[s,t] for s in range(t//5+1,6)),F(0))/(5-t//5) for t in range(25)),F(0))/25
     fwt=sum((rates[t//5+1,t] for t in range(25)),F(0))/25

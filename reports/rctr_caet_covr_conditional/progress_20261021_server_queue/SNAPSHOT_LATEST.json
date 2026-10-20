@@ -1,5 +1,5 @@
 {
-  "unix": 1792518208.250503,
+  "unix": 1792519111.1044068,
   "runs": {
     "RCTR_OBJECT_42": {
       "status": {
@@ -29,9 +29,9 @@
         {
           "stage": "task6",
           "method": "rctr",
-          "branches": 111,
+          "branches": 134,
           "successful_branches": 0,
-          "committed_policy_steps": 59120,
+          "committed_policy_steps": 70400,
           "acceptance": null
         }
       ]
@@ -40,7 +40,7 @@
   "queue_status": {
     "status": "RUNNING",
     "key": "RCTR_OBJECT_42",
-    "unix": 1792518163.9128606
+    "unix": 1792519064.875409
   },
   "decision": {
     "action": "RUN_IF_ADMITTED",
@@ -48,26 +48,25 @@
     "suite": "OBJECT",
     "seed": 42,
     "decisions": [],
-    "unix": 1792518163.905003
+    "unix": 1792519064.8618305
   },
   "disk": {
     "/data": {
       "total": 105358065664,
-      "used": 82209771520,
-      "free": 18278256640
+      "used": 83087675392,
+      "free": 17400352768
     },
     "/root": {
       "total": 62559989760,
-      "used": 52215992320,
-      "free": 7240470528
+      "used": 53545136128,
+      "free": 5911326720
     }
   },
-  "gpu": "NVIDIA GeForce RTX 3090, 58 %, 3006 MiB",
+  "gpu": "NVIDIA GeForce RTX 3090, 62 %, 3006 MiB",
   "processes": [
-    "  46522   46513    01:31:21 python -u -m rctr_exp.pipeline",
-    "  46593   46522    01:21:12 /data/mlr_ifa/env/bin/python -m rctr_exp.collect 6",
-    "  46819   46818       42:43 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020/acquire_libero50_server.py",
-    "  47521       1       04:45 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020/queue_controller_v2.py /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020"
+    "  46522   46513    01:46:24 python -u -m rctr_exp.pipeline",
+    "  46593   46522    01:36:15 /data/mlr_ifa/env/bin/python -m rctr_exp.collect 6",
+    "  47521       1       19:48 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020/queue_controller_v2.py /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020"
   ],
   "controller_v2": {
     "pid": {
@@ -105,18 +104,18 @@
     "exit": null
   },
   "libero50_acquisition": {
-    "status": "ACQUIRING",
-    "verified": 41,
+    "status": "DATA_VERIFIED",
+    "verified": 50,
     "total": 50,
-    "unix": 1792518184.1467857,
+    "unix": 1792518693.2098863,
     "data_only": true,
     "pretrained_checkpoint_available": false,
     "current": {
       "status": "LOSSLESS_REPACK",
-      "path": "libero_90/KITCHEN_SCENE7_put_the_white_bowl_to_the_right_of_the_plate_demo.hdf5",
-      "unix": 1792518201.5345986
+      "path": "libero_90/KITCHEN_SCENE9_turn_on_the_stove_demo.hdf5",
+      "unix": 1792518675.9605691
     },
-    "exit": null
+    "exit": "0"
   },
   "libero50_shared_pretraining": null
 }
