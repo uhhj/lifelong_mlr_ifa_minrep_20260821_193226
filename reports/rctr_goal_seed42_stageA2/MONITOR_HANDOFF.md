@@ -21,3 +21,6 @@ Once runner/analyze/supervisor all exit0 and both processes are gone, download l
 Every check/audit: update reviewed REPORT.md, run publish.py to publish this directory only to publish_mlr_branch remote MLR, verify receipt. No forcepush or binary/private data. Root remote RUN_STATUS initially remains BLOCKED by design; current recovery status is under E. Recovery final RUN_STATUS says AWAITING_ANALYSIS; determine actual completion from execution/analysis/exit/process evidence and local audit.
 
 Automation `rctr-stage-a2` is hourly. Normal checks should finish after saving progress and ETA; do not watch continuously. Notify only material progress/change/failure/completion. Delete this automation after final acceptance, complete publication and delivery. Do not start any further experiment.
+
+## Latest user cancellation, 2026-10-20
+A2 is STOPPED_BY_USER. Worker and supervisor exit143, 76 committed records retained, zero optimizer calls. Automation rctr-stage-a2 deleted. Do not resume or treat partial results as acceptance. See ../20261020_three_methods/STOP_ACCEPTANCE.json and stop_evidence. Supersedes earlier continuation instructions.
