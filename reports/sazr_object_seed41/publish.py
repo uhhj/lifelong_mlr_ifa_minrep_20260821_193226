@@ -6,14 +6,14 @@ def git(*args):return subprocess.check_output(['git','-C',str(repo),*args],text=
 assert git('branch','--show-current')=='MLR'
 assert git('remote','get-url','origin')=='https://github.com/uhhj/lifelong_mlr_ifa_minrep_20260821_193226.git'
 assert not git('diff','--cached','--name-only'),'Preserve unrelated staged changes'
-allowed={'.py','.sh','.json','.jsonl','.md','.yaml','.yml','.txt','.patch','.log','.exit','.pid','.started','.sbatch'}
+allowed={'.py','.sh','.json','.jsonl','.md','.yaml','.yml','.txt','.patch','.log','.exit','.pid','.started','.sbatch','.csv'}
 files={}
 for p in R.rglob('*'):
  if not p.is_file() or '__pycache__' in p.parts or p.name.startswith('PUBLICATION_RECEIPT'):continue
  if p.suffix not in allowed and p.name!='LICENSE':continue
  rel=p.relative_to(R).as_posix()
  if 'source' not in Path(rel).parts:assert not {'features','buffer','bindings','models','recovery','smoke'}&set(Path(rel).parts),rel
- else:assert p.suffix in {'.py','.sh','.md','.yaml','.yml','.txt','.json','.sbatch'} or p.name=='LICENSE',rel
+ else:assert p.suffix in {'.py','.sh','.md','.yaml','.yml','.txt','.json','.sbatch','.csv'} or p.name=='LICENSE',rel
  files[rel]=p
 def inspect(v):
  if isinstance(v,dict):
@@ -36,7 +36,7 @@ subprocess.run(['git','-C',str(repo),'add','-f','--pathspec-from-file=-','--path
 assert set(git('diff','--cached','--name-only').splitlines())<=set(paths)
 subprocess.run(['git','-C',str(repo),'diff','--cached','--check'],check=True)
 if git('diff','--cached','--name-only'):
- subprocess.run(['git','-C',str(repo),'commit','-q','-m','Complete SAZR Task6 audit with validation rejection and parent fallback'],check=True)
+ subprocess.run(['git','-C',str(repo),'commit','-q','-m','Audit SAZR projection suppression and saturated gripper path using existing assets'],check=True)
  subprocess.run(['git','-C',str(repo),'push','origin','MLR'],check=True)
 head=git('rev-parse','HEAD');remote=git('ls-remote','origin','refs/heads/MLR').split()[0];assert head==remote
 receipt=dict(status='PUSH_VERIFIED',commit=head,remote=remote,files=len(paths),bytes=sum(v['bytes'] for v in manifest.values()),experiment_status=json.loads((R/'RUN_STATUS.json').read_text())['status'],time=datetime.datetime.now().astimezone().isoformat())
