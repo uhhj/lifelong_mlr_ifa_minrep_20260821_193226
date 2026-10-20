@@ -1,0 +1,881 @@
+{
+  "time": "2026-10-20T22:14:47.075846+08:00",
+  "sources": {
+    "libero_requirements": {
+      "url": "https://raw.githubusercontent.com/Lifelong-Robot-Learning/LIBERO/master/requirements.txt",
+      "sha256": "b7d3093bb5e2f424c54396a2731bf26ea185bd3fbff79b561571a92400958130",
+      "bytes": 274,
+      "relevant_lines": [
+        {
+          "line": 10,
+          "text": " robosuite==1.4.0"
+        }
+      ]
+    },
+    "collection": {
+      "url": "https://raw.githubusercontent.com/Lifelong-Robot-Learning/LIBERO/master/scripts/collect_demonstration.py",
+      "sha256": "b0529ba1526eda5d10cc3db85c74628c95fda7a36ea420cb777bba8c44c4d311",
+      "bytes": 11104,
+      "relevant_lines": [
+        {
+          "line": 3,
+          "text": "import datetime"
+        },
+        {
+          "line": 9,
+          "text": "import robosuite as suite"
+        },
+        {
+          "line": 10,
+          "text": "import time"
+        },
+        {
+          "line": 12,
+          "text": "from robosuite import load_controller_config"
+        },
+        {
+          "line": 13,
+          "text": "from robosuite.wrappers import DataCollectionWrapper, VisualizationWrapper"
+        },
+        {
+          "line": 14,
+          "text": "from robosuite.utils.input_utils import input2action"
+        },
+        {
+          "line": 49,
+          "text": "    )  # counter to collect 10 timesteps after reaching goal"
+        },
+        {
+          "line": 65,
+          "text": "        # Get the newest action"
+        },
+        {
+          "line": 66,
+          "text": "        action, grasp = input2action("
+        },
+        {
+          "line": 73,
+          "text": "        # If action is none, then this a reset so we should break"
+        },
+        {
+          "line": 74,
+          "text": "        if action is None:"
+        },
+        {
+          "line": 81,
+          "text": "        env.step(action)"
+        },
+        {
+          "line": 87,
+          "text": "        # state machine to check for having a success for 10 consecutive timesteps"
+        },
+        {
+          "line": 90,
+          "text": "                task_completion_hold_count -= 1  # latched state, decrement count"
+        },
+        {
+          "line": 92,
+          "text": "                task_completion_hold_count = 10  # reset count on first success timestep"
+        },
+        {
+          "line": 105,
+          "text": "    directory, out_dir, env_info, args, remove_directory=[]"
+        },
+        {
+          "line": 114,
+          "text": "        date (attribute) - date of collection"
+        },
+        {
+          "line": 115,
+          "text": "        time (attribute) - time of collection"
+        },
+        {
+          "line": 116,
+          "text": "        repository_version (attribute) - repository version used during collection"
+        },
+        {
+          "line": 121,
+          "text": "            states (dataset) - flattened mujoco states"
+        },
+        {
+          "line": 122,
+          "text": "            actions (dataset) - actions applied during demonstration"
+        },
+        {
+          "line": 130,
+          "text": "        env_info (str): JSON-encoded string containing environment information,"
+        },
+        {
+          "line": 148,
+          "text": "        state_paths = os.path.join(directory, ep_directory, \"state_*.npz\")"
+        },
+        {
+          "line": 149,
+          "text": "        states = []"
+        },
+        {
+          "line": 150,
+          "text": "        actions = []"
+        },
+        {
+          "line": 152,
+          "text": "        for state_file in sorted(glob(state_paths)):"
+        },
+        {
+          "line": 153,
+          "text": "            dic = np.load(state_file, allow_pickle=True)"
+        },
+        {
+          "line": 156,
+          "text": "            states.extend(dic[\"states\"])"
+        },
+        {
+          "line": 157,
+          "text": "            for ai in dic[\"action_infos\"]:"
+        },
+        {
+          "line": 158,
+          "text": "                actions.append(ai[\"actions\"])"
+        },
+        {
+          "line": 160,
+          "text": "        if len(states) == 0:"
+        },
+        {
+          "line": 163,
+          "text": "        # Delete the first actions and the last state. This is because when the DataCollector wrapper"
+        },
+        {
+          "line": 164,
+          "text": "        # recorded the states and actions, the states were recorded AFTER playing that action."
+        },
+        {
+          "line": 165,
+          "text": "        del states[-1]"
+        },
+        {
+          "line": 166,
+          "text": "        assert len(states) == len(actions)"
+        },
+        {
+          "line": 177,
+          "text": "        # write datasets for states and actions"
+        },
+        {
+          "line": 178,
+          "text": "        ep_data_grp.create_dataset(\"states\", data=np.array(states))"
+        },
+        {
+          "line": 179,
+          "text": "        ep_data_grp.create_dataset(\"actions\", data=np.array(actions))"
+        },
+        {
+          "line": 182,
+          "text": "    now = datetime.datetime.now()"
+        },
+        {
+          "line": 183,
+          "text": "    grp.attrs[\"date\"] = \"{}-{}-{}\".format(now.month, now.day, now.year)"
+        },
+        {
+          "line": 184,
+          "text": "    grp.attrs[\"time\"] = \"{}:{}:{}\".format(now.hour, now.minute, now.second)"
+        },
+        {
+          "line": 185,
+          "text": "    grp.attrs[\"repository_version\"] = suite.__version__"
+        },
+        {
+          "line": 187,
+          "text": "    grp.attrs[\"env_info\"] = env_info"
+        },
+        {
+          "line": 297,
+          "text": "    env_info = json.dumps(config)"
+        },
+        {
+          "line": 303,
+          "text": "        str(time.time()).replace(\".\", \"_\"),"
+        },
+        {
+          "line": 308,
+          "text": "    # initialize device"
+        },
+        {
+          "line": 310,
+          "text": "        from robosuite.devices import Keyboard"
+        },
+        {
+          "line": 319,
+          "text": "        from robosuite.devices import SpaceMouse"
+        },
+        {
+          "line": 332,
+          "text": "    # make a new timestamped directory"
+        },
+        {
+          "line": 333,
+          "text": "    t1, t2 = str(time.time()).split(\".\")"
+        },
+        {
+          "line": 354,
+          "text": "                tmp_directory, new_dir, env_info, args, remove_directory"
+        }
+      ]
+    },
+    "conversion": {
+      "url": "https://raw.githubusercontent.com/Lifelong-Robot-Learning/LIBERO/master/scripts/create_dataset.py",
+      "sha256": "6ff09687a6ca8cb5df16b828cce2326467099da2b4dd6e5af557644d3e60f37f",
+      "bytes": 8813,
+      "relevant_lines": [
+        {
+          "line": 7,
+          "text": "import robosuite"
+        },
+        {
+          "line": 8,
+          "text": "import robosuite.utils.transform_utils as T"
+        },
+        {
+          "line": 9,
+          "text": "import robosuite.macros as macros"
+        },
+        {
+          "line": 15,
+          "text": "from robosuite.utils import camera_utils"
+        },
+        {
+          "line": 25,
+          "text": "        \"--use-actions\","
+        },
+        {
+          "line": 26,
+          "text": "        action=\"store_true\","
+        },
+        {
+          "line": 28,
+          "text": "    parser.add_argument(\"--use-camera-obs\", action=\"store_true\")"
+        },
+        {
+          "line": 41,
+          "text": "    parser.add_argument(\"--no-proprio\", action=\"store_true\")"
+        },
+        {
+          "line": 45,
+          "text": "        action=\"store_true\","
+        },
+        {
+          "line": 54,
+          "text": "    env_args = f[\"data\"].attrs[\"env_info\"]"
+        },
+        {
+          "line": 55,
+          "text": "    env_kwargs = json.loads(f[\"data\"].attrs[\"env_info\"])"
+        },
+        {
+          "line": 83,
+          "text": "    libero_utils.update_env_kwargs("
+        },
+        {
+          "line": 123,
+          "text": "    cap_index = 5"
+        },
+        {
+          "line": 144,
+          "text": "        # load the flattened mujoco states"
+        },
+        {
+          "line": 145,
+          "text": "        states = f[\"data/{}/states\".format(ep)][()]"
+        },
+        {
+          "line": 146,
+          "text": "        actions = np.array(f[\"data/{}/actions\".format(ep)][()])"
+        },
+        {
+          "line": 148,
+          "text": "        num_actions = actions.shape[0]"
+        },
+        {
+          "line": 153,
+          "text": "        env.sim.set_state_from_flattened(states[init_idx])"
+        },
+        {
+          "line": 157,
+          "text": "        ee_states = []"
+        },
+        {
+          "line": 158,
+          "text": "        gripper_states = []"
+        },
+        {
+          "line": 159,
+          "text": "        joint_states = []"
+        },
+        {
+          "line": 160,
+          "text": "        robot_states = []"
+        },
+        {
+          "line": 175,
+          "text": "        for j, action in enumerate(actions):"
+        },
+        {
+          "line": 177,
+          "text": "            obs, reward, done, info = env.step(action)"
+        },
+        {
+          "line": 179,
+          "text": "            if j < num_actions - 1:"
+        },
+        {
+          "line": 180,
+          "text": "                # ensure that the actions deterministically lead to the same recorded states"
+        },
+        {
+          "line": 181,
+          "text": "                state_playback = env.sim.get_state().flatten()"
+        },
+        {
+          "line": 182,
+          "text": "                # assert(np.all(np.equal(states[j + 1], state_playback)))"
+        },
+        {
+          "line": 183,
+          "text": "                err = np.linalg.norm(states[j + 1] - state_playback)"
+        },
+        {
+          "line": 192,
+          "text": "            if j < cap_index:"
+        },
+        {
+          "line": 199,
+          "text": "                    gripper_states.append(obs[\"robot0_gripper_qpos\"])"
+        },
+        {
+          "line": 201,
+          "text": "                joint_states.append(obs[\"robot0_joint_pos\"])"
+        },
+        {
+          "line": 203,
+          "text": "                ee_states.append("
+        },
+        {
+          "line": 212,
+          "text": "            robot_states.append(env.get_robot_state_vector(obs))"
+        },
+        {
+          "line": 226,
+          "text": "        states = states[valid_index]"
+        },
+        {
+          "line": 227,
+          "text": "        actions = actions[valid_index]"
+        },
+        {
+          "line": 228,
+          "text": "        dones = np.zeros(len(actions)).astype(np.uint8)"
+        },
+        {
+          "line": 230,
+          "text": "        rewards = np.zeros(len(actions)).astype(np.uint8)"
+        },
+        {
+          "line": 232,
+          "text": "        print(len(actions), len(agentview_images))"
+        },
+        {
+          "line": 233,
+          "text": "        assert len(actions) == len(agentview_images)"
+        },
+        {
+          "line": 234,
+          "text": "        print(len(actions))"
+        },
+        {
+          "line": 241,
+          "text": "                \"gripper_states\", data=np.stack(gripper_states, axis=0)"
+        },
+        {
+          "line": 243,
+          "text": "            obs_grp.create_dataset(\"joint_states\", data=np.stack(joint_states, axis=0))"
+        },
+        {
+          "line": 244,
+          "text": "            obs_grp.create_dataset(\"ee_states\", data=np.stack(ee_states, axis=0))"
+        },
+        {
+          "line": 245,
+          "text": "            obs_grp.create_dataset(\"ee_pos\", data=np.stack(ee_states, axis=0)[:, :3])"
+        },
+        {
+          "line": 246,
+          "text": "            obs_grp.create_dataset(\"ee_ori\", data=np.stack(ee_states, axis=0)[:, 3:])"
+        },
+        {
+          "line": 260,
+          "text": "        ep_data_grp.create_dataset(\"actions\", data=actions)"
+        },
+        {
+          "line": 261,
+          "text": "        ep_data_grp.create_dataset(\"states\", data=states)"
+        },
+        {
+          "line": 262,
+          "text": "        ep_data_grp.create_dataset(\"robot_states\", data=np.stack(robot_states, axis=0))"
+        },
+        {
+          "line": 267,
+          "text": "        ep_data_grp.attrs[\"init_state\"] = states[init_idx]"
+        }
+      ]
+    },
+    "collection_wrapper": {
+      "url": "https://raw.githubusercontent.com/ARISE-Initiative/robosuite/v1.4.0/robosuite/wrappers/data_collection_wrapper.py",
+      "sha256": "9654d8d7f18c57a7456c338e1213e16adf40274c6ee6be886323e5346b541316",
+      "bytes": 6448,
+      "relevant_lines": [
+        {
+          "line": 2,
+          "text": "This file implements a wrapper for saving simulation states to disk."
+        },
+        {
+          "line": 7,
+          "text": "import time"
+        },
+        {
+          "line": 11,
+          "text": "from robosuite.utils.mjcf_utils import save_sim_model"
+        },
+        {
+          "line": 12,
+          "text": "from robosuite.wrappers import Wrapper"
+        },
+        {
+          "line": 23,
+          "text": "            collect_freq (int): How often to save simulation state, in terms of environment steps."
+        },
+        {
+          "line": 31,
+          "text": "        # in-memory cache for simulation states and action info"
+        },
+        {
+          "line": 32,
+          "text": "        self.states = []"
+        },
+        {
+          "line": 33,
+          "text": "        self.action_infos = []  # stores information about actions taken"
+        },
+        {
+          "line": 34,
+          "text": "        self.successful = False  # stores success state of demonstration"
+        },
+        {
+          "line": 36,
+          "text": "        # how often to save simulation state, in terms of environment steps"
+        },
+        {
+          "line": 49,
+          "text": "        # remember whether any environment interaction has occurred"
+        },
+        {
+          "line": 50,
+          "text": "        self.has_interaction = False"
+        },
+        {
+          "line": 52,
+          "text": "        # some variables for remembering the current episode's initial state and model xml"
+        },
+        {
+          "line": 53,
+          "text": "        self._current_task_instance_state = None"
+        },
+        {
+          "line": 61,
+          "text": "        # flush any data left over from the previous episode if any interactions have happened"
+        },
+        {
+          "line": 62,
+          "text": "        if self.has_interaction:"
+        },
+        {
+          "line": 65,
+          "text": "        # timesteps in current episode"
+        },
+        {
+          "line": 67,
+          "text": "        self.has_interaction = False"
+        },
+        {
+          "line": 69,
+          "text": "        # save the task instance (will be saved on the first env interaction)"
+        },
+        {
+          "line": 71,
+          "text": "        self._current_task_instance_state = np.array(self.env.sim.get_state().flatten())"
+        },
+        {
+          "line": 74,
+          "text": "        # deterministically by using the recorded actions open loop"
+        },
+        {
+          "line": 77,
+          "text": "        self.env.sim.set_state_from_flattened(self._current_task_instance_state)"
+        },
+        {
+          "line": 80,
+          "text": "    def _on_first_interaction(self):"
+        },
+        {
+          "line": 82,
+          "text": "        Bookkeeping for first timestep of episode."
+        },
+        {
+          "line": 91,
+          "text": "        self.has_interaction = True"
+        },
+        {
+          "line": 93,
+          "text": "        # create a directory with a timestamp"
+        },
+        {
+          "line": 94,
+          "text": "        t1, t2 = str(time.time()).split(\".\")"
+        },
+        {
+          "line": 105,
+          "text": "        # save initial state and action"
+        },
+        {
+          "line": 106,
+          "text": "        assert len(self.states) == 0"
+        },
+        {
+          "line": 107,
+          "text": "        self.states.append(self._current_task_instance_state)"
+        },
+        {
+          "line": 111,
+          "text": "        Method to flush internal state to disk."
+        },
+        {
+          "line": 113,
+          "text": "        t1, t2 = str(time.time()).split(\".\")"
+        },
+        {
+          "line": 114,
+          "text": "        state_path = os.path.join(self.ep_directory, \"state_{}_{}.npz\".format(t1, t2))"
+        },
+        {
+          "line": 119,
+          "text": "        np.savez("
+        },
+        {
+          "line": 120,
+          "text": "            state_path,"
+        },
+        {
+          "line": 121,
+          "text": "            states=np.array(self.states),"
+        },
+        {
+          "line": 122,
+          "text": "            action_infos=self.action_infos,"
+        },
+        {
+          "line": 126,
+          "text": "        self.states = []"
+        },
+        {
+          "line": 127,
+          "text": "        self.action_infos = []"
+        },
+        {
+          "line": 132,
+          "text": "        Extends vanilla reset() function call to accommodate data collection"
+        },
+        {
+          "line": 141,
+          "text": "    def step(self, action):"
+        },
+        {
+          "line": 143,
+          "text": "        Extends vanilla step() function call to accommodate data collection"
+        },
+        {
+          "line": 146,
+          "text": "            action (np.array): Action to take in environment"
+        },
+        {
+          "line": 156,
+          "text": "        ret = super().step(action)"
+        },
+        {
+          "line": 159,
+          "text": "        # on the first time step, make directories for logging"
+        },
+        {
+          "line": 160,
+          "text": "        if not self.has_interaction:"
+        },
+        {
+          "line": 161,
+          "text": "            self._on_first_interaction()"
+        },
+        {
+          "line": 163,
+          "text": "        # collect the current simulation state if necessary"
+        },
+        {
+          "line": 165,
+          "text": "            state = self.env.sim.get_state().flatten()"
+        },
+        {
+          "line": 166,
+          "text": "            self.states.append(state)"
+        },
+        {
+          "line": 169,
+          "text": "            info[\"actions\"] = np.array(action)"
+        },
+        {
+          "line": 170,
+          "text": "            self.action_infos.append(info)"
+        },
+        {
+          "line": 186,
+          "text": "        if self.has_interaction:"
+        }
+      ]
+    },
+    "robosuite_setup": {
+      "url": "https://raw.githubusercontent.com/ARISE-Initiative/robosuite/v1.4.0/setup.py",
+      "sha256": "e537958a0ba8d3711586ad5ff6668450f5388d44d9139ec3f97b007790550d12",
+      "bytes": 1073,
+      "relevant_lines": [
+        {
+          "line": 15,
+          "text": "    name=\"robosuite\","
+        },
+        {
+          "line": 16,
+          "text": "    packages=[package for package in find_packages() if package.startswith(\"robosuite\")],"
+        },
+        {
+          "line": 21,
+          "text": "        \"mujoco>=2.3.0\","
+        },
+        {
+          "line": 28,
+          "text": "    description=\"robosuite: A Modular Simulation Framework and Benchmark for Robot Learning\","
+        },
+        {
+          "line": 30,
+          "text": "    url=\"https://github.com/ARISE-Initiative/robosuite\","
+        },
+        {
+          "line": 32,
+          "text": "    version=\"1.4.0\","
+        }
+      ]
+    },
+    "hf_tree": {
+      "url": "https://huggingface.co/api/datasets/yifengzhu-hf/LIBERO-datasets/tree/main/libero_goal?recursive=true",
+      "sha256": "d36b431f9934e555a1c5f84c871cadf0049c32d805a95d16f7c851479fa32b3f",
+      "bytes": 3398,
+      "entries": [
+        {
+          "type": "file",
+          "oid": "f5fd7d04feb773fe27b9f56c7e26650659a76551",
+          "size": 702223367,
+          "lfs": {
+            "oid": "20252c7cf98cd7437061f7f200ae7b6cb6219fabbd53b4536dfaa8abda6ab737",
+            "size": 702223367,
+            "pointerSize": 134
+          },
+          "xetHash": "2263833a2ff679fbc44623f07ce389dceb9d4f7ff9cfc392a12ce8eee04e0f8f",
+          "path": "libero_goal/open_the_middle_drawer_of_the_cabinet_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "545c0c4075c2ebb3575f08a31d13ee5e9ffab50b",
+          "size": 1017886342,
+          "lfs": {
+            "oid": "1b50d99a053a7e4547c9ae9ccd2e3cd762543d27be78f240f13440d7ae487ae8",
+            "size": 1017886342,
+            "pointerSize": 135
+          },
+          "xetHash": "006699783016adaf8cd2370d5ac435346b794ee3128e03ec011b5fdec16146fd",
+          "path": "libero_goal/open_the_top_drawer_and_put_the_bowl_inside_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "f388bd79816d7f5cbf62c54218088deb369fa5b7",
+          "size": 762855139,
+          "lfs": {
+            "oid": "36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6",
+            "size": 762855139,
+            "pointerSize": 134
+          },
+          "xetHash": "7dea71d045f53bc1d0fb8c62dcd4ebe564e4da984872c98b3a0ab9720b64e001",
+          "path": "libero_goal/push_the_plate_to_the_front_of_the_stove_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "11397e235bacbc37fa53d13356077af6d337a486",
+          "size": 468246288,
+          "lfs": {
+            "oid": "e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406",
+            "size": 468246288,
+            "pointerSize": 134
+          },
+          "xetHash": "3a0b1534cbe19a14a5769b1cc56f3b878070fa82c1f60152c8d9105d4a4e2f31",
+          "path": "libero_goal/put_the_bowl_on_the_plate_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "c819f60c847e40dc8b5142cc99325afbe284427a",
+          "size": 509123820,
+          "lfs": {
+            "oid": "ff77d3bf0f89a147d423840ecbd842cd63c3c55aeead91f88dbc0917be473e99",
+            "size": 509123820,
+            "pointerSize": 134
+          },
+          "xetHash": "264543e9fb3661ef83b8c9bbe66ce8762cae15a9a5cb77afa6f516c6cc598fac",
+          "path": "libero_goal/put_the_bowl_on_the_stove_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "8d924db67995010c7f22a71cfe7b97b772197fa6",
+          "size": 510414285,
+          "lfs": {
+            "oid": "e14c84ebc820a13ef9a92ca82a7f04bb299f0ee96dfe9cc907bab71aeb2683b2",
+            "size": 510414285,
+            "pointerSize": 134
+          },
+          "xetHash": "d3828164ab9e6986d80c0c92aabdef3e5658736e8a190f1f4346c57724538d93",
+          "path": "libero_goal/put_the_bowl_on_top_of_the_cabinet_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "b5154d6c4c23b1b24988d761adaeaff9a80f1225",
+          "size": 535715512,
+          "lfs": {
+            "oid": "ee58a7d72c143a71bf1448674e70940ac7781c1d1bb10a1b0c7a5c69b26abbef",
+            "size": 535715512,
+            "pointerSize": 134
+          },
+          "xetHash": "a896bd3a83c321c68416d2e8ff119bd5de6a84fa4e6da1d50283abf28cd7b0a3",
+          "path": "libero_goal/put_the_cream_cheese_in_the_bowl_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "193f981c023499abd2515de9bcca6f55a5d0518d",
+          "size": 878958730,
+          "lfs": {
+            "oid": "f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e",
+            "size": 878958730,
+            "pointerSize": 134
+          },
+          "xetHash": "f04ba56b25957ffe81ce4664157b4063c2a711d14fd095686fdbb5113dd6f4fd",
+          "path": "libero_goal/put_the_wine_bottle_on_the_rack_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "e692eb0beed01d31e04da9daae5fdff57f9d8908",
+          "size": 540179470,
+          "lfs": {
+            "oid": "7dc087a7596d5cbbe394f681b21a0be434438b0dca73ac430c293fe4c818404a",
+            "size": 540179470,
+            "pointerSize": 134
+          },
+          "xetHash": "3e56a99c675fa46b12eab8cdb8e1a380e3cd4e78fa0319dd7b1d233323a1e52b",
+          "path": "libero_goal/put_the_wine_bottle_on_top_of_the_cabinet_demo.hdf5"
+        },
+        {
+          "type": "file",
+          "oid": "b480b78a3ec7b1e66c9c2a599dadeaa5815da299",
+          "size": 447509922,
+          "lfs": {
+            "oid": "387fc10747696b80dea6ed8d7f2beaa162bf92ae11750b241073cbd33aac73d5",
+            "size": 447509922,
+            "pointerSize": 134
+          },
+          "xetHash": "f4de35f27ce534849eaa22a623a8387fd034ffb50b37b811910484249b8a8a04",
+          "path": "libero_goal/turn_on_the_stove_demo.hdf5"
+        }
+      ]
+    },
+    "hf_info": {
+      "url": "https://huggingface.co/api/datasets/yifengzhu-hf/LIBERO-datasets",
+      "sha256": "5f338f14f379677c2805e0e02eaf1b91463451b48854abc4a3416864c1e32a06",
+      "bytes": 13817,
+      "metadata": {
+        "id": "yifengzhu-hf/LIBERO-datasets",
+        "sha": "f13aa24a3da8c43c7225569f28c562979fa0e35a",
+        "createdAt": "2025-03-13T04:02:37.000Z",
+        "lastModified": "2025-05-18T17:02:51.000Z",
+        "cardData": {
+          "license": "apache-2.0"
+        }
+      }
+    },
+    "collection_history": {
+      "url": "https://api.github.com/repos/Lifelong-Robot-Learning/LIBERO/commits?path=scripts/collect_demonstration.py&per_page=100",
+      "sha256": "dfe354805ff0dc23d4c5b19a05b4f1735315937d4f18cf7950c2648af6aa92b8",
+      "bytes": 3369,
+      "commits": [
+        {
+          "sha": "4f0dd188960c25b608babc7de34e1e20a9d1306f",
+          "date": "2023-06-07T14:39:51Z",
+          "message": "init"
+        }
+      ]
+    },
+    "requirements_history": {
+      "url": "https://api.github.com/repos/Lifelong-Robot-Learning/LIBERO/commits?path=requirements.txt&per_page=100",
+      "sha256": "049613c1a63db2f61fa79c18f1edb6c120727fa17bc6429be105ea4b1110a113",
+      "bytes": 7831,
+      "commits": [
+        {
+          "sha": "a4cd6c192fe417238ffe4bac5dad8a0d10c3e1c5",
+          "date": "2024-12-10T06:27:30Z",
+          "message": "add robosuite version control"
+        },
+        {
+          "sha": "4f0dd188960c25b608babc7de34e1e20a9d1306f",
+          "date": "2023-06-07T14:39:51Z",
+          "message": "init"
+        }
+      ]
+    },
+    "mujoco237": {
+      "url": "https://pypi.org/pypi/mujoco/2.3.7/json",
+      "sha256": "4632a7146c07b4a1919dd1baa4a7c152f7d6c08e713d28e4e960d270bee8a8c5",
+      "bytes": 57947,
+      "wheels": [
+        {
+          "filename": "mujoco-2.3.7-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+          "digests": {
+            "blake2b_256": "457a7da910aa28893b17610ffdc4346c1af4cd3bfbb24078176237650a09c099",
+            "md5": "7979f11002b7c91ffc39bf827073bc5c",
+            "sha256": "7473a3de4dd1a8762d569ffb139196b4c5e7eca27d256df97b6cd4c66d2a09b2"
+          },
+          "upload_time_iso_8601": "2023-07-20T09:56:33.721801Z",
+          "url": "https://files.pythonhosted.org/packages/45/7a/7da910aa28893b17610ffdc4346c1af4cd3bfbb24078176237650a09c099/mujoco-2.3.7-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
+        },
+        {
+          "filename": "mujoco-2.3.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "digests": {
+            "blake2b_256": "93bb2329ec630636cf2d0b01f3956fd2ce090b03c78132ecb7e00ad836e20518",
+            "md5": "b8215bfb0d0995db6e8fd8ceafaf0247",
+            "sha256": "40e7e2d8f93d2495ec74efec84e5118ecc6e1d85157a844789c73c9ac9a4e28e"
+          },
+          "upload_time_iso_8601": "2023-07-20T09:56:36.495753Z",
+          "url": "https://files.pythonhosted.org/packages/93/bb/2329ec630636cf2d0b01f3956fd2ce090b03c78132ecb7e00ad836e20518/mujoco-2.3.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+        }
+      ]
+    }
+  }
+}

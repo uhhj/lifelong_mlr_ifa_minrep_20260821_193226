@@ -1,0 +1,83 @@
+{
+  "status": "BLOCKED_HISTORICAL_CONTINUATION",
+  "audit_time": "2026-10-20T22:24:43.352765+08:00",
+  "input_hashes_unchanged": true,
+  "input_hashes": {
+    "/data/mlr_ifa/datasets/libero_goal/put_the_cream_cheese_in_the_bowl_demo.hdf5": "ee58a7d72c143a71bf1448674e70940ac7781c1d1bb10a1b0c7a5c69b26abbef",
+    "/root/mlr_ifa/experiments/RA_Coreset_GOAL_seed42_20261018/bindings/task6.json": "98df8b99a40b7ca54af88f61749d7a1487931826c66b6833701eb56d00c46d47",
+    "/root/mlr_ifa/experiments/RA_Coreset_GOAL_seed42_20261018/ra_coreset/storage/task6.json": "418ca10f13bdfebcf0bbcc64548068c6226a49fd5e2215004debaaacbc3818ff",
+    "/root/mlr_ifa/experiments/RA_Coreset_GOAL_seed42_20261018/features/6/160.pt": "a4867b0054a9740c8250f0d3bd0f5063ec6f4fc2303488252d17a7b4d7c0dfc5",
+    "/root/mlr_ifa/experiments/RA_Coreset_GOAL_seed42_20261018/features/6/23.pt": "d5ef94348ddaaaa27b48a2af8577af4072f23d30d87649a6a115a9e8fae9a325",
+    "/root/mlr_ifa/experiments/RA_Coreset_GOAL_seed42_20261018/features/6/453.pt": "cdac6e7438fd2191a548e3d29aa0c56204d2ce0fdceb785fc9dd17abb2831a5d"
+  },
+  "preserved_contracts": [
+    {
+      "path": "/data/mlr_ifa/experiments/RCTR_GOAL_seed42_stageA_20261020/restoration_repair/CONTRACT.json",
+      "sha256": "e241d981e8eb39e4e6488636db5462652cdb05e1af39bea4a40a41eba415c6db"
+    },
+    {
+      "path": "/data/mlr_ifa/experiments/RCTR_GOAL_seed42_stageA_20261020/restoration_repair/integration_probe/CONTRACT.json",
+      "sha256": "374b62e51c921fb2e90b5372cf77d404b1be76019e92a8ee30eba44bff0a4866"
+    }
+  ],
+  "attempts": {
+    "mujoco_3.2.3": {
+      "steps_started": 164,
+      "steps_completed": 164,
+      "resets": 6,
+      "closed": 1,
+      "exceptions": 0
+    },
+    "mujoco_2.3.5": {
+      "steps_started": 47,
+      "steps_completed": 47,
+      "resets": 1,
+      "closed": 1,
+      "exceptions": 1
+    },
+    "mujoco_2.3.5_legacy_snapshot_recovery": {
+      "steps_started": 164,
+      "steps_completed": 164,
+      "resets": 6,
+      "closed": 1,
+      "exceptions": 0
+    },
+    "controller_phase": {
+      "steps_started": 170,
+      "steps_completed": 170,
+      "resets": 3,
+      "closed": 1,
+      "exceptions": 0
+    }
+  },
+  "engineering_steps": 545,
+  "policy_continuations": 0,
+  "optimizer_calls": 0,
+  "exit_codes": {
+    "probe235.exit": 1,
+    "phase.exit": 0,
+    "controller.exit": 1,
+    "probe323.exit": 0,
+    "install235.exit": 0,
+    "recovery235.exit": 0
+  },
+  "no_remaining_workers": true,
+  "original_runtime": {
+    "version": "3.2.3",
+    "file": "/data/mlr_ifa/env/lib/python3.8/site-packages/mujoco/__init__.py"
+  },
+  "isolated_libraries": {
+    "/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA_20261020/provenance_diagnosis/mujoco235": {
+      "mujoco-2.3.5.dist-info/METADATA": "c0c4af7cdccdad322e31b5ed5f5d31a62f618579852bb92098ab11a75508f0cd",
+      "mujoco-2.3.5.dist-info/RECORD": "57554b08aad703e115254d4d8e74ffe230d44a01705768ed53b874167aa86b20",
+      "mujoco/libmujoco.so.2.3.5": "516affffe658ef57e86814a4203d119a990f4feaa8257f475e66cd2fc02a1834"
+    },
+    "/data/mlr_ifa/env/lib/python3.8/site-packages/mujoco": {
+      "libmujoco.so.3.2.3": "78f5455cbcbc2b4c1452f09a096aaa1d79893d63bbeb0bad93f610ddde19d264"
+    }
+  },
+  "state_threshold": 1e-05,
+  "observation_threshold": 1e-06,
+  "repeat_threshold": 1e-10,
+  "reason": "2.3.5 resolves fixed target transitions and 8-frame histories but demo_2 native next transition still fails; no 54 continuations."
+}

@@ -1,0 +1,57 @@
+{
+  "initial_requirements": {
+    "url": "https://raw.githubusercontent.com/Lifelong-Robot-Learning/LIBERO/4f0dd188960c25b608babc7de34e1e20a9d1306f/requirements.txt",
+    "sha256": "23ef4abd0a9809a8075d626d2ee09181e474c6cdf046ad340de134e383afea01",
+    "text": " hydra-core==1.2.0\n numpy==1.22.4 \n wandb==0.13.1 \n easydict==1.9 \n transformers==4.21.1\n opencv-python==4.6.0.66 \n robomimic==0.2.0 \n einops==0.4.1\n thop==0.1.1-2209072238\n robosuite\n bddl==1.0.1\n future==0.18.2 \n matplotlib==3.5.3 \n cloudpickle==2.1.0\n gym==0.25.2\n"
+  },
+  "mujoco235": {
+    "url": "https://pypi.org/pypi/mujoco/2.3.5/json",
+    "sha256": "9aca7ae5e9ccfef507766007ee66122ce09ef8e22e60b8ed33130775d82d034c",
+    "wheels": [
+      {
+        "filename": "mujoco-2.3.5-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "digests": {
+          "blake2b_256": "1516730d358e795dad19ee718067ff0fc53579627172caeda44374873e2db6b1",
+          "md5": "c3b943ee507f3cc16c6c8c78432a315f",
+          "sha256": "1e2d45eaa76799681e61d2ef0a2d22a12a77b6ac4f4471deef862e80b3e7cbe2"
+        },
+        "upload_time_iso_8601": "2023-04-25T16:31:40.023317Z"
+      }
+    ]
+  },
+  "issue16": {
+    "url": "https://api.github.com/repos/Lifelong-Robot-Learning/LIBERO/issues/16/comments",
+    "sha256": "5d8a60e33289ef4742cc7fc81db2d313d15964b358d92cb39b40ad3635fec2d7",
+    "maintainer_comments": [
+      {
+        "url": "https://github.com/Lifelong-Robot-Learning/LIBERO/issues/16#issuecomment-2053671879",
+        "date": "2024-04-13T15:05:26Z",
+        "body": "The physics might be a bit different on different machines. If you want to replay data, you can directly reset to the sim state instead of replaying action sequences.\r\n\r\nThere is an initial burn-in no actions during evaluation with null actions, this is just for stabilizing the physics (e.g., sometimes the objects are not perfectly aligned, so null actions will let everything stabilize).",
+        "association": "COLLABORATOR"
+      },
+      {
+        "url": "https://github.com/Lifelong-Robot-Learning/LIBERO/issues/16#issuecomment-2336044389",
+        "date": "2024-09-07T17:10:57Z",
+        "body": "Please check our https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/notebooks/quick_walkthrough.ipynb notebook, basically you set_init_state once to the starting state, then simulate the action, then record the observation.",
+        "association": "COLLABORATOR"
+      }
+    ]
+  },
+  "local_search": {
+    "root": "C:/Users/Lenovo/Documents/ChatGPT/MLR",
+    "exit_code": 0,
+    "matches": [
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e43_b127__task6__trial10\\TASK_GRAD_QP_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e43_b127__task6__trial10\\MLR_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e43_b127__task6__trial07\\TASK_GRAD_QP_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e43_b127__task6__trial07\\MLR_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e43_b127__task6__trial04\\TASK_GRAD_QP_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e43_b127__task6__trial04\\MLR_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e34_b11__task7__trial16\\TASK_GRAD_QP_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e34_b11__task7__trial16\\MLR_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e34_b11__task7__trial14\\TASK_GRAD_QP_states.npz",
+      "C:/Users/Lenovo/Documents/ChatGPT/MLR\\reports\\qp_flip_diagnostic_v1\\replay_corrected\\s45_t7_e34_b11__task7__trial14\\MLR_states.npz"
+    ],
+    "interpretation": "All matches are later experimental state traces, not original GOAL demonstration assets."
+  }
+}

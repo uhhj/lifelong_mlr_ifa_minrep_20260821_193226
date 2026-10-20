@@ -36,7 +36,7 @@ subprocess.run(['git','-C',str(repo),'add','-f','--pathspec-from-file=-','--path
 assert set(git('diff','--cached','--name-only').splitlines())<=set(paths)
 subprocess.run(['git','-C',str(repo),'diff','--cached','--check'],check=True)
 if git('diff','--cached','--name-only'):
- subprocess.run(['git','-C',str(repo),'commit','-q','-m','Repair RCTR timing and snapshot restore; retain strict historical-fidelity block'],check=True)
+ subprocess.run(['git','-C',str(repo),'commit','-q','-m','Audit RCTR collection provenance and MuJoCo dynamics; preserve continuation gate'],check=True)
  subprocess.run(['git','-C',str(repo),'push','origin','MLR'],check=True)
 head=git('rev-parse','HEAD');remote=git('ls-remote','origin','refs/heads/MLR').split()[0];assert head==remote
 current_status=R/'LATEST_REPAIR.json' if (R/'LATEST_REPAIR.json').exists() else R/'RUN_STATUS.json'
