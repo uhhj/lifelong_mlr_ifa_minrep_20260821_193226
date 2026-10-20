@@ -1,3 +1,7 @@
+# 最新检查 2026-10-20 15:58 CST
+
+校准10epoch/1570step及11结构扫描PASS；锚定3成功/32锚点/rank30。验证SS3/SF0/FS0/FF7，开关拒绝，正式直接父head回退。40/50记录，formal10/20第二批运行，GPU85%，hash PASS；预计16:03–16:07含审计。见progress_20261020_155824/REPORT.md与LOCAL_ACCEPTANCE.json。无工程恢复，不能提前COMPLETED。下一次检查完成后完整本地验收、报告发布并删除自动化。
+
 # SAZR OBJECT seed41 Task6
 
 最新15:38 CST：正式anchor进程41072正在0–600步的首个10lane批次，尚未提交10条结果；GPU3090/8485MiB/83%，哈希PASS。supervisor41065、pipeline41071均在运行。见progress_20261020_153745/LOCAL_ACCEPTANCE.json（PASS_PARTIAL，19个本地部署文件与冻结源一致）。新自动化`sazr-object-seed41-task6`每15分钟检查，预计15:37启动后约25–35分钟完成（约16:02–16:12，非保证）。无堵塞或追加预算。

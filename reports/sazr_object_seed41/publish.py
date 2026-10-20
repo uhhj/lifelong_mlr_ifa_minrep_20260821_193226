@@ -36,7 +36,7 @@ subprocess.run(['git','-C',str(repo),'add','-f','--pathspec-from-file=-','--path
 assert set(git('diff','--cached','--name-only').splitlines())<=set(paths)
 subprocess.run(['git','-C',str(repo),'diff','--cached','--check'],check=True)
 if git('diff','--cached','--name-only'):
- subprocess.run(['git','-C',str(repo),'commit','-q','-m','Launch SAZR Task6 success-anchor prototype with fixed validation budget'],check=True)
+ subprocess.run(['git','-C',str(repo),'commit','-q','-m','Record SAZR validation rejection and 40-of-50 episode progress'],check=True)
  subprocess.run(['git','-C',str(repo),'push','origin','MLR'],check=True)
 head=git('rev-parse','HEAD');remote=git('ls-remote','origin','refs/heads/MLR').split()[0];assert head==remote
 receipt=dict(status='PUSH_VERIFIED',commit=head,remote=remote,files=len(paths),bytes=sum(v['bytes'] for v in manifest.values()),experiment_status=json.loads((R/'RUN_STATUS.json').read_text())['status'],time=datetime.datetime.now().astimezone().isoformat())
