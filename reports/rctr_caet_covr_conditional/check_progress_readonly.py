@@ -21,13 +21,45 @@ root=O/"rctr/task6"
 rows=[json.loads(p.read_text()) for p in sorted((root/"committed").glob("*.json"))]
 def read(p):
     return json.loads(p.read_text()) if p.exists() else None
+collections_by_task={}
+for task in (6,7,8):
+    stage=O/"rctr"/("task%d"%task)
+    if not stage.exists():continue
+    committed=[read(p) for p in sorted((stage/"committed").glob("*.json"))]
+    ledger=stage/"attempts.jsonl"
+    raw=ledger.read_bytes() if ledger.exists() else b""
+    lines=raw.splitlines(keepends=True)
+    events=[json.loads(line) for line in lines if line.endswith(b"\n")]
+    starts=[e["key"] for e in events if e["event"]=="branch_start"]
+    ends=[e["key"] for e in events if e["event"]=="branch_complete"]
+    collections_by_task[str(task)]=dict(committed=committed,
+        acceptance=read(stage/"ACCEPTANCE.json"),status=read(stage/"RUN_STATUS.json"),
+        live_step=read(stage/"LIVE_STEP.json"),
+        events=dict(collections.Counter(e["event"] for e in events)),
+        branch_starts=starts,branch_completes=ends,
+        ledger_bytes=len(raw),ledger_sha256=sha(ledger) if ledger.exists() else None,
+        incomplete_tail_lines=sum(not line.endswith(b"\n") for line in lines),
+        sidecar_sha256=sha(stage/"sidecar.pth") if (stage/"sidecar.pth").exists() else None)
+auxiliary={}
+for task in (6,7,8,9):
+    files=sorted((O/"ra_coreset/auxiliary").glob("task%d_epoch*.json"%task))
+    if files:
+        stats=[r for p in files for r in read(p)]
+        auxiliary[str(task)]=dict(epoch_files=len(files),updates=len(stats),
+            active_updates=sum(r["auxiliary"] is not None for r in stats),
+            first_step=stats[0]["step"],last_step=stats[-1]["step"],
+            all_steps=[r["step"] for r in stats],
+            file_sha256={p.name:sha(p) for p in files})
 result=dict(unix=time.time(),status="FROZEN_CONTRACT_INPUTS_PASS",
     contract_sha256=sha(O/"CONTRACT.json"),source_files=len(c["source_sha256"]),
-    committed=rows,collection_status=read(root/"RUN_STATUS.json"),
+    committed=rows,collections_by_task=collections_by_task,auxiliary=auxiliary,
+    epochs=read(O/"ra_coreset/epochs.json"),run_status=read(O/"RUN_STATUS.json"),
+    exits={p.name:p.read_text().strip() for p in O.glob("*.exit")},
+    collection_status=read(root/"RUN_STATUS.json"),
     live_step=read(root/"LIVE_STEP.json"),commands=read(O/"pipeline.pid.json"),
     logs={p.name:dict(bytes=p.stat().st_size,mtime=p.stat().st_mtime,
          tail=p.read_text(errors="replace")[-2000:])
-         for p in (O/"collect6.log",O/"train6.log") if p.exists()},
+         for p in sorted(O.glob("*.log")) if p.name.startswith(("collect","train","pipeline","supervisor"))},
     checkpoint_files=[dict(name=p.name,bytes=p.stat().st_size,mtime=p.stat().st_mtime)
                       for p in (O/"ra_coreset/models").glob("*.pth")])
 print(json.dumps(result,indent=2))
