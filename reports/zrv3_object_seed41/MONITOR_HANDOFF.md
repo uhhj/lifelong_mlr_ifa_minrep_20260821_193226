@@ -1,5 +1,7 @@
 # ZR-v3 OBJECT seed41监控与验收
 
+最终2026-10-20 14:49 CST：COMPLETED，工程验收通过、预定效果门槛未通过。40epoch/10550step/4CP/200正式/20完整vector/16结构检查及全部退出0、无worker、冻结输入hash和本地PASS_FINAL均通过。AUC71.25/FWT73.75/NBT4.722222/OldFinal73.333333/FinalAll66.25%；对RA AUC−1.770833pp、FWT−1.25pp、OldFinal−5pp。服务器按冻结分支STOP，没有运行v3-A。见FINAL_REPORT.md、progress_20261020_144750/LOCAL_ACCEPTANCE.json及FINAL_TASK_DECOMPOSITION.json。无需恢复、重训或追加评估；完成发布后删除自动化。
+
 最新2026-10-20 14:12 CST：正常原协议评估，130/200正式记录、13完整vector+1运行中，阶段9 Task6。GPU3090利用率100%，磁盘24.47GiB，0技术异常。冻结hash、父CP/初态身份及attempt计数本地只读复核PASS；6个完整cell在线KL最大0.49999999998941175。尚无完整AUC/FWT/OldFinal，不提前过门槛。实测13批均值242.74秒，预计14:43–14:52完成v3含审计（不含条件v3-A）；同一自动化已改每30分钟。见progress_20261020_141228/REPORT.md和PROGRESS_AUDIT.json。服务器无需任何恢复或重启。
 
 最新2026-10-20 13:16 CST：v3已40epoch/10550step/105240曝光完成，calibrate.exit=0；16全dataset结构检查PASS、最大实际KL0.4999999999568453。独立evaluate进程已启动，当前快照0/200，不提前标COMPLETED。见progress_20261020_131602、LAUNCH_REPORT.md与LOCAL_CALIBRATION_ACCEPTANCE.json。下文30epoch为历史检查。原selected-Gaussian训练NLL较混合NLL大很多、有限且下降，不因此改科学参数。

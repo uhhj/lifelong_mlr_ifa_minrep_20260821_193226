@@ -1,0 +1,81 @@
+{
+  "parent": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed41_20261019",
+  "parent_source": "/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/source",
+  "parent_env": "/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/env.sh",
+  "parent_arm": "ra_coreset",
+  "parent_engineering_file": "/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed41_20261019/AUTONOMOUS_EXIT_ACCEPTANCE.json",
+  "seed": 41,
+  "branch": "OBJECT_RA",
+  "suite": "LIBERO_OBJECT",
+  "arm": "ra_coreset_ifa_zrv3",
+  "output": "/data/mlr_ifa/experiments/ZRv3_OBJECT_RA_seed41_20261020_v3",
+  "counts": [
+    1562,
+    1480,
+    1560,
+    1319
+  ],
+  "quotas": [
+    781,
+    740,
+    780,
+    660
+  ],
+  "epochs": 40,
+  "optimizer_steps": 10550,
+  "exposures": 105240,
+  "formal_episodes": 200,
+  "controller_contract": "/data/mlr_ifa/experiment_workspaces/ZRv3_OBJECT_RA_seed41_20261020/ORCHESTRATION.json",
+  "baseline_metrics": {
+    "AUC": {
+      "fraction": "701/960",
+      "percent": 73.02083333333333
+    },
+    "FWT": {
+      "fraction": "3/4",
+      "percent": 75.0
+    },
+    "NBT": {
+      "fraction": "1/24",
+      "percent": 4.166666666666667
+    },
+    "OldFinal": {
+      "fraction": "47/60",
+      "percent": 78.33333333333333
+    },
+    "FinalAll": {
+      "fraction": "7/10",
+      "percent": 70.0
+    }
+  },
+  "baseline_episode_hashes": {
+    "trials_stage6_task6.jsonl": "179b15a3171c8e3fb6a800b68b0de63d3fb3eff1a493b83f76ea91c7bbdf52c4",
+    "trials_stage7_task6.jsonl": "0d583f6a5f88b596359203ab77aec42d5f582a07b7eeb9dd80f5fd0f1cbe1b3d",
+    "trials_stage7_task7.jsonl": "52e679e9231d43abd1a1381294b600391726d138b8975ebc7f072b059f4753bb",
+    "trials_stage8_task6.jsonl": "60490c16ba5d5ca6ceaa38eaa8767fbade7520479e3230cbf214aaf7b500f68e",
+    "trials_stage8_task7.jsonl": "5799c32bdae3ace36e8c3c75edc9941a2038c034e0d3d8e9d9aef0c42282f8f3",
+    "trials_stage8_task8.jsonl": "0b45c1db27ba800af8321bfdcba5a3046584a505db8d325d50a212d39541fd14",
+    "trials_stage9_task6.jsonl": "36fa5c6ec20b7de439426f7237f3aaece8499a67a1d03489f9af994c9f3cf2cf",
+    "trials_stage9_task7.jsonl": "df88c5d3de573cc83bd03ccdc6034c170be03640da9dad4960a82970b6d60382",
+    "trials_stage9_task8.jsonl": "e2b3cc598905ee413ae294d1dbf05fa05641b7a1c243c4c60b29323b200b314a",
+    "trials_stage9_task9.jsonl": "3c838fd0c87cf4bd047a40e2d2a87ee5b9e24ca8da2b244a0548e591d0aba971"
+  },
+  "parent_source_contract_sha256": "39f96bbf8aeee2e05bb46bdefb7dbbd00c414a94a9fdfd0b48e42c267ace7e26",
+  "additional_public_training": 0,
+  "local_residual_seed": "experiment_seed + task_id",
+  "evaluation": "original 0-19/20 per cell/10 lanes/env[s,s+1]/600/5zero/stage global RNG/argmax component Normal",
+  "created": 1792473001.0669765,
+  "parent_amendment_files": [
+    "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/RECOVERY_CONTRACT.json",
+    "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/AUTHORIZATION.json",
+    "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_adapter.py",
+    "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/ra_audit.py",
+    "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/stage1/41/PROTOCOL_EQUIVALENCE.json",
+    "/data/mlr_ifa/experiment_workspaces/RA_ZRv2_autonomous_20261019/stage1/41/TASK6_POLICY_ACCEPTANCE.json"
+  ],
+  "variant": "v3",
+  "epsilon": 0.5,
+  "gate": "AUC>parent; FWT>=parent; OldFinal>=parent; engineering PASS",
+  "new_uv_initialization": true,
+  "old_zrv2_output": "/data/mlr_ifa/experiments/Conditional_ZRv2_OBJECT_RA_seed41_20261019"
+}

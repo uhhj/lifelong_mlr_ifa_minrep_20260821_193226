@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "epochs": 40,
+  "optimizer_steps": 10550,
+  "sample_exposures": 105240,
+  "checkpoints": 4,
+  "episodes": 200,
+  "vector_attempts": 20,
+  "structure_checks": 16,
+  "metric_gate": false,
+  "cost": {
+    "optimizer_steps": 10550,
+    "sample_exposures": 105240,
+    "epoch_seconds": 196.91679430007935,
+    "extra_T0_bytes": 75735064,
+    "residual_parameters": 16608,
+    "peak_gpu_bytes": 216006144,
+    "latency": [
+      {
+        "batch": 10,
+        "history": 1,
+        "parent_temporal_head_ms": 4.562678527832031,
+        "zrv3_temporal_head_ms": 10.447798156738282,
+        "overhead_ms": 5.88511962890625
+      },
+      {
+        "batch": 10,
+        "history": 4,
+        "parent_temporal_head_ms": 4.484921646118164,
+        "zrv3_temporal_head_ms": 10.051583862304687,
+        "overhead_ms": 5.566662216186523
+      },
+      {
+        "batch": 10,
+        "history": 8,
+        "parent_temporal_head_ms": 4.49620475769043,
+        "zrv3_temporal_head_ms": 9.968460845947266,
+        "overhead_ms": 5.472256088256836
+      }
+    ]
+  },
+  "notes": [
+    "Single seed gate: AUC improves; FWT and OldFinal do not decrease; engineering all PASS.",
+    "Historical hardware may differ; global action RNG not isolated; see parent binding.",
+    "Public policy was not retrained; extra calibration compute is not equal-budget comparison."
+  ]
+}
