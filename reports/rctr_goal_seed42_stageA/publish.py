@@ -36,8 +36,9 @@ subprocess.run(['git','-C',str(repo),'add','-f','--pathspec-from-file=-','--path
 assert set(git('diff','--cached','--name-only').splitlines())<=set(paths)
 subprocess.run(['git','-C',str(repo),'diff','--cached','--check'],check=True)
 if git('diff','--cached','--name-only'):
- subprocess.run(['git','-C',str(repo),'commit','-q','-m','Audit RCTR Stage A restoration failure and stop before policy branches'],check=True)
+ subprocess.run(['git','-C',str(repo),'commit','-q','-m','Repair RCTR timing and snapshot restore; retain strict historical-fidelity block'],check=True)
  subprocess.run(['git','-C',str(repo),'push','origin','MLR'],check=True)
 head=git('rev-parse','HEAD');remote=git('ls-remote','origin','refs/heads/MLR').split()[0];assert head==remote
-receipt=dict(status='PUSH_VERIFIED',commit=head,remote=remote,files=len(paths),bytes=sum(v['bytes'] for v in manifest.values()),experiment_status=json.loads((R/'RUN_STATUS.json').read_text(encoding='utf-8'))['status'],time=datetime.datetime.now().astimezone().isoformat())
+current_status=R/'LATEST_REPAIR.json' if (R/'LATEST_REPAIR.json').exists() else R/'RUN_STATUS.json'
+receipt=dict(status='PUSH_VERIFIED',commit=head,remote=remote,files=len(paths),bytes=sum(v['bytes'] for v in manifest.values()),experiment_status=json.loads(current_status.read_text(encoding='utf-8'))['status'],time=datetime.datetime.now().astimezone().isoformat())
 (R/('PUBLICATION_RECEIPT_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S')+'.json')).write_text(json.dumps(receipt,indent=2)+'\n');print(json.dumps(receipt,indent=2))
