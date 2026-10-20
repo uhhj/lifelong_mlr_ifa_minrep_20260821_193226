@@ -1,0 +1,114 @@
+{
+  "time": 1792473210.7718358,
+  "workers": [
+    "/data/mlr_ifa/env/bin/python -u -m zr3_exp.calibrate "
+  ],
+  "gpu": "NVIDIA GeForce RTX 3090, 1374 MiB, 16 %",
+  "data_free_GiB": 24.628231048583984,
+  "variants": {
+    "v3": {
+      "epochs": 19,
+      "optimizer_steps": 3613,
+      "episodes": 0,
+      "completed_vectors": 0,
+      "RUN_STATUS.json": {
+        "status": "CALIBRATING",
+        "time": 1792473206.1239946,
+        "pid": 37509,
+        "task": 7,
+        "epoch": 8,
+        "optimizer_steps": 3613,
+        "exposures": 35969
+      },
+      "PREFLIGHT_ACCEPTANCE.json": {
+        "status": "PASS",
+        "optimizer_calls": 4,
+        "environment_steps": 0,
+        "time": 1792473060.7027574
+      },
+      "last_epoch": {
+        "task": 7,
+        "epoch": 8,
+        "batches": 227,
+        "samples": 2261,
+        "optimizer_steps": 3613,
+        "exposures": 35969,
+        "loss": 1057300.3904968044,
+        "lr_first": 2.5649717514124295e-05,
+        "lr_after": 1.2824858757062148e-05,
+        "branch_steps": {
+          "6": 2014,
+          "7": 2040
+        },
+        "seconds": 4.220877647399902
+      },
+      "mean_epoch_seconds": 3.4658266368665194,
+      "technical_exceptions": 0,
+      "preflight/software_reference.exit": "0",
+      "preflight/cost.exit": "0",
+      "preflight/software_exec_cpu.exit": "0",
+      "preflight/admission.exit": "0",
+      "preflight/integration.exit": "0",
+      "preflight/software_exec_cuda.exit": "0",
+      "preflight/freeze.exit": "0",
+      "recent_logs": {
+        "calibrate.log": {
+          "bytes": 5565,
+          "mtime": 1792473206.122824,
+          "tail": "5712086484, \"lr_first\": 8.977401129943503e-05, \"lr_after\": 7.694915254237288e-05, \"branch_steps\": {\"6\": 899, \"7\": 906}, \"seconds\": 4.438395023345947}\n{\"task\": 7, \"epoch\": 4, \"batches\": 227, \"samples\": 2261, \"optimizer_steps\": 2705, \"exposures\": 26925, \"loss\": 1057300.672772154, \"lr_first\": 7.694915254237288e-05, \"lr_after\": 6.412429378531075e-05, \"branch_steps\": {\"6\": 1122, \"7\": 1133}, \"seconds\": 4.372411489486694}\n{\"task\": 7, \"epoch\": 5, \"batches\": 227, \"samples\": 2261, \"optimizer_steps\": 2932, \"exposures\": 29186, \"loss\": 1057300.4539380583, \"lr_first\": 6.412429378531075e-05, \"lr_after\": 5.129943502824859e-05, \"branch_steps\": {\"6\": 1346, \"7\": 1359}, \"seconds\": 4.330624341964722}\n{\"task\": 7, \"epoch\": 6, \"batches\": 227, \"samples\": 2261, \"optimizer_steps\": 3159, \"exposures\": 31447, \"loss\": 1057300.4499843642, \"lr_first\": 5.129943502824859e-05, \"lr_after\": 3.847457627118644e-05, \"branch_steps\": {\"6\": 1567, \"7\": 1586}, \"seconds\": 4.51560378074646}\n{\"task\": 7, \"epoch\": 7, \"batches\": 227, \"samples\": 2261, \"optimizer_steps\": 3386, \"exposures\": 33708, \"loss\": 1057300.462916067, \"lr_first\": 3.847457627118644e-05, \"lr_after\": 2.5649717514124295e-05, \"branch_steps\": {\"6\": 1791, \"7\": 1813}, \"seconds\": 4.494664907455444}\n{\"task\": 7, \"epoch\": 8, \"batches\": 227, \"samples\": 2261, \"optimizer_steps\": 3613, \"exposures\": 35969, \"loss\": 1057300.3904968044, \"lr_first\": 2.5649717514124295e-05, \"lr_after\": 1.2824858757062148e-05, \"branch_steps\": {\"6\": 2014, \"7\": 2040}, \"seconds\": 4.220877647399902}\n"
+        },
+        "preflight/software_reference.log": {
+          "bytes": 1749,
+          "mtime": 1792473003.3960655,
+          "tail": "forward_values (__main__.CalibrationTests) ... ok\ntest_local_initialization_preserves_torch_rng (__main__.CalibrationTests) ... ok\ntest_mean_bound_and_distribution_identity (__main__.CalibrationTests) ... ok\ntest_nonzero_own_and_zero_other (__main__.CalibrationTests) ... ok\ntest_real_language_not_replaced_by_ids (__main__.CalibrationTests) ... ok\ntest_reload_keeps_gates_and_output (__main__.CalibrationTests) ... ok\ntest_unknown_training_label_rejected (__main__.CalibrationTests) ... ok\ntest_zero_init (__main__.CalibrationTests) ... ok\ntest_duplicate_current_rejected (__main__.GateTests) ... ok\ntest_near_span_rejected (__main__.GateTests) ... ok\ntest_old_dependence_allowed (__main__.GateTests) ... ok\ntest_recursive_identity_and_old_responses (__main__.GateTests) ... ok\ntest_recursive_update_really_zeros_old_to_new (__main__.GateTests) ... ok\ntest_shape_mismatch_rejected (__main__.GateTests) ... ok\ntest_zero_language_rejected (__main__.GateTests) ... ok\ntest_all_success (__main__.MetricsTests) ... ok\ntest_equal_results_do_not_pass_strict_gate (__main__.MetricsTests) ... ok\ntest_exact_locked_baseline (__main__.MetricsTests) ... ok\ntest_missing_matrix_cell_rejected (__main__.MetricsTests) ... ok\ntest_nonboolean_success_rejected (__main__.MetricsTests) ... ok\ntest_record_comparison_and_gate (__main__.MetricsTests) ... ok\ntest_wrong_parent_hash_rejected (__main__.MetricsTests) ... ok\n\n----------------------------------------------------------------------\nRan 25 tests in 0.195s\n\nOK\n"
+        },
+        "preflight/cost.log": {
+          "bytes": 43,
+          "mtime": 1792473057.835732,
+          "tail": "COST_ISOLATION PASS; zero updates/rollouts\n"
+        },
+        "preflight/integration.log": {
+          "bytes": 984,
+          "mtime": 1792473049.9757802,
+          "tail": "[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n============= Initialized Observation Utils with Obs Spec =============\n\nusing obs modality: rgb with keys: ['agentview_rgb', 'eye_in_hand_rgb']\nusing obs modality: depth with keys: []\nusing obs modality: low_dim with keys: ['gripper_states', 'joint_states']\nSequenceDataset: loading dataset into memory...\n\n  0%|          | 0/50 [00:00<?, ?it/s]\n100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 50/50 [00:00<00:00, 1594.65it/s]/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.\n  warnings.warn(\n\nSequenceDataset: loading dataset into memory...\n\n  0%|          | 0/50 [00:00<?, ?it/s]\n100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 50/50 [00:00<00:00, 1693.55it/s]\nINTEGRATION PASS: four optimizer calls, zero environment steps\n"
+        },
+        "preflight/software_exec_cpu.log": {
+          "bytes": 107,
+          "mtime": 1792473004.8400567,
+          "tail": ".........\n----------------------------------------------------------------------\nRan 9 tests in 0.049s\n\nOK\n"
+        },
+        "preflight/freeze.log": {
+          "bytes": 0,
+          "mtime": 1792473058.331729,
+          "tail": ""
+        },
+        "preflight/admission.log": {
+          "bytes": 831,
+          "mtime": 1792473037.5478563,
+          "tail": "[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n============= Initialized Observation Utils with Obs Spec =============\n\nusing obs modality: rgb with keys: ['eye_in_hand_rgb', 'agentview_rgb']\nusing obs modality: depth with keys: []\nusing obs modality: low_dim with keys: ['gripper_states', 'joint_states']\nSequenceDataset: loading dataset into memory...\n\n  0%|          | 0/50 [00:00<?, ?it/s]\n100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 50/50 [00:00<00:00, 1512.73it/s]\n{\"status\": \"PASS\", \"violations\": [], \"seconds\": 27.850094079971313}\n/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.\n  warnings.warn(\n"
+        },
+        "preflight/software_exec_cuda.log": {
+          "bytes": 107,
+          "mtime": 1792473007.5840397,
+          "tail": ".........\n----------------------------------------------------------------------\nRan 9 tests in 1.380s\n\nOK\n"
+        },
+        "preflight/formal.log": {
+          "bytes": 0,
+          "mtime": 1792473113.9553883,
+          "tail": ""
+        }
+      },
+      "frozen_hashes": true
+    }
+  },
+  "RUN_STATUS.json": {
+    "status": "PREPARING",
+    "time": 1792472994.664291,
+    "scope": "OBJECT RA seed41 v3; conditional v3-A",
+    "no_baseline_retraining": true
+  },
+  "controller.started": {
+    "pid": 37502,
+    "time": 1792473113.9571803
+  }
+}

@@ -1,0 +1,367 @@
+--- v2/admission.py
++++ v3/admission.py
+@@ -1,7 +1,7 @@
+ """Read-only parent binding and real CUDA language gate admission; zero updates/env."""
+ import os,sys,json,hashlib,time,traceback
+ from pathlib import Path
+-from zr2_exp.params import *
++from zr3_exp.params import *
+ os.environ.update(CORESET_OUT=str(P),CORESET_SEED=str(SEED),PYTHONDONTWRITEBYTECODE='1')
+ sys.dont_write_bytecode=True
+ sys.path[:0]=[str(W/'attachment'),str(S)]
+--- v2/pipeline.py
++++ v3/pipeline.py
+@@ -10,7 +10,7 @@
+     try:
+         for phase in ['calibrate','evaluate','audit']:
+             assert not (O/(phase+'.exit')).exists()
+-            command=[sys.executable,'-u','-m','zr2_exp.'+phase];start=time.time()
++            command=[sys.executable,'-u','-m','zr3_exp.'+phase];start=time.time()
+             with (O/'commands.jsonl').open('a') as f:f.write(json.dumps(dict(phase=phase,command=command,time=start))+'\n')
+             with (O/(phase+'.log')).open('x') as log:r=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT)
+             (O/(phase+'.exit')).write_text(str(r.returncode)+'\n')
+--- v2/attachment/branch_metrics.py
++++ v3/attachment/branch_metrics.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ from fractions import Fraction
+ import hashlib,json
+-from zr2_exp.params import SEED,PARM,ARM
++from zr3_exp.params import SEED,PARM,ARM
+ from compare_metrics import metrics,_sha_field
+ def load_records(folder,is_new):
+  folder=Path(folder);expected={'trials_stage%d_task%d.jsonl'%(s,t) for s in range(6,10) for t in range(6,s+1)}
+@@ -33,4 +33,4 @@
+   for f in ['initial_state_index','initial_state_sha256','modal_sha256']:assert b[key][f]==n[key][f]
+   assert b[key]['checkpoint_sha256']==n[key]['parent_checkpoint_sha256']
+  pack=lambda m:{k:dict(fraction=str(v),percent=float(v*100)) for k,v in m.items()}
+- return dict(status='PASS_RECORD_COMPARISON',baseline=pack(bm),new=pack(nm),delta_pp=pack({k:nm[k]-bm[k] for k in bm}),metric_gate=nm['AUC']>bm['AUC'],metric_gate_scope='per-seed AUC diagnostic only; full three-seed mean and 2/3 plus all engineering gate evaluated by controller',baseline_files_sha256=bh,new_files_sha256=nh,matrices={name:[[float(rates[s,t]*100) if t<=s else None for t in range(6,10)] for s in range(6,10)] for name,rates in [('parent',br),('new',nr)]})
++ return dict(status='PASS_RECORD_COMPARISON',baseline=pack(bm),new=pack(nm),delta_pp=pack({k:nm[k]-bm[k] for k in bm}),metric_gate=nm['AUC']>bm['AUC'] and nm['FWT']>=bm['FWT'] and nm['OldFinal']>=bm['OldFinal'],metric_gate_scope='Single diagnostic seed41: AUC improves, FWT and OldFinal do not decrease; engineering acceptance also required',baseline_files_sha256=bh,new_files_sha256=nh,matrices={name:[[float(rates[s,t]*100) if t<=s else None for t in range(6,10)] for s in range(6,10)] for name,rates in [('parent',br),('new',nr)]})
+--- v2/attachment/execution_core.py
++++ v3/attachment/execution_core.py
+@@ -0,0 +1,48 @@
++"""Shared training/native selected-Gaussian correction and numerical KL enforcement."""
++import torch
++from torch.distributions import Categorical, Independent, MixtureSameFamily, Normal
++
++def calibrate_distribution(b, scales, logits, delta, epsilon=0.5):
++    assert b.ndim == 3 and b.shape[1:] == (5, 7)
++    assert scales.shape == b.shape and logits.shape == b.shape[:2] and delta.shape == (len(b), 7)
++    assert b.dtype in (torch.float32, torch.float64)
++    assert all(torch.isfinite(x).all() for x in (b, scales, logits, delta))
++    assert (scales > 0).all()
++    rows = torch.arange(len(b), device=b.device)
++    selected = logits.argmax(-1)
++    base_means = b.tanh()
++    base = base_means[rows, selected]
++    sigma = scales[rows, selected]
++    proposal = (b[rows, selected] + delta).tanh()
++    shift = proposal.double() - base.double()
++    raw_kl = 0.5 * ((shift / sigma.double()) ** 2).sum(-1)
++    alpha = torch.ones_like(raw_kl)
++    if epsilon is not None:
++        assert epsilon == 0.5, "Frozen scientific budget"
++        alpha = torch.minimum(alpha, (epsilon / raw_kl.clamp_min(1e-30)).sqrt())
++    executed = (base.double() + alpha[:, None] * shift).to(b.dtype)
++    # The value passed to Normal, not a pre-cast surrogate, must satisfy the bound.
++    # nextafter only corrects floating-point boundary overshoot toward the parent.
++    # Preserve analytical projection gradients; discrete ULP rounding is not a learned gate.
++    rounding_passes = 0
++    if epsilon is not None:
++        for _ in range(16):
++            actual = 0.5 * (((executed.double() - base.double()) / sigma.double()) ** 2).sum(-1)
++            over = actual.detach() > epsilon
++            if not bool(over.any()):
++                break
++            toward = torch.nextafter(executed.detach(), base.detach())
++            rounded = torch.where(over[:, None], toward, executed.detach())
++            executed = executed + (rounded - executed).detach()
++            rounding_passes += 1
++    actual = 0.5 * (((executed.double() - base.double()) / sigma.double()) ** 2).sum(-1)
++    if epsilon is not None:
++        assert bool((actual.detach() <= epsilon + 1e-12).all()), "Actual executed KL exceeds budget"
++    means = base_means.clone()
++    means[rows, selected] = executed
++    dist = Independent(Normal(executed, sigma), 1)
++    return dict(means=means, scales=scales, logits=logits, selected=selected,
++                probs=logits.softmax(-1), base_means=base_means, base_selected=base,
++                executed_mean=executed, executed_scale=sigma, executed_dist=dist,
++                raw_kl=raw_kl, actual_kl=actual, alpha=alpha, rounding_passes=rounding_passes,
++                gmm=MixtureSameFamily(Categorical(logits=logits), Independent(Normal(means, scales), 1)))
+--- v2/attachment/test_execution_core.py
++++ v3/attachment/test_execution_core.py
+@@ -0,0 +1,64 @@
++"""Synthetic numerical/gradient checks, not real task performance."""
++import os
++import unittest
++import torch
++from torch.distributions import Independent, Normal, kl_divergence
++from execution_core import calibrate_distribution
++
++DEVICE = os.environ.get('TEST_DEVICE', 'cpu')
++if DEVICE == 'cuda':
++    assert torch.cuda.is_available()
++
++class ExecutionTests(unittest.TestCase):
++    def data(self, dtype=torch.float32, n=128):
++        g=torch.Generator(device=DEVICE).manual_seed(9281)
++        b=torch.randn(n,5,7,device=DEVICE,dtype=dtype,generator=g)*2
++        s=torch.logspace(-4,0,7,device=DEVICE,dtype=dtype)[None,None].expand_as(b).clone()
++        l=torch.randn(n,5,device=DEVICE,dtype=dtype,generator=g)
++        d=torch.randn(n,7,device=DEVICE,dtype=dtype,generator=g).tanh()*.1
++        return b,s,l,d
++    def test_zero_exact(self):
++        for dt in (torch.float32,torch.float64):
++            b,s,l,d=self.data(dt);o=calibrate_distribution(b,s,l,d*0)
++            self.assertTrue(torch.equal(o['means'],b.tanh()))
++            self.assertTrue(bool((o['actual_kl']==0).all()))
++    def test_bound_actual_float32_and_float64(self):
++        for dt in (torch.float32,torch.float64):
++            b,s,l,d=self.data(dt,1024);o=calibrate_distribution(b,s,l,d)
++            self.assertTrue(bool((o['actual_kl']<=.5+1e-12).all()))
++            self.assertTrue(bool((o['raw_kl']>.5).any()))
++    def test_unselected_and_parent_distribution_fixed(self):
++        b,s,l,d=self.data();o=calibrate_distribution(b,s,l,d)
++        mask=torch.ones_like(l,dtype=torch.bool);mask.scatter_(1,l.argmax(-1)[:,None],False)
++        self.assertTrue(torch.equal(o['means'][mask],b.tanh()[mask]))
++        self.assertTrue(torch.equal(o['scales'],s) and torch.equal(o['logits'],l))
++    def test_matches_closed_form_kl(self):
++        b,s,l,d=self.data();o=calibrate_distribution(b,s,l,d)
++        a=Independent(Normal(o['executed_mean'].double(),o['executed_scale'].double()),1)
++        p=Independent(Normal(o['base_selected'].double(),o['executed_scale'].double()),1)
++        self.assertTrue(torch.allclose(kl_divergence(a,p),o['actual_kl'],atol=1e-12,rtol=1e-10))
++    def test_backward_zero_and_projected(self):
++        for zero in (True,False):
++            b,s,l,d=self.data();d=(d*0 if zero else d).requires_grad_()
++            o=calibrate_distribution(b,s,l,d)
++            loss=-o['executed_dist'].log_prob(torch.zeros_like(d)).mean();loss.backward()
++            self.assertTrue(torch.isfinite(d.grad).all() and bool((d.grad!=0).any()))
++    def test_no_projection_ablation(self):
++        b,s,l,d=self.data();o=calibrate_distribution(b,s,l,d,None)
++        ix=torch.arange(len(b),device=DEVICE)
++        self.assertTrue(torch.equal(o['executed_mean'],(b[ix,l.argmax(-1)]+d).tanh()))
++        self.assertTrue(bool((o['alpha']==1).all()))
++    def test_selected_nll_identity(self):
++        b,s,l,d=self.data();o=calibrate_distribution(b,s,l,d)
++        a=torch.zeros_like(d);manual=-Normal(o['executed_mean'],o['executed_scale']).log_prob(a).sum(-1)
++        self.assertTrue(torch.equal(-o['executed_dist'].log_prob(a),manual))
++    def test_no_rng_consumption(self):
++        b,s,l,d=self.data();state=torch.cuda.get_rng_state() if DEVICE=='cuda' else torch.get_rng_state()
++        calibrate_distribution(b,s,l,d)
++        self.assertTrue(torch.equal(state,torch.cuda.get_rng_state() if DEVICE=='cuda' else torch.get_rng_state()))
++    def test_invalid_scale_rejected(self):
++        b,s,l,d=self.data();s[0,0,0]=0
++        with self.assertRaises(AssertionError):calibrate_distribution(b,s,l,d)
++
++if __name__=='__main__':
++    unittest.main()
+--- v2/source/zr2_exp/audit.py
++++ v3/source/zr3_exp/audit.py
+@@ -21,6 +21,10 @@
+         assert js(O/f'buffer_after_task{t}.json')['hashes']==js(P/PARM/f'buffer_after_task{t}.json')['hashes']
+     structure=[json.loads(s) for s in (O/'STRUCTURE.jsonl').read_text().splitlines()]
+     assert len(structure)==16 and all(r['passed'] for r in structure)
++    assert all(r['unselected_means_exact'] and r['zero_residual_parent_exact'] and r['selected_component_exact'] for r in structure)
++    if EPSILON is not None:
++        assert max(r['actual_kl_max'] for r in logs+structure)<=EPSILON+1e-12
++        assert all(js(f)['max_executed_kl']<=EPSILON+1e-12 for f in (O/'evaluation').glob('cell*.json'))
+     assert len({r['T0_hash'] for r in structure})==1
+     attempts=[]
+     for f in (O/'evaluation').glob('attempts*.jsonl'):attempts.extend(json.loads(s) for s in f.read_text().splitlines())
+@@ -29,13 +33,13 @@
+     comparison=compare(P/PARM/'evaluation',O/'evaluation');write(O/'METRIC_COMPARISON.json',comparison)
+     setup();p,t0=new_public();loaded=[]
+     for t in range(6,10):
+-        f=O/'models'/f'zrv2_stage{t}_calibration_ep9.pth';s=torch.load(f,map_location='cpu');assert sha(f)==cal['checkpoints'][f.name]
++        f=O/'models'/f'zrv3_stage{t}_calibration_ep9.pth';s=torch.load(f,map_location='cpu');assert sha(f)==cal['checkpoints'][f.name]
+         assert s['next_epoch']==10 and s['task']==t and s['contract_sha256']==sha(O/'CONTRACT.json')
+         load_stage(p,t);assert tensor_hash(p)==s['public_hash'];assert tensor_hash(t0)==s['T0_hash']
+         b,_=make_bank(t);b.load_state_dict(s['bank'],strict=True);assert b.gate_w.dtype==torch.float64
+         loaded.append(dict(stage=t,checkpoint_sha256=sha(f),public_hash=s['public_hash'],T0_hash=s['T0_hash'],parameters=sum(v.numel() for v in b.parameters())))
+     write(O/'CHECKPOINT_LOAD_ACCEPTANCE.json',dict(status='PASS',rows=loaded))
+-    write(O/'AUDIT.json',dict(status='PASS',epochs=40,optimizer_steps=STEPS,sample_exposures=EXPOSURES,checkpoints=4,episodes=200,vector_attempts=20,structure_checks=16,metric_gate=comparison['metric_gate'],cost=dict(optimizer_steps=STEPS,sample_exposures=EXPOSURES,epoch_seconds=sum(r['seconds'] for r in rows),extra_T0_bytes=js(O/'INTEGRATION.json')['T0_bytes'],residual_parameters=16608,peak_gpu_bytes=cal['gpu_peak_allocated'],latency=js(O/'COST_ISOLATION.json')['latency']),notes=['Whole-three-seed gate: mean AUC delta positive and at least two positive seed deltas; engineering all PASS.','Historical hardware may differ; global action RNG not isolated; see parent binding.','Public policy was not retrained; extra calibration compute is not equal-budget comparison.']))
++    write(O/'AUDIT.json',dict(status='PASS',epochs=40,optimizer_steps=STEPS,sample_exposures=EXPOSURES,checkpoints=4,episodes=200,vector_attempts=20,structure_checks=16,metric_gate=comparison['metric_gate'],cost=dict(optimizer_steps=STEPS,sample_exposures=EXPOSURES,epoch_seconds=sum(r['seconds'] for r in rows),extra_T0_bytes=js(O/'INTEGRATION.json')['T0_bytes'],residual_parameters=16608,peak_gpu_bytes=cal['gpu_peak_allocated'],latency=js(O/'COST_ISOLATION.json')['latency']),notes=['Single seed gate: AUC improves; FWT and OldFinal do not decrease; engineering all PASS.','Historical hardware may differ; global action RNG not isolated; see parent binding.','Public policy was not retrained; extra calibration compute is not equal-budget comparison.']))
+     status('AWAITING_PROCESS_EXIT_ACCEPTANCE',metric_gate=comparison['metric_gate'])
+     print(json.dumps(dict(status='AUDIT_PASS',metric_gate=comparison['metric_gate'])),flush=True)
+ if __name__=='__main__':main()
+--- v2/source/zr2_exp/calibrate.py
++++ v3/source/zr3_exp/calibrate.py
+@@ -68,7 +68,7 @@
+             if epoch in (0,9):check(p,t0,bank,dataset,f'epoch{epoch}',ph,t0_hash)
+             epochs.append(row);write(O/'epochs.json',epochs)
+             snapshot=dict(task=t,next_epoch=epoch+1,bank=cpu(bank.state_dict()),optimizer=cpu(opt.state_dict()),scheduler=cpu(sch.state_dict()),grads={n:cpu(v.grad) for n,v in bank.named_parameters()},modes={n:m.training for n,m in bank.named_modules()},rng=cpu(rng()),globalstep=globalstep,exposures=exposures,epochs=epochs,parent=parent,public_hash=ph,T0_hash=t0_hash,contract_sha256=sha(O/'CONTRACT.json'),dataset_order_sha256=hashlib.sha256(json.dumps(order).encode()).hexdigest(),buffer_hashes={f.name:sha(f) for f in (O/'buffer').glob('*.pt')})
+-            if epoch==9:save(O/'models'/f'zrv2_stage{t}_calibration_ep9.pth',snapshot)
++            if epoch==9:save(O/'models'/f'zrv3_stage{t}_calibration_ep9.pth',snapshot)
+             save(cp,snapshot);status('CALIBRATING',task=t,epoch=epoch,optimizer_steps=globalstep,exposures=exposures);print(json.dumps(row),flush=True)
+         check(p,t0,bank,dataset,'stage_end',ph,t0_hash);store(t);previous=bank
+     assert len(epochs)==40 and globalstep==STEPS and exposures==EXPOSURES
+--- v2/source/zr2_exp/cost_and_isolation.py
++++ v3/source/zr3_exp/cost_and_isolation.py
+@@ -22,7 +22,7 @@
+                 end.record();torch.cuda.synchronize();return begin.elapsed_time(end)/10
+             a=measure(lambda:p.policy_head(p.temporal_encode(hh)[:,-1],train=False))
+             b=measure(lambda:selected_dist(decode(p,t0,trained,hh)))
+-            latencies.append(dict(batch=10,history=length,parent_temporal_head_ms=a,zrv2_temporal_head_ms=b,overhead_ms=b-a))
++            latencies.append(dict(batch=10,history=length,parent_temporal_head_ms=a,zrv3_temporal_head_ms=b,overhead_ms=b-a))
+     write(O/'COST_ISOLATION.json',dict(status='PASS',actual_task7_only_update_other_task6_mean_max=diff,cross_delta_max=dd,latency=latencies,note='Real retained latent, no spatial encoder or environment in timing; ten repeated forwards, zero optimizer calls.',T0_parameters=sum(p.numel() for p in t0.parameters()),T0_bytes=sum(v.numel()*v.element_size() for v in t0.state_dict().values()),gpu_peak_allocated=torch.cuda.max_memory_allocated(),optimizer_calls=0,environment_steps=0))
+     print('COST_ISOLATION PASS; zero updates/rollouts')
+ if __name__=='__main__':main()
+--- v2/source/zr2_exp/diagnostics.py
++++ v3/source/zr3_exp/diagnostics.py
+@@ -2,7 +2,7 @@
+ 
+ @torch.no_grad()
+ def check(p,t0,bank,dataset,label,public_hash,t0_hash):
+-    state=cpu(rng());start=time.time();maxgate=0.;selferr=0.;cross=0.;amp=0.;sat=0;count=0
++    state=cpu(rng());start=time.time();maxgate=0.;selferr=0.;cross=0.;amp=0.;sat=0;count=0;maxkl=0.;rawkl=0.;projected=0
+     from torch.utils.data import DataLoader
+     try:
+         assert tensor_hash(p)==public_hash and tensor_hash(t0)==t0_hash
+@@ -19,12 +19,20 @@
+                 if foreign.any():
+                     without=(.1*torch.tanh(total-values[:,j])).float()
+                     diff=(out['delta'][foreign]-without[foreign]).abs().max();cross=max(cross,float(diff))
+-                    means=(out['b'][foreign]+without[foreign,None,:]).tanh()
++                    means=calibrate_distribution(out['b'][foreign],out['scales'][foreign],out['logits'][foreign],without[foreign],EPSILON)['means']
+                     cross=max(cross,float((out['means'][foreign]-means).abs().max()))
++            maxkl=max(maxkl,float(out['actual_kl'].max()));rawkl=max(rawkl,float(out['raw_kl'].max()));projected+=int((out['alpha']<1).sum())
++            off=torch.ones_like(out['logits'],dtype=torch.bool);off.scatter_(1,out['selected'][:,None],False)
++            assert torch.equal(out['means'][off],out['base_means'][off])
++            zero=calibrate_distribution(out['b'],out['scales'],out['logits'],torch.zeros_like(out['delta']),EPSILON)
++            assert torch.equal(zero['means'],out['base_means']) and bool((zero['actual_kl']==0).all())
++            assert torch.equal(out['selected'],out['logits'].argmax(-1))
+             amp=max(amp,float(out['delta'].abs().max()));sat+=int((out['delta'].abs()>=.099).sum());count+=len(h)*7
+             assert float((out['means']-out['base_means']).abs().max())<=.100001
+         report=dict(label=label,stage=max(bank.task_ids),samples=len(dataset),off_gate=maxgate,self_gate_error=selferr,cross_contribution_and_mean=cross,delta_max=amp,saturation_fraction=sat/count,public_hash=public_hash,T0_hash=t0_hash,gate_hash=hashlib.sha256(bank.gate_w.cpu().numpy().tobytes()).hexdigest(),branch_norms={n:{k:float(v.norm()) for k,v in branch.named_parameters()} for n,branch in bank.branches.items()},seconds=time.time()-start)
+-        report['passed']=maxgate<=1e-6 and selferr<=1e-5 and cross<=1e-6
++        report.update(actual_kl_max=maxkl,raw_kl_max=rawkl,projected_samples=projected,epsilon=EPSILON,
++                      unselected_means_exact=True,zero_residual_parent_exact=True,selected_component_exact=True)
++        report['passed']=maxgate<=1e-6 and selferr<=1e-5 and cross<=1e-6 and (EPSILON is None or maxkl<=EPSILON+1e-12)
+         append(O/'STRUCTURE.jsonl',report);assert report['passed'],('FAIL_RUNTIME',report)
+         return report
+     finally:restore_rng(state)
+--- v2/source/zr2_exp/evaluate.py
++++ v3/source/zr3_exp/evaluate.py
+@@ -14,7 +14,7 @@
+     t0=None
+     for stage in range(6,10):
+         control_seed(SEED)
+-        cp=O/'models'/f'zrv2_stage{stage}_calibration_ep9.pth';snap=torch.load(cp,map_location='cpu')
++        cp=O/'models'/f'zrv3_stage{stage}_calibration_ep9.pth';snap=torch.load(cp,map_location='cpu')
+         assert snap['task']==stage and snap['next_epoch']==10 and snap['contract_sha256']==sha(O/'CONTRACT.json')
+         parent=snap['parent'];assert sha(parent['path'])==parent['sha256']
+         for taskid in range(6,stage+1):
+@@ -33,7 +33,9 @@
+             status('EVALUATING',stage=stage,task=taskid)
+             try:
+                 instr,mask=b.get_task_emb(taskid);tic=time.time();result=evaluate_one_task_success(c,algo,task,instr,mask,taskid,see=SEED)
+-                write(root/f'cell_stage{stage}_task{taskid}.json',dict(success_rate=float(result),seconds=time.time()-tic,spatial_calls=ctx['spatial_calls'],**context.CONTEXT))
++                write(root/f'cell_stage{stage}_task{taskid}.json',dict(success_rate=float(result),seconds=time.time()-tic,spatial_calls=ctx['spatial_calls'],
++                      max_executed_kl=ctx['max_executed_kl'],max_raw_kl=ctx['max_raw_kl'],projected_states=ctx['projected_states'],sampled_states=ctx['sampled_states'],
++                      epsilon=EPSILON,**context.CONTEXT))
+             except BaseException as exc:context.ledger('technical_exception',exception=repr(exc));raise
+             finally:del algo,bank;torch.cuda.empty_cache()
+     write(root/'EVALUATION_COMPLETE.json',dict(status='EVALUATED',episodes=200));status('EVALUATED')
+--- v2/source/zr2_exp/freeze.py
++++ v3/source/zr3_exp/freeze.py
+@@ -5,7 +5,7 @@
+     for p in list((W/'source').rglob('*.py'))+list((W/'attachment').glob('*'))+[W/'admission.py',W/'language_and_gates.npz',W/'pipeline.py',W/'env.sh',W/'RUN_SPEC.json',Path(SPEC['controller_contract'])]:
+         if p.is_file():files[str(p)]=sha(p)
+     for name in ['ADMISSION.json','PARENT_BINDING.json','INTEGRATION.json','COST_ISOLATION.json']:files[str(O/name)]=sha(O/name)
+-    write(O/'CONTRACT.json',dict(name=ARM+'_'+SUITE+'_seed'+str(SEED),seed=SEED,files=files,epochs=40,optimizer_steps=STEPS,sample_exposures=EXPOSURES,formal_episodes=200,conditional_extension='User 2026-10-19 whole-three-seed mean AUC positive and at least 2/3 positive; all engineering PASS'))
++    write(O/'CONTRACT.json',dict(name=ARM+'_'+SUITE+'_seed'+str(SEED),seed=SEED,files=files,epochs=40,optimizer_steps=STEPS,sample_exposures=EXPOSURES,formal_episodes=200,conditional_extension='v3 versus RA: AUC>0, FWT>=0, OldFinal>=0 and engineering PASS; then v3-A only, no extra seeds'))
+     write(O/'resolved_calibration.json',dict(parent_cfg=cfg(PARM),spec=SPEC,actual=dict(seed=SEED,batch=10,epochs_per_stage=10,workers=0,drop_last=False,sampler_seed=0,optimizer='AdamW_UV_only',lr=1e-4,weight_decay=.1,warmup500=True,common_eval_frozen=True,T0_eval_frozen=True,output=str(O))))
+     status('READY')
+ if __name__=='__main__':main()
+--- v2/source/zr2_exp/integration.py
++++ v3/source/zr3_exp/integration.py
+@@ -55,11 +55,12 @@
+         for length in [1,4,8]:
+             batch=copy.deepcopy(rawdata);batch['obs']={k:v[:,:length].contiguous() for k,v in batch['obs'].items()}
+             r=cpu(rng());action=full.get_action(batch);out=ctx['out'];hh=ctx['h'];separate=decode(p,t0,bank,hh)
+-            for key in ['means','scales','logits','selected']:assert torch.equal(out[key],separate[key]),(length,key)
++            for key in ['means','scales','logits','selected','executed_mean','actual_kl']:assert torch.equal(out[key],separate[key]),(length,key)
+             restore_rng(r);expected=selected_dist(separate).sample().cpu().numpy();assert np.array_equal(action,expected)
+-            native_rows.append(dict(length=length,distribution_exact=True,sampled_action_exact=True))
++            native_rows.append(dict(length=length,distribution_exact=True,sampled_action_exact=True,selected_component_exact=True,
++                                   actual_kl_max=float(out['actual_kl'].max())))
+     assert ctx['spatial_calls']==3
+     assert tensor_hash(p)==public_before and tensor_hash(t0)==t0_before
+-    write(O/'INTEGRATION.json',dict(status='PASS',optimizer_calls=4,environment_steps=0,real_history=native_rows,updates=[r0,r1,r2,r3],recovery_tensor_and_optimizer_exact=True,absent_branch_none_and_adam_unchanged=True,public_hash=public_before,T0_hash=t0_before,T0_bytes=sum(v.numel()*v.element_size() for v in t0.state_dict().values()),public_parameters_frozen=True,mean_bound=.1,seconds=time.time()-start))
++    write(O/'INTEGRATION.json',dict(status='PASS',optimizer_calls=4,environment_steps=0,real_history=native_rows,updates=[r0,r1,r2,r3],recovery_tensor_and_optimizer_exact=True,absent_branch_none_and_adam_unchanged=True,public_hash=public_before,T0_hash=t0_before,T0_bytes=sum(v.numel()*v.element_size() for v in t0.state_dict().values()),public_parameters_frozen=True,mean_bound=.1,epsilon=EPSILON,training_loss='selected_Gaussian_NLL',shared_train_inference_function=True,seconds=time.time()-start))
+     print('INTEGRATION PASS: four optimizer calls, zero environment steps',flush=True)
+ if __name__=='__main__':main()
+--- v2/source/zr2_exp/model.py
++++ v3/source/zr3_exp/model.py
+@@ -2,6 +2,7 @@
+ from .common import *
+ from torch import nn
+ from torch.distributions import Independent,Normal
++from execution_core import calibrate_distribution
+ 
+ def temporal(t0,h):
+     b,t,m,e=h.shape
+@@ -16,20 +17,23 @@
+     with torch.no_grad():
+         z=p.temporal_encode(h)[:,-1];b,s,l=raw(p.policy_head,z);q=temporal(t0,h)
+     delta=bank(q,h[:,-1,0],ids)
+-    out=corrected_gmm(b,s,l,delta);out.update(delta=delta,base_means=b.tanh(),q=q,b=b)
++    out=calibrate_distribution(b,s,l,delta,EPSILON);out.update(delta=delta,q=q,b=b)
+     return out
+ 
+ def selected_dist(out):
+-    ix=torch.arange(len(out['means']))
+-    return Independent(Normal(out['means'][ix,out['selected']],out['scales'][ix,out['selected']]),1)
++    return out['executed_dist']
+ 
+ class NativeHead(nn.Module):
+     def __init__(self,base,t0,bank,ctx):
+         super().__init__();self.base=base;self.t0=t0;self.bank=bank;self.ctx=ctx
+     def forward(self,z,train=False):
+         h=self.ctx['h'];b,s,l=raw(self.base,z);q=temporal(self.t0,h)
+-        out=corrected_gmm(b,s,l,self.bank(q,h[:,-1,0]));self.ctx['out']=out
+-        return out['gmm'] if train else selected_dist(out)
++        out=calibrate_distribution(b,s,l,self.bank(q,h[:,-1,0]),EPSILON);self.ctx['out']=out
++        self.ctx['max_executed_kl']=max(self.ctx.get('max_executed_kl',0.),float(out['actual_kl'].detach().max()))
++        self.ctx['max_raw_kl']=max(self.ctx.get('max_raw_kl',0.),float(out['raw_kl'].detach().max()))
++        self.ctx['projected_states']=self.ctx.get('projected_states',0)+int((out['alpha'].detach()<1).sum())
++        self.ctx['sampled_states']=self.ctx.get('sampled_states',0)+len(h)
++        return selected_dist(out)
+ 
+ def install_native(p,t0,bank):
+     ctx={};original=p.spatial_encode;base=p.policy_head
+@@ -40,7 +44,7 @@
+ 
+ def update(p,t0,bank,opt,sch,h,actions,ids):
+     opt.zero_grad(set_to_none=True);out=decode(p,t0,bank,h,ids)
+-    loss=-out['gmm'].log_prob(actions[:,-1]).mean();assert torch.isfinite(loss);loss.backward()
++    loss=-selected_dist(out).log_prob(actions[:,-1]).mean();assert torch.isfinite(loss);loss.backward()
+     present=set(ids.tolist());absent=[]
+     for t in bank.task_ids:
+         pars=list(bank.branches[str(t)].parameters())
+@@ -55,4 +59,6 @@
+         assert torch.equal(v,b);now=opt.state.get(v,{})
+         assert set(now)==set(s)
+         for key in s:assert torch.equal(now[key].cpu(),s[key]) if torch.is_tensor(s[key]) else now[key]==s[key]
+-    return dict(loss=float(loss.detach()),grad_norm=float(norm),delta_max=float(out['delta'].abs().max()),active=sorted(present))
++    return dict(loss=float(loss.detach()),grad_norm=float(norm),delta_max=float(out['delta'].abs().max()),active=sorted(present),
++                actual_kl_max=float(out['actual_kl'].detach().max()),raw_kl_max=float(out['raw_kl'].detach().max()),
++                projected_states=int((out['alpha'].detach()<1).sum()),states=len(h),rounding_passes=out['rounding_passes'])
+--- v2/source/zr2_exp/params.py
++++ v3/source/zr3_exp/params.py
+@@ -6,7 +6,7 @@
+ O=Path(SPEC['output']);P=Path(SPEC['parent']);S=Path(SPEC['parent_source'])
+ SEED=SPEC['seed'];SUITE=SPEC['suite'];PARM=SPEC['parent_arm'];ARM=SPEC['arm']
+ assert SEED in [41,42,43,44] and SUITE in ['LIBERO_OBJECT','LIBERO_GOAL']
+-assert PARM in ['coreset','ra_coreset'] and ARM==PARM+'_ifa_zrv2'
++assert PARM in ['coreset','ra_coreset'] and ARM in [PARM+'_ifa_zrv3',PARM+'_ifa_zrv3a']
+ COUNTS=[1562,1480,1560,1319] if SUITE=='LIBERO_OBJECT' else [997,889,904,1969]
+ QUOTAS=[(n+1)//2 for n in COUNTS]
+ LENS=[n+sum(QUOTAS[:i]) for i,n in enumerate(COUNTS)]
+@@ -14,3 +14,6 @@
+ STEPS=10*sum(BATCHES);EXPOSURES=10*sum(LENS)
+ assert STEPS==(10550 if SUITE=='LIBERO_OBJECT' else 7610)
+ assert SPEC['optimizer_steps']==STEPS and SPEC['exposures']==EXPOSURES
++
++EPSILON=.5 if SPEC['variant']=='v3' else None
++assert SPEC['variant'] in ['v3','v3a'] and SEED==41 and SUITE=='LIBERO_OBJECT'
