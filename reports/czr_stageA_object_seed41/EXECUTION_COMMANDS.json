@@ -1,0 +1,24 @@
+{
+  "formal_remote": {
+    "command": "bash -lc 'source /data/mlr_ifa/experiment_workspaces/CZR_A_OBJECT_seed41_20261020/env.sh; python run_czr.py > /data/mlr_ifa/experiment_workspaces/CZR_A_OBJECT_seed41_20261020/run.log 2>&1; rc=$?; printf '\"'\"'%s\\n'\"'\"' \"$rc\" > /data/mlr_ifa/experiment_workspaces/CZR_A_OBJECT_seed41_20261020/run.exit; exit \"$rc\"'",
+    "exit": 0,
+    "stderr": "",
+    "stdout": ""
+  },
+  "neighbor_audit": {
+    "command": "/data/mlr_ifa/env/bin/python /data/mlr_ifa/analyses/CZR_A_OBJECT_seed41_20261020_neighbor_audit.py",
+    "exit": 0,
+    "new_model_forwards": 0
+  },
+  "local_recompute": {
+    "command": "python execution/20261020_czr_stageA/audit_local.py",
+    "exit": 0
+  },
+  "local_compile": {
+    "exit": 0
+  },
+  "local_properties": {
+    "exit": 0,
+    "synthetic_only": true
+  }
+}
