@@ -1,0 +1,25 @@
+{
+  "scope": "Read-only resource admission; before model forward or environment creation",
+  "attempts": [
+    {
+      "command": "python /data/mlr_ifa/analyses/OVR_OBJECT_seed42_20261020_resource_audit.py",
+      "exit_code": 1,
+      "error": "AssertionError: downstream key count expected 100, found 0",
+      "diagnosis": "Serialized checkpoint uses module. prefix; audit prefix filtering omitted this normalization."
+    },
+    {
+      "command": "python /data/mlr_ifa/analyses/OVR_OBJECT_seed42_20261020_resource_audit_v2.py",
+      "exit_code": 1,
+      "error": "AttributeError: 'str' object has no attribute 'removeprefix'",
+      "diagnosis": "Target Python 3.8; removeprefix is a newer Python API."
+    },
+    {
+      "command": "python /data/mlr_ifa/analyses/OVR_OBJECT_seed42_20261020_resource_audit_v3.py",
+      "exit_code": 0,
+      "diagnosis": "Explicit prefix slicing; both 100-key tensor sets finite and shape-compatible, inputs unchanged."
+    }
+  ],
+  "checkpoints_modified": false,
+  "new_environment_episodes": 0,
+  "new_optimizer_calls": 0
+}

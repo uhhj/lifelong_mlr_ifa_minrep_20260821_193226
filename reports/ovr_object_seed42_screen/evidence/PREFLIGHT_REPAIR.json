@@ -1,0 +1,14 @@
+{
+  "time": 1792495191.274584,
+  "reason": "Independent test omitted native GMMHead.forward_fn tanh on means.",
+  "original_preflight_exit": 1,
+  "original_screen_sha256": "08d107a5a46f65c0b1deb135c1524b833cc020f820e12101fdf6e3276feef0ad",
+  "original_contract_sha256": "d9618936182a60beab3ac2bb571613b4449ddf75578de051b777595ae4b3f969",
+  "adapter_sha256": "244bad624c3942d857c74b849075ea669c9ba20ee303a174552666839f403183",
+  "old_expression": "means=head.mean_layer(x).view(-1,5,7)",
+  "new_expression": "means=torch.tanh(head.mean_layer(x).view(-1,5,7))",
+  "original_scientific_code_changed": false,
+  "rollout_changed": false,
+  "optimizer_calls": 0,
+  "environment_calls_before_repair": 0
+}

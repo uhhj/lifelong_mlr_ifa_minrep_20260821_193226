@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "observed_at": "2026-10-20T19:32:21.803811+08:00",
+  "episodes": 20,
+  "pairs": 10,
+  "vector_attempts": 2,
+  "counts": {
+    "SS": 3,
+    "SF": 0,
+    "FS": 1,
+    "FF": 6
+  },
+  "parent_successes": 3,
+  "teacher_successes": 4,
+  "difference_pp": 10,
+  "teacher_better_in_this_screen": true,
+  "config_differences": [
+    {
+      "path": "/experiment_dir",
+      "parent": "/data/mlr_ifa/experiments/OVR_OBJECT_RA_seed42_screen_20261020/parent9",
+      "teacher": "/data/mlr_ifa/experiments/OVR_OBJECT_RA_seed42_screen_20261020/teacher7"
+    }
+  ],
+  "matched_noise_all_common_steps": true,
+  "local_manifest_hashes_verified": true,
+  "no_automatic_distillation": true,
+  "command_seconds": {
+    "parent9": 304.8866102695465,
+    "teacher7": 306.1809310913086,
+    "audit": 2.863283395767212
+  },
+  "loop_controls": {
+    "episodes_per_model": 10,
+    "lanes": 10,
+    "zero_steps": 5,
+    "max_policy_steps": 600,
+    "inherited_eval_n_eval": 20,
+    "note": "Inherited n_eval/num_procs fields are not consumed by the fixed screen loop; actual budget comes from frozen screen.py and CONTRACT.json."
+  }
+}
