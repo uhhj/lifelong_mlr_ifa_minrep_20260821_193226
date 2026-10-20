@@ -1,0 +1,33 @@
+{
+  "environment": "/root/mlr_ifa/experiment_workspaces/RA_Coreset_GOAL_seed42_20261018/env.sh",
+  "remote_workspace": "/data/mlr_ifa/experiment_workspaces/RCTR_GOAL_seed42_stageA_20261020",
+  "commands": [
+    {
+      "command": "/data/mlr_ifa/env/bin/python admit.py",
+      "exit": 0
+    },
+    {
+      "command": "nohup bash run_probe.sh; run_probe.sh sources parent env.sh and executes python state_probe.py",
+      "exit": 1
+    },
+    {
+      "command": "nohup bash run_recovery.sh; run_recovery.sh sources parent env.sh and executes python recover_asset_paths.py",
+      "exit": 0
+    },
+    {
+      "command": "source parent/env.sh; python source_audit.py",
+      "exit": 0
+    },
+    {
+      "command": "/data/mlr_ifa/env/bin/python diagnose_alignment.py && /data/mlr_ifa/env/bin/python finalize_remote.py",
+      "exit": 0
+    },
+    {
+      "command": "python execution/20261020_rctr_goal_seed42_stageA/audit_local.py",
+      "exit": 0
+    }
+  ],
+  "original_failed_attempt_preserved": true,
+  "policy_rollouts": 0,
+  "optimizer_calls": 0
+}
