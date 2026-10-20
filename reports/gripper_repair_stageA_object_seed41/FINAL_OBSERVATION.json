@@ -1,0 +1,54 @@
+{
+  "time": 1792485626.7545674,
+  "workers": [],
+  "source_input_hash_pass": true,
+  "run_exit": 0,
+  "native_audit_exit": 0,
+  "gpu": "NVIDIA GeForce RTX 3090, 10 MiB, 0 %\n",
+  "feature_export_mode": "native train mode with original augmentation",
+  "augmentation_source": "/data/mlr_ifa/experiment_workspaces/RA_OBJECT_conditional_20261019/seed41/source/libero/lifelong/models/modules/data_augmentation.py",
+  "augmentation_sha256": "dfc721db7433cb272079a44bd5c69ec460955a9fec1266ef4fb4ef0ff987a824",
+  "augmentation_mode_source_excerpt": "class DataAugGroup(nn.Module):\n    \"\"\"\n    Add augmentation to multiple inputs\n    \"\"\"\n\n    def __init__(self, aug_list):\n        super().__init__()\n        self.aug_layer = nn.Sequential(*aug_list)\n\n    def forward(self, x_groups):\n        \"\"\"\n        x_groups: list/tuple of tensors, each of shape (B, T, C_i, H, W),\n                where C_i is typically 3 (RGB) or 1 (depth/grayscale).\n        Returns a tuple of the same shape, with augmentations applied per group.\n        \"\"\"\n        if self.training:\n            out_groups = []\n            for x in x_groups:\n                B, T, C, H, W = x.shape\n                # 1) flatten time into batch\n                x_flat = x.view(B * T, C, H, W)        # (B*T, C, H, W)\n                # 2) augment each slice\n                x_aug_flat = self.aug_layer(x_flat)    # (B*T, C, H, W) with C=3 or 1\n                # 3) reshape back to (B, T, C, H, W)\n                x_aug = x_aug_flat.view(B, T, C, H, W)\n                out_groups.append(x_aug)\n            return tuple(out_groups)\n        else:\n            # eval \u6a21\u5f0f\u4e0d\u53d8\n            return x_groups\n    \n",
+  "files": {
+    "PREFLIGHT.json": {
+      "bytes": 108,
+      "sha256": "e3b5bac1284847f38e955ada14a2594ec601f3a6f6627f41772af2ec0346b6c8"
+    },
+    "RUN_STATUS.json": {
+      "bytes": 115,
+      "sha256": "5ec63f377eaf53e8a2ad1100980687a55b5629df515279dd00b7e7bd749d5891"
+    },
+    "ENVIRONMENT_SOURCE_AUDIT.json": {
+      "bytes": 815,
+      "sha256": "73a743e9cfe19adbf6877f519bdf63f44c2409d9b3d52a95d49d0c23bda958ce"
+    },
+    "SOFTWARE_TESTS.json": {
+      "bytes": 524,
+      "sha256": "638b87857a32213ecf3af256b5bc8fcc67c9bb161a9d7e3fc0a959be5de8e2fe"
+    },
+    "FINAL_AUDIT.json": {
+      "bytes": 1125,
+      "sha256": "b242cabe9591b0ed68722b40a55297dd9e93299458c0183daf44e7b8cf1fdc1f"
+    },
+    "WINDOW_OUTCOMES.json": {
+      "bytes": 493972,
+      "sha256": "7b100ede6b1bfecc3dda43e55b479e5a04c6c7e236106e23ededeb2cbd68f437"
+    },
+    "SPLIT.json": {
+      "bytes": 276301,
+      "sha256": "fe4fcc3c0af853e695c89bf52043100caf710a01b3bdee13354922bae2a783a2"
+    },
+    "CONTRACT.json": {
+      "bytes": 241408,
+      "sha256": "120b67488eab38f8321024596d10f0a26dbe9b7f32685d3c1730189189f4dd52"
+    },
+    "NATIVE_INTERFACE.json": {
+      "bytes": 4012,
+      "sha256": "0a2455ce330b970b6c015f4c4dcbccf7ef30c7327102ba3b5c34940cc2123004"
+    },
+    "epochs.json": {
+      "bytes": 2219,
+      "sha256": "f227b5e739b081e521e9ba307fb31b40e7c8a213a60cb524aa7fcbf07faa3318"
+    }
+  }
+}

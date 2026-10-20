@@ -1,0 +1,31 @@
+{
+  "gripper_source": "/data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/models/grippers/panda_gripper.py",
+  "sha256": "a3760a8fc4599fa6f79914304b82466f3c1bda1a945943ca693bb57f00dc59eb",
+  "mapping": [
+    {
+      "command": -1,
+      "meaning": "open",
+      "actuator_delta": [
+        0.01,
+        -0.01
+      ]
+    },
+    {
+      "command": 1,
+      "meaning": "closed",
+      "actuator_delta": [
+        -0.01,
+        0.01
+      ]
+    }
+  ],
+  "evidence": "Actual PandaGripper.format_action docstring and pure function; no physical environment",
+  "state_restore_status": "STATIC_ONLY_NOT_COUNTERFACTUAL_VERIFIED",
+  "required_additional_state": [
+    "gripper.current_action",
+    "controller internal targets",
+    "observable state/history",
+    "RNG",
+    "physics warm-start/control state"
+  ]
+}
