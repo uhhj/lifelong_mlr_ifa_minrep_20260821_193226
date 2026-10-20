@@ -1,5 +1,7 @@
 # 三方案与LIBERO-50执行交接（以本版为准）
 
+最新检查2026-10-21 05:03 CST：progress_20261021_050025，只读复算PASS；collect6已提交442分支（438探索+4确认）、206403策略步、正式0条。176源码及冻结输入PASS，进程正常，无恢复或重启。近期41.46秒/分支，剩余探索上限约0.21小时、确认最多另0.51小时；保留30分钟检查间隔。53个成功辅助分支不代表认证训练记录。后续若阶段转换，先适配外置只读进度脚本，不修改冻结科学源码。
+
 用户要求持续推进、自动获取缺失数据、自主选推荐工程方案，不只轮询。当前PARTIAL，不可把部署或CPU测试称为实验完成。先读BRANCH_RULES.md、proposals三份全文、RUN_STATUS.json、REPORT.md及progress_20261021_server_queue/AUDIT.json。
 
 最新检查2026-10-21 04:29 CST：progress_20261021_042827，collect6已提交393分支（389探索+4确认）、181017策略步、正式0条；176源码与冻结输入PASS，无工程恢复。52条辅助成功不能当作52条认证训练记录。近期33.14秒/分支，Task6剩余探索约0.62小时、确认最多另0.41小时；为检查即将到来的阶段交接，同一自动化改为30分钟。阶段交接后应恢复较低检查频率。外置check_progress_readonly.py --details与audit_progress_readonly.py目前写死task6/100epoch，阶段变化时只改外置读数逻辑，勿把正常进入train7误报为协议失败；原冻结服务器科学源不变。
@@ -12,7 +14,7 @@
 
 ## 服务器与队列
 
-SSH root@jq1.9gpu.com:11920已有授权，凭据只内存/getpass，不存文件日志。可用execution/20261020_epr_stageA/ssh_session.py JSON桥，当前session27015，失效时重新安全连接。
+SSH root@jq1.9gpu.com:11920已有授权，凭据只内存/getpass，不存文件日志。使用check_progress_readonly.py的固定只读命令与已固定主机密钥；旧通用桥受审批限制，不复用该桥绕过限制。
 Q=/data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020。
 当前controller_v2.py PID47521，查controller_v2.pid.json/exit/log、CONTROLLER_V2_HANDOFF.json。原controller PID46681在无子launcher时显式SIGTERM交接，原日志/pid/源保留，不制造原exit0。controller_v2使用原branch_gate与独立queue_verifier，LIBERO50用libero50_verifier。registry18项：9OBJECT+6RCTR/COVR GOAL+3LIBERO50；每个未来worker仍须独立真实GPU准入。
 使用Q/monitor_snapshot_v2.py，原monitor_snapshot.py遗漏新controller和下载，不宜独用。实际记录时间取JSON unix，不取快照文件名。

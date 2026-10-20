@@ -1,0 +1,121 @@
+{
+  "unix": 1792530151.2100713,
+  "runs": {
+    "RCTR_OBJECT_42": {
+      "status": {
+        "status": "RUNNING",
+        "phase": "collect6",
+        "unix": 1792513336.2961988,
+        "pid": 46522
+      },
+      "epochs": 100,
+      "optimizer_steps": 15700,
+      "last_epoch": {
+        "task": 6,
+        "epoch": 99,
+        "batches": 157,
+        "steps": 15700,
+        "loss": -31.924616212298158,
+        "lr_first": 1.0328947368421052e-06,
+        "lr_after": 0.0,
+        "seconds": 4.952332496643066
+      },
+      "exits": {
+        "train6.exit": "0"
+      },
+      "formal_records": 0,
+      "formal_attempt_events": 0,
+      "collections": [
+        {
+          "stage": "task6",
+          "method": "rctr",
+          "branches": 441,
+          "successful_branches": 53,
+          "committed_policy_steps": 205923,
+          "acceptance": null
+        }
+      ]
+    }
+  },
+  "queue_status": {
+    "status": "RUNNING",
+    "key": "RCTR_OBJECT_42",
+    "unix": 1792530115.6352208
+  },
+  "decision": {
+    "action": "RUN_IF_ADMITTED",
+    "method": "RCTR",
+    "suite": "OBJECT",
+    "seed": 42,
+    "decisions": [],
+    "unix": 1792530115.5890794
+  },
+  "disk": {
+    "/data": {
+      "total": 105358065664,
+      "used": 83111088128,
+      "free": 17376940032
+    },
+    "/root": {
+      "total": 62559989760,
+      "used": 53545144320,
+      "free": 5911318528
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090, 49 %, 3006 MiB",
+  "processes": [
+    "  46522   46513    04:50:24 python -u -m rctr_exp.pipeline",
+    "  46593   46522    04:40:15 /data/mlr_ifa/env/bin/python -m rctr_exp.collect 6",
+    "  47521       1    03:23:48 /data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020/queue_controller_v2.py /data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020"
+  ],
+  "controller_v2": {
+    "pid": {
+      "pid": 47521,
+      "unix": 1792517923.6277895
+    },
+    "handoff": {
+      "old_pid": 46681,
+      "old_command_sha256": "6b508c69555c5243fc36d7c9598083669d8aa1d67944ed878d30fcdba904ffb8",
+      "active_workers": {
+        "46522": {
+          "command_sha256": "c0b4c9902eb61d4a017e0232e80bc4670816df6adba2092b9fe09ca989b66a69",
+          "start_ticks": "13018948"
+        },
+        "46593": {
+          "command_sha256": "4554b91fc819e48ad26ae17f4cceb3c2757a76500887f4adf3c7cb2245a72635",
+          "start_ticks": "13079857"
+        },
+        "46599": {
+          "command_sha256": "87ba31a249899d38f62174d08e1a266e3430cbd4b3cd3fe868b2177511885dae",
+          "start_ticks": "13081063"
+        }
+      },
+      "old_pid_receipt_sha256": "bad4e6811162a86bbefd044e9c8ff5fdd337b476f576803c815c6f5483b4f3c9",
+      "unix": 1792517923.4930232,
+      "status": "PASS",
+      "new_pid": 47521,
+      "new_controller_sha256": "213625d1e280ff5087faecb95dd2137c83cbc8dbf57b3c221fa2e355e4ed3ebf",
+      "old_controller_termination_signal": 15,
+      "original_exit_not_fabricated": true,
+      "experiment_workers_preserved": true,
+      "scientific_source_changes": 0,
+      "unix_complete": 1792517925.5966153
+    },
+    "exit": null
+  },
+  "libero50_acquisition": {
+    "status": "DATA_VERIFIED",
+    "verified": 50,
+    "total": 50,
+    "unix": 1792518693.2098863,
+    "data_only": true,
+    "pretrained_checkpoint_available": false,
+    "current": {
+      "status": "LOSSLESS_REPACK",
+      "path": "libero_90/KITCHEN_SCENE9_turn_on_the_stove_demo.hdf5",
+      "unix": 1792518675.9605691
+    },
+    "exit": "0"
+  },
+  "libero50_shared_pretraining": null
+}
