@@ -1,0 +1,6 @@
+{
+  "command": "source /data/mlr_ifa/experiment_workspaces/RCTR_OBJECT_seed42_full_20261021/env.sh && /data/mlr_ifa/env/bin/python -c '\nimport collections,json,time\nfrom pathlib import Path\nfrom coreset_exp.common import O,verify,sha\nc=verify()\nroot=O/\"rctr/task6\"\nrows=[json.loads(p.read_text()) for p in sorted((root/\"committed\").glob(\"*.json\"))]\ndef read(p):\n    return json.loads(p.read_text()) if p.exists() else None\nresult=dict(unix=time.time(),status=\"FROZEN_CONTRACT_INPUTS_PASS\",\n    contract_sha256=sha(O/\"CONTRACT.json\"),source_files=len(c[\"source_sha256\"]),\n    committed=rows,collection_status=read(root/\"RUN_STATUS.json\"),\n    live_step=read(root/\"LIVE_STEP.json\"),commands=read(O/\"pipeline.pid.json\"),\n    logs={p.name:dict(bytes=p.stat().st_size,mtime=p.stat().st_mtime,\n         tail=p.read_text(errors=\"replace\")[-2000:])\n         for p in (O/\"collect6.log\",O/\"train6.log\") if p.exists()},\n    checkpoint_files=[dict(name=p.name,bytes=p.stat().st_size,mtime=p.stat().st_mtime)\n                      for p in (O/\"ra_coreset/models\").glob(\"*.pth\")])\nprint(json.dumps(result,indent=2))\n'",
+  "exit": 0,
+  "sha256": "7b2cfcdb4a5a944133d16a87a2047b685a2845e19c05e137fd080f95c19952c6",
+  "server_writes": 0
+}
