@@ -1,40 +1,38 @@
-# 三方案与 LIBERO-50 持续执行交接
+# 三方案与LIBERO-50执行交接（以本版为准）
 
-本任务尚未完成，不能只轮询而放弃剩余实现。用户要求持续工作、自动选推荐方案处理工程问题；如服务器无LIBERO50数据，自动取得。不得伪造实验完成、扩大科学预算、重试正常失败或覆盖失败证据。
+用户要求持续推进、自动获取缺失数据、自主选推荐工程方案，不只轮询。当前PARTIAL，不可把部署或CPU测试称为实验完成。先读BRANCH_RULES.md、proposals三份全文、RUN_STATUS.json、REPORT.md及progress_20261021_server_queue/AUDIT.json。
 
-## 最新明确授权
+## 科学顺序
 
-停止旧RCTR A2（已停止，143，76完成/77启动，零训练）；依次RCTR、CAET、COVR，均RA+IFA。各OBJECT42先跑；AUC严格高于同seed RA且工程通过才补41、43。三个OBJECT等权平均AUC严格高于对应RA平均才跑该方法GOAL41、42、43，之后下一方法。无2/3或OldFinal附加门槛。全部方法适用分支完成后RA+IFA LIBERO50 41、42、43。用户允许自主选择，无需再问常规实现/下载/工程恢复选择；科学改变必须如实单独记录，不能改阈值冒充原协议。
+旧RCTR A2已按用户要求停止，不恢复。RCTR→CAET→COVR：各OBJECT42精确AUC严格高于同seed RA且工程PASS，才固定补OBJECT41/43；三个OBJECT等权平均AUC严格高于对应RA平均，才执行该方法GOAL41/42/43，随后下一方法。没有OldFinal或2/3附加门槛。最后RA+IFA LIBERO50 41/42/43。旧基线全部只读。
 
-## 当前真实状态（2026-10-21）
+## 服务器与队列
 
-唯一正式worker：RCTR OBJECT42。
-W=/data/mlr_ifa/experiment_workspaces/RCTR_OBJECT_seed42_full_20261021
-O=/data/mlr_ifa/experiments/RCTR_OBJECT_seed42_full_20261021
-supervisor PID46513，pipeline PID46522。source W/env.sh。
-GPU准入第二次exit0，28工程步、0optimizer、0正式；首次exit1是缺assets链接，第一个环境步前，证据保留。LAUNCH_ACCEPTANCE与本地audit_admission_local.py PASS。source176文件冻结；不要修改已冻结RCTR source或原CONTRACT。
-最新已完成Task6 100epoch/15700更新，进入collect6；Task6逐张量和初始化RNG同RA父通过才会进入采集。三个采集阶段在各任务ep99之后，最多1368探索+144确认，前缀与工程重复另计。每原训练batch仍只一步optimizer，最终105500更新、200原协议正式episode/20vector。
-pipeline.py会按train6/collect6/train7/collect7/train8/collect8/train9/evaluate/audit执行；supervise.sh待pipeline结束后final_process。新生成正式任务未完，不能说全部方案完成。
+SSH root@jq1.9gpu.com:11920已有授权，凭据只内存/getpass，不存文件日志。可用execution/20261020_epr_stageA/ssh_session.py JSON桥，当前session27015，失效时重新安全连接。
+Q=/data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020。
+当前controller_v2.py PID47521，查controller_v2.pid.json/exit/log、CONTROLLER_V2_HANDOFF.json。原controller PID46681在无子launcher时显式SIGTERM交接，原日志/pid/源保留，不制造原exit0。controller_v2使用原branch_gate与独立queue_verifier，LIBERO50用libero50_verifier。registry18项：9OBJECT+6RCTR/COVR GOAL+3LIBERO50；每个未来worker仍须独立真实GPU准入。
+使用Q/monitor_snapshot_v2.py，原monitor_snapshot.py遗漏新controller和下载，不宜独用。实际记录时间取JSON unix，不取快照文件名。
+14个未启动OBJECT/GOAL入口采用worker_entrypoint_env_v2.py，解决CPU导入时空CUDA导致EGL非法编号；科学源和bundle未改，CPU_NATIVE_IMPORT_retry.log证明CUDA张量占用0。旧entry/launcher保留，新registry版本明确记账。不得改已冻结共享文件来绕过哈希。
 
-## 条件队列真实部署状态（更新）
+## 当前唯一GPU实验
 
-Q=/data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020，controller PID46681。9个OBJECT入口+6个RCTR/COVR GOAL入口已登记，REGISTRY15项。旧OBJECT源/entry/deployment hash完整保留。CAET/COVR实现已在204文件文本bundle中，真实GPU准入只在条件触发时执行，CPU11项已PASS不当GPU证据。不要重跑prepare或改已登记共享文件SHA；新修复用明确版本、保留原失败合同。
-queue_controller.py→branch_gate.py→queue_verifier.py独立验收全记录再判精确AUC。CAET GOAL真实探针发现stage7正对为0（41/42/43全部），因此没有注册；其他stage8/9有正对。阈值不能放宽，不静默跳过适用方法。LIBERO50 worker/验收adapter尚需实现，当前controller明确拒绝RA_IFA adapter缺失；不应声称整套已部署。
+W=/data/mlr_ifa/experiment_workspaces/RCTR_OBJECT_seed42_full_20261021；O=/data/mlr_ifa/experiments/RCTR_OBJECT_seed42_full_20261021。source W/env.sh。supervisor46513、pipeline46522、collect6 46593。Task6 100epoch/15700步结束且实际张量/初始化RNG同父，正在collect6。source176文件冻结。预检第二次PASS28工程步0optimizer，第一次缺assets链接失败发生第一个环境步前，保留。
+顺序train6/collect6/train7/collect7/train8/collect8/train9/evaluate/audit/final_process；400epoch105500主步、4CP、200正式20vector；采集最多1368探索+144确认，prefix和工程尝试独立记账。committed JSON为唯一完成权威，不重试正常失败。
 
-## 资产与下载
+## LIBERO-50
 
-SSH root@jq1.9gpu.com:11920已有授权。凭据仅内存/getpass，不写文件日志。可使用已有PTY JSON桥（当前session27015，脚本execution/20261020_epr_stageA/ssh_session.py）；exec/put/get元数据，禁止输出凭据。
-父OBJECT RA /data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed{s}_20261019；对应已完成RA源码在RA_OBJECT_conditional_20261019/seed{s}/source。原基线只读不重跑。
-本地source/为已部署RCTR源码，PARENT_SOURCE_BUNDLE.json为原真实RA文本源，hash来源PARENT_SOURCE_HASHES。
-官方LIBERO镜像yifengzhu-hf/LIBERO-datasets，固定revision f13aa24a3da8c43c7225569f28c562979fa0e35a。download_libero50.py后台PID25160在下载50厨房任务约39GiB，逐文件LFS SHA与大小校验，本地local_assets/libero50_official，绝不发布数据。检查实际PID和partial/status，有限网络失败安全续传，不重复进程；本地D盘约84GiB初始余量，远端/data25GiB/root13GiB初始余量，所以先本地取得，再设计分批转移/合法预处理。
-作者公开目录目前只找到OBJECT和GOAL预训练权重，LIBERO50权重未找到。继续查官方资产；必要时依用户自主选择授权准备忠实预训练复现，但必须公开来源/实现差异，不能用OBJECT权重充当50官方权重。论文50协议25预训练任务各50演示+5阶段各5任务各10演示，100epoch、batch10、gamma.1。任务划分可核验官方LOTUS LIBERO_KITCHEN_EXP25，asset_sources/lotus_benchmark.py有索引；还需严格验证与作者协议。仅下载全部50厨房数据不表示划分/权重已齐全。
+服务器acquire_libero50.sh PID46818负责自动获取，查LIBERO50_SERVER_STATUS.json、CURRENT、libero50_acquisition.exit及libero50_acquisition/*.json。固定HF revision f13aa24a3da8c43c7225569f28c562979fa0e35a。数据位于/data/mlr_ifa/datasets/libero50_acquired及/root/mlr_ifa_datasets/libero50_acquired，逻辑路径用链接统一。只对自己的临时下载做逐数组/属性无损验证后删除raw，原实验数据不能删。本地重复下载25160已停且文件保留。
+LIBERO50_PARTITION.json为LOTUS固定25预训练+25新增任务，全部BDDL/初态已找到。论文公开代码未提供完整50预训练权重；事前工程选择见libero50_preparation/IMPLEMENTATION_DECISIONS.md。共享新预训练seed42、25任务50演示、100epoch、batch10、FP32、CLIP base冻结而LoRA8/alpha8及新投影/FiLM/state/T/head训练，最终ep99，不能冒充官方checkpoint。三个下游seed使用同一份。当前未运行预训练。
+LIBERO50_SOURCE_BUNDLE_final.json SHA370dd4645bb319f0f1739fa13b5a84fa82d86c7c0e0078be0da28d8caad718ae，196文件。14CPU性质PASS及真实数据CPU完整→Brief GMM history1/4/8完全一致，0更新/0环境/0CUDA字节；不是GPU验收。新正式入口自动prepare→4隔离GPU恢复更新（下游另1零动作接口步）→pipeline。预训练另4隔离更新0环境。未通过不能训练。
+下游每seed5阶段每阶段5新任务，100epoch/batch10、BC+.1meanIFA/gamma.1/warmup500逐步、RA每任务ceil.5及半配额硬锚点、原距离标定42与sampler0。IFA多当前任务规则已事前披露；新特征逐seed导出；新buffer硬链接自身不可变feature以省空间，载荷逐字节hash。每次RA选择额外独立全部删除代价验证。5CP、1500episodes/150vectors/seed，共4500；原0–19、10lane、env[s,s+1]、600步5zero、stage global RNG、argmax分量Normal。不给额外Random/Coreset基线，不扩seed。
+workspace Q/libero50/shared_pretraining与seed41/42/43；新输出/data/mlr_ifa/experiments/LIBERO50_reproduced_pretraining_seed42_20261021及RA_Coreset_LIBERO50_seed{s}_20261021。
+外置package_libero50_light.py仅包装允许元数据，完成后在PYTHONPATH对应source和LIBERO50环境下调用；audit_libero50_light.py本地纯标准库复算全部4500/矩阵/三seed均值样本SD。未完成不能报指标。检查磁盘并保留原资产，不能为了空间改科学预算或精度。
 
-## 恢复与发布
+## 适用性边界与恢复
 
-确认原进程已退出、合同哈希一致、保存错误后才恢复。完整epoch恢复模型/optimizer/scheduler/grads/模式/allRNG/cursor；存储预提交清单幂等，不重复入库。RCTR collection每key committed JSON是完成权威；不能重试已提交正常失败，技术恢复重采同固定prefix必须和原物理/观察hash一致并另记全部attempt。正式global RNG评估部分完成不能盲重启。
-保持source冻结；必要工程修复用有因果说明的外置适配或明确版本和恢复合同，绝不重贴原标签。
-每轮检查/审计/实验发布到publish_mlr_branch远端MLR，运行publish.py，审查代码和轻量元数据，排除文本源bundle/asset_sources/权重/原actions/latent/buffer/状态/RNG二进制。最近已核验远端commit5df28b4f242a7bc9ec48c4855432ecdc5ce286c9。后续新草稿尚未发布。receipt本地保留；不能称出版完成即实验完成。
+CAET GOAL真实probe在三个seed阶段7正对均为0，stage8/9有正对。未登记CAET GOAL，不能放宽阈值或伪造配对；该条件若触发必须如实处理，其他独立工作照常推进。不是说整套所有科学条件已通过。
+工程错误先确认进程停、合同输入一致、保留原失败；训练只从完整epoch恢复model/optimizer/scheduler/grads/modes/allRNG/cursor，入库预提交名单幂等。collection技术重采必须同固定prefix物理/观察哈希并记全attempt。部分global RNG正式评估不能盲重启。冻结科学源/合同不可悄改重贴；新版本/外置适配说明原因。只读汇总可外置修复，不重跑环境。
 
-## 2026-10-21最新补充
+## 发布与结束
 
-以REPORT.md和RUN_STATUS.json时间为准：RCTR collect6已64 committed，0正式。服务器acquire_libero50.sh PID46818已接管下载，LIBERO50_SERVER_STATUS/CURRENT和libero50_acquisition.exit为权威；本地PID25160已停止，文件保留。无损打包预检PASS，原数组/属性全等才删除自身暂存raw。当前3/50已验证。GOAL registry首次换行SHA失败、探针前两次缺env导入失败保留，v2注册/v3探针通过。不得把旧交接中本地下载和“队列未部署”描述当最新状态。
+每次检查/实验/只读审计按AGENTS运行publish.py，精确提交到publish_mlr_branch远端MLR，核对SHA并存receipt。排除所有BUNDLE JSON、asset_sources、权重、demos、latent/buffer、原actions/状态/噪声/RNG二进制。本地report只含PARTIAL观察，不代表完成。自动化rctr-caet-covr-libero50保持有效；全部适用分支及LIBERO50完整验收交付后才删除，不启动新付费资源。
