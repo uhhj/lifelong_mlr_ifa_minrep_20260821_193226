@@ -1,0 +1,85 @@
+{
+  "status": "PASS_PROTOTYPE",
+  "optimizer_updates": 200,
+  "updates_by_task": {
+    "6": 50,
+    "7": 50,
+    "8": 50,
+    "9": 50
+  },
+  "full_training_runs": 0,
+  "environment_creations": 0,
+  "environment_steps": 0,
+  "rollouts": 0,
+  "all_input_hashes_unchanged": 6101,
+  "runtime_old_gate_max": 2.7248437084459454e-07,
+  "runtime_current_gate_error_max": 4.552175806304959e-07,
+  "old_raw_max": 0.0,
+  "runtime_variant_old_raw_max": 7.450580596923828e-09,
+  "runtime_variant_contribution_max": 8.736162904199318e-09,
+  "shared_tensor_exact": true,
+  "old_residual_tensor_exact": true,
+  "activation": [
+    {
+      "task": 6,
+      "rms": 0.017056740820407867,
+      "distribution_max": 0.04290571063756943,
+      "U_changed": true,
+      "V_changed": true,
+      "median_update_seconds": 0.002605081499496009,
+      "parameter_count": 4696,
+      "gate_bytes": 4096
+    },
+    {
+      "task": 7,
+      "rms": 0.015335706993937492,
+      "distribution_max": 0.03312184661626816,
+      "U_changed": true,
+      "V_changed": true,
+      "median_update_seconds": 0.0027359414998500142,
+      "parameter_count": 4696,
+      "gate_bytes": 4096
+    },
+    {
+      "task": 8,
+      "rms": 0.014435608871281147,
+      "distribution_max": 0.04701382666826248,
+      "U_changed": true,
+      "V_changed": true,
+      "median_update_seconds": 0.00294218099952559,
+      "parameter_count": 4696,
+      "gate_bytes": 4096
+    },
+    {
+      "task": 9,
+      "rms": 0.016055269166827202,
+      "distribution_max": 0.034961286932229996,
+      "U_changed": true,
+      "V_changed": true,
+      "median_update_seconds": 0.0030539654999302,
+      "parameter_count": 4696,
+      "gate_bytes": 4096
+    }
+  ],
+  "isolation_cases": 180,
+  "variant_z_pairs": 100512,
+  "native_reload_cases": 60,
+  "prototype_seconds": 40.90048956871033,
+  "extract_seconds": 45.79810404777527,
+  "native_reload_seconds": 18.551061153411865,
+  "max_cuda_memory_bytes": 1034838528,
+  "trainable_parameters_total": 18784,
+  "gate_tensor_bytes": 16384,
+  "learned_residual_tensor_bytes": 75136,
+  "residual_file_bytes": 95223,
+  "instruction_bank_file_bytes": 260206,
+  "scientific_limits": [
+    "Frozen shared model only",
+    "Fixed ten original instructions, no paraphrase generalization",
+    "No claim of forgetting prevention after unfreezing shared model",
+    "No closed-loop performance or novelty claim"
+  ],
+  "implementation_note": "Reference ZIP unavailable. Implemented directly from supplied protocol/spec. 7 gate + 4 residual synthetic tests passed; not the externally claimed 15 tests.",
+  "cpu_exact_test_note": "Initial CPU test imposed bitwise equality stronger than protocol. Preserved failure and measured discrepancy; corrected test to supplied atol=rtol=1e-6 without changing model/training code or adding updates.",
+  "finalized_unix": 1792219243.729287
+}
