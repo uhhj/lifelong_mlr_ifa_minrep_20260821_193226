@@ -1,3 +1,9 @@
+## 2026-10-21 CAET GOAL 零训练配对核查完成（不更改队列）
+
+用户本轮仅授权已有数据只读核查，不启动条件CAET。报告goal_pair_audit_20261021_185515/REPORT.md；PAIR_EVIDENCE、RECEIPT、LOCAL_AUDIT全PASS。0训练/0优化器/0环境/0CUDA/0服务器写入，原COVR队列未改。每seed4759窗口与原RA存储身份重新核验，按原native排序拼接seed shuffle与效果fit batch64/10轮固定torch顺序重放，当前—旧与旧—旧拆分、演示覆盖和真实batch正负同时存在计数均已复算。
+
+Task7三个seed当前—旧正对均0。Task8无向正对12/12/18，全部6↔8；全局覆盖当前5/9演示但仅7/7/9个监督时刻，有效batch仅7/2/8（各250批），实际当前demo4/2/4。Task9当前—旧234/308/275，旧—旧3/1/0；全局当前demo9/9，实际batch当前demo6/8/9，有效batch33/48/46（各460批），每轮都有信号。主信号约76%–78%来自7↔9。留出demo当前非静止窗口支持Task8仅3/37、3/37、4/37，Task9仅3/61、4/61、4/61，不能当已证明模型泛化。结论不支持Task8/9同时启用；仅Task9值得作为新的有限探索候选，仍需另行固定条件与模型质量准入，不自动启动。原CAET-GOAL保持适用性阻塞；不得将本轮建议覆盖冻结规则。第一次纯只读脚本因AST类型声明顺序退出（资产读取前），失败保留185431/ATTEMPT，仅外置修复并成功于185515，不涉及训练恢复。
+
 ## 最新检查 2026-10-21 18:26 CST（PARTIAL，COVR进入Task7中点采集）
 
 COVR OBJECT42已完成Task6的100epoch及Task7前50epoch，共150epoch27050主更新；train6与train7_first50退出0。真实collect7 PID64977与controller_v3 PID64697正常，GPU3090观察65%/3006MiB。Task6实际tensor同父、初始化RNG同父、Task6/7 IFA同父、Task6入库781条有序ID与源目标载荷一致，204冻结源码296输入hash全部PASS。无重启，无新增预检。正式闭环仍0条，不能提前计算指标。
