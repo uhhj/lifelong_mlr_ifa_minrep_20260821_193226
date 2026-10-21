@@ -10,7 +10,7 @@ import shlex
 
 R=Path(__file__).resolve().parent
 Q="/data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020"
-COMMAND=f"/data/mlr_ifa/env/bin/python {Q}/monitor_snapshot_v2.py"
+COMMAND=f"/data/mlr_ifa/env/bin/python {Q}/monitor_snapshot_v3.py"
 W="/data/mlr_ifa/experiment_workspaces/RCTR_OBJECT_seed42_full_20261021"
 DETAIL_CODE=r'''
 import collections,json,time,subprocess
@@ -222,7 +222,7 @@ def main():
         out.mkdir()
         (out/"SNAPSHOT.json").write_bytes(raw)
         with client.open_sftp() as sftp:
-            for name in ("REGISTRY.json","controller_v2.pid.json","CONTROLLER_V2_HANDOFF.json",
+            for name in ("REGISTRY.json","controller_v3.pid.json","CONTROLLER_V3_HANDOFF.json","CAET_GOAL_DEFERRED.json",
                          "LIBERO50_REGISTRY_ACCEPTANCE.json"):
                 with sftp.open(Q+"/"+name,"rb") as f:data=f.read()
                 json.loads(data)

@@ -1,0 +1,304 @@
+{
+  "status": "COMPLETED_GAIN",
+  "seed": 43,
+  "engineering": "LOCAL_INDEPENDENT_PASS",
+  "observed_at": "2026-10-21T17:55:03.410898+08:00",
+  "metrics": {
+    "AUC": {
+      "fraction": "243/320",
+      "percent": 75.9375
+    },
+    "FWT": {
+      "fraction": "3/4",
+      "percent": 75.0
+    },
+    "NBT": {
+      "fraction": "-1/45",
+      "percent": -2.2222222222222223
+    },
+    "OldFinal": {
+      "fraction": "17/20",
+      "percent": 85.0
+    },
+    "FinalAll": {
+      "fraction": "3/4",
+      "percent": 75.0
+    }
+  },
+  "baseline": {
+    "AUC": {
+      "fraction": "721/960",
+      "percent": 75.10416666666667
+    },
+    "FWT": {
+      "fraction": "3/4",
+      "percent": 75.0
+    },
+    "NBT": {
+      "fraction": "-1/72",
+      "percent": -1.3888888888888888
+    },
+    "OldFinal": {
+      "fraction": "49/60",
+      "percent": 81.66666666666667
+    },
+    "FinalAll": {
+      "fraction": "3/4",
+      "percent": 75.0
+    }
+  },
+  "delta": {
+    "AUC": {
+      "fraction": "1/120",
+      "percent": 0.8333333333333334
+    },
+    "FWT": {
+      "fraction": "0",
+      "percent": 0.0
+    },
+    "NBT": {
+      "fraction": "-1/120",
+      "percent": -0.8333333333333334
+    },
+    "OldFinal": {
+      "fraction": "1/30",
+      "percent": 3.3333333333333335
+    },
+    "FinalAll": {
+      "fraction": "0",
+      "percent": 0.0
+    }
+  },
+  "gate": true,
+  "matrix": [
+    {
+      "stage": 6,
+      "task": 6,
+      "current": "3/5",
+      "baseline": "3/5"
+    },
+    {
+      "stage": 7,
+      "task": 6,
+      "current": "19/20",
+      "baseline": "13/20"
+    },
+    {
+      "stage": 7,
+      "task": 7,
+      "current": "1",
+      "baseline": "19/20"
+    },
+    {
+      "stage": 8,
+      "task": 6,
+      "current": "7/20",
+      "baseline": "2/5"
+    },
+    {
+      "stage": 8,
+      "task": 7,
+      "current": "1",
+      "baseline": "1"
+    },
+    {
+      "stage": 8,
+      "task": 8,
+      "current": "19/20",
+      "baseline": "9/10"
+    },
+    {
+      "stage": 9,
+      "task": 6,
+      "current": "11/20",
+      "baseline": "1/2"
+    },
+    {
+      "stage": 9,
+      "task": 7,
+      "current": "1",
+      "baseline": "19/20"
+    },
+    {
+      "stage": 9,
+      "task": 8,
+      "current": "1",
+      "baseline": "1"
+    },
+    {
+      "stage": 9,
+      "task": 9,
+      "current": "9/20",
+      "baseline": "11/20"
+    }
+  ],
+  "formal": {
+    "records": 200,
+    "completed_vectors": 20,
+    "started_vectors": 20,
+    "completed_cells": 10,
+    "technical_exceptions": 0,
+    "mean_vector_seconds": 180.6091672062874,
+    "remaining_evaluation_hours": 0.0
+  },
+  "epochs": 400,
+  "optimizer_steps": 105500,
+  "checkpoints": [
+    {
+      "task": 6,
+      "sha256": "c888a1cec17df9f1dd847568ec2e06bfc5b6b585f7531801777b67819fa7276f",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 7,
+      "sha256": "d46cee637da048906e9230bc828100418bbd03b2199bccfbbf4ce11f813c803d",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 8,
+      "sha256": "3947db68b3236fc72bf77665ec6449f01775e99319f53bca69cdf7f24ad80537",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 9,
+      "sha256": "76fc86f310a605fa6c1b96e272218519f4259d27c81c0dba11f47c8e3de7487c",
+      "strict_loaded_keys": 100
+    }
+  ],
+  "auxiliary": {
+    "6": {
+      "epoch_files": 100,
+      "updates": 15700,
+      "active_updates": 0
+    },
+    "7": {
+      "epoch_files": 100,
+      "updates": 22700,
+      "active_updates": 22696
+    },
+    "8": {
+      "epoch_files": 100,
+      "updates": 30900,
+      "active_updates": 30895
+    },
+    "9": {
+      "epoch_files": 100,
+      "updates": 36200,
+      "active_updates": 36200
+    }
+  },
+  "effect_audit": {
+    "labels": [
+      {
+        "task": 6,
+        "valid_labels": 1482,
+        "retained": 781,
+        "physical_recomputation_exact": true
+      },
+      {
+        "task": 7,
+        "valid_labels": 1400,
+        "retained": 740,
+        "physical_recomputation_exact": true
+      },
+      {
+        "task": 8,
+        "valid_labels": 1480,
+        "retained": 780,
+        "physical_recomputation_exact": true
+      },
+      {
+        "task": 9,
+        "valid_labels": 1239,
+        "retained": 660,
+        "physical_recomputation_exact": true
+      }
+    ],
+    "predictors": [
+      {
+        "status": "PASS",
+        "task": 7,
+        "epochs": 10,
+        "optimizer_steps": 310,
+        "train_windows": 1967,
+        "heldout_windows": 194,
+        "global_positive_pairs": 4760,
+        "global_negative_pairs": 1444460,
+        "observed_training_positive_pairs": 1534,
+        "heldout_final_normalized_mae": [
+          0.45298081636428833,
+          0.22980472445487976,
+          0.20912618935108185,
+          0.258125364780426,
+          0.14069291949272156,
+          0.15037554502487183
+        ],
+        "action_gradient_l1": 0.034193579107522964,
+        "action_gradient_finite": true,
+        "frozen_predictor_sha256": "eb161b4201de18227b316beaa96c2379c25692e60e8eb4fd80f2be3c9c7b8e5f",
+        "source_dataset_windows": 2261,
+        "policy_updates": 0,
+        "training_only_scale_floor": 1e-06,
+        "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
+        "validation_is_not_closed_loop_evidence": true
+      },
+      {
+        "status": "PASS",
+        "task": 8,
+        "epochs": 10,
+        "optimizer_steps": 430,
+        "train_windows": 2697,
+        "heldout_windows": 259,
+        "global_positive_pairs": 15272,
+        "global_negative_pairs": 3673120,
+        "observed_training_positive_pairs": 3486,
+        "heldout_final_normalized_mae": [
+          0.5309181809425354,
+          0.20723843574523926,
+          0.32502955198287964,
+          0.23538978397846222,
+          0.14983250200748444,
+          0.16678278148174286
+        ],
+        "action_gradient_l1": 0.028098054230213165,
+        "action_gradient_finite": true,
+        "frozen_predictor_sha256": "45a5b5c044e3a8c736c60fd07b1301ca8030bdeff04c2b35ad9054a443b2d65e",
+        "source_dataset_windows": 3081,
+        "policy_updates": 0,
+        "training_only_scale_floor": 1e-06,
+        "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
+        "validation_is_not_closed_loop_evidence": true
+      },
+      {
+        "status": "PASS",
+        "task": 9,
+        "epochs": 10,
+        "optimizer_steps": 500,
+        "train_windows": 3156,
+        "heldout_windows": 312,
+        "global_positive_pairs": 15484,
+        "global_negative_pairs": 5993390,
+        "observed_training_positive_pairs": 3008,
+        "heldout_final_normalized_mae": [
+          0.46635621786117554,
+          0.2578721046447754,
+          0.2526950538158417,
+          0.28803005814552307,
+          0.14197294414043427,
+          0.13364407420158386
+        ],
+        "action_gradient_l1": 0.051555752754211426,
+        "action_gradient_finite": true,
+        "frozen_predictor_sha256": "e3ff7493b24981dd02d80575df2e4ff0884acaa9af5ad3aae4a6b06b0a60157d",
+        "source_dataset_windows": 3620,
+        "policy_updates": 0,
+        "training_only_scale_floor": 1e-06,
+        "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
+        "validation_is_not_closed_loop_evidence": true
+      }
+    ]
+  },
+  "summed_epoch_seconds": 4827.190313816071,
+  "source_details_sha256": "fe5e5ee0f6e372a35c014d9c72704d764ffdbb0405364eab2aa7a28bda0dbe2e",
+  "server_audit_sha256": "73ce7462c20901535fedd032a4ba135d2c73897a70580fac459c6bac4ab88bb1"
+}
