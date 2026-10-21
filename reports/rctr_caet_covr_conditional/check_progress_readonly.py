@@ -13,7 +13,7 @@ Q="/data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020"
 COMMAND=f"/data/mlr_ifa/env/bin/python {Q}/monitor_snapshot_v2.py"
 W="/data/mlr_ifa/experiment_workspaces/RCTR_OBJECT_seed42_full_20261021"
 DETAIL_CODE=r'''
-import collections,json,time
+import collections,json,time,subprocess
 from pathlib import Path
 from coreset_exp.common import O,verify,sha
 c=verify()
@@ -50,16 +50,34 @@ for task in (6,7,8,9):
             first_step=stats[0]["step"],last_step=stats[-1]["step"],
             all_steps=[r["step"] for r in stats],
             file_sha256={p.name:sha(p) for p in files})
+evaluation=O/"ra_coreset/evaluation"
+def jsonlines(p):
+    return [json.loads(line) for line in p.read_bytes().splitlines(keepends=True) if line.endswith(b"\n")]
+formal=dict(trials=[r for p in sorted(evaluation.glob("trials*.jsonl")) for r in jsonlines(p)],
+    attempts=[r for p in sorted(evaluation.glob("attempts*.jsonl")) for r in jsonlines(p)],
+    cells={p.name:read(p) for p in sorted(evaluation.glob("cell*.json"))},
+    complete=read(evaluation/"EVALUATION_COMPLETE.json"))
+workers=[]
+for proc in Path('/proc').glob('[0-9]*'):
+    try:
+        env=(proc/'environ').read_bytes().split(b'\0')
+        if ('CORESET_OUT='+str(O)).encode() in env:
+            cmd=(proc/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
+            if 'python -c' not in cmd and 'python -u -c' not in cmd:
+                workers.append(dict(pid=int(proc.name),command=cmd))
+    except (OSError,PermissionError):pass
 result=dict(unix=time.time(),status="FROZEN_CONTRACT_INPUTS_PASS",
     contract_sha256=sha(O/"CONTRACT.json"),source_files=len(c["source_sha256"]),
     committed=rows,collections_by_task=collections_by_task,auxiliary=auxiliary,
     epochs=read(O/"ra_coreset/epochs.json"),run_status=read(O/"RUN_STATUS.json"),
+    training_complete=read(O/"ra_coreset/TRAINING_COMPLETE.json"),formal=formal,
+    worker_processes=workers,
     exits={p.name:p.read_text().strip() for p in O.glob("*.exit")},
     collection_status=read(root/"RUN_STATUS.json"),
     live_step=read(root/"LIVE_STEP.json"),commands=read(O/"pipeline.pid.json"),
     logs={p.name:dict(bytes=p.stat().st_size,mtime=p.stat().st_mtime,
          tail=p.read_text(errors="replace")[-2000:])
-         for p in sorted(O.glob("*.log")) if p.name.startswith(("collect","train","pipeline","supervisor"))},
+         for p in sorted(O.glob("*.log")) if p.name.startswith(("collect","train","evaluate","pipeline","supervisor"))},
     checkpoint_files=[dict(name=p.name,bytes=p.stat().st_size,mtime=p.stat().st_mtime)
                       for p in (O/"ra_coreset/models").glob("*.pth")])
 print(json.dumps(result,indent=2))

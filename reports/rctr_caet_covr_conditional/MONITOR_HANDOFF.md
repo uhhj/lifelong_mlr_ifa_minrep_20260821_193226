@@ -1,5 +1,7 @@
 # 三方案与LIBERO-50执行交接（以本版为准）
 
+最新2026-10-21 08:14 CST：progress_20261021_081224，400epoch/105500主步全部完成，evaluate PID49522及10环境子进程正常。Task6/7/8采集460/456/472分支（合计1368探索20确认），认证记录均0，三个ACCEPTANCE PASS；Task8有4个快照进入确认，均未过。四任务训练辅助激活均0，不能将后续分数差解释为RCTR监督收益。没有修改既定AUC扩展门槛。正式10/200条、1完成vector+1进行中、0技术异常；原0–19/seed与记录唯一性复算PASS，176源码输入hash PASS，7个train/collect退出均0。首完成vector约283.8秒，剩余评估暂估1.50小时，未计最终验收。用新版check_progress_readonly.py --details读取formal/worker_processes，audit_progress_stages.py已适配evaluate阶段和记录/attempt复算；服务器mon进程筛选不含coreset_exp.evaluate，不能因其processes列表未列评估而误报退出。外置本地脚本变化不影响科学冻结源。仍30分钟检查，LIBERO50尚未GPU准入。
+
 最新2026-10-21 07:41 CST：progress_20261021_074031，仍正常collect8，420已提交辅助分支（404探索16确认）、51221策略步；未完成采集验收，不能把412次成功当作认证记录。300epoch/69300主步、正式0条不变。176源码/冻结输入、逐分支账目和本地复算PASS，无重复start；无需恢复。Task8已观测均值10.54秒/分支，剩余最大计划量若同速约15分钟，之后仍需Task9训练和正式评估。为观察交接将原自动化改30分钟，不新建。LIBERO50保持数据就绪未GPU准入，GPU正常，数据盘15.85GiB/系统5.51GiB。每次采集/评估完成按原合同验收，门槛不变。
 
 最新2026-10-21 06:38 CST：progress_20261021_063655，collect8 PID48670正常，累计300epoch/69300主步、正式0条。Task7完成456探索、0确认、27758策略步；456分支全成功，未出现配对挽救，0认证记录，collect7.exit0。Task8训练100epoch/30900步、辅助激活0，train8.exit0。Task6/7认证及逐分支attempt独立复算PASS，无重复start；176源码/冻结输入PASS。Task8观察87分支（83探索4确认），8110策略步，尚未完成认证验收。初期7.99秒/分支，当前剩余探索确认若同速约0.93小时，非硬上界且不代表整队列完成；保留每小时检查。数据盘约15.88GiB/系统盘5.51GiB，LIBERO50未GPU准入。仍使用check_progress_readonly.py及audit_progress_stages.py，无实验重启或科学修改。不要把Task7辅助全成功或Task8中间成功当正式结果/认证记录。

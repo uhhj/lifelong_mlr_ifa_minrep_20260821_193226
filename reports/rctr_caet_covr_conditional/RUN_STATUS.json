@@ -1,12 +1,12 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-21T07:41:18.698887+08:00",
+  "observed_at": "2026-10-21T08:14:13.283267+08:00",
   "active": "RCTR_OBJECT_42",
-  "phase": "collect8",
-  "epochs": 300,
-  "optimizer_steps": 69300,
-  "formal_records": 0,
-  "collection_branches": 1336,
+  "phase": "evaluate",
+  "epochs": 400,
+  "optimizer_steps": 105500,
+  "formal_records": 10,
+  "collection_branches": 1388,
   "object_entries_deployed": 9,
   "goal_entries_deployed": 6,
   "libero50_entries_deployed": 3,
@@ -20,7 +20,7 @@
   "caet_goal_admission": "Stage7 has no moving cross-task positive pairs; not admitted",
   "controller_version": 2,
   "controller_pid": 47521,
-  "latest_progress": "progress_20261021_074031",
+  "latest_progress": "progress_20261021_081224",
   "collections": {
     "6": {
       "branches": 460,
@@ -209,34 +209,114 @@
       }
     },
     "8": {
-      "branches": 420,
-      "exploration": 404,
+      "branches": 472,
+      "exploration": 456,
       "confirmation": 16,
-      "policy_steps": 51221,
-      "successful_branches": 412,
-      "accepted": false,
-      "certified_records": null,
+      "policy_steps": 53782,
+      "successful_branches": 464,
+      "accepted": true,
+      "certified_records": 0,
       "repeated_start_keys": 0,
-      "pending_branch_keys": [
-        "25_40_exploration_0_a1_+1_2"
+      "pending_branch_keys": [],
+      "certifications": [
+        {
+          "initial": 20,
+          "snapshot_step": 40,
+          "exploratory_candidates": 2,
+          "certified": false
+        },
+        {
+          "initial": 20,
+          "snapshot_step": 120,
+          "exploratory_candidates": 0,
+          "certified": false
+        },
+        {
+          "initial": 21,
+          "snapshot_step": 40,
+          "exploratory_candidates": 0,
+          "certified": false
+        },
+        {
+          "initial": 21,
+          "snapshot_step": 120,
+          "exploratory_candidates": 0,
+          "certified": false
+        },
+        {
+          "initial": 22,
+          "snapshot_step": 40,
+          "exploratory_candidates": 0,
+          "certified": false
+        },
+        {
+          "initial": 22,
+          "snapshot_step": 120,
+          "exploratory_candidates": 0,
+          "certified": false
+        },
+        {
+          "initial": 23,
+          "snapshot_step": 40,
+          "exploratory_candidates": 2,
+          "certified": false
+        },
+        {
+          "initial": 23,
+          "snapshot_step": 120,
+          "exploratory_candidates": 0,
+          "certified": false
+        },
+        {
+          "initial": 24,
+          "snapshot_step": 40,
+          "exploratory_candidates": 1,
+          "certified": false
+        },
+        {
+          "initial": 24,
+          "snapshot_step": 120,
+          "exploratory_candidates": 1,
+          "certified": false
+        },
+        {
+          "initial": 25,
+          "snapshot_step": 40,
+          "exploratory_candidates": 0,
+          "certified": false
+        },
+        {
+          "initial": 25,
+          "snapshot_step": 120,
+          "exploratory_candidates": 0,
+          "certified": false
+        }
       ],
-      "certifications": [],
       "attempt_event_counts": {
-        "control_step_start": 926,
-        "control_step_complete": 926,
-        "engineering_repeat_start": 22,
-        "engineering_gate_complete": 11,
-        "branch_start": 421,
-        "branch_complete": 420
+        "control_step_start": 942,
+        "control_step_complete": 942,
+        "engineering_repeat_start": 24,
+        "engineering_gate_complete": 12,
+        "branch_start": 472,
+        "branch_complete": 472
       }
     }
   },
   "current_stage_eta": {
-    "task": 8,
-    "observed_branches": 420,
-    "seconds_per_branch": 10.540548495899877,
-    "remaining_upper_hours": 0.24594613157099715,
+    "phase": "evaluate",
+    "observed_vectors": 1,
+    "seconds_per_vector": 283.7753257751465,
+    "remaining_hours": 1.4977031082577175,
     "provisional": true,
-    "basis": "Current-stage branch execution times; early successes may understate future cost"
+    "basis": "Completed vector wall time, excludes final audits and later conditional experiments"
+  },
+  "formal_audit": {
+    "records": 10,
+    "completed_vectors": 1,
+    "started_vectors": 2,
+    "completed_cells": 0,
+    "technical_exceptions": 0,
+    "unique_records": true,
+    "mean_seconds_per_completed_vector": 283.7753257751465
   }
 }

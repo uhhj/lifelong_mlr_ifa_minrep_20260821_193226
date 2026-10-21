@@ -94,7 +94,8 @@ def main():
         old=sum(summaries[str(j)]['certified_records'] or 0 for j in range(6,t))
         assert aux['active_updates']==(aux['updates'] if old else 0)
     at=datetime.datetime.fromtimestamp(d['unix'],datetime.timezone(datetime.timedelta(hours=8))).isoformat()
-    phase=d['run_status']['phase'];active=int(phase[-1]) if phase.startswith('collect') else None
+    phase=d['run_status'].get('phase') or ('evaluate' if d['run_status']['status']=='EVALUATING' else d['run_status']['status'])
+    active=int(phase[-1]) if phase.startswith('collect') else None
     estimate=None
     if active:
         rr=d['collections_by_task'][str(active)]['committed']
@@ -104,25 +105,66 @@ def main():
             estimate=dict(task=active,observed_branches=len(rr),seconds_per_branch=seconds,
                 remaining_upper_hours=((456-count['exploration'])+(48-count['confirmation']))*seconds/3600,
                 provisional=True,basis='Current-stage branch execution times; early successes may understate future cost')
+    formal_audit=None
+    formal_count=run['formal_records']
+    if 'formal' in d:
+        f=d['formal'];trials=f['trials'];attempts=f['attempts'];formal_count=len(trials)
+        assert formal_count>=run['formal_records'] and formal_count<=200
+        keys=[(r['stage'],r['task'],r['trial']) for r in trials];assert len(keys)==len(set(keys))
+        for r in trials:
+            assert 6<=r['task']<=r['stage']<=9 and r['epoch']==99 and r['seed']==42
+            assert 0<=r['trial']<20 and r['initial_state_index']==r['trial']
+            assert r['initial_state_sha256']==r['initial_hashes'][r['trial']]
+            assert isinstance(r['success'],bool) and 0<r['vector_group_steps']<=600
+        assert not any(e['event']=='technical_exception' for e in attempts)
+        starts={(e['stage'],e['task'],e['group']):e for e in attempts if e['event']=='vector_attempt_start'}
+        done={(e['stage'],e['task'],e['group']):e for e in attempts if e['event']=='vector_attempt_complete'}
+        assert len(starts)==sum(e['event']=='vector_attempt_start' for e in attempts)
+        assert len(done)==sum(e['event']=='vector_attempt_complete' for e in attempts)
+        assert set(done)<=set(starts) and len(starts)<=20
+        for key,e in starts.items():
+            assert e['group'] in (0,1) and e['env_seed']==42+e['group']
+            assert e['initial_indices']==list(range(10*e['group'],10*(e['group']+1)))
+        for key,e in done.items():
+            rows=sorted((r for r in trials if (r['stage'],r['task'],r['trial']//10)==key),key=lambda r:r['trial'])
+            assert len(rows)==10 and [r['success'] for r in rows]==e['successes']
+            assert all(r['vector_group_steps']==e['steps'] for r in rows)
+            assert 0<e['steps']<=600 and e['lanes']==10
+        for cell in f['cells'].values():
+            rows=[r for r in trials if (r['stage'],r['task'])==(cell['stage'],cell['task'])]
+            assert len(rows)==20 and sum(r['success'] for r in rows)/20==cell['success_rate']
+        durations=[e['unix']-starts[k]['unix'] for k,e in done.items()]
+        formal_audit=dict(records=formal_count,completed_vectors=len(done),started_vectors=len(starts),
+            completed_cells=len(f['cells']),technical_exceptions=0,unique_records=True,
+            mean_seconds_per_completed_vector=sum(durations)/len(durations) if durations else None)
+        if phase=='evaluate' and durations:
+            estimate=dict(phase='evaluate',observed_vectors=len(done),
+                seconds_per_vector=sum(durations)/len(durations),
+                remaining_hours=(20-len(done))*sum(durations)/len(durations)/3600,
+                provisional=True,basis='Completed vector wall time, excludes final audits and later conditional experiments')
     result=dict(status='PARTIAL_PROGRESS_AUDIT_PASS',observed_at=at,phase=phase,
-        epochs=len(history),optimizer_steps=steps,formal_records=run['formal_records'],
+        epochs=len(history),optimizer_steps=steps,formal_records=formal_count,formal_audit=formal_audit,
         collections=summaries,auxiliary={t:{k:v for k,v in a.items() if k not in ('all_steps','file_sha256')}
                                        for t,a in d['auxiliary'].items()},
         current_stage_eta=estimate,source_and_input_hashes_pass=True,source_files=176,
         command_exits=d['exits'],libero50_gpu_admitted=False,experiment_recovery_performed=False,
         files={f.name:sha(f) for f in p.iterdir() if f.is_file() and f.name not in ('AUDIT.json','REPORT.md')})
     (p/'AUDIT.json').write_text(json.dumps(result,indent=2)+'\n')
-    report=f'# 阶段交接只读核查 — PARTIAL\n\n观察时间：{at}。当前 {phase}，累计{len(history)} epoch、{steps}次主更新，正式评估{run["formal_records"]}条。\n\n'
+    report=f'# 阶段交接只读核查 — PARTIAL\n\n观察时间：{at}。当前 {phase}，累计{len(history)} epoch、{steps}次主更新，正式评估{formal_count}条。\n\n'
     for t,s in summaries.items():
         report+=f'- Task{t}：{s["branches"]}个辅助分支（探索{s["exploration"]}、确认{s["confirmation"]}），{s["policy_steps"]}策略步；完成采集验收={s["accepted"]}；认证训练记录={s["certified_records"]}。\n'
     report+='\n辅助分支成功不等于通过两级认证。已完成阶段按原始逐分支结果独立复算候选排序、探索与确认门槛；未放宽阈值或追加预算。\n\n'
     for t,a in result['auxiliary'].items():
         report+=f'Task{t}训练：{a["updates"]}次更新，其中RCTR辅助激活{a["active_updates"]}次。\n\n'
-    if estimate:report+=f'当前Task{active}仅{estimate["observed_branches"]}分支，实测均值{estimate["seconds_per_branch"]:.2f}秒/分支，若持续该速度，剩余探索与确认上限约{estimate["remaining_upper_hours"]:.2f}小时。早期成功较快，阶段初期估时不稳，不能作为整套实验ETA。\n\n'
+    if estimate and active:report+=f'当前Task{active}仅{estimate["observed_branches"]}分支，实测均值{estimate["seconds_per_branch"]:.2f}秒/分支，若持续该速度，剩余探索与确认上限约{estimate["remaining_upper_hours"]:.2f}小时。早期成功较快，阶段初期估时不稳，不能作为整套实验ETA。\n\n'
+    if formal_audit:
+        report+=f'正式评估：{formal_count}/200条，完成{formal_audit["completed_vectors"]}/20个vector，0技术异常，记录身份/唯一性与已完成vector结果一致；不计算未完成全指标。\n\n'
+    if estimate and phase=='evaluate':
+        report+=f'按已完成{estimate["observed_vectors"]}个vector的实测均值{estimate["seconds_per_vector"]:.1f}秒推算，剩余评估约{estimate["remaining_hours"]:.2f}小时；仅早期估计，未含最终验收及后续方案。\n\n'
     report+='176个冻结源码及输入hash通过；本轮只更新本地外置读数与复算脚本，没有修改服务器科学代码、合同、模型或运行流程。全部实际已产生阶段退出码为0，队列尚未退出。LIBERO50数据就绪但GPU尚未准入。\n'
     (p/'REPORT.md').write_text(report,encoding='utf8')
     state=read(R/'RUN_STATUS.json');state.update(status='PARTIAL',observed_at=at,phase=phase,
-        epochs=len(history),optimizer_steps=steps,formal_records=run['formal_records'],
+        epochs=len(history),optimizer_steps=steps,formal_records=formal_count,formal_audit=formal_audit,
         collection_branches=sum(x['branches'] for x in summaries.values()),collections=summaries,
         latest_progress=p.name,current_stage_eta=estimate)
     state.pop('seconds_per_collection_branch',None)
