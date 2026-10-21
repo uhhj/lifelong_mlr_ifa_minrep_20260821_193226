@@ -35,3 +35,8 @@ CAET-v2 OBJECT41已378epoch/97536主步，Task8/9预测器留出均PASS，Task8�
 ## 2026-10-22 01:31更新
 
 最新2026-10-22 01:31 CST：progress_seed41_20261022_013003完成400epoch105500主步，train6–9/retain6–9全部exit0，507冻结hash与Task6实际tensor同RA、本地逐epoch/逐步账目PASS。Task8/9迁移实际7602/9103步，冲突关闭6224/6998，保护非零2915/4186步；两预测器留出PASS，拟合额外1840更新。Task7全RA回退。正式60/200条、6完成vector+1进行中、0技术异常；evaluate PID72624及10环境正常。新增外置audit_evaluation_progress.py <目录> <seed>，逐episode初态hash/index/envseed/600步及attempt唯一性/成功向量独立PASS，cell summary留最终包。6批均249.01秒，剩余约58分钟加最终审计，预计02:30–03:00 CST供参考。仍PARTIAL，无部分AUC或性能结论。未重启、未改科学源、未重复预检；43和LIBERO50仍排队未GPU准入。容量watcher仍ARMED未接管，data普通空闲9.205GB/root全空闲14.075GB，system普通5.902GB；无需对活动payload操作。下一轮继续核41正式评估，完成后package_final/audit_final 41并确认43自动准入。
+
+
+## 2026-10-22 01:58更新
+
+最新2026-10-22 01:58 CST：progress_seed41_20261022_015731，seed41正式130/200条，13完成vector+1进行中，0技术异常，evaluate72624及10环境正常；400epoch105500主步、Task8/9迁移7602/9103与保护2915/4186不变。507冻结hash及逐epoch/逐步/逐episode身份与attempt成功向量独立PASS。13批均243.30秒，剩余评估约28.4分钟加最终验收，预计02:30–02:55参考。正常无重启，无部分AUC。43与LIBERO50仍排队未GPU准入，容量watcher仍ARMED未接管，data普通9.205GB/root全部14.075GB、system普通5.902GB。下一轮若完成先package_final.py 41和audit_final.py <包> 41真实独立验收，并核43自动启动；若仍评估则继续原进程，禁止盲重启。
