@@ -1,10 +1,10 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-21T10:17:14.925160+08:00",
+  "observed_at": "2026-10-21T10:44:31.548297+08:00",
   "active": "CAET_OBJECT_42",
   "phase": "TRAINING",
-  "epochs": 261,
-  "optimizer_steps": 57249,
+  "epochs": 359,
+  "optimizer_steps": 90658,
   "formal_records": 0,
   "object_entries_deployed": 9,
   "goal_entries_deployed": 6,
@@ -19,9 +19,9 @@
   "caet_goal_admission": "Stage7 has no moving cross-task positive pairs; not admitted",
   "controller_version": 2,
   "controller_pid": 47521,
-  "latest_progress": "progress_20261021_101253",
+  "latest_progress": "progress_20261021_104229",
   "current_stage_eta": {
-    "remaining_main_training_hours": 0.6134138859334245,
+    "remaining_main_training_hours": 0.17917095877805447,
     "full_evaluation_reference_hours": 1.321268334256278,
     "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
   },
@@ -197,18 +197,18 @@
   "caet_progress": {
     "status": "PARTIAL",
     "audit": "CAET_PROGRESS_PASS",
-    "observed_at": "2026-10-21T10:17:14.925160+08:00",
-    "epochs": 261,
-    "optimizer_steps": 57249,
+    "observed_at": "2026-10-21T10:44:31.548297+08:00",
+    "epochs": 359,
+    "optimizer_steps": 90658,
     "latest_epoch": {
-      "task": 8,
-      "epoch": 60,
-      "batches": 309,
-      "steps": 57249,
-      "loss": -28.71112938297605,
-      "lr_first": 4.0657894736842105e-05,
-      "lr_after": 3.964144736842105e-05,
-      "seconds": 13.322552919387817
+      "task": 9,
+      "epoch": 58,
+      "batches": 362,
+      "steps": 90658,
+      "loss": -29.001199543146797,
+      "lr_first": 4.258823529411765e-05,
+      "lr_after": 4.157422969187675e-05,
+      "seconds": 13.66915488243103
     },
     "formal_records": 0,
     "auxiliary": {
@@ -223,14 +223,14 @@
         "active_updates": 22695
       },
       "8": {
-        "epoch_files": 61,
-        "updates": 18849,
-        "active_updates": 18847
+        "epoch_files": 100,
+        "updates": 30900,
+        "active_updates": 30897
       },
       "9": {
-        "epoch_files": 0,
-        "updates": 0,
-        "active_updates": 0
+        "epoch_files": 59,
+        "updates": 21358,
+        "active_updates": 21358
       }
     },
     "effects": {
@@ -256,6 +256,33 @@
         "action_gradient_finite": true,
         "frozen_predictor_sha256": "dffede2aaf2a6cc48696bfc448f8dd974e8e77e59516202312717adcd32ccaab",
         "source_dataset_windows": 2261,
+        "policy_updates": 0,
+        "training_only_scale_floor": 1e-06,
+        "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
+        "validation_is_not_closed_loop_evidence": true
+      },
+      "effects/models/task9/ACCEPTANCE.json": {
+        "status": "PASS",
+        "task": 9,
+        "epochs": 10,
+        "optimizer_steps": 500,
+        "train_windows": 3149,
+        "heldout_windows": 331,
+        "global_positive_pairs": 12738,
+        "global_negative_pairs": 6015254,
+        "observed_training_positive_pairs": 2514,
+        "heldout_final_normalized_mae": [
+          0.4357820153236389,
+          0.2464473992586136,
+          0.2631279528141022,
+          0.25193893909454346,
+          0.14883464574813843,
+          0.15990708768367767
+        ],
+        "action_gradient_l1": 0.031236037611961365,
+        "action_gradient_finite": true,
+        "frozen_predictor_sha256": "b3ce76a3d85299a34adf77fe14e5d3cdb6769014c10548c72378479eabf4c5a4",
+        "source_dataset_windows": 3620,
         "policy_updates": 0,
         "training_only_scale_floor": 1e-06,
         "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
@@ -292,17 +319,50 @@
     "source_files": 204,
     "source_input_feature_hashes_pass": true,
     "phase_exits": {
+      "labels9.exit": "0",
       "fit8.exit": "0",
       "labels8.exit": "0",
       "train7.exit": "0",
       "train6.exit": "0",
+      "fit9.exit": "0",
       "fit7.exit": "0",
+      "train8.exit": "0",
       "labels7.exit": "0",
+      "retain8.exit": "0",
       "retain6.exit": "0",
       "retain7.exit": "0"
     },
+    "storage": {
+      "6": {
+        "count": 781,
+        "ordered_ids_equal": true,
+        "payloads_equal": true,
+        "manifest_sha256": "ee620d348ce02cc03ac5ad1b1144052aa84f63b937c99c237c88af923cf9b16a",
+        "parent_manifest_sha256": "380535fa0c80162362e202be714c93e19d5733d694ce7b92ea6e8209b90f6ef1"
+      },
+      "7": {
+        "count": 740,
+        "ordered_ids_equal": true,
+        "payloads_equal": true,
+        "manifest_sha256": "4f78835d4d266dfba694ee88b901ed5fe966f9835a74e5aa0e5d399ab07975da",
+        "parent_manifest_sha256": "b4852187de769cf2d194c90bdb77b8e73007c0c7fd564af03f1097b48ba06cc8"
+      },
+      "8": {
+        "count": 780,
+        "ordered_ids_equal": true,
+        "payloads_equal": true,
+        "manifest_sha256": "fe7dd00a84e3080973a28de86037fc230915fd293db90f1fe01e0f12a4a7d024",
+        "parent_manifest_sha256": "425d8398a6d41e5db573d671801d1af034c13f99e4cf441e0823680ecb3e87e3"
+      }
+    },
+    "ifa_equal": {
+      "ifa_task7.json": true,
+      "ifa_task9.json": true,
+      "ifa_task6.json": true,
+      "ifa_task8.json": true
+    },
     "eta": {
-      "remaining_main_training_hours": 0.6134138859334245,
+      "remaining_main_training_hours": 0.17917095877805447,
       "full_evaluation_reference_hours": 1.321268334256278,
       "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
     },
@@ -311,8 +371,8 @@
       "sha256": "70bad60c3fdb46703de5d5154f2128ced3138bb10c60660832c9db2557547a1b",
       "recomputed_this_check": false
     },
-    "details_sha256": "8bb59b1d67788610bcb2609a4f1e7ba32299d4d4d74d3719237ab7a954447683",
-    "snapshot_sha256": "45e9874425d01659a9a9365bb0ecc90103d6518e3babd1b7c35d24bf6606cb09",
+    "details_sha256": "d4d2f869c0adf8f06e37828529a54e5b3e47eeb15fc609b08fc67bc728b6c7bf",
+    "snapshot_sha256": "4eddc14720f3030ec8f6e605fbb11c26f0e9e89d17cdd854cbe17ef0a5b0c6ac",
     "optimizer_calls_in_this_check": 0,
     "environment_steps_in_this_check": 0
   }

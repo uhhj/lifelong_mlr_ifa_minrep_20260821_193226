@@ -149,7 +149,25 @@ for proc in Path('/proc').glob('[0-9]*'):
             if 'python -c' not in cmd:result['caet']['workers'].append(dict(pid=int(proc.name),command=cmd))
     except (OSError,PermissionError):pass
 result['caet']['checkpoints']=[dict(name=p.name,bytes=p.stat().st_size) for p in (output/'ra_coreset/models').glob('*.pth')]
-result['caet']['storage_metadata']={str(p.relative_to(output)):read(p) for p in (output/'ra_coreset').glob('**/STORAGE_COMMIT.json')}
+parent=Path(read(output/'PARENT_BINDING.json')['parent'])
+root=output/'ra_coreset'
+result['caet']['initial_rng_equal']=read(root/'INITIAL_STATE.json')==read(parent/'ra_coreset/INITIAL_STATE.json')
+result['caet']['storage_metadata']={}
+for manifest in sorted((root/'storage').glob('task*.json')):
+    task=int(manifest.stem[4:])
+    if not (output/('retain%d.exit'%task)).exists():continue
+    current=read(manifest);baseline=read(parent/'ra_coreset/storage'/manifest.name)
+    assert current['K']==baseline['K']
+    assert current['selection']['selected_ids']==baseline['selection']['selected_ids']
+    def identities(m):return [(Path(x['source']).name,x['destination'],x['sha256']) for x in m['selected']]
+    assert identities(current)==identities(baseline)
+    assert all(sha(x['source'])==sha(root/'buffer'/x['destination'])==x['sha256'] for x in current['selected'])
+    result['caet']['storage_metadata'][str(task)]=dict(count=current['K'],ordered_ids_equal=True,payloads_equal=True,
+        manifest_sha256=sha(manifest),parent_manifest_sha256=sha(parent/'ra_coreset/storage'/manifest.name))
+result['caet']['ifa_equal']={}
+for f in root.glob('ifa_task*.json'):
+    assert read(f)==read(parent/'ra_coreset'/f.name)
+    result['caet']['ifa_equal'][f.name]=True
 result['observed_end_unix']=time.time()
 print(json.dumps(result,indent=2))
 '''

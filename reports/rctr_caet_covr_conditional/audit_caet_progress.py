@@ -18,6 +18,11 @@ def main():
     assert c['launch']['contract_sha256']==c['contract_sha256']
     assert c['preflight']['optimizer_calls']==4 and c['preflight']['environment_steps']==0
     assert c['task6_parity']['equal']
+    if 'storage_metadata' in c and 'initial_rng_equal' in c:
+        assert c['initial_rng_equal'] and all(c['ifa_equal'].values())
+        for task,storage in c['storage_metadata'].items():
+            assert storage['ordered_ids_equal'] and storage['payloads_equal']
+            assert storage['count']=={6:781,7:740,8:780,9:660}[int(task)]
     assert all(v=='0' for v in c['admission_exits'].values())
     assert all(v=='0' for v in c['phase_exits'].values())
     history=c['epochs'];assert len({(r['task'],r['epoch']) for r in history})==len(history)
@@ -57,6 +62,7 @@ def main():
     result=dict(status='PARTIAL',audit='CAET_PROGRESS_PASS',observed_at=at,epochs=len(history),optimizer_steps=steps,
         latest_epoch=history[-1],formal_records=len(keys),auxiliary=c['auxiliary'],effects=c['effects'],
         source_files=c['source_files'],source_input_feature_hashes_pass=True,phase_exits=c['phase_exits'],
+        storage=c.get('storage_metadata',{}),ifa_equal=c.get('ifa_equal',{}),
         eta=dict(remaining_main_training_hours=remaining,full_evaluation_reference_hours=eval_ref,
             excludes='Future labels, effect fitting, storage and final audit; no whole-program ETA'),
         completed_rctr_evidence=dict(path=str(previous.relative_to(R)),sha256=sha(previous),recomputed_this_check=False),

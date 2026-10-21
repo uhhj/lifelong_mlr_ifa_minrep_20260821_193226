@@ -1,3 +1,11 @@
+## 最新检查 2026-10-21 10:44 CST（PARTIAL）
+
+CAET OBJECT42正常Task9，359完整epoch/90658主步/0正式。Task7/8已100epoch，各22695/22700和30897/30900步辅助激活；Task9已59epoch，21358/21358步激活。三个效果预测器均10epoch，共1240辅助优化步，实际训练正对1062/2796/2514，动作梯度有限非零PASS。这些不是闭环增益。
+
+新增只读入库核验：Task6–8配额781/740/780，成员有序ID、源/目标载荷均与父RA一致；四阶段IFA名单及初始化RNG同父。204源码/输入/特征hash及已完成阶段退出0、本地CAET_PROGRESS_PASS，无实验恢复或重复预检。修正外置监控之前查找通用STORAGE_COMMIT文件的空结果，改为实际ra_coreset/storage/task*.json与retain完成标记，不改服务器源码。原首次读数另存CAET_DETAILS_first及receipt。
+
+证据progress_20261021_104229。剩余主训练实测约11分钟，完整评估参考79分钟，入库及最终验收另计，预计12:15–12:45仅参考；30分钟检查不变。数据盘14.64GiB/系统5.51GiB，LIBERO50未GPU准入。使用check_progress_readonly.py --caet及audit_caet_progress.py，不重复RCTR完成审计。
+
 ## 最新检查 2026-10-21 10:17 CST（PARTIAL）
 
 CAET OBJECT42 正常训练Task8，261完整epoch/57249主步/0正式。Task7已完成100epoch，22695/22700步实际效果辅助激活；Task8已完成61epoch，18847/18849步激活。Task8效果拟合10epoch/430辅助优化步、2796实际训练正对、动作梯度有限非零PASS。204源码及输入/特征hash、已完成阶段退出0、本地CAET_PROGRESS_PASS；无恢复或重复预检。主训练剩余约0.61小时，完整评估参考1.32小时，另计后续标签/拟合/入库/验收，整体预计12:20–13:00仅参考。
