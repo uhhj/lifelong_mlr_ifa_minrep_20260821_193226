@@ -64,6 +64,8 @@ def main():
     gate=m['AUC']>b['AUC'];assert gate==a['metric_gate']
     receipt=complete['receipt']
     assert receipt['engineering']=='PASS' and not receipt['residual_workers']
+    assert receipt['method']=='CAET' and receipt['suite']=='OBJECT' and receipt['seed']==seed
+    assert receipt['formal_records']==receipt['baseline_records']==200
     assert F(receipt['auc'])==m['AUC'] and F(receipt['baseline_auc'])==b['AUC']
     result=dict(status='COMPLETED_GAIN' if gate else 'COMPLETED_NO_GAIN',seed=seed,engineering='LOCAL_INDEPENDENT_PASS',
         observed_at=datetime.datetime.fromtimestamp(d['observed_end_unix']).astimezone().isoformat(),
