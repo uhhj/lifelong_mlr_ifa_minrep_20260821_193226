@@ -21,7 +21,7 @@ for seed in (41,42,43):
  if not e.is_file():continue
  entry=json.loads(e.read_text())
  for output in (Path(entry['output']),Path(entry['shared_pretrain_output'])):
-  for n in ('RUN_STATUS.json','GPU_PREFLIGHT.json','PRETRAIN_GPU_PREFLIGHT.json','LAUNCH_ACCEPTANCE.json','PROCESS_EXIT_ACCEPTANCE.json','pipeline.exit','supervisor.exit','PRETRAIN_COMPLETE.json','pretraining/epochs.json'):
+  for n in ('RUN_STATUS.json','GPU_PREFLIGHT.json','PRETRAIN_GPU_PREFLIGHT.json','PRETRAIN_INITIALIZATION.json','LAUNCH_ACCEPTANCE.json','PROCESS_EXIT_ACCEPTANCE.json','pipeline.exit','supervisor.exit','PRETRAIN_COMPLETE.json','pretraining/epochs.json'):
    read(output/n)
 
 for seed in (41,43):
