@@ -120,13 +120,49 @@ result['observed_end_unix']=time.time()
 print(json.dumps(result,indent=2))
 '''
 
+CAET_CODE = r'''
+import json,time,hashlib
+from pathlib import Path
+def read(p):
+    return json.loads(p.read_text()) if p.exists() else None
+def sha(p):
+    h=hashlib.sha256()
+    with open(p,'rb') as f:
+        for chunk in iter(lambda:f.read(8*1024*1024),b''):h.update(chunk)
+    return h.hexdigest()
+def jsonlines(p):
+    return [json.loads(line) for line in p.read_bytes().splitlines(keepends=True) if line.endswith(b'\n')] if p.exists() else []
+queue=Path('/data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020')
+result=dict(unix=time.time(),status='CAET_FROZEN_CONTRACT_INPUTS_PASS')
+''' + DETAIL_CODE[DETAIL_CODE.index("entry=read(queue/'REGISTRY.json')"):DETAIL_CODE.index("result['observed_end_unix']")] + r'''
+assert 'caet' in result
+evaluation=output/'ra_coreset/evaluation'
+result['caet']['formal']=dict(trials=[r for p in sorted(evaluation.glob('trials*.jsonl')) for r in jsonlines(p)],
+    attempts=[r for p in sorted(evaluation.glob('attempts*.jsonl')) for r in jsonlines(p)],
+    cells={p.name:read(p) for p in evaluation.glob('cell*.json')})
+result['caet']['workers']=[]
+for proc in Path('/proc').glob('[0-9]*'):
+    try:
+        env=(proc/'environ').read_bytes().split(b'\0')
+        if ('CORESET_OUT='+str(output)).encode() in env:
+            cmd=(proc/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
+            if 'python -c' not in cmd:result['caet']['workers'].append(dict(pid=int(proc.name),command=cmd))
+    except (OSError,PermissionError):pass
+result['caet']['checkpoints']=[dict(name=p.name,bytes=p.stat().st_size) for p in (output/'ra_coreset/models').glob('*.pth')]
+result['caet']['storage_metadata']={str(p.relative_to(output)):read(p) for p in (output/'ra_coreset').glob('**/STORAGE_COMMIT.json')}
+result['observed_end_unix']=time.time()
+print(json.dumps(result,indent=2))
+'''
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--details",type=Path)
+    ap.add_argument("--caet",type=Path,help="Only active CAET metadata; no repeated RCTR completion audit")
     args=ap.parse_args()
     stamp=datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    out=args.details or R/("progress_"+stamp)
-    if args.details:
+    assert not (args.details and args.caet)
+    out=args.details or args.caet or R/("progress_"+stamp)
+    if args.details or args.caet:
         assert out.resolve().parent==R and (out/"SNAPSHOT.json").is_file()
     client=paramiko.SSHClient()
     client.load_system_host_keys()
@@ -137,17 +173,19 @@ def main():
         client.connect("jq1.9gpu.com",port=11920,username="root",password=password,
                        allow_agent=False,look_for_keys=False,timeout=20)
         password=None
-        if args.details:
-            command=f"source {W}/env.sh && /data/mlr_ifa/env/bin/python -c {shlex.quote(DETAIL_CODE)}"
+        if args.details or args.caet:
+            command=(f"/data/mlr_ifa/env/bin/python -c {shlex.quote(CAET_CODE)}" if args.caet else
+                     f"source {W}/env.sh && /data/mlr_ifa/env/bin/python -c {shlex.quote(DETAIL_CODE)}")
             _,stdout,stderr=client.exec_command(command,timeout=180)
             raw=stdout.read();err=stderr.read();rc=stdout.channel.recv_exit_status()
             assert rc==0,(rc,err.decode(errors="replace"))
             details=json.loads(raw)
-            assert details["status"]=="FROZEN_CONTRACT_INPUTS_PASS"
-            (out/"DETAILS.json").write_bytes(raw)
-            (out/"DETAILS_RECEIPT.json").write_text(json.dumps(dict(command=command,exit=rc,
+            assert details["status"]==("CAET_FROZEN_CONTRACT_INPUTS_PASS" if args.caet else "FROZEN_CONTRACT_INPUTS_PASS")
+            prefix="CAET_DETAILS" if args.caet else "DETAILS"
+            (out/(prefix+".json")).write_bytes(raw)
+            (out/(prefix+"_RECEIPT.json")).write_text(json.dumps(dict(command=command,exit=rc,
                 sha256=hashlib.sha256(raw).hexdigest(),server_writes=0),indent=2)+"\n")
-            print(json.dumps(dict(status=details["status"],committed=len(details["committed"]),
+            print(json.dumps(dict(status=details["status"],committed=len(details.get("committed",[])),
                                   directory=str(out))))
             return
         _,stdout,stderr=client.exec_command(COMMAND,timeout=60)

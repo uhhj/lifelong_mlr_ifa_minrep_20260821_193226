@@ -1,3 +1,9 @@
+## 最新检查 2026-10-21 10:17 CST（PARTIAL）
+
+CAET OBJECT42 正常训练Task8，261完整epoch/57249主步/0正式。Task7已完成100epoch，22695/22700步实际效果辅助激活；Task8已完成61epoch，18847/18849步激活。Task8效果拟合10epoch/430辅助优化步、2796实际训练正对、动作梯度有限非零PASS。204源码及输入/特征hash、已完成阶段退出0、本地CAET_PROGRESS_PASS；无恢复或重复预检。主训练剩余约0.61小时，完整评估参考1.32小时，另计后续标签/拟合/入库/验收，整体预计12:20–13:00仅参考。
+
+本轮使用新增固定只读 `check_progress_readonly.py --caet <snapshot目录>` 与 `audit_caet_progress.py`，仅核验活跃CAET，RCTR完成证据沿用progress_20261021_094302，不重复已完成RCTR的重哈希/复算。检查证据progress_20261021_101253。新增本地监控代码不改变服务器冻结源码。数据盘约14.79GiB、系统5.51GiB；LIBERO50数据已齐，仍未GPU准入。当前30分钟检查不变，正常运行不重启。
+
 # 条件队列与 LIBERO-50 准备进度 — PARTIAL
 
 最新2026-10-21 09:46 CST：progress_20261021_094302，RCTR_OBJECT42全部完成，400epoch105500step/4CP严格加载/200正式20vector/176冻结源码输入/入库IFA/无残留/全部exit0及本地独立验收PASS。精确AUC229/320=71.5625%，FWT70、NBT-3.0555556、OldFinal65、FinalAll63.75，与RA五指标全部相同，200条成功失败结果逐条相同。三采集阶段0认证、105500步辅助激活0，无RCTR监督干预，不能把本轮作为辅助损失有效或有害的证据。按原AUC门槛不扩RCTR41/43或GOAL，controller已自动切换CAET_OBJECT42。CAET真实4隔离更新恢复0环境预检PASS、204冻结源码/输入/特征PASS、Task6张量同父；122epoch20694步、正式0。Task7效果模型10epoch310辅助更新、3660全局正对、拟合实际1062正对，动作梯度有限非零；Task7主训练4994步中4993步辅助激活。剩余主训练按当前吞吐约1.11小时，评估参考1.32小时，另计后续标签/拟合/入库/最终验收，当前预计约12:15–13:00但非承诺。服务器RUN_STATUS队列字段可能停留RCTR旧值，因为controller阻塞等待CAET launcher；以DECISION、真实进程和CAET本身状态为准。使用check_progress_readonly.py --details新增completion/caet字段及audit_rctr_completion_caet_progress.py本地复算；旧audit_progress_stages仅RCTR历史分支，不作为CAET进度报告。没有重启任何实验或修改冻结科学源。LIBERO50仍未GPU准入；数据盘约14.93GiB，系统5.51GiB。

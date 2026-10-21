@@ -1,10 +1,10 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-21T09:46:40.171092+08:00",
+  "observed_at": "2026-10-21T10:17:14.925160+08:00",
   "active": "CAET_OBJECT_42",
   "phase": "TRAINING",
-  "epochs": 122,
-  "optimizer_steps": 20694,
+  "epochs": 261,
+  "optimizer_steps": 57249,
   "formal_records": 0,
   "object_entries_deployed": 9,
   "goal_entries_deployed": 6,
@@ -19,12 +19,11 @@
   "caet_goal_admission": "Stage7 has no moving cross-task positive pairs; not admitted",
   "controller_version": 2,
   "controller_pid": 47521,
-  "latest_progress": "progress_20261021_094302",
+  "latest_progress": "progress_20261021_101253",
   "current_stage_eta": {
-    "remaining_policy_training_hours": 1.1092404049645543,
-    "eval_reference_hours": 1.321268334256278,
-    "provisional": true,
-    "excludes": "Future labels/fitting/storage/audit; extrapolated from Task7 observed training rate"
+    "remaining_main_training_hours": 0.6134138859334245,
+    "full_evaluation_reference_hours": 1.321268334256278,
+    "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
   },
   "rctr_completed": {
     "engineering": "LOCAL_INDEPENDENT_PASS",
@@ -196,10 +195,22 @@
     "scientific_conclusion": "No certified RCTR supervision was activated; scores are not evidence of RCTR mechanism benefit."
   },
   "caet_progress": {
-    "engineering": "PROGRESS_AND_ADMISSION_PASS",
-    "epochs": 122,
-    "optimizer_steps": 20694,
-    "source_files": 204,
+    "status": "PARTIAL",
+    "audit": "CAET_PROGRESS_PASS",
+    "observed_at": "2026-10-21T10:17:14.925160+08:00",
+    "epochs": 261,
+    "optimizer_steps": 57249,
+    "latest_epoch": {
+      "task": 8,
+      "epoch": 60,
+      "batches": 309,
+      "steps": 57249,
+      "loss": -28.71112938297605,
+      "lr_first": 4.0657894736842105e-05,
+      "lr_after": 3.964144736842105e-05,
+      "seconds": 13.322552919387817
+    },
+    "formal_records": 0,
     "auxiliary": {
       "6": {
         "epoch_files": 100,
@@ -207,14 +218,14 @@
         "active_updates": 0
       },
       "7": {
-        "epoch_files": 22,
-        "updates": 4994,
-        "active_updates": 4993
+        "epoch_files": 100,
+        "updates": 22700,
+        "active_updates": 22695
       },
       "8": {
-        "epoch_files": 0,
-        "updates": 0,
-        "active_updates": 0
+        "epoch_files": 61,
+        "updates": 18849,
+        "active_updates": 18847
       },
       "9": {
         "epoch_files": 0,
@@ -249,14 +260,60 @@
         "training_only_scale_floor": 1e-06,
         "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
         "validation_is_not_closed_loop_evidence": true
+      },
+      "effects/models/task8/ACCEPTANCE.json": {
+        "status": "PASS",
+        "task": 8,
+        "epochs": 10,
+        "optimizer_steps": 430,
+        "train_windows": 2690,
+        "heldout_windows": 272,
+        "global_positive_pairs": 12514,
+        "global_negative_pairs": 3700926,
+        "observed_training_positive_pairs": 2796,
+        "heldout_final_normalized_mae": [
+          0.5099695920944214,
+          0.2222415655851364,
+          0.2608588933944702,
+          0.2506757080554962,
+          0.15139174461364746,
+          0.17949241399765015
+        ],
+        "action_gradient_l1": 0.03371294215321541,
+        "action_gradient_finite": true,
+        "frozen_predictor_sha256": "55be5c1ff2ffee3eae5a4a06c91466b93668a2d254bb29629d09f7e483a5fa82",
+        "source_dataset_windows": 3081,
+        "policy_updates": 0,
+        "training_only_scale_floor": 1e-06,
+        "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
+        "validation_is_not_closed_loop_evidence": true
       }
     },
-    "formal_records": 0,
+    "source_files": 204,
+    "source_input_feature_hashes_pass": true,
+    "phase_exits": {
+      "fit8.exit": "0",
+      "labels8.exit": "0",
+      "train7.exit": "0",
+      "train6.exit": "0",
+      "fit7.exit": "0",
+      "labels7.exit": "0",
+      "retain6.exit": "0",
+      "retain7.exit": "0"
+    },
     "eta": {
-      "remaining_policy_training_hours": 1.1092404049645543,
-      "eval_reference_hours": 1.321268334256278,
-      "provisional": true,
-      "excludes": "Future labels/fitting/storage/audit; extrapolated from Task7 observed training rate"
-    }
+      "remaining_main_training_hours": 0.6134138859334245,
+      "full_evaluation_reference_hours": 1.321268334256278,
+      "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
+    },
+    "completed_rctr_evidence": {
+      "path": "progress_20261021_094302\\FINAL_RCTR_AND_CAET_AUDIT.json",
+      "sha256": "70bad60c3fdb46703de5d5154f2128ced3138bb10c60660832c9db2557547a1b",
+      "recomputed_this_check": false
+    },
+    "details_sha256": "8bb59b1d67788610bcb2609a4f1e7ba32299d4d4d74d3719237ab7a954447683",
+    "snapshot_sha256": "45e9874425d01659a9a9365bb0ecc90103d6518e3babd1b7c35d24bf6606cb09",
+    "optimizer_calls_in_this_check": 0,
+    "environment_steps_in_this_check": 0
   }
 }
