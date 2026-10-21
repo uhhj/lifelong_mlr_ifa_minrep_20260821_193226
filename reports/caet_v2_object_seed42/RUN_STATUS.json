@@ -1,26 +1,21 @@
 {
-  "status": "PARTIAL",
-  "phase": "FORMAL_EVALUATION_RUNNING",
+  "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
+  "phase": "FINAL_ACCEPTED_NO_AUTO_EXPANSION",
   "gate1": "PASS",
   "gate2": "PASS",
-  "gate3": "RUNNING_NOT_ACCEPTED",
-  "observed_at": "2026-10-21T22:48:42.233364+08:00",
+  "gate3": "COMPLETED_PASS",
+  "observed_at": "2026-10-21T23:17:58.656732+08:00",
   "epochs": 400,
   "optimizer_steps": 105500,
-  "formal_records": 140,
-  "latest_progress": "progress_20261021_224741",
+  "formal_records": 200,
+  "latest_progress": "progress_20261021_231101",
   "source_and_input_hashes": "PASS",
   "supervisor_pid": 66931,
   "pipeline_pid": 66966,
   "workspace": "/data/mlr_ifa/experiment_workspaces/CAET_v2_OBJECT_seed42_20261021",
   "output": "/data/mlr_ifa/experiments/CAET_v2_OBJECT_seed42_20261021",
   "recovery": "ENVIRONMENT01 only; initial import failure preserved, no repeated optimizer calls",
-  "eta": {
-    "mean_completed_vector_seconds": 237.9381536926542,
-    "remaining_evaluation_minutes": 23.79381536926542,
-    "expected_completion_cst": "2026-10-21 23:15-23:35",
-    "qualification": "14 completed vectors measured; final audits additional; later-cell runtime may change ETA."
-  },
+  "eta": null,
   "automatic_seed_expansion": false,
   "covr": "CANCELLED_DO_NOT_RESUME",
   "latest_handoff": "handoff_20261021_202636",
@@ -32,7 +27,7 @@
     "policy_updates": 0,
     "effect_updates": 0
   },
-  "formal_observation_at": "2026-10-21T22:48:42.233364+08:00",
+  "formal_observation_at": "2026-10-21T23:11:31.683219+08:00",
   "mechanism_audit": "PASS",
   "task8_predictor": "PASS",
   "task9_predictor": "PASS",
@@ -73,5 +68,82 @@
       "active": 36200,
       "accounting_pass": true
     }
+  },
+  "final_evidence": "final_20261021_231144",
+  "metrics": {
+    "AUC": {
+      "fraction": "719/960",
+      "percent": 74.89583333333333
+    },
+    "FWT": {
+      "fraction": "29/40",
+      "percent": 72.5
+    },
+    "NBT": {
+      "fraction": "-7/120",
+      "percent": -5.833333333333333
+    },
+    "OldFinal": {
+      "fraction": "2/3",
+      "percent": 66.66666666666667
+    },
+    "FinalAll": {
+      "fraction": "7/10",
+      "percent": 70.0
+    }
+  },
+  "delta_ra": {
+    "AUC": {
+      "fraction": "1/30",
+      "percent": 3.3333333333333335
+    },
+    "FWT": {
+      "fraction": "1/40",
+      "percent": 2.5
+    },
+    "NBT": {
+      "fraction": "-1/36",
+      "percent": -2.7777777777777777
+    },
+    "OldFinal": {
+      "fraction": "1/60",
+      "percent": 1.6666666666666667
+    },
+    "FinalAll": {
+      "fraction": "1/16",
+      "percent": 6.25
+    }
+  },
+  "delta_v1": {
+    "AUC": {
+      "fraction": "-7/320",
+      "percent": -2.1875
+    },
+    "FWT": {
+      "fraction": "3/80",
+      "percent": 3.75
+    },
+    "NBT": {
+      "fraction": "1/9",
+      "percent": 11.11111111111111
+    },
+    "OldFinal": {
+      "fraction": "-1/6",
+      "percent": -16.666666666666668
+    },
+    "FinalAll": {
+      "fraction": "-9/80",
+      "percent": -11.25
+    }
+  },
+  "active_workers": 0,
+  "process_exit_acceptance": "PASS",
+  "recovery_supervisor_exit": 0,
+  "pipeline_exit": 0,
+  "completed_server_at": "2026-10-21T23:05:43.980174+08:00",
+  "remaining_authorized_work": {
+    "LIBERO50": "PENDING_SEPARATE_SCHEDULER",
+    "CAET_v1_GOAL": "SCIENTIFIC_BLOCKED_NOT_RESUMABLE_UNCHANGED",
+    "COVR": "USER_CANCELLED_DO_NOT_RESUME"
   }
 }
