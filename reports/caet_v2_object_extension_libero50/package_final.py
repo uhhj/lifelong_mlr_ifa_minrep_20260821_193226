@@ -40,7 +40,11 @@ try:
  c.connect('jq1.9gpu.com',port=11920,username='root',password=pw,look_for_keys=False,allow_agent=False,timeout=20);pw=None
  i,o,e=c.exec_command('/data/mlr_ifa/env/bin/python -c '+shlex.quote(SCRIPT),timeout=120);raw=o.read();err=e.read();rc=o.channel.recv_exit_status();assert rc==0,err.decode()
  manifest=json.loads(raw);dest=R/('final_seed%d_'%seed+datetime.datetime.now().strftime('%Y%m%d_%H%M%S'));dest.mkdir()
- (dest/'PACKAGE_MANIFEST.json').write_bytes(raw);s=c.open_sftp()
+ (dest/'PACKAGE_MANIFEST.json').write_bytes(raw)
+ if '--manifest-only' in sys.argv:
+  print(json.dumps(dict(directory=str(dest),status='MANIFEST_ONLY_NOT_DOWNLOADED',files=len(manifest['entries']))))
+  sys.exit(0)
+ s=c.open_sftp()
  for name,item in manifest['entries'].items():
   p=(dest/name).resolve();assert dest.resolve() in p.parents
   p.parent.mkdir(parents=True,exist_ok=True)
