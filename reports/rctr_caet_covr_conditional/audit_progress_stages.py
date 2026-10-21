@@ -4,6 +4,7 @@ import collections
 import datetime
 import hashlib
 import json
+import re
 from pathlib import Path
 
 R=Path(__file__).resolve().parent
@@ -130,8 +131,16 @@ def main():
             assert len(rows)==10 and [r['success'] for r in rows]==e['successes']
             assert all(r['vector_group_steps']==e['steps'] for r in rows)
             assert 0<e['steps']<=600 and e['lanes']==10
-        for cell in f['cells'].values():
-            rows=[r for r in trials if (r['stage'],r['task'])==(cell['stage'],cell['task'])]
+        for name,cell in f['cells'].items():
+            match=re.fullmatch(r'cell_stage(\d+)_task(\d+)\.json',name)
+            assert match,name
+            stage,task=map(int,match.groups())
+            assert cell['stage']==stage and cell['epoch']==99
+            assert Path(cell['trial_log']).name==f'trials_stage{stage}_task{task}.jsonl'
+            assert Path(cell['attempt_log']).name==f'attempts_stage{stage}_task{task}.jsonl'
+            rows=[r for r in trials if (r['stage'],r['task'])==(stage,task)]
+            assert all(r['checkpoint_sha256']==cell['checkpoint_sha256'] and
+                       r['initial_hashes']==cell['initial_hashes'] for r in rows)
             assert len(rows)==20 and sum(r['success'] for r in rows)/20==cell['success_rate']
         durations=[e['unix']-starts[k]['unix'] for k,e in done.items()]
         formal_audit=dict(records=formal_count,completed_vectors=len(done),started_vectors=len(starts),
