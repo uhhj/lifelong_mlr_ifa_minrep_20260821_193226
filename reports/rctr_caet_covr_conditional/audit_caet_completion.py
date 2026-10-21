@@ -9,8 +9,13 @@ from audit_rctr_completion_caet_progress import metrics, pack
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('directory',type=Path)
-    p=ap.parse_args().directory.resolve();assert p.parent==R
-    d=read(p/'CAET_DETAILS.json');c=d['caet'];complete=c['completion'];a=complete['audit']
+    ap.add_argument('--seed',type=int,choices=(41,42,43),default=42)
+    args=ap.parse_args();seed=args.seed
+    p=args.directory.resolve();assert p.parent==R
+    details_name='CAET_DETAILS.json' if seed==42 else f'CAET_DETAILS_seed{seed}.json'
+    suffix='' if seed==42 else f'_seed{seed}'
+    d=read(p/details_name);c=d['caet'];complete=c['completion'];a=complete['audit']
+    assert f'CAET_OBJECT_seed{seed}_' in c['output']
     assert d['status']=='CAET_FROZEN_CONTRACT_INPUTS_PASS' and c['source_input_feature_hashes_pass']
     assert not c['workers']
     assert c['phase_exits']['pipeline.exit']==c['phase_exits']['supervisor.exit']=='0'
@@ -47,9 +52,10 @@ def main():
         assert x['status']=='PASS' and x['epochs']==10 and x['policy_updates']==0
         assert x['observed_training_positive_pairs']>0 and x['action_gradient_finite'] and x['action_gradient_l1']>0
         assert x['optimizer_steps']==10*((x['train_windows']+63)//64)
-    fa=audit_formal(c['formal'])
+    fa=audit_formal(c['formal'],seed)
     assert fa['records']==200 and fa['completed_vectors']==fa['started_vectors']==20 and fa['completed_cells']==10
-    rates,m,new=metrics(c['formal']['trials']);base,b,old=metrics(complete['baseline_trials'])
+    rates,m,new=metrics(c['formal']['trials'],seed);base,b,old=metrics(complete['baseline_trials'],seed)
+    assert all(r['seed']==seed for r in complete['baseline_trials'])
     for key,r in new.items():
         assert r['initial_state_sha256']==old[key]['initial_state_sha256'] and r['modal_sha256']==old[key]['modal_sha256']
         assert r['checkpoint_sha256']==complete['checkpoints_sha256'][f"mlrifa_{r['stage']}_model_ep99.pth"]
@@ -59,20 +65,20 @@ def main():
     receipt=complete['receipt']
     assert receipt['engineering']=='PASS' and not receipt['residual_workers']
     assert F(receipt['auc'])==m['AUC'] and F(receipt['baseline_auc'])==b['AUC']
-    result=dict(status='COMPLETED_GAIN' if gate else 'COMPLETED_NO_GAIN',engineering='LOCAL_INDEPENDENT_PASS',
+    result=dict(status='COMPLETED_GAIN' if gate else 'COMPLETED_NO_GAIN',seed=seed,engineering='LOCAL_INDEPENDENT_PASS',
         observed_at=datetime.datetime.fromtimestamp(d['observed_end_unix']).astimezone().isoformat(),
         metrics=pack(m),baseline=pack(b),delta=pack({k:m[k]-b[k] for k in m}),gate=gate,
         matrix=[dict(stage=s,task=t,current=str(rates[s,t]),baseline=str(base[s,t])) for s,t in rates],
         formal=fa,epochs=400,optimizer_steps=steps,checkpoints=a['checkpoints'],
         auxiliary=c['auxiliary'],effect_audit=a['auxiliary'],summed_epoch_seconds=a['summed_epoch_seconds'],
-        source_details_sha256=sha(p/'CAET_DETAILS.json'),server_audit_sha256=complete['audit_sha256'])
-    (p/'CAET_FINAL_AUDIT.json').write_text(json.dumps(result,indent=2)+'\n')
-    report='# CAET OBJECT seed42最终独立复算\n\n状态：'+result['status']+'。工程验收全部通过。\n\n|指标|RA %|CAET %|差 pp|\n|---|---:|---:|---:|\n'
+        source_details_sha256=sha(p/details_name),server_audit_sha256=complete['audit_sha256'])
+    (p/f'CAET_FINAL_AUDIT{suffix}.json').write_text(json.dumps(result,indent=2)+'\n')
+    report=f'# CAET OBJECT seed{seed}最终独立复算\n\n状态：'+result['status']+'。工程验收全部通过。\n\n|指标|RA %|CAET %|差 pp|\n|---|---:|---:|---:|\n'
     for k in m:report+=f'|{k}|{float(100*b[k]):.6f}|{float(100*m[k]):.6f}|{float(100*(m[k]-b[k])):+.6f}|\n'
     report+='\n|阶段|任务|RA %|CAET %|\n|---|---|---:|---:|\n'
     for s,t in rates:report+=f'|{s}|{t}|{float(100*base[s,t]):.1f}|{float(100*rates[s,t]):.1f}|\n'
     report+='\n严格按精确AUC与工程验收判定扩展，不添加其他数值门槛。额外物理标签和效果拟合成本、单seed探索性、全局动作随机流未隔离、预训练state未知及调度补全边界均保留。辅助梯度实际激活不等同于机制的独立因果证明。\n'
-    (p/'CAET_FINAL_REPORT.md').write_text(report,encoding='utf8')
+    (p/f'CAET_FINAL_REPORT{suffix}.md').write_text(report,encoding='utf8')
     print(json.dumps(result,ensure_ascii=False,indent=2))
 
 if __name__=='__main__':main()

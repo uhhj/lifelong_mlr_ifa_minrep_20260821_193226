@@ -13,7 +13,7 @@ R=Path(__file__).resolve().parent
 def read(p): return json.loads(p.read_text(encoding='utf8'))
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def pack(m): return {k:dict(fraction=str(v),percent=float(100*v)) for k,v in m.items()}
-def metrics(rows):
+def metrics(rows, seed=42):
     keys=[(r['stage'],r['task'],r['trial']) for r in rows]
     assert len(keys)==len(set(keys))==200
     rates={}
@@ -21,7 +21,7 @@ def metrics(rows):
         for task in range(6,stage+1):
             cell=[r for r in rows if (r['stage'],r['task'])==(stage,task)]
             assert len(cell)==20 and {r['trial'] for r in cell}==set(range(20))
-            assert all(r['seed']==42 and r['epoch']==99 and isinstance(r['success'],bool) for r in cell)
+            assert all(r['seed']==seed and r['epoch']==99 and isinstance(r['success'],bool) for r in cell)
             rates[stage,task]=F(sum(r['success'] for r in cell),20)
     m=dict(AUC=sum(sum(rates[s,t] for s in range(t,10))/F(10-t) for t in range(6,10))/4,
            FWT=sum(rates[t,t] for t in range(6,10))/4,
