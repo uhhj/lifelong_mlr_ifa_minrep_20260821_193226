@@ -102,7 +102,7 @@ def main():
         password=None
         if args.details:
             command=f"source {W}/env.sh && /data/mlr_ifa/env/bin/python -c {shlex.quote(DETAIL_CODE)}"
-            _,stdout,stderr=client.exec_command(command,timeout=60)
+            _,stdout,stderr=client.exec_command(command,timeout=180)
             raw=stdout.read();err=stderr.read();rc=stdout.channel.recv_exit_status()
             assert rc==0,(rc,err.decode(errors="replace"))
             details=json.loads(raw)

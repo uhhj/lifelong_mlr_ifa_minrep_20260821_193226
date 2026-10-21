@@ -1,5 +1,7 @@
 # 三方案与LIBERO-50执行交接（以本版为准）
 
+最新2026-10-21 09:15 CST：progress_20261021_091231，RCTR正式170/200条，17完成vector+1进行中，8完整cell，0技术异常；evaluate PID49522与10环境子进程正常。400epoch105500步、三阶段0认证及全部辅助激活0不变。176源码/冻结输入及逐分支、episode/attempt本地复算PASS。17批实测均值230.7秒，剩余评估约12分钟，最终验收另计；仍PARTIAL，不提前判全指标。只读details首次SSH读取超时，已保留失败与旧脚本，将该固定只读命令I/O超时由60改180秒后成功；未改服务器科学代码或重启实验。数据盘15.72GiB/系统5.51GiB；LIBERO50未GPU准入。继续30分钟检查，后续只按完整退出验收和原精确AUC门槛推进。
+
 最新2026-10-21 08:44 CST：progress_20261021_084241，RCTR正式100/200条，10个vector完成，0技术异常；400epoch105500步及三阶段0认证/全部辅助激活0不变。176源码与冻结输入、逐episode及attempt独立复算PASS，evaluate PID49522仍在运行，当前环境进程正在轮换，未重启。按10个已完成vector均值216.8秒估计剩余评估约36分钟，最终验收另计。首批完整cell暴露本地只读审计误读task键，原失败和旧脚本已保留；现从cell文件名解析并交叉验证日志身份、模型/初态哈希，重新复算PASS。仅修本地审计，无服务器科学源/预算/模型变化。仍PARTIAL，不提前计算全指标或判断扩展。数据盘15.72GiB、系统5.51GiB；LIBERO50仍未GPU准入。
 
 最新2026-10-21 08:14 CST：progress_20261021_081224，400epoch/105500主步全部完成，evaluate PID49522及10环境子进程正常。Task6/7/8采集460/456/472分支（合计1368探索20确认），认证记录均0，三个ACCEPTANCE PASS；Task8有4个快照进入确认，均未过。四任务训练辅助激活均0，不能将后续分数差解释为RCTR监督收益。没有修改既定AUC扩展门槛。正式10/200条、1完成vector+1进行中、0技术异常；原0–19/seed与记录唯一性复算PASS，176源码输入hash PASS，7个train/collect退出均0。首完成vector约283.8秒，剩余评估暂估1.50小时，未计最终验收。用新版check_progress_readonly.py --details读取formal/worker_processes，audit_progress_stages.py已适配evaluate阶段和记录/attempt复算；服务器mon进程筛选不含coreset_exp.evaluate，不能因其processes列表未列评估而误报退出。外置本地脚本变化不影响科学冻结源。仍30分钟检查，LIBERO50尚未GPU准入。
