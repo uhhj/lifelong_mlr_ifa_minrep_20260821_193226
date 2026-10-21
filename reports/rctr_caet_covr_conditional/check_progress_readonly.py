@@ -182,6 +182,7 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--details",type=Path)
     ap.add_argument("--caet",type=Path,help="Only active CAET metadata; no repeated RCTR completion audit")
+    ap.add_argument("--caet-seed",type=int,choices=(41,42,43),default=42)
     args=ap.parse_args()
     stamp=datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     assert not (args.details and args.caet)
@@ -198,7 +199,8 @@ def main():
                        allow_agent=False,look_for_keys=False,timeout=20)
         password=None
         if args.details or args.caet:
-            command=(f"/data/mlr_ifa/env/bin/python -c {shlex.quote(CAET_CODE)}" if args.caet else
+            caet_code=CAET_CODE.replace('CAET_OBJECT_42','CAET_OBJECT_%d'%args.caet_seed)
+            command=(f"/data/mlr_ifa/env/bin/python -c {shlex.quote(caet_code)}" if args.caet else
                      f"source {W}/env.sh && /data/mlr_ifa/env/bin/python -c {shlex.quote(DETAIL_CODE)}")
             _,stdout,stderr=client.exec_command(command,timeout=180)
             raw=stdout.read();err=stderr.read();rc=stdout.channel.recv_exit_status()
@@ -206,6 +208,7 @@ def main():
             details=json.loads(raw)
             assert details["status"]==("CAET_FROZEN_CONTRACT_INPUTS_PASS" if args.caet else "FROZEN_CONTRACT_INPUTS_PASS")
             prefix="CAET_DETAILS" if args.caet else "DETAILS"
+            if args.caet and args.caet_seed!=42:prefix+='_seed%d'%args.caet_seed
             (out/(prefix+".json")).write_bytes(raw)
             (out/(prefix+"_RECEIPT.json")).write_text(json.dumps(dict(command=command,exit=rc,
                 sha256=hashlib.sha256(raw).hexdigest(),server_writes=0),indent=2)+"\n")
