@@ -80,6 +80,43 @@ result=dict(unix=time.time(),status="FROZEN_CONTRACT_INPUTS_PASS",
          for p in sorted(O.glob("*.log")) if p.name.startswith(("collect","train","evaluate","pipeline","supervisor"))},
     checkpoint_files=[dict(name=p.name,bytes=p.stat().st_size,mtime=p.stat().st_mtime)
                       for p in (O/"ra_coreset/models").glob("*.pth")])
+queue=Path('/data/mlr_ifa/experiment_workspaces/RCTR_CAET_COVR_conditional_20261020')
+if (O/'PROCESS_EXIT_ACCEPTANCE.json').exists():
+    parent=Path(read(O/'PARENT_BINDING.json')['parent'])
+    names=('AUDIT.json','PROCESS_EXIT_ACCEPTANCE.json','TASK6_TENSOR_PARITY.json','GPU_PREFLIGHT.json')
+    result['completion']={name:read(O/name) for name in names}
+    result['completion']['audit_sha256']=sha(O/'AUDIT.json')
+    result['completion']['receipt']=read(queue/'receipts/RCTR_OBJECT_42.json')
+    result['completion']['checkpoints_sha256']={p.name:sha(p) for p in (O/'ra_coreset/models').glob('*ep99.pth')}
+    result['completion']['baseline_trials']=[r for p in sorted((parent/'ra_coreset/evaluation').glob('trials*.jsonl')) for r in jsonlines(p)]
+    result['completion']['baseline_audit']=read(parent/'AUDIT.json')
+    result['completion']['initial_rng_equal']=read(O/'ra_coreset/INITIAL_STATE.json')==read(parent/'ra_coreset/INITIAL_STATE.json')
+entry=read(queue/'REGISTRY.json').get('CAET_OBJECT_42')
+if entry and Path(entry['output']).exists():
+    output=Path(entry['output']);source=Path(entry['source']);contract=read(output/'CONTRACT.json')
+    if contract:
+        actual={str(p.relative_to(source)):sha(p) for p in source.rglob('*') if p.is_file() and p.suffix in ('.py','.yaml','.sh') and '__pycache__' not in p.parts}
+        assert actual==contract['source_sha256']
+        assert all(sha(p)==h for p,h in contract['files'].items())
+        feature_hashes=read(output/'FEATURES.json')['hashes']
+        assert all(sha(output/'features'/name)==h for name,h in feature_hashes.items())
+        aux={}
+        for task in (6,7,8,9):
+            files=sorted((output/'ra_coreset/auxiliary').glob('task%d_epoch*.json'%task))
+            stats=[r for p in files for r in read(p)]
+            aux[str(task)]=dict(epoch_files=len(files),updates=len(stats),active_updates=sum(r['effect_loss'] is not None for r in stats))
+        result['caet']=dict(output=str(output),source=str(source),source_files=len(actual),source_input_feature_hashes_pass=True,
+            contract_sha256=sha(output/'CONTRACT.json'),status=read(output/'RUN_STATUS.json'),
+            epochs=read(output/'ra_coreset/epochs.json'),auxiliary=aux,
+            launch=read(output/'LAUNCH_ACCEPTANCE.json'),preflight=read(output/'GPU_PREFLIGHT.json'),
+            task6_parity=read(output/'TASK6_TENSOR_PARITY.json'),
+            admission_exits={p.name:p.read_text().strip() for p in (source.parent/'admission').glob('*.exit')},
+            phase_exits={p.name:p.read_text().strip() for p in output.glob('*.exit')},
+            effects={str(p.relative_to(output)):read(p) for p in (output/'effects/models').glob('*/ACCEPTANCE.json')},
+            effect_epochs={str(p.relative_to(output)):read(p) for p in (output/'effects/models').glob('*/epochs.json')},
+            command_events=jsonlines(output/'commands.jsonl'),
+            formal_records=sum(len(jsonlines(p)) for p in (output/'ra_coreset/evaluation').glob('trials*.jsonl')))
+result['observed_end_unix']=time.time()
 print(json.dumps(result,indent=2))
 '''
 

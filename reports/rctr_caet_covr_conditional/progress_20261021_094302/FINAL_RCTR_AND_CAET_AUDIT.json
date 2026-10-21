@@ -1,0 +1,239 @@
+{
+  "status": "RCTR_COMPLETED_NO_GAIN_CAET_PARTIAL",
+  "observed_at": "2026-10-21T09:46:40.171092+08:00",
+  "rctr": {
+    "engineering": "LOCAL_INDEPENDENT_PASS",
+    "metrics": {
+      "AUC": {
+        "fraction": "229/320",
+        "percent": 71.5625
+      },
+      "FWT": {
+        "fraction": "7/10",
+        "percent": 70.0
+      },
+      "NBT": {
+        "fraction": "-11/360",
+        "percent": -3.0555555555555554
+      },
+      "OldFinal": {
+        "fraction": "13/20",
+        "percent": 65.0
+      },
+      "FinalAll": {
+        "fraction": "51/80",
+        "percent": 63.75
+      }
+    },
+    "baseline": {
+      "AUC": {
+        "fraction": "229/320",
+        "percent": 71.5625
+      },
+      "FWT": {
+        "fraction": "7/10",
+        "percent": 70.0
+      },
+      "NBT": {
+        "fraction": "-11/360",
+        "percent": -3.0555555555555554
+      },
+      "OldFinal": {
+        "fraction": "13/20",
+        "percent": 65.0
+      },
+      "FinalAll": {
+        "fraction": "51/80",
+        "percent": 63.75
+      }
+    },
+    "delta": {
+      "AUC": {
+        "fraction": "0",
+        "percent": 0.0
+      },
+      "FWT": {
+        "fraction": "0",
+        "percent": 0.0
+      },
+      "NBT": {
+        "fraction": "0",
+        "percent": 0.0
+      },
+      "OldFinal": {
+        "fraction": "0",
+        "percent": 0.0
+      },
+      "FinalAll": {
+        "fraction": "0",
+        "percent": 0.0
+      }
+    },
+    "matrix": [
+      {
+        "stage": 6,
+        "task": 6,
+        "rctr": "3/10",
+        "baseline": "3/10"
+      },
+      {
+        "stage": 7,
+        "task": 6,
+        "rctr": "4/5",
+        "baseline": "4/5"
+      },
+      {
+        "stage": 7,
+        "task": 7,
+        "rctr": "1",
+        "baseline": "1"
+      },
+      {
+        "stage": 8,
+        "task": 6,
+        "rctr": "7/20",
+        "baseline": "7/20"
+      },
+      {
+        "stage": 8,
+        "task": 7,
+        "rctr": "19/20",
+        "baseline": "19/20"
+      },
+      {
+        "stage": 8,
+        "task": 8,
+        "rctr": "9/10",
+        "baseline": "9/10"
+      },
+      {
+        "stage": 9,
+        "task": 6,
+        "rctr": "1/10",
+        "baseline": "1/10"
+      },
+      {
+        "stage": 9,
+        "task": 7,
+        "rctr": "9/10",
+        "baseline": "9/10"
+      },
+      {
+        "stage": 9,
+        "task": 8,
+        "rctr": "19/20",
+        "baseline": "19/20"
+      },
+      {
+        "stage": 9,
+        "task": 9,
+        "rctr": "3/5",
+        "baseline": "3/5"
+      }
+    ],
+    "same_episode_outcomes": 200,
+    "gate": false,
+    "certified_records": 0,
+    "auxiliary_activated_steps": 0,
+    "formal_records": 200,
+    "vector_attempts": 20,
+    "training_epochs": 400,
+    "optimizer_steps": 105500,
+    "checkpoint_strict_load_evidence": [
+      {
+        "task": 6,
+        "sha256": "addfd75cd25f305cb8eca71895d7cd408d928e4517480bd4321ba9a13d8a28a8",
+        "strict_loaded_keys": 100
+      },
+      {
+        "task": 7,
+        "sha256": "8e7361033aeeb4dad77386911b288c5a2090bf089c1b9872238a695d1df8c104",
+        "strict_loaded_keys": 100
+      },
+      {
+        "task": 8,
+        "sha256": "0d2624f6a56ef4d7046b44726a130a8f2ae32d19091a658027212afe57b6e8ef",
+        "strict_loaded_keys": 100
+      },
+      {
+        "task": 9,
+        "sha256": "59fc2025fdaa2cf1473c9e084aaab8caf7ab676b584a507d1012c48a2941e892",
+        "strict_loaded_keys": 100
+      }
+    ],
+    "cost": {
+      "summed_epoch_seconds": 3210.252777814865,
+      "auxiliary_branches": 1388,
+      "auxiliary_policy_steps": 296583,
+      "collection_prefix_steps": 2250,
+      "collection_engineering_steps": 576
+    },
+    "scientific_conclusion": "No certified RCTR supervision was activated; scores are not evidence of RCTR mechanism benefit."
+  },
+  "caet": {
+    "engineering": "PROGRESS_AND_ADMISSION_PASS",
+    "epochs": 122,
+    "optimizer_steps": 20694,
+    "source_files": 204,
+    "auxiliary": {
+      "6": {
+        "epoch_files": 100,
+        "updates": 15700,
+        "active_updates": 0
+      },
+      "7": {
+        "epoch_files": 22,
+        "updates": 4994,
+        "active_updates": 4993
+      },
+      "8": {
+        "epoch_files": 0,
+        "updates": 0,
+        "active_updates": 0
+      },
+      "9": {
+        "epoch_files": 0,
+        "updates": 0,
+        "active_updates": 0
+      }
+    },
+    "effects": {
+      "effects/models/task7/ACCEPTANCE.json": {
+        "status": "PASS",
+        "task": 7,
+        "epochs": 10,
+        "optimizer_steps": 310,
+        "train_windows": 1965,
+        "heldout_windows": 197,
+        "global_positive_pairs": 3660,
+        "global_negative_pairs": 1451938,
+        "observed_training_positive_pairs": 1062,
+        "heldout_final_normalized_mae": [
+          0.4714191257953644,
+          0.243989959359169,
+          0.22108858823776245,
+          0.2756921947002411,
+          0.14862310886383057,
+          0.13760076463222504
+        ],
+        "action_gradient_l1": 0.04002455621957779,
+        "action_gradient_finite": true,
+        "frozen_predictor_sha256": "dffede2aaf2a6cc48696bfc448f8dd974e8e77e59516202312717adcd32ccaab",
+        "source_dataset_windows": 2261,
+        "policy_updates": 0,
+        "training_only_scale_floor": 1e-06,
+        "label_distribution": "current full task plus actual RA memory; whole-demo holdout",
+        "validation_is_not_closed_loop_evidence": true
+      }
+    },
+    "formal_records": 0,
+    "eta": {
+      "remaining_policy_training_hours": 1.1092404049645543,
+      "eval_reference_hours": 1.321268334256278,
+      "provisional": true,
+      "excludes": "Future labels/fitting/storage/audit; extrapolated from Task7 observed training rate"
+    }
+  },
+  "details_sha256": "b731f7bbbfa835aef7d56ac65a21e279adecbdfa0b2e68db16742ed235913d4a",
+  "branch_rules_sha256": "9635a83a611791f3c1599697491148524a862a3de160220ca6a3e5a7ef39ab5f"
+}
