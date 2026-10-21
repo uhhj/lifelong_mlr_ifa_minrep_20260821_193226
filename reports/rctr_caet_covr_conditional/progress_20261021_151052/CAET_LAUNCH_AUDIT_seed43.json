@@ -1,0 +1,50 @@
+{
+  "status": "PARTIAL",
+  "audit": "CAET_ADMISSION_AND_LIVE_TRAINING_PASS",
+  "seed": 43,
+  "observed_at": "2026-10-21T15:12:25.940380+08:00",
+  "phase": "train6",
+  "completed_epoch_metadata_available": false,
+  "source_files": 204,
+  "preflight": {
+    "status": "PASS",
+    "optimizer_calls": 4,
+    "formal_steps": 0,
+    "environment_steps": 0,
+    "zero_aux_native_update_exact": true,
+    "full_state_epoch_recovery_exact": true,
+    "actual_index_wrapper_order_exact": true,
+    "frozen_effect_action_gradient_finite_nonzero": true,
+    "fitted_predictor_validation": "Required per stage before Task7-9 activation",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "torch": "1.13.0+cu116"
+  },
+  "admission_exits": {
+    "prepare.exit": "0",
+    "gpu_preflight.exit": "0",
+    "software.exit": "0",
+    "labels6.exit": "0"
+  },
+  "workers": [
+    {
+      "pid": 60860,
+      "command": "/data/mlr_ifa/env/bin/python -u -m caet_exp.pipeline "
+    },
+    {
+      "pid": 60923,
+      "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m caet_exp.train ra_coreset --through-task 6 "
+    },
+    {
+      "pid": 60931,
+      "command": "/data/mlr_ifa/env/bin/python -u -m caet_exp.train ra_coreset --through-task 6 "
+    }
+  ],
+  "details_sha256": "3339e29340b8ebdb99c7d5dda68aedb528626f16215df3ccac5ec016ec374d0a",
+  "snapshot_sha256": "fb153a2c2f7c15cae74dbfa857372811d227fb0dba22acc46bc5322b0e0eca92",
+  "initial_rng_parity": "REQUIRES_LATER_PROGRESS_AUDIT",
+  "initial_rng_equal_observed": false,
+  "task6_final_tensor_parity": "PENDING_TASK6_COMPLETE",
+  "formal_records": 0,
+  "optimizer_calls_this_audit": 0,
+  "environment_steps_this_audit": 0
+}
