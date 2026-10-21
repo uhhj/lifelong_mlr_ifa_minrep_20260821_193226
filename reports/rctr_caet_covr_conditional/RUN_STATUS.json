@@ -1,10 +1,10 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-21T18:03:46.380314+08:00",
+  "observed_at": "2026-10-21T18:25:31.049574+08:00",
   "active": "COVR_OBJECT_42",
-  "phase": "TRAINING_TASK6",
-  "epochs": 24,
-  "optimizer_steps": 3768,
+  "phase": "COLLECT7",
+  "epochs": 150,
+  "optimizer_steps": 27050,
   "formal_records": 0,
   "object_entries_deployed": 9,
   "goal_entries_deployed": 6,
@@ -19,24 +19,21 @@
   "caet_goal_admission": "Stage7 has no moving cross-task positive pairs; not admitted",
   "controller_version": 3,
   "controller_pid": 64697,
-  "latest_progress": "progress_20261021_175926",
+  "latest_progress": "progress_20261021_182413",
   "current_stage_eta": {
-    "status": "COVR_EARLY_TRAINING_PASS",
-    "experiment_status": "PARTIAL",
-    "observed_at": "2026-10-21T18:03:46.380314+08:00",
-    "epochs": 24,
-    "optimizer_steps": 3768,
-    "formal_records": 0,
-    "mean_epoch_seconds": 4.3902481396993,
-    "remaining_task6_minutes": 5.560980976952447,
-    "full_run_eta": null,
-    "eta_limitation": "No measured COVR collection throughput yet; no reliable complete-run ETA",
-    "source_input_hashes": "PASS",
-    "preflight_optimizer_calls": 4,
-    "preflight_engineering_environment_steps": 28,
-    "local_optimizer_calls": 0,
-    "local_environment_steps": 0,
-    "details_sha256": "f7024b415235d22fe7a09dc47a1611e485a0d65765140eb82db20915235dab47"
+    "committed": 8,
+    "exploration": 8,
+    "confirmation": 0,
+    "normal_completed": 1,
+    "successful_branches": 0,
+    "policy_steps": 4480,
+    "completed_decisions": 0,
+    "acceptance": null,
+    "restore_gates": 1,
+    "mean_branch_seconds": 44.39472304850278,
+    "remaining_exploration_budget_minutes": 34.035954337185466,
+    "remaining_confirmation_budget_minutes": 19.977625371826253,
+    "note": "Budget-scaled projection, not all branches necessarily executed; excludes normal episodes and engineering overhead"
   },
   "rctr_completed": {
     "engineering": "LOCAL_INDEPENDENT_PASS",
@@ -1155,5 +1152,59 @@
     "remaining_work": "CAET GOAL needs a separately documented scientifically valid protocol; no threshold or target replacement performed.",
     "scope": "Defer only this blocked branch, retain it visibly, execute already authorized independent COVR and LIBERO50 branches; never claim all work complete."
   },
-  "all_authorized_work_complete": false
+  "all_authorized_work_complete": false,
+  "covr_progress": {
+    "status": "COVR_PROGRESS_PASS",
+    "experiment_status": "PARTIAL",
+    "observed_at": "2026-10-21T18:25:31.049574+08:00",
+    "epochs": 150,
+    "optimizer_steps": 27050,
+    "phase": {
+      "status": "RUNNING",
+      "phase": "collect7",
+      "unix": 1792577868.4310622,
+      "pid": 64834
+    },
+    "auxiliary": {
+      "6": {
+        "updates": 15700,
+        "active": 0
+      },
+      "7": {
+        "updates": 11350,
+        "active": 0
+      }
+    },
+    "collections": {
+      "stage7": {
+        "committed": 8,
+        "exploration": 8,
+        "confirmation": 0,
+        "normal_completed": 1,
+        "successful_branches": 0,
+        "policy_steps": 4480,
+        "completed_decisions": 0,
+        "acceptance": null,
+        "restore_gates": 1,
+        "mean_branch_seconds": 44.39472304850278,
+        "remaining_exploration_budget_minutes": 34.035954337185466,
+        "remaining_confirmation_budget_minutes": 19.977625371826253,
+        "note": "Budget-scaled projection, not all branches necessarily executed; excludes normal episodes and engineering overhead"
+      }
+    },
+    "full_run_eta": null,
+    "source_input_hashes": "PASS",
+    "storage": {
+      "task6.json": {
+        "count": 781,
+        "ordered_ids_equal": true,
+        "payloads_equal": true
+      }
+    },
+    "task6_tensor_equal": true,
+    "initialization_equal": true,
+    "local_optimizer_calls": 0,
+    "local_environment_steps": 0,
+    "details_sha256": "33f98c33aa01e2e5db4f05f87f896994a0f44321001a99aed9c71999883cec99"
+  }
 }
