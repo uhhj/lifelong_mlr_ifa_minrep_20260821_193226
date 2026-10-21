@@ -1,0 +1,44 @@
+{
+  "status": "READ_ONLY_MECHANISM_AND_CAPACITY_AUDIT_PASS_WITH_TIMING_CAVEAT",
+  "tasks": {
+    "8": {
+      "predictor": "PASS",
+      "effect_updates": 850,
+      "constraint_epochs": 100,
+      "protected_groups": 18,
+      "max_mu": 0.6700560000731103,
+      "violated_group_epochs": 102,
+      "max_observed_excess": 3.955021925325746,
+      "full_epoch_dual_updates_exact": true,
+      "mean_control_mae": 0.49044543504714966,
+      "permuted_control_mae": 0.29477250576019287,
+      "heldout_mae": 0.2733776569366455
+    },
+    "9": {
+      "predictor": "PASS",
+      "effect_updates": 990,
+      "constraint_epochs": 55,
+      "protected_groups": 24,
+      "max_mu": 0.12633287111918132,
+      "violated_group_epochs": 1,
+      "max_observed_excess": 1.2633287111918132,
+      "full_epoch_dual_updates_exact": true,
+      "mean_control_mae": 0.47276198863983154,
+      "permuted_control_mae": 0.2943558394908905,
+      "heldout_mae": 0.2586829364299774
+    }
+  },
+  "effect_updates": 1840,
+  "timing_caveats": [
+    {
+      "task": 8,
+      "raw_seconds": -5.327922582626343,
+      "status": "INVALID_DURATION_PRESERVED",
+      "reason": "Frozen fit.py uses wall-clock time.time; arithmetic/eligibility does not use this duration. No retraining or replacement value."
+    }
+  ],
+  "orchestration_hashes": 29,
+  "compression_plain_zlib_saving_bytes": 37009628,
+  "not_closed_loop_result": true,
+  "no_server_changes": true
+}

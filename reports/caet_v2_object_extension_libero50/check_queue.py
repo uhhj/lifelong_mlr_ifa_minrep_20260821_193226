@@ -3,7 +3,7 @@ from pathlib import Path
 import paramiko
 R=Path(__file__).resolve().parent
 SCRIPT=r'''
-import json,subprocess,time,shutil,hashlib
+import json,subprocess,time,shutil,hashlib,os
 from pathlib import Path
 Q=Path('/data/mlr_ifa/experiment_workspaces/CAET_v2_OBJECT_extension_LIBERO50_20261021')
 out={'observed_unix':time.time(),'files':{},'processes':[],'disk':{p:shutil.disk_usage(p).free for p in ('/','/data')}}
@@ -13,6 +13,17 @@ def read(p):
   except json.JSONDecodeError:out['files'][str(p)]={'inflight_read':True}
 for n in ('RUN_STATUS.json','controller.pid.json','controller.exit','FAILURE.json','controller.log','QUEUE.json','ORCHESTRATION_CONTRACT.json'):read(Q/n)
 for p in Q.glob('*.receipt.json'):read(p)
+D=Q/'capacity_recovery_v1'
+for n in ('RUN_STATUS.json','CONTRACT.json','watcher.pid.json','watcher.exit','FAILURE.json','HANDOFF.json','watcher.log'):read(D/n)
+for p in D.glob('*.receipt.json'):read(p)
+for seed in (41,42,43):
+ e=Q/('LIBERO50_seed%d.json'%seed)
+ if not e.is_file():continue
+ entry=json.loads(e.read_text())
+ for output in (Path(entry['output']),Path(entry['shared_pretrain_output'])):
+  for n in ('RUN_STATUS.json','GPU_PREFLIGHT.json','PRETRAIN_GPU_PREFLIGHT.json','LAUNCH_ACCEPTANCE.json','PROCESS_EXIT_ACCEPTANCE.json','pipeline.exit','supervisor.exit','PRETRAIN_COMPLETE.json','pretraining/epochs.json'):
+   read(output/n)
+
 for seed in (41,43):
  w=Q/('object_seed%d'%seed);o=Path('/data/mlr_ifa/experiments/CAET_v2_OBJECT_seed%d_20261021'%seed)
  for n in ('supervisor.exit','FAILURE.json'):read(w/n)
@@ -25,6 +36,9 @@ for p in Path('/proc').glob('[0-9]*'):
   if 'python -c' in cmd:continue
   if any(x in cmd for x in ('CAET_v2_OBJECT_extension_LIBERO50','caet_v2_exp.','coreset_exp.evaluate','l50_exp.','worker_entrypoint_libero50.py')):out['processes'].append(dict(pid=int(p.name),command=cmd))
  except OSError:pass
+out['filesystem_capacity']={}
+for mount in ('/','/data'):
+ st=os.statvfs(mount);out['filesystem_capacity'][mount]=dict(block_size=st.f_frsize,available_unprivileged=st.f_bavail*st.f_frsize,free_all_blocks=st.f_bfree*st.f_frsize,reserved_difference=(st.f_bfree-st.f_bavail)*st.f_frsize,euid=os.geteuid())
 out['gpu']=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid,process_name,used_memory','--format=csv,noheader'],text=True)
 print(json.dumps(out))
 '''

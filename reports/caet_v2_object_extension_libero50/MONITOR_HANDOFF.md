@@ -15,3 +15,10 @@ L50 entry是本Q/LIBERO50_seed{s}.json与.sh；引用旧Q独立worker_entrypoint
 资源待办必须主动解决：当前数据约9.13GiB（41初始恢复已占）系统5.50GiB。每seed45388feature文件约2.82GiB，加检查点/恢复/共享预训与两CAET，总累计存储可能不足。队列每入口至少4.5GB（L50）、1.6GB（CAET）空闲保护，不保证整个未来容量。依据真实产物做工程存储方案；可以在新、尚未冻结入口采用版本化路径分配，或审核仅本轮新产物的逐字节验证无损归档，禁止删旧实验/更改冻结源/默改合同或减少预算。不得等满盘才处理；不新付费资源。当前科学源未改。若更改调度需保留旧队列/退出证据，安全边界交接，不杀活跃训练或评估来省磁盘。原L50轻量包装/审计位于execution/20261020_three_methods/package_libero50_light.py、audit_libero50_light.py，需核对新路径后使用，保持payload禁下载。
 
 本地publication通过publish_mlr_branch远端MLR，精确stage/类型体积secret/hash审查、非force、remoteSHA核验并存receipt。当前是PARTIAL启动证明，不算任何新seed完成。正常监控每小时，近阶段完成可30分钟；实际有异常自主处理，不能绕过科学失败或盲重启部分global RNG评估。全部完成后交付OBJECT三seed和L50三seed完整结果，不自动扩更多seed/GOAL。总监控保留其他科学阻塞的真实状态。
+
+
+## 最新2026-10-22 00:54 CST
+progress_seed41_20261022_004440完整349epoch87038步/0正式、507冻结hash独立PASS；queue_20261022_005409轻量378epoch97536步，Task9 epoch77，无重启。Task6全部tensor同RA。8/9留出均PASS（MAE .273378/.258683；均值.490445/.472762；置换.294773/.294356），额外850+990=1840更新。00:45机制8迁移7602/冲突6224/保护2915，9前49epoch迁移4741/冲突3129/保护0；随后resource_mechanism_20261022_004649约束至task9epoch54：epoch49首次一个组超限、mu升.126333后回0；不要延用零保护称全阶段没有激活，也不误称闭环改善。Task8 fit seconds=-5.327923，wall-clock异常保留标不可用，不重训/不把负数当成本。所有双对偶账目独立复算PASS。
+预计01:02结束训练，73分钟参考完整评估+验收，41约02:15–02:50；下一轮核正式记录attempt和评估进程，不能提前完成或部分AUC。43未GPU准入，L50未GPU准入。
+容量已新增独立、未改旧合同的后备：capacity_recovery_v1.py与Q/capacity_recovery_v1/CONTRACT.json，watcher PID72538，ARMED_WAITING_ORIGINAL_EXIT。先查check_queue新增字段；它仅在旧controller.exit1且FAILURE明确RESOURCE_CAPACITY、已完receipt验证/GPU无实验/pending输出不存在/队列锁释放后，自动启动剩余L50 42/43，使用/data statvfs.f_bfree真实root空闲且保留2GiB。不是现在重启旧队列或与当前并发。普通可用9.34GB、root全部空闲14.21GB，原守卫只计前者。没有tune2fs/改挂载/删除资产/改科学源；禁止把原guard失败当实验失败或改原exit。后备有效退出和receipt都在Q/capacity_recovery_v1，最终需结合原prefix与后备suffix核验。原队列exit0则后备NO_RECOVERY_NEEDED退出0；非容量错误停止留证，由助手单独修复，不能盲重试。8纯CPU边界测试通过，不是GPU测试。全资源预算仍需实际监测，保留2GiB不足就阻塞，不绕过。
+只读codec探针storage_codec_probe_20261022_004847：本轮preflight文件346MB和100buffer已逐字节逆变换SHA一致；byte-plane+zlib恢复文件82.56%、样本buffer66.67%体积；无服务器写入/归档/删除，禁止把探针当作已释放空间。不需要现在删除或归档活动文件。原IMPLEMENTATION_NOTES称共享预训优先系统盘只是早期安排，实际冻结entry共享仍/data，41下游/system，以entry和本hand-off实际路径为准。
