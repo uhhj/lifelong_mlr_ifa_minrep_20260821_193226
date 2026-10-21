@@ -168,6 +168,12 @@ result['caet']['ifa_equal']={}
 for f in root.glob('ifa_task*.json'):
     assert read(f)==read(parent/'ra_coreset'/f.name)
     result['caet']['ifa_equal'][f.name]=True
+if (output/'PROCESS_EXIT_ACCEPTANCE.json').exists():
+    result['caet']['completion']=dict(audit=read(output/'AUDIT.json'),
+        process_exit=read(output/'PROCESS_EXIT_ACCEPTANCE.json'),audit_sha256=sha(output/'AUDIT.json'),
+        receipt=read(queue/'receipts/CAET_OBJECT_42.json'),
+        checkpoints_sha256={p.name:sha(p) for p in (root/'models').glob('*ep99.pth')},
+        baseline_trials=[r for p in sorted((parent/'ra_coreset/evaluation').glob('trials*.jsonl')) for r in jsonlines(p)])
 result['observed_end_unix']=time.time()
 print(json.dumps(result,indent=2))
 '''
