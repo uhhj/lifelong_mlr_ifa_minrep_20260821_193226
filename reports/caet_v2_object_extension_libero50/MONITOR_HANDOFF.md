@@ -32,3 +32,10 @@ progress_seed41_20261022_004440完整349epoch87038步/0正式、507冻结hash独
 ## 2026-10-22 01:58更新
 
 最新2026-10-22 01:58 CST：progress_seed41_20261022_015731，seed41正式130/200条，13完成vector+1进行中，0技术异常，evaluate72624及10环境正常；400epoch105500主步、Task8/9迁移7602/9103与保护2915/4186不变。507冻结hash及逐epoch/逐步/逐episode身份与attempt成功向量独立PASS。13批均243.30秒，剩余评估约28.4分钟加最终验收，预计02:30–02:55参考。正常无重启，无部分AUC。43与LIBERO50仍排队未GPU准入，容量watcher仍ARMED未接管，data普通9.205GB/root全部14.075GB、system普通5.902GB。下一轮若完成先package_final.py 41和audit_final.py <包> 41真实独立验收，并核43自动启动；若仍评估则继续原进程，禁止盲重启。
+
+
+## 2026-10-22 02:32更新
+
+最新2026-10-22 02:32 CST：seed41已完整独立验收final_seed41_20261022_022751/LOCAL_FINAL_AUDIT.json及TASK_COST_AUDIT/QUEUE_EXIT_LOCAL_AUDIT PASS。400epoch105500主步、4CP严格100键、200正式20vector10cell、原RA成员载荷/IFA/初始化与Task6tensor、全部阶段exit0无残留；950轻量文件全SHA通过。AUC65.0 vs RA73.020833/v1 71.25；FWT67.5 vs75/73.75；NBT5.833333 vs4.166667/3.888889（低好）；OldFinal73.333333 vs78.333333/66.666667；FinalAll58.75 vs70/66.25。相对RA FWT-7.5pp全来自Task9 45→15；最终Task6/7/8分别30/100/90，差-15/+5/-5pp。负结果保留，不重训重评。效果额外1840更新、主epoch76.93分钟、正式vector79.81分钟，Task8负拟合耗时无效原样保留；最终旧组超限4/18与12/24，双对偶不是保证。
+服务器02:26自动转43，8隔离GPU更新0环境真实PASS，progress_seed43_20261022_022754启动505source/input hash及本地PASS。queue_20261022_023117观察02:31已Task6 42epoch6594主步0正式；Task6最终tensor尚待100epoch，不提前PASS。按41分阶段主训练77分钟+评估80分钟另计拟合入库审计，43预计05:10–05:50参考；不能因41负结果取消固定43。LIBERO50仍排队未GPU准入，data普通8.504GB/root全部13.374GB、system普通5.902GB，容量watcher仍ARMED未动。一次本地顺序SFTP下载因小文件往返慢主动中断exit1，DOWNLOAD_ATTEMPT01保留，resume_light_download.py并行只读补655缺项后950全SHA通过；无服务器写入或实验重启。以后43可先生成manifest，使用同白名单并行包装方式，不必重下已核验文件。
+下一轮只核活跃43，不重复41/42审计。完成后audit_final.py/summarize_final.py已在41实证可用，再汇总三seed原episode和均值样本SD。本轮总队列仍PARTIAL，CAET-v1 GOAL科学阻塞/COVR取消不变。
