@@ -22,3 +22,8 @@ progress_seed41_20261022_004440完整349epoch87038步/0正式、507冻结hash独
 预计01:02结束训练，73分钟参考完整评估+验收，41约02:15–02:50；下一轮核正式记录attempt和评估进程，不能提前完成或部分AUC。43未GPU准入，L50未GPU准入。
 容量已新增独立、未改旧合同的后备：capacity_recovery_v1.py与Q/capacity_recovery_v1/CONTRACT.json，watcher PID72538，ARMED_WAITING_ORIGINAL_EXIT。先查check_queue新增字段；它仅在旧controller.exit1且FAILURE明确RESOURCE_CAPACITY、已完receipt验证/GPU无实验/pending输出不存在/队列锁释放后，自动启动剩余L50 42/43，使用/data statvfs.f_bfree真实root空闲且保留2GiB。不是现在重启旧队列或与当前并发。普通可用9.34GB、root全部空闲14.21GB，原守卫只计前者。没有tune2fs/改挂载/删除资产/改科学源；禁止把原guard失败当实验失败或改原exit。后备有效退出和receipt都在Q/capacity_recovery_v1，最终需结合原prefix与后备suffix核验。原队列exit0则后备NO_RECOVERY_NEEDED退出0；非容量错误停止留证，由助手单独修复，不能盲重试。8纯CPU边界测试通过，不是GPU测试。全资源预算仍需实际监测，保留2GiB不足就阻塞，不绕过。
 只读codec探针storage_codec_probe_20261022_004847：本轮preflight文件346MB和100buffer已逐字节逆变换SHA一致；byte-plane+zlib恢复文件82.56%、样本buffer66.67%体积；无服务器写入/归档/删除，禁止把探针当作已释放空间。不需要现在删除或归档活动文件。原IMPLEMENTATION_NOTES称共享预训优先系统盘只是早期安排，实际冻结entry共享仍/data，41下游/system，以entry和本hand-off实际路径为准。
+
+
+## 2026-10-22 01:31更新
+
+最新2026-10-22 01:31 CST：progress_seed41_20261022_013003完成400epoch105500主步，train6–9/retain6–9全部exit0，507冻结hash与Task6实际tensor同RA、本地逐epoch/逐步账目PASS。Task8/9迁移实际7602/9103步，冲突关闭6224/6998，保护非零2915/4186步；两预测器留出PASS，拟合额外1840更新。Task7全RA回退。正式60/200条、6完成vector+1进行中、0技术异常；evaluate PID72624及10环境正常。新增外置audit_evaluation_progress.py <目录> <seed>，逐episode初态hash/index/envseed/600步及attempt唯一性/成功向量独立PASS，cell summary留最终包。6批均249.01秒，剩余约58分钟加最终审计，预计02:30–03:00 CST供参考。仍PARTIAL，无部分AUC或性能结论。未重启、未改科学源、未重复预检；43和LIBERO50仍排队未GPU准入。容量watcher仍ARMED未接管，data普通空闲9.205GB/root全空闲14.075GB，system普通5.902GB；无需对活动payload操作。下一轮继续核41正式评估，完成后package_final/audit_final 41并确认43自动准入。
