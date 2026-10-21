@@ -1,11 +1,11 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-21T16:17:05.360525+08:00",
+  "observed_at": "2026-10-21T17:22:29.395630+08:00",
   "active": "CAET_OBJECT_43",
-  "phase": "TRAINING",
-  "epochs": 312,
-  "optimizer_steps": 73644,
-  "formal_records": 0,
+  "phase": "EVALUATING",
+  "epochs": 400,
+  "optimizer_steps": 105500,
+  "formal_records": 120,
   "object_entries_deployed": 9,
   "goal_entries_deployed": 6,
   "libero50_entries_deployed": 3,
@@ -19,12 +19,12 @@
   "caet_goal_admission": "Stage7 has no moving cross-task positive pairs; not admitted",
   "controller_version": 2,
   "controller_pid": 47521,
-  "latest_progress": "progress_20261021_161609",
+  "latest_progress": "progress_20261021_172109",
   "current_stage_eta": {
-    "remaining_main_training_hours": 0.4309125864947284,
+    "remaining_main_training_hours": 0.0,
     "full_evaluation_reference_hours": 1.321268334256278,
     "basis": "per-task measured epoch time, using completed seed42 task times for not-yet-started tasks",
-    "remaining_evaluation_hours": null,
+    "remaining_evaluation_hours": 0.40634998343608997,
     "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
   },
   "rctr_completed": {
@@ -200,20 +200,20 @@
     "status": "PARTIAL",
     "audit": "CAET_PROGRESS_PASS",
     "seed": 43,
-    "observed_at": "2026-10-21T16:17:05.360525+08:00",
-    "epochs": 312,
-    "optimizer_steps": 73644,
+    "observed_at": "2026-10-21T17:22:29.395630+08:00",
+    "epochs": 400,
+    "optimizer_steps": 105500,
     "latest_epoch": {
       "task": 9,
-      "epoch": 11,
+      "epoch": 99,
       "batches": 362,
-      "steps": 73644,
-      "loss": -24.08051113002208,
-      "lr_first": 9.024649859943977e-05,
-      "lr_after": 8.923249299719888e-05,
-      "seconds": 17.868489503860474
+      "steps": 105500,
+      "loss": -33.98266849201687,
+      "lr_first": 1.0140056022408963e-06,
+      "lr_after": 0.0,
+      "seconds": 17.131453037261963
     },
-    "formal_records": 0,
+    "formal_records": 120,
     "auxiliary": {
       "6": {
         "epoch_files": 100,
@@ -231,9 +231,9 @@
         "active_updates": 30895
       },
       "9": {
-        "epoch_files": 12,
-        "updates": 4344,
-        "active_updates": 4344
+        "epoch_files": 100,
+        "updates": 36200,
+        "active_updates": 36200
       }
     },
     "effects": {
@@ -320,17 +320,18 @@
       }
     },
     "formal_audit": {
-      "records": 0,
-      "completed_vectors": 0,
-      "started_vectors": 0,
-      "completed_cells": 0,
+      "records": 120,
+      "completed_vectors": 12,
+      "started_vectors": 13,
+      "completed_cells": 6,
       "technical_exceptions": 0,
-      "mean_vector_seconds": null,
-      "remaining_evaluation_hours": null
+      "mean_vector_seconds": 182.85749254624048,
+      "remaining_evaluation_hours": 0.40634998343608997
     },
     "source_files": 204,
     "source_input_feature_hashes_pass": true,
     "phase_exits": {
+      "retain9.exit": "0",
       "labels9.exit": "0",
       "fit8.exit": "0",
       "labels8.exit": "0",
@@ -338,6 +339,7 @@
       "train6.exit": "0",
       "fit9.exit": "0",
       "fit7.exit": "0",
+      "train9.exit": "0",
       "train8.exit": "0",
       "labels7.exit": "0",
       "retain8.exit": "0",
@@ -365,6 +367,13 @@
         "payloads_equal": true,
         "manifest_sha256": "fa01e57096c760d645a1767ef941c3c7ba1858d2add95694cd29ed20199999e8",
         "parent_manifest_sha256": "32fa8e938055bb4e5c7b8931a1ba27c5f16ddfe7f5e2e6d504f8c66f55980df3"
+      },
+      "9": {
+        "count": 660,
+        "ordered_ids_equal": true,
+        "payloads_equal": true,
+        "manifest_sha256": "504f18d943b9aaa58e182befe10487cec515ee67c79187211dfc41d6b0b93a4f",
+        "parent_manifest_sha256": "4b7ea2381088214a9ee0e50dbe6fff69f25bfe804893307216f7315b9b8ca38d"
       }
     },
     "ifa_equal": {
@@ -374,10 +383,10 @@
       "ifa_task8.json": true
     },
     "eta": {
-      "remaining_main_training_hours": 0.4309125864947284,
+      "remaining_main_training_hours": 0.0,
       "full_evaluation_reference_hours": 1.321268334256278,
       "basis": "per-task measured epoch time, using completed seed42 task times for not-yet-started tasks",
-      "remaining_evaluation_hours": null,
+      "remaining_evaluation_hours": 0.40634998343608997,
       "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
     },
     "completed_rctr_evidence": {
@@ -386,8 +395,8 @@
       "recomputed_this_check": false
     },
     "task6_parity": "PASS",
-    "details_sha256": "da2ddffe56ff17584330790bdec712c1913bfed32363b4dc27d28549dfe21358",
-    "snapshot_sha256": "dc4c91179f71a0539a24f16c17683ae6ccc0366cb24d20fee9132af9ec538d3c",
+    "details_sha256": "4fdae56806796244f63a497a73919bc4e1ab66b30663d3ec4f9f32110d79a565",
+    "snapshot_sha256": "cc769608a0895e9a79746de3e00a77de33bb7b1287f97c610601d13c4d2775c5",
     "optimizer_calls_in_this_check": 0,
     "environment_steps_in_this_check": 0
   },

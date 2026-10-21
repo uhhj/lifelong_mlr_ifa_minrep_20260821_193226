@@ -22,7 +22,17 @@ def main():
         audit_path = p/f'CAET_FINAL_AUDIT{suffix}.json'
         details_path = p/f'CAET_DETAILS{suffix}.json'
         a = read(audit_path); d = read(details_path); c = d['caet']
-        assert a['seed'] == seed and a['engineering'] == 'LOCAL_INDEPENDENT_PASS'
+        receipt = c['completion']['receipt']
+        assert (receipt['method'],receipt['suite'],receipt['seed']) == ('CAET','OBJECT',seed)
+        assert f'CAET_OBJECT_seed{seed}_' in c['output']
+        if 'seed' in a:
+            assert a['seed'] == seed
+        else:
+            # Original seed42 audit predates the parameterized JSON schema.
+            # Bind its identity through the hashed details and actual receipt;
+            # never rewrite the original acceptance artifact.
+            assert seed == 42 and p.name == 'progress_20261021_121832'
+        assert a['engineering'] == 'LOCAL_INDEPENDENT_PASS'
         assert a['status'] in ('COMPLETED_GAIN','COMPLETED_NO_GAIN')
         assert a['source_details_sha256'] == sha(details_path)
         assert a['epochs'] == 400 and a['optimizer_steps'] == 105500

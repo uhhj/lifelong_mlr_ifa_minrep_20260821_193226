@@ -1,3 +1,11 @@
+## 最新检查 2026-10-21 17:23 CST（PARTIAL，CAET43已进入评估）
+
+CAET OBJECT43已完成400epoch105500主步，4个ep99已生成、最终严格加载与退出验收待完成。Task7/8/9辅助激活22696/30895/36200共89791次，效果模型另1240更新。204冻结源码输入特征、Task6实际tensor、四任务入库781/740/780/660有序ID及源目标载荷、IFA/初始化RNG同父，已结束阶段exit0均PASS。正式120/200、12完成vector＋1进行中、6完整cell、0技术异常，实际evaluate及环境正常，本地逐episode/attempt核验PASS，无工程恢复。证据progress_20261021_172109；初始snapshot110与后续details120按各自时间保留。
+
+12批均182.86秒，剩余评估约24分钟，最终验收另计，预计17:50–18:15 CST参考。临近完成同一自动化改30分钟，不新建。未全200条与工程验收前不计算全指标及三seed门槛。数据盘12.11GiB/系统5.51GiB，LIBERO50未GPU准入。
+
+外置aggregate_caet_object.py新增旧seed42验收格式兼容：原CAET_FINAL_AUDIT.json没有seed字段，使用原哈希绑定的CAET_DETAILS和服务器receipt中的method/suite/seed及真实episode身份确认，仅允许已验收的progress_20261021_121832，不重写旧证据。该绑定与语法已验证，尚未运行三seed汇总。完整43验收后再汇总并核对controller；下一轮可能已自动转换入口，按真实DECISION/worker核查，不重复启动。服务器科学源未改，本轮0优化器/0环境调用。
+
 ## 最新检查 2026-10-21 16:17 CST（PARTIAL）
 
 CAET OBJECT43正常Task9，312完整epoch73644主步/0正式。Task6–8各100epoch已完成，Task6实际tensor同父PASS，前三任务入库781/740/780有序ID及源目标载荷、四阶段IFA/初始化RNG同父，204冻结源码输入特征及已结束阶段exit0全部PASS，无重复阶段启动或工程恢复。Task7/8/9辅助激活22696/30895/4344；效果预测器各10epoch共1240更新、实际正对1534/3486/3008且动作梯度有限非零PASS。证据progress_20261021_161609/CAET_PROGRESS_AUDIT.json；辅助项激活不是闭环增益。
