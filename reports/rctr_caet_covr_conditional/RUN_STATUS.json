@@ -1,11 +1,11 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-21T10:44:31.548297+08:00",
+  "observed_at": "2026-10-21T11:14:22.695176+08:00",
   "active": "CAET_OBJECT_42",
-  "phase": "TRAINING",
-  "epochs": 359,
-  "optimizer_steps": 90658,
-  "formal_records": 0,
+  "phase": "EVALUATING",
+  "epochs": 400,
+  "optimizer_steps": 105500,
+  "formal_records": 40,
   "object_entries_deployed": 9,
   "goal_entries_deployed": 6,
   "libero50_entries_deployed": 3,
@@ -19,10 +19,11 @@
   "caet_goal_admission": "Stage7 has no moving cross-task positive pairs; not admitted",
   "controller_version": 2,
   "controller_pid": 47521,
-  "latest_progress": "progress_20261021_104229",
+  "latest_progress": "progress_20261021_111232",
   "current_stage_eta": {
-    "remaining_main_training_hours": 0.17917095877805447,
+    "remaining_main_training_hours": 0.0,
     "full_evaluation_reference_hours": 1.321268334256278,
+    "remaining_evaluation_hours": 1.2474334499571058,
     "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
   },
   "rctr_completed": {
@@ -197,20 +198,20 @@
   "caet_progress": {
     "status": "PARTIAL",
     "audit": "CAET_PROGRESS_PASS",
-    "observed_at": "2026-10-21T10:44:31.548297+08:00",
-    "epochs": 359,
-    "optimizer_steps": 90658,
+    "observed_at": "2026-10-21T11:14:22.695176+08:00",
+    "epochs": 400,
+    "optimizer_steps": 105500,
     "latest_epoch": {
       "task": 9,
-      "epoch": 58,
+      "epoch": 99,
       "batches": 362,
-      "steps": 90658,
-      "loss": -29.001199543146797,
-      "lr_first": 4.258823529411765e-05,
-      "lr_after": 4.157422969187675e-05,
-      "seconds": 13.66915488243103
+      "steps": 105500,
+      "loss": -33.99358738851811,
+      "lr_first": 1.0140056022408963e-06,
+      "lr_after": 0.0,
+      "seconds": 14.553806066513062
     },
-    "formal_records": 0,
+    "formal_records": 40,
     "auxiliary": {
       "6": {
         "epoch_files": 100,
@@ -228,9 +229,9 @@
         "active_updates": 30897
       },
       "9": {
-        "epoch_files": 59,
-        "updates": 21358,
-        "active_updates": 21358
+        "epoch_files": 100,
+        "updates": 36200,
+        "active_updates": 36200
       }
     },
     "effects": {
@@ -316,9 +317,19 @@
         "validation_is_not_closed_loop_evidence": true
       }
     },
+    "formal_audit": {
+      "records": 40,
+      "completed_vectors": 4,
+      "started_vectors": 4,
+      "completed_cells": 1,
+      "technical_exceptions": 0,
+      "mean_vector_seconds": 280.6725262403488,
+      "remaining_evaluation_hours": 1.2474334499571058
+    },
     "source_files": 204,
     "source_input_feature_hashes_pass": true,
     "phase_exits": {
+      "retain9.exit": "0",
       "labels9.exit": "0",
       "fit8.exit": "0",
       "labels8.exit": "0",
@@ -326,6 +337,7 @@
       "train6.exit": "0",
       "fit9.exit": "0",
       "fit7.exit": "0",
+      "train9.exit": "0",
       "train8.exit": "0",
       "labels7.exit": "0",
       "retain8.exit": "0",
@@ -353,6 +365,13 @@
         "payloads_equal": true,
         "manifest_sha256": "fe7dd00a84e3080973a28de86037fc230915fd293db90f1fe01e0f12a4a7d024",
         "parent_manifest_sha256": "425d8398a6d41e5db573d671801d1af034c13f99e4cf441e0823680ecb3e87e3"
+      },
+      "9": {
+        "count": 660,
+        "ordered_ids_equal": true,
+        "payloads_equal": true,
+        "manifest_sha256": "2b1bc5dc8e08e3df241f4f09ef3ef067419a31a14066f239767b400268ed5570",
+        "parent_manifest_sha256": "8bb5958343eea622339f203773661e90a00a6e947eb62ce23f713e46f478b1f5"
       }
     },
     "ifa_equal": {
@@ -362,8 +381,9 @@
       "ifa_task8.json": true
     },
     "eta": {
-      "remaining_main_training_hours": 0.17917095877805447,
+      "remaining_main_training_hours": 0.0,
       "full_evaluation_reference_hours": 1.321268334256278,
+      "remaining_evaluation_hours": 1.2474334499571058,
       "excludes": "Future labels, effect fitting, storage and final audit; no whole-program ETA"
     },
     "completed_rctr_evidence": {
@@ -371,8 +391,8 @@
       "sha256": "70bad60c3fdb46703de5d5154f2128ced3138bb10c60660832c9db2557547a1b",
       "recomputed_this_check": false
     },
-    "details_sha256": "d4d2f869c0adf8f06e37828529a54e5b3e47eeb15fc609b08fc67bc728b6c7bf",
-    "snapshot_sha256": "4eddc14720f3030ec8f6e605fbb11c26f0e9e89d17cdd854cbe17ef0a5b0c6ac",
+    "details_sha256": "dbc51d46bbd0c18f5f919b5c2730b6843e7fe992c8024772d55693c1fa3efb32",
+    "snapshot_sha256": "fd6fbffe27958616b85def1cf6919fb6ccaf0c1335692fd3f5c8b226e9a281c7",
     "optimizer_calls_in_this_check": 0,
     "environment_steps_in_this_check": 0
   }
