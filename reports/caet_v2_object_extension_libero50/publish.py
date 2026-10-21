@@ -72,7 +72,7 @@ def main():
     receipt = dict(status="PUSH_VERIFIED", commit=head, remote=remote,
                    time=datetime.datetime.now().astimezone().isoformat(),
                    files=len(paths), bytes=sum(x["bytes"] for x in manifest.values()),
-                   experiment_status=json.loads((R/"RUN_STATUS.json").read_text())["status"])
+                   experiment_status=json.loads((R/"RUN_STATUS.json").read_text(encoding="utf8"))["status"])
     (R/("PUBLICATION_RECEIPT_"+datetime.datetime.now().strftime("%Y%m%d_%H%M%S")+".json")).write_text(json.dumps(receipt, indent=2)+"\n")
     print(json.dumps(receipt, indent=2))
 
