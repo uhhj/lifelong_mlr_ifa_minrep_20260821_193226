@@ -16,12 +16,16 @@ for p in Q.glob('*.receipt.json'):read(p)
 D=Q/'capacity_recovery_v1'
 for n in ('RUN_STATUS.json','CONTRACT.json','watcher.pid.json','watcher.exit','FAILURE.json','HANDOFF.json','watcher.log'):read(D/n)
 for p in D.glob('*.receipt.json'):read(p)
-for seed in (41,42,43):
- e=Q/('LIBERO50_seed%d.json'%seed)
+recovery=Q/'libero50_taskmap01'
+for n in ('RUN_STATUS.json','CONTRACT.json','MAPPING_AUDIT.json','controller.pid.json','controller.exit','FAILURE.json','controller.log','QUEUE.json'):read(recovery/n)
+for p in recovery.glob('*.receipt.json'):read(p)
+for w in (recovery/'shared_pretraining',recovery/'seed41',recovery/'seed42',recovery/'seed43'):
+ for p in (w/'admission').glob('*'):read(p)
+for e in [root/('LIBERO50_seed%d.json'%seed) for root in (Q,recovery) for seed in (41,42,43)]:
  if not e.is_file():continue
  entry=json.loads(e.read_text())
  for output in (Path(entry['output']),Path(entry['shared_pretrain_output'])):
-  for n in ('RUN_STATUS.json','GPU_PREFLIGHT.json','PRETRAIN_GPU_PREFLIGHT.json','PRETRAIN_INITIALIZATION.json','LAUNCH_ACCEPTANCE.json','PROCESS_EXIT_ACCEPTANCE.json','pipeline.exit','supervisor.exit','PRETRAIN_COMPLETE.json','pretraining/epochs.json'):
+  for n in ('RUN_STATUS.json','GPU_PREFLIGHT.json','PRETRAIN_GPU_PREFLIGHT.json','PRETRAIN_INITIALIZATION.json','LAUNCH_ACCEPTANCE.json','PROCESS_EXIT_ACCEPTANCE.json','pipeline.exit','supervisor.exit','PRETRAIN_COMPLETE.json','pretraining/epochs.json','pretrain.log','pretrain.exit'):
    read(output/n)
 
 for seed in (41,43):

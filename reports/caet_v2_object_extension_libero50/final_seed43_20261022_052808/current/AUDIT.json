@@ -1,0 +1,398 @@
+{
+  "status": "PASS",
+  "method": "CAET-v2",
+  "epochs": 400,
+  "optimizer_steps": 105500,
+  "formal_records": 200,
+  "vector_attempts": 20,
+  "checkpoints": [
+    {
+      "task": 6,
+      "sha256": "369a4230176e05f8dfe63bb6891c14b718d5602ea7da0abfe8fb9284111a0b17",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 7,
+      "sha256": "5c60da05041cc5043fda11333d9184da1c8fda4c43eb152510083a2ade274251",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 8,
+      "sha256": "7da298d7d773ef9c84c42144789ffee47c85c8434bbee00bb429895f95e41f04",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 9,
+      "sha256": "9c2e30115e0584eef3dbcfe72a3417ba361fee0630cec3556c403a8a3a01959f",
+      "strict_loaded_keys": 100
+    }
+  ],
+  "selection": {
+    "6": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 781
+    },
+    "7": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 740
+    },
+    "8": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 780
+    },
+    "9": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 660
+    }
+  },
+  "ifa": {
+    "6": {
+      "equal": true
+    },
+    "7": {
+      "equal": true
+    },
+    "8": {
+      "equal": true
+    },
+    "9": {
+      "equal": true
+    }
+  },
+  "auxiliary": {
+    "6": {
+      "active": false,
+      "predictor": null,
+      "transfer_applied_updates": 0,
+      "transfer_blocked_updates": 0,
+      "retention_active_updates": 0,
+      "causal_labels": 1472,
+      "support_sha256": "c4ef028cd6171aa72b85d3e2f06712e81cd81be20f8eb646619fee4f5dd4cd66"
+    },
+    "7": {
+      "active": false,
+      "predictor": {
+        "status": "FALLBACK_RA",
+        "reason": "NO_QUALIFIED_GRAPH",
+        "policy_updates": 0,
+        "effect_updates": 0
+      },
+      "transfer_applied_updates": 0,
+      "transfer_blocked_updates": 0,
+      "retention_active_updates": 0,
+      "causal_labels": 1390,
+      "support_sha256": "2e8dd956e79d9655372bbd3406e2586cacc7e48cb695271f2ede3296e4c6f85d"
+    },
+    "8": {
+      "active": true,
+      "predictor": {
+        "status": "PASS",
+        "reason": null,
+        "heldout_mae": 0.2537175118923187,
+        "training_mean_baseline_mae": 0.488547146320343,
+        "permuted_action_mae": 0.27784714102745056,
+        "action_gradient_finite_nonzero": true,
+        "action_gradient_abs_sum": 0.4137721061706543,
+        "heldout_supported": 75,
+        "heldout_old_demos": [
+          [
+            6,
+            "demo_2"
+          ],
+          [
+            6,
+            "demo_3"
+          ],
+          [
+            6,
+            "demo_5"
+          ],
+          [
+            6,
+            "demo_6"
+          ],
+          [
+            7,
+            "demo_0"
+          ],
+          [
+            7,
+            "demo_1"
+          ],
+          [
+            7,
+            "demo_2"
+          ],
+          [
+            7,
+            "demo_3"
+          ],
+          [
+            7,
+            "demo_5"
+          ],
+          [
+            7,
+            "demo_6"
+          ],
+          [
+            7,
+            "demo_7"
+          ],
+          [
+            7,
+            "demo_8"
+          ]
+        ],
+        "effect_updates": 840,
+        "epochs": 10,
+        "policy_updates": 0,
+        "seconds": 4.851348876953125,
+        "train_windows": 2682,
+        "holdout_windows": 256,
+        "frozen_predictor_sha256": "dfc9207ec65c9a6c3075e6f86fae756e1b56e7e5397773c22404052566b7aa4d",
+        "support_sha256": "58c06cb88efd5af10e17502313f4ce702ef6b2a83698311861cb8502fa6ee677"
+      },
+      "transfer_applied_updates": 7612,
+      "transfer_blocked_updates": 5964,
+      "retention_active_updates": 2578,
+      "causal_labels": 1470,
+      "support_sha256": "58c06cb88efd5af10e17502313f4ce702ef6b2a83698311861cb8502fa6ee677"
+    },
+    "9": {
+      "active": true,
+      "predictor": {
+        "status": "PASS",
+        "reason": null,
+        "heldout_mae": 0.25501102209091187,
+        "training_mean_baseline_mae": 0.4687478840351105,
+        "permuted_action_mae": 0.2865823805332184,
+        "action_gradient_finite_nonzero": true,
+        "action_gradient_abs_sum": 0.5438234806060791,
+        "heldout_supported": 64,
+        "heldout_old_demos": [
+          [
+            7,
+            "demo_0"
+          ],
+          [
+            7,
+            "demo_1"
+          ],
+          [
+            7,
+            "demo_2"
+          ],
+          [
+            7,
+            "demo_3"
+          ],
+          [
+            7,
+            "demo_4"
+          ],
+          [
+            7,
+            "demo_5"
+          ],
+          [
+            7,
+            "demo_6"
+          ],
+          [
+            7,
+            "demo_7"
+          ],
+          [
+            7,
+            "demo_8"
+          ],
+          [
+            8,
+            "demo_0"
+          ],
+          [
+            8,
+            "demo_1"
+          ],
+          [
+            8,
+            "demo_2"
+          ],
+          [
+            8,
+            "demo_3"
+          ],
+          [
+            8,
+            "demo_4"
+          ],
+          [
+            8,
+            "demo_5"
+          ],
+          [
+            8,
+            "demo_6"
+          ],
+          [
+            8,
+            "demo_7"
+          ],
+          [
+            8,
+            "demo_8"
+          ]
+        ],
+        "effect_updates": 980,
+        "epochs": 10,
+        "policy_updates": 0,
+        "seconds": 5.2822043895721436,
+        "train_windows": 3136,
+        "holdout_windows": 309,
+        "frozen_predictor_sha256": "a490dfea949b2cfd22eb3a7cd18fc52bbce898304e5464558a2e4bdf669f643d",
+        "support_sha256": "d760e34f51d93b563ec4fdb371255124f34b06f6203b327a4ca03890eb849368"
+      },
+      "transfer_applied_updates": 9036,
+      "transfer_blocked_updates": 6859,
+      "retention_active_updates": 4918,
+      "causal_labels": 1229,
+      "support_sha256": "d760e34f51d93b563ec4fdb371255124f34b06f6203b327a4ca03890eb849368"
+    }
+  },
+  "all_inputs_unchanged": true,
+  "metrics": {
+    "AUC": {
+      "fraction": "89/120",
+      "percent": 74.16666666666667
+    },
+    "FWT": {
+      "fraction": "3/4",
+      "percent": 75.0
+    },
+    "NBT": {
+      "fraction": "7/360",
+      "percent": 1.9444444444444444
+    },
+    "OldFinal": {
+      "fraction": "49/60",
+      "percent": 81.66666666666667
+    },
+    "FinalAll": {
+      "fraction": "29/40",
+      "percent": 72.5
+    }
+  },
+  "baseline": {
+    "AUC": {
+      "fraction": "721/960",
+      "percent": 75.10416666666667
+    },
+    "FWT": {
+      "fraction": "3/4",
+      "percent": 75.0
+    },
+    "NBT": {
+      "fraction": "-1/72",
+      "percent": -1.3888888888888888
+    },
+    "OldFinal": {
+      "fraction": "49/60",
+      "percent": 81.66666666666667
+    },
+    "FinalAll": {
+      "fraction": "3/4",
+      "percent": 75.0
+    }
+  },
+  "delta": {
+    "AUC": {
+      "fraction": "-3/320",
+      "percent": -0.9375
+    },
+    "FWT": {
+      "fraction": "0",
+      "percent": 0.0
+    },
+    "NBT": {
+      "fraction": "1/30",
+      "percent": 3.3333333333333335
+    },
+    "OldFinal": {
+      "fraction": "0",
+      "percent": 0.0
+    },
+    "FinalAll": {
+      "fraction": "-1/40",
+      "percent": -2.5
+    }
+  },
+  "matrix": [
+    {
+      "stage": 6,
+      "task": 6,
+      "current": "3/5",
+      "parent": "3/5"
+    },
+    {
+      "stage": 7,
+      "task": 6,
+      "current": "13/20",
+      "parent": "13/20"
+    },
+    {
+      "stage": 7,
+      "task": 7,
+      "current": "19/20",
+      "parent": "19/20"
+    },
+    {
+      "stage": 8,
+      "task": 6,
+      "current": "11/20",
+      "parent": "2/5"
+    },
+    {
+      "stage": 8,
+      "task": 7,
+      "current": "19/20",
+      "parent": "1"
+    },
+    {
+      "stage": 8,
+      "task": 8,
+      "current": "1",
+      "parent": "9/10"
+    },
+    {
+      "stage": 9,
+      "task": 6,
+      "current": "1/2",
+      "parent": "1/2"
+    },
+    {
+      "stage": 9,
+      "task": 7,
+      "current": "1",
+      "parent": "19/20"
+    },
+    {
+      "stage": 9,
+      "task": 8,
+      "current": "19/20",
+      "parent": "1"
+    },
+    {
+      "stage": 9,
+      "task": 9,
+      "current": "9/20",
+      "parent": "11/20"
+    }
+  ],
+  "metric_gate": false,
+  "summed_epoch_seconds": 4337.079509973526
+}
