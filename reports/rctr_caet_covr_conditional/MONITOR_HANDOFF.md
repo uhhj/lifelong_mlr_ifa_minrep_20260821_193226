@@ -1,3 +1,15 @@
+## 2026-10-21 19:03 CST：COVR42进入Task8中点采集（PARTIAL）
+
+证据：progress_20261021_190031/SNAPSHOT.json、COVR_DETAILS.json、COVR_PROGRESS_AUDIT.json。已完成250epoch/53850主更新，Task6/7各100epoch、Task8前50epoch；正式评估0/200。controller_v3 PID64697、pipeline64834、collect8 PID65456正常，五个已结束阶段exit0。未重启、未追加预算、未改冻结源。
+
+Task7采集验收PASS：6条正常轨迹中4成功、2失败且均有可用快照；按固定顺序选中两失败快照（初态20、25），36条探索/0确认、16104策略步、1822正常前缀步、32恢复检查步。初态20的分量3仅一次挽救，分别对正常与argmax对照FS=1/SF=0，未到FS>=2；初态25所有候选均无挽救。因此两者NO_EXPLORATION_CANDIDATE、0认证快照/0训练窗口，Task7后50epoch辅助激活为0。不能将单条成功分支当作认证监督或模块收益。
+
+外置新增audit_covr_decisions.py，逐项独立复算失败快照选择、双对照FS/SF、候选排序、动作不同性、确认和训练repeat绑定；本次已对Task7完整决策实际执行PASS。Task8尚无完成决策，不能从当前少量成功分支推断认证数。该审计仅元数据，不冒称完成所有张量载荷结构最终验收；后者仍需原服务器最终审计。
+
+Task8观察到5条探索/0确认、1891策略步、1正常轨迹及1恢复门；均值30.29秒/分支。按剩余最大预算估计探索约52分钟，若全部触发确认另27分钟，正常轨迹/工程检查另计；早期估时不稳定，整组完成时间仍未可靠确定。保持30分钟检查。
+
+204源码/296输入哈希、Task6实际tensor、初始化RNG、已出现IFA、Task6/7入库781/740有序ID及源目标载荷均PASS。所有已完成更新辅助激活0。GPU3090约61%/3006MiB；数据盘11.01GiB、系统盘5.50GiB空闲。LIBERO50数据完整但未GPU准入，预算不减。CAET-GOAL适用性阻塞保留，已完成零训练核查不等于授权新条件训练。总体PARTIAL。
+
 ## 2026-10-21 CAET GOAL 零训练配对核查完成（不更改队列）
 
 用户本轮仅授权已有数据只读核查，不启动条件CAET。报告goal_pair_audit_20261021_185515/REPORT.md；PAIR_EVIDENCE、RECEIPT、LOCAL_AUDIT全PASS。0训练/0优化器/0环境/0CUDA/0服务器写入，原COVR队列未改。每seed4759窗口与原RA存储身份重新核验，按原native排序拼接seed shuffle与效果fit batch64/10轮固定torch顺序重放，当前—旧与旧—旧拆分、演示覆盖和真实batch正负同时存在计数均已复算。

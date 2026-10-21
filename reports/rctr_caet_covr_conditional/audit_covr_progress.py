@@ -1,6 +1,7 @@
 """Read-only partial-stage accounting, never a final acceptance or efficacy claim."""
 import argparse,collections,datetime,hashlib,json,statistics
 from pathlib import Path
+from audit_covr_decisions import audit_decisions
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('directory',type=Path);a=ap.parse_args();p=a.directory
  raw=(p/'COVR_DETAILS.json').read_bytes();d=json.loads(raw)
@@ -37,9 +38,9 @@ def main():
   avg=statistics.mean(x['seconds'] for x in br) if br else None
   reports[name]=dict(committed=len(br),exploration=exp,confirmation=conf,normal_completed=len(ns),
    successful_branches=sum(x['success'] for x in br),policy_steps=sum(x['steps'] for x in br),
-   completed_decisions=len(c['decisions']),acceptance=c['acceptance'],restore_gates=len(c['gates']),
-   mean_branch_seconds=avg,remaining_exploration_budget_minutes=(54*(stage-6)-exp)*avg/60 if avg else None,
-   remaining_confirmation_budget_minutes=(27*(stage-6)-conf)*avg/60 if avg else None,
+   completed_decisions=len(c['decisions']),decision_audit=audit_decisions(stage,c),acceptance=c['acceptance'],restore_gates=len(c['gates']),
+   mean_branch_seconds=avg,remaining_exploration_budget_minutes=0 if c['acceptance'] else ((54*(stage-6)-exp)*avg/60 if avg else None),
+   remaining_confirmation_budget_minutes=0 if c['acceptance'] else ((27*(stage-6)-conf)*avg/60 if avg else None),
    note='Budget-scaled projection, not all branches necessarily executed; excludes normal episodes and engineering overhead')
  out=dict(status='COVR_PROGRESS_PASS',experiment_status='PARTIAL',
   observed_at=datetime.datetime.fromtimestamp(d['observed_end_unix'],datetime.timezone(datetime.timedelta(hours=8))).isoformat(),
