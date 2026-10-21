@@ -1,3 +1,11 @@
+## 2026-10-21 CAET动作后信息审计：科学要求FAIL
+
+详见caet_temporal_audit_20261021_191704/REPORT.md及LOCAL_AUDIT。三seed17763缓存全SHA动作绑定、16803有效效果窗口包含目标动作后末帧。120 seed-demo物理状态对齐及原生索引核验：obs[t]关节/夹爪精确等于states[t+1]，EffectModel时间平均包含末帧并拼接action[t]，标签为state[t]到state[t+1]。至少state token动作后信息已证实；无重渲染或视觉重编码，不冒称像素复验。0训练0环境0模型forward0服务器写入。已有闭环数值/冻结验收保留，因果预测机制解读受限；不能只解决GOAL正对数量后直接启用。修复时序需新版本另立协议，本轮未授权新训练。COVR仍USER_CANCELLED不得恢复；LIBERO50未取消仍待执行。
+
+## 用户取消COVR并要求分析CAET（2026-10-21）
+
+COVR_CANCELLED_BY_USER.json已确认controller_v3及COVR进程子树全部退出，250epoch中断，保留全部现场。所有OBJECT/GOAL COVR分支取消；不是工程失败，不得恢复，不伪造完成/NO_GAIN。LIBERO50未取消、调度待衔接。当前优先CAET OBJECT只读结果分析及用户新增的效果预测器时间泄漏零训练审计。不能在数据时序核查未完成时自行修改或启动新CAET条件版本。旧文档COVR继续指令全部失效。
+
 ## 2026-10-21 19:03 CST：COVR42进入Task8中点采集（PARTIAL）
 
 证据：progress_20261021_190031/SNAPSHOT.json、COVR_DETAILS.json、COVR_PROGRESS_AUDIT.json。已完成250epoch/53850主更新，Task6/7各100epoch、Task8前50epoch；正式评估0/200。controller_v3 PID64697、pipeline64834、collect8 PID65456正常，五个已结束阶段exit0。未重启、未追加预算、未改冻结源。
