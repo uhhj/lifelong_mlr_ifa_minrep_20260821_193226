@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T17:56:17.188508+08:00",
+  "observed_at": "2026-10-22T18:07:24.556189+08:00",
   "order": [
     "TAC",
     "EFTR",
@@ -9,7 +9,7 @@
   "seed": 41,
   "controller_pid": 84841,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_175613",
+  "snapshot": "progress_20261022_180722",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
@@ -87,21 +87,21 @@
       }
     },
     "EFTR_OBJECT_41": {
-      "complete_epochs": 158,
-      "steps": 28866,
+      "complete_epochs": 170,
+      "steps": 31590,
       "formal_records": 0,
       "gpu_admission": "PASS",
       "last": {
         "task": 7,
-        "epoch": 57,
+        "epoch": 69,
         "batches": 227,
-        "steps": 28866,
-        "loss": -27.195680853553807,
-        "lr_first": 4.396846846846847e-05,
-        "lr_after": 4.2945945945945946e-05,
-        "seconds": 55.687098026275635
+        "steps": 31590,
+        "loss": -28.756438654424862,
+        "lr_first": 3.16981981981982e-05,
+        "lr_after": 3.0675675675675675e-05,
+        "seconds": 53.018693923950195
       },
-      "last_stage_mean_epoch_seconds": 57.50991566181183,
+      "last_stage_mean_epoch_seconds": 55.03872411251068,
       "mechanism": {
         "6": {
           "records": 15700,
@@ -118,18 +118,18 @@
           "budget_unmet": 0
         },
         "7": {
-          "records": 13166,
+          "records": 15890,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 39498,
+          "optimizer_trials": 47670,
           "candidate_selected": {
-            "0": 2802,
-            "1": 2731,
-            "2": 7633
+            "0": 3420,
+            "1": 3049,
+            "2": 9421
           },
-          "budget_unmet": 13147
+          "budget_unmet": 15871
         },
         "8": {
           "records": 0,
@@ -282,36 +282,57 @@
     }
   },
   "EFTR_latest": {
-    "complete_epochs": 158,
-    "steps": 28866,
-    "formal_records": 0,
+    "complete_epochs": 170,
+    "steps": 31590,
     "task": 7,
-    "completed_task_epochs": 58,
+    "completed_task_epochs": 70,
+    "formal_records": 0,
+    "evidence": "progress_20261022_180722",
+    "status": "RUNNING",
+    "train_pid": 88491,
+    "pipeline_pid": 88206,
     "mechanism_summary": {
-      "records": 13166,
+      "records": 15890,
       "head_updates": 0,
       "effect_exposures": 0,
       "cross_anchors": 0,
       "partner_forwards": 0,
-      "optimizer_trials": 39498,
+      "optimizer_trials": 47670,
       "candidate_selected": {
-        "0": 2802,
-        "1": 2731,
-        "2": 7633
+        "0": 3420,
+        "1": 3049,
+        "2": 9421
       },
-      "budget_unmet": 13147
-    },
-    "evidence": "progress_20261022_175613",
-    "status": "RUNNING",
-    "train_pid": 88491,
-    "pipeline_pid": 88206
+      "budget_unmet": 15871
+    }
   },
   "EFTR_ETA": {
-    "recent10_epoch_seconds": 57.50991566181183,
-    "task7_remaining_minutes": 40.256940963268285,
+    "recent10_epoch_seconds": 55.03872411251068,
+    "task7_remaining_minutes": 27.51936205625534,
     "task7_reference_finish_CST": "2026-10-22 18:37–18:40",
-    "whole_run": "unknown: Task8/9 actual throughput not measured; evaluation and final acceptance additional"
+    "whole_run": "unknown: Task8/9 throughput pending"
   },
   "mechanism_evidence": "eftr_mechanism_20261022_172904",
-  "scale_evidence": "eftr_scale_readonly_20261022_173132"
+  "scale_evidence": "eftr_scale_readonly_20261022_173132",
+  "EFTR_zero_training_diagnostic": {
+    "directory": "eftr_kl_diagnostic_readonly_20261022_180335",
+    "status": "PASS_ZERO_TRAINING_DIAGNOSTIC",
+    "snapshot": {
+      "path": "/data/mlr_ifa/experiments/CAETv3_EFTR_OBJECT_seed41_20261022_collate01/ra_coreset/recovery/latest.pth",
+      "sha256": "ef72d31f5c39a9aa0e2f0432ad08f0fe17d0e7192fb13953a228b6fb00c26572",
+      "task": 7,
+      "epoch": 64,
+      "step": 30455,
+      "bytes": 346368253,
+      "atomic_fd": true
+    },
+    "R_decomposition": {
+      "R": 292667.0983828298,
+      "arm_contribution_R": 3.5898343595873787,
+      "gripper_contribution_R": 292663.50099405274,
+      "explicit_switch_contribution_R": 0.007554417413572344
+    },
+    "actual_head": "GMMHead",
+    "prior_class_identity_superseded": true
+  }
 }
