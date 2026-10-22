@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-23T05:21:16.145195+08:00",
+  "observed_at": "2026-10-23T05:51:15.937765+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
@@ -19,7 +19,7 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261023_052136",
+  "snapshot": "snapshot_readonly_20261023_055136",
   "runs": {
     "OBJECT_42": {
       "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
@@ -302,29 +302,29 @@
     },
     "GOAL_42": {
       "status": "RUNNING_OR_PREPARING",
-      "complete_epochs": 247,
-      "main_steps": 32595,
+      "complete_epochs": 400,
+      "main_steps": 76100,
       "last": {
-        "task": 8,
-        "epoch": 46,
-        "batches": 185,
-        "steps": 32595,
-        "loss": -25.371092574660842,
-        "lr_first": 5.550000000000001e-05,
-        "lr_after": 5.447222222222222e-05,
-        "seconds": 5.429284334182739
+        "task": 9,
+        "epoch": 99,
+        "batches": 337,
+        "steps": 76100,
+        "loss": -30.156259548062742,
+        "lr_first": 1.0150602409638555e-06,
+        "lr_after": 0.0,
+        "seconds": 8.379806995391846
       },
       "formal": {
-        "records": 0,
-        "completed_vectors": 0,
-        "started_vectors": 0,
+        "records": 10,
+        "completed_vectors": 1,
+        "started_vectors": 2,
         "completed_cells": 0,
         "technical_exceptions": 0,
-        "mean_vector_seconds": null,
-        "remaining_evaluation_hours": null
+        "mean_vector_seconds": 286.2500548362732,
+        "remaining_evaluation_hours": 1.510764178302553
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 5.342136526107788
+      "recent_stage_epoch_seconds": 8.49125895500183
     },
     "GOAL_43": {
       "status": "QUEUED_NOT_GPU_ADMITTED",
@@ -336,26 +336,25 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "GOAL42_Task8_remaining_epochs_at_snapshot": 53,
-    "GOAL42_recent_Task8_epoch_seconds": 5.342136526107788,
-    "GOAL42_Task8_remaining_minutes_linear": 4.718887264728547,
-    "GOAL42_Task8_reference_finish_CST": "2026-10-23 05:26–05:30",
-    "GOAL42_reference_final_acceptance_CST": "2026-10-23 06:45–07:15",
+    "GOAL42_completed_vectors_at_snapshot": 1,
+    "GOAL42_first_vector_seconds": 286.2500548362732,
+    "GOAL42_remaining_evaluation_minutes_linear": 90.64585069815318,
+    "GOAL42_reference_final_acceptance_CST": "2026-10-23 07:20–07:50",
     "GOAL43_finish_CST": null,
     "total_finish_CST": null,
-    "basis": "05:21 actual42 Task8 last10 epochs5.342137sec, remaining53 linear4.718887min; future Task9 reference own-suite seed41 last10 mean8.886625sec*100=14.811041min, formal20vector reference actual41 59.377450min, plus preparation and audits. Later throughput uncertain, no overall queue promise.",
+    "basis": "05:51 actual42 first vector286.250055sec only; remaining19 linear90.645851min plus final audits/local download. One batch small sample and startup mixing, not a reliable total ETA; supersedes prior same-suite41-based06:45–07:15 reference. Later batches must recalibrate.",
     "provisional": true
   },
-  "phase_exit_evidence": "snapshot_readonly_20261023_052136",
-  "current_phase": "GOAL42_TRAINING_TASK8",
+  "phase_exit_evidence": "snapshot_readonly_20261023_055136",
+  "current_phase": "GOAL42_FORMAL_EVALUATION",
   "disk": {
     "/data": {
-      "ordinary": 6585720832,
-      "root": 11455758336
+      "ordinary": 6283370496,
+      "root": 11153408000
     },
     "/": {
-      "ordinary": 7979352064,
-      "root": 11082878976
+      "ordinary": 7979122688,
+      "root": 11082649600
     }
   },
   "accepted_packages": {
@@ -398,17 +397,17 @@
   },
   "capacity_recheck": {
     "/": {
-      "free": 7979352064,
+      "free": 7979122688,
       "reserve": 1073741824,
       "remaining_additional_bound": 5153960754,
-      "margin": 1751649486
+      "margin": 1751420110
     },
     "/data": {
-      "free": 11110191104,
+      "free": 11153408000,
       "reserve": 2147483648,
-      "remaining_additional_bound": 7978082302,
-      "margin": 984625154
+      "remaining_additional_bound": 7328591870,
+      "margin": 1677332482
     }
   },
-  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_052148"
+  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_055148"
 }
