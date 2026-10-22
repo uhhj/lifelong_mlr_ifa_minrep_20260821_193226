@@ -24,3 +24,14 @@ A固定128留出样本的7vs8执行分布KL均值10937480.735087，分量切换5
 见rset_diagnostic_20261022_123604/REPORT.md、LOCAL_AUDIT及SCIENTIFIC_FINDINGS。原门首要问题为状态cos>=.90：Task8/9原效果支持178/206中排同demo仅3/0有任一状态邻居，最多1demo，自身demo加回上界仍2。取消Top20或仅用当前任务库仍0联合支持，不能将主要原因归于混合动作尺度。新局部嵌套LODO原型专家交集160/178及197/206，但所有20个夹爪连续OOD阈值为0，随机执行动作几乎全拒绝，判NOT_READY_DEGENERATE_GRIPPER_BOUND；不能以分量均值高覆盖冒称随机执行可靠性。0训练0优化器0环境0服务器写入，50批CPU冻结原v2前向、4CP严格100键与SHA、标量独立复算PASS。不更改冻结RSET、不放宽阈值、不把诊断原型当新增训练授权。
 
 进度快照progress_20261022_123307：TAC171完整epoch31817主步/0正式，Task6实际tensor同RA、689冻结hash通过。RUN_STATUS读取比epochs早一个epoch，属于只读快照时序；没有恢复或重启。RSET/EFTR尚未GPU准入。原10MB标量证据仅本地，发布27个结构化片段及可逐字节重建的manifest。
+
+
+## 2026-10-22 用户修订：停止七步TAC，转独立八步辅助头
+
+用户明确要求主8步BC/Temporal Transformer/GMM/闭环不变，新增训练专用下一动作H_aux后重启。tac_user_stop_20261022_131004/STOP_RECEIPT.json：旧dispatcher82742和TAC训练树停止，297完整epoch/68373主步、正式0，689原冻结hash通过。旧实验标USER_STOPPED_FOR_REVISION，不是完成或NO_GAIN；原产物只读，不能恢复旧队列。新工作目录../20261022_tac_aux8_object_seed41，新实验TAC_AUX8，从官方初始化/空本run缓冲开始；原RSET/EFTR仍独立授权、按原版本待安全衔接。新版本协议与实际准入以新目录为准。
+
+### RSET夹爪语义零训练诊断完成（不替换冻结B）
+
+rset_semantic_v2_20261022_125521/REPORT.md、LOCAL_AUDIT.json与LIGHT_PACKAGE_AUDIT PASS。18份安装源追踪、28个纯formatter测试确认PandaGripper用sign命令增量修改内部目标：负OPEN/零HOLD/正CLOSE，非瞬时物理开合。0训练0优化器0环境0服务器写入。专家效果图交集Task8 160/178、Task9 197/206，与先前专家覆盖相同；冻结原v2后期Normal采样支持157/178和194/206。6维机械臂±10sigma压力768例全部拒绝，独立嵌套LODO排自身demo。解决了旧原型夹爪连续零阈值的系统误拒绝，不证明闭环增益。
+
+冻结原v2预测器分层仅TRANSLATION/open通过：Task8 MAE.387732 vs阶段均值.630151/臂动作置换.406426，Task9 .345851 vs.605613/.381036；此open为物理夹爪间距组，不是OPEN命令类别。STATIC/open不如分层均值，其他组证据不足；当前任务只有1个留出demo，不能宣称当前任务多demo泛化。原v2模型代理不能替代未来RSET时序注意力预测器自身验收。完整12.42MB标量证据本地保留，发布31个可逐字节重建结构化片段，SHA771cc40f011aa447e73ca5ebe01c750b5e8d738557e9c1320bbf594c964e47e8。

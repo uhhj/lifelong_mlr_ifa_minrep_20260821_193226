@@ -34,7 +34,7 @@ def main():
     exclude = {"STOP_LIGHT_BUNDLE.json", "PARENT_SOURCE_BUNDLE.json", "DEPLOY_TEXT_BUNDLE.json"}
     manifest = {}
     for p in sorted(R.rglob("*")):
-        if p.relative_to(R).as_posix() == 'rset_diagnostic_20261022_123604/EVIDENCE.json':
+        if p.relative_to(R).as_posix() in {'rset_diagnostic_20261022_123604/EVIDENCE.json','rset_semantic_v2_20261022_125521/EVIDENCE.json'}:
             # Reviewed scalar evidence is published as losslessly reconstructible
             # structured parts (<2.5MB each); keep the 10MB original local.
             assert json.loads((p.parent/'LIGHT_PACKAGE_AUDIT.json').read_text())['reconstructed_raw_bytes_exact']
@@ -70,7 +70,7 @@ def main():
     subprocess.run(["git", "-C", str(REPO), "diff", "--cached", "--check"], check=True)
     if git("diff", "--cached", "--name-only"):
         subprocess.run(["git", "-C", str(REPO), "commit", "-q", "-m",
-                        "Audit RSET retrieval and local action support without training"], check=True)
+                        "Verify gripper execution semantics and decoupled RSET reliability"], check=True)
         subprocess.run(["git", "-C", str(REPO), "push", "origin", "MLR"], check=True)
     head = git("rev-parse", "HEAD")
     remote = git("ls-remote", "origin", "refs/heads/MLR").split()[0]
