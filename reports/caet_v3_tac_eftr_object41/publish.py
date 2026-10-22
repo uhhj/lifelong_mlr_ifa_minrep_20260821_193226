@@ -70,7 +70,7 @@ def main():
     subprocess.run(["git", "-C", str(REPO), "diff", "--cached", "--check"], check=True)
     if git("diff", "--cached", "--name-only"):
         subprocess.run(["git", "-C", str(REPO), "commit", "-q", "-m",
-                        "Start independent TAC EFTR and aligned-BC controls on OBJECT seed41"], check=True)
+                        "Accept TAC seed41 final results and track independent EFTR progress"], check=True)
         subprocess.run(["git", "-C", str(REPO), "push", "origin", "MLR"], check=True)
     head = git("rev-parse", "HEAD")
     remote = git("ls-remote", "origin", "refs/heads/MLR").split()[0]

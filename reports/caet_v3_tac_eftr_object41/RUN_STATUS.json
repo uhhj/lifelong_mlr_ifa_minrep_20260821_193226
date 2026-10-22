@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T16:24:06.173975+08:00",
+  "observed_at": "2026-10-22T17:00:55.893890+08:00",
   "order": [
     "TAC",
     "EFTR",
@@ -9,12 +9,12 @@
   "seed": 41,
   "controller_pid": 84841,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_162140",
+  "snapshot": "progress_20261022_165602",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
       "steps": 105500,
-      "formal_records": 130,
+      "formal_records": 200,
       "gpu_admission": "PASS",
       "last": {
         "task": 9,
@@ -87,20 +87,29 @@
       }
     },
     "EFTR_OBJECT_41": {
-      "complete_epochs": 0,
-      "steps": 0,
+      "complete_epochs": 74,
+      "steps": 11618,
       "formal_records": 0,
-      "gpu_admission": "PENDING",
-      "last": null,
-      "last_stage_mean_epoch_seconds": null,
+      "gpu_admission": "PASS",
+      "last": {
+        "task": 6,
+        "epoch": 73,
+        "batches": 157,
+        "steps": 11618,
+        "loss": -28.287794829933507,
+        "lr_first": 2.7888157894736844e-05,
+        "lr_after": 2.685526315789474e-05,
+        "seconds": 3.7058756351470947
+      },
+      "last_stage_mean_epoch_seconds": 3.7530471086502075,
       "mechanism": {
         "6": {
-          "records": 0,
+          "records": 11618,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 0,
+          "optimizer_trials": 11618,
           "candidate_selected": {
             "0": 0,
             "1": 0,
@@ -221,18 +230,75 @@
   },
   "formal_acceptance": false,
   "automation_id": "caet-v3-tac-eftr-align-seed41",
-  "evaluation_snapshot": "evaluation_readonly_20261022_162355",
-  "evaluation": {
-    "TAC_OBJECT_41": {
-      "records": 130,
-      "completed_vectors": 13,
-      "started_vectors": 14,
-      "completed_cells": 6,
-      "technical_exceptions": 0,
-      "mean_vector_seconds": 232.5126710671645,
-      "remaining_evaluation_hours": 0.4521079715194865
+  "stage": "EFTR_TRAIN7",
+  "light_snapshot": "queue_light_readonly_20261022_170047",
+  "completed_local": [
+    "TAC"
+  ],
+  "TAC_final_package": "final_TAC_seed41_20261022_165721",
+  "TAC_final_status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
+  "TAC_metrics": {
+    "AUC": {
+      "fraction": "719/960",
+      "percent": 74.89583333333333
+    },
+    "FWT": {
+      "fraction": "29/40",
+      "percent": 72.5
+    },
+    "NBT": {
+      "fraction": "-1/24",
+      "percent": -4.166666666666667
+    },
+    "OldFinal": {
+      "fraction": "37/60",
+      "percent": 61.666666666666664
+    },
+    "FinalAll": {
+      "fraction": "53/80",
+      "percent": 66.25
     }
   },
-  "TAC_estimated_completion_CST": "2026-10-22 16:55–17:20, reference only including final audit",
-  "stage": "TAC_FORMAL_EVALUATION"
+  "TAC_delta_ra": {
+    "AUC": {
+      "fraction": "3/160",
+      "percent": 1.875
+    },
+    "FWT": {
+      "fraction": "-1/40",
+      "percent": -2.5
+    },
+    "NBT": {
+      "fraction": "-1/12",
+      "percent": -8.333333333333334
+    },
+    "OldFinal": {
+      "fraction": "-1/6",
+      "percent": -16.666666666666668
+    },
+    "FinalAll": {
+      "fraction": "-3/80",
+      "percent": -3.75
+    }
+  },
+  "EFTR_latest": {
+    "complete_epochs": 100,
+    "last": {
+      "task": 6,
+      "epoch": 99,
+      "batches": 157,
+      "steps": 15700,
+      "loss": -32.05045442520433,
+      "lr_first": 1.0328947368421052e-06,
+      "lr_after": 0.0,
+      "seconds": 4.607359409332275
+    },
+    "status": {
+      "status": "RUNNING",
+      "phase": "train7",
+      "unix": 1792659606.9033146,
+      "pid": 88206
+    }
+  },
+  "EFTR_ETA": "unknown until actual candidate-stage throughput"
 }

@@ -1,0 +1,213 @@
+{
+  "status": "PASS",
+  "method": "CAET-v3-TAC",
+  "epochs": 400,
+  "optimizer_steps": 105500,
+  "formal_records": 200,
+  "vector_attempts": 20,
+  "checkpoints": [
+    {
+      "task": 6,
+      "sha256": "87652a822d762cdc29adea4c0b57676509ca61035a6c5d4a34e28f0346489247",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 7,
+      "sha256": "6e91f7e004a9095dd39a4fce791cd88189690b918cb1ef52919bc9bc4d5b56a9",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 8,
+      "sha256": "f51f66f244f8283407323009c264070c5c02d563b2e78be6c1727a88c26c7922",
+      "strict_loaded_keys": 100
+    },
+    {
+      "task": 9,
+      "sha256": "b4a60e247b95cdd56abf4f89742de5ffd62869ae3637042ea8317d28afa8f672",
+      "strict_loaded_keys": 100
+    }
+  ],
+  "selection": {
+    "6": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 781
+    },
+    "7": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 740
+    },
+    "8": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 780
+    },
+    "9": {
+      "ordered_ids_equal": true,
+      "payloads_equal": true,
+      "count": 660
+    }
+  },
+  "ifa": {
+    "6": {
+      "equal": true
+    },
+    "7": {
+      "equal": true
+    },
+    "8": {
+      "equal": true
+    },
+    "9": {
+      "equal": true
+    }
+  },
+  "auxiliary": {
+    "status": "PASS",
+    "variant": "TAC",
+    "counts": {
+      "bc_exposures": 1008100,
+      "invalid_bc_exposures": 44300,
+      "main_updates": 105500,
+      "head_updates": 105493,
+      "effect_exposures": 1002100,
+      "cross_anchors": 38400,
+      "partner_forwards": 184900,
+      "optimizer_trials": 105500
+    },
+    "boundary_masks_and_native_order_verified": true,
+    "actual_head_or_candidate_updates_separately_counted": true
+  },
+  "all_inputs_unchanged": true,
+  "metrics": {
+    "AUC": {
+      "fraction": "719/960",
+      "percent": 74.89583333333333
+    },
+    "FWT": {
+      "fraction": "29/40",
+      "percent": 72.5
+    },
+    "NBT": {
+      "fraction": "-1/24",
+      "percent": -4.166666666666667
+    },
+    "OldFinal": {
+      "fraction": "37/60",
+      "percent": 61.666666666666664
+    },
+    "FinalAll": {
+      "fraction": "53/80",
+      "percent": 66.25
+    }
+  },
+  "baseline": {
+    "AUC": {
+      "fraction": "701/960",
+      "percent": 73.02083333333333
+    },
+    "FWT": {
+      "fraction": "3/4",
+      "percent": 75.0
+    },
+    "NBT": {
+      "fraction": "1/24",
+      "percent": 4.166666666666667
+    },
+    "OldFinal": {
+      "fraction": "47/60",
+      "percent": 78.33333333333333
+    },
+    "FinalAll": {
+      "fraction": "7/10",
+      "percent": 70.0
+    }
+  },
+  "delta": {
+    "AUC": {
+      "fraction": "3/160",
+      "percent": 1.875
+    },
+    "FWT": {
+      "fraction": "-1/40",
+      "percent": -2.5
+    },
+    "NBT": {
+      "fraction": "-1/12",
+      "percent": -8.333333333333334
+    },
+    "OldFinal": {
+      "fraction": "-1/6",
+      "percent": -16.666666666666668
+    },
+    "FinalAll": {
+      "fraction": "-3/80",
+      "percent": -3.75
+    }
+  },
+  "matrix": [
+    {
+      "stage": 6,
+      "task": 6,
+      "current": "7/20",
+      "parent": "3/5"
+    },
+    {
+      "stage": 7,
+      "task": 6,
+      "current": "9/10",
+      "parent": "17/20"
+    },
+    {
+      "stage": 7,
+      "task": 7,
+      "current": "3/4",
+      "parent": "19/20"
+    },
+    {
+      "stage": 8,
+      "task": 6,
+      "current": "9/20",
+      "parent": "7/20"
+    },
+    {
+      "stage": 8,
+      "task": 7,
+      "current": "3/4",
+      "parent": "9/10"
+    },
+    {
+      "stage": 8,
+      "task": 8,
+      "current": "1",
+      "parent": "1"
+    },
+    {
+      "stage": 9,
+      "task": 6,
+      "current": "3/20",
+      "parent": "9/20"
+    },
+    {
+      "stage": 9,
+      "task": 7,
+      "current": "7/10",
+      "parent": "19/20"
+    },
+    {
+      "stage": 9,
+      "task": 8,
+      "current": "1",
+      "parent": "19/20"
+    },
+    {
+      "stage": 9,
+      "task": 9,
+      "current": "4/5",
+      "parent": "9/20"
+    }
+  ],
+  "metric_gate": true,
+  "summed_epoch_seconds": 3884.3144636154175
+}
