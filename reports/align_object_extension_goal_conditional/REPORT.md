@@ -84,3 +84,17 @@ snapshot_readonly_20261023_025134/LOCAL_AUDIT PASS：43正式130/200条、13完�
 N snapshot_readonly_20261023_025144/LOCAL_AUDIT PASS：95924仍正常WAITING，1462hash不变、六输出未创建，无GPU准入。capacity_readonly_20261023_025200剩余新增界PASS，data root13.6781GB，对最坏剩余新增10.7050GB＋2GiB后余0.8256GB；system普通7.9794GB仍余1.7517GB。无旧资产删除/活动payload操作/预算改变/付费扩容，仍非全程容量最终验收。新N无真实GPU吞吐或总ETA。
 
 旧41本地最终JSON只读字段兼容检查（不是重复最终验收）确认已有suite=OBJECT、seed=41与COMPLETED_LOCAL_INDEPENDENT_PASS，原RA基线字段为ra；外置aggregate_local的baseline/ra回退能够识别该旧格式。未计算局部均值或门槛，未更改旧包。
+
+## 2026-10-23 03:28 CST — OBJECT43本地验收、三seed门槛与GOAL自然分支
+
+- `final_OBJECT_43_20261023_032427/LOCAL_FINAL_AUDIT.json`完整独立PASS：929轻量文件全SHA、400epoch/105500主步、4CP严格100键、200正式/20vector/10cell、原RA成员载荷/IFA/初始化、完整mask账目、有效pipeline/supervisor exit0无残留，queue receipt绑定。只读下载/复算，无重训重评。
+- 43 AUC76.041667%对RA75.104167%（+0.9375pp）；FWT71.25（-3.75pp）、NBT-9.722222（-8.333333pp，低好）、OldFinal76.666667（-5pp）、FinalAll72.5（-2.5pp）。最终Task6/7/8/9=35/95/100/60；RA50/95/100/55。Task6自身阶段7峰95→最终35，不能用负NBT声称没有遗忘。BC有效1006700/无效45700；主epoch46.036489分钟、正式vector75.537377分钟，准备/审计另计。
+- `aggregate_OBJECT_20261023_0326/LOCAL_AGGREGATE.json`及`GATE_AND_TASK_AUDIT.json`实际PASS，41/42既有包只读复用；30个单元及全部11个负单元保留。三seed等权ALIGN AUC80.173611±3.662660%，RA73.229167±1.780001%，配对均差+6.944444pp。FWT+4.166667、NBT-4.814815（有符号低好）、OldFinal-0.555556、FinalAll+6.25pp；无显著性或保护保证。
+- 精确门槛2309/2880 >703/960，delta5/72；本地与服务器OBJECT_GATE和receipt精确绑定PASS。controller93501自然进入GOAL_41，不重复启动，GOAL41→42→43固定完成。
+- `snapshot_readonly_20261023_032132/LOCAL_AUDIT.json` PASS：GOAL41自己的5真实隔离GPU主调用、0辅助/0环境；关闭全状态同RA、maskedBC/空mask/完整恢复PASS。GOAL41已128完整epoch13892主步/0正式，Task7前28轮，实际train101972/torchrun101964/pipeline101907/supervisor101863正常。1209冻结hash与本run277输入hash、初始化同父、逐主步mask账目PASS；train6/retain6/labels7 exit0。Task6因BC目标不同不要求tensor同RA。
+- 最近10轮Task7均3.424396秒，余72轮线性4.109275分钟（03:23快照），仅本阶段参考03:27–03:30。Task8/9及GOAL正式评估尚无实测吞吐，整体ETA未知。GOAL42/43尚未GPU准入，未提前验收。
+- N `snapshot_readonly_20261023_032141/LOCAL_AUDIT.json` PASS：controller95924继续等待A整个队列自然exit0；1462hash未变、六输出不存在，不把CPU验证当GPU准入。
+- `capacity_readonly_20261023_032343`主动审计PASS（不是最终容量验收）：data root12.612702GB，对剩余新增9.479571GB+2GiB后余0.985648GB；system普通7.979397GB，扣三run和1GiB后余1.751695GB。按已接受43及GOAL41稳定私有已分配量抵扣，不重复全额预留；不删旧资产、不改源、不付费扩容。
+- 整体PARTIAL；下一轮只查活跃GOAL41，不重复43/42/41最终验收；N继续等待。所有取消任务不恢复。按同一30分钟监控、正常保存发布后结束不守候。
+
+外置轻量下载器预先补齐冻结GOAL父实验`/root/mlr_ifa/experiments/`元数据前缀，避免data-only包装拒绝合法parent JSON；后缀/大小/manifest SHA约束原样，AST静态PASS，0服务器写入/0payload下载。OBJECT43已在改动前实际全SHA完成，GOAL新路径仍须实际最终验收，不把静态检查称最终PASS。见`GOAL_LIGHT_WRAPPER_PREFIX_REVIEW_20261023_0328.json`。
