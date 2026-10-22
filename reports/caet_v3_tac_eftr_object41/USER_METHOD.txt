@@ -1,0 +1,490 @@
+AC：保持八步输入，统一动作时间目标
+这是整个方案最重要的改动。
+
+最新审计已经证实，原始演示的观测时间关系为：
+\[
+o_u=\operatorname{Observe}(s_{u+1})
+\]
+
+即观测 \(o_u\) 是动作 \(a_u\) 执行之后的结果。
+
+而原 MLR 的缓存窗口为：
+\[
+x_u=[o_{u-7},\ldots,o_u]\in\mathbb R^{8\times4\times512}
+\]
+
+原 BC 使用：
+\[
+\pi_\theta(x_u)\rightarrow a_u
+\]
+
+此前 CAET-v2 为保证物理效果的因果性，却使用：
+\[
+F_\phi(x_u,\hat a)\rightarrow e_{u+1}
+\]
+
+但 \(\hat a\) 来自仍在拟合 \(a_u\) 的主GMM，因此动作目标不一致。
+这次采用的统一修复
+保留完整八步输入，将主策略的专家动作目标统一为 \(a_{u+1}\)。
+\[
+\boxed{
+\underbrace{x_u=[o_{u-7},\ldots,o_u]}_{\text{完整8步}}
+\longrightarrow
+\underbrace{a_{u+1}}_{\text{当前状态之后的动作}}
+}
+\]
+
+效果监督使用同一动作：
+\[
+\boxed{
+F_\phi(h_\theta(x_u),a_{u+1})
+\longrightarrow
+e_{u+1}
+}
+\]
+
+其中：
+\[
+e_{u+1}
+=
+\operatorname{Effect}(s_{u+1},s_{u+2})
+\]
+
+这里 \(h_\theta\) 是原 Temporal Transformer 最后时刻的隐藏表示。
+
+这样，BC与效果学习终于对应同一个动作，而且全部输入都发生在目标动作之前。
+
+八步时间建模没有减少，Temporal Transformer没有替换，GMM Head结构也没有改变。
+
+这属于训练监督的因果时间对齐修正。它修改了原BC目标，但按照论文标准完全可以作为新算法的一部分。
+
+因此，主实验除复用原RA基线外，还要加入一个只修正BC时间索引、没有效果模块的 RA-TAC-Align 对照，以识别收益究竟来自时间对齐还是新增的物理效果学习。
+边界样本处理
+不是所有缓存窗口都具有合法的下一动作。
+
+按真实的 demo_id 和目标动作索引 u 建立两个独立标记：
+\[
+m_u^a=\mathbf 1[u+1<N]
+\]
+
+\[
+m_u^e=\mathbf 1[u+2<N]
+\]
+
+其中 \(N\) 为该演示的动作/记录状态长度。
+
+动作目标有效时参与新的 BC；物理效果有效时才参与效果监督。窗口身份不唯一、时间绑定有歧义或者对应位置属于填充区域时，也不能猜测下一动作。
+
+对于无合法下一动作的窗口，保留在原DataLoader和RA选样人口中，但不构造虚假的因果BC标签。这些窗口仍可按照预先定义的条件参与原IFA或历史教师输出约束；所有有效样本数、无效样本数和实际BC曝光次数必须报告。
+
+这会改变相对于原RA的有效BC监督量，因此 RA-TAC-Align 对照采用完全相同的边界处理。
+三、TAC 的效果迁移机制
+3.1 不再通过不可靠的采样动作梯度训练主策略
+CAET-v2 的核心问题之一，是把当前GMM采样动作 \(\hat a\) 输入冻结效果预测器，再利用预测误差反向修改GMM。
+
+但预测器主要从专家动作学习，并没有可靠的反事实数据证明：
+\[
+\frac{\partial F(x,a)}{\partial a}
+\]
+
+在策略产生的非专家动作附近是正确的物理控制梯度。
+
+因此新TAC不再使用这条直接修正GMM动作的路径。
+
+改为学习共享时序表示中的物理效果知识。
+
+首先，使用原 Temporal Transformer：
+\[
+h_u=h_\theta(x_u)\in\mathbb R^{512}
+\]
+
+然后建立独立效果头：
+\[
+\hat e_{u+1}
+=
+F_\phi(h_u,a_{u+1}^*)
+\]
+
+使用真实专家动作进行条件监督：
+\[
+\mathcal L_{\mathrm{effect}}
+=
+\operatorname{SmoothL1}
+(\hat e_{u+1},e_{u+1}^*)
+\]
+
+其中效果头为训练期辅助模块，输入512维时序表示与7维专家动作，输出7维物理效果：
+\[
+e=[\Delta p_x,\Delta p_y,\Delta p_z,
+\Delta r_x,\Delta r_y,\Delta r_z,\Delta d_{\mathrm{goal}}]
+\]
+
+沿用现有 science.py 的真实物体位姿、局部篮子坐标系与目标距离进展构造方式。没有真实标签或因果时间绑定不唯一的样本不参与效果监督。
+
+这里的梯度作用关系是：
+八步特征 \(x_u\)
+
+Temporal Transformer
+
+原GMM Head
+
+BC监督 \(a_{u+1}\)
+
+
+新增Effect Head
+
+监督真实效果 \(e_{u+1}\)
+
+
+
+两个目标使用同一动作时刻，通过共享时序表示产生关联
+效果头的梯度更新共享Temporal Transformer和效果头自身，不直接通过采样动作对GMM Head施加梯度。GMM Head主要由因果对齐后的BC和EFTR约束更新。
+
+这消除了v2已发现的动作目标冲突与策略动作域外效果梯度问题，但共享表示的梯度仍可能与BC冲突，所以必须配合后续候选更新检查。
+3.2 保留真正的跨任务效果关联
+仅增加一个Effect Head仍不足以证明知识迁移。
+
+需要保留现有CAET-v2已经实现的跨任务效果关联图：
+\[
+\mathcal G_t=
+\{(i,j):i\in D_t,\ j\in M_{<t},
+\ \operatorname{Compatible}(i,j)\}
+\]
+
+其中 \(D_t\) 是当前任务数据，\(M_{<t}\) 只能包含之前实际保留的RA-Coreset样本。
+
+现有 science.py 已经实现了物理效果、夹爪开度、末端相对位置、双向近邻、独立演示与独立时刻的支持检查，可以作为初版图构造逻辑继续使用。
+
+但要改变它在策略训练中的作用。
+
+对满足效果兼容性的跨任务样本，通过一个128维效果投影头 \(P_\phi\) 构造监督对比损失：
+\[
+\mathcal L_{\mathrm{cross}}
+=
+-\frac{1}{|\mathcal I|}
+\sum_{i\in\mathcal I}
+\log
+\frac{
+\sum_{j\in\mathcal P(i)}
+\exp(\operatorname{sim}(P(h_i),P(h_j))/\tau)
+}{
+\sum_{j\in\mathcal P(i)\cup\mathcal N(i)}
+\exp(\operatorname{sim}(P(h_i),P(h_j))/\tau)
+}
+\]
+
+只将真正的当前—旧任务关联作为迁移正对，保留可信负对；重复重叠时间窗不能被重复计算成独立物理事件。
+
+原本batch为10，随机混合后不一定同时出现跨任务正对。因此对当前batch中的有效迁移样本，可从合法旧RA记忆中确定性读取关联伙伴，进行额外的辅助前向。
+
+这些伙伴不改变原BC数据采样器，也不增加新的主策略optimizer step。它们只用于这一更新中的迁移表示监督，其额外前向计算单独统计。
+
+在Task7没有合格效果关联时，关闭跨任务对比项即可。因果BC、真实效果辅助监督和EFTR仍然正常执行。
+
+这是对CAET-v2另一处设计问题的修复：没有跨任务正对，不应该意味着连独立的旧任务功能保护也一起关闭。
+3.3 TAC目标
+\[
+\boxed{
+\mathcal L_{\mathrm{TAC}}
+=
+\mathcal L_{\mathrm{BC}}^{\mathrm{aligned}}
++0.1\mathcal L_{\mathrm{IFA}}
++\lambda_e\mathcal L_{\mathrm{effect}}
++\lambda_c\mathcal L_{\mathrm{cross}}
+}
+\]
+
+这里的 \(\lambda_e,\lambda_c\) 是新算法超参数，可以按训练期验证方案设定，但不得用正式闭环测试结果反复搜索后再将其声称为独立确认结果。
+
+四、EFTR：真正围绕GMM实际执行行为进行保护
+4.1 保护什么？
+原 CAET-v2 用历史下一动作混合GMM NLL进行保护：
+\[
+-\log p_\theta(a_{u+1}^*\mid x_u)
+\]
+
+但GMM的完整混合分布似然提高，不一定代表机器人最终实际采样的分量保持一致。
+
+因此EFTR直接针对部署时使用的动作分布建立参考。
+
+现有 policy_head.py 具有5个GMM模式、7维动作。对历史任务样本 \(x\)，令参考策略输出：
+\[
+\{\mu_k^T,\sigma_k^T,\ell_k^T\}_{k=1}^{5}
+\]
+
+选中模式：
+\[
+k_T=\arg\max_k \ell_k^T
+\]
+
+则历史实际执行分布是：
+\[
+q_T^{\mathrm{exec}}
+=
+\mathcal N(\mu_{k_T}^T,\operatorname{diag}((\sigma_{k_T}^T)^2))
+\]
+
+当前策略也输出相同结构。
+4.2 历史教师怎么选择？
+我建议使用每个旧任务刚完成训练时的本方法自身检查点，而不是CAET-v2的“每个效果组从不同阶段挑选最优NLL”的做法。
+
+例如训练Task9时：
+历史任务	参考策略
+Task6	CAET-v3自己的Task6 epoch99
+Task7	CAET-v3自己的Task7 epoch99
+Task8	CAET-v3自己的Task8 epoch99
+
+这样每个旧任务有明确、固定的历史行为基准。
+
+其优点是参考模型来自该任务刚学完的时刻，不会因为上一阶段已经遗忘而把退化行为直接当成应该保留的标准；也不通过正式闭环成功率挑选教师。
+
+教师仅使用自己已经训练完成的过去模型，不包含未来任务信息。
+
+工程上不必每个batch都加载三个完整教师网络。可以在每个任务训练完成、RA入库成员确定之后，对该任务选中的历史样本预计算教师GMM输出参数及选中模式，并将其与RA样本ID绑定。
+
+历史数据仍然只使用真实保留的RA成员。
+4.3 执行分布保持损失
+EFTR同时关注动作分布与模式切换。
+
+首先对教师实际选中的模式计算高斯KL：
+\[
+\mathcal L_{\mathrm{exec}}
+=
+D_{\mathrm{KL}}
+\left(
+\mathcal N_T^{k_T}
+\parallel
+\mathcal N_\theta^{k_T}
+\right)
+\]
+
+对于7维对角高斯，该KL可直接解析计算，无须通过动作采样估计。
+
+然后加入模式保持项：
+\[
+\mathcal L_{\mathrm{mode}}
+=
+\left[
+m+
+\max_{k\ne k_T}\ell^\theta_k
+-
+\ell^\theta_{k_T}
+\right]_+
+\]
+
+这样不仅要求旧任务对应分量的均值和方差接近，还抑制当前策略把其他GMM分量提高到历史执行分量之上。
+
+这非常重要，因为单纯保持某个高斯分量并不能保证它仍是最大logit分量。
+
+正式执行中的分量切换率还应独立审计。GMM模式编号在不同检查点之间可能出现语义变化，因此该项属于对连续训练模型的模式锚定，并非一般意义上对任意重排GMM都不变的距离。
+
+EFTR基础损失：
+\[
+\boxed{
+\mathcal L_{\mathrm{EFTR}}
+=
+\lambda_R\mathcal L_{\mathrm{exec}}
++
+\lambda_M\mathcal L_{\mathrm{mode}}
+}
+\]
+
+这两个项只在历史RA记忆样本上计算。历史任务样本仍然正常参与因果BC训练。
+4.4 候选AdamW更新：同时考虑旧任务和新任务
+这次保留完整版EFTR的候选更新能力，不人为限制为单纯KL正则化。
+
+对于每个当前训练batch，计算：
+\[
+g_0=\nabla_\theta
+(\mathcal L_{\mathrm{BC}}^{\mathrm{aligned}}
++0.1\mathcal L_{\mathrm{IFA}})
+\]
+
+以及新增TAC和EFTR的梯度 \(g_A\)。
+
+从相同的参数和AdamW优化器状态生成以下候选：
+\[
+\begin{aligned}
+\theta_0^+&=\operatorname{AdamW}(\theta,g_0)\\
+\theta_{1/2}^+&=\operatorname{AdamW}(\theta,g_0+0.5g_A)\\
+\theta_1^+&=\operatorname{AdamW}(\theta,g_0+g_A)
+\end{aligned}
+\]
+
+这不是把三个更新依次施加到模型上，而是同一个起点的三个独立候选。
+
+候选检查只使用当前任务训练batch以及合法旧RA记忆：
+- 新任务学习检查： 候选的当前任务专家动作NLL不能明显劣于原生更新。
+- 旧任务功能检查： 在历史RA样本上，比较候选与历史执行分布的KL和GMM模式切换。
+- 择优提交： 在不显著牺牲当前BC的候选中，优先选择更有利于旧任务执行分布保持的候选。
+原生候选始终存在，因此不需要为了让实验流程继续而凭空跳过整个batch。
+
+需要强调，这种有限候选搜索仍不能数学上保证所有旧任务不遗忘。它能保证的是：候选选择经过明确定义的当前训练损失及旧任务执行行为检查，而不再只依赖一个梯度点积符号。
+
+每轮候选比较必须保留原始优化器状态，最后只提交被选择候选对应的参数和AdamW状态。 未被选中的候选不能推进正式scheduler或消耗正式的模型更新次数。额外计算作为新算法成本完整报告。
+五、最终训练目标与建议参数
+5.1 总目标
+CAET-v3 的基础训练目标为：
+\[
+\boxed{
+\mathcal L_{\mathrm{v3}}
+=
+\mathcal L_{\mathrm{BC}}^{\mathrm{aligned}}
++0.1\mathcal L_{\mathrm{IFA}}
++\lambda_e\mathcal L_{\mathrm{effect}}
++\lambda_c\mathcal L_{\mathrm{cross}}
++\lambda_R\mathcal L_{\mathrm{exec}}
++\lambda_M\mathcal L_{\mathrm{mode}}
+}
+\]
+
+候选AdamW机制并不是另一个损失项，而是决定本轮使用多大比例的辅助梯度。
+5.2 首版固定配置
+以下是建议的 v3.0 初始配置，不是已经实验验证有效的参数。
+参数	建议配置
+主策略输入	原8步，每步4个512维token
+主GMM	原5模式、7维动作
+BC	因果对齐的 \(a_{u+1}\)
+IFA	原系数0.1、OBJECT gamma0.3
+Effect Head	519→256→128→7，ReLU
+效果表征投影	512→128，L2归一化
+效果回归系数 \(\lambda_e\)	0.03
+跨任务对比系数 \(\lambda_c\)	0.02
+对比温度 \(\tau\)	0.1
+EFTR高斯KL系数 \(\lambda_R\)	0.05
+模式保持系数 \(\lambda_M\)	0.01
+模式margin	0.1
+候选辅助梯度系数	0、0.5、1.0
+辅助Head优化器	AdamW，学习率3e-4、weight decay0.01
+额外独立训练epoch	首版不增加，辅助Head联合训练
+
+建议对物理效果使用固定物理尺度归一化，而非每阶段重新计算可能过小的逐维标准差：
+\[
+s_e=
+[0.01,0.01,0.01,
+\pi/18,\pi/18,\pi/18,0.01]
+\]
+
+平移和目标进展以1cm为参考尺度，旋转以10度为参考尺度。此处是数值标准化，不是把小于这些值的效果视为无效。
+
+跨任务图初版可沿用CAET-v2已经实现的互为top-10近邻、物理条件兼容、至少3条独立演示和12个独立操作时刻的筛选方式。静止样本可参加物理效果回归与历史功能保护，但不自动作为跨任务迁移正对。
+
+这些参数应在第一次v3正式闭环前冻结。若随后依据训练期数据调整，则明确建立新版本，不将旧实验结果混入。
+5.3 EFTR候选选择的确定规则
+为避免“候选更新”停留在概念层面，建议第一版使用可实现的词典序规则。
+
+对于三个候选，分别在确定性评估模式下计算：
+\[
+C_k=\mathcal L_{\mathrm{BC,current}}(\theta_k^+)
+\]
+
+\[
+R_k=
+\frac{1}{7}
+D_{\mathrm{KL}}(q_T^{\mathrm{exec}}\Vert q_k^{\mathrm{exec}})
++0.1\,\operatorname{SwitchRate}_k
+\]
+
+其中 \(C_0\) 为原生AdamW候选的当前任务BC损失；\(R_k\) 在本阶段当前可访问的旧RA记忆检查批上计算。
+
+首版定义当前任务容差：
+\[
+C_k\le C_0+0.02
+\]
+
+并把历史行为优先区域设为：
+\[
+R_k\le0.10
+\]
+
+选择顺序为：先保留符合当前BC容差的候选；其中若存在满足历史行为预算的候选，则优先从中选择 \(R_k\) 最小者；否则在符合当前BC容差的候选中选择 \(R_k\) 最小者，并记录历史预算未满足。
+
+相同评分时优先选择 \(C_k\) 较低的候选，仍相同则按固定候选编号决定，保证可重复。
+
+因此原生候选始终可以提交，但绝不宣称历史行为预算在所有情况下都有硬保证。
+
+检查用的旧样本从已保留的RA记忆中按任务分层、固定顺序轮换读取；可以首版每步取最多32个历史样本。此部分是新增训练期计算，不改变原主DataLoader的batch10，也不应被隐藏在“相同计算预算”表述里。
+六、代码级改造方案
+建议新建独立模块：
+caet_v3_exp/
+├── __init__.py
+├── prepare.py
+├── science.py
+├── labels.py
+├── dataset.py
+├── model.py
+├── transfer.py
+├── teacher_exec.py          # 新增
+├── eftr_optimizer.py        # 新增
+├── observe.py
+├── train.py
+├── preflight.py
+├── evaluate.py              # 只封装原评估入口
+├── audit.py
+└── pipeline.py
+
+
+基于当前仓库的 reports/caet_v2_object_seed42/additions/caet_v2_exp/ 建立新版本，不覆盖已冻结的v1/v2源码和报告。
+6.1 science.py、labels.py：统一标签
+扩展现有 derive_task()，将“下一动作有效性”和“下一转移效果有效性”分开。
+def causal_binding(sample, demo):    u = sample["target_step"]    n = len(demo["actions"])    if not sample["identity_unique"]:        return {"bc_valid": False, "effect_valid": False}    if not sample["full_window_valid"]:        return {"bc_valid": False, "effect_valid": False}    bc_valid = u + 1 < n    effect_valid = u + 2 < len(demo["states"])    return {        "bc_valid": bc_valid,        "effect_valid": effect_valid,        "next_action": demo["actions"][u + 1] if bc_valid else None,        "effect": recorded_physical_effect(demo, u + 1)                  if effect_valid else None,    }
+
+
+
+这里的 full_window_valid 必须从原始 possible_starts、实际序列索引及填充规则核验后得到，不能只根据缓存文件数量或动作尾值推断。
+
+侧车标签必须含有原文件SHA256、任务ID、demo ID、原目标动作索引、下一动作索引、效果状态区间和有效掩码。
+6.2 dataset.py：不改变RA样本顺序
+复用原来的：
+native = build_dataset_for_task(    c.feature_dir, task, c.buffer_dir, SEED, start=6)
+
+
+
+只在原样本上添加：
+sample["causal_action"]sample["causal_bc_valid"]sample["effect_target"]sample["effect_valid"]sample["effect_group"]sample["transfer_supported"]sample["teacher_ref_id"]
+
+
+
+保留原 .pt 的 feature、actions 和SHA，不重写RA-Coreset选样输入。
+
+旧任务的下一动作、效果标签和教师信息，必须在该任务训练结束、RA样本确定时保存到对应sidecar。后续任务只读取已保留成员的sidecar，不重新扫描旧任务已丢弃的完整示范。
+6.3 model.py：新增两个训练期网络
+原 BriefPolicy 不改变：
+self.temporal_transformerself.policy_head
+
+
+
+新增：
+class EffectHead(nn.Module):    def __init__(self):        super().__init__()        self.net = nn.Sequential(            nn.Linear(512 + 7, 256),            nn.ReLU(),            nn.Linear(256, 128),            nn.ReLU(),            nn.Linear(128, 7),        )    def forward(self, hidden, expert_action):        return self.net(torch.cat([hidden, expert_action], dim=-1))
+
+
+
+另建512→128的效果投影头，用于跨任务对比学习。两个辅助头不参与正式闭环加载。
+6.4 teacher_exec.py：缓存历史实际执行分布
+在任务 \(j\) 完成epoch99且RA成员确定后，用本次实验自己的模型，对Task \(j\) 入库样本计算：
+z = policy.temporal_encode(feature)[:, -1]means, stds, logits = policy.policy_head.forward_fn(z)teacher_mode = logits.argmax(dim=-1)
+
+
+
+将5个模式的均值、标准差、logits以及选中模式与样本身份绑定。
+
+正式训练历史任务教师只读，不参与梯度更新。
+6.5 eftr_optimizer.py：隔离候选更新
+必须实现以下接口：
+native_grad = compute_native_grad(...)auxiliary_grad = compute_tac_eftr_grad(...)initial_state = capture_full_optimizer_state()proposals = []for scale in (0.0, 0.5, 1.0):    restore_full_optimizer_state(initial_state)    proposal = simulate_adamw_update(        native_grad, auxiliary_grad, scale    )    scores = evaluate_training_only_constraints(proposal)    proposals.append((proposal, scores))selected = select_candidate(proposals)restore_full_optimizer_state(initial_state)commit_selected_candidate(selected)advance_scheduler_once()
+
+
+
+这里最重要的工程条件是：simulate_adamw_update() 必须产生与实际PyTorch AdamW一致的参数及优化器状态，包括动量、二阶矩、权重衰减和梯度裁剪。
+
+不能只手工修改参数，却遗漏optimizer状态，否则候选比较和最终提交不属于同一优化算法。
+
+此外，候选评分必须使用固定的评估模式，避免不同候选使用不同dropout随机掩码。正式训练的RNG必须在候选模拟后正确恢复。
+6.6 observe.py：一次原生数据batch的完整计算
+def observe(batch, task):    # 原始8步特征，不裁剪时间维    x = batch["feature"].squeeze(1)    # 一次主策略前向    gmm, hidden = policy(x)    # TAC: 与物理效果监督同一动作索引    loss_bc = masked_gmm_nll(        gmm,        batch["causal_action"],        batch["causal_bc_valid"],    )    # 原IFA逻辑    loss_ifa = original_ifa_loss(hidden, task)    native_loss = loss_bc + 0.1 * loss_ifa    # 专家动作条件下的真实物理效果监督    loss_effect = effect_supervision(        hidden,        batch["causal_action"],        batch["effect_target"],        batch["effect_valid"],    )    # 只有真实跨任务支持时才有该项    loss_cross = supported_effect_contrast(batch, hidden)    # 与当前任务是否存在跨任务正对无关    loss_exec, loss_mode = eftr_on_old_ra_memory(batch)    auxiliary_loss = (        0.03 * loss_effect        + 0.02 * loss_cross        + 0.05 * loss_exec        + 0.01 * loss_mode    )    eftr_candidate_update(native_loss, auxiliary_loss)
+
+
+
+这是算法执行骨架，尚不是能够直接导入的完整源码。实际实现需要处理DDP、掩码归一化、没有旧任务样本的batch、训练/评估模式恢复，以及辅助Head独立优化器的状态保存。
+
+辅助Head可在同一正式batch上用自身优化器更新一次。即使本轮策略候选选择了辅助梯度系数0，效果Head仍可按固定规则继续学习物理效果；这两类更新要分别记录。
