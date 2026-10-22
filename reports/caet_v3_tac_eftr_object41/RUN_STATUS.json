@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T19:40:30.905707+08:00",
+  "observed_at": "2026-10-22T19:56:02.160477+08:00",
   "order": [
     "TAC",
     "EFTR",
@@ -9,7 +9,7 @@
   "seed": 41,
   "controller_pid": 89818,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_193855",
+  "snapshot": "progress_20261022_195604",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
@@ -165,20 +165,29 @@
       "final_acceptance": false
     },
     "ALIGN_OBJECT_41": {
-      "complete_epochs": 0,
-      "steps": 0,
+      "complete_epochs": 155,
+      "steps": 28185,
       "formal_records": 0,
-      "gpu_admission": "PENDING",
-      "last": null,
-      "last_stage_mean_epoch_seconds": null,
+      "gpu_admission": "PASS",
+      "last": {
+        "task": 7,
+        "epoch": 54,
+        "batches": 227,
+        "steps": 28185,
+        "loss": -26.852269134857583,
+        "lr_first": 4.703603603603604e-05,
+        "lr_after": 4.601351351351352e-05,
+        "seconds": 5.6837170124053955
+      },
+      "last_stage_mean_epoch_seconds": 5.472055959701538,
       "mechanism": {
         "6": {
-          "records": 0,
+          "records": 15700,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 0,
+          "optimizer_trials": 15700,
           "candidate_selected": {
             "0": 0,
             "1": 0,
@@ -187,12 +196,12 @@
           "budget_unmet": 0
         },
         "7": {
-          "records": 0,
+          "records": 12485,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 0,
+          "optimizer_trials": 12485,
           "candidate_selected": {
             "0": 0,
             "1": 0,
@@ -233,7 +242,7 @@
   },
   "formal_acceptance": false,
   "automation_id": "caet-v3-tac-eftr-align-seed41",
-  "stage": "ALIGN_TRAIN6",
+  "stage": "ALIGN_TRAIN7",
   "light_snapshot": "queue_light_readonly_20261022_194033",
   "completed_local": [
     "TAC"
@@ -456,31 +465,32 @@
     "preservation": "No payload or log deleted; partial-epoch work is not counted as completed training; last complete recovery retained"
   },
   "ALIGN_ETA": {
-    "recent_task6_epoch_seconds": 4.480002164840698,
-    "task6_remaining_minutes": 7.1680034637451175,
+    "recent_task7_epoch_seconds": 5.472055959701538,
+    "task7_remaining_minutes": 4.104041969776153,
+    "task7_reference_finish_CST": "2026-10-22 20:01–20:05",
     "reference_full_completion_CST": "2026-10-22 22:00–22:40",
-    "basis": "Early ALIGN task6 throughput and completed TAC 64.739min main epochs +75.968min formal vectors; preparation/storage/audit extra; later-stage throughput unknown",
+    "basis": "Task7 real recent10 throughput; total reference retains prior TAC training/evaluation costs, Task8/9 not yet measured; no completion guarantee",
     "provisional": true
   },
   "ALIGN_latest": {
     "status": "RUNNING",
-    "complete_epochs": 4,
-    "steps": 628,
+    "complete_epochs": 155,
+    "steps": 28185,
     "last": {
-      "task": 6,
-      "epoch": 3,
-      "batches": 157,
-      "steps": 628,
-      "loss": -17.17779307152815,
-      "lr_first": 9.42e-05,
-      "lr_after": 9.915789473684211e-05,
-      "seconds": 4.258496522903442
+      "task": 7,
+      "epoch": 54,
+      "batches": 227,
+      "steps": 28185,
+      "loss": -26.852269134857583,
+      "lr_first": 4.703603603603604e-05,
+      "lr_after": 4.601351351351352e-05,
+      "seconds": 5.6837170124053955
     },
     "gpu_admission": "PASS",
     "formal_records": 0,
-    "train_pid": 89949,
+    "train_pid": 90084,
     "pipeline_pid": 89935,
-    "evidence": "queue_light_readonly_20261022_194033"
+    "evidence": "progress_20261022_195604"
   },
-  "snapshot_observation_note": "runs is the full 19:38 snapshot; ALIGN_latest is the separately verified 19:40 light snapshot"
+  "snapshot_observation_note": "runs and ALIGN_latest use this full snapshot"
 }
