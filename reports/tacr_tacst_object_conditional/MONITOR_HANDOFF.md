@@ -15,3 +15,6 @@
 每检查/审计按AGENTS本目录publish.py经publish_mlr_branch审查类型大小secret/hash、精确stage非force推MLR并核remoteSHA/本地receipt；只轻量证据。A发生新检查也按A/publish.py发布。共用同一align-object-seed-goal监控，每30分钟，只有实质阶段变化/恢复失败/完成/需行动通知，健康等待安静。一轮保存发布后结束不守候。监控须两队列实际所选分支全部本地独立验收/比较/发布后才删，不能A完成就删除新任务。整体仍PARTIAL。
 
 补充：import_readonly_20261023_002022六环境导入PASS；先前两次外置EGL配置导入失败保留于import_readonly_20261023_001655及import_readonly_20261023_001919，未改冻结源或训练。AUTOMATION_UPDATE_RECEIPT实际保存带前缀30分钟规则，提示末尾换行由工具trim，比较strip后相同。
+
+
+2026-10-23 00:51 CST：snapshot_readonly_20261023_005155/LOCAL_AUDIT与CAPACITY_LOCAL_AUDIT PASS。controller95924仍正常等待旧队列，1462冻结hash不变、六输出不存在、未GPU准入；GPU仍为旧evaluate94045，无新失败/恢复/重启。data普通10.129GB/root14.999GB、system普通7.979GB；旧四待运行与新六run的保守剩余上界仍通过，data保留2GiB后余0.826GB、system保留1GiB后余1.752GB；这不是最终容量验收。旧ALIGN42正式计数见同轮A全快照，不沿用旧10/200。新队列无可用吞吐与ETA，正常等待不通知。
