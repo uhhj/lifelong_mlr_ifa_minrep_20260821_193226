@@ -31,3 +31,7 @@ phase_exit_readonly_20261022_231917补充只读核查：train6/retain6/labels7/t
 Task8最近十epoch均8.503秒，余29轮约4.11分钟。Task9尚无本seed实测，参考已完成ALIGN41的9.554秒/epoch约15.92分钟；另计标签/入库/加载及正式评估参考73.11分钟和最终验收。42完整验收参考10月23日00:55–01:25，OBJECT三seed判定参考03:10–04:00，均仅参考、须按实际评估耗时校正。不计算部分AUC，不提前判定GOAL。
 
 data普通10.467GB/root15.337GB、system普通7.979GB；data当前root空闲仍高于保守五run全部10GiB加2GiB保留，后续继续按实际产物核验。未删除资产/下载payload/付费扩容。OBJECT43与GOAL三入口仍排队未GPU准入；门槛仍完整三seed等权meanAUC严格高于同seedRA703/960，不增加其他条件。监控保持30分钟，健康无变化安静。
+
+## 2026-10-22 23:47 CST：OBJECT42训练完成，正式评估中
+
+snapshot_readonly_20261022_234734及LOCAL_AUDIT PASS：400完整epoch/105500主更新完成，train6–9/retain6–9等已完成阶段真实exit0；1209冻结hash、302输入hash与初始化同父、完整逐步无辅助账目均PASS。evaluate94045及10环境正常，正式10/200条、1完成vector+1进行中、0技术异常；逐episode身份/初态/seed/attempt成功向量核验PASS。未计算部分指标，未完整200/20和4CP/有效退出验收前仍PARTIAL。首vector286.147秒，线性余评估90.61分钟加最终审计，参考10月23日01:15–01:45；单批不稳，随后校正。43仍排队，GOAL仍等待原三seed平均AUC门槛。data普通10.164GB/root15.034GB、system普通7.979GB，保留余量满足，无恢复/重启/改参。用户新授权TAC-R/R+ST两组独立条件扩展正在另目录准备，不修改本冻结队列。
