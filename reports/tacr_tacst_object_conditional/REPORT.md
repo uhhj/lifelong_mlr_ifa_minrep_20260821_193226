@@ -71,3 +71,9 @@
 初次snapshot_readonly_20261023_062138在认证前SSH protocol banner读取EOF失败，未启动远端脚本；LOCAL_CONNECTION_ATTEMPT.json原地留证。仅重试监控连接一次，snapshot_readonly_20261023_062227/LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL，RESOLUTION.json绑定该审计SHA，原失败不覆盖。0服务器写入/0训练或评估重启，不是训练故障恢复，无需用户操作。
 
 1462冻结hash一致，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，六输出不存在，未GPU准入；A的GOAL42正式100/200、10vector+1进行中、0技术异常，完整主预算和逐步/逐episode审计PASS。N不绕过A或改变独立OBJECT41的701/960门槛。capacity_readonly_20261023_062149 PASS_NOT_FINAL：data root11.153052GB扣余新增7.328236GB+2GiB后余1.677332GB，system普通7.978947GB扣三run+1GiB后余1.751244GB，GOAL42私有已分配1.261699GB抵扣新增界。不删旧资产、不下载payload、不改科学协议或新付费资源。总PARTIAL，正常保存发布后结束不守候。
+
+## 2026-10-23 06:51 CST — 正常等待上游GOAL42
+
+`snapshot_readonly_20261023_065149/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL；1462冻结源调度hash未变，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，六输出不存在、尚未GPU准入，无新失败/恢复。此次只读SSH连接成功，先前认证前banner失败及重连证据原样保留，不当作训练故障。上游A仍evaluate106640，正式记录以同轮A独立快照为准，N不绕过完整上游有效退出/receipt/GPU空闲/锁释放。
+
+`capacity_readonly_20261023_065203`剩余新增界PASS_NOT_FINAL：data root11.152695GB，扣余新增7.327879GB+2GiB后余1.677332GB；system普通7.978930GB，扣三run+1GiB后余1.751228GB。GOAL42稳定私有已分配1.262055GB抵扣新增界；已接受产物不额外全额预留。0模型前向/0优化器/0环境/0服务器写入，不删旧资产、改预算、下载payload或增加付费资源。N无真实吞吐/总ETA，整体PARTIAL，正常保存发布后结束本轮不守候。
