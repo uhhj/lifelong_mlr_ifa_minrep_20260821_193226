@@ -1,11 +1,11 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-23T00:51:44.835500+08:00",
+  "observed_at": "2026-10-23T01:21:31.415303+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
   "frozen_files": 1209,
-  "active": "OBJECT_42",
+  "active": "OBJECT_43",
   "order": [
     "OBJECT_42",
     "OBJECT_43",
@@ -19,10 +19,10 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261023_005145",
+  "snapshot": "snapshot_readonly_20261023_012130",
   "runs": {
     "OBJECT_42": {
-      "status": "RUNNING_OR_PREPARING",
+      "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
       "complete_epochs": 400,
       "main_steps": 105500,
       "last": {
@@ -36,20 +36,109 @@
         "seconds": 9.862071752548218
       },
       "formal": {
-        "records": 190,
-        "completed_vectors": 19,
+        "records": 200,
+        "completed_vectors": 20,
         "started_vectors": 20,
-        "completed_cells": 9,
+        "completed_cells": 10,
         "technical_exceptions": 0,
-        "mean_vector_seconds": 203.70758148243553,
-        "remaining_evaluation_hours": 0.056585439300676534
+        "mean_vector_seconds": 207.2402078986168,
+        "remaining_evaluation_hours": 0.0
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 9.899419164657592
+      "recent_stage_epoch_seconds": 9.899419164657592,
+      "final_package": "final_OBJECT_42_20261023_012252",
+      "metrics": {
+        "AUC": {
+          "fraction": "797/960",
+          "percent": 83.02083333333333
+        },
+        "FWT": {
+          "fraction": "13/16",
+          "percent": 81.25
+        },
+        "NBT": {
+          "fraction": "-1/30",
+          "percent": -3.3333333333333335
+        },
+        "OldFinal": {
+          "fraction": "23/30",
+          "percent": 76.66666666666667
+        },
+        "FinalAll": {
+          "fraction": "4/5",
+          "percent": 80.0
+        }
+      },
+      "baseline": {
+        "AUC": {
+          "fraction": "229/320",
+          "percent": 71.5625
+        },
+        "FWT": {
+          "fraction": "7/10",
+          "percent": 70.0
+        },
+        "NBT": {
+          "fraction": "-11/360",
+          "percent": -3.0555555555555554
+        },
+        "OldFinal": {
+          "fraction": "13/20",
+          "percent": 65.0
+        },
+        "FinalAll": {
+          "fraction": "51/80",
+          "percent": 63.75
+        }
+      },
+      "delta": {
+        "AUC": {
+          "fraction": "11/96",
+          "percent": 11.458333333333334
+        },
+        "FWT": {
+          "fraction": "9/80",
+          "percent": 11.25
+        },
+        "NBT": {
+          "fraction": "-1/360",
+          "percent": -0.2777777777777778
+        },
+        "OldFinal": {
+          "fraction": "7/60",
+          "percent": 11.666666666666666
+        },
+        "FinalAll": {
+          "fraction": "13/80",
+          "percent": 16.25
+        }
+      }
     },
     "OBJECT_43": {
-      "status": "QUEUED_NOT_GPU_ADMITTED",
-      "formal_records": 0
+      "status": "RUNNING_OR_PREPARING",
+      "complete_epochs": 210,
+      "main_steps": 41490,
+      "last": {
+        "task": 8,
+        "epoch": 9,
+        "batches": 309,
+        "steps": 41490,
+        "loss": -22.45992142637185,
+        "lr_first": 9.249671052631579e-05,
+        "lr_after": 9.148026315789474e-05,
+        "seconds": 8.556615829467773
+      },
+      "formal": {
+        "records": 0,
+        "completed_vectors": 0,
+        "started_vectors": 0,
+        "completed_cells": 0,
+        "technical_exceptions": 0,
+        "mean_vector_seconds": null,
+        "remaining_evaluation_hours": null
+      },
+      "gpu_admission": "PASS",
+      "recent_stage_epoch_seconds": 8.346097087860107
     },
     "GOAL_41": {
       "status": "QUEUED_NOT_GPU_ADMITTED",
@@ -69,25 +158,26 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "OBJECT42_reference_finish_CST": "2026-10-23 00:55\u201301:20",
-    "OBJECT_three_seed_gate_reference_CST": "2026-10-23 03:00\u201304:00",
-    "basis": "19 complete formal vectors mean203.7076sec; last vector linear3.395min plus final audits. Subsequent OBJECT43 throughput and local packaging unknown; references only.",
+    "OBJECT43_reference_finish_CST": "2026-10-23 03:00\u201303:40",
+    "OBJECT_three_seed_gate_reference_CST": "2026-10-23 03:00\u201303:40",
+    "basis": "43 Task8 remaining90*8.346sec=12.52min, Task9 reference42 9.899sec/epoch=16.50min; evaluation reference42 69.08min; preparation/final auditing extra. Task9 actual throughput not yet known.",
     "GOAL_finish_CST": null,
-    "GOAL_basis": "Conditional and not GPU admitted; estimate only after its actual throughput",
-    "provisional": true,
-    "current_task8_recent_epoch_seconds": 8.502793169021606,
-    "current_task8_remaining_minutes": 4.109683365027109
+    "provisional": true
   },
-  "phase_exit_evidence": "snapshot_readonly_20261023_005145",
-  "current_phase": "OBJECT42_EVALUATION",
+  "phase_exit_evidence": "snapshot_readonly_20261023_012130",
+  "current_phase": "OBJECT43_TASK8_TRAINING",
   "disk": {
     "/data": {
-      "ordinary": 10129395712,
-      "root": 14999433216
+      "ordinary": 9121271808,
+      "root": 13991309312
     },
     "/": {
-      "ordinary": 7979433984,
-      "root": 11082960896
+      "ordinary": 7979446272,
+      "root": 11082973184
     }
+  },
+  "accepted_packages": {
+    "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252",
+    "OBJECT_42": "final_OBJECT_42_20261023_012252"
   }
 }
