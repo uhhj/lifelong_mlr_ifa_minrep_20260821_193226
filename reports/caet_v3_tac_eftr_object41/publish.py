@@ -70,7 +70,7 @@ def main():
     subprocess.run(["git", "-C", str(REPO), "diff", "--cached", "--check"], check=True)
     if git("diff", "--cached", "--name-only"):
         subprocess.run(["git", "-C", str(REPO), "commit", "-q", "-m",
-                        "Record EFTR Task8 epoch38 progress and clarify budget semantics"], check=True)
+                        "Preserve user-terminated EFTR and launch frozen ALIGN continuation"], check=True)
         subprocess.run(["git", "-C", str(REPO), "push", "origin", "MLR"], check=True)
     head = git("rev-parse", "HEAD")
     remote = git("ls-remote", "origin", "refs/heads/MLR").split()[0]

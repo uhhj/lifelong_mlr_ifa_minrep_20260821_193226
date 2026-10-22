@@ -18,6 +18,12 @@ for p in Path('/proc').glob('[0-9]*'):
   if int(p.name)!=os.getpid() and 'python -c' not in cmd and ('CAETv3_' in cmd or 'CAETv3_' in cwd):out['processes'].append(dict(pid=int(p.name),command=cmd,cwd=cwd))
  except OSError:pass
 c=read(Q/'ORCHESTRATION_CONTRACT.json');out['hashes']=dict(count=len(c['files']),failures=[p for p,h in c['files'].items() if hashlib.sha256(Path(p).read_bytes()).hexdigest()!=h])
+D=Q/'align_after_eftr_stop01'
+if D.exists():
+ continuation_contract=read(D/'CONTRACT.json')
+ out['continuation']={n:read(D/n) for n in ('RUN_STATUS.json','controller.pid.json','controller.exit','FAILURE.json','ALIGN_OBJECT_41.receipt.json','DISPATCH_RECEIPT.json')}
+ out['continuation']['hashes']=dict(count=len(continuation_contract['files']),failures=[p for p,h in continuation_contract['files'].items() if hashlib.sha256(Path(p).read_bytes()).hexdigest()!=h])
+ out['continuation']['contract_sha256']=hashlib.sha256((D/'CONTRACT.json').read_bytes()).hexdigest()
 for m in ('/','/data'):
  s=os.statvfs(m);out['disk'][m]=dict(ordinary=s.f_bavail*s.f_frsize,root=s.f_bfree*s.f_frsize)
 for entry in entries:
@@ -28,6 +34,10 @@ for entry in entries:
   for p in folder.glob('*.exit'):d['exits'][str(p)]=read(p)
   for p in sorted(folder.glob('*.log'),key=lambda p:p.stat().st_mtime,reverse=True)[:2]:d['logs'][str(p)]=read(p)
  contract=read(o/'CONTRACT.json')
+ d['termination']=read(o/'USER_TERMINATION.json')
+ if d['termination']:
+  d['termination_matches_acceptance']=d['termination']==read(Q/'eftr_user_stop01/TERMINATION_ACCEPTANCE.json')
+  d['preserved_checkpoint_hashes']=dict(count=len(d['termination']['checkpoint_inventory']),failures=[p for p,h in d['termination']['checkpoint_inventory'].items() if not (o/p).is_file() or hashlib.sha256((o/p).read_bytes()).hexdigest()!=h['sha256']])
  d['inputs']=None if contract is None else dict(count=len(contract['files']),failures=[p for p,h in contract['files'].items() if not Path(p).is_file() or hashlib.sha256(Path(p).read_bytes()).hexdigest()!=h])
  d['parent_initial']=read(Path('/data/mlr_ifa/experiments/RA_Coreset_OBJECT_seed41_20261019')/'ra_coreset/INITIAL_STATE.json')
  history=read(o/'ra_coreset/epochs.json') or [];d['epochs']=history;d['auxiliary']={}
@@ -35,6 +45,8 @@ for entry in entries:
   stats=[x for p in sorted((o/'ra_coreset/auxiliary').glob('task%d_epoch*.json'%t)) for x in read(p)]
   d['auxiliary'][str(t)]=dict(records=len(stats),head_updates=sum(x.get('head_updates',0) for x in stats),effect_exposures=sum(x.get('effect_samples',0) for x in stats),cross_anchors=sum(x.get('cross_anchors',0) for x in stats),partner_forwards=sum(x.get('extra_partner_forwards',0) for x in stats),optimizer_trials=sum(x.get('optimizer_trials',0) for x in stats),candidate_selected={str(i):sum(x.get('selected')==i for x in stats) for i in range(3)},budget_unmet=sum(x.get('budget_unmet',False) for x in stats))
  d['formal_records']=sum(len(p.read_text().splitlines()) for p in (o/'ra_coreset/evaluation').glob('trials*.jsonl'));d['receipt']=read(Q/(entry['key']+'.receipt.json'))
+ if entry['key']=='ALIGN_OBJECT_41' and D.exists():
+  d['receipt']=read(D/'ALIGN_OBJECT_41.receipt.json');d['receipt_origin']=str(D/'ALIGN_OBJECT_41.receipt.json')
  out['runs'][entry['key']]=d
 print(json.dumps(out))
 '''

@@ -7,6 +7,11 @@ def js(p):return json.loads(p.read_text(encoding='utf8'))
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 a=js(p/'LOCAL_FINAL_AUDIT.json');assert a['status']=='COMPLETED_LOCAL_INDEPENDENT_PASS'
 d=js(snapshot/'SNAPSHOT.json');r=d['runs'][variant+'_OBJECT_41'];receipt=r['receipt']
+if variant=='ALIGN' and d.get('continuation'):
+ c=d['continuation'];assert c['controller.exit'].strip()=='0' and c['FAILURE.json'] is None
+ assert not c['hashes']['failures'] and receipt==c['ALIGN_OBJECT_41.receipt.json']
+ assert receipt['continuation_contract_sha256']==c['contract_sha256']
+ assert d['runs']['EFTR_OBJECT_41']['termination']['status']=='EARLY_TERMINATED_BY_USER'
 assert receipt['seed']==41 and receipt['method']==a['method']
 assert receipt['acceptance_sha256']==sha(p/'current/PROCESS_EXIT_ACCEPTANCE.json')
 assert receipt['contract_sha256']==sha(p/'current/CONTRACT.json')

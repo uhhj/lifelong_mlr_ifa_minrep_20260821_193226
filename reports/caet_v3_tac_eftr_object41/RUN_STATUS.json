@@ -1,15 +1,15 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T19:26:10.083005+08:00",
+  "observed_at": "2026-10-22T19:40:30.905707+08:00",
   "order": [
     "TAC",
     "EFTR",
     "ALIGN"
   ],
   "seed": 41,
-  "controller_pid": 84841,
+  "controller_pid": 89818,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_192611",
+  "snapshot": "progress_20261022_193855",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
@@ -87,21 +87,21 @@
       }
     },
     "EFTR_OBJECT_41": {
-      "complete_epochs": 238,
-      "steps": 50142,
+      "complete_epochs": 246,
+      "steps": 52614,
       "formal_records": 0,
       "gpu_admission": "PASS",
       "last": {
         "task": 8,
-        "epoch": 37,
+        "epoch": 45,
         "batches": 309,
-        "steps": 50142,
-        "loss": -26.154495479991134,
-        "lr_first": 6.403618421052632e-05,
-        "lr_after": 6.301973684210528e-05,
-        "seconds": 79.44443106651306
+        "steps": 52614,
+        "loss": -27.009930194002912,
+        "lr_first": 5.59046052631579e-05,
+        "lr_after": 5.488815789473685e-05,
+        "seconds": 68.0004997253418
       },
-      "last_stage_mean_epoch_seconds": 78.9742782831192,
+      "last_stage_mean_epoch_seconds": 72.43013889789582,
       "mechanism": {
         "6": {
           "records": 15700,
@@ -132,18 +132,18 @@
           "budget_unmet": 22681
         },
         "8": {
-          "records": 11742,
+          "records": 14214,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 35226,
+          "optimizer_trials": 42642,
           "candidate_selected": {
-            "0": 2015,
-            "1": 2104,
-            "2": 7623
+            "0": 2539,
+            "1": 2408,
+            "2": 9267
           },
-          "budget_unmet": 11742
+          "budget_unmet": 14214
         },
         "9": {
           "records": 0,
@@ -159,7 +159,10 @@
           },
           "budget_unmet": 0
         }
-      }
+      },
+      "status": "EARLY_TERMINATED_BY_USER",
+      "complete_negative_result_comparison": false,
+      "final_acceptance": false
     },
     "ALIGN_OBJECT_41": {
       "complete_epochs": 0,
@@ -230,8 +233,8 @@
   },
   "formal_acceptance": false,
   "automation_id": "caet-v3-tac-eftr-align-seed41",
-  "stage": "EFTR_TRAIN8",
-  "light_snapshot": "queue_light_readonly_20261022_170047",
+  "stage": "ALIGN_TRAIN6",
+  "light_snapshot": "queue_light_readonly_20261022_194033",
   "completed_local": [
     "TAC"
   ],
@@ -282,35 +285,20 @@
     }
   },
   "EFTR_latest": {
-    "complete_epochs": 238,
-    "steps": 50142,
-    "formal_records": 0,
+    "status": "EARLY_TERMINATED_BY_USER",
+    "complete_epochs": 246,
+    "steps": 52614,
     "task": 8,
-    "completed_task_epochs": 38,
-    "mechanism_summary": {
-      "records": 11742,
-      "head_updates": 0,
-      "effect_exposures": 0,
-      "cross_anchors": 0,
-      "partner_forwards": 0,
-      "optimizer_trials": 35226,
-      "candidate_selected": {
-        "0": 2015,
-        "1": 2104,
-        "2": 7623
-      },
-      "budget_unmet": 11742
-    },
-    "evidence": "progress_20261022_192611",
-    "status": "RUNNING",
-    "train_pid": 89365,
-    "pipeline_pid": 88206
+    "completed_task_epochs": 46,
+    "formal_records": 0,
+    "evidence": "stop_eftr_user01_20261022_193639",
+    "final_acceptance": false,
+    "complete_negative_result_comparison": false,
+    "no_restart": true
   },
   "EFTR_ETA": {
-    "recent10_epoch_seconds": 78.9742782831192,
-    "task8_remaining_minutes": 81.60675422588984,
-    "task8_reference_finish_CST": "2026-10-22 20:45–21:00",
-    "whole_run": "unknown: Task9 throughput pending; evaluation and final audit additional"
+    "status": "CANCELLED_BY_USER",
+    "expected_completion": null
   },
   "mechanism_evidence": "eftr_mechanism_20261022_185723",
   "scale_evidence": "eftr_scale_readonly_20261022_173132",
@@ -336,5 +324,163 @@
     "prior_class_identity_superseded": true
   },
   "previous_task7_mechanism_evidence": "eftr_kl_diagnostic_readonly_20261022_180335",
-  "EFTR_budget_semantics": "History budget is a preferred region, not a hard commit veto; scale0 is native BC+IFA, not a no-op. Budget-unmet candidates can be committed under frozen lexicographic rule."
+  "EFTR_budget_semantics": "History budget is a preferred region, not a hard commit veto; scale0 is native BC+IFA, not a no-op. Budget-unmet candidates can be committed under frozen lexicographic rule.",
+  "original_controller_pid": 84841,
+  "continuation_queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/align_after_eftr_stop01",
+  "terminated_local": [
+    "EFTR"
+  ],
+  "pending_completion": [
+    "ALIGN"
+  ],
+  "EFTR_termination": {
+    "request": {
+      "status": "USER_TERMINATION_REQUESTED",
+      "unix": 1792668996.9025867,
+      "reason": "User explicitly stopped current EFTR; preserve checkpoints/logs/diagnostics; no complete negative-result comparison; continue frozen ALIGN only",
+      "signal": "SIGTERM",
+      "target": {
+        "pid": 89357,
+        "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m caet_v3_exp.train ra_coreset --through-task 8 --resume ",
+        "cwd": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/EFTR/source"
+      },
+      "processes_before": [
+        {
+          "pid": 84841,
+          "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/queue_controller.py ",
+          "cwd": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01"
+        },
+        {
+          "pid": 88150,
+          "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/seed_supervisor.py /data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/EFTR ",
+          "cwd": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01"
+        },
+        {
+          "pid": 88206,
+          "command": "/data/mlr_ifa/env/bin/python -u -m caet_v3_exp.pipeline ",
+          "cwd": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/EFTR/source"
+        },
+        {
+          "pid": 89357,
+          "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m caet_v3_exp.train ra_coreset --through-task 8 --resume ",
+          "cwd": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/EFTR/source"
+        },
+        {
+          "pid": 89365,
+          "command": "/data/mlr_ifa/env/bin/python -u -m caet_v3_exp.train ra_coreset --through-task 8 --resume ",
+          "cwd": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/EFTR/source"
+        }
+      ],
+      "original_contract_sha256": "4e74adbf7b52426b8c3e2b3bc5b7302f80bc0a64ec4550a557c544497b1b5a3f"
+    },
+    "processes_after": [],
+    "unix": 1792668997.9400287,
+    "queue_exit": "1\n",
+    "queue_failure": {
+      "status": "BLOCKED_REQUIRES_EVIDENCE_PRESERVING_RECOVERY",
+      "traceback": "Traceback (most recent call last):\n  File \"/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/queue_controller.py\", line 30, in main\n    (Q/(e['key']+'.exit')).write_text(str(code)+'\\n');assert code==0,(e['key'],code)\nAssertionError: ('EFTR_OBJECT_41', 1)\n",
+      "completed": [
+        "TAC_OBJECT_41"
+      ],
+      "unix": 1792668997.4650896
+    },
+    "worker_exit": "1\n",
+    "pipeline_exit": "1\n",
+    "train_exit": "1\n",
+    "gpu": "",
+    "status": "EARLY_TERMINATED_BY_USER",
+    "complete_epochs": 246,
+    "last_complete_epoch": {
+      "task": 8,
+      "epoch": 45,
+      "batches": 309,
+      "steps": 52614,
+      "loss": -27.009930194002912,
+      "lr_first": 5.59046052631579e-05,
+      "lr_after": 5.488815789473685e-05,
+      "seconds": 68.0004997253418
+    },
+    "formal_records": 0,
+    "checkpoint_inventory": {
+      "effects/current/task6/labels.pth": {
+        "bytes": 1277029,
+        "sha256": "91c5855037536fde2036e6f3d7cd935a11d004f5441178213b89ceb4a852fbdd"
+      },
+      "effects/current/task7/labels.pth": {
+        "bytes": 1207113,
+        "sha256": "e28a5b98c72d9200dd1846a365faabe82f1372dd83d0f3af329e8fa9b4ca9841"
+      },
+      "effects/current/task8/labels.pth": {
+        "bytes": 1274345,
+        "sha256": "57d06a8c4de214418f5e706e5e4c837759842321ba88da36526d4ebdd03889aa"
+      },
+      "effects/memory/task6.pth": {
+        "bytes": 652351,
+        "sha256": "8b8356a853d604afcba5cb1b8f88e80d8d4fb6c341e067219801933b72f3ec63"
+      },
+      "effects/memory/task7.pth": {
+        "bytes": 616017,
+        "sha256": "5d91f0c1f0e29394856e624217661016435c565df91f532d4a2ffe8bfd971356"
+      },
+      "preflight/recovery.pth": {
+        "bytes": 346294205,
+        "sha256": "3261267ca2675d4c970d4badee546bdb186674e677e1719f5f7a27151a57cd05"
+      },
+      "ra_coreset/models/mlrifa_6_model_ep99.pth": {
+        "bytes": 86579769,
+        "sha256": "30f1679e8fcf66495fb2f3cca5c196522a78b6b595ba67222c7104af9e02628f"
+      },
+      "ra_coreset/models/mlrifa_7_model_ep99.pth": {
+        "bytes": 86579769,
+        "sha256": "63cbebfa406d319ac6def1a5e4f9c3ad0c6f795ffad2deff8f4b8ffa2a9c93c1"
+      },
+      "ra_coreset/recovery/latest.pth": {
+        "bytes": 346438077,
+        "sha256": "ddd0f04b8a4e344af91fb306a3ab12782e276225cbb40a87b456d77426ceb0f4"
+      },
+      "teachers/task6.pth": {
+        "bytes": 911602,
+        "sha256": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+      },
+      "teachers/task7.pth": {
+        "bytes": 863597,
+        "sha256": "18b296366df7e91166bac5b71913d9e8bf359ff809af6799b4d6c060082f4208"
+      }
+    },
+    "frozen_hashes": {
+      "count": 725,
+      "status": "PASS"
+    },
+    "final_acceptance": false,
+    "complete_negative_result_comparison": false,
+    "preservation": "No payload or log deleted; partial-epoch work is not counted as completed training; last complete recovery retained"
+  },
+  "ALIGN_ETA": {
+    "recent_task6_epoch_seconds": 4.480002164840698,
+    "task6_remaining_minutes": 7.1680034637451175,
+    "reference_full_completion_CST": "2026-10-22 22:00–22:40",
+    "basis": "Early ALIGN task6 throughput and completed TAC 64.739min main epochs +75.968min formal vectors; preparation/storage/audit extra; later-stage throughput unknown",
+    "provisional": true
+  },
+  "ALIGN_latest": {
+    "status": "RUNNING",
+    "complete_epochs": 4,
+    "steps": 628,
+    "last": {
+      "task": 6,
+      "epoch": 3,
+      "batches": 157,
+      "steps": 628,
+      "loss": -17.17779307152815,
+      "lr_first": 9.42e-05,
+      "lr_after": 9.915789473684211e-05,
+      "seconds": 4.258496522903442
+    },
+    "gpu_admission": "PASS",
+    "formal_records": 0,
+    "train_pid": 89949,
+    "pipeline_pid": 89935,
+    "evidence": "queue_light_readonly_20261022_194033"
+  },
+  "snapshot_observation_note": "runs is the full 19:38 snapshot; ALIGN_latest is the separately verified 19:40 light snapshot"
 }
