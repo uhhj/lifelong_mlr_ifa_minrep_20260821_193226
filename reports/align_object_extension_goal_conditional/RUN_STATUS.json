@@ -1,0 +1,81 @@
+{
+  "status": "PARTIAL",
+  "observed_at": "2026-10-22T22:45:57.149158+08:00",
+  "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
+  "controller_pid": 93501,
+  "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
+  "frozen_files": 1209,
+  "active": "OBJECT_42",
+  "order": [
+    "OBJECT_42",
+    "OBJECT_43",
+    "GOAL_41",
+    "GOAL_42",
+    "GOAL_43"
+  ],
+  "conditional_GOAL": "PENDING_COMPLETE_OBJECT_THREE_SEED_MEAN_AUC_STRICT_GREATER_THAN_SAME_SEED_RA",
+  "baseline_OBJECT_mean_AUC_fraction": "703/960",
+  "baseline_OBJECT_mean_AUC_percent": 73.22916666666667,
+  "read_only_completed_prefix": {
+    "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
+  },
+  "snapshot": "snapshot_readonly_20261022_224604",
+  "runs": {
+    "OBJECT_42": {
+      "status": "RUNNING_OR_PREPARING",
+      "complete_epochs": 25,
+      "main_steps": 3925,
+      "last": {
+        "task": 6,
+        "epoch": 24,
+        "batches": 157,
+        "steps": 3925,
+        "loss": -21.957385761722637,
+        "lr_first": 7.850000000000001e-05,
+        "lr_after": 7.74671052631579e-05,
+        "seconds": 4.506163835525513
+      },
+      "formal": {
+        "records": 0,
+        "completed_vectors": 0,
+        "started_vectors": 0,
+        "completed_cells": 0,
+        "technical_exceptions": 0,
+        "mean_vector_seconds": null,
+        "remaining_evaluation_hours": null
+      },
+      "gpu_admission": "PASS",
+      "recent_stage_epoch_seconds": 4.37917742729187
+    },
+    "OBJECT_43": {
+      "status": "QUEUED_NOT_GPU_ADMITTED",
+      "formal_records": 0
+    },
+    "GOAL_41": {
+      "status": "QUEUED_NOT_GPU_ADMITTED",
+      "formal_records": 0
+    },
+    "GOAL_42": {
+      "status": "QUEUED_NOT_GPU_ADMITTED",
+      "formal_records": 0
+    },
+    "GOAL_43": {
+      "status": "QUEUED_NOT_GPU_ADMITTED",
+      "formal_records": 0
+    }
+  },
+  "formal_acceptance": false,
+  "automation_id": "align-object-seed-goal",
+  "new_max_main_updates_if_GOAL_selected": 439300,
+  "new_main_updates_if_GOAL_not_selected": 211000,
+  "ETA": {
+    "current_task6_recent_epoch_seconds": 4.37917742729187,
+    "current_task6_remaining_minutes": 5.473971784114838,
+    "OBJECT42_reference_finish_CST": "2026-10-23 00:45–01:20",
+    "OBJECT_three_seed_gate_reference_CST": "2026-10-23 03:00–04:00",
+    "basis": "OBJECT41 actual47.79min main epochs +73.11min formal vectors plus preparation/audit; early42 Task6 throughput similar, later stages/evaluation variable",
+    "GOAL_finish_CST": null,
+    "GOAL_basis": "Conditional and not GPU admitted; estimate only after its actual throughput",
+    "provisional": true
+  }
+}

@@ -1,0 +1,17 @@
+# 实现与验收边界
+
+新有限队列Q=/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022，controller93501；entry为OBJECT_42、OBJECT_43、GOAL_41、GOAL_42、GOAL_43。原OBJECT41输出只读复用。旧队列及EFTR用户终止状态不修改。
+
+从已验收ALIGN41 source逐文件复制，新版本只8项差异：suite/预算参数化的prepare、train、audit、audit_mechanism、model cfg；variant固定ALIGN；新纯BC标签器与labels替换无关物理效果侧车。原caet_v3_exp/model.py、observe.py、preflight.py、pipeline.py、final_process.py逐字节保持。完整source diff及1209冻结hash在launch receipt/远端SOURCE_DIFF与ORCHESTRATION_CONTRACT。prepare不会继承父训练后参数或buffer；仅复用同seed只读feature与选样输入，正式初始化仍官方权重和空buffer。
+
+新BC标签器对OBJECT41旧下一动作标签逐样本SHA、有效mask完全一致，三OBJECT均5601/5921合法；GOAL均4439/4759合法。其余窗口仍在DataLoader人口中，BC mask为零，IFA与优化步保留。GOAL原绑定未显式identity_unique字段，其既有唯一demo/target/length证据结合所有possible_starts完整8x7动作逐字节匹配与端点断言核实，不猜测多解标签。全部demo states与观测joint/grip的post-action时序关系逐数组通过。无物理效果、对比图或预测器要求，旧CAET GOAL零支持不影响本ALIGN方案。
+
+OBJECT官方ep99与GOAL原官方ep96、gamma差异继承各自RA，不跨suite改科学参数。零训练核查6组父成员实际源/bufferSHA，不重新导出特征或重选RA。每组仍须自身5真实隔离GPU优化恢复，不能套用其他组通过；OBJECT42已在snapshot_readonly_20261022_224325实际PASS，0辅助/0环境。
+
+服务器每新seed完成后先调用原训练audit(严格4CP实际100键加载、全payload校验等)及process exit，再由外置independent_audit对完整mask账目、所有200episode/20vector/10cell、同seedRA矩阵与Fraction指标独立复算并写receipt。完整OBJECT41旧结果也已由相同外置审计真实通过且与旧本地验收指标/acceptanceSHA绑定。三seedmean(AUC)严格大于父RA则自动继续GOAL；该自动分支不等待桌面可用，最终本地验收通过前仍PARTIAL。
+
+部署前实测/data root空闲16.36GB，五新run总起步预算10GiB+2GiB保留通过。每run保守2GiB包含原buffer复制、4模型、完整recovery、GPU预检recovery和轻量日志；feature新增0，旧资产删除0。此为实测资产大小建立的起步规划，后续每次检查和阶段切换仍核真实产物，不冒称未来容量最终验收。系统普通空闲7.98GB仅只读使用。
+
+本地package_final.py KEY仅白名单metadata manifest；resume_light_download.py并行只读补缺并全SHA；audit_final.py包内独立复算并绑定server independent/receipt；aggregate_local.py --suite OBJECT或GOAL --seed41 --seed42 --seed43 --output 输出完整均值和样本SD。新包装分支目前静态通过，须新run真正完成后实证；故障只能外置修复留证，不重跑正式环境。OBJECT seed41参数使用旧已验收final包。禁止提前计算部分性能或用预检说明效果成功。
+
+一次本地源码拷贝路径相对根错误发生在部署前，0服务器更改/0优化器；修复absolute resolve后复核字节一致，LOCAL_PREPARATION_NOTE保留。无训练恢复或协议改动。

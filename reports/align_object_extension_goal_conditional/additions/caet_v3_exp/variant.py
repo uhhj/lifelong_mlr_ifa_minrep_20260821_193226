@@ -1,0 +1,2 @@
+VARIANT='ALIGN'
+METHOD='RA-TAC-Align'
