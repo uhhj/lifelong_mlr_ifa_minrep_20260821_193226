@@ -124,3 +124,14 @@ N snapshot_readonly_20261023_042133本地PASS，95924仍正常WAITING，1462hash
 18批实测均175.356644秒，04:51快照剩2批线性5.845221分钟，后续耗时不确定，最终退出审计/轻量下载/本地验收另计，仍参考05:05–05:30 CST；只作为当前GOAL41参考，后续seed实际吞吐及总ETA未知。GOAL42/43尚未GPU准入，OBJECT已验收三seed只读不重复下载/验收。
 
 N snapshot_readonly_20261023_045134本地PASS，95924正常WAITING，1462hash不变/六输出未创建。capacity_readonly_20261023_045147剩余新增界PASS_NOT_FINAL：data root12.415291GB，扣余新增9.045878GB+2GiB后余1.221929GB；system普通7.979356GB，扣三run+1GiB后余1.751654GB。GOAL41稳定私有已分配1.262043GB抵扣新增界。无旧资产删除/活动payload操作/降预算/付费资源，科学合同不变。健康继续评估，无需用户行动；本轮正常保存发布后结束，不守候完成。
+
+## 2026-10-23 05:25 CST — GOAL41完整本地验收，GOAL42自然训练
+
+- `final_GOAL_41_20261023_052225/LOCAL_FINAL_AUDIT.json`与`QUEUE_TASK_COST_AUDIT.json`实际PASS：929轻量文件全SHA、400epoch76100主步、4CP严格100键、200正式20vector10cell、原RA成员载荷499/445/452/985、IFA/初始化/完整mask账目、pipeline/supervisor有效exit0无残留，绑定队列receipt及服务器独立审计SHA。新GOAL包装/下载/root父JSON前缀/本地独立全矩阵路径首次实证PASS。无重训重评/权重下载/科学源改动。
+- GOAL41 AUC83.4375% vs RA78.75%，+4.6875pp；FWT91.25 vs82.5，+8.75pp；NBT16.666667 vs5.555556，+11.111111pp（低好，变差）；OldFinal75 vs73.333333，+1.666667pp；FinalAll78.75 vs76.25，+2.5pp。最终Task6/7/8/9=55/100/70/90，RA35/100/85/85；保留唯一跨基线负单元Task8最终-15pp。自身Task6初80→最终55、Task8刚学完95→最终70均下降25pp，不能把AUC提升说成防遗忘。单seed探索性，不作显著性或三seed结论。
+- 主epoch33.708108分钟，正式vector59.377450分钟，准备/审计另计。BC有效714400/屏蔽45400、主76100更新，无辅助更新；10个单元与成本完整入包。之后只读复用GOAL41，不重复下载/最终验收。
+- 原controller93501于约05:00自然转GOAL42，不重复启动。`snapshot_readonly_20261023_052136/LOCAL_AUDIT.json` PASS，GOAL42已247完整epoch32595主步/0正式，Task8前47轮；1209冻结源调度和本run270输入hash、初始化同父、完整已写逐步mask/native-only账目PASS。自身5真实隔离GPU主调用、0辅助/0环境PASS，关闭同RA/maskedBC/空mask/完整恢复通过，不重复准入。train6/7与retain6/7/labels7/8 exit0；train105900/torchrun105892/pipeline105795/supervisor105753正常。
+- GOAL42最近10轮Task8均5.342137秒，05:21余53轮线性4.718887分钟，Task8参考05:26–05:30。后续Task9借同套件41末10轮8.886625秒参考14.811041分钟，正式评估借41实际59.377450分钟，另准备/最终验收，GOAL42完成暂参考06:45–07:15，不保证。GOAL43尚未自身准入，完整队列总ETA仍不承诺。
+- N同名snapshot本地PASS，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，1462hash不变，六输出未创建；继续等待A整个GOAL队列自然有效exit0，不绕过或kill正常运行。N的独立OBJECT seed41门仍各自>同seedRA41的701/960，与GOAL41结果无关。
+- `capacity_readonly_20261023_052148`剩余新增界PASS_NOT_FINAL：data root11.110191GB，扣余新增7.978082GB+2GiB后余0.984625GB；system普通7.979352GB，扣三run+1GiB后余1.751649GB。已验收GOAL41不再新增预留，GOAL42稳定私有已分配0.611852GB抵扣；1个不稳定文件未计信用。不删旧资产、改预算、下载payload或付费扩容。所有取消任务不恢复。
+- 总体PARTIAL，OBJECT三seed与GOAL41已本地验收只读；下一轮只核GOAL42进度/正式评估及各自真实准入，GOAL43和N最终路径仍须实际独立验收。正常保存发布后结束，不守候。
