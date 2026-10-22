@@ -1,14 +1,19 @@
 """Copy completed-epoch JSON ledgers only, no model/optimizer/environment calls."""
-import datetime,getpass,json,hashlib,shlex
+import datetime,getpass,json,hashlib,shlex,argparse
 from pathlib import Path
 import paramiko
 R=Path(__file__).resolve().parent
+ap=argparse.ArgumentParser();ap.add_argument('--task',type=int,choices=[7,8,9]);args=ap.parse_args()
 SCRIPT=r'''
 import json,time,hashlib
 from pathlib import Path
 O=Path('/data/mlr_ifa/experiments/CAETv3_EFTR_OBJECT_seed41_20261022_collate01')
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 history=json.loads((O/'ra_coreset/epochs.json').read_text());files={};manifest={}
+stage_filter=STAGE_FILTER
+if stage_filter is not None:
+ history=[h for h in history if h['task']==stage_filter]
+ assert history and history[0]['epoch']==0
 def add(p):
  raw=p.read_bytes();assert p.suffix=='.json' and len(raw)<8*1024**2
  name=str(p.relative_to(O));files[name]=raw.decode();manifest[name]=dict(sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw))
@@ -26,6 +31,7 @@ for t in stages:
   binding[str(j)]=actual
 print(json.dumps(dict(observed_unix=time.time(),history=history,teacher_binding=binding,manifest=manifest,files=files)))
 '''
+SCRIPT=SCRIPT.replace('STAGE_FILTER',repr(args.task))
 c=paramiko.SSHClient();c.load_system_host_keys();c.set_missing_host_key_policy(paramiko.RejectPolicy());pw=getpass.getpass('SSH password (memory only): ')
 try:
  c.connect('jq1.9gpu.com',port=11920,username='root',password=pw,allow_agent=False,look_for_keys=False,timeout=20);pw=None

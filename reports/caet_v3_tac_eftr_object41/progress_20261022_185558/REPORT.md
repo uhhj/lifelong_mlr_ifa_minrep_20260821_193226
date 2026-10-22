@@ -1,0 +1,5 @@
+# PARTIAL — EFTR Task8阶段检查
+
+最新2026-10-22 18:58 CST：progress_20261022_185558及LOCAL_AUDIT PASS，EFTR自然完成Task7并进入Task8；215完整epoch43035主步/0正式，Task8已15轮。train7/retain7/teacher7/labels8均exit0；真实train89365/torchrun89357/pipeline88206/controller84841正常，无恢复或改参。725冻结源调度与288输入hash保持PASS。Task7完整原账目汇总22700提交68100候选，选择0/.5/1=4706/3314/14680，预算未满足22681；本轮未重复下载Task7全量候选。
+外置check_eftr_mechanisms.py新增--task 8过滤，默认全阶段语义不变，实际执行及独立audit_eftr_mechanisms PASS（eftr_mechanism_20261022_185723）。Task8前15轮4635提交13905候选（额外9270），选择0/.5/1=823/843/2969；4635次全部历史预算未满足，15次完整1521旧成员检查均不满足。新增Task7自身ep99教师740成员与Task6教师781成员，实际教师/CP/storage SHA及成员轮转/身份、逐候选当前NLL容差与预算优先级/词典序选择独立PASS；不代替最终实际成员载荷验收。最大选中当前NLL增量.0199985504<=.02；1448辅助候选因BC门被拒。mean selected R341448.9903、native342026.8113，最后完整记忆R300446.9419>.1。账目正确不等于历史保护达标，未运行额外模型前向/优化器/环境或修改服务器源码，既有Task7逐维KL诊断不重复、不外推为Task8逐维结论。
+最近Task8十轮均70.819秒，剩85轮线性约100.33分钟，阶段完成参考20:35–20:50 CST；Task9吞吐及整体完成ETA未知，评估与最终验收另计。data普通12.849GB/root17.719GB，system普通7.979GB，余量满足。TAC已验收只读，ALIGN仍排队未GPU准入，总体PARTIAL。下一轮正常只读进度，保留历史预算未达与GMMHead类更正，不重复已完成诊断或TAC验收。

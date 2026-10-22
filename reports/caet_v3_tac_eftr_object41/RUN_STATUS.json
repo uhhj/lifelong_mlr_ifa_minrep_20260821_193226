@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T18:25:57.027516+08:00",
+  "observed_at": "2026-10-22T18:55:57.299917+08:00",
   "order": [
     "TAC",
     "EFTR",
@@ -9,7 +9,7 @@
   "seed": 41,
   "controller_pid": 84841,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_182558",
+  "snapshot": "progress_20261022_185558",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
@@ -87,21 +87,21 @@
       }
     },
     "EFTR_OBJECT_41": {
-      "complete_epochs": 189,
-      "steps": 35903,
+      "complete_epochs": 215,
+      "steps": 43035,
       "formal_records": 0,
       "gpu_admission": "PASS",
       "last": {
-        "task": 7,
-        "epoch": 88,
-        "batches": 227,
-        "steps": 35903,
-        "loss": -31.152533669828845,
-        "lr_first": 1.227027027027027e-05,
-        "lr_after": 1.124774774774775e-05,
-        "seconds": 59.23789143562317
+        "task": 8,
+        "epoch": 14,
+        "batches": 309,
+        "steps": 43035,
+        "loss": -23.5316530986897,
+        "lr_first": 8.741447368421054e-05,
+        "lr_after": 8.639802631578948e-05,
+        "seconds": 69.94997811317444
       },
-      "last_stage_mean_epoch_seconds": 56.37886271476746,
+      "last_stage_mean_epoch_seconds": 70.81920835971832,
       "mechanism": {
         "6": {
           "records": 15700,
@@ -118,32 +118,32 @@
           "budget_unmet": 0
         },
         "7": {
-          "records": 20203,
+          "records": 22700,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 60609,
+          "optimizer_trials": 68100,
           "candidate_selected": {
-            "0": 4318,
-            "1": 3284,
-            "2": 12601
+            "0": 4706,
+            "1": 3314,
+            "2": 14680
           },
-          "budget_unmet": 20184
+          "budget_unmet": 22681
         },
         "8": {
-          "records": 0,
+          "records": 4635,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 0,
+          "optimizer_trials": 13905,
           "candidate_selected": {
-            "0": 0,
-            "1": 0,
-            "2": 0
+            "0": 823,
+            "1": 843,
+            "2": 2969
           },
-          "budget_unmet": 0
+          "budget_unmet": 4635
         },
         "9": {
           "records": 0,
@@ -230,7 +230,7 @@
   },
   "formal_acceptance": false,
   "automation_id": "caet-v3-tac-eftr-align-seed41",
-  "stage": "EFTR_TRAIN7",
+  "stage": "EFTR_TRAIN8",
   "light_snapshot": "queue_light_readonly_20261022_170047",
   "completed_local": [
     "TAC"
@@ -282,37 +282,37 @@
     }
   },
   "EFTR_latest": {
-    "complete_epochs": 189,
-    "steps": 35903,
+    "complete_epochs": 215,
+    "steps": 43035,
     "formal_records": 0,
-    "task": 7,
-    "completed_task_epochs": 89,
+    "task": 8,
+    "completed_task_epochs": 15,
     "mechanism_summary": {
-      "records": 20203,
+      "records": 4635,
       "head_updates": 0,
       "effect_exposures": 0,
       "cross_anchors": 0,
       "partner_forwards": 0,
-      "optimizer_trials": 60609,
+      "optimizer_trials": 13905,
       "candidate_selected": {
-        "0": 4318,
-        "1": 3284,
-        "2": 12601
+        "0": 823,
+        "1": 843,
+        "2": 2969
       },
-      "budget_unmet": 20184
+      "budget_unmet": 4635
     },
-    "evidence": "progress_20261022_182558",
+    "evidence": "progress_20261022_185558",
     "status": "RUNNING",
-    "train_pid": 88491,
+    "train_pid": 89365,
     "pipeline_pid": 88206
   },
   "EFTR_ETA": {
-    "recent10_epoch_seconds": 56.37886271476746,
-    "task7_remaining_minutes": 10.336124831040701,
-    "task7_reference_finish_CST": "2026-10-22 18:37–18:40",
-    "whole_run": "unknown: Task8/9 throughput pending"
+    "recent10_epoch_seconds": 70.81920835971832,
+    "task8_remaining_minutes": 100.32721184293428,
+    "task8_reference_finish_CST": "2026-10-22 20:35–20:50",
+    "whole_run": "unknown: Task9 throughput pending; evaluation and final audit additional"
   },
-  "mechanism_evidence": "eftr_mechanism_20261022_172904",
+  "mechanism_evidence": "eftr_mechanism_20261022_185723",
   "scale_evidence": "eftr_scale_readonly_20261022_173132",
   "EFTR_zero_training_diagnostic": {
     "directory": "eftr_kl_diagnostic_readonly_20261022_180335",
@@ -334,5 +334,6 @@
     },
     "actual_head": "GMMHead",
     "prior_class_identity_superseded": true
-  }
+  },
+  "previous_task7_mechanism_evidence": "eftr_kl_diagnostic_readonly_20261022_180335"
 }
