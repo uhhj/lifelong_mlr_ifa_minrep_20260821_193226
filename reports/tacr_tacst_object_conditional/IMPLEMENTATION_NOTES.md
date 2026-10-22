@@ -15,3 +15,8 @@ model.py定义20键学生，其中部署14键R/U/gate，E/D训练专用。observ
 import_readonly_20261023_002022：六入口各15个实际活动模块全部导入PASS，自己的variant/seed匹配，torch CUDA未初始化、无模型前向/优化器/环境/输出创建，冻结1462hash不变。此前两次外置探针分别因空CUDA环境触发LIBERO强制EGL设备解析、以及不相容的PYOPENGL_PLATFORM而在导入期退出1，原ATTEMPT均保留；改为worker同款EGL设备环境后通过，未改变任何冻结代码/正常评估。
 
 同一align-object-seed-goal监控已更新覆盖原A与新N。首次无RRULE前缀更新被工具保存120分钟，复核后用工具提交带前缀的30分钟规则成功；AUTOMATION_UPDATE_RECEIPT记录实际保存值与提示SHA，不手改调度文件、不新建重复任务。
+
+
+2026-10-23 01:25 CST：snapshot_readonly_20261023_012140/LOCAL_AUDIT PASS，新95924仍WAITING、1462hash不变、六输出不存在，无GPU准入。旧ALIGN42已在A/final_OBJECT_42_20261023_012252完整本地独立PASS，AUC83.020833%对同seedRA71.5625%；旧43已自动GPU准入并训练中，本N不越过旧GOAL条件流程。capacity_readonly_20261023_012323按剩余新增分配计当前43已写稳定私有1.009GB的信用，data root13.990GB，对最坏剩余11.017GB＋2GiB后仍余0.826GB；system普通7.979GB仍余1.752GB。不能拿部署时全额四run界重复扣当前已耗的空间而误报满盘；此仍是规划界，不是最终容量验收。
+
+外置resume_light_download.py发现原复制工具仅允许/data元数据路径，已加明确的/root/mlr_ifa/experiments/前缀以匹配冻结TACR41/43与TACRST42输出；仍只.json/.jsonl/.exit、包目录内路径、<8MiB、manifest全SHA，不下载pth或payload。仅外置包装修改/语法验证，无服务器源码或合同修改；实际新组最终下载仍待真实验收。N无新性能结果或可用吞吐ETA。

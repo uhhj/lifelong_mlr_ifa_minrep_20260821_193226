@@ -16,7 +16,7 @@ for name,item in manifest['entries'].items():
     target=(p/name).resolve()
     assert p in target.parents and target.suffix in ('.json','.jsonl','.exit')
     assert item['bytes']<8*1024**2
-    assert str(item['path']).startswith(('/data/mlr_ifa/experiments/','/data/mlr_ifa/experiment_workspaces/'))
+    assert str(item['path']).startswith(('/data/mlr_ifa/experiments/','/root/mlr_ifa/experiments/','/data/mlr_ifa/experiment_workspaces/'))
     if target.is_file():
         raw=target.read_bytes()
         assert len(raw)==item['bytes'] and hashlib.sha256(raw).hexdigest()==item['sha256']

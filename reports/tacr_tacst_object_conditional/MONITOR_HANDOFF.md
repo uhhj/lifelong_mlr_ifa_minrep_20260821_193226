@@ -18,3 +18,8 @@
 
 
 2026-10-23 00:51 CST：snapshot_readonly_20261023_005155/LOCAL_AUDIT与CAPACITY_LOCAL_AUDIT PASS。controller95924仍正常等待旧队列，1462冻结hash不变、六输出不存在、未GPU准入；GPU仍为旧evaluate94045，无新失败/恢复/重启。data普通10.129GB/root14.999GB、system普通7.979GB；旧四待运行与新六run的保守剩余上界仍通过，data保留2GiB后余0.826GB、system保留1GiB后余1.752GB；这不是最终容量验收。旧ALIGN42正式计数见同轮A全快照，不沿用旧10/200。新队列无可用吞吐与ETA，正常等待不通知。
+
+
+2026-10-23 01:25 CST：snapshot_readonly_20261023_012140/LOCAL_AUDIT PASS，新95924仍WAITING、1462hash不变、六输出不存在，无GPU准入。旧ALIGN42已在A/final_OBJECT_42_20261023_012252完整本地独立PASS，AUC83.020833%对同seedRA71.5625%；旧43已自动GPU准入并训练中，本N不越过旧GOAL条件流程。capacity_readonly_20261023_012323按剩余新增分配计当前43已写稳定私有1.009GB的信用，data root13.990GB，对最坏剩余11.017GB＋2GiB后仍余0.826GB；system普通7.979GB仍余1.752GB。不能拿部署时全额四run界重复扣当前已耗的空间而误报满盘；此仍是规划界，不是最终容量验收。
+
+外置resume_light_download.py发现原复制工具仅允许/data元数据路径，已加明确的/root/mlr_ifa/experiments/前缀以匹配冻结TACR41/43与TACRST42输出；仍只.json/.jsonl/.exit、包目录内路径、<8MiB、manifest全SHA，不下载pth或payload。仅外置包装修改/语法验证，无服务器源码或合同修改；实际新组最终下载仍待真实验收。N无新性能结果或可用吞吐ETA。
