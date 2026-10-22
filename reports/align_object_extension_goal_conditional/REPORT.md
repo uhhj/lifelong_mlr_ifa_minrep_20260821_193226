@@ -153,3 +153,11 @@ GOAL43尚未自身GPU准入，N同轮audit PASS，95924仍正常WAITING，1462ha
 N初次只读连接在认证前SSH banner EOF失败，证据保留于N/snapshot_readonly_20261023_062138/LOCAL_CONNECTION_ATTEMPT.json。仅重连一次读取监控，snapshot_readonly_20261023_062227/LOCAL_AUDIT PASS，原失败未抹除，RESOLUTION绑定重连后的审计；未运行失败脚本、未改服务器、未重启训练/评估。N95924正常WAITING，1462hash不变/六输出不存在。此为本地监控连接问题，不是科学失败或训练恢复，不需用户操作。
 
 capacity_readonly_20261023_062149剩余新增界PASS_NOT_FINAL：data root11.153052GB，扣余新增7.328236GB+2GiB后余1.677332GB；system普通7.978947GB，扣三run+1GiB后余1.751244GB。GOAL42稳定私有1.261699GB抵扣新增界；已验收产物不额外预留。不删资产、不改精度batch更新、不下载payload或付费扩容。健康继续评估；本轮正常保存发布后结束，不守候。
+
+## 2026-10-23 06:51 CST — GOAL42正常评估180/200，仍PARTIAL
+
+`snapshot_readonly_20261023_065135/LOCAL_AUDIT.json` PASS：正式180/200条、18完成vector+1进行中、9完整cell、0技术异常；逐episode初态hash/index/env seed/600步、attempt唯一性与成功向量核验通过。400完整epoch76100主步、train6–9/retain6–9 exit0不变，1209冻结源调度与270输入hash、初始化同父及逐主步native-only/mask账目PASS。evaluate106640及环境正常，无训练/评估重启、故障恢复或改参。不计算部分指标，完整200/20、4CP100键、原成员载荷、有效退出0无残留及本地最终验收仍待完成。
+
+18批实测平均214.566596秒，06:51余2批线性7.152220分钟，另有效退出审计/轻量下载/本地验收，继续参考07:05–07:25 CST，最后批次耗时仍不确定。GOAL43尚未自身GPU准入，总ETA未知；已验收GOAL41和OBJECT三seed只读不重复下载/最终验收。正常保存发布后结束，不守候完成。
+
+N snapshot_readonly_20261023_065149本地PASS，95924仍正常WAITING，1462hash不变/六输出不存在；本轮只读连接正常，旧banner失败及恢复证据保留。capacity_readonly_20261023_065203剩余新增界PASS_NOT_FINAL：data root11.152695GB扣余新增7.327879GB+2GiB后余1.677332GB，system普通7.978930GB扣三run+1GiB后余1.751228GB；GOAL42稳定私有1.262055GB抵扣新增界。无旧资产删除/活动payload操作/精度batch预算改变/付费资源，全部科学合同不变。健康无实质状态变化，无需用户行动。
