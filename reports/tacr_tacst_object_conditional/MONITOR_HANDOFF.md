@@ -67,3 +67,9 @@
 `snapshot_readonly_20261023_052136/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，1462冻结源调度hash未变，95924正常WAITING，六输出不存在。A GOAL41已final_GOAL_41_20261023_052225完整本地独立PASS，AUC83.4375 vs同seedRA78.75（+4.6875pp），但NBT+11.111111pp低好、最终Task8-15pp保留，不外推N收益。A自然进入GOAL42，247完整epoch32595主步0正式、自己5GPU主调用0辅助0环境及1209hash/270输入hash/计步PASS，详细见A本轮报告。N仍等A整个队列自然有效exit0/完整receipt/GPU空闲/互斥锁释放，不绕过；各自OBJECT41门仍701/960。
 
 `capacity_readonly_20261023_052148`剩余新增界PASS_NOT_FINAL：data root11.110191GB扣余新增7.978082GB+2GiB后余0.984625GB；system普通7.979352GB扣三run+1GiB后余1.751649GB。已接受GOAL41不再额外预留，GOAL42稳定私有0.611852GB抵扣；1不稳定文件未计信用。0模型前向/0优化器/0环境/0服务器写入，不删资产/改参/付费扩容。N真实GPU吞吐及总ETA未知；两队列整体PARTIAL，正常保存发布后结束不守候。
+
+## 2026-10-23 05:51 CST — 正常等待上游GOAL42，未GPU准入
+
+`snapshot_readonly_20261023_055136/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL；1462冻结hash一致，无新失败或恢复，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT。六输出未创建，不能把CPU验证当GPU准入。A当前GPU进程106640，具体正式进度以同轮A完整审计为准；N不绕过A/互斥锁，不kill或重复启动正常训练评估，取消任务不恢复。
+
+`capacity_readonly_20261023_055148`剩余新增界PASS_NOT_FINAL：data root11.153408GB，扣余新增7.328592GB+2GiB后余1.677332GB；system普通7.979123GB，扣三run+1GiB后余1.751420GB。GOAL42稳定私有已分配1.261343GB抵扣新增界；已接受OBJECT和GOAL41不再额外预留。不删旧资产、下载payload、改精度batch更新或增加付费资源，0模型前向/0优化器/0环境/0服务器写入。N实际吞吐和整体ETA仍未知，总PARTIAL，保存发布后结束本轮，不守候。
