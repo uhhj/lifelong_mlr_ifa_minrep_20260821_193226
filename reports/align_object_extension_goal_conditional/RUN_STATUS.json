@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-23T03:51:20.141485+08:00",
+  "observed_at": "2026-10-23T04:21:16.071499+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
@@ -19,7 +19,7 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261023_035136",
+  "snapshot": "snapshot_readonly_20261023_042133",
   "runs": {
     "OBJECT_42": {
       "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
@@ -209,29 +209,29 @@
     },
     "GOAL_41": {
       "status": "RUNNING_OR_PREPARING",
-      "complete_epochs": 369,
-      "main_steps": 65653,
+      "complete_epochs": 400,
+      "main_steps": 76100,
       "last": {
         "task": 9,
-        "epoch": 68,
+        "epoch": 99,
         "batches": 337,
-        "steps": 65653,
-        "loss": -26.54919826949032,
-        "lr_first": 3.248192771084338e-05,
-        "lr_after": 3.146686746987952e-05,
-        "seconds": 9.903010845184326
+        "steps": 76100,
+        "loss": -29.918826711637685,
+        "lr_first": 1.0150602409638555e-06,
+        "lr_after": 0.0,
+        "seconds": 8.75956130027771
       },
       "formal": {
-        "records": 0,
-        "completed_vectors": 0,
-        "started_vectors": 0,
-        "completed_cells": 0,
+        "records": 70,
+        "completed_vectors": 7,
+        "started_vectors": 8,
+        "completed_cells": 3,
         "technical_exceptions": 0,
-        "mean_vector_seconds": null,
-        "remaining_evaluation_hours": null
+        "mean_vector_seconds": 178.85803157942635,
+        "remaining_evaluation_hours": 0.6458762251479284
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 9.402701711654663
+      "recent_stage_epoch_seconds": 8.886624646186828
     },
     "GOAL_42": {
       "status": "QUEUED_NOT_GPU_ADMITTED",
@@ -247,25 +247,25 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "GOAL41_Task9_remaining_epochs_at_snapshot": 31,
-    "GOAL41_Task9_seconds_recent_mean": 9.402701711654663,
-    "GOAL41_Task9_remaining_minutes_linear": 4.858062551021575,
-    "GOAL41_main_training_reference_finish_CST": "2026-10-23 03:56–04:00",
-    "GOAL41_final_acceptance_CST": null,
+    "GOAL41_completed_vectors_at_snapshot": 7,
+    "GOAL41_mean_vector_seconds": 178.85803157942635,
+    "GOAL41_remaining_evaluation_minutes_linear": 38.752573508875706,
+    "GOAL41_reference_final_acceptance_CST": "2026-10-23 05:05–05:30",
+    "GOAL42_43_finish_CST": null,
     "total_finish_CST": null,
-    "basis": "03:51 own Task9 last10 complete epochs mean9.402702sec; 31 remain, linear4.858063min. Preparation, formal GOAL vector times and local final acceptance not included. No actual GOAL vector throughput yet.",
+    "basis": "04:21 seven actual GOAL41 vectors average178.858032sec, remaining13 linear38.752574min plus final audits/light download/local acceptance; later vector duration uncertain. Future seeds throughput not measured.",
     "provisional": true
   },
-  "phase_exit_evidence": "snapshot_readonly_20261023_035136",
-  "current_phase": "GOAL41_TRAINING_TASK9",
+  "phase_exit_evidence": "snapshot_readonly_20261023_042133",
+  "current_phase": "GOAL41_FORMAL_EVALUATION",
   "disk": {
     "/data": {
-      "ordinary": 7708463104,
-      "root": 12578500608
+      "ordinary": 7545696256,
+      "root": 12415733760
     },
     "/": {
-      "ordinary": 7979393024,
-      "root": 11082919936
+      "ordinary": 7979376640,
+      "root": 11082903552
     }
   },
   "accepted_packages": {
@@ -307,17 +307,17 @@
   },
   "capacity_recheck": {
     "/": {
-      "free": 7979393024,
+      "free": 7979376640,
       "reserve": 1073741824,
       "remaining_additional_bound": 5153960754,
-      "margin": 1751690446
+      "margin": 1751674062
     },
     "/data": {
-      "free": 12578676736,
+      "free": 12415733760,
       "reserve": 2147483648,
-      "remaining_additional_bound": 9209230948,
-      "margin": 1221962140
+      "remaining_additional_bound": 9046320740,
+      "margin": 1221929372
     }
   },
-  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_035149"
+  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_042146"
 }

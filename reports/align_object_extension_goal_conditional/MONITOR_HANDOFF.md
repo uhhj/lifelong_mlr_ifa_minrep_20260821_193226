@@ -112,3 +112,13 @@ N snapshot_readonly_20261023_025144/LOCAL_AUDIT PASS：95924仍正常WAITING，1
 最近10轮Task9均9.402702秒，余31轮线性4.858063分钟（03:51快照），主训练预计03:56–04:00 CST仅参考。随后保留/准备、正式20vector及本地验收另计；GOAL正式尚0vector，不能按OBJECT时间伪造本套件评估总ETA或提前指标。未完整400epoch76100、4CP100键、200正式20vector及有效退出验收前仍PARTIAL。GOAL42/43尚未GPU准入；通过门后固定完成三seed，不按途中结果取消。
 
 N同轮audit PASS，95924正常等待A自然有效exit0，1462hash不变/六输出未创建。`../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_035149`剩余新增界PASS_NOT_FINAL：data root12.578677GB，扣余新增9.209231GB+2GiB后余1.221962GB；system普通7.979393GB，扣新三run+1GiB后余1.751690GB。按GOAL41稳定私有已分配1.098691GB抵扣新增界。无重启、恢复、改参、活动payload操作、旧资产删除或付费资源。健康继续推进，无需用户行动，正常保存发布后结束本轮不守候。
+
+## 2026-10-23 04:24 CST — GOAL41主训练完成、正式评估70/200
+
+`snapshot_readonly_20261023_042133/LOCAL_AUDIT.json` PASS：GOAL41全部400完整epoch76100主更新完成，train6–9/retain6–9与labels7–9均exit0。原1209冻结源调度与277输入hash、初始化同父、逐主步native-only/mask账目通过。evaluate102662、10环境进程、pipeline101907/supervisor101863/controller93501正常，无新失败、恢复、重复启动或改参。
+
+正式70/200条，7完成vector+1进行中，3完整cell，0技术异常；原formal_audit逐episode初态hash/index/env seed/600步、attempt唯一性和成功向量核验PASS。不计算部分AUC，也不把训练完成当最终COMPLETED。4CP严格加载、完整200/20、有效pipeline/supervisor exit0无残留、实际原成员载荷与完整本地最终包验收仍待最终完成。
+
+7批实测均178.858032秒，04:21快照剩13批线性38.752574分钟，后续时长仍不确定，评估及轻量包装本地验收暂参考05:05–05:30 CST。GOAL42/43尚未自身GPU准入，无完整队列可靠总ETA；通过OBJECT门后固定完成GOAL三seed，不按途中负结果取消。
+
+N snapshot_readonly_20261023_042133本地PASS，95924仍正常WAITING，1462hash未变/六输出不存在。`../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_042146`剩余新增界PASS_NOT_FINAL：data root12.415734GB，扣余新增9.046321GB+2GiB后余1.221929GB；system普通7.979377GB，扣三run+1GiB后余1.751674GB。GOAL41稳定私有已分配1.261601GB抵扣新增界。不删旧资产、下载payload、降预算或增加付费资源。OBJECT已验收三seed和归因汇总只读不重复。总PARTIAL，正常保存发布后结束，不守候。
