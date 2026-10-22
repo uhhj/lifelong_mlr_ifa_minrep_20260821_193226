@@ -30,3 +30,10 @@ Q=/data/mlr_ifa/experiment_workspaces/CAETv2_TAC_AUX8_OBJECT41_20261022，A work
 证据progress_20261022_132501/SNAPSHOT.json、LOCAL_AUDIT.json、ETA.json。Task6正常47完整epoch/7379主步，H_aux教师7379更新/62322样本曝光，正式0。691冻结hash、逐epoch主步及独立头计数、GPU准入绑定独立PASS；已结束prepare/labels6/preflight均exit0，controller83788/train83920仍活跃，无失败/无恢复。Task6迁移与保护仍0，最终tensor同父须等ep99。RSET/EFTR未启动。
 
 最近10epoch平均5.471秒，Task6余53epoch约4.83分钟（仅训练，入库另计），整组ETA仍未实测。data普通5.765GB/root10.635GB，system普通5.902GB。正常继续原进程，没有重复预检或改源。整体PARTIAL，健康常规进度不发通知。
+
+
+## 2026-10-22T13:52:37.786541+08:00 用户停止所有训练（覆盖此前继续执行指令）
+
+用户要求停止训练并清理废用数据。所有当前训练与调度已停止，GPU 空闲；caet-v2-object41 自动化已删除。不得恢复 TAC_AUX8、旧 TAC、RSET 或 EFTR 队列。TAC_AUX8 182 完整 epoch/34314 主更新/0 正式；旧 TAC 297 完整 epoch/68373 主更新/0 正式；RSET/EFTR 未启动。状态 USER_STOPPED，不是实验完成或工程失败。
+
+已清理 37 个通过预检的临时序列化副本，实测释放 11.460 GB，6 个合同引用候选保留。正式检查点、实际训练恢复点、数据、特征、buffer 与审计记录保留。清单和独立核对见 ../20261022_stop_cleanup/REPORT.md、LOCAL_CLEANUP_AUDIT.json。历史进度和协议保留但不再是继续运行授权。

@@ -37,3 +37,10 @@ EFTR将检查真实AdamW候选及完整native状态回退；尚未执行其GPU�
 rset_semantic_v2_20261022_125521/REPORT.md、LOCAL_AUDIT.json与LIGHT_PACKAGE_AUDIT PASS。18份安装源追踪、28个纯formatter测试确认PandaGripper用sign命令增量修改内部目标：负OPEN/零HOLD/正CLOSE，非瞬时物理开合。0训练0优化器0环境0服务器写入。专家效果图交集Task8 160/178、Task9 197/206，与先前专家覆盖相同；冻结原v2后期Normal采样支持157/178和194/206。6维机械臂±10sigma压力768例全部拒绝，独立嵌套LODO排自身demo。解决了旧原型夹爪连续零阈值的系统误拒绝，不证明闭环增益。
 
 冻结原v2预测器分层仅TRANSLATION/open通过：Task8 MAE.387732 vs阶段均值.630151/臂动作置换.406426，Task9 .345851 vs.605613/.381036；此open为物理夹爪间距组，不是OPEN命令类别。STATIC/open不如分层均值，其他组证据不足；当前任务只有1个留出demo，不能宣称当前任务多demo泛化。原v2模型代理不能替代未来RSET时序注意力预测器自身验收。完整12.42MB标量证据本地保留，发布31个可逐字节重建结构化片段，SHA771cc40f011aa447e73ca5ebe01c750b5e8d738557e9c1320bbf594c964e47e8。
+
+
+## 2026-10-22T13:52:37.786541+08:00 用户停止所有训练（覆盖此前继续执行指令）
+
+用户要求停止训练并清理废用数据。所有当前训练与调度已停止，GPU 空闲；caet-v2-object41 自动化已删除。不得恢复 TAC_AUX8、旧 TAC、RSET 或 EFTR 队列。TAC_AUX8 182 完整 epoch/34314 主更新/0 正式；旧 TAC 297 完整 epoch/68373 主更新/0 正式；RSET/EFTR 未启动。状态 USER_STOPPED，不是实验完成或工程失败。
+
+已清理 37 个通过预检的临时序列化副本，实测释放 11.460 GB，6 个合同引用候选保留。正式检查点、实际训练恢复点、数据、特征、buffer 与审计记录保留。清单和独立核对见 ../20261022_stop_cleanup/REPORT.md、LOCAL_CLEANUP_AUDIT.json。历史进度和协议保留但不再是继续运行授权。
