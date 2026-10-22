@@ -15,6 +15,7 @@ for e in js(Q/'QUEUE.json'):
  W=Q/e['key'];O=Path(e['output']);r=dict(entry=e,exists=O.exists(),worker={n:read(W/n) for n in ['supervisor.pid.json','supervisor.exit','FAILURE.json']},admission={n:read(W/'admission'/n) for n in ['prepare.exit','labels6.exit','gpu_preflight.exit','pipeline.exit','final_process.exit']},receipt=read(Q/(e['key']+'.receipt.json')),independent=read(Q/'independent'/(e['key']+'.json')))
  if O.exists():
   r['status_files']={n:read(O/n) for n in ['RUN_STATUS.json','GPU_PREFLIGHT.json','TASK6_TENSOR_PARITY.json','pipeline.exit','supervisor.exit','AUDIT.json','PROCESS_EXIT_ACCEPTANCE.json']}
+  r['phase_exits']={p.name:p.read_text() for p in O.glob('*.exit')}
   history=read(O/'ra_coreset/epochs.json') or [];r['epochs']=history
   r['input_hashes']=dict(count=0,failures=[])
   if (O/'CONTRACT.json').exists():

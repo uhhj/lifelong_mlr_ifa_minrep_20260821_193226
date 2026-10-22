@@ -21,3 +21,13 @@ Task6最近十epoch均4.379秒，余75轮约5.47分钟，仅阶段参考。参�
 先完整读PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、GATE1_INDEX及launch证据。Q和路径以RUN_STATUS为准。先python -X utf8 check_progress.py，再audit_progress.py <snapshot目录>；核原进程防重复。各完成KEY用package_final.py KEY（只manifest）、resume_light_download.py <包>、audit_final.py <包>；三seedaggregate_local.py --suite OBJECT或GOAL --seed41 <包> --seed42 <包> --seed43 <包> --output <新目录>。OBJECT41用原已验收包。新脚本仅静态检查的分支须真实验证，外置包装故障可修，不重训重评。
 
 每轮按AGENTS运行publish.py经publish_mlr_branch/MLR审查stage非force并核远端SHA/本地receipt；禁payload/secret。旧取消任务不恢复，源合同不重贴；工程失败先停进程核hash留证，仅完整epoch/allstate恢复，不盲重启部分globalRNG评估。当前新入口均未最终本地验收。完成所选分支全部本地验收发布后删本监控。
+
+## 2026-10-22 23:18 CST：OBJECT42已进入Task8，仍PARTIAL
+
+snapshot_readonly_20261022_231816及LOCAL_AUDIT PASS：OBJECT42完成271完整epoch/60339主更新，Task8已71轮，0正式评估。controller93501/supervisor93503/pipeline93546/train93773（torchrun93765）正常。1209冻结源码调度及302输入hash不变，初始化tensor和全部RNG同父、完整epoch/原mask/BC账目通过；无辅助、对比或候选更新。Task6实际tensor与RA不同，符合下一动作BC协议，不误报为工程故障。
+
+phase_exit_readonly_20261022_231917补充只读核查：train6/retain6/labels7/train7/retain7/labels8均真实exit0；该轻量时点Task8已77轮（总277epoch/62193步），不混写为271完整快照的账目。无失败/恢复/重复预检或评估。下次snapshot_readonly额外采集全部phase_exits并由audit_progress校验，只读字段扩充，服务器冻结代码与合同不变。
+
+Task8最近十epoch均8.503秒，余29轮约4.11分钟。Task9尚无本seed实测，参考已完成ALIGN41的9.554秒/epoch约15.92分钟；另计标签/入库/加载及正式评估参考73.11分钟和最终验收。42完整验收参考10月23日00:55–01:25，OBJECT三seed判定参考03:10–04:00，均仅参考、须按实际评估耗时校正。不计算部分AUC，不提前判定GOAL。
+
+data普通10.467GB/root15.337GB、system普通7.979GB；data当前root空闲仍高于保守五run全部10GiB加2GiB保留，后续继续按实际产物核验。未删除资产/下载payload/付费扩容。OBJECT43与GOAL三入口仍排队未GPU准入；门槛仍完整三seed等权meanAUC严格高于同seedRA703/960，不增加其他条件。监控保持30分钟，健康无变化安静。

@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T22:45:57.149158+08:00",
+  "observed_at": "2026-10-22T23:18:11.765349+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
@@ -19,21 +19,21 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261022_224604",
+  "snapshot": "snapshot_readonly_20261022_231816",
   "runs": {
     "OBJECT_42": {
       "status": "RUNNING_OR_PREPARING",
-      "complete_epochs": 25,
-      "main_steps": 3925,
+      "complete_epochs": 271,
+      "main_steps": 60339,
       "last": {
-        "task": 6,
-        "epoch": 24,
-        "batches": 157,
-        "steps": 3925,
-        "loss": -21.957385761722637,
-        "lr_first": 7.850000000000001e-05,
-        "lr_after": 7.74671052631579e-05,
-        "seconds": 4.506163835525513
+        "task": 8,
+        "epoch": 70,
+        "batches": 309,
+        "steps": 60339,
+        "loss": -29.49257408685283,
+        "lr_first": 3.049342105263158e-05,
+        "lr_after": 2.947697368421053e-05,
+        "seconds": 8.329844951629639
       },
       "formal": {
         "records": 0,
@@ -45,7 +45,7 @@
         "remaining_evaluation_hours": null
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 4.37917742729187
+      "recent_stage_epoch_seconds": 8.502793169021606
     },
     "OBJECT_43": {
       "status": "QUEUED_NOT_GPU_ADMITTED",
@@ -69,13 +69,25 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "current_task6_recent_epoch_seconds": 4.37917742729187,
-    "current_task6_remaining_minutes": 5.473971784114838,
-    "OBJECT42_reference_finish_CST": "2026-10-23 00:45–01:20",
-    "OBJECT_three_seed_gate_reference_CST": "2026-10-23 03:00–04:00",
-    "basis": "OBJECT41 actual47.79min main epochs +73.11min formal vectors plus preparation/audit; early42 Task6 throughput similar, later stages/evaluation variable",
+    "OBJECT42_reference_finish_CST": "2026-10-23 00:55–01:25",
+    "OBJECT_three_seed_gate_reference_CST": "2026-10-23 03:10–04:00",
+    "basis": "Task8 last10 real epochs8.5028sec; remaining29 epochs4.11min; Task9 uses completed ALIGN41 mean9.554sec/epoch15.92min, plus labels/storage/loading and73.11min reference evaluation/final audit. Provisional, not a completion guarantee.",
     "GOAL_finish_CST": null,
     "GOAL_basis": "Conditional and not GPU admitted; estimate only after its actual throughput",
-    "provisional": true
+    "provisional": true,
+    "current_task8_recent_epoch_seconds": 8.502793169021606,
+    "current_task8_remaining_minutes": 4.109683365027109
+  },
+  "phase_exit_evidence": "phase_exit_readonly_20261022_231917",
+  "current_phase": "OBJECT42_TASK8_TRAINING",
+  "disk": {
+    "/data": {
+      "ordinary": 10466758656,
+      "root": 15336796160
+    },
+    "/": {
+      "ordinary": 7979347968,
+      "root": 11082874880
+    }
   }
 }

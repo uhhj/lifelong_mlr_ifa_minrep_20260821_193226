@@ -10,6 +10,7 @@ for key,r in d['runs'].items():
  assert r['worker']['supervisor.exit'] is None or r['worker']['supervisor.exit'].strip()=='0'
  if not r['exists']:
   runs[key]=dict(status='QUEUED_NOT_GPU_ADMITTED',formal_records=0);continue
+ assert all(v.strip()=='0' for v in r.get('phase_exits',{}).values())
  assert not r['input_hashes']['failures'] and r['initial_matches_parent'] is not False
  h=r['epochs'];step=0
  for i,x in enumerate(h):
