@@ -13,3 +13,10 @@ progress_20261022_132018：新controller83788、pipeline83907、train6 PID83920�
 Task6前两epoch6.04/5.22秒，早期仅可估本阶段余下约8–10分钟；Task8/9新辅助头和保护开销未实测，完整训练/闭环ETA暂不可靠。正式预算400epoch105500主步、4ep99、200episode20vector未减。H_aux更新与效果拟合更新独立记账。data普通6.107GB/root10.977GB、system普通5.902GB，data保留2GiB，不删旧资产。
 
 新有限队列TAC_AUX8→原冻结RSET→原冻结EFTR，旧queue与新queue双锁。B/C没有混入新的语义LODO原型，仍各需自己的GPU准入。COVR和LIBERO50预训练保持用户取消。新版本最终本地轻量打包/验收需核验H_aux状态链和教师账目，不得直接套用旧七步TAC的预检数目或输入差异检查；旧基线只读。
+
+
+## 2026-10-22T13:25:08.579931+08:00 常规进度
+
+证据progress_20261022_132501/SNAPSHOT.json、LOCAL_AUDIT.json、ETA.json。Task6正常47完整epoch/7379主步，H_aux教师7379更新/62322样本曝光，正式0。691冻结hash、逐epoch主步及独立头计数、GPU准入绑定独立PASS；已结束prepare/labels6/preflight均exit0，controller83788/train83920仍活跃，无失败/无恢复。Task6迁移与保护仍0，最终tensor同父须等ep99。RSET/EFTR未启动。
+
+最近10epoch平均5.471秒，Task6余53epoch约4.83分钟（仅训练，入库另计），整组ETA仍未实测。data普通5.765GB/root10.635GB，system普通5.902GB。正常继续原进程，没有重复预检或改源。整体PARTIAL，健康常规进度不发通知。
