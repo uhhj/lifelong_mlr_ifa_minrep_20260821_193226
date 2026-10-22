@@ -64,7 +64,7 @@ def main():
     subprocess.run(["git", "-C", str(REPO), "diff", "--cached", "--check"], check=True)
     if git("diff", "--cached", "--name-only"):
         subprocess.run(["git", "-C", str(REPO), "commit", "-q", "-m",
-                        "Launch authorized CAET-v2 OBJECT extensions and RA LIBERO50 finite queue"], check=True)
+                        "Analyze completed CAET-v2 results and record user-cancelled LIBERO50 pretraining"], check=True)
         subprocess.run(["git", "-C", str(REPO), "push", "origin", "MLR"], check=True)
     head = git("rev-parse", "HEAD")
     remote = git("ls-remote", "origin", "refs/heads/MLR").split()[0]

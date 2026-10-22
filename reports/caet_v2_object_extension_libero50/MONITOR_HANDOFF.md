@@ -129,3 +129,10 @@ libero50_progress_20261022_053759：新共享4真实隔离GPU更新0环境PASS�
 ## 2026-10-22 10:58更新
 
 2026-10-22 10:58 CST，PARTIAL。queue_20261022_105726与libero50_progress_20261022_105726核实controller80274、pretrain80406及原父进程持续活跃；450项冻结源码/输入/调度hash和本地独立进度审计PASS。GPU瞬时100%、23540/24576MiB；data普通7.899GB/root总12.769GB、system普通5.902GB，容量稳定。首完整epoch仍未落盘，epoch内步数未记录，实际训练主步数未知，不推断0更新或卡住。无新FAILURE或有效阶段异常退出，未重启、重复准入或新增测试。尚无完整epoch单调耗时，暂不更新正式训练ETA；既有共享24.58天仅预检热身外推，不含下游。三个下游seed未GPU准入、正式闭环0；继续原预算和串行队列。此次无新可行动变化，保存轻量证据按约定push后安静结束。
+
+
+## 2026-10-22 用户取消预训练与 CAET-v2 分析
+
+用户明确“放弃预训练”，优先于全部旧继续运行/恢复指令。LIBERO50 taskmap01 controller 与预训练子树已停止，独立检查无残留进程、GPU 无任务；450 冻结哈希保留，未删除资产。共享预训练标 CANCELLED_BY_USER；没有完成 epoch，epoch 内实际更新数未知，不能报零更新或已完成。三个下游 seed 均未启动，标 NOT_STARTED_DEPENDENCY_CANCELLED_NO_AUTOSTART，不能自动换权重、重启预训练或调用任何旧 controller。自动化 rctr-caet-covr-libero50 已删除。证据 pretraining_cancelled_20261022_112307 和 queue_20261022_112353。取消不伪造成功退出或实验验收。
+
+CAET-v2 OBJECT 三 seed 完成状态不变。本次新零训练分析见 caet_v2_failure_analysis_20261022/REPORT.md：主要闭环下降集中 Task9；49,296 次迁移与 22,669 次保护非零，44.27% 候选迁移因冲突关闭。优先问题是同一动作头主 BC a[u] 与辅助/保护 a[u+1] 的目标不一致、专家预测与策略梯度有效性之间的缺口及大量最终保护组超限。结构事实与待验证因果解释分开，不新增训练/forward/环境。COVR 取消和 v1 GOAL 科学阻塞保留，不声称 ALL_ACCEPTED。

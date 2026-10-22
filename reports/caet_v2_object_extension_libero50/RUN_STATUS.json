@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL",
-  "observed_at": "2026-10-22T10:57:44.262896+08:00",
-  "active": "LIBERO50_SHARED_PRETRAINING_taskmap01",
+  "status": "STOPPED_BY_USER_PRETRAINING_CANCELLED",
+  "observed_at": "2026-10-22T11:33:49.612038+08:00",
+  "active": null,
   "epochs": 0,
   "steps": null,
   "formal_records": 0,
@@ -12,7 +12,7 @@
     "RA_IFA_LIBERO50_42",
     "RA_IFA_LIBERO50_43"
   ],
-  "controller_pid": 80274,
+  "controller_pid": null,
   "gate1_seeds": [
     41,
     43
@@ -25,20 +25,20 @@
   "source_input_hashes_pass": 450,
   "baseline_retrained": false,
   "libero50_gpu_admitted": true,
-  "storage_capacity": "taskmap01 versioned guard active: data root f_bfree with 2GiB reserve; system ordinary free only; old capacity watcher exited",
+  "storage_capacity": "Stopped; no assets deleted; no active capacity watcher",
   "cancelled_excluded": [
     "COVR",
     "A2"
   ],
   "eta_object41": "COMPLETED_LOCAL_ACCEPTED",
   "eta_object43": "COMPLETED_LOCAL_ACCEPTED",
-  "eta_libero50": "Shared preflight warm extrapolation24.58days; first complete epoch pending; downstream excluded",
+  "eta_libero50": "CANCELLED_BY_USER_NO_AUTORESTART",
   "capacity_watcher": {
     "pid": 72538,
     "status": "EXIT1_NON_CAPACITY_REFUSED_NOT_ACTIVE"
   },
   "latest_progress": "libero50_progress_20261022_105726",
-  "latest_queue": "queue_20261022_105726",
+  "latest_queue": "queue_20261022_112353",
   "mechanism_audit": "resource_mechanism_20261022_004649",
   "task6_tensor_parity": true,
   "predictors": {
@@ -46,7 +46,7 @@
     "9": "PASS"
   },
   "completed_vectors": 0,
-  "active_phase": "PRETRAINING",
+  "active_phase": null,
   "completed_local": {
     "41": "final_seed41_20261022_022751",
     "42": "../20261021_caet_v2_object_seed42/final_20261021_231144",
@@ -95,5 +95,11 @@
   "old_capacity_watcher_exit": 1,
   "libero50_downstream_gpu_admitted": [],
   "completed_epoch_steps": 0,
-  "active_recovery": "libero50_taskmap01"
+  "active_recovery": null,
+  "pretraining_status": "CANCELLED_BY_USER",
+  "downstream_status": "NOT_STARTED_DEPENDENCY_CANCELLED_NO_AUTOSTART",
+  "cancellation_evidence": "pretraining_cancelled_20261022_112307/STOP_EVIDENCE.json",
+  "automation_status": "DELETED",
+  "caet_failure_analysis": "caet_v2_failure_analysis_20261022",
+  "all_authorized_experiments_accepted": false
 }
