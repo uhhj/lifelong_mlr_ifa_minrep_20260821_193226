@@ -17,3 +17,14 @@ TAC/ALIGN改变BC时间目标，Task6最终张量不要求同原RA；EFTR Task6�
 每轮按AGENTS运行本目录 publish.py，精确审查轻量文件、类型大小secret/hash后经publish_mlr_branch非force推MLR并核远端SHA/本地receipt。禁权重、demos、原动作/状态、latent、buffer、RNG二进制、未审查归档。数据root保留2GiB，system仅普通空闲，不删旧资产/新付费。
 
 新监控 caet-v3-tac-eftr-align-seed41，每30分钟，健康无变化安静，只实质阶段变化/恢复失败/完成/需行动通知。三组全部本地验收发布后删除该监控。旧任务保持取消。
+
+
+## 2026-10-22 16:24 CST 检查
+
+progress_20261022_162140：TAC四阶段全部400epoch、105500主更新完成，train6–9/retain6–9及已完成准备阶段均exit0；controller84841、pipeline84899和evaluate85327正常，未恢复或重复准入。725冻结源/调度和288输入hash、初始化同父、本地逐epoch计步PASS。TAC Task6张量与RA不同符合已冻结BC目标变更，保留实际差异，不能误报工程失败。
+
+逐步原始账目汇总：辅助头105493更新，效果曝光1002100；Task8/9对比锚点曝光17800/20600，额外伙伴前向85800/99100（合计184900）。这是178/206独立当前时刻经100epoch重复曝光，不是38400个独立样本；Task6/7跨任务对比0，效果回归仍执行。上述为账目汇总，身份/伙伴选择的完整独立复算仍纳入最终验收，不能称已证明迁移收益。主epoch累计64.739分钟，额外准备/存储/评估另计。
+
+evaluation_readonly_20261022_162355：130/200正式记录、13完成vector/14已开始、6完整cell、0技术异常；外置audit_evaluation_progress.py使用原formal_audit独立检查逐episode初态hash/index、envseed、600步上限、唯一attempt/成功向量及已完成cell摘要PASS。未计算部分AUC。13批均232.513秒，剩评估线性27.13分钟，含最终包装/审计预计16:55–17:20 CST仅参考；后续批次耗时有变动。仍待4最终CP严格加载、完整200/20及有效退出无残留验收。
+
+EFTR/ALIGN仍排队且尚未GPU准入，不能套用TAC的通过。数据普通13.895GB/root18.766GB、system普通7.979GB，data保留2GiB条件满足。正常训练/评估不重启。下一轮先检查是否自然完成/自动转EFTR，TAC完成后只下载白名单轻量包并独立最终验收；新版包装/最终脚本仍待实证。总体PARTIAL。
