@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-23T01:51:34.738743+08:00",
+  "observed_at": "2026-10-23T02:21:28.475009+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
@@ -19,7 +19,7 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261023_015134",
+  "snapshot": "snapshot_readonly_20261023_022133",
   "runs": {
     "OBJECT_42": {
       "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
@@ -116,29 +116,29 @@
     },
     "OBJECT_43": {
       "status": "RUNNING_OR_PREPARING",
-      "complete_epochs": 389,
-      "main_steps": 101518,
+      "complete_epochs": 400,
+      "main_steps": 105500,
       "last": {
         "task": 9,
-        "epoch": 88,
+        "epoch": 99,
         "batches": 362,
-        "steps": 101518,
-        "loss": -32.45325369861244,
-        "lr_first": 1.2168067226890758e-05,
-        "lr_after": 1.115406162464986e-05,
-        "seconds": 9.519060373306274
+        "steps": 105500,
+        "loss": -33.7840332484377,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 8.697423696517944
       },
       "formal": {
-        "records": 0,
-        "completed_vectors": 0,
-        "started_vectors": 0,
-        "completed_cells": 0,
+        "records": 60,
+        "completed_vectors": 6,
+        "started_vectors": 7,
+        "completed_cells": 3,
         "technical_exceptions": 0,
-        "mean_vector_seconds": null,
-        "remaining_evaluation_hours": null
+        "mean_vector_seconds": 242.81959879398346,
+        "remaining_evaluation_hours": 0.9442984397543801
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 8.499878907203675
+      "recent_stage_epoch_seconds": 8.847494840621948
     },
     "GOAL_41": {
       "status": "QUEUED_NOT_GPU_ADMITTED",
@@ -158,22 +158,22 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "OBJECT43_reference_finish_CST": "2026-10-23 03:00\u201303:40",
-    "OBJECT_three_seed_gate_reference_CST": "2026-10-23 03:00\u201303:40",
-    "basis": "Own Task9 latest10 epochs mean8.499879sec; 11 epochs remaining=1.558min. Formal evaluation still not started in this snapshot, reference42 69.08min plus preparation/final audits; only reference, not guarantee.",
+    "OBJECT43_reference_finish_CST": "2026-10-23 03:20\u201303:50",
+    "OBJECT_three_seed_gate_reference_CST": "2026-10-23 03:20\u201303:50",
+    "basis": "Six actual43 vectors mean242.819599sec; remaining14 linear56.6579min from snapshot observation, plus final audit/local acceptance; later batch durations uncertain, no total GOAL/N ETA.",
     "GOAL_finish_CST": null,
     "provisional": true
   },
-  "phase_exit_evidence": "snapshot_readonly_20261023_015134",
-  "current_phase": "OBJECT43_TASK9_TRAINING",
+  "phase_exit_evidence": "snapshot_readonly_20261023_022133",
+  "current_phase": "OBJECT43_EVALUATION",
   "disk": {
     "/data": {
-      "ordinary": 8944578560,
-      "root": 13814616064
+      "ordinary": 8808316928,
+      "root": 13678354432
     },
     "/": {
-      "ordinary": 7979442176,
-      "root": 11082969088
+      "ordinary": 7979425792,
+      "root": 11082952704
     }
   },
   "accepted_packages": {
