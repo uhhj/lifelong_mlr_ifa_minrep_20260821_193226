@@ -105,3 +105,7 @@ queue_light_readonly_20261022_194033及LOCAL_AUDIT PASS：19:40:31 ALIGN自己5�
 
 最新2026-10-22 19:58 CST：progress_20261022_195604及LOCAL_AUDIT PASS，ALIGN已Task6完整100轮并进入Task7，155完整epoch28185主步/0正式，Task7完成55轮。train6/retain6/labels7均exit0，train90084/pipeline89935/controller89818正常，无新失败/重启。725冻结源调度+续接5hash及288输入hash一致，初始化同父；Task6实际tensor不同RA符合已冻结下一动作BC协议，不当工程失败。辅助头/效果曝光/伙伴/候选选择全部0，原主调用与提交计步一致。EFTR仍用户提前终止246epoch52614主步/0正式，无残留；11保留pth逐SHA全部一致，原exit1/FAILURE按用户中断解释并原样保留。
 Task7最近10轮均5.472秒，余45轮约4.10分钟，阶段参考20:01–20:05 CST。Task8/9尚无实测，整体训练+原正式评估+验收仍参考今晚22:00–22:40，不保证；不提前计算部分指标或闭环收益。data普通11.972GB/root16.842GB，system普通7.979GB，余量满足。TAC已验收只读；本轮正常只读检查，不重做准入/诊断，不恢复任何取消任务。总PARTIAL。后续继续ALIGN完整400/200和严格CP/退出/成员/mask本地验收，再TAC对ALIGN、ALIGN对RA归因汇总；终止EFTR不纳入完整结果比较。
+
+## 完成后原因分析（本地只读）
+
+详见 tac_align_cause_analysis_20261022/REPORT.md 与 LOCAL_ANALYSIS.json。105500步batch与BC mask匹配；Task7无对比即出现初学-20pp，不能把全部损失归于跨任务对比。ALIGN的AUC改善主要由Task9贡献；NBT受初学锚点影响。共享表示冲突、效果任务捷径及局部支持偏差均为待验证机制，不伪称已测梯度结论。0训练/0模型前向/0环境/0服务器写入，EFTR取消与监控删除不变。

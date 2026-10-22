@@ -1,0 +1,142 @@
+{
+  "status": "LOCAL_CAUSAL_LIMITS_AND_DECOMPOSITION_PASS",
+  "observed_at": "2026-10-22T22:14:12.031147+08:00",
+  "matched_batch_and_mask_steps": 105500,
+  "decomposition": {
+    "TAC_minus_ALIGN": {
+      "6": {
+        "auc_contribution_pp": -0.9375,
+        "fwt_contribution_pp": 0.0,
+        "initial_delta_pp": 0.0,
+        "final_delta_pp": -15.0
+      },
+      "7": {
+        "auc_contribution_pp": -3.75,
+        "fwt_contribution_pp": -5.0,
+        "initial_delta_pp": -20.0,
+        "final_delta_pp": -15.0
+      },
+      "8": {
+        "auc_contribution_pp": 0.625,
+        "fwt_contribution_pp": 0.0,
+        "initial_delta_pp": 0.0,
+        "final_delta_pp": 5.0
+      },
+      "9": {
+        "auc_contribution_pp": -2.5,
+        "fwt_contribution_pp": -2.5,
+        "initial_delta_pp": -10.0,
+        "final_delta_pp": -10.0
+      }
+    },
+    "ALIGN_minus_RA": {
+      "6": {
+        "auc_contribution_pp": -1.5625,
+        "fwt_contribution_pp": -6.25,
+        "initial_delta_pp": -25.0,
+        "final_delta_pp": -15.0
+      },
+      "7": {
+        "auc_contribution_pp": -1.25,
+        "fwt_contribution_pp": 0.0,
+        "initial_delta_pp": 0.0,
+        "final_delta_pp": -10.0
+      },
+      "8": {
+        "auc_contribution_pp": 0.0,
+        "fwt_contribution_pp": 0.0,
+        "initial_delta_pp": 0.0,
+        "final_delta_pp": 0.0
+      },
+      "9": {
+        "auc_contribution_pp": 11.25,
+        "fwt_contribution_pp": 11.25,
+        "initial_delta_pp": 45.0,
+        "final_delta_pp": 45.0
+      }
+    }
+  },
+  "stage_auxiliary": {
+    "6": {
+      "main_updates": 15700,
+      "effect_samples": 147200,
+      "contrast_anchor_exposures": 0,
+      "unique_supported_moments": 0,
+      "current_unique_effect_valid_moments": 1472,
+      "support_fraction_of_unique_effect_valid_current": 0.0,
+      "head_updates": 15700,
+      "effect_loss_mean": 0.013229387814788447,
+      "cross_loss_mean_including_zero_batches": 0.0
+    },
+    "7": {
+      "main_updates": 22700,
+      "effect_samples": 215000,
+      "contrast_anchor_exposures": 0,
+      "unique_supported_moments": 0,
+      "current_unique_effect_valid_moments": 1390,
+      "support_fraction_of_unique_effect_valid_current": 0.0,
+      "head_updates": 22696,
+      "effect_loss_mean": 0.005362152322733455,
+      "cross_loss_mean_including_zero_batches": 0.0
+    },
+    "8": {
+      "main_updates": 30900,
+      "effect_samples": 294400,
+      "contrast_anchor_exposures": 17800,
+      "unique_supported_moments": 178,
+      "current_unique_effect_valid_moments": 1470,
+      "support_fraction_of_unique_effect_valid_current": 0.12108843537414966,
+      "head_updates": 30897,
+      "effect_loss_mean": 0.006760898076110467,
+      "cross_loss_mean_including_zero_batches": 0.005924576247759177
+    },
+    "9": {
+      "main_updates": 36200,
+      "effect_samples": 345500,
+      "contrast_anchor_exposures": 20600,
+      "unique_supported_moments": 206,
+      "current_unique_effect_valid_moments": 1229,
+      "support_fraction_of_unique_effect_valid_current": 0.1676159479251424,
+      "head_updates": 36200,
+      "effect_loss_mean": 0.0030017192578206306,
+      "cross_loss_mean_including_zero_batches": 0.006028419872073222
+    }
+  },
+  "nbt_by_task_pp": {
+    "RA": {
+      "6": 5.0,
+      "7": 2.5,
+      "8": 5.0
+    },
+    "ALIGN": {
+      "6": -20.0,
+      "7": 10.0,
+      "8": 5.0
+    },
+    "TAC": {
+      "6": -15.0,
+      "7": 2.5,
+      "8": 0.0
+    }
+  },
+  "illustrative_TAC_NBT_with_ALIGN_anchors_percent": 2.5,
+  "common_anchor_note": "Arithmetic illustration only, not an alternative official metric or causal counterfactual.",
+  "formal_gradient_conflict_measurements_available": false,
+  "causal_limits": [
+    "One seed, 20 episodes per cell; no significance claim.",
+    "TAC vs ALIGN isolates the joint auxiliary implementation, not effect versus contrast independently.",
+    "Task7 has zero contrast, but starts from a different Task6 model; its deficit cannot be assigned solely to Task7 regression.",
+    "Loss scalars do not establish gradient dominance; no frozen-policy forward or gradients were run."
+  ],
+  "input_comparison_sha256": "e516d7d4eeeb768b589a39659be1ccb07393453493ec624f8d7fef2919f48e6d",
+  "source_review_sha256": {
+    "PROTOCOL.md": "b9d452f15e6d113e9366774e5f861d93258eea6ff68d56c3f8c43bb4a065f4e7",
+    "additions\\caet_v3_exp\\observe.py": "3c3302730b2c6d57f812e1749d91f1f7a77e34e946d0d973878ef98e7d16721b",
+    "additions\\caet_v3_exp\\model.py": "914997d7bdf65391ef6f4f35669efc65017d441d319f33892dc6b9264a9e4164",
+    "additions\\caet_v3_exp\\dataset.py": "24f8acfbbb7efa2985a810573aa4fd89dfaa2695a207afdd541dd007224cf979"
+  },
+  "training_updates": 0,
+  "model_forwards": 0,
+  "environment_steps": 0,
+  "server_writes": 0
+}
