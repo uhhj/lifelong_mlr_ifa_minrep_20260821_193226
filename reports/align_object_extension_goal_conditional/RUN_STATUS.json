@@ -1,11 +1,11 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-23T06:51:13.802971+08:00",
+  "observed_at": "2026-10-23T07:21:12.270146+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
   "frozen_files": 1209,
-  "active": "GOAL_42",
+  "active": "GOAL_43",
   "order": [
     "OBJECT_42",
     "OBJECT_43",
@@ -19,7 +19,7 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261023_065135",
+  "snapshot": "snapshot_readonly_20261023_072136",
   "runs": {
     "OBJECT_42": {
       "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
@@ -301,7 +301,7 @@
       }
     },
     "GOAL_42": {
-      "status": "RUNNING_OR_PREPARING",
+      "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
       "complete_epochs": 400,
       "main_steps": 76100,
       "last": {
@@ -315,20 +315,109 @@
         "seconds": 8.379806995391846
       },
       "formal": {
-        "records": 180,
-        "completed_vectors": 18,
-        "started_vectors": 19,
-        "completed_cells": 9,
+        "records": 200,
+        "completed_vectors": 20,
+        "started_vectors": 20,
+        "completed_cells": 10,
         "technical_exceptions": 0,
-        "mean_vector_seconds": 214.56659599145254,
-        "remaining_evaluation_hours": 0.11920366443969586
+        "mean_vector_seconds": 212.25626134872437,
+        "remaining_evaluation_hours": 0.0
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 8.49125895500183
+      "recent_stage_epoch_seconds": 8.49125895500183,
+      "final_package": "final_GOAL_42_20261023_072244",
+      "metrics": {
+        "AUC": {
+          "fraction": "397/480",
+          "percent": 82.70833333333333
+        },
+        "FWT": {
+          "fraction": "17/20",
+          "percent": 85.0
+        },
+        "NBT": {
+          "fraction": "1/15",
+          "percent": 6.666666666666667
+        },
+        "OldFinal": {
+          "fraction": "43/60",
+          "percent": 71.66666666666667
+        },
+        "FinalAll": {
+          "fraction": "31/40",
+          "percent": 77.5
+        }
+      },
+      "baseline": {
+        "AUC": {
+          "fraction": "33/40",
+          "percent": 82.5
+        },
+        "FWT": {
+          "fraction": "17/20",
+          "percent": 85.0
+        },
+        "NBT": {
+          "fraction": "1/18",
+          "percent": 5.555555555555555
+        },
+        "OldFinal": {
+          "fraction": "3/4",
+          "percent": 75.0
+        },
+        "FinalAll": {
+          "fraction": "4/5",
+          "percent": 80.0
+        }
+      },
+      "delta": {
+        "AUC": {
+          "fraction": "1/480",
+          "percent": 0.20833333333333334
+        },
+        "FWT": {
+          "fraction": "0",
+          "percent": 0.0
+        },
+        "NBT": {
+          "fraction": "1/90",
+          "percent": 1.1111111111111112
+        },
+        "OldFinal": {
+          "fraction": "-1/30",
+          "percent": -3.3333333333333335
+        },
+        "FinalAll": {
+          "fraction": "-1/40",
+          "percent": -2.5
+        }
+      }
     },
     "GOAL_43": {
-      "status": "QUEUED_NOT_GPU_ADMITTED",
-      "formal_records": 0
+      "status": "RUNNING_OR_PREPARING",
+      "complete_epochs": 245,
+      "main_steps": 32225,
+      "last": {
+        "task": 8,
+        "epoch": 44,
+        "batches": 185,
+        "steps": 32225,
+        "loss": -24.834779192950275,
+        "lr_first": 5.755555555555556e-05,
+        "lr_after": 5.652777777777778e-05,
+        "seconds": 5.642916679382324
+      },
+      "formal": {
+        "records": 0,
+        "completed_vectors": 0,
+        "started_vectors": 0,
+        "completed_cells": 0,
+        "technical_exceptions": 0,
+        "mean_vector_seconds": null,
+        "remaining_evaluation_hours": null
+      },
+      "gpu_admission": "PASS",
+      "recent_stage_epoch_seconds": 5.362712335586548
     }
   },
   "formal_acceptance": false,
@@ -336,21 +425,22 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "GOAL42_completed_vectors_at_snapshot": 18,
-    "GOAL42_mean_vector_seconds": 214.56659599145254,
-    "GOAL42_remaining_evaluation_minutes_linear": 7.152219866381752,
-    "GOAL42_reference_final_acceptance_CST": "2026-10-23 07:05–07:25",
-    "GOAL43_finish_CST": null,
+    "GOAL43_Task8_remaining_epochs_at_snapshot": 55,
+    "GOAL43_recent_Task8_epoch_seconds": 5.362712335586548,
+    "GOAL43_Task8_remaining_minutes_linear": 4.915819640954336,
+    "GOAL43_Task8_reference_finish_CST": "2026-10-23 07:26–07:30",
+    "GOAL43_reference_final_acceptance_CST": "2026-10-23 08:50–09:20",
+    "N_start_CST": null,
     "total_finish_CST": null,
-    "basis": "06:51 actual18 GOAL42 vectors mean214.566596sec; remaining2 linear7.152220min plus effective exit, light download and local final acceptance. Last vector times uncertain; no partial metrics.",
+    "basis": "07:21 actual43 Task8 last10 mean5.362712sec, remaining55 linear4.915820min; future Task9 reference42 last10 mean8.491259sec*100=14.152098min, formal evaluation reference completed41/42 59.377450/70.752087min, plus preparation/final audit. Later43 throughput unknown, no start promise forN.",
     "provisional": true
   },
-  "phase_exit_evidence": "snapshot_readonly_20261023_065135",
-  "current_phase": "GOAL42_FORMAL_EVALUATION",
+  "phase_exit_evidence": "snapshot_readonly_20261023_072136",
+  "current_phase": "GOAL43_TRAINING_TASK8",
   "disk": {
     "/data": {
-      "ordinary": 6282600448,
-      "root": 11152637952
+      "ordinary": 5323436032,
+      "root": 10193473536
     },
     "/": {
       "ordinary": 7978926080,
@@ -361,7 +451,8 @@
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252",
     "OBJECT_42": "final_OBJECT_42_20261023_012252",
     "OBJECT_43": "final_OBJECT_43_20261023_032427",
-    "GOAL_41": "final_GOAL_41_20261023_052225"
+    "GOAL_41": "final_GOAL_41_20261023_052225",
+    "GOAL_42": "final_GOAL_42_20261023_072244"
   },
   "OBJECT_aggregate": "aggregate_OBJECT_20261023_0326",
   "OBJECT_gate": {
@@ -397,17 +488,17 @@
   },
   "capacity_recheck": {
     "/": {
-      "free": 7978930176,
+      "free": 7978926080,
       "reserve": 1073741824,
       "remaining_additional_bound": 5153960754,
-      "margin": 1751227598
+      "margin": 1751223502
     },
     "/data": {
-      "free": 11152695296,
+      "free": 10194198528,
       "reserve": 2147483648,
-      "remaining_additional_bound": 7327879166,
-      "margin": 1677332482
+      "remaining_additional_bound": 5913917848,
+      "margin": 2132797032
     }
   },
-  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_065203"
+  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_072202"
 }

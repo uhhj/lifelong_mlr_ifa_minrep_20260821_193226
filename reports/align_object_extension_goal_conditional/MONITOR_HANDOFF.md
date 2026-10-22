@@ -167,3 +167,14 @@ capacity_readonly_20261023_062149剩余新增界PASS_NOT_FINAL：data root11.153
 18批实测平均214.566596秒，06:51余2批线性7.152220分钟，另有效退出审计/轻量下载/本地验收，继续参考07:05–07:25 CST，最后批次耗时仍不确定。GOAL43尚未自身GPU准入，总ETA未知；已验收GOAL41和OBJECT三seed只读不重复下载/最终验收。正常保存发布后结束，不守候完成。
 
 N snapshot_readonly_20261023_065149本地PASS，95924仍正常WAITING，1462hash不变/六输出不存在；本轮只读连接正常，旧banner失败及恢复证据保留。capacity_readonly_20261023_065203剩余新增界PASS_NOT_FINAL：data root11.152695GB扣余新增7.327879GB+2GiB后余1.677332GB，system普通7.978930GB扣三run+1GiB后余1.751228GB；GOAL42稳定私有1.262055GB抵扣新增界。无旧资产删除/活动payload操作/精度batch预算改变/付费资源，全部科学合同不变。健康无实质状态变化，无需用户行动。
+
+## 2026-10-23 07:25 CST — GOAL42完整独立验收，GOAL43自然训练
+
+- `final_GOAL_42_20261023_072244/LOCAL_FINAL_AUDIT.json`及`QUEUE_TASK_COST_AUDIT.json`实际PASS：929轻量文件全SHA、400epoch76100主更新、4CP严格100键、200正式20vector10cell、原RA成员载荷499/445/452/985与IFA/初始化/完整mask账目、pipeline/supervisor有效exit0无残留；绑定队列receipt和服务器独立审计SHA，无重训重评或权重下载。此后42只读复用，不重复最终验收。
+- AUC82.708333% vs RA82.5%（+0.208333pp），FWT85持平，NBT6.666667 vs5.555556（+1.111111pp，低好，变差），OldFinal71.666667 vs75（-3.333333pp），FinalAll77.5 vs80（-2.5pp）。最终Task6/7/8/9=60/100/55/95，RA55/100/70/95。全部3个负单元保留：Task7刚学完-5pp、阶段8的Task6-5pp、最终Task8-15pp。自身Task6峰85→最终60、Task8刚学完80→最终55均下降25pp。不把微小AUC差称稳定收益、防遗忘或显著；未对未完成43算局部三seed均值。
+- 主epoch34.760823分钟，正式vector70.752087分钟，准备/审计另计；BC有效714300/屏蔽45500、76100主步，0辅助，10个完整单元和成本入包。
+- 93501于约07:00自然转GOAL43。`snapshot_readonly_20261023_072136/LOCAL_AUDIT.json` PASS：43已245完整epoch32225主步/0正式，Task8前45轮，自己的5真实隔离GPU主调用0辅助0环境PASS；关闭同RA/maskedBC/空mask/完整恢复通过。1209冻结源调度与283输入hash、初始化同父、已写逐步native-only/mask账目PASS。train6/7 retain6/7 labels7/8 exit0，train110395/torchrun110387/pipeline110287/supervisor110187正常，无重启/恢复/改参。
+- 最近10轮43 Task8均5.362712秒，07:21余55轮线性4.915820分钟，阶段参考07:26–07:30。后续Task9借42末10轮均8.491259秒参考14.152098分钟；正式评估借同套件41/42实际59.377450/70.752087分钟，另准备和本地验收，43及GOAL三seed完整验收暂参考08:50–09:20，后续自身吞吐仍不确定，不承诺N开始或全队列完成。
+- N snapshot_readonly_20261023_072149本地PASS，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，1462hash一致/六输出不存在；继续等整个A自然有效exit0和全部receipt/GPU空闲/锁释放，不提前启动或kill正常运行。
+- capacity_readonly_20261023_072202剩余新增界PASS_NOT_FINAL：data root10.194199GB，扣余新增5.913918GB+2GiB后余2.132797GB；system普通7.978926GB，扣三run+1GiB后余1.751224GB。已验收42不再额外预留，43稳定私有0.958030GB抵扣新增界。不删资产、不改精度batch更新、不下载payload或付费扩容。所有取消任务不恢复。
+- 总PARTIAL；下一轮只核活跃GOAL43，完成按原package/download/audit_final/describe_final，再GOAL三seedaggregate_local及A有效controller退出/全部receipt绑定验收。41/42和OBJECT全部只读不重复。N按冻结条件可在A服务器有效退出后自然接续，正常新GPU工作不杀；本地最终包装/汇总错误外置修复，不重跑环境。两队列所选分支均本地验收比较发布后才删除同一监控。正常保存发布后结束，不守候。
