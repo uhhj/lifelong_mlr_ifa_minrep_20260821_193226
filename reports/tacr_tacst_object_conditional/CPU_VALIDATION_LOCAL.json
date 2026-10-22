@@ -1,0 +1,67 @@
+{
+  "status": "PASS_NOT_GPU_ADMISSION",
+  "actual_result": "EVIDENCE.json",
+  "evidence_sha256": "c2a56e1ab65be0b85e84e0599401e58fbf4bfb33d68b6d9274014cb580a5cf2b",
+  "source_sha256": {
+    "additions\\caet_v3_exp\\model.py": "2e12246bd39e793521d099b2f4f17661bc1ff832e0b6e3bc02057dc80ddc0176",
+    "additions\\caet_v3_exp\\gradient_audit.py": "664a4e33169ef523dac07830acd0f639e3546cb0ea2e7d7bfb16c58ae55cbebe"
+  },
+  "proof": {
+    "status": "ACTUAL_TEMPORAL_GMM_CPU_GRADIENT_PASS",
+    "proof": {
+      "gradient_norm2": {
+        "BC": {
+          "Temporal": 88558.150450934,
+          "GMM": 529058.438099223,
+          "R": 1.1422753782178126,
+          "U": 6.085927060276234,
+          "gate": 0.003311971306813162,
+          "E": 0,
+          "D": 0
+        },
+        "IFA": {
+          "Temporal": 0.6111415752480662,
+          "GMM": 0,
+          "R": 0,
+          "U": 0,
+          "gate": 0,
+          "E": 0,
+          "D": 0
+        },
+        "effect": {
+          "Temporal": 0,
+          "GMM": 0,
+          "R": 0.6974816898896186,
+          "U": 0,
+          "gate": 0,
+          "E": 0.24652884935112115,
+          "D": 0.1486380759532498
+        },
+        "ST": {
+          "Temporal": 0,
+          "GMM": 0,
+          "R": 607.7630194236434,
+          "U": 0,
+          "gate": 0,
+          "E": 411.3193482709794,
+          "D": 0
+        }
+      },
+      "initial_actual_GMM_parameters_exact": true,
+      "initial_U_BC_gradient_nonzero": true,
+      "initial_R_BC_gradient_zero_expected": true,
+      "deploy_adapter_same_fusion_exact": true,
+      "strict_deploy_keys": 14,
+      "probe": "isolated actual core/GMM with constructed ST keys; actual qualified graph separately audited"
+    },
+    "cuda_initialized": false,
+    "optimizer_calls": 0,
+    "environment_steps": 0,
+    "server_writes": 0,
+    "unix": 1792685471.7622058
+  },
+  "failed_attempts_preserved": [
+    "cpu_checks_20261022_235858",
+    "actual_cpu_20261023_001015"
+  ]
+}
