@@ -53,3 +53,5 @@
 `snapshot_readonly_20261023_042133/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，1462冻结源调度hash一致，无失败/恢复，95924保持WAITING_PRIOR_QUEUE_NATURAL_EXIT，六输出未创建。上游A GPU进程102662，正式阶段以本轮A独立快照为准；不越过A完整队列自然有效exit0/receipt/hash/互斥锁，其他已取消任务不恢复。
 
 `capacity_readonly_20261023_042146`剩余新增界PASS_NOT_FINAL：data root12.415734GB，扣余新增9.046321GB+2GiB后余1.221929GB；system普通7.979377GB，扣三run+1GiB后余1.751674GB。GOAL41稳定私有已分配1.261601GB抵扣新增界，不重复全额预留已消耗或已接受产物。0模型前向/0优化器/0环境/0服务器写入，不删除旧资产、改参数、下载payload或增加付费资源。N无真实GPU吞吐或总ETA，仍PARTIAL，正常保存发布后结束，不守候。
+
+同轮A完整快照确认GOAL41主400epoch76100步完成，正式70/200、7完成vector+1进行中，evaluate102662与10环境正常，0技术异常，1209源调度+277输入hash及逐episode核验PASS。余13批线性38.75min另最终验收，参考05:05–05:30；A仍PARTIAL且N继续等待整个上游队列自然有效exit0。
