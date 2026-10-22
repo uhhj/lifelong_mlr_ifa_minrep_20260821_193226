@@ -19,3 +19,10 @@ EFTR将检查真实AdamW候选及完整native状态回退；尚未执行其GPU�
 零训练证据见gate1_TAC、gate1_RSET、gate1_EFTR；最新进程/退出/hash证据见progress_20261022_121508，689个冻结源码/调度hash通过。每个入口223源文件，其中209与原v2不变。预算和探索性阈值见PROTOCOL.md。新增监控caet-v2-object41每30分钟续查，正常进程不重启；COVR及LIBERO50预训练保持取消。
 
 尚无足够的后续阶段实际吞吐，暂不提供三组总完成时间；尤其EFTR候选试算成本需GPU实测后估算。下一步继续TAC Task6父张量/初始化/成员验收，再看Task7回退、Task8/9留出与激活，最后完整闭环验收。
+
+
+## 2026-10-22 零训练RSET诊断追加
+
+见rset_diagnostic_20261022_123604/REPORT.md、LOCAL_AUDIT及SCIENTIFIC_FINDINGS。原门首要问题为状态cos>=.90：Task8/9原效果支持178/206中排同demo仅3/0有任一状态邻居，最多1demo，自身demo加回上界仍2。取消Top20或仅用当前任务库仍0联合支持，不能将主要原因归于混合动作尺度。新局部嵌套LODO原型专家交集160/178及197/206，但所有20个夹爪连续OOD阈值为0，随机执行动作几乎全拒绝，判NOT_READY_DEGENERATE_GRIPPER_BOUND；不能以分量均值高覆盖冒称随机执行可靠性。0训练0优化器0环境0服务器写入，50批CPU冻结原v2前向、4CP严格100键与SHA、标量独立复算PASS。不更改冻结RSET、不放宽阈值、不把诊断原型当新增训练授权。
+
+进度快照progress_20261022_123307：TAC171完整epoch31817主步/0正式，Task6实际tensor同RA、689冻结hash通过。RUN_STATUS读取比epochs早一个epoch，属于只读快照时序；没有恢复或重启。RSET/EFTR尚未GPU准入。原10MB标量证据仅本地，发布27个结构化片段及可逐字节重建的manifest。

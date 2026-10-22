@@ -17,3 +17,10 @@ A固定128留出样本的7vs8执行分布KL均值10937480.735087，分量切换5
 完整supervisor/pipeline退出0、PROCESS_EXIT_ACCEPTANCE、4CP严格100键/RA载荷/IFA/初始化Task6tensor、机制与200/20及无残留之后：package_final.py <variant> --manifest-only；resume_light_download.py <包目录>；全SHA通过后 audit_final.py <包目录> <variant>。这些新适配最终脚本目前仅静态语法通过，须实证验证。包内legacy v1目录实际绑定原CAET-v2 seed41，报告必须标v2 baseline，不可混同v1。最终分别与RA/v2复算完整矩阵和AUC/FWT/NBT/OldFinal/FinalAll及成本，不做单seed显著性结论。
 
 每轮按AGENTS运行本目录publish.py，向publish_mlr_branch远端MLR精确stage、非force push并核SHA/本地receipt；仅审查后代码与轻量元数据，禁止权重/原动作状态/latentbuffer/RNG二进制或BUNDLE。监控automationId=caet-v2-object41，ACTIVE，每30分钟。无实质变化保持安静；三组全部独立验收和发布后才删除该监控。
+
+
+## 2026-10-22 零训练RSET诊断追加
+
+见rset_diagnostic_20261022_123604/REPORT.md、LOCAL_AUDIT及SCIENTIFIC_FINDINGS。原门首要问题为状态cos>=.90：Task8/9原效果支持178/206中排同demo仅3/0有任一状态邻居，最多1demo，自身demo加回上界仍2。取消Top20或仅用当前任务库仍0联合支持，不能将主要原因归于混合动作尺度。新局部嵌套LODO原型专家交集160/178及197/206，但所有20个夹爪连续OOD阈值为0，随机执行动作几乎全拒绝，判NOT_READY_DEGENERATE_GRIPPER_BOUND；不能以分量均值高覆盖冒称随机执行可靠性。0训练0优化器0环境0服务器写入，50批CPU冻结原v2前向、4CP严格100键与SHA、标量独立复算PASS。不更改冻结RSET、不放宽阈值、不把诊断原型当新增训练授权。
+
+进度快照progress_20261022_123307：TAC171完整epoch31817主步/0正式，Task6实际tensor同RA、689冻结hash通过。RUN_STATUS读取比epochs早一个epoch，属于只读快照时序；没有恢复或重启。RSET/EFTR尚未GPU准入。原10MB标量证据仅本地，发布27个结构化片段及可逐字节重建的manifest。

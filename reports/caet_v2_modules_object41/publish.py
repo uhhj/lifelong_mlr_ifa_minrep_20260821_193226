@@ -34,6 +34,12 @@ def main():
     exclude = {"STOP_LIGHT_BUNDLE.json", "PARENT_SOURCE_BUNDLE.json", "DEPLOY_TEXT_BUNDLE.json"}
     manifest = {}
     for p in sorted(R.rglob("*")):
+        if p.relative_to(R).as_posix() == 'rset_diagnostic_20261022_123604/EVIDENCE.json':
+            # Reviewed scalar evidence is published as losslessly reconstructible
+            # structured parts (<2.5MB each); keep the 10MB original local.
+            assert json.loads((p.parent/'LIGHT_PACKAGE_AUDIT.json').read_text())['reconstructed_raw_bytes_exact']
+            assert hashlib.sha256(p.read_bytes()).hexdigest() == json.loads((p.parent/'LIGHT_PACKAGE_AUDIT.json').read_text())['original_sha256']
+            continue
         if (not p.is_file() or p.suffix not in allowed or p.name in exclude or
                 ("BUNDLE" in p.name and p.suffix == ".json") or
                 p.name.startswith("PUBLICATION_RECEIPT") or
@@ -64,7 +70,7 @@ def main():
     subprocess.run(["git", "-C", str(REPO), "diff", "--cached", "--check"], check=True)
     if git("diff", "--cached", "--name-only"):
         subprocess.run(["git", "-C", str(REPO), "commit", "-q", "-m",
-                        "Implement independent TAC RSET EFTR OBJECT seed41 experiments"], check=True)
+                        "Audit RSET retrieval and local action support without training"], check=True)
         subprocess.run(["git", "-C", str(REPO), "push", "origin", "MLR"], check=True)
     head = git("rev-parse", "HEAD")
     remote = git("ls-remote", "origin", "refs/heads/MLR").split()[0]
