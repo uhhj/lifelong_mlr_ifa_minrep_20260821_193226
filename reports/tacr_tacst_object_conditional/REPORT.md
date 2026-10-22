@@ -17,3 +17,6 @@
 2026-10-23 01:25 CST：snapshot_readonly_20261023_012140/LOCAL_AUDIT PASS，新95924仍WAITING、1462hash不变、六输出不存在，无GPU准入。旧ALIGN42已在A/final_OBJECT_42_20261023_012252完整本地独立PASS，AUC83.020833%对同seedRA71.5625%；旧43已自动GPU准入并训练中，本N不越过旧GOAL条件流程。capacity_readonly_20261023_012323按剩余新增分配计当前43已写稳定私有1.009GB的信用，data root13.990GB，对最坏剩余11.017GB＋2GiB后仍余0.826GB；system普通7.979GB仍余1.752GB。不能拿部署时全额四run界重复扣当前已耗的空间而误报满盘；此仍是规划界，不是最终容量验收。
 
 外置resume_light_download.py发现原复制工具仅允许/data元数据路径，已加明确的/root/mlr_ifa/experiments/前缀以匹配冻结TACR41/43与TACRST42输出；仍只.json/.jsonl/.exit、包目录内路径、<8MiB、manifest全SHA，不下载pth或payload。仅外置包装修改/语法验证，无服务器源码或合同修改；实际新组最终下载仍待真实验收。N无新性能结果或可用吞吐ETA。
+
+
+2026-10-23 01:51–01:52 CST：snapshot_readonly_20261023_015144/LOCAL_AUDIT PASS，95924仍正常WAITING、1462hash不变、六输出未创建、无GPU准入/新性能结果。旧A的43正常389完整epoch101518步/0正式，Task9已89轮；GOAL门槛仍待完整43。capacity_readonly_20261023_015201按43稳定私有已分配1.184GB抵扣后，data root13.8146GB，对最坏剩余新增10.8415GB＋2GiB保留后余0.8256GB；system普通7.9794GB保留及新三run界后余1.7517GB。无旧资产删除、活动payload操作、付费扩容或预算改变；仍非全程最终容量验收。新组继续等A全部所选分支有效退出及互斥锁，无可用新GPU吞吐/总ETA。正常保存发布后结束，不守候。
