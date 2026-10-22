@@ -26,3 +26,6 @@
 
 
 同轮A的43已完成主预算，正式60/200，0技术异常；N仍无GPU准入，严格等待旧队列全部所选分支自然有效结束。
+
+
+2026-10-23 02:51–02:52 CST：snapshot_readonly_20261023_025144/LOCAL_AUDIT PASS，95924正常WAITING，1462hash一致、六输出不存在，尚未GPU准入，无新失败或恢复。旧A的43仍原evaluate98808正常运行，正式计数以同轮A独立快照为准。capacity_readonly_20261023_025200保守剩余新增界PASS：data root13.6781GB，对最坏剩余新增10.7050GB＋2GiB保留后余0.8256GB；system普通7.9794GB余1.7517GB。不动活动payload或删旧资产，不增付费资源/降预算，无新N实际GPU吞吐或总ETA；仍PARTIAL，正常保存发布结束本轮，不守候。
