@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T17:00:55.893890+08:00",
+  "observed_at": "2026-10-22T17:28:51.190651+08:00",
   "order": [
     "TAC",
     "EFTR",
@@ -9,7 +9,7 @@
   "seed": 41,
   "controller_pid": 84841,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_165602",
+  "snapshot": "progress_20261022_172556",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
@@ -87,29 +87,29 @@
       }
     },
     "EFTR_OBJECT_41": {
-      "complete_epochs": 74,
-      "steps": 11618,
+      "complete_epochs": 127,
+      "steps": 21829,
       "formal_records": 0,
       "gpu_admission": "PASS",
       "last": {
-        "task": 6,
-        "epoch": 73,
-        "batches": 157,
-        "steps": 11618,
-        "loss": -28.287794829933507,
-        "lr_first": 2.7888157894736844e-05,
-        "lr_after": 2.685526315789474e-05,
-        "seconds": 3.7058756351470947
+        "task": 7,
+        "epoch": 26,
+        "batches": 227,
+        "steps": 21829,
+        "loss": -23.602867454159103,
+        "lr_first": 7.566666666666667e-05,
+        "lr_after": 7.464414414414414e-05,
+        "seconds": 59.12771677970886
       },
-      "last_stage_mean_epoch_seconds": 3.7530471086502075,
+      "last_stage_mean_epoch_seconds": 54.45737588405609,
       "mechanism": {
         "6": {
-          "records": 11618,
+          "records": 15700,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 11618,
+          "optimizer_trials": 15700,
           "candidate_selected": {
             "0": 0,
             "1": 0,
@@ -118,18 +118,18 @@
           "budget_unmet": 0
         },
         "7": {
-          "records": 0,
+          "records": 6129,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 0,
+          "optimizer_trials": 18387,
           "candidate_selected": {
-            "0": 0,
-            "1": 0,
-            "2": 0
+            "0": 1336,
+            "1": 1395,
+            "2": 3398
           },
-          "budget_unmet": 0
+          "budget_unmet": 6110
         },
         "8": {
           "records": 0,
@@ -282,23 +282,434 @@
     }
   },
   "EFTR_latest": {
-    "complete_epochs": 100,
-    "last": {
-      "task": 6,
-      "epoch": 99,
-      "batches": 157,
-      "steps": 15700,
-      "loss": -32.05045442520433,
-      "lr_first": 1.0328947368421052e-06,
-      "lr_after": 0.0,
-      "seconds": 4.607359409332275
+    "complete_epochs": 129,
+    "steps": 22283,
+    "formal_records": 0,
+    "task": 7,
+    "completed_task_epochs": 29,
+    "mechanism": {
+      "counts": {
+        "commits": 6583,
+        "trials": 19749,
+        "selected_0": 1426,
+        "budget_unmet": 6564,
+        "old_check_exposures": 210656,
+        "aux_candidate_rejected_by_BC": 2808,
+        "retention_loss_nonzero": 6581,
+        "mode_loss_nonzero": 5524,
+        "selected_2": 3672,
+        "selected_1": 1485
+      },
+      "epochs": 29,
+      "max_selected_current_NLL_delta": 0.019987106323242188,
+      "mean_selected_R": 307713.7572743417,
+      "mean_native_R": 308391.1326590821,
+      "mean_selected_switch": 0.04420951693756646,
+      "mean_selected_gripper_abs": 0.021542540666088857,
+      "budget_unmet_fraction": 0.9971137779128058,
+      "full_memory_epochs_satisfied": 0,
+      "latest_full_memory": {
+        "epoch": 28,
+        "active": true,
+        "count": 781,
+        "KL_per_dim": 292623.07860352186,
+        "switch": 0.05121638924455826,
+        "R": 292623.0837251608,
+        "budget": 0.1,
+        "budget_satisfied": false,
+        "teacher_hash": {
+          "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+        }
+      },
+      "full_memory_checks": [
+        {
+          "epoch": 0,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 109747.60154835842,
+          "switch": 0.04353393085787452,
+          "R": 109747.6059017515,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 1,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 512158.9664840637,
+          "switch": 0.04865556978233035,
+          "R": 512158.9713496207,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 2,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 804670.7422534913,
+          "switch": 0.07554417413572344,
+          "R": 804670.7498079087,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 3,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 438978.02116882254,
+          "switch": 0.04225352112676056,
+          "R": 438978.0253941746,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 4,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 182845.34537375072,
+          "switch": 0.04481434058898848,
+          "R": 182845.3498551848,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 5,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 182881.64160757972,
+          "switch": 0.06530089628681178,
+          "R": 182881.64813766934,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 6,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 329152.8350860731,
+          "switch": 0.034571062740076826,
+          "R": 329152.8385431794,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 7,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 292644.8853269434,
+          "switch": 0.04481434058898848,
+          "R": 292644.8898083775,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 8,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 475438.21155214583,
+          "switch": 0.05505761843790013,
+          "R": 475438.2170579077,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 9,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 585296.2320208518,
+          "switch": 0.04865556978233035,
+          "R": 585296.2368864088,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 10,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 329151.1727563609,
+          "switch": 0.06145966709346991,
+          "R": 329151.1789023276,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 11,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 182907.75042048303,
+          "switch": 0.04353393085787452,
+          "R": 182907.75477387614,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 12,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 475554.6752282318,
+          "switch": 0.05121638924455826,
+          "R": 475554.68034987076,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 13,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 292646.5439831474,
+          "switch": 0.040973111395646605,
+          "R": 292646.54808045854,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 14,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 512093.3730228013,
+          "switch": 0.05377720870678617,
+          "R": 512093.37840052217,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 15,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 219489.85721327047,
+          "switch": 0.04353393085787452,
+          "R": 219489.86156666355,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 16,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 256058.42538539323,
+          "switch": 0.03841229193341869,
+          "R": 256058.42922662242,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 17,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 256072.58604177725,
+          "switch": 0.03969270166453265,
+          "R": 256072.5900110474,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 18,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 402394.25805305573,
+          "switch": 0.04481434058898848,
+          "R": 402394.2625344898,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 19,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 402387.8583689693,
+          "switch": 0.04353393085787452,
+          "R": 402387.86272236233,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 20,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 292466.5440208396,
+          "switch": 0.040973111395646605,
+          "R": 292466.54811815073,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 21,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 329140.8190938637,
+          "switch": 0.03969270166453265,
+          "R": 329140.82306313387,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 22,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 219396.67312507256,
+          "switch": 0.03969270166453265,
+          "R": 219396.67709434274,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 23,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 256065.21967873923,
+          "switch": 0.04481434058898848,
+          "R": 256065.2241601733,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 24,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 365816.909517718,
+          "switch": 0.05121638924455826,
+          "R": 365816.91463935695,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 25,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 146307.37386053562,
+          "switch": 0.03713188220230474,
+          "R": 146307.37757372385,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 26,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 256060.96535085884,
+          "switch": 0.04737516005121639,
+          "R": 256060.97008837483,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 27,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 219485.1144323665,
+          "switch": 0.03969270166453265,
+          "R": 219485.11840163666,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        },
+        {
+          "epoch": 28,
+          "active": true,
+          "count": 781,
+          "KL_per_dim": 292623.07860352186,
+          "switch": 0.05121638924455826,
+          "R": 292623.0837251608,
+          "budget": 0.1,
+          "budget_satisfied": false,
+          "teacher_hash": {
+            "6": "10e97a64e2db80be41eddd38f75c72bc282373cd8b9c5100670987761380d816"
+          }
+        }
+      ]
     },
-    "status": {
-      "status": "RUNNING",
-      "phase": "train7",
-      "unix": 1792659606.9033146,
-      "pid": 88206
-    }
+    "evidence": "eftr_mechanism_20261022_172904",
+    "status": "RUNNING"
   },
-  "EFTR_ETA": "unknown until actual candidate-stage throughput"
+  "EFTR_ETA": {
+    "recent10_epoch_seconds": 55.4630878925,
+    "task7_remaining_minutes": 65.6313,
+    "task7_reference_finish_CST": "2026-10-22 18:35",
+    "whole_run": "unknown: Task8/9 actual throughput not measured; evaluation and final acceptance additional"
+  },
+  "mechanism_evidence": "eftr_mechanism_20261022_172904",
+  "scale_evidence": "eftr_scale_readonly_20261022_173132"
 }
