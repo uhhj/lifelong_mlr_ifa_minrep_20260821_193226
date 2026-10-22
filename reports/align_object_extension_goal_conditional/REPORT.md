@@ -55,3 +55,12 @@ final_OBJECT_42_20261023_012252/LOCAL_FINAL_AUDIT.json COMPLETED_LOCAL_INDEPENDE
 snapshot_readonly_20261023_012130/LOCAL_AUDIT PASS：旧controller93501已于00:55左右自然转43；43自己的5隔离GPU主调用/0辅助0环境真实PASS，初始化tensor/allRNG同父、1209冻结源调度及289输入hash不变。43已210完整epoch41490主步，Task8完成10轮，0正式；train6/retain6/train7/retain7/labels8等真实exit0，当前train98154正常，无恢复或阈值修改。Task8最近十轮8.346秒，余90轮约12.52分钟；Task9参考42的9.899秒/epoch约16.50分钟，另正式评估参考69.08分钟和准备审计，完成/三seed门槛参考03:00–03:40，未测后续实际吞吐，不作承诺。
 
 N controller95924继续等待本队列全部所选分支完成，1462hash不变、六输出未创建。容量核查改按“剩余新增分配”扣除当前43已稳定写入的自身新文件，避免把既有文件再完整预留一次：capacity_readonly_20261023_012323 PASS，43稳定私有已分配1,009,217,536字节，DATA真实root空闲13.990GB，旧剩余＋新六run新增上界11.017GB＋2GiB保留后余0.826GB；system普通7.979GB，对新三run及1GiB保留后余1.752GB。未计软链接/旧资产硬链接/临时或不稳定文件信用，不删旧资产、不动活动payload。全程容量仍待实测验收。整体PARTIAL。
+
+
+## 2026-10-23 01:51 CST：OBJECT43 Task9正常训练，仍PARTIAL
+
+snapshot_readonly_20261023_015134/LOCAL_AUDIT PASS：43已389完整epoch101518主步，Task9完成89轮，0正式；train6–8/retain6–8及labels7–9等真实exit0，train98587/torchrun98579及原pipeline/controller正常。1209冻结源调度、289输入hash、初始化同父及全部完整epoch原BC mask/主步账目PASS；无新失败、故障恢复、重启或科学修改。42保留既有final_OBJECT_42_20261023_012252完整本地验收，只读复用，未重复下载、最终验收、训练或评估。GOAL仍待完整三seed门槛，不以41/42局部结果判定，不计算43部分指标。
+
+最近Task9十轮均8.499879秒，余11轮约1.558分钟；正式评估本快照未启动，参考42实测69.08分钟另准备/最终审计，43与三seed门槛仍参考03:00–03:40，后续依自身实测校正、不作承诺。
+
+N snapshot_readonly_20261023_015144/LOCAL_AUDIT PASS，95924仍等待旧队列，1462hash不变、六输出不存在、未GPU准入。capacity_readonly_20261023_015201剩余新增容量界PASS：43稳定私有已分配1.184GB，不重复全额预留已消耗文件；data root13.8146GB，对最坏剩余新增10.8415GB＋2GiB保留后余0.8256GB，system普通7.9794GB对新三run及1GiB后余1.7517GB。保留全部旧资产，不动活动payload、不减预算或扩付费资源。正常训练/等待无可行动变化，不通知；按约定保存发布后结束本轮，不守候。
