@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-23T07:21:12.270146+08:00",
+  "observed_at": "2026-10-23T07:51:11.241302+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
@@ -19,7 +19,7 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261023_072136",
+  "snapshot": "snapshot_readonly_20261023_075135",
   "runs": {
     "OBJECT_42": {
       "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
@@ -395,29 +395,29 @@
     },
     "GOAL_43": {
       "status": "RUNNING_OR_PREPARING",
-      "complete_epochs": 245,
-      "main_steps": 32225,
+      "complete_epochs": 400,
+      "main_steps": 76100,
       "last": {
-        "task": 8,
-        "epoch": 44,
-        "batches": 185,
-        "steps": 32225,
-        "loss": -24.834779192950275,
-        "lr_first": 5.755555555555556e-05,
-        "lr_after": 5.652777777777778e-05,
-        "seconds": 5.642916679382324
+        "task": 9,
+        "epoch": 99,
+        "batches": 337,
+        "steps": 76100,
+        "loss": -30.161453439503113,
+        "lr_first": 1.0150602409638555e-06,
+        "lr_after": 0.0,
+        "seconds": 9.296168088912964
       },
       "formal": {
-        "records": 0,
-        "completed_vectors": 0,
-        "started_vectors": 0,
+        "records": 10,
+        "completed_vectors": 1,
+        "started_vectors": 2,
         "completed_cells": 0,
         "technical_exceptions": 0,
-        "mean_vector_seconds": null,
-        "remaining_evaluation_hours": null
+        "mean_vector_seconds": 292.7587375640869,
+        "remaining_evaluation_hours": 1.5451155593660142
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 5.362712335586548
+      "recent_stage_epoch_seconds": 9.457610988616944
     }
   },
   "formal_acceptance": false,
@@ -425,26 +425,25 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "GOAL43_Task8_remaining_epochs_at_snapshot": 55,
-    "GOAL43_recent_Task8_epoch_seconds": 5.362712335586548,
-    "GOAL43_Task8_remaining_minutes_linear": 4.915819640954336,
-    "GOAL43_Task8_reference_finish_CST": "2026-10-23 07:26–07:30",
-    "GOAL43_reference_final_acceptance_CST": "2026-10-23 08:50–09:20",
+    "GOAL43_completed_vectors_at_snapshot": 1,
+    "GOAL43_first_vector_seconds": 292.7587375640869,
+    "GOAL43_remaining_evaluation_minutes_linear": 92.70693356196085,
+    "GOAL43_and_local_GOAL_aggregate_reference_finish_CST": "2026-10-23 09:30–10:00",
     "N_start_CST": null,
     "total_finish_CST": null,
-    "basis": "07:21 actual43 Task8 last10 mean5.362712sec, remaining55 linear4.915820min; future Task9 reference42 last10 mean8.491259sec*100=14.152098min, formal evaluation reference completed41/42 59.377450/70.752087min, plus preparation/final audit. Later43 throughput unknown, no start promise forN.",
+    "basis": "07:51 first43 actual vector292.758738sec only, remaining19 linear92.706934min plus exit/light download/local audit/three-seed aggregation. First batch includes startup and is small sample; supersedes prior borrowed41/42 throughput08:50–09:20. Later batches must recalibrate, no promise for N start.",
     "provisional": true
   },
-  "phase_exit_evidence": "snapshot_readonly_20261023_072136",
-  "current_phase": "GOAL43_TRAINING_TASK8",
+  "phase_exit_evidence": "snapshot_readonly_20261023_075135",
+  "current_phase": "GOAL43_FORMAL_EVALUATION",
   "disk": {
     "/data": {
-      "ordinary": 5323436032,
-      "root": 10193473536
+      "ordinary": 5020782592,
+      "root": 9890820096
     },
     "/": {
-      "ordinary": 7978926080,
-      "root": 11082452992
+      "ordinary": 7978909696,
+      "root": 11082436608
     }
   },
   "accepted_packages": {
@@ -488,17 +487,17 @@
   },
   "capacity_recheck": {
     "/": {
-      "free": 7978926080,
+      "free": 7978909696,
       "reserve": 1073741824,
       "remaining_additional_bound": 5153960754,
-      "margin": 1751223502
+      "margin": 1751207118
     },
     "/data": {
-      "free": 10194198528,
+      "free": 9890848768,
       "reserve": 2147483648,
-      "remaining_additional_bound": 5913917848,
-      "margin": 2132797032
+      "remaining_additional_bound": 5610645912,
+      "margin": 2132719208
     }
   },
-  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_072202"
+  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_075204"
 }

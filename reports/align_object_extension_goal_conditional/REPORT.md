@@ -172,3 +172,13 @@ N snapshot_readonly_20261023_065149本地PASS，95924仍正常WAITING，1462hash
 - N snapshot_readonly_20261023_072149本地PASS，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，1462hash一致/六输出不存在；继续等整个A自然有效exit0和全部receipt/GPU空闲/锁释放，不提前启动或kill正常运行。
 - capacity_readonly_20261023_072202剩余新增界PASS_NOT_FINAL：data root10.194199GB，扣余新增5.913918GB+2GiB后余2.132797GB；system普通7.978926GB，扣三run+1GiB后余1.751224GB。已验收42不再额外预留，43稳定私有0.958030GB抵扣新增界。不删资产、不改精度batch更新、不下载payload或付费扩容。所有取消任务不恢复。
 - 总PARTIAL；下一轮只核活跃GOAL43，完成按原package/download/audit_final/describe_final，再GOAL三seedaggregate_local及A有效controller退出/全部receipt绑定验收。41/42和OBJECT全部只读不重复。N按冻结条件可在A服务器有效退出后自然接续，正常新GPU工作不杀；本地最终包装/汇总错误外置修复，不重跑环境。两队列所选分支均本地验收比较发布后才删除同一监控。正常保存发布后结束，不守候。
+
+## 2026-10-23 07:56 CST — GOAL43主训练完成，正式评估开始
+
+`snapshot_readonly_20261023_075135/LOCAL_AUDIT.json` PASS：GOAL43全部400完整epoch76100主步完成，train6–9/retain6–9/labels7–9均exit0；1209冻结源调度和283输入hash、初始化同父、逐主步native-only/mask账目通过。evaluate110830与10环境/pipeline110287/supervisor110187/controller93501正常，无故障恢复/重启/改参。正式10/200、1完成vector+1进行中、0完整cell、0技术异常，逐episode初态hash/index/env seed/600步、attempt唯一性与成功向量复算PASS。未完整200/20、4CP100键、原成员载荷/IFA/有效退出0无残留和本地最终验收前仍PARTIAL，不计算部分指标或局部三seed均值。
+
+首批实测292.758738秒，仅1批且混有启动，不是稳定吞吐；07:51快照余19批线性92.706934分钟，加有效退出审计、轻量下载、本地最终验收及GOAL三seed描述汇总，暂参考09:30–10:00 CST，替代借41/42的08:50–09:20参考；后续更多批次校正，不承诺N开始或全队列完成。已验收GOAL41/42和OBJECT三seed只读不重复最终下载验收。
+
+外置aggregate_local.py修正尚未实际运行的GOAL报告文案：OBJECT门原样保留；GOAL AUC高低仅描述，不设新自动分支，输出mean_AUC_above_RA_descriptive及automatic_branch_authorized_by_this_GOAL_comparison=false。N独立OBJECT41门仍各自>同seedRA41的701/960，与GOAL三seed结果无关，不被取消或扩展。见GOAL_AGGREGATE_REPORT_REVIEW_20261023_0752.json，AST静态PASS，不是GOAL三seed实际汇总；旧已验收OBJECT报告不修改，0服务器写入/科学阈值变更。
+
+N snapshot_readonly_20261023_075148本地PASS，1462hash不变/六输出不存在，95924仍正常WAITING。capacity_readonly_20261023_075204剩余新增界PASS_NOT_FINAL：data root9.890849GB扣余新增5.610646GB+2GiB后余2.132719GB；system普通7.978910GB扣三run+1GiB后余1.751207GB。GOAL43稳定私有1.261302GB抵扣新增界，已接受产物不额外预留。不删旧资产、不下载payload、不降精度batch更新或新付费。科学合同不变，正常保存发布后结束不守候。
