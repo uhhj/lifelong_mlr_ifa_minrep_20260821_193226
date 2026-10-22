@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-22T18:55:57.299917+08:00",
+  "observed_at": "2026-10-22T19:26:10.083005+08:00",
   "order": [
     "TAC",
     "EFTR",
@@ -9,7 +9,7 @@
   "seed": 41,
   "controller_pid": 84841,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_185558",
+  "snapshot": "progress_20261022_192611",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
@@ -87,21 +87,21 @@
       }
     },
     "EFTR_OBJECT_41": {
-      "complete_epochs": 215,
-      "steps": 43035,
+      "complete_epochs": 238,
+      "steps": 50142,
       "formal_records": 0,
       "gpu_admission": "PASS",
       "last": {
         "task": 8,
-        "epoch": 14,
+        "epoch": 37,
         "batches": 309,
-        "steps": 43035,
-        "loss": -23.5316530986897,
-        "lr_first": 8.741447368421054e-05,
-        "lr_after": 8.639802631578948e-05,
-        "seconds": 69.94997811317444
+        "steps": 50142,
+        "loss": -26.154495479991134,
+        "lr_first": 6.403618421052632e-05,
+        "lr_after": 6.301973684210528e-05,
+        "seconds": 79.44443106651306
       },
-      "last_stage_mean_epoch_seconds": 70.81920835971832,
+      "last_stage_mean_epoch_seconds": 78.9742782831192,
       "mechanism": {
         "6": {
           "records": 15700,
@@ -132,18 +132,18 @@
           "budget_unmet": 22681
         },
         "8": {
-          "records": 4635,
+          "records": 11742,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 13905,
+          "optimizer_trials": 35226,
           "candidate_selected": {
-            "0": 823,
-            "1": 843,
-            "2": 2969
+            "0": 2015,
+            "1": 2104,
+            "2": 7623
           },
-          "budget_unmet": 4635
+          "budget_unmet": 11742
         },
         "9": {
           "records": 0,
@@ -282,34 +282,34 @@
     }
   },
   "EFTR_latest": {
-    "complete_epochs": 215,
-    "steps": 43035,
+    "complete_epochs": 238,
+    "steps": 50142,
     "formal_records": 0,
     "task": 8,
-    "completed_task_epochs": 15,
+    "completed_task_epochs": 38,
     "mechanism_summary": {
-      "records": 4635,
+      "records": 11742,
       "head_updates": 0,
       "effect_exposures": 0,
       "cross_anchors": 0,
       "partner_forwards": 0,
-      "optimizer_trials": 13905,
+      "optimizer_trials": 35226,
       "candidate_selected": {
-        "0": 823,
-        "1": 843,
-        "2": 2969
+        "0": 2015,
+        "1": 2104,
+        "2": 7623
       },
-      "budget_unmet": 4635
+      "budget_unmet": 11742
     },
-    "evidence": "progress_20261022_185558",
+    "evidence": "progress_20261022_192611",
     "status": "RUNNING",
     "train_pid": 89365,
     "pipeline_pid": 88206
   },
   "EFTR_ETA": {
-    "recent10_epoch_seconds": 70.81920835971832,
-    "task8_remaining_minutes": 100.32721184293428,
-    "task8_reference_finish_CST": "2026-10-22 20:35–20:50",
+    "recent10_epoch_seconds": 78.9742782831192,
+    "task8_remaining_minutes": 81.60675422588984,
+    "task8_reference_finish_CST": "2026-10-22 20:45–21:00",
     "whole_run": "unknown: Task9 throughput pending; evaluation and final audit additional"
   },
   "mechanism_evidence": "eftr_mechanism_20261022_185723",
@@ -335,5 +335,6 @@
     "actual_head": "GMMHead",
     "prior_class_identity_superseded": true
   },
-  "previous_task7_mechanism_evidence": "eftr_kl_diagnostic_readonly_20261022_180335"
+  "previous_task7_mechanism_evidence": "eftr_kl_diagnostic_readonly_20261022_180335",
+  "EFTR_budget_semantics": "History budget is a preferred region, not a hard commit veto; scale0 is native BC+IFA, not a no-op. Budget-unmet candidates can be committed under frozen lexicographic rule."
 }
