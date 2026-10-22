@@ -20,3 +20,6 @@
 
 
 2026-10-23 01:51–01:52 CST：snapshot_readonly_20261023_015144/LOCAL_AUDIT PASS，95924仍正常WAITING、1462hash不变、六输出未创建、无GPU准入/新性能结果。旧A的43正常389完整epoch101518步/0正式，Task9已89轮；GOAL门槛仍待完整43。capacity_readonly_20261023_015201按43稳定私有已分配1.184GB抵扣后，data root13.8146GB，对最坏剩余新增10.8415GB＋2GiB保留后余0.8256GB；system普通7.9794GB保留及新三run界后余1.7517GB。无旧资产删除、活动payload操作、付费扩容或预算改变；仍非全程最终容量验收。新组继续等A全部所选分支有效退出及互斥锁，无可用新GPU吞吐/总ETA。正常保存发布后结束，不守候。
+
+
+2026-10-23 02:21–02:22 CST：snapshot_readonly_20261023_022140/LOCAL_AUDIT PASS，95924仍WAITING，1462hash不变，六输出不存在且尚未GPU准入。capacity_readonly_20261023_022156剩余新增界PASS：43当前稳定私有分配1.3206GB，data root13.6784GB，对最坏剩余新增10.7053GB＋2GiB保留后余0.8256GB；system普通7.9794GB仍余1.7517GB。未删除旧资产或操作活动payload。原A的43阶段/正式进度以同轮A完整快照为准，N不越过旧队列/GOAL门槛，不新增训练/环境/付费资源；仍PARTIAL，新N无实际GPU吞吐/总ETA。
