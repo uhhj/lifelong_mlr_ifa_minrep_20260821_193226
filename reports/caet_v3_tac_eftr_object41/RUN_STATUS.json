@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL",
-  "observed_at": "2026-10-22T19:56:02.160477+08:00",
+  "status": "COMPLETED_TAC_ALIGN_WITH_EFTR_USER_TERMINATED",
+  "observed_at": "2026-10-22T22:06:45.551202+08:00",
   "order": [
     "TAC",
     "EFTR",
@@ -9,7 +9,7 @@
   "seed": 41,
   "controller_pid": 89818,
   "queue": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01",
-  "snapshot": "progress_20261022_195604",
+  "snapshot": "progress_20261022_215906",
   "runs": {
     "TAC_OBJECT_41": {
       "complete_epochs": 400,
@@ -165,21 +165,21 @@
       "final_acceptance": false
     },
     "ALIGN_OBJECT_41": {
-      "complete_epochs": 155,
-      "steps": 28185,
-      "formal_records": 0,
+      "complete_epochs": 400,
+      "steps": 105500,
+      "formal_records": 200,
       "gpu_admission": "PASS",
       "last": {
-        "task": 7,
-        "epoch": 54,
-        "batches": 227,
-        "steps": 28185,
-        "loss": -26.852269134857583,
-        "lr_first": 4.703603603603604e-05,
-        "lr_after": 4.601351351351352e-05,
-        "seconds": 5.6837170124053955
+        "task": 9,
+        "epoch": 99,
+        "batches": 362,
+        "steps": 105500,
+        "loss": -33.8690505159494,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "seconds": 10.484420776367188
       },
-      "last_stage_mean_epoch_seconds": 5.472055959701538,
+      "last_stage_mean_epoch_seconds": 9.664953303337096,
       "mechanism": {
         "6": {
           "records": 15700,
@@ -196,12 +196,12 @@
           "budget_unmet": 0
         },
         "7": {
-          "records": 12485,
+          "records": 22700,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 12485,
+          "optimizer_trials": 22700,
           "candidate_selected": {
             "0": 0,
             "1": 0,
@@ -210,12 +210,12 @@
           "budget_unmet": 0
         },
         "8": {
-          "records": 0,
+          "records": 30900,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 0,
+          "optimizer_trials": 30900,
           "candidate_selected": {
             "0": 0,
             "1": 0,
@@ -224,12 +224,12 @@
           "budget_unmet": 0
         },
         "9": {
-          "records": 0,
+          "records": 36200,
           "head_updates": 0,
           "effect_exposures": 0,
           "cross_anchors": 0,
           "partner_forwards": 0,
-          "optimizer_trials": 0,
+          "optimizer_trials": 36200,
           "candidate_selected": {
             "0": 0,
             "1": 0,
@@ -240,12 +240,17 @@
       }
     }
   },
-  "formal_acceptance": false,
+  "formal_acceptance": {
+    "TAC": true,
+    "ALIGN": true,
+    "EFTR": false
+  },
   "automation_id": "caet-v3-tac-eftr-align-seed41",
-  "stage": "ALIGN_TRAIN7",
+  "stage": "CLOSED_LOCAL_ACCEPTANCE_COMPLETE",
   "light_snapshot": "queue_light_readonly_20261022_194033",
   "completed_local": [
-    "TAC"
+    "TAC",
+    "ALIGN"
   ],
   "TAC_final_package": "final_TAC_seed41_20261022_165721",
   "TAC_final_status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
@@ -339,9 +344,7 @@
   "terminated_local": [
     "EFTR"
   ],
-  "pending_completion": [
-    "ALIGN"
-  ],
+  "pending_completion": [],
   "EFTR_termination": {
     "request": {
       "status": "USER_TERMINATION_REQUESTED",
@@ -465,32 +468,71 @@
     "preservation": "No payload or log deleted; partial-epoch work is not counted as completed training; last complete recovery retained"
   },
   "ALIGN_ETA": {
-    "recent_task7_epoch_seconds": 5.472055959701538,
-    "task7_remaining_minutes": 4.104041969776153,
-    "task7_reference_finish_CST": "2026-10-22 20:01–20:05",
-    "reference_full_completion_CST": "2026-10-22 22:00–22:40",
-    "basis": "Task7 real recent10 throughput; total reference retains prior TAC training/evaluation costs, Task8/9 not yet measured; no completion guarantee",
-    "provisional": true
+    "status": "FINISHED",
+    "server_finished_at": "2026-10-22T21:55:43.238796+08:00",
+    "local_accepted_at": "2026-10-22T22:06:45.551202+08:00",
+    "remaining_minutes": 0
   },
   "ALIGN_latest": {
-    "status": "RUNNING",
-    "complete_epochs": 155,
-    "steps": 28185,
-    "last": {
-      "task": 7,
-      "epoch": 54,
-      "batches": 227,
-      "steps": 28185,
-      "loss": -26.852269134857583,
-      "lr_first": 4.703603603603604e-05,
-      "lr_after": 4.601351351351352e-05,
-      "seconds": 5.6837170124053955
-    },
-    "gpu_admission": "PASS",
-    "formal_records": 0,
-    "train_pid": 90084,
-    "pipeline_pid": 89935,
-    "evidence": "progress_20261022_195604"
+    "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
+    "complete_epochs": 400,
+    "steps": 105500,
+    "formal_records": 200,
+    "completed_vectors": 20,
+    "completed_cells": 10,
+    "technical_exceptions": 0,
+    "server_finished_at": "2026-10-22T21:55:43.238796+08:00",
+    "evidence": "final_ALIGN_seed41_20261022_220252",
+    "residual_workers": []
   },
-  "snapshot_observation_note": "runs and ALIGN_latest use this full snapshot"
+  "snapshot_observation_note": "Fresh final snapshot; original EFTR user-termination exit1 preserved and ALIGN continuation exit0 independently bound.",
+  "ALIGN_final_package": "final_ALIGN_seed41_20261022_220252",
+  "ALIGN_final_status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
+  "ALIGN_metrics": {
+    "AUC": {
+      "fraction": "391/480",
+      "percent": 81.45833333333333
+    },
+    "FWT": {
+      "fraction": "4/5",
+      "percent": 80.0
+    },
+    "NBT": {
+      "fraction": "-1/60",
+      "percent": -1.6666666666666667
+    },
+    "OldFinal": {
+      "fraction": "7/10",
+      "percent": 70.0
+    },
+    "FinalAll": {
+      "fraction": "3/4",
+      "percent": 75.0
+    }
+  },
+  "ALIGN_delta_ra": {
+    "AUC": {
+      "fraction": "27/320",
+      "percent": 8.4375
+    },
+    "FWT": {
+      "fraction": "1/20",
+      "percent": 5.0
+    },
+    "NBT": {
+      "fraction": "-7/120",
+      "percent": -5.833333333333333
+    },
+    "OldFinal": {
+      "fraction": "-1/12",
+      "percent": -8.333333333333334
+    },
+    "FinalAll": {
+      "fraction": "1/20",
+      "percent": 5.0
+    }
+  },
+  "comparison": "tac_align_final_comparison_20261022",
+  "automation_completion_action": "DELETE_AFTER_VERIFIED_PUBLICATION",
+  "all_three_accepted": false
 }
