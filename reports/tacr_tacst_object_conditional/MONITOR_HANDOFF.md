@@ -35,3 +35,9 @@
 
 
 2026-10-23 02:51–02:52 CST：snapshot_readonly_20261023_025144/LOCAL_AUDIT PASS，95924正常WAITING，1462hash一致、六输出不存在，尚未GPU准入，无新失败或恢复。旧A的43仍原evaluate98808正常运行，正式计数以同轮A独立快照为准。capacity_readonly_20261023_025200保守剩余新增界PASS：data root13.6781GB，对最坏剩余新增10.7050GB＋2GiB保留后余0.8256GB；system普通7.9794GB余1.7517GB。不动活动payload或删旧资产，不增付费资源/降预算，无新N实际GPU吞吐或总ETA；仍PARTIAL，正常保存发布结束本轮，不守候。
+
+## 2026-10-23 03:28 CST — 上游OBJECT门通过，继续等完整GOAL队列
+
+`snapshot_readonly_20261023_032141/LOCAL_AUDIT.json`PASS；1462冻结hash未变，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，六输出不存在。A OBJECT43已完整本地验收，三seed等权AUC80.173611%对RA73.229167%，精确门通过并已自然进入GOAL41。A整体仍PARTIAL，不能绕过它启动N；TACR/RST各自seed41仍只与同seedRA41的701/960比较。
+
+`capacity_readonly_20261023_032343`PASS_NOT_FINAL：data root12.612702GB扣剩余新增9.479571GB和2GiB后余0.985648GB；system普通7.979397GB扣3新run及1GiB后余1.751695GB。已接受43不再全额预留，GOAL41稳定私有分配0.828350GB抵扣剩余界。0模型前向/0优化器/0环境/0服务器写入，不改合同、不删资产。新模块GPU及最终包装仍待真实运行，未给新模块总ETA。整体PARTIAL。
