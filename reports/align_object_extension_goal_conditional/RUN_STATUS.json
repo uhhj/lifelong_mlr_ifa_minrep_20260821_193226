@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observed_at": "2026-10-23T03:23:05.803928+08:00",
+  "observed_at": "2026-10-23T03:51:20.141485+08:00",
   "queue": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022",
   "controller_pid": 93501,
   "contract_sha256": "8c35a51e3bf0d4c3c7a5b55b642a88d6b2dca861cd3c7099fd31fbc94e8e21ca",
@@ -19,7 +19,7 @@
   "read_only_completed_prefix": {
     "OBJECT_41": "../20261022_caet_v3_tac_eftr_object41/final_ALIGN_seed41_20261022_220252"
   },
-  "snapshot": "snapshot_readonly_20261023_032132",
+  "snapshot": "snapshot_readonly_20261023_035136",
   "runs": {
     "OBJECT_42": {
       "status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
@@ -209,17 +209,17 @@
     },
     "GOAL_41": {
       "status": "RUNNING_OR_PREPARING",
-      "complete_epochs": 128,
-      "main_steps": 13892,
+      "complete_epochs": 369,
+      "main_steps": 65653,
       "last": {
-        "task": 7,
-        "epoch": 27,
-        "batches": 139,
-        "steps": 13892,
-        "loss": -22.298573047994708,
-        "lr_first": 7.572388059701492e-05,
-        "lr_after": 7.468656716417912e-05,
-        "seconds": 3.2704436779022217
+        "task": 9,
+        "epoch": 68,
+        "batches": 337,
+        "steps": 65653,
+        "loss": -26.54919826949032,
+        "lr_first": 3.248192771084338e-05,
+        "lr_after": 3.146686746987952e-05,
+        "seconds": 9.903010845184326
       },
       "formal": {
         "records": 0,
@@ -231,7 +231,7 @@
         "remaining_evaluation_hours": null
       },
       "gpu_admission": "PASS",
-      "recent_stage_epoch_seconds": 3.4243959188461304
+      "recent_stage_epoch_seconds": 9.402701711654663
     },
     "GOAL_42": {
       "status": "QUEUED_NOT_GPU_ADMITTED",
@@ -247,25 +247,25 @@
   "new_max_main_updates_if_GOAL_selected": 439300,
   "new_main_updates_if_GOAL_not_selected": 211000,
   "ETA": {
-    "GOAL41_Task7_remaining_epochs_at_snapshot": 72,
-    "GOAL41_Task7_seconds_recent_mean": 3.4243959188461304,
-    "GOAL41_Task7_remaining_minutes_linear": 4.1092751026153564,
-    "GOAL41_Task7_reference_finish_CST": "2026-10-23 03:27–03:30",
-    "GOAL41_finish_CST": null,
+    "GOAL41_Task9_remaining_epochs_at_snapshot": 31,
+    "GOAL41_Task9_seconds_recent_mean": 9.402701711654663,
+    "GOAL41_Task9_remaining_minutes_linear": 4.858062551021575,
+    "GOAL41_main_training_reference_finish_CST": "2026-10-23 03:56–04:00",
+    "GOAL41_final_acceptance_CST": null,
     "total_finish_CST": null,
-    "basis": "Own GOAL41 last10 complete Task7 epochs; later Task8/9 and GOAL formal evaluations have no actual run throughput yet. No total promise.",
+    "basis": "03:51 own Task9 last10 complete epochs mean9.402702sec; 31 remain, linear4.858063min. Preparation, formal GOAL vector times and local final acceptance not included. No actual GOAL vector throughput yet.",
     "provisional": true
   },
-  "phase_exit_evidence": "snapshot_readonly_20261023_032132",
-  "current_phase": "GOAL41_TRAINING_TASK7",
+  "phase_exit_evidence": "snapshot_readonly_20261023_035136",
+  "current_phase": "GOAL41_TRAINING_TASK9",
   "disk": {
     "/data": {
-      "ordinary": 7978921984,
-      "root": 12848959488
+      "ordinary": 7708463104,
+      "root": 12578500608
     },
     "/": {
-      "ordinary": 7979397120,
-      "root": 11082924032
+      "ordinary": 7979393024,
+      "root": 11082919936
     }
   },
   "accepted_packages": {
@@ -304,5 +304,20 @@
     },
     "unix": 1792696370.7137578,
     "local_acceptance_pending": true
-  }
+  },
+  "capacity_recheck": {
+    "/": {
+      "free": 7979393024,
+      "reserve": 1073741824,
+      "remaining_additional_bound": 5153960754,
+      "margin": 1751690446
+    },
+    "/data": {
+      "free": 12578676736,
+      "reserve": 2147483648,
+      "remaining_additional_bound": 9209230948,
+      "margin": 1221962140
+    }
+  },
+  "capacity_evidence": "../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_035149"
 }

@@ -104,3 +104,11 @@ N snapshot_readonly_20261023_025144/LOCAL_AUDIT PASS：95924仍正常WAITING，1
 - 整体PARTIAL；下一轮只查活跃GOAL41，不重复43/42/41最终验收；N继续等待。所有取消任务不恢复。按同一30分钟监控、正常保存发布后结束不守候。
 
 外置轻量下载器预先补齐冻结GOAL父实验`/root/mlr_ifa/experiments/`元数据前缀，避免data-only包装拒绝合法parent JSON；后缀/大小/manifest SHA约束原样，AST静态PASS，0服务器写入/0payload下载。OBJECT43已在改动前实际全SHA完成，GOAL新路径仍须实际最终验收，不把静态检查称最终PASS。见`GOAL_LIGHT_WRAPPER_PREFIX_REVIEW_20261023_0328.json`。
+
+## 2026-10-23 03:51 CST — GOAL41正常Task9，369完整epoch
+
+`snapshot_readonly_20261023_035136/LOCAL_AUDIT.json` PASS：GOAL41共369完整epoch65653主步，Task9已69轮，正式0；train6/7/8、retain6/7/8及labels7/8/9均exit0。train102448/torchrun102440/pipeline101907/supervisor101863/controller93501正常，1209冻结hash与277输入hash无变化，初始化同父及逐步mask/native-only账目核验通过。自己的GPU准入已通过，不重跑。原OBJECT三seed本地已验收与aggregate只读复用，不重复最终下载/审计。
+
+最近10轮Task9均9.402702秒，余31轮线性4.858063分钟（03:51快照），主训练预计03:56–04:00 CST仅参考。随后保留/准备、正式20vector及本地验收另计；GOAL正式尚0vector，不能按OBJECT时间伪造本套件评估总ETA或提前指标。未完整400epoch76100、4CP100键、200正式20vector及有效退出验收前仍PARTIAL。GOAL42/43尚未GPU准入；通过门后固定完成三seed，不按途中结果取消。
+
+N同轮audit PASS，95924正常等待A自然有效exit0，1462hash不变/六输出未创建。`../20261023_tacr_tacst_object_conditional/capacity_readonly_20261023_035149`剩余新增界PASS_NOT_FINAL：data root12.578677GB，扣余新增9.209231GB+2GiB后余1.221962GB；system普通7.979393GB，扣新三run+1GiB后余1.751690GB。按GOAL41稳定私有已分配1.098691GB抵扣新增界。无重启、恢复、改参、活动payload操作、旧资产删除或付费资源。健康继续推进，无需用户行动，正常保存发布后结束本轮不守候。
