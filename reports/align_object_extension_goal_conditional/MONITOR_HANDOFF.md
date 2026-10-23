@@ -208,3 +208,17 @@ N `snapshot_readonly_20261023_082156/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL�
 N `snapshot_readonly_20261023_085150/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，1462hash不变、95924仍正常WAITING、六输出不存在、尚未自己的GPU准入。`capacity_readonly_20261023_085204`剩余新增界PASS_NOT_FINAL：data root9.890226GB扣余新增5.610023GB+2GiB后余2.132719GB；system普通7.978881GB扣三run+1GiB后余1.751178GB。GOAL43稳定私有1.261924GB抵扣新增界，已接受产物不额外预留；0额外前向/优化器/环境/服务器写入，不删资产、下载payload、改精度batch预算或新付费。
 
 全部科学合同不变。两队列总PARTIAL，正常保存发布后结束不守候；健康无实质阶段变化，无需用户行动。同一监控保持30分钟，全部所选分支本地验收比较发布后才删除。
+
+## 2026-10-23 09:27 CST — ALIGN全部所选分支本地验收完成，GOAL负结果保留
+
+最后`final_GOAL_43_20261023_092244/LOCAL_FINAL_AUDIT.json`及`QUEUE_TASK_COST_AUDIT.json`实际完整PASS：929轻量全SHA、400epoch76100主步、4CP严格100键、200正式20vector10cell、原RA成员载荷/IFA/初始化/完整mask、有效pipeline与supervisor exit0无残留、队列receipt与服务器独立审计绑定。主epoch35.352623分钟、正式vector87.540782分钟，准备/审计另计；BC有效711900/屏蔽47900，无辅助更新。以后43只读，不重复训练评估或最终下载验收。
+
+GOAL43 AUC77.1875 vs RA84.6875（-7.5pp），FWT81.25 vs83.75（-2.5），NBT9.166667 vs-3.333333（+12.5，低好变差），OldFinal73.333333 vs85（-11.666667），FinalAll72.5 vs86.25（-13.75）。最终Task6/7/8/9=65/90/65/70，对RA75/100/80/90，四项均下降10/10/15/20pp。全部7个负单元及自身峰值下降保留，不称保护或显著结论。
+
+`aggregate_GOAL_20261023_0925/LOCAL_AGGREGATE.json`与`QUEUE_CLOSURE_AND_TASK_AUDIT.json`实际PASS：三seed等权AUC81.111111±3.417450%，RA81.979167±3.002820%，精确73/90 vs787/960，差-5/576=-0.868056pp；FWT+2.083333pp、NBT+8.240741pp（低好变差）、OldFinal-4.444444pp、FinalAll-4.583333pp，全部30单元与11个负单元/自身峰值下降完整记录。GOAL三seed没有总体AUC收益，不将OBJECT提升外推为跨套件一致提升，不作显著性或无遗忘保证。
+
+`snapshot_readonly_20261023_092140/LOCAL_AUDIT.json` PASS，1209冻结hash不变；原controller93501于09:17:56自然exit0，五个新增run全部receipt/已验收包/服务器原始独立审计SHA及OBJECT精确门与GOAL描述汇总绑定，原进程零残留。外置闭合helper首次运行发现早期OBJECT包没有后来GOAL使用的QUEUE_TASK_COST_AUDIT字段；保留WRAPPER_ATTEMPT_01，改为绑定已有OBJECT全矩阵门审计，真实重算PASS并保留WRAPPER_RESOLUTION。仅本地汇总schema适配，0服务器源码/参数变更、0重训重评，未伪造旧文件。
+
+N95924按原条件于09:18:23自然进入TACR41。N`snapshot_readonly_20261023_092154/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL：1462hash及288输入hash一致，自己8真实隔离GPU调用5主3表征/0环境PASS，关闭全状态同RA/零残差原GMM等同/梯度路由/14键部署融合/完整恢复通过。09:22完整账目16epoch2512主步与2512表征更新、BC23712有效/1280屏蔽、效果23552、ST锚点0、正式0。09:24`active_process_readonly_20261023_092439/LOCAL_AUDIT.json`另核真实train114167→torchrun114159→pipeline114154→supervisor114098→controller95924；40完整epoch6280主步，前16轮与完整账目精确一致，后24轮这里只核epoch，不把它称全账目审计。最近10轮5.817791秒，Task6余60轮线性5.817791分钟，仅阶段参考09:30–09:33，后续阶段与新部署评估吞吐未知，总ETA未知。
+
+容量`capacity_readonly_20261023_092209`剩余新增界PASS_NOT_FINAL：data root9.889808GB扣余新增5.153961GB+2GiB后余2.588364GB；system普通7.269413GB扣余新增4.444603GB+1GiB后余1.751068GB。已验收A不再预留，TACR41稳定私有0.709358GB抵扣新增界；不删旧资产、下载payload、降预算精度或新增付费。R与RST各自独立41门仍701/960；GOAL负结果不改变新授权。A全部本地验收完成，只读复用；两队列总PARTIAL至N所选分支全部本地验收比较发布，同一30分钟监控继续，仅跟踪N，不能因A完成删除。
