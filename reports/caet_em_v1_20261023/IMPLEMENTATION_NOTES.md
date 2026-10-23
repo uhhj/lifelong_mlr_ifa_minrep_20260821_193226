@@ -11,3 +11,6 @@
 
 
 2026-10-23 23:15 CST：新增纯本地audit_evaluation_progress.py，实际对snapshot_20261023_230628通过四阶段诊断manifest/CP/codec绑定及已记录formal attempt/episode一致性审计；不计算部分性能，不替代最终CPU严格CP及初态文件字节审计。冻结1875源码未变，B0完整训练结束，按首批实测和用户新规则下次检查90分钟后。
+
+
+2026-10-24 01:45 CST：新增外置capacity_readonly.py，仅两次stat稳定私有文件st_blocks计算剩余新增界；symlink与hardlink排除，额外保全恢复只在实际free中计一次。实际远端只读及本地算术PASS，未修改冻结科学源。
