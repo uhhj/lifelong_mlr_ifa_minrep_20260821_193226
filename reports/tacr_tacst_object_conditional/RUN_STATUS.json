@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL",
-  "observation": "2026-10-23T08:51:24.158141+08:00",
-  "phase": "WAITING_PRIOR_QUEUE_NATURAL_EXIT",
+  "observation": "2026-10-23T09:22:05.714304+08:00",
+  "phase": "TACR_41_TRAINING",
   "queue": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023",
   "controller_pid": 95924,
   "frozen_files": 1462,
@@ -16,7 +16,39 @@
     ]
   },
   "runs": {
-    "TACR_41": "QUEUED_NOT_GPU_ADMITTED",
+    "TACR_41": {
+      "epochs": 16,
+      "main_steps": 2512,
+      "representation_steps": 2512,
+      "formal": {
+        "records": 0,
+        "completed_vectors": 0,
+        "started_vectors": 0,
+        "completed_cells": 0,
+        "technical_exceptions": 0,
+        "mean_vector_seconds": null,
+        "remaining_evaluation_hours": null
+      },
+      "exposures": {
+        "bc_valid": 23712,
+        "bc_invalid": 1280,
+        "effects": 23552,
+        "anchors": 0,
+        "key_reads": 0
+      },
+      "preflight_pass": true,
+      "status": "RUNNING_PARTIAL",
+      "input_hashes": {
+        "count": 288,
+        "failures": []
+      },
+      "GPU_calls": {
+        "main": 5,
+        "representation": 3,
+        "total": 8,
+        "environment_steps": 0
+      }
+    },
     "TACR_42": "QUEUED_NOT_GPU_ADMITTED",
     "TACR_43": "QUEUED_NOT_GPU_ADMITTED",
     "TACRST_41": "QUEUED_NOT_GPU_ADMITTED",
@@ -24,9 +56,9 @@
     "TACRST_43": "QUEUED_NOT_GPU_ADMITTED"
   },
   "CPU_validation": "PASS_NOT_GPU_ADMISSION",
-  "GPU_admission_pending": true,
+  "GPU_admission_pending": false,
   "launch_directory": "launch_20261023_001410",
-  "snapshot": "snapshot_readonly_20261023_085150",
+  "snapshot": "snapshot_readonly_20261023_092154",
   "capacity": {
     "/": {
       "free": 7979462656,
@@ -46,38 +78,102 @@
   "monitor_receipt": "AUTOMATION_UPDATE_RECEIPT.json",
   "disk": {
     "/": {
-      "ordinary": 7978885120,
-      "root": 11082412032
+      "ordinary": 7269412864,
+      "root": 10372939776
     },
     "/data": {
-      "ordinary": 5020188672,
-      "root": 9890226176
+      "ordinary": 5019770880,
+      "root": 9889808384
     }
   },
   "capacity_recheck": {
     "/": {
-      "free": 7978881024,
+      "free": 7269412864,
       "reserve": 1073741824,
-      "remaining_additional_bound": 5153960754,
-      "margin": 1751178446
+      "remaining_additional_bound": 4444603186,
+      "margin": 1751067854
     },
     "/data": {
-      "free": 9890226176,
+      "free": 9889808384,
       "reserve": 2147483648,
-      "remaining_additional_bound": 5610023320,
-      "margin": 2132719208
+      "remaining_additional_bound": 5153960754,
+      "margin": 2588363982
     }
   },
   "prior_completed": [
     "OBJECT_42",
     "OBJECT_43",
     "GOAL_41",
-    "GOAL_42"
+    "GOAL_42",
+    "GOAL_43"
   ],
-  "prior_active": "GOAL_43",
-  "capacity_evidence": "capacity_readonly_20261023_085204",
+  "prior_active": null,
+  "capacity_evidence": "capacity_readonly_20261023_092209",
   "external_light_wrapper_root_prefix": "FIXED_SYNTAX_PASS_NOT_ACTUAL_NEW_FINAL_DOWNLOAD",
   "prior_OBJECT_gate": "PASS_LOCAL_AND_SERVER_MEAN_AUC_2309/2880_VS_703/960",
   "local_connection_attempt": "snapshot_readonly_20261023_062138/LOCAL_CONNECTION_ATTEMPT.json",
-  "local_connection_resolution": "snapshot_readonly_20261023_062138/RESOLUTION.json"
+  "local_connection_resolution": "snapshot_readonly_20261023_062138/RESOLUTION.json",
+  "active": "TACR_41",
+  "prior_queue_local_status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
+  "prior_queue_closure": "../20261022_align_object_extension_goal_conditional/aggregate_GOAL_20261023_0925/QUEUE_CLOSURE_AND_TASK_AUDIT.json",
+  "active_process_evidence": "active_process_readonly_20261023_092439",
+  "latest_epoch_only_observation": {
+    "status": "LOCAL_ACTUAL_PROCESS_AND_COMPLETED_EPOCH_PREFIX_PASS_NOT_FULL_LEDGER_AUDIT",
+    "observed_unix": 1792718693.9991982,
+    "evidence_sha256": "3bac6f06b827056532bb623feb958360f9730231b96bf9e8a1284c9b0b975909",
+    "full_progress_snapshot_sha256": "ec797196c623ef9249c333e3d1729732b741e5c15e11c43e0daec61e2fec0a17",
+    "gpu_train_pid": 114167,
+    "processes": [
+      {
+        "pid": 95924,
+        "ppid": 1,
+        "start_ticks": 30312249,
+        "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023",
+        "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/controller.py "
+      },
+      {
+        "pid": 114098,
+        "ppid": 95924,
+        "start_ticks": 33570142,
+        "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023",
+        "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/seed_supervisor.py /data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41 "
+      },
+      {
+        "pid": 114154,
+        "ppid": 114098,
+        "start_ticks": 33580926,
+        "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41/source",
+        "command": "/data/mlr_ifa/env/bin/python -u -m caet_v3_exp.pipeline "
+      },
+      {
+        "pid": 114159,
+        "ppid": 114154,
+        "start_ticks": 33582080,
+        "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41/source",
+        "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m caet_v3_exp.train ra_coreset --through-task 6 "
+      },
+      {
+        "pid": 114167,
+        "ppid": 114159,
+        "start_ticks": 33582183,
+        "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41/source",
+        "command": "/data/mlr_ifa/env/bin/python -u -m caet_v3_exp.train ra_coreset --through-task 6 "
+      }
+    ],
+    "complete_epochs": 40,
+    "main_steps": 6280,
+    "representation_steps_inferred_from_main_only": true,
+    "full_ledger_verified_epochs": 16,
+    "recent_epoch_seconds": 5.817790699005127,
+    "remaining_Task6_minutes_linear": 5.817790699005127
+  },
+  "ETA": {
+    "ALIGN_queue_completed": true,
+    "N_started_CST": "2026-10-23 09:18:23",
+    "N_Task6_finish_reference_CST": "2026-10-23 09:30–09:33",
+    "N_total_finish_CST": null,
+    "basis": "N09:24 actual40 completed Task6 epochs; last10 mean5.817791sec; remaining60 linear5.817791min. Later stages and new deployment evaluation unmeasured. No reliable total ETA.",
+    "provisional": true
+  },
+  "GPU_admission_pending_other_runs": true
 }

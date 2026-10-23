@@ -1,0 +1,50 @@
+{
+  "status": "LOCAL_ACTUAL_PROCESS_AND_COMPLETED_EPOCH_PREFIX_PASS_NOT_FULL_LEDGER_AUDIT",
+  "observed_unix": 1792718693.9991982,
+  "evidence_sha256": "3bac6f06b827056532bb623feb958360f9730231b96bf9e8a1284c9b0b975909",
+  "full_progress_snapshot_sha256": "ec797196c623ef9249c333e3d1729732b741e5c15e11c43e0daec61e2fec0a17",
+  "gpu_train_pid": 114167,
+  "processes": [
+    {
+      "pid": 95924,
+      "ppid": 1,
+      "start_ticks": 30312249,
+      "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023",
+      "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/controller.py "
+    },
+    {
+      "pid": 114098,
+      "ppid": 95924,
+      "start_ticks": 33570142,
+      "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023",
+      "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/seed_supervisor.py /data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41 "
+    },
+    {
+      "pid": 114154,
+      "ppid": 114098,
+      "start_ticks": 33580926,
+      "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41/source",
+      "command": "/data/mlr_ifa/env/bin/python -u -m caet_v3_exp.pipeline "
+    },
+    {
+      "pid": 114159,
+      "ppid": 114154,
+      "start_ticks": 33582080,
+      "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41/source",
+      "command": "/data/mlr_ifa/env/bin/python -m torch.distributed.run --standalone --nproc_per_node=1 -m caet_v3_exp.train ra_coreset --through-task 6 "
+    },
+    {
+      "pid": 114167,
+      "ppid": 114159,
+      "start_ticks": 33582183,
+      "cwd": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023/TACR_41/source",
+      "command": "/data/mlr_ifa/env/bin/python -u -m caet_v3_exp.train ra_coreset --through-task 6 "
+    }
+  ],
+  "complete_epochs": 40,
+  "main_steps": 6280,
+  "representation_steps_inferred_from_main_only": true,
+  "full_ledger_verified_epochs": 16,
+  "recent_epoch_seconds": 5.817790699005127,
+  "remaining_Task6_minutes_linear": 5.817790699005127
+}
