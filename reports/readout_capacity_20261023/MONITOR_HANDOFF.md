@@ -1,5 +1,5 @@
-# Latest override 2026-10-23 18:02 CST
-snapshot_20261023_180113 LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL：4552epochs38216updates22full200fits，Task6全15/Task7 P0五折及G两折完成，当前G_task7_fold2快照150epochs/下载152，EVENTS差异保留。189hash及父合同不变，GPU122635/controller122601健康，准入exit0，无重启改参，0环境。66caseJSON下载SHA核验，非最终CP/科学接受。Task7 P0五fit29.501652秒/G首两fit112.034655秒，Task6 S五fit114.336808秒，Task7 S未测；18:01线性余13.82min至约18:15，训练参考18:12–18:20，最终审计另计。下次8min检查Task7 S，临近退出再缩短。data root5.498GB/systemordinary6.645GB安全。健康无变化安静，一次检查保存发布后结束。此段覆盖以下旧进度/5min间隔；只有自然exit0且无自身进程才运行已备最终wrappers，其新路径仍须真实验收。
+# Latest override 2026-10-23 18:12 CST
+snapshot_20261023_181101 LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL：5621epochs46768updates28full200fits，仅Task7 S fold3/4未完，当前fold3快照19epochs/下载21，EVENTS差异保留。189hash及父合同不变，GPU122635/controller122601健康，准入exit0，无重启改参，0环境。84caseJSON下载SHA核验，非最终CP/科学接受。Task7 G五fit111.314501秒，S首3fit108.302099秒，18:11剩余线性3.44min至18:14:31，训练参考18:14–18:17，服务器/本地最终审计另计。下次5min核自然exit0及无自身进程，完成后立即执行下述已备finalwrappers并实际验收；若仍健康未完只保存发布，不hover。data root5.468GB/systemordinary6.645GB安全。健康无变化安静，全部30/90CP/18case本地复算前不算局部性能或判门。此段覆盖以下旧进度和ETA。
 
 # Active capacity-only queue: no redeploy
 
