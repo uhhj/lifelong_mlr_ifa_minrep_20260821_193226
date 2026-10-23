@@ -1,0 +1,17 @@
+最新2026-10-23 21:47 CST覆盖：snapshot_20261023_214425 LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL，279hash无变化，controller124118/GPU124266正常，phase B0_train6。共享codec100完整epoch1900辅助更新完成、codec.exit0，验证最早best epoch96(index)，frozen SHA b9e153c25601c378c8a45f0eac42030a17e7d4428496c578850742c5a1b91d03。B0自己3隔离GPU优化器调用/0env/下一步精确恢复/最新camera1,camera2,state依赖/1–8长度/空mask零/mixture训练argmaxNormal部署实际PASS、admission exit0。B0完整25epoch3925主更新，Task6每轮5868有效380屏蔽，人口1562/157batch通过；B1/B2尚未自身准入。21:44最近10轮5.344974秒、余75约6.6812min训练计算，另完整恢复保存与阶段准备，Task6参考21:51–21:55，下一5min检查Task7接续，随后按自己的阶段吞吐调整；后续任务/EM/正式评估未测，全队列ETA未知。此段取代下方codec24轮与codec ETA。新的最终wrappers仍仅静态待完整实际验收；describe_final已记载冻结diagnose计数常量高估的本地独立成本校正（EM extra decoder实际6窗口非8，B0 tokenizer实际1非4），原数据保留，勿为修计数重跑/改服务器。
+
+只跟踪用户新授权的 CAET-EM-v1 OBJECT seed41。先读 D:/论文课题研究/MLR+IFA/execution/20261023_caet_em_v1 的 USER_METHOD.txt、PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json 和最新证据。原位置探针A失败保留；此新路线不需要10mm/25mm门。旧ALIGN/TACR/readout等已完成或取消的队列不得恢复。没有自动seed扩展。
+
+当前实际root=/data/mlr_ifa/experiment_workspaces/CAET_EM_OBJECT41_20261023_v1_engineering04，controller124118，合同58e5a91bad19cc3e2c17e0ecc7d2fd430666b88150cf34f92ce4ecad09c94c94，279冻结项。不要重跑deploy.py或controller。21:40快照snapshot_20261023_213914本地进度PASS，codec自己的GPU3隔离优化器调用/0环境/全状态下一步恢复PASS，codec124164健康，完整24epoch456辅助更新，三组主训练0/闭环0。数据下载后前进已记录。codec最近10轮0.767600秒/轮，余76约58秒计算加保存/冻结，21:41–21:43仅codec参考；主训练/闭环未实测，总ETA未知。下一5分钟核主策略自身准入和首轮，按实际阶段剩余时间调整同一个监控（准入/切换3–5min，主训练5–15min，评估按实测vector耗时10–20min），不固定30min，不守候。健康无变化安静；只实质切换/失败/完成/需行动通知。一轮检查保存发布后结束。
+
+顺序：共享Task6证据和100epoch codec冻结→B0 READOUT_BC4→B1 EM→B2 EM_TF，每组固定Task6–9四阶段400epoch105500主步、200正式episodes20vector10cell；合计316500主更新600正式。各阶段ep99完整新模型CP；原RA成员与人口不变。B1/B2同一codec/初始decoder，各自从官方Temporal初始化、Task6无T/F应完全一致；后面只用自身上一阶段教师。三组共享最后帧modality3控制读出、modality0 IFA及四步动作；部署只采样执行第一动作再观测，32token/8帧不改、原argmax-component Normal语义。B1−B0解释接口，B2−B1解释T+F组合，旧RA/ALIGN仅外部参考。无途中科学失败筛选、无额外seed或消融。
+
+每轮 check_progress.py只读→audit_progress.py SNAPSHOT，核源/输入/进程/GPU/磁盘/有效退出/完整epoch账目。不得把codec准入套三组主策略；各组ADMISSION_B0/B1/B2必须实际通过。当前数据证据1562样本、第一步1482合法、四步5868合法，模糊身份和尾部按独立mask保留人口；只读复用engineering03完成的labels/PCA/normalization。前3失败版本全部留证：精度比较、null身份索引、事件输出参数重名；0主更新/0正式环境，attempt02和03各3124视觉前向+640重复，attempt03另3隔离更新。新04自己另3准入。不能覆盖冻结源码，也不再导出完成Task6证据。
+
+SSH root@jq1.9gpu.com:11920授权，凭据仅getpass/现有内存，不文件日志或参数。失败先确认相关进程停止、合同hash、原失败与完整epoch恢复文件，再版本化工程修复；科学结构/损失/有效标签/预算/seed不变。不得盲重启controller或部分globalRNG正式评估，不重试正常负结果。恢复须核model/optimizer/scheduler/grads/modes/requires_grad/allRNG/cursor/selected-best/数据与codec/teacher SHA；每次新版本自己的准入，已完成codec/训练不重跑。发现问题可自动工程修复，但必须留证，不把日志输出错误当科学失败。
+
+共享及B2在/data，B0/B1在/root，具体见ENTRY。单组保守1.8GiB、shared .3GiB，实际模型与buffer估计约1.50GB；data root f_bfree留2GiB，system普通f_bavail留1GiB。每阶段实际核容量及已分配抵扣新增界，不删除旧资产/下载weights、features、rawactions/states/降预算/付费。
+
+全部controller自然exit0且无自身进程后：remote.py final_readonly.py→audit_final_local.py SNAPSHOT SCALAR_DIR→describe_final.py FINAL_DIR SNAPSHOT。这些新最终wrapper仅AST通过尚待真实验收；必须12实际CPU严格完整新CP、codec验证最早best/统计SHA、B1/B2Task6 tensor相等、完整恢复态、独立600正式episode/60vector/30cell/全mask人口账目/原RA成员/初态hash/attempt唯一性、无残留与有效退出。外置wrapper错误可修，不重训/重评。保留全部负单元与参数/辅助计算/额外存储、重复探索限制，不称显著或保护保证。完整接受报告发布后删除该新监控，不自动扩seed。
+
+每次检查/恢复/验收均按根AGENTS经本目录publish.py调用publish_mlr_branch流程，精确审查轻量type/size/secret/hash，串行stage、非force推https://github.com/uhhj/lifelong_mlr_ifa_minrep_20260821_193226的MLR，核remoteSHA/localreceipt。仅代码/报告/hash/误差标量和episode outcomes；禁CP/模型/原action/state/demo/latent/buffer/RNG/privatepayload/凭据/未审查bundle。TLS必要每命令OpenSSL+HTTP1.1仍验证证书。科学状态一直PARTIAL至全部独立验收，发布进度不等于接受。

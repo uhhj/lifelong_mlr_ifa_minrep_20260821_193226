@@ -1,6 +1,12 @@
 # CAET-EM-v1
 
-状态：PARTIAL，2026-10-23 21:40 CST。共享Task6 codec已正式训练；三组主训练和闭环尚未在最新快照中开始。用户方案见USER_METHOD.txt，冻结的补充定义见PROTOCOL.md。
+状态：PARTIAL，2026-10-23 21:47 CST更新。共享Task6 codec已完成冻结，B0正式Task6训练中。用户方案见USER_METHOD.txt，冻结的补充定义见PROTOCOL.md。
+
+最新snapshot_20261023_214425本地审计PASS_PROGRESS_NOT_FINAL：B0完整25epoch3925主更新，人口1562/每轮157batch、5868有效380屏蔽位置复算通过。B0自己的3隔离GPU优化器调用/0环境，完整恢复、最新两相机/状态依赖、长度1–8、空mask、mixture训练/argmaxNormal部署检查PASS，admission exit0。controller124118、GPU124266健康，279hash不变。B1/B2尚未自身准入，正式闭环0。
+
+codec100epoch1900辅助更新与自然exit0，验证最早best为index96；冻结SHA b9e153c25601c378c8a45f0eac42030a17e7d4428496c578850742c5a1b91d03。完整最终独立CPU严格加载仍待完整流程，不能把冻结元数据当最终接受。21:44 Task6最近10轮5.344974秒/轮，余75轮约6.6812min训练计算，另保存/准备，阶段参考21:51–21:55。下一5min后按Task7实测更新同一caet-em-object41监控；后续训练和正式评估未测，总ETA未知。
+
+下文21:40记录作为历史保留，以上述最新证据为准。外置最终成本报告已明确校正冻结diagnose.py的计数常量高估：EM额外decoder实际6窗口而非8，B0 tokenizer实际1而非4；原记录保留，不改服务器科学源或重跑。
 
 最新只读资产核对：GPU空闲；data root 5,456,470,016 bytes，system普通6,644,719,616 bytes；Task6–9原特征人口1562/1480/1560/1319，旧RA成员加入后1562/2261/3081/3620。旧训练和诊断均不恢复。新方案不采用旧位置探针10/25门，也不继承旧自动扩seed授权。
 

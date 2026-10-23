@@ -15,9 +15,11 @@ for arm in ('B0','B1','B2'):
     r=g.setdefault(k,dict(sum=0.,count=0));r['sum']+=v['sum'];r['count']+=v['count']
   stages[str(t)]={g:{k:r['sum']/r['count'] if r['count'] else None for k,r in v.items()} for g,v in groups.items()}
  diagnostics[arm]=stages
+ windows=sum(len(js(meta/arm/'dataset'/('task%d.json'%t))['rows']) for t in range(6,10))
+ cost[arm].update(main_target_tokenizer_windows=windows,diagnostic_policy_windows=windows,diagnostic_tokenizer_windows=windows*(1 if arm=='B0' else 4),diagnostic_extra_decoder_windows=windows*(0 if arm=='B0' else 6))
 negative={}
 for a,b in [('B1','B0'),('B2','B1'),('B2','B0')]:negative[a+'-'+b]={k:5*(v-data['arms'][b]['success_counts'][k]) for k,v in data['arms'][a]['success_counts'].items() if v<data['arms'][b]['success_counts'][k]}
-(F/'COST_AUDIT.json').write_text(json.dumps(dict(cost=cost,not_equal_compute=True,extra_storage_not_equal_memory=True,diagnostics_and_admission_separate=True),indent=2));(F/'OFFLINE_DIAGNOSTICS.json').write_text(json.dumps(diagnostics,indent=2));(F/'NEGATIVE_CELLS.json').write_text(json.dumps(negative,indent=2))
+(F/'COST_AUDIT.json').write_text(json.dumps(dict(cost=cost,not_equal_compute=True,extra_storage_not_equal_memory=True,diagnostics_and_admission_separate=True,diagnostic_counter_reconciliation='Frozen diagnose.py constants overcount extra decoder (8 vs actual 6 for EM), and B0 tokenizer (4 vs actual 1). Above counts independently derived from actual loop branches and complete dataset population; original records preserved.'),indent=2));(F/'OFFLINE_DIAGNOSTICS.json').write_text(json.dumps(diagnostics,indent=2));(F/'NEGATIVE_CELLS.json').write_text(json.dumps(negative,indent=2))
 lines=['# CAET-EM-v1 OBJECT seed41 完整结果','','三组完整本地独立验收；单seed探索，不宣称显著性、防遗忘保证或跨套件泛化。旧位置探针A失败保留，此路线不放宽或改写该门。','','|组|AUC %|FWT %|NBT %（低好）|OldFinal %|FinalAll %|','|---|---:|---:|---:|---:|---:|']
 for a in ('B0','B1','B2'):lines.append('|'+a+'|'+'|'.join('%.6f'%data['arms'][a]['metrics'][k]['percent'] for k in ('AUC','FWT','NBT','OldFinal','FinalAll'))+'|')
 lines+=['','B1−B0检验效果接口；B2−B1检验条件迁移和功能保护组合。所有负单元见NEGATIVE_CELLS.json，完整10cell见LOCAL_FINAL_AUDIT.json，不能只报AUC或只选最好的组。','','旧ALIGN41 AUC81.458333%、OldFinal70%、FinalAll75%仅作外部参考；共享读出和四步监督已改变，不作严格单因素比较。','','主更新三组316500、正式episode600；额外codec训练、教师及诊断前向见COST_AUDIT.json与原阶段证据，不称等算力/等总内存。任何新增seed或消融须另行决定，无自动扩展。']

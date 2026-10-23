@@ -20,6 +20,15 @@ for t in range(6,10):
 for arm in ARMS:
  root=arm_root(arm);reports[arm]={}
  for t in range(6,10):
+  manifest=js(root/'dataset'/('task%d.json'%t));history=js(root/'epochs'/('task%d.json'%t));n=len(manifest['rows'])
+  oldpaths=sorted([str(root/'buffer'/r['destination']) for j in range(6,t) for r in js(PARENT/'ra_coreset/storage'/('task%d.json'%j))['selected']]);paths=oldpaths+sorted(str(p) for p in (PARENT/'features'/str(t)).glob('*.pt'));random.Random(41).shuffle(paths)
+  assert len(paths)==n
+  for path,row in zip(paths,manifest['rows']):
+   name=Path(path).name;tid=int(name.split('__')[0][1:]) if '__' in name else t;sample=name.split('__',1)[1] if '__' in name else name
+   assert tid==row['task'] and sample==row['sample'] and sha(path)==row['sha256'],'Native population/mix identity mismatch'
+  for row in history:
+   generator=torch.Generator();generator.manual_seed(row['epoch']);order=torch.randperm(n,generator=generator).numpy().astype(np.int64)
+   assert hashlib.sha256(order.tobytes()).hexdigest()==row['order_sha256'],'Native sampler0 epoch order mismatch'
   p=Policy(arm,pack['model'],pack['statistics']);cp=root/'models'/('task%d.pth'%t);raw=torch.load(cp,map_location='cpu');sd=p.state_dict();assert set(sd)==set(raw['model'])
   assert all(v.shape==raw['model'][k].shape and v.dtype==raw['model'][k].dtype==torch.float32 for k,v in sd.items() if v.is_floating_point())
   n=strict_policy_restore(p,raw,contract,sha(frozen_codec()));reports[arm][str(t)]=dict(sha256=sha(cp),strict_keys=n,parameters=sum(v.numel() for v in p.parameters()),dtype_shape_exact=True)
