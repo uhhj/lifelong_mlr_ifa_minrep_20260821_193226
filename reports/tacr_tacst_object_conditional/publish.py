@@ -64,7 +64,7 @@ def main():
     subprocess.run(["git", "-C", str(REPO), "diff", "--cached", "--check"], check=True)
     if git("diff", "--cached", "--name-only"):
         subprocess.run(["git", "-C", str(REPO), "commit", "-q", "-m",
-                        "Queue independent TAC-R and TAC-R+ST with exact RA41 gates"], check=True)
+                        "Stop TAC-R/ST by user request and preserve audited evidence"], check=True)
         subprocess.run(["git", "-C", str(REPO), "push", "origin", "MLR"], check=True)
     head = git("rev-parse", "HEAD")
     remote = git("ls-remote", "origin", "refs/heads/MLR").split()[0]

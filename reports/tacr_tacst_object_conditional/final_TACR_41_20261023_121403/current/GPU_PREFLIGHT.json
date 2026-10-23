@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "variant": "TACR",
+  "optimizer_calls": 8,
+  "main_optimizer_calls": 5,
+  "representation_optimizer_calls": 3,
+  "formal_steps": 0,
+  "environment_steps": 0,
+  "proof": {
+    "disabled_full_state_exact_RA": true,
+    "gradient_norm2": {
+      "BC": {
+        "Temporal": 1008.1914798337176,
+        "GMM": 37008.98017761128,
+        "R": 0.009140076621488042,
+        "U": 0.041496456376586194,
+        "gate": 9.061087986692649e-06,
+        "E": 0,
+        "D": 0
+      },
+      "IFA": {
+        "Temporal": 0.7754118373173418,
+        "GMM": 0,
+        "R": 0,
+        "U": 0,
+        "gate": 0,
+        "E": 0,
+        "D": 0
+      },
+      "effect": {
+        "Temporal": 0,
+        "GMM": 0,
+        "R": 0.2803210606361366,
+        "U": 0,
+        "gate": 0,
+        "E": 0.09677245354282614,
+        "D": 0.05025665514008331
+      },
+      "ST": {
+        "Temporal": 0,
+        "GMM": 0,
+        "R": 442.0522762505037,
+        "U": 0,
+        "gate": 0,
+        "E": 326.57904380146266,
+        "D": 0
+      }
+    },
+    "initial_actual_GMM_parameters_exact": true,
+    "initial_U_BC_gradient_nonzero": true,
+    "initial_R_BC_gradient_zero_expected": true,
+    "deploy_adapter_same_fusion_exact": true,
+    "strict_deploy_keys": 14,
+    "probe": "isolated actual core/GMM with constructed ST keys; actual qualified graph separately audited",
+    "masked_valid_nll_exact": true,
+    "empty_valid_mask_differentiable_zero": true,
+    "active_serialized_full_state_restore_exact": true,
+    "student_and_both_optimizer_schedulers_grads_modes_RNG_restored": true
+  },
+  "gpu": "NVIDIA GeForce RTX 3090"
+}

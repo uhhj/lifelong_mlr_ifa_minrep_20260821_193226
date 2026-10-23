@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL",
-  "observation": "2026-10-23T11:21:54.490855+08:00",
-  "phase": "TACR_41_FORMAL_EVALUATION",
+  "status": "CANCELLED_BY_USER",
+  "observation": "2026-10-23T12:18:02.176210+08:00",
+  "phase": "USER_STOP_CONFIRMED_NO_ACTIVE_PROCESSES",
   "queue": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023",
   "controller_pid": 95924,
   "frozen_files": 1462,
@@ -17,43 +17,116 @@
   },
   "runs": {
     "TACR_41": {
+      "status": "COMPLETED_LOCAL_INDEPENDENT_PASS_PRESERVED",
+      "final_package": "final_TACR_41_20261023_121403",
       "epochs": 400,
       "main_steps": 105500,
       "representation_steps": 105500,
       "formal": {
-        "records": 100,
-        "completed_vectors": 10,
-        "started_vectors": 11,
-        "completed_cells": 5,
+        "records": 200,
+        "completed_vectors": 20,
+        "started_vectors": 20,
+        "completed_cells": 10,
         "technical_exceptions": 0,
-        "mean_vector_seconds": 245.38281581401824,
-        "remaining_evaluation_hours": 0.6816189328167174
+        "mean_vector_seconds": 253.5484964489937,
+        "remaining_evaluation_hours": 0.0
       },
-      "exposures": {
-        "bc_valid": 1008100,
-        "bc_invalid": 44300,
-        "effects": 1002100,
-        "anchors": 0,
-        "key_reads": 0
+      "metrics": {
+        "AUC": {
+          "fraction": "619/960",
+          "percent": 64.47916666666667
+        },
+        "FWT": {
+          "fraction": "9/16",
+          "percent": 56.25
+        },
+        "NBT": {
+          "fraction": "-11/72",
+          "percent": -15.277777777777779
+        },
+        "OldFinal": {
+          "fraction": "13/20",
+          "percent": 65.0
+        },
+        "FinalAll": {
+          "fraction": "5/8",
+          "percent": 62.5
+        }
       },
-      "preflight_pass": true,
-      "status": "MAIN_TRAINING_COMPLETE_EVALUATION_PARTIAL",
-      "input_hashes": {
-        "count": 288,
-        "failures": []
+      "baseline": {
+        "AUC": {
+          "fraction": "701/960",
+          "percent": 73.02083333333333
+        },
+        "FWT": {
+          "fraction": "3/4",
+          "percent": 75.0
+        },
+        "NBT": {
+          "fraction": "1/24",
+          "percent": 4.166666666666667
+        },
+        "OldFinal": {
+          "fraction": "47/60",
+          "percent": 78.33333333333333
+        },
+        "FinalAll": {
+          "fraction": "7/10",
+          "percent": 70.0
+        }
       },
-      "GPU_calls": {
-        "main": 5,
-        "representation": 3,
-        "total": 8,
-        "environment_steps": 0
+      "delta": {
+        "AUC": {
+          "fraction": "-41/480",
+          "percent": -8.541666666666666
+        },
+        "FWT": {
+          "fraction": "-3/16",
+          "percent": -18.75
+        },
+        "NBT": {
+          "fraction": "-7/36",
+          "percent": -19.444444444444443
+        },
+        "OldFinal": {
+          "fraction": "-2/15",
+          "percent": -13.333333333333334
+        },
+        "FinalAll": {
+          "fraction": "-3/40",
+          "percent": -7.5
+        }
       }
     },
-    "TACR_42": "QUEUED_NOT_GPU_ADMITTED",
-    "TACR_43": "QUEUED_NOT_GPU_ADMITTED",
-    "TACRST_41": "QUEUED_NOT_GPU_ADMITTED",
-    "TACRST_42": "QUEUED_NOT_GPU_ADMITTED",
-    "TACRST_43": "QUEUED_NOT_GPU_ADMITTED"
+    "TACR_42": "NOT_EXPANDED_GATE_FAILED_AND_USER_CANCELLED",
+    "TACR_43": "NOT_EXPANDED_GATE_FAILED_AND_USER_CANCELLED",
+    "TACRST_41": {
+      "status": "EARLY_TERMINATED_BY_USER",
+      "complete_epochs": 91,
+      "main_steps_in_complete_epochs": 14287,
+      "formal_records": 0,
+      "remaining_incomplete_epoch_not_counted": true,
+      "checkpoint_files_preserved": [
+        {
+          "path": "/data/mlr_ifa/experiments/TACRST_OBJECT_seed41_20261023/effects/current/task6/labels.pth",
+          "bytes": 1285093,
+          "sha256": "c3602c92f60b3cccde4b9221c303c312d3fd0f022ba736a3fa9e0a2774956a9a"
+        },
+        {
+          "path": "/data/mlr_ifa/experiments/TACRST_OBJECT_seed41_20261023/preflight/recovery.pth",
+          "bytes": 349929653,
+          "sha256": "930fda9975e27b42f441957c41c5f208b667b083b000c0536f1c90b368c4c981"
+        },
+        {
+          "path": "/data/mlr_ifa/experiments/TACRST_OBJECT_seed41_20261023/ra_coreset/recovery/latest.pth",
+          "bytes": 349929909,
+          "sha256": "d017fc03c35416136e945c6a6078e51ddf84bfa51926980386a4d1035e073bd5"
+        }
+      ],
+      "not_a_complete_performance_result": true
+    },
+    "TACRST_42": "CANCELLED_BY_USER_NOT_STARTED",
+    "TACRST_43": "CANCELLED_BY_USER_NOT_STARTED"
   },
   "CPU_validation": "PASS_NOT_GPU_ADMISSION",
   "GPU_admission_pending": false,
@@ -113,20 +186,15 @@
   "prior_OBJECT_gate": "PASS_LOCAL_AND_SERVER_MEAN_AUC_2309/2880_VS_703/960",
   "local_connection_attempt": "snapshot_readonly_20261023_062138/LOCAL_CONNECTION_ATTEMPT.json",
   "local_connection_resolution": "snapshot_readonly_20261023_062138/RESOLUTION.json",
-  "active": "TACR_41",
+  "active": null,
   "prior_queue_local_status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
   "prior_queue_closure": "../20261022_align_object_extension_goal_conditional/aggregate_GOAL_20261023_0925/QUEUE_CLOSURE_AND_TASK_AUDIT.json",
   "active_process_evidence": "snapshot_readonly_20261023_112137/EVIDENCE.json (evaluate GPU PID115145; EVALUATING stage8 status)",
   "ETA": {
-    "completed_vectors": 10,
-    "mean_vector_seconds": 245.38281581401824,
-    "remaining_evaluation_minutes_linear": 40.897135969003045,
-    "TACR41_and_local_acceptance_reference_finish_CST": "2026-10-23 12:10–12:35",
-    "total_queue_finish_CST": null,
-    "basis": "11:21:54 ten complete vectors mean245.382816sec, remaining10 linear40.897136min, plus effective exit/light download/local final acceptance. Remaining cell durations uncertain, not guaranteed.",
-    "provisional": true
+    "cancelled_by_user": true,
+    "no_completion_time": true
   },
-  "GPU_admission_pending_other_runs": true,
+  "GPU_admission_pending_other_runs": false,
   "deployment_checkpoint_evidence": "deployment_checkpoint_readonly_20261023_105439",
   "deployment_progress_audit": "snapshot_readonly_20261023_112137/DEPLOYMENT_PROGRESS_AUDIT.json",
   "token_visibility_audit": {
@@ -136,5 +204,16 @@
     "experiment_protocol_changed": false,
     "new_training_authorized_by_this_audit": false,
     "last_progress_observation_not_refreshed": "2026-10-23T11:21:54.490855+08:00"
-  }
+  },
+  "controller_running": false,
+  "automation_status": "DELETED",
+  "all_future_training_cancelled": true,
+  "requires_new_user_authorization_to_restart": true,
+  "termination_evidence": "stop_all_by_user_20261023_121741",
+  "termination_audit": "stop_all_by_user_20261023_121741/LOCAL_AUDIT.json",
+  "residual_processes": [],
+  "gpu_idle": true,
+  "TACR_seed41_gate_passed": false,
+  "original_remote_exit_codes_not_rewritten": true,
+  "post_stop_independent_verification": "verify_user_stop_readonly_20261023_121930/LOCAL_AUDIT.json"
 }

@@ -34,7 +34,8 @@ result = dict(status='LOCAL_DEPLOYMENT_PROGRESS_BINDING_PASS_NOT_FINAL_ACCEPTANC
               key=d['key'], formal=formal, formal_stages_with_strict_main_load_records=sorted(stages),
               four_main_checkpoints_schema_keys=100, four_residuals_strict_keys=14,
               four_students_strict_keys=20, current_rows_bound_to_actual_hashes=len(all_rows),
-              main_strict_loading_for_unvisited_stages_pending=True,
+              main_strict_loading_for_unvisited_stages_pending=bool(set(by)-stages),
+              unvisited_formal_stages=sorted(set(by)-stages),
               snapshot_sha256=hashlib.sha256((p/'EVIDENCE.json').read_bytes()).hexdigest(),
               checkpoint_evidence_sha256=hashlib.sha256((c/'EVIDENCE.json').read_bytes()).hexdigest(),
               no_training_rollout_or_parameter_change=True)

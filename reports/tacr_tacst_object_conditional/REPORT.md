@@ -1,3 +1,5 @@
+> 最新用户指令（2026-10-23）：TAC-R/ST训练及后续扩展全部停止，监控已删除。所有继续运行/自动扩展的旧文字仅为历史记录，已被本次取消覆盖。不得在无新授权下重启、恢复、补评或自动修订设计。状态CANCELLED_BY_USER；详见USER_CANCELLATION.md和stop_all_by_user_20261023_121741。
+
 # PARTIAL：TAC-R / TAC-R＋TAC-ST 已排队
 
 观察2026-10-23 00:15:45 CST。snapshot_readonly_20261023_001540/LOCAL_AUDIT PASS：新controller95924实际存活，1462冻结hash一致，六个输出均不存在、尚未GPU准入，无失败。唯一活跃GPU为旧ALIGN42评估94045，未中断。新队列等待旧ALIGN OBJECT42/43及其条件GOAL分支自然有效结束，故没有新实验训练吞吐或完成ETA，不能拿CPU测试伪造GPU进度。
@@ -163,3 +165,25 @@ temporal_token_visibility_readonly_20261023_120529/LOCAL_AUDIT.json PASS，活�
 14次独立CPU Temporal前向、1次输入VJP，无参数梯度、0优化器/环境/CUDA/服务器写入，1462hash前后不变；source_capture另核真实运行代码，未把hash不同的旧参考冒充活动文件。本次仅合成潜在输入通路诊断，没有真实demo泛化/更换读出的BC或闭环收益，不能归因当前性能，更不能断言31/池化必然更好。报告给出下一版控制h保持原样、物理分支独立读取全模态/全token的候选，未实施或启动新训练。
 
 物理分支R与ST teacher/query共享该限制，stopgrad使效果监督不能让Temporal直接补学物理特征，但不妨碍BC/IFA更新主干。当前问题属于科学表示限制，非冻结实现不一致/故障；不自动停止、重启、调参或替换读出，原条件扩展门701/960和队列授权不变。实验总体PARTIAL，最后完整进度仍11:21:54的100/200，本次不把诊断时间当新评估快照。按AGENTS发布代码报告及轻量证据，后续监控继续原协议。
+
+## 2026-10-23 12:20 CST — 用户取消，停止确认
+
+# 用户停止TAC-R/ST训练：终止记录
+
+用户明确要求“停止训练，TAC-R设计有问题”。该最新指令覆盖此前继续队列、条件扩展与自动处理工程问题的授权。未经新的用户明确授权，不得重启/恢复/补评、替换token读出或另启修订版训练。
+
+- 2026-10-23 12:17:56 CST，先暂停已验证的队列控制器阻止新入口，然后向当前队列5个实际进程发送SIGTERM并恢复其信号处理；PID/start_ticks/命令/cwd均记录。控制器95924、supervisor118243、pipeline118359、torchrun118364、train118372全部停止。
+- 12:18:02记录无残留进程、GPU空闲，1462冻结文件停止前后hash一致；没有删除或下载任何checkpoint/演示/缓存payload，没有重新训练或环境调用。原队列RUN_STATUS、退出文件及历史失败均保留，不伪改为正常exit0；服务端新USER_TERMINATION_BY_USER.json明确标记人为终止。
+- TACRST41：91个完整epoch（Task6截至epoch90），完整epoch计14287主步，正式0。未完成epoch不计完成。恢复检查点latest.pth SHA d017fc03c35416136e945c6a6078e51ddf84bfa519269880386a4d1035e073bd5及preflight恢复/标签等原地保留；没有Task6 ep99最终模型，不伪称完整负结果或已验证ST效果。
+- TACR41在停止请求前已经完成400epoch、105500主步与105500表征步、200正式20vector10cell，原结果/4主100键/4部署14键/4学生20键/输入与成员IFA/完整账目/有效退出凭据保留。此前用户“检查进度”已开始下载的932个轻量文件全部SHA核验后，本地audit_final只读复算实际通过；没有新训练、补评或额外闭环。AUC619/960=64.479167%，低于同seed RA701/960=73.020833%，未过扩展门。此后只保留结果，不继续三seed或追加实验。
+- TACR42/43原来已因门未过而未启动；所有TACRST后续seed及任何未来扩展现在均由用户取消。
+- 监控align-object-seed-goal先暂停，停止确认后已通过工具删除，并核本地automation.toml不存在。没有保留自动恢复任务。
+
+## 保留与核验
+
+stop_all_by_user_20261023_121741/EVIDENCE.json与LOCAL_AUDIT.json保存实际信号、零残留/GPU、完整epoch计数、35个pth工件的路径/大小/SHA及原退出文件。这里35项也包含标签和RNG恢复工件，只发布元数据，不发布二进制。
+
+verify_user_stop_readonly另行复核所有已记录pth大小/SHA、当前队列无残留、GPU及日志清单；不修改服务器。所有日志、恢复状态与既有Temporal token诊断均保留。A ALIGN已完成结果及所有旧取消实验未改动。
+
+实验终态为CANCELLED_BY_USER，不是全部科学实验完成或三seed成功。TACRST41为EARLY_TERMINATED_BY_USER，不纳入完整性能比较。token可见性问题仍只证明结构性限制，没有据此把TACR性能归因或自动启动新设计。
+
