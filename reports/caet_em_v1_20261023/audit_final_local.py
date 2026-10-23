@@ -5,6 +5,10 @@ from fractions import Fraction
 P=Path(sys.argv[1]);F=Path(sys.argv[2]);d=json.loads((P/'EVIDENCE.json').read_text());proof=json.loads((F/'EVIDENCE.json').read_text());assert proof['status']=='PASS' and d['controller_exit']=='0' and not d['own_processes'] and not d['hash_bad'];assert proof['contract']==d['contract_sha256'];assert all(v=='0' for v in d['phase_exits'].values())
 download=json.loads((P/'DOWNLOAD.json').read_text());assert all(v['sha256']==v['at_snapshot']['sha256'] for v in download.values())
 for name,m in download.items():assert hashlib.sha256((P/'metadata'/name).read_bytes()).hexdigest()==m['sha256']
+if proof.get('engineering_lineage'):
+ lineage=json.loads((P/'metadata/shared/RESUME_MANIFEST.json').read_text());assert lineage==proof['engineering_lineage']
+ admission=json.loads((P/'metadata/shared/CONTINUATION_ADMISSION.json').read_text());assert admission['status']=='PASS' and admission['contract']==d['contract_sha256'] and admission['actual_GPU_full_state_roundtrip']
+ assert lineage['completed_main_updates']==38400 and not lineage['completed_training_repeated']
 def js(p):return json.loads(p.read_text())
 def metrics(r):
  return dict(AUC=sum(sum(r[s,t] for s in range(t,10))/(10-t) for t in range(6,10))/4,FWT=sum(r[t,t] for t in range(6,10))/4,NBT=sum(sum(r[t,t]-r[s,t] for s in range(t+1,10))/(9-t) for t in range(6,9))/3,OldFinal=sum(r[9,t] for t in range(6,9))/3,FinalAll=sum(r[9,t] for t in range(6,10))/4)

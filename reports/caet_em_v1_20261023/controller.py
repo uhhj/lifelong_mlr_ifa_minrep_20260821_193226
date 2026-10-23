@@ -11,13 +11,12 @@ def main():
  lock=open('/data/mlr_ifa/physical_effect_probe.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
  assert not (ROOT/'EVENTS.jsonl').exists(),'No blind controller restart'
  try:
-  phase('prepare',['prepare'])
-  if not (ROOT/'evidence/task6/TEMPORAL_BINDING_AUDIT.json').exists():phase('evidence6',['evidence','6'])
-  else:verify();event('evidence_reused',task=6,labels_sha256=sha(ROOT/'evidence/task6/labels.pth'))
-  phase('codec_admission',['admission','codec']);phase('codec',['train_codec'])
+  phase('continuation_admission',['continuation_admission'])
+  phase('B0_admission',['admission','B0'])
+  phase('B0_diagnose7',['diagnose','B0','7'])
   for arm in ARMS:
-   phase(arm+'_admission',['admission',arm])
-   for task in range(6,10):
+   if arm!='B0':phase(arm+'_admission',['admission',arm])
+   for task in range(8 if arm=='B0' else 6,10):
     if not (ROOT/'evidence'/('task%d'%task)/'TEMPORAL_BINDING_AUDIT.json').exists():phase('evidence%d'%task,['evidence',str(task)])
     phase('%s_train%d'%(arm,task),['train',arm,str(task)])
     phase('%s_diagnose%d'%(arm,task),['diagnose',arm,str(task)])

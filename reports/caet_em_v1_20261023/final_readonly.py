@@ -5,6 +5,13 @@ ROOT=Path(os.environ['EM_ROOT']);sys.path.insert(0,str(ROOT))
 from caet_em_exp.common import *
 from caet_em_exp.model import Codec,Policy,strict_policy_restore
 assert (ROOT/'controller.exit').read_text().strip()=='0';contract=verify()
+lineage=None
+if (ROOT/'RESUME_MANIFEST.json').exists():
+ lineage=js(ROOT/'RESUME_MANIFEST.json');admission=js(ROOT/'CONTINUATION_ADMISSION.json')
+ assert admission['status']=='PASS' and admission['contract']==contract and admission['actual_GPU_full_state_roundtrip']
+ assert admission['steps']==38400 and not admission['retrain_completed']
+ assert sha(lineage['preserved_recovery']['path'])==lineage['preserved_recovery']['sha256']==admission['recovery_sha256']
+ assert js(ROOT/'ADMISSION_B0.json')['contract']==contract
 for pp in Path('/proc').iterdir():
  if pp.name.isdigit() and int(pp.name)!=os.getpid():
   try:env=(pp/'environ').read_bytes().split(b'\0')
@@ -38,4 +45,4 @@ for arm in ARMS:
  assert recovery['contract']==contract and recovery['codec_sha256']==sha(frozen_codec());assert set(recovery['grads'])==set(recovery['requires']);assert set(recovery['rng'])=={'python','numpy','cpu','cuda'}
  reports[arm]['recovery']=dict(sha256=sha(root/'recovery/latest.pth'),steps=recovery['steps'],optimizer_states=len(recovery['optimizer']['state']),complete_epoch=True)
 assert states['B1'].keys()==states['B2'].keys() and all(torch.equal(states['B1'][k],states['B2'][k]) for k in states['B1']),'B1/B2 Task6 must coincide before T/F starts'
-print(json.dumps(dict(status='PASS',contract=contract,checkpoints=reports,codec_sha256=sha(frozen_codec()),codec_selected_epoch=best,B1_B2_Task6_exact=True,initial=initial,forward_calls=0,optimizer_calls=0,environment_steps=0,server_writes=0)))
+print(json.dumps(dict(status='PASS',contract=contract,engineering_lineage=lineage,checkpoints=reports,codec_sha256=sha(frozen_codec()),codec_selected_epoch=best,B1_B2_Task6_exact=True,initial=initial,forward_calls=0,optimizer_calls=0,environment_steps=0,server_writes=0)))

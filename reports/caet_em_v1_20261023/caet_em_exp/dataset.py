@@ -37,3 +37,23 @@ def retain(arm,task,rows):
  write(p.with_suffix('.json'),dict(sha256=sha(p),codec_sha256=sha(frozen_codec()),projection_sha256=sha(ROOT/'shared/projection.pth'),normalization_sha256=sha(ROOT/'shared/normalization.pth'),members={n:r['sample_sha256'] for n,r in memory.items()}))
  actual={p.name:sha(p) for p in (root/'buffer').glob('*.pt')};expected=dict(before);expected.update({r['destination']:r['sha256'] for r in selected});assert actual==expected
  write(root/'storage'/('task%d.json'%task),dict(status='PASS',selected=selected,parent_storage_sha256=sha(PARENT/'ra_coreset/storage'/('task%d.json'%task)),sidecar_sha256=sha(p),buffer=actual,counts={str(j):sum(n.startswith('t%d__'%j) for n in actual) for j in range(6,task+1)}))
+
+def diagnostic_dataset(arm,task):
+ # Training has already retained this task. Reconstruct its exact pre-retention
+ # population from the saved training manifest, not the now-expanded buffer.
+ root=arm_root(arm);manifest=js(root/'dataset'/('task%d.json'%task));labels=current(task);past={}
+ for j in range(6,task):
+  side=root/'sidecars'/('task%d.pth'%j);md=js(side.with_suffix('.json'))
+  assert sha(side)==md['sha256'] and md['codec_sha256']==sha(frozen_codec())
+  past.update(torch.load(side,map_location='cpu'))
+ rows=[];paths=[]
+ for i,item in enumerate(manifest['rows']):
+  tid=item['task'];name=item['sample'];assert item['index']==i and 6<=tid<=task
+  path=PARENT/'features'/str(task)/name if tid==task else root/'buffer'/('t%d__'%tid+name)
+  r=labels[name] if tid==task else past[path.name]
+  assert r['task']==tid and r['sample']==name and r['demo']==item['demo'] and r['u']==item['u']
+  assert sha(path)==r['sample_sha256']==item['sha256'] and r['action_mask'].tolist()==item['action_mask']
+  assert (r['action_mask']&r['response_mask']&r['visual_mask']).tolist()==item['effect_mask']
+  paths.append(str(path));rows.append(r)
+ assert len(rows)==POPS[task] and len(set(paths))==len(paths)
+ return EvidenceDataset(paths,rows)

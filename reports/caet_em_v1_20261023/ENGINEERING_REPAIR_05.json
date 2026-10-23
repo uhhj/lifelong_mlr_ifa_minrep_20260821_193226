@@ -1,0 +1,53 @@
+{
+  "status": "OWN_GPU_ADMISSION_PASS_DIAGNOSTIC_IN_PROGRESS",
+  "parent_root": "/data/mlr_ifa/experiment_workspaces/CAET_EM_OBJECT41_20261023_v1_engineering04",
+  "failure_snapshot": "snapshot_20261023_221016",
+  "preflight": "repair05_preflight_readonly_20261023_221421",
+  "cause": "diagnostics rebuilt native dataset after retain() added current-stage members to buffer; training manifest unchanged",
+  "fix": "diagnostic-only exact saved-stage population; SHA-pinned legacy B0 checkpoints admitted into new execution contract",
+  "completed_main_epochs": 200,
+  "completed_main_updates": 38400,
+  "retrain_completed": false,
+  "formal_episodes": 0,
+  "scientific_changes": false,
+  "changes": {
+    "controller.py": {
+      "old_sha256": "98eeea722ef432c2482649ea7b5533f7a0b116ba16ce6d038e20a3ae811afd5a",
+      "new_sha256": "ea70018f06ab9ae5e5eddcebd627baf8246337f173e4ca402034c11f43c6896f"
+    },
+    "caet_em_exp/common.py": {
+      "old_sha256": "88ca8a1dca364691df0ddc375d94376dbbcbb84ab899fd6bda294eb8b2baa6a1",
+      "new_sha256": "0937d8c1f8c034f849076da390db2c5aa05928971734fa6c05363db0be26a57b"
+    },
+    "caet_em_exp/dataset.py": {
+      "old_sha256": "fa139378eabc5a1f6cd7154ce03bac4ddaa07bc08ab2e53019488c080487c516",
+      "new_sha256": "a97e474bbf3d8799716267537c73f599bf47095634f8c4db97821d02292acf97"
+    },
+    "caet_em_exp/diagnose.py": {
+      "old_sha256": "fdc60f08f00074ebe9a0604d51c52d90ac113f31aa8a3984441855e701f4c589",
+      "new_sha256": "61c7bbd5bd434f9bb7475d90a1aa9dafb415bb1b17b4ca7ca974b1d73f0e8a98"
+    },
+    "caet_em_exp/model.py": {
+      "old_sha256": "4173354955375be50ca37d6ecd55cf583ab143675ac31f3d7b77b5ae94a79660",
+      "new_sha256": "0cd35a294edec2ecd0577ee3c10deb9cbb0040a3ca3855d950800304345d43b9"
+    },
+    "caet_em_exp/train.py": {
+      "old_sha256": "3a8320c5422fb0fd06ae43c9db4ee2f7c0f1a29280d8e8c4b253098e3ce7ea30",
+      "new_sha256": "68b1440e9226fe413250a06554cfb99fca98982d8b95a27251f9faaebe9ba041"
+    }
+  },
+  "new_entrypoints": [
+    "deploy_engineering05.py",
+    "caet_em_exp/continuation_admission.py"
+  ],
+  "root": "/data/mlr_ifa/experiment_workspaces/CAET_EM_OBJECT41_20261023_v1_engineering05",
+  "controller": 124820,
+  "contract_sha256": "2f6af444986a5710cbc84572f25ec15f9b3d44ea72aacbd01fa3ad4e624681b0",
+  "frozen_files": 1875,
+  "preserved_recovery_bytes": 367341909,
+  "legacy_policy_acceptance": "Only two exact SHA and canonical payload fingerprints pinned by new contract; new policies use new contract.",
+  "snapshot": "snapshot_20261023_221908",
+  "actual_complete_state_roundtrip": true,
+  "new_B0_isolated_optimizer_calls": 3,
+  "diagnostic_completion_pending": true
+}

@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from torch.nn import functional as F
-from .common import official,config,cpu
+from .common import official,config,cpu,validate_policy_contract
 from .readout import readout
 def mlp(a,b,c):return nn.Sequential(nn.Linear(a,b),nn.ReLU(),nn.Linear(b,c))
 def masked_mean(x,mask):
@@ -70,7 +70,7 @@ class Policy(nn.Module):
   z=self.predictor(h).reshape(len(h),4,64);e=z*self.effect_std+self.effect_mean;return self.decoder(e,x),z,ifa
  def decode_z(self,z,x):return self.decoder(z*self.effect_std+self.effect_mean,x)
 def strict_policy_restore(model,payload,contract,codec_sha):
- assert payload['contract']==contract and payload['codec_sha256']==codec_sha
+ validate_policy_contract(payload,contract);assert payload['codec_sha256']==codec_sha
  expected=model.state_dict();assert set(expected)==set(payload['model'])
  assert all(v.shape==payload['model'][k].shape and v.dtype==payload['model'][k].dtype for k,v in expected.items())
  model.load_state_dict(payload['model'],strict=True)

@@ -1,5 +1,13 @@
 # CAET-EM-v1
 
+最新2026-10-23 22:21 CST覆盖：engineering04在B0诊断7因入库后native读取扩大buffer触发KeyError(t7__1360.pt)停止，snapshot_20261023_221016保留exit1/零自身进程/GPU空闲/279hash不变。Task6/7各100完整epoch，共38400主更新、codec100epoch1900更新均已完成，不能重跑。repair05_preflight_readonly_20261023_221421实际CPU严格2个104键CP/原人口顺序mask/RA成员sidecar/完整恢复态通过；故障发生在诊断目标计算及前向之前，0额外正式环境。
+当前唯一root改为/data/mlr_ifa/experiment_workspaces/CAET_EM_OBJECT41_20261023_v1_engineering05，controller124820，合同2f6af444986a5710cbc84572f25ec15f9b3d44ea72aacbd01fa3ad4e624681b0，1875冻结项；ENTRY仍指engineering04三个原输出目录，复用而非重训。仅诊断改为按已保存训练manifest重建原阶段人口，训练make/科学结构/损失/预算均不改；旧B0两CP按完整SHA及payload fingerprint精确白名单接受，新CP绑定新合同。旧源码/失败/日志保留，完整Task7恢复文件367341909bytes在新root/provenance私有保全，禁止下载。shared codec/Task6/7证据只读链接复用，不导出或重训。
+snapshot_20261023_221908实际观察22:19:32，LOCAL_AUDIT及RECOVERY_AND_CAPACITY_AUDIT PASS_PROGRESS_NOT_FINAL：1875hash一致，200epoch38400主步，controller124820和diagnose124931存在、phase B0_diagnose7，未观察到诊断退出，不冒称已完成。新版本CONTINUATION_ADMISSION实际GPU恢复model/optimizer/scheduler/allRNG/grads/modes/requires/cursor/codec及数据SHA全字段精确roundtrip，Task6/7诊断人口1562/2261逐身份顺序mask PASS，0forward/update/env；新自己的B0 GPU3隔离优化器调用、下一步精确恢复及全部原准入PASS，不能套旧PASS。接续队列先diag7，再Task8/9及B0正式评估，然后B1/B2完整四阶段；B1/B2尚未准入，正式闭环0。下一3min核diagnose7/evidence8/首训练8，再按实际吞吐调整，不守候；旧Task7 ETA作废，总ETA未知。
+data root4.938023GB/system普通5.969146GB，恢复文件已分配；即使全额预留原2.1/3.6GiB及2/1GiB保留，余0.535681/1.029933GB仍正。不删资产/降预算/付费。最终外置wrappers追加继承合同与恢复证明绑定，仅AST尚待完整实际验收。原diagnose计数高估仍在本地最终成本报告独立校正，不改冻结计数或重跑。总体PARTIAL，保存发布后结束；下轮不得重跑deploy/build/controller，也不得重训已完成codec或Task6/7。
+
+以下历史记录保留，以上述最新证据为准。
+
+
 最新2026-10-23 22:07 CST覆盖：snapshot_20261023_220549/LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL，实际观察22:06:07，279冻结hash不变，controller124118/GPU124389健康，仍B0_train7。Task6完整100epoch15700更新已自然完成；下载Task7完整88epoch19976更新，累计188epoch35676主更新，快照后元数据前进保留。人口2261/227batch、每轮8578有效466屏蔽位置账目复算通过，无恢复重启改参，正式闭环0，B1/B2未自身准入。Task7最近10轮均7.474898秒，余12轮线性1.494980min纯计算，保存/诊断/准备另计，阶段参考22:08–22:13；下一3min检查自然阶段接续，不守候，后续阶段及正式评估未测，总ETA未知。data root5.306024GB/system普通6.120960GB，即使全额再预留2.1/3.6GiB及2/1GiB保留仍有正余量，不需容量操作。codec100epoch1900辅助更新、best index96及冻结SHA b9e153c25601c378c8a45f0eac42030a17e7d4428496c578850742c5a1b91d03不变。只读进度不是科学接受，不算局部闭环性能。本段覆盖旧进度/ETA/监控间隔。
 
 以下历史记录保留，以最新证据为准。

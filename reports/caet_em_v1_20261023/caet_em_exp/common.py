@@ -71,3 +71,16 @@ def restore(model,opt,sched,x):
  for n,m in model.named_modules():m.training=x['modes'][n]
  restore_rng(x['rng'])
 def to_device(x,device='cuda'):return {k:v.to(device) if torch.is_tensor(v) else v for k,v in x.items()}
+
+def policy_fingerprint(payload):
+ h=hashlib.sha256(json.dumps({k:v for k,v in payload.items() if k!='model'},sort_keys=True).encode())
+ for k,v in sorted(payload['model'].items()):
+  h.update(json.dumps([k,list(v.shape),str(v.dtype)]).encode());h.update(v.detach().cpu().contiguous().numpy().tobytes())
+ return h.hexdigest()
+def validate_policy_contract(payload,contract):
+ if payload['contract']==contract:return
+ manifest=js(ROOT/'RESUME_MANIFEST.json');key='%s_task%d'%(payload['arm'],payload['task'])
+ assert key in manifest['accepted_checkpoints'],'Unregistered legacy checkpoint'
+ record=manifest['accepted_checkpoints'][key]
+ assert payload['contract']==manifest['parent_contract'] and sha(record['path'])==record['sha256']
+ assert policy_fingerprint(payload)==record['payload_fingerprint'],'Legacy checkpoint payload changed'

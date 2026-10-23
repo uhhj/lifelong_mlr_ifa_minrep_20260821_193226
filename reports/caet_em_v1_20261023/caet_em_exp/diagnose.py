@@ -2,13 +2,13 @@
 import argparse,time
 from torch.utils.data import DataLoader
 from .common import *
-from .dataset import make
+from .dataset import diagnostic_dataset
 from .train import load_codec,targets
 from .model import Policy,selected,grouped_huber,huber,masked_mean,strict_policy_restore
 @torch.no_grad()
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('arm',choices=ARMS);ap.add_argument('task',type=int,choices=range(6,10));a=ap.parse_args();contract=verify();root=arm_root(a.arm);pack,codec=load_codec();p=Policy(a.arm,pack['model'],pack['statistics']).cuda().eval();cp=root/'models'/('task%d.pth'%a.task);strict_policy_restore(p,torch.load(cp,map_location='cpu'),contract,sha(frozen_codec()))
- ds=make(a.arm,a.task);targets(ds,codec);records=[];windows=0;tic=time.time()
+ ds=diagnostic_dataset(a.arm,a.task);targets(ds,codec);records=[];windows=0;tic=time.time()
  for b in DataLoader(ds,32,shuffle=False):
   b=to_device(b);q,z,_=p(b['feature']);base=selected(q);values=dict(predicted_action=grouped_huber(base[0],b['action']))
   if a.arm!='B0':

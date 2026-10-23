@@ -1,7 +1,7 @@
 import argparse,time
 from torch.utils.data import DataLoader,DistributedSampler
 from .common import *
-from .model import Codec,Policy,nll,masked_mean,huber
+from .model import Codec,Policy,nll,masked_mean,huber,strict_policy_restore
 from .dataset import make,current,retain
 from .transfer import build_cache,transfer_loss
 from .retention import retain_loss
@@ -36,7 +36,7 @@ def main():
  ap=argparse.ArgumentParser();ap.add_argument('arm',choices=ARMS);ap.add_argument('task',type=int,choices=range(6,10));ap.add_argument('--resume',action='store_true');args=ap.parse_args();a,t=args.arm,args.task;contract=verify();capacity();root=arm_root(a);assert js(ROOT/('ADMISSION_%s.json'%a))['status']=='PASS'
  pack,codec=load_codec();seed();p=Policy(a,pack['model'],pack['statistics']).cuda();root.mkdir(parents=True,exist_ok=True)
  if t>6:
-  prior=torch.load(root/'models'/('task%d.pth'%(t-1)),map_location='cpu');assert prior['contract']==contract and prior['codec_sha256']==sha(frozen_codec());p.load_state_dict(prior['model'],strict=True)
+  prior=torch.load(root/'models'/('task%d.pth'%(t-1)),map_location='cpu');strict_policy_restore(p,prior,contract,sha(frozen_codec()))
  ds=make(a,t);targets(ds,codec);rows=current(t)
  for r in ds.rows:
   if r['task']==t:rows[r['sample']]=r
