@@ -198,3 +198,13 @@ N snapshot_readonly_20261023_075148本地PASS，1462hash不变/六输出不存�
 N `snapshot_readonly_20261023_082156/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，1462hash不变、六输出不存在、尚未自身GPU准入；等待A整个队列自然有效exit0、全部receipt/GPU空闲/锁释放。`capacity_readonly_20261023_082210` 剩余新增界PASS_NOT_FINAL：data root9.890497GB扣余新增5.610294GB+2GiB后余2.132719GB，system普通7.978893GB扣三run+1GiB后余1.751191GB；GOAL43稳定私有1.261654GB抵扣新增界，已接受产物不再额外预留。不删旧资产、不下载payload、不降精度batch预算或付费扩容。全部取消任务不恢复。
 
 本轮仅只读快照与本地独立复算、保存报告及轻量证据发布；健康进度无新阶段变化，无需用户行动。两队列所选分支全部本地验收比较发布前保持总PARTIAL，同一30分钟监控继续；正常保存发布后结束，不守候。
+
+## 2026-10-23 08:56 CST — GOAL43继续正常评估，整体PARTIAL
+
+`snapshot_readonly_20261023_085135/LOCAL_AUDIT.json` PASS，实际观察08:51:10 CST：正式150/200、15完成vector+1进行中、7完整cell、0技术异常。逐episode初态hash/index/env seed/600步、attempt唯一性与成功向量通过；不计算部分性能指标或局部三seed均值。400完整epoch76100主步已完成，train6–9/retain6–9/labels7–9均exit0；1209冻结源调度及283输入hash、初始化同父、逐主步native-only/mask账目PASS。evaluate110830及10环境/pipeline110287/supervisor110187/controller93501正常，没有恢复、重启或改参；完整200/20、4CP100键、原成员载荷/IFA、有效退出0无残留与本地最终验收仍待完成。
+
+15批实测平均254.677500秒，08:51余5批线性21.223125分钟，另有效退出/轻量下载/本地最终验收与GOAL三seed描述汇总，暂参考09:20–09:45 CST，后续批次仍不确定，不承诺N开始或全队列完成。已验收OBJECT三seed和GOAL41/42只读，不重复训练评估或最终下载验收；GOAL比较仅描述，不产生新自动分支。N各自OBJECT41门仍同seedRA41的701/960。
+
+N `snapshot_readonly_20261023_085150/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，1462hash不变、95924仍正常WAITING、六输出不存在、尚未自己的GPU准入。`capacity_readonly_20261023_085204`剩余新增界PASS_NOT_FINAL：data root9.890226GB扣余新增5.610023GB+2GiB后余2.132719GB；system普通7.978881GB扣三run+1GiB后余1.751178GB。GOAL43稳定私有1.261924GB抵扣新增界，已接受产物不额外预留；0额外前向/优化器/环境/服务器写入，不删资产、下载payload、改精度batch预算或新付费。
+
+全部科学合同不变。两队列总PARTIAL，正常保存发布后结束不守候；健康无实质阶段变化，无需用户行动。同一监控保持30分钟，全部所选分支本地验收比较发布后才删除。
