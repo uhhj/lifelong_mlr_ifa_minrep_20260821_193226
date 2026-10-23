@@ -1,0 +1,1481 @@
+{
+  "status": "LOCAL_ACCEPTED_MATRIX_DECOMPOSITION_PASS",
+  "observed_at": "2026-10-23T12:34:26.744824+08:00",
+  "scope": "Existing accepted matrices only; no training, environment, remote writes or renewed acceptance",
+  "shared_token_source": {
+    "libero/lifelong/models/brief.py": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+    "libero/lifelong/models/complete_policy.py": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+    "libero/lifelong/models/modules/transformer_modules.py": "963a3e6474bfe1c8ff9e6d08617d7deed8e4c8be05d370fab1c0025e84a415df"
+  },
+  "source_capture_sha256": "15788a8f837685a88a978856e1fcd89425e57821201b39169d64be76ea03f2cb",
+  "suites": {
+    "OBJECT": {
+      "provenance": [
+        {
+          "seed": 41,
+          "path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_caet_v3_tac_eftr_object41\\final_ALIGN_seed41_20261022_220252\\LOCAL_FINAL_AUDIT.json",
+          "sha256": "548be0608381d29fa971915de22b58e88bad4627c18a0225b40665aaaec179bf",
+          "shared_token_source_exact": true,
+          "bc_valid": 1008100,
+          "bc_invalid": 44300,
+          "delta_AUC": {
+            "fraction": "27/320",
+            "percent": 8.4375
+          }
+        },
+        {
+          "seed": 42,
+          "path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_align_object_extension_goal_conditional\\final_OBJECT_42_20261023_012252\\LOCAL_FINAL_AUDIT.json",
+          "sha256": "69bdaf906fd79a5aaf107369be641b3a9d1ef426286e6db4daa41e9a4f80ef15",
+          "shared_token_source_exact": true,
+          "bc_valid": 1008600,
+          "bc_invalid": 43800,
+          "delta_AUC": {
+            "fraction": "11/96",
+            "percent": 11.458333333333334
+          }
+        },
+        {
+          "seed": 43,
+          "path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_align_object_extension_goal_conditional\\final_OBJECT_43_20261023_032427\\LOCAL_FINAL_AUDIT.json",
+          "sha256": "7364877c8e107a2fa01c1f7c969fff792b4dca2ff52eed38452110e897c08082",
+          "shared_token_source_exact": true,
+          "bc_valid": 1006700,
+          "bc_invalid": 45700,
+          "delta_AUC": {
+            "fraction": "3/320",
+            "percent": 0.9375
+          }
+        }
+      ],
+      "metrics": {
+        "AUC": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "391/480",
+              "797/960",
+              "73/96"
+            ],
+            "mean_fraction": "2309/2880",
+            "mean_percent": 80.17361111111111,
+            "sample_sd_percent": 3.6626595844388055
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "701/960",
+              "229/320",
+              "721/960"
+            ],
+            "mean_fraction": "703/960",
+            "mean_percent": 73.22916666666667,
+            "sample_sd_percent": 1.7800007802744884
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "27/320",
+              "11/96",
+              "3/320"
+            ],
+            "mean_fraction": "5/72",
+            "mean_percent": 6.944444444444445,
+            "sample_sd_percent": 5.417000523899359
+          }
+        },
+        "FWT": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "4/5",
+              "13/16",
+              "57/80"
+            ],
+            "mean_fraction": "31/40",
+            "mean_percent": 77.5,
+            "sample_sd_percent": 5.448623679425842
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "3/4",
+              "7/10",
+              "3/4"
+            ],
+            "mean_fraction": "11/15",
+            "mean_percent": 73.33333333333333,
+            "sample_sd_percent": 2.8867513459481287
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "1/20",
+              "9/80",
+              "-3/80"
+            ],
+            "mean_fraction": "1/24",
+            "mean_percent": 4.166666666666667,
+            "sample_sd_percent": 7.534642216677135
+          }
+        },
+        "NBT": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "-1/60",
+              "-1/30",
+              "-7/72"
+            ],
+            "mean_fraction": "-53/1080",
+            "mean_percent": -4.907407407407407,
+            "sample_sd_percent": 4.2522083345203825
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "1/24",
+              "-11/360",
+              "-1/72"
+            ],
+            "mean_fraction": "-1/1080",
+            "mean_percent": -0.09259259259259259,
+            "sample_sd_percent": 3.78158849197447
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "-7/120",
+              "-1/360",
+              "-1/12"
+            ],
+            "mean_fraction": "-13/270",
+            "mean_percent": -4.814814814814815,
+            "sample_sd_percent": 4.123230384854133
+          }
+        },
+        "OldFinal": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "7/10",
+              "23/30",
+              "23/30"
+            ],
+            "mean_fraction": "67/90",
+            "mean_percent": 74.44444444444444,
+            "sample_sd_percent": 3.8490017945975077
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "47/60",
+              "13/20",
+              "49/60"
+            ],
+            "mean_fraction": "3/4",
+            "mean_percent": 75.0,
+            "sample_sd_percent": 8.81917103688197
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "-1/12",
+              "7/60",
+              "-1/20"
+            ],
+            "mean_fraction": "-1/180",
+            "mean_percent": -0.5555555555555556,
+            "sample_sd_percent": 10.715167512214395
+          }
+        },
+        "FinalAll": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "3/4",
+              "4/5",
+              "29/40"
+            ],
+            "mean_fraction": "91/120",
+            "mean_percent": 75.83333333333333,
+            "sample_sd_percent": 3.8188130791298667
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "7/10",
+              "51/80",
+              "3/4"
+            ],
+            "mean_fraction": "167/240",
+            "mean_percent": 69.58333333333333,
+            "sample_sd_percent": 5.636562191028617
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "1/20",
+              "13/80",
+              "-1/40"
+            ],
+            "mean_fraction": "1/16",
+            "mean_percent": 6.25,
+            "sample_sd_percent": 9.437293044088436
+          }
+        }
+      },
+      "cells": [
+        {
+          "stage": 6,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "7/15",
+            "percent": 46.666666666666664
+          },
+          "RA": {
+            "fraction": "1/2",
+            "percent": 50.0
+          },
+          "delta": {
+            "fraction": "-1/30",
+            "percent": -3.3333333333333335
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "-1/480",
+            "percent": -0.20833333333333334
+          }
+        },
+        {
+          "stage": 7,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "49/60",
+            "percent": 81.66666666666667
+          },
+          "RA": {
+            "fraction": "23/30",
+            "percent": 76.66666666666667
+          },
+          "delta": {
+            "fraction": "1/20",
+            "percent": 5.0
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "1/320",
+            "percent": 0.3125
+          }
+        },
+        {
+          "stage": 7,
+          "task": 7,
+          "ALIGN": {
+            "fraction": "53/60",
+            "percent": 88.33333333333333
+          },
+          "RA": {
+            "fraction": "29/30",
+            "percent": 96.66666666666667
+          },
+          "delta": {
+            "fraction": "-1/12",
+            "percent": -8.333333333333334
+          },
+          "AUC_weight": "1/12",
+          "AUC_delta_contribution": {
+            "fraction": "-1/144",
+            "percent": -0.6944444444444444
+          }
+        },
+        {
+          "stage": 8,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "11/20",
+            "percent": 55.0
+          },
+          "RA": {
+            "fraction": "11/30",
+            "percent": 36.666666666666664
+          },
+          "delta": {
+            "fraction": "11/60",
+            "percent": 18.333333333333332
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "11/960",
+            "percent": 1.1458333333333333
+          }
+        },
+        {
+          "stage": 8,
+          "task": 7,
+          "ALIGN": {
+            "fraction": "11/12",
+            "percent": 91.66666666666667
+          },
+          "RA": {
+            "fraction": "19/20",
+            "percent": 95.0
+          },
+          "delta": {
+            "fraction": "-1/30",
+            "percent": -3.3333333333333335
+          },
+          "AUC_weight": "1/12",
+          "AUC_delta_contribution": {
+            "fraction": "-1/360",
+            "percent": -0.2777777777777778
+          }
+        },
+        {
+          "stage": 8,
+          "task": 8,
+          "ALIGN": {
+            "fraction": "19/20",
+            "percent": 95.0
+          },
+          "RA": {
+            "fraction": "14/15",
+            "percent": 93.33333333333333
+          },
+          "delta": {
+            "fraction": "1/60",
+            "percent": 1.6666666666666667
+          },
+          "AUC_weight": "1/8",
+          "AUC_delta_contribution": {
+            "fraction": "1/480",
+            "percent": 0.20833333333333334
+          }
+        },
+        {
+          "stage": 9,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "7/20",
+            "percent": 35.0
+          },
+          "RA": {
+            "fraction": "7/20",
+            "percent": 35.0
+          },
+          "delta": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "0",
+            "percent": 0.0
+          }
+        },
+        {
+          "stage": 9,
+          "task": 7,
+          "ALIGN": {
+            "fraction": "14/15",
+            "percent": 93.33333333333333
+          },
+          "RA": {
+            "fraction": "14/15",
+            "percent": 93.33333333333333
+          },
+          "delta": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "AUC_weight": "1/12",
+          "AUC_delta_contribution": {
+            "fraction": "0",
+            "percent": 0.0
+          }
+        },
+        {
+          "stage": 9,
+          "task": 8,
+          "ALIGN": {
+            "fraction": "19/20",
+            "percent": 95.0
+          },
+          "RA": {
+            "fraction": "29/30",
+            "percent": 96.66666666666667
+          },
+          "delta": {
+            "fraction": "-1/60",
+            "percent": -1.6666666666666667
+          },
+          "AUC_weight": "1/8",
+          "AUC_delta_contribution": {
+            "fraction": "-1/480",
+            "percent": -0.20833333333333334
+          }
+        },
+        {
+          "stage": 9,
+          "task": 9,
+          "ALIGN": {
+            "fraction": "4/5",
+            "percent": 80.0
+          },
+          "RA": {
+            "fraction": "8/15",
+            "percent": 53.333333333333336
+          },
+          "delta": {
+            "fraction": "4/15",
+            "percent": 26.666666666666668
+          },
+          "AUC_weight": "1/4",
+          "AUC_delta_contribution": {
+            "fraction": "1/15",
+            "percent": 6.666666666666667
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task": 6,
+          "name": "pick_up_the_butter_and_place_it_in_the_basket",
+          "trajectory_delta": {
+            "fraction": "1/20",
+            "percent": 5.0
+          },
+          "AUC_delta_contribution": {
+            "fraction": "1/80",
+            "percent": 1.25
+          },
+          "initial_ALIGN": {
+            "fraction": "7/15",
+            "percent": 46.666666666666664
+          },
+          "initial_RA": {
+            "fraction": "1/2",
+            "percent": 50.0
+          },
+          "final_ALIGN": {
+            "fraction": "7/20",
+            "percent": 35.0
+          },
+          "final_RA": {
+            "fraction": "7/20",
+            "percent": 35.0
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "7/60",
+            "percent": 11.666666666666666
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "3/20",
+            "percent": 15.0
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "3/10",
+                "percent": 30.0
+              },
+              "RA": {
+                "fraction": "9/20",
+                "percent": 45.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "2/5",
+                "percent": 40.0
+              },
+              "RA": {
+                "fraction": "1/10",
+                "percent": 10.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "7/20",
+                "percent": 35.0
+              },
+              "RA": {
+                "fraction": "1/2",
+                "percent": 50.0
+              }
+            }
+          ]
+        },
+        {
+          "task": 7,
+          "name": "pick_up_the_milk_and_place_it_in_the_basket",
+          "trajectory_delta": {
+            "fraction": "-7/180",
+            "percent": -3.888888888888889
+          },
+          "AUC_delta_contribution": {
+            "fraction": "-7/720",
+            "percent": -0.9722222222222222
+          },
+          "initial_ALIGN": {
+            "fraction": "53/60",
+            "percent": 88.33333333333333
+          },
+          "initial_RA": {
+            "fraction": "29/30",
+            "percent": 96.66666666666667
+          },
+          "final_ALIGN": {
+            "fraction": "14/15",
+            "percent": 93.33333333333333
+          },
+          "final_RA": {
+            "fraction": "14/15",
+            "percent": 93.33333333333333
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "-1/20",
+            "percent": -5.0
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "1/30",
+            "percent": 3.3333333333333335
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "17/20",
+                "percent": 85.0
+              },
+              "RA": {
+                "fraction": "19/20",
+                "percent": 95.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "1",
+                "percent": 100.0
+              },
+              "RA": {
+                "fraction": "9/10",
+                "percent": 90.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "19/20",
+                "percent": 95.0
+              },
+              "RA": {
+                "fraction": "19/20",
+                "percent": 95.0
+              }
+            }
+          ]
+        },
+        {
+          "task": 8,
+          "name": "pick_up_the_chocolate_pudding_and_place_it_in_the_basket",
+          "trajectory_delta": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "AUC_delta_contribution": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "initial_ALIGN": {
+            "fraction": "19/20",
+            "percent": 95.0
+          },
+          "initial_RA": {
+            "fraction": "14/15",
+            "percent": 93.33333333333333
+          },
+          "final_ALIGN": {
+            "fraction": "19/20",
+            "percent": 95.0
+          },
+          "final_RA": {
+            "fraction": "29/30",
+            "percent": 96.66666666666667
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "-1/30",
+            "percent": -3.3333333333333335
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "19/20",
+                "percent": 95.0
+              },
+              "RA": {
+                "fraction": "19/20",
+                "percent": 95.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "9/10",
+                "percent": 90.0
+              },
+              "RA": {
+                "fraction": "19/20",
+                "percent": 95.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "1",
+                "percent": 100.0
+              },
+              "RA": {
+                "fraction": "1",
+                "percent": 100.0
+              }
+            }
+          ]
+        },
+        {
+          "task": 9,
+          "name": "pick_up_the_orange_juice_and_place_it_in_the_basket",
+          "trajectory_delta": {
+            "fraction": "4/15",
+            "percent": 26.666666666666668
+          },
+          "AUC_delta_contribution": {
+            "fraction": "1/15",
+            "percent": 6.666666666666667
+          },
+          "initial_ALIGN": {
+            "fraction": "4/5",
+            "percent": 80.0
+          },
+          "initial_RA": {
+            "fraction": "8/15",
+            "percent": 53.333333333333336
+          },
+          "final_ALIGN": {
+            "fraction": "4/5",
+            "percent": 80.0
+          },
+          "final_RA": {
+            "fraction": "8/15",
+            "percent": 53.333333333333336
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "9/10",
+                "percent": 90.0
+              },
+              "RA": {
+                "fraction": "9/20",
+                "percent": 45.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "9/10",
+                "percent": 90.0
+              },
+              "RA": {
+                "fraction": "3/5",
+                "percent": 60.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "3/5",
+                "percent": 60.0
+              },
+              "RA": {
+                "fraction": "11/20",
+                "percent": 55.0
+              }
+            }
+          ]
+        }
+      ],
+      "AUC_diagonal_contribution": {
+        "fraction": "43/720",
+        "percent": 5.972222222222222
+      },
+      "AUC_post_learning_contribution": {
+        "fraction": "7/720",
+        "percent": 0.9722222222222222
+      },
+      "pooled_600_episode_successes": {
+        "ALIGN": "457",
+        "RA": "436"
+      },
+      "unweighted_10_cell_mean_delta": {
+        "fraction": "7/200",
+        "percent": 3.5
+      },
+      "paired_cell_counts": {
+        "positive": 12,
+        "equal": 7,
+        "negative": 11
+      },
+      "bc_masked_exposure_fraction": {
+        "fraction": "223/5262",
+        "percent": 4.237932345115926
+      },
+      "task9_population": {
+        "total": 3620,
+        "old": 2301,
+        "new": 1319,
+        "old_fraction": {
+          "fraction": "2301/3620",
+          "percent": 63.56353591160221
+        }
+      }
+    },
+    "GOAL": {
+      "provenance": [
+        {
+          "seed": 41,
+          "path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_align_object_extension_goal_conditional\\final_GOAL_41_20261023_052225\\LOCAL_FINAL_AUDIT.json",
+          "sha256": "ed9155f009b1e24e00066c9559ef6cf827d18fb617988cfcdba4a5d0407e23f8",
+          "shared_token_source_exact": true,
+          "bc_valid": 714400,
+          "bc_invalid": 45400,
+          "delta_AUC": {
+            "fraction": "3/64",
+            "percent": 4.6875
+          }
+        },
+        {
+          "seed": 42,
+          "path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_align_object_extension_goal_conditional\\final_GOAL_42_20261023_072244\\LOCAL_FINAL_AUDIT.json",
+          "sha256": "278e3a943faf6fcf8f19ccd509e10f951f6377d659bb345d0cbf84a404f1dd65",
+          "shared_token_source_exact": true,
+          "bc_valid": 714300,
+          "bc_invalid": 45500,
+          "delta_AUC": {
+            "fraction": "1/480",
+            "percent": 0.20833333333333334
+          }
+        },
+        {
+          "seed": 43,
+          "path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_align_object_extension_goal_conditional\\final_GOAL_43_20261023_092244\\LOCAL_FINAL_AUDIT.json",
+          "sha256": "b5bc528b2a3a659f53e22a2b7d295a0d2ee342467fcf4b6c45a8fa02a4595ef8",
+          "shared_token_source_exact": true,
+          "bc_valid": 711900,
+          "bc_invalid": 47900,
+          "delta_AUC": {
+            "fraction": "-3/40",
+            "percent": -7.5
+          }
+        }
+      ],
+      "metrics": {
+        "AUC": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "267/320",
+              "397/480",
+              "247/320"
+            ],
+            "mean_fraction": "73/90",
+            "mean_percent": 81.11111111111111,
+            "sample_sd_percent": 3.4174499440914072
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "63/80",
+              "33/40",
+              "271/320"
+            ],
+            "mean_fraction": "787/960",
+            "mean_percent": 81.97916666666667,
+            "sample_sd_percent": 3.002819855291578
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "3/64",
+              "1/480",
+              "-3/40"
+            ],
+            "mean_fraction": "-5/576",
+            "mean_percent": -0.8680555555555556,
+            "sample_sd_percent": 6.164636959512912
+          }
+        },
+        "FWT": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "73/80",
+              "17/20",
+              "13/16"
+            ],
+            "mean_fraction": "103/120",
+            "mean_percent": 85.83333333333333,
+            "sample_sd_percent": 5.0518148554092255
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "33/40",
+              "17/20",
+              "67/80"
+            ],
+            "mean_fraction": "67/80",
+            "mean_percent": 83.75,
+            "sample_sd_percent": 1.25
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "7/80",
+              "0",
+              "-1/40"
+            ],
+            "mean_fraction": "1/48",
+            "mean_percent": 2.0833333333333335,
+            "sample_sd_percent": 5.907269532815761
+          }
+        },
+        "NBT": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "1/6",
+              "1/15",
+              "11/120"
+            ],
+            "mean_fraction": "13/120",
+            "mean_percent": 10.833333333333334,
+            "sample_sd_percent": 5.204164998665332
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "1/18",
+              "1/18",
+              "-1/30"
+            ],
+            "mean_fraction": "7/270",
+            "mean_percent": 2.5925925925925926,
+            "sample_sd_percent": 5.132002392796673
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "1/9",
+              "1/90",
+              "1/8"
+            ],
+            "mean_fraction": "89/1080",
+            "mean_percent": 8.24074074074074,
+            "sample_sd_percent": 6.213370025854673
+          }
+        },
+        "OldFinal": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "3/4",
+              "43/60",
+              "11/15"
+            ],
+            "mean_fraction": "11/15",
+            "mean_percent": 73.33333333333333,
+            "sample_sd_percent": 1.6666666666666643
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "11/15",
+              "3/4",
+              "17/20"
+            ],
+            "mean_fraction": "7/9",
+            "mean_percent": 77.77777777777777,
+            "sample_sd_percent": 6.309898162000306
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "1/60",
+              "-1/30",
+              "-7/60"
+            ],
+            "mean_fraction": "-2/45",
+            "mean_percent": -4.444444444444445,
+            "sample_sd_percent": 6.735753140545634
+          }
+        },
+        "FinalAll": {
+          "ALIGN": {
+            "per_seed_fraction": [
+              "63/80",
+              "31/40",
+              "29/40"
+            ],
+            "mean_fraction": "61/80",
+            "mean_percent": 76.25,
+            "sample_sd_percent": 3.307189138830738
+          },
+          "RA": {
+            "per_seed_fraction": [
+              "61/80",
+              "4/5",
+              "69/80"
+            ],
+            "mean_fraction": "97/120",
+            "mean_percent": 80.83333333333333,
+            "sample_sd_percent": 5.0518148554092255
+          },
+          "paired_delta": {
+            "per_seed_fraction": [
+              "1/40",
+              "-1/40",
+              "-11/80"
+            ],
+            "mean_fraction": "-11/240",
+            "mean_percent": -4.583333333333333,
+            "sample_sd_percent": 8.322910148099242
+          }
+        }
+      },
+      "cells": [
+        {
+          "stage": 6,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "3/4",
+            "percent": 75.0
+          },
+          "RA": {
+            "fraction": "43/60",
+            "percent": 71.66666666666667
+          },
+          "delta": {
+            "fraction": "1/30",
+            "percent": 3.3333333333333335
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "1/480",
+            "percent": 0.20833333333333334
+          }
+        },
+        {
+          "stage": 7,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "3/4",
+            "percent": 75.0
+          },
+          "RA": {
+            "fraction": "19/30",
+            "percent": 63.333333333333336
+          },
+          "delta": {
+            "fraction": "7/60",
+            "percent": 11.666666666666666
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "7/960",
+            "percent": 0.7291666666666666
+          }
+        },
+        {
+          "stage": 7,
+          "task": 7,
+          "ALIGN": {
+            "fraction": "59/60",
+            "percent": 98.33333333333333
+          },
+          "RA": {
+            "fraction": "1",
+            "percent": 100.0
+          },
+          "delta": {
+            "fraction": "-1/60",
+            "percent": -1.6666666666666667
+          },
+          "AUC_weight": "1/12",
+          "AUC_delta_contribution": {
+            "fraction": "-1/720",
+            "percent": -0.1388888888888889
+          }
+        },
+        {
+          "stage": 8,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "3/5",
+            "percent": 60.0
+          },
+          "RA": {
+            "fraction": "7/12",
+            "percent": 58.333333333333336
+          },
+          "delta": {
+            "fraction": "1/60",
+            "percent": 1.6666666666666667
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "1/960",
+            "percent": 0.10416666666666667
+          }
+        },
+        {
+          "stage": 8,
+          "task": 7,
+          "ALIGN": {
+            "fraction": "59/60",
+            "percent": 98.33333333333333
+          },
+          "RA": {
+            "fraction": "1",
+            "percent": 100.0
+          },
+          "delta": {
+            "fraction": "-1/60",
+            "percent": -1.6666666666666667
+          },
+          "AUC_weight": "1/12",
+          "AUC_delta_contribution": {
+            "fraction": "-1/720",
+            "percent": -0.1388888888888889
+          }
+        },
+        {
+          "stage": 8,
+          "task": 8,
+          "ALIGN": {
+            "fraction": "17/20",
+            "percent": 85.0
+          },
+          "RA": {
+            "fraction": "11/15",
+            "percent": 73.33333333333333
+          },
+          "delta": {
+            "fraction": "7/60",
+            "percent": 11.666666666666666
+          },
+          "AUC_weight": "1/8",
+          "AUC_delta_contribution": {
+            "fraction": "7/480",
+            "percent": 1.4583333333333333
+          }
+        },
+        {
+          "stage": 9,
+          "task": 6,
+          "ALIGN": {
+            "fraction": "3/5",
+            "percent": 60.0
+          },
+          "RA": {
+            "fraction": "11/20",
+            "percent": 55.0
+          },
+          "delta": {
+            "fraction": "1/20",
+            "percent": 5.0
+          },
+          "AUC_weight": "1/16",
+          "AUC_delta_contribution": {
+            "fraction": "1/320",
+            "percent": 0.3125
+          }
+        },
+        {
+          "stage": 9,
+          "task": 7,
+          "ALIGN": {
+            "fraction": "29/30",
+            "percent": 96.66666666666667
+          },
+          "RA": {
+            "fraction": "1",
+            "percent": 100.0
+          },
+          "delta": {
+            "fraction": "-1/30",
+            "percent": -3.3333333333333335
+          },
+          "AUC_weight": "1/12",
+          "AUC_delta_contribution": {
+            "fraction": "-1/360",
+            "percent": -0.2777777777777778
+          }
+        },
+        {
+          "stage": 9,
+          "task": 8,
+          "ALIGN": {
+            "fraction": "19/30",
+            "percent": 63.333333333333336
+          },
+          "RA": {
+            "fraction": "47/60",
+            "percent": 78.33333333333333
+          },
+          "delta": {
+            "fraction": "-3/20",
+            "percent": -15.0
+          },
+          "AUC_weight": "1/8",
+          "AUC_delta_contribution": {
+            "fraction": "-3/160",
+            "percent": -1.875
+          }
+        },
+        {
+          "stage": 9,
+          "task": 9,
+          "ALIGN": {
+            "fraction": "17/20",
+            "percent": 85.0
+          },
+          "RA": {
+            "fraction": "9/10",
+            "percent": 90.0
+          },
+          "delta": {
+            "fraction": "-1/20",
+            "percent": -5.0
+          },
+          "AUC_weight": "1/4",
+          "AUC_delta_contribution": {
+            "fraction": "-1/80",
+            "percent": -1.25
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task": 6,
+          "name": "put_the_cream_cheese_in_the_bowl",
+          "trajectory_delta": {
+            "fraction": "13/240",
+            "percent": 5.416666666666667
+          },
+          "AUC_delta_contribution": {
+            "fraction": "13/960",
+            "percent": 1.3541666666666667
+          },
+          "initial_ALIGN": {
+            "fraction": "3/4",
+            "percent": 75.0
+          },
+          "initial_RA": {
+            "fraction": "43/60",
+            "percent": 71.66666666666667
+          },
+          "final_ALIGN": {
+            "fraction": "3/5",
+            "percent": 60.0
+          },
+          "final_RA": {
+            "fraction": "11/20",
+            "percent": 55.0
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "3/20",
+            "percent": 15.0
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "1/6",
+            "percent": 16.666666666666668
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "11/20",
+                "percent": 55.0
+              },
+              "RA": {
+                "fraction": "7/20",
+                "percent": 35.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "3/5",
+                "percent": 60.0
+              },
+              "RA": {
+                "fraction": "11/20",
+                "percent": 55.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "13/20",
+                "percent": 65.0
+              },
+              "RA": {
+                "fraction": "3/4",
+                "percent": 75.0
+              }
+            }
+          ]
+        },
+        {
+          "task": 7,
+          "name": "turn_on_the_stove",
+          "trajectory_delta": {
+            "fraction": "-1/45",
+            "percent": -2.2222222222222223
+          },
+          "AUC_delta_contribution": {
+            "fraction": "-1/180",
+            "percent": -0.5555555555555556
+          },
+          "initial_ALIGN": {
+            "fraction": "59/60",
+            "percent": 98.33333333333333
+          },
+          "initial_RA": {
+            "fraction": "1",
+            "percent": 100.0
+          },
+          "final_ALIGN": {
+            "fraction": "29/30",
+            "percent": 96.66666666666667
+          },
+          "final_RA": {
+            "fraction": "1",
+            "percent": 100.0
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "1/60",
+            "percent": 1.6666666666666667
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "1",
+                "percent": 100.0
+              },
+              "RA": {
+                "fraction": "1",
+                "percent": 100.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "1",
+                "percent": 100.0
+              },
+              "RA": {
+                "fraction": "1",
+                "percent": 100.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "9/10",
+                "percent": 90.0
+              },
+              "RA": {
+                "fraction": "1",
+                "percent": 100.0
+              }
+            }
+          ]
+        },
+        {
+          "task": 8,
+          "name": "put_the_bowl_on_the_plate",
+          "trajectory_delta": {
+            "fraction": "-1/60",
+            "percent": -1.6666666666666667
+          },
+          "AUC_delta_contribution": {
+            "fraction": "-1/240",
+            "percent": -0.4166666666666667
+          },
+          "initial_ALIGN": {
+            "fraction": "17/20",
+            "percent": 85.0
+          },
+          "initial_RA": {
+            "fraction": "11/15",
+            "percent": 73.33333333333333
+          },
+          "final_ALIGN": {
+            "fraction": "19/30",
+            "percent": 63.333333333333336
+          },
+          "final_RA": {
+            "fraction": "47/60",
+            "percent": 78.33333333333333
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "13/60",
+            "percent": 21.666666666666668
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "-1/20",
+            "percent": -5.0
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "7/10",
+                "percent": 70.0
+              },
+              "RA": {
+                "fraction": "17/20",
+                "percent": 85.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "11/20",
+                "percent": 55.0
+              },
+              "RA": {
+                "fraction": "7/10",
+                "percent": 70.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "13/20",
+                "percent": 65.0
+              },
+              "RA": {
+                "fraction": "4/5",
+                "percent": 80.0
+              }
+            }
+          ]
+        },
+        {
+          "task": 9,
+          "name": "put_the_wine_bottle_on_the_rack",
+          "trajectory_delta": {
+            "fraction": "-1/20",
+            "percent": -5.0
+          },
+          "AUC_delta_contribution": {
+            "fraction": "-1/80",
+            "percent": -1.25
+          },
+          "initial_ALIGN": {
+            "fraction": "17/20",
+            "percent": 85.0
+          },
+          "initial_RA": {
+            "fraction": "9/10",
+            "percent": 90.0
+          },
+          "final_ALIGN": {
+            "fraction": "17/20",
+            "percent": 85.0
+          },
+          "final_RA": {
+            "fraction": "9/10",
+            "percent": 90.0
+          },
+          "mean_initial_to_final_drop_ALIGN": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "mean_initial_to_final_drop_RA": {
+            "fraction": "0",
+            "percent": 0.0
+          },
+          "final_per_seed": [
+            {
+              "seed": 41,
+              "ALIGN": {
+                "fraction": "9/10",
+                "percent": 90.0
+              },
+              "RA": {
+                "fraction": "17/20",
+                "percent": 85.0
+              }
+            },
+            {
+              "seed": 42,
+              "ALIGN": {
+                "fraction": "19/20",
+                "percent": 95.0
+              },
+              "RA": {
+                "fraction": "19/20",
+                "percent": 95.0
+              }
+            },
+            {
+              "seed": 43,
+              "ALIGN": {
+                "fraction": "7/10",
+                "percent": 70.0
+              },
+              "RA": {
+                "fraction": "9/10",
+                "percent": 90.0
+              }
+            }
+          ]
+        }
+      ],
+      "AUC_diagonal_contribution": {
+        "fraction": "1/360",
+        "percent": 0.2777777777777778
+      },
+      "AUC_post_learning_contribution": {
+        "fraction": "-11/960",
+        "percent": -1.1458333333333333
+      },
+      "pooled_600_episode_successes": {
+        "ALIGN": "478",
+        "RA": "474"
+      },
+      "unweighted_10_cell_mean_delta": {
+        "fraction": "1/150",
+        "percent": 0.6666666666666666
+      },
+      "paired_cell_counts": {
+        "positive": 9,
+        "equal": 10,
+        "negative": 11
+      },
+      "bc_masked_exposure_fraction": {
+        "fraction": "694/11397",
+        "percent": 6.089321751338072
+      },
+      "task9_population": {
+        "total": 3365,
+        "old": 1396,
+        "new": 1969,
+        "old_fraction": {
+          "fraction": "1396/3365",
+          "percent": 41.48588410104012
+        }
+      }
+    }
+  }
+}
