@@ -1,3 +1,6 @@
+# Latest override 2026-10-23 17:40 CST
+snapshot_20261023_173929 LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL：1532epochs13056updates7full200fits，Task6 P0五折/G两折完成，当前G_task6_fold2快照131epochs/下载132，EVENTS差异保留。189hash及父合同不变，GPU122635/controller122601健康，admissionexit0，0环境，无重启。21caseJSON SHA已核，不是最终CP审计。P0五fit均27.011363秒/G首两fit均105.536580秒，新S与Task7未实测；借旧S的混合线性余约33.69min约18:13，仍参考18:10–18:25训练另加最终审计。下次8min以观察S自身fit，之后按实际剩余5–15min，不空守候。data root5.584GB/systemordinary6.645GB安全。健康无变化安静；一轮检查保存发布后结束，不算局部性能/门。此进度覆盖以下旧快照与5min间隔。
+
 # Active capacity-only queue: no redeploy
 
 2026-10-23 17:35 CST。只跟踪D:/论文课题研究/MLR+IFA/execution/20261023_readout_capacity，先读REPORT/PROTOCOL/IMPLEMENTATION_NOTES/RUN_STATUS/ACTIVE_ROOT和最新证据。当前实际root /data/mlr_ifa/experiment_workspaces/READOUT_CAPACITY_OBJECT41_20261023_v1_engineering02，controller122601，合同8ad12b59271e3d6478c4b8e6a2480adba5ccc55b8b38ec5fe1fe6d4e305eb9b0，189冻结项。不要重跑deploy/build_capacity/prepare_engineering02。
