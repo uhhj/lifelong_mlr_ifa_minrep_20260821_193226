@@ -23,3 +23,9 @@ snapshot_20261023_163201/LOCAL_AUDIT passed:1278 completeepochs11024updates6full
 18 downloaded budget cases bound bySHA; six50prefix cases compare train/validation/allthree testintervention scalar metrics and selectedvalidationepoch against acceptedv2 cases, server-reportedprediction maxdifference0. PREFIX_PROGRESS_AUDIT PASS_LOCAL_PREFIX_SCALAR_AND_METADATA_BINDING_NOT_FINAL_CP_AUDIT. This is scalar/metadata binding; actual independent CPUcheckpoint/completeprediction audit still waitsall30trajectories. No partial performance or gate inference.
 
 MeasuredG/P0 plus priorS extrapolation gives remaining38.31min from16:32, linear~17:10; reference17:10–17:20CST training, finalauditextra, Sstillunmeasured. Same monitor changedto8min toobserveSnearTask6Gcompletion, thenrecompute5–15min fromactual. Diskdata root5830090752bytes andsystemordinary6644756480bytes retainreserves. No capacityaction.
+
+## 16:43 CST checked progress — PARTIAL
+
+snapshot_20261023_164257 LOCAL_AUDIT passed:2391completeepochs20528updates11full200epochfits. SnapshotS_task6_fold1 completed190epochs; download191, documentedEVENTSchange. Task6P0/G fivefolds each plusSfold0complete. Currentcontroller121796/GPU121830 healthy, admissionexit0,88source/metadata andparenthashchecks unchanged; no restart/parameter/environment changes. PREFIX_PROGRESS_AUDIT11complete50prefixes binds full train/validation/testintervention scalar metrics, selectedepoch andparentpredictionSHA; serverreportedmaxdifference0, metadata/scalarbinding only, final90CPauditpending. No partial performance/gateclaim.
+
+ActualP0mean30.245771s(5fits),Gmean119.766987s(5),S119.910269s(1). Currenttimingextrapolation remaining28.59min from16:43,~17:11; retain17:10–17:20trainingreference with finalauditextra. Sonlyonefit/Task7unmeasured, notguaranteed. Nextsameheartbeat10min toobserveTask7andrefine5–15min. Data root5788033024bytes/systemordinary6644752384bytes preserve2GiB/1GiB; noasset/capacityaction.
