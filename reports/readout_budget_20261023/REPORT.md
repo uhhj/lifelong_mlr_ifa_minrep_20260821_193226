@@ -41,3 +41,24 @@ Task7Gfirstfit114.095875s;Task6Sfivefitmean115.960626s,Task7Sstillunmeasured. Re
 snapshot_20261023_170458 LOCAL_AUDIT passed:5498completeepochs45784updates27full200epochfits. AllTask6 andTask7P0/Gcomplete;Task7Sfold0/1complete, fold2snapshot97completeepochs/download98. EVENTSmismatchrecorded.88hash+parentchecks unchanged, GPU121830/controller121796 healthy, admissionexit0,no engineeringfailure orrestart.81caseJSONSHAchecked;27full50prefixes bind selectedepochs/allpartitions/intervention scalars toacceptedv2,parentpredictionSHA,serverdifference0. Thisis notfinal90CPorcompletegateacceptance. No partialperformanceclaim.
 
 Task7Gfivefitmean109.266178s/Sfirsttwofitmean108.459315s. RemainingcurrentStail+2fits linear4.55minfrom17:05,~17:09:33; trainingreference17:09–17:12,serverauditandlocal90CPacceptanceadditional. Nextsameheartbeat5min tochecknaturalexit; do notwaitthisroundorforcecompletion. Data root5660807168bytes/systemordinary6644748288bytes retainreserves; no capacityaction.
+
+## 最终验收：预算对照已完成，科学 A 关失败
+
+2026-10-23 17:09:31 CST 控制器自然退出0，全部阶段exit0，GPU空闲。最终snapshot_20261023_171206的所有下载SHA一致、无变动元数据；30条轨迹/6000epoch/49800正式探针更新完整，额外准入9更新单列，策略更新和环境调用均0。
+
+final_scalars_readonly_20261023_171248实际CPU strict加载90个检查点，并复核每条完整训练游标、验证集最优选择、所有划分身份、三预算误差和50前缀复现、父Patch最终SHA、源合同、退出及无自身进程。最终本地final_A_BUDGET_20261023/LOCAL_FINAL_AUDIT独立复算18合并case、77814误差行的分位数、demo配对CI、动态与视觉依赖，真实PASS；selected=null、STOP_STATE_GATE。CLOSURE_INDEX绑定完整证据。新最终路径已实际验证，无包装失败或重训。停止重复检查、下载或训练本队列。
+
+200epoch范围内验证选优的正式 pooled test median/P90（mm）：
+
+|模型|Task6 物体—末端|Task6 物体—目标|Task7 物体—末端|Task7 物体—目标|
+|---|---:|---:|---:|---:|
+|G 全局|9.69 / 25.17|21.84 / 63.22|11.05 / 26.94|22.69 / 47.21|
+|S Patch|9.73 / 28.44|19.74 / 64.77|12.35 / 32.15|21.23 / 51.25|
+
+严格要求仍为median≤10/P90≤25及其他全部条件。G的Task6末端P90 25.17也不能按舍入放行。G/S全部8个task-target检查失败；S的Task7末端视觉动态优势为-0.0679mm、CI下界-0.0428mm；G/S Task6目标对P0的CI均跨0。保留全部负项。G200对S200的四个demo配对探索CI均跨0，四个S的P90仍比G高，不宣称Patch有显著优势。
+
+预算增加确实改善训练拟合，但没有解决主要的跨演示目标定位误差。以下是每折median的均值，不能和上表pooled量混用：G物体—目标训练Task6/7由7.41/7.57降至4.88/3.73mm，测试由23.09/24.66变22.75/22.98mm；S训练由12.35/12.18降至6.92/5.21mm，测试由24.22/22.84变19.75/20.96mm。S的Task6目标验证median反而18.35→18.90mm（检查点按两个位置目标的联合验证分数选，单目标不保证单调）。支持预算不足是部分原因，同时存在显著训练—留出差距；不能据此把唯一瓶颈归于CLIP或Temporal。完整50/100/200、所有负目标与探索性配对比较见BUDGET_DIAGNOSTICS.json。没有用测试结果改选50/100预算。
+
+实际训练与选后评估fit时间合计2558.837756秒（42.6473分钟），另有准备/准入/审计。P0/G/S分别301.376703/1145.165824/1112.295230秒；参数680711/598151/598151，各16600更新。跨结构不称等算力，正式预算对照保留相同输入与优化规则。
+
+下一步只考虑已授权的小网络容量诊断，独立登记后再新根实施；当前没有新训练，B仍不启动。将优先缩小Temporal内部FFN，保留512→128投影、query和空间输入，避免再次加重读出压缩；不同时改学习率、正则或预算。原A/v2和本次失败不改写。反复使用同一批演示只能形成探索性证据，不能视作外部独立验证或无限试验至过关。
