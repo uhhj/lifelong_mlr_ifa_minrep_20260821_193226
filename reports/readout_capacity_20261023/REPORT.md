@@ -27,3 +27,10 @@ P0五fit均27.011363秒，G首两fit均105.536580秒；新S与Task7尚未实测�
 snapshot_20261023_174927/LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL：下载2560完整epoch、21880正式更新、12完整200epoch拟合。Task6 P0/G各五折及S两折完成；当前S_task6_fold2快照159完整epoch、下载160，EVENTS前进已记录。189冻结及父hash不变，controller122601/GPU122635健康，准入exit0；36个case JSON的下载SHA通过，未作最终CP/性能门结论，无重启或改参。
 
 自身Task6 P0/G均5fit平均27.011363/111.855703秒，S首2fit平均114.891667秒。用当前Task6实测外推未测Task7，线性剩余约25.39分钟，训练约18:15；仍保留18:10–18:25参考，最终独立验收另计。10分钟后检查Task7实际吞吐再校正。data root5.556806GB、system普通6.644732GB满足保留。总体PARTIAL，0策略更新/环境。
+
+
+## 18:01 本轮只读检查
+
+snapshot_20261023_180113/LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL：下载4552完整epoch、38216正式更新、22完整200epoch拟合。Task6全部15拟合、Task7 P0五折及G两折完成。当前G_task7_fold2快照150epoch/下载152，EVENTS前进已保留。189hash及父合同不变，GPU122635/controller122601健康，准入exit0，无重启/改参。66个case JSON下载SHA核验，不代表最终CP审计或科学接受。
+
+Task7 P0五fit平均29.501652秒、G首两fit平均112.034655秒；Task6 S五fit均114.336808秒，Task7 S尚未实测。按自身Task7 G及Task6 S外推，余约13.82分钟至18:15左右；训练参考收窄至18:12–18:20，服务器及本地最终独立验收另计。8分钟后检查Task7 S实际吞吐，临近自然退出再缩短间隔。data root5.498089GB/system普通6.644732GB，满足保留。总体PARTIAL，不算部分指标或判门。
