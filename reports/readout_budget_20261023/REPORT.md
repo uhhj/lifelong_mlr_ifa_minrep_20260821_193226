@@ -35,3 +35,9 @@ ActualP0mean30.245771s(5fits),Gmean119.766987s(5),S119.910269s(1). Currenttiming
 snapshot_20261023_165500 LOCAL_AUDIT passed:4391completeepochs36928updates21full200epochfits. All15Task6fits and5Task7P0 plusfirstTask7Gcomplete. SnapshotG_task7_fold1 has190completeepochs, download191; EVENTSchangeexplicit. GPU121830/controller121796healthy, admissionexit0,88source/metadataandparenthashchecks unchanged. PREFIX_PROGRESS_AUDIT21complete50prefixes comparesv2allpartitions/interventions/selectedepochs withboundparentpredictionSHA; serverreporteddiff0.63caseJSONSHAchecked. Thisremainsmetadata/scalarbinding, final90CPauditpending; no partialperformance/gateclaim.
 
 Task7Gfirstfit114.095875s;Task6Sfivefitmean115.960626s,Task7Sstillunmeasured. Remaininglinear15.46min from16:55,~17:10; retain17:10–17:20trainingreference, finalauditextra. Next8min toobserveTask7Sthenupdatefromactual. Dataroot5705625600bytes/systemordinary6644752384bytes preserve2GiB/1GiB; no capacityaction/restart/parameterchanges.
+
+## 17:05 CST checked progress — PARTIAL
+
+snapshot_20261023_170458 LOCAL_AUDIT passed:5498completeepochs45784updates27full200epochfits. AllTask6 andTask7P0/Gcomplete;Task7Sfold0/1complete, fold2snapshot97completeepochs/download98. EVENTSmismatchrecorded.88hash+parentchecks unchanged, GPU121830/controller121796 healthy, admissionexit0,no engineeringfailure orrestart.81caseJSONSHAchecked;27full50prefixes bind selectedepochs/allpartitions/intervention scalars toacceptedv2,parentpredictionSHA,serverdifference0. Thisis notfinal90CPorcompletegateacceptance. No partialperformanceclaim.
+
+Task7Gfivefitmean109.266178s/Sfirsttwofitmean108.459315s. RemainingcurrentStail+2fits linear4.55minfrom17:05,~17:09:33; trainingreference17:09–17:12,serverauditandlocal90CPacceptanceadditional. Nextsameheartbeat5min tochecknaturalexit; do notwaitthisroundorforcecompletion. Data root5660807168bytes/systemordinary6644748288bytes retainreserves; no capacityaction.
