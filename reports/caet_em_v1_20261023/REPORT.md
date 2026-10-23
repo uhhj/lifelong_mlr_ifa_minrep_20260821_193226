@@ -1,5 +1,10 @@
 # CAET-EM-v1
 
+最新2026-10-23 21:58 CST覆盖：snapshot_20261023_215123/LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL，实际观察21:56，279冻结hash不变，controller124118/GPU124389健康，B0已自然进入Task7。Task6完整100epoch15700主更新、train6/diagnose6/evidence7均exit0；下载Task7完整19epoch4313更新，累计119epoch20013主更新。Task7元数据快照后前进已如实记录，人口2261/227batch、每轮8578有效466屏蔽位置独立复算通过；无重启改参，正式闭环0，B1/B2未自身准入。Task7最近10轮均8.303793秒，余81轮线性11.210121min纯计算，另恢复保存/诊断/阶段准备，Task7参考22:08–22:13，下一8min检查，后续阶段及正式评估未测，总ETA未知。data root5.306069GB/system普通6.121038GB，即使不抵扣已分配、仍全额预留原2.1/3.6GiB新增界及2/1GiB保留也有正余量；不删除资产或新增资源。codec100epoch1900辅助更新已完成冻结、best index96和SHA b9e153c25601c378c8a45f0eac42030a17e7d4428496c578850742c5a1b91d03不变；三组最终完整路径尚待真实验收，不把进度/离线诊断当闭环收益。此段覆盖旧Task6进度与ETA。
+
+以下历史记录保留，以最新证据为准。
+
+
 状态：PARTIAL，2026-10-23 21:47 CST更新。共享Task6 codec已完成冻结，B0正式Task6训练中。用户方案见USER_METHOD.txt，冻结的补充定义见PROTOCOL.md。
 
 最新snapshot_20261023_214425本地审计PASS_PROGRESS_NOT_FINAL：B0完整25epoch3925主更新，人口1562/每轮157batch、5868有效380屏蔽位置复算通过。B0自己的3隔离GPU优化器调用/0环境，完整恢复、最新两相机/状态依赖、长度1–8、空mask、mixture训练/argmaxNormal部署检查PASS，admission exit0。controller124118、GPU124266健康，279hash不变。B1/B2尚未自身准入，正式闭环0。
