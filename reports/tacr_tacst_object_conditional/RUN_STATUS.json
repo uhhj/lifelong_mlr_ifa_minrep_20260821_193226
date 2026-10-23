@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL",
-  "observation": "2026-10-23T10:21:58.599074+08:00",
-  "phase": "TACR_41_TASK9_TRAINING",
+  "observation": "2026-10-23T10:51:54.483830+08:00",
+  "phase": "TACR_41_FORMAL_EVALUATION",
   "queue": "/data/mlr_ifa/experiment_workspaces/TACR_TACST_OBJECT_conditional_20261023",
   "controller_pid": 95924,
   "frozen_files": 1462,
@@ -17,27 +17,27 @@
   },
   "runs": {
     "TACR_41": {
-      "epochs": 337,
-      "main_steps": 82694,
-      "representation_steps": 82694,
+      "epochs": 400,
+      "main_steps": 105500,
+      "representation_steps": 105500,
       "formal": {
-        "records": 0,
-        "completed_vectors": 0,
-        "started_vectors": 0,
-        "completed_cells": 0,
+        "records": 30,
+        "completed_vectors": 3,
+        "started_vectors": 4,
+        "completed_cells": 1,
         "technical_exceptions": 0,
-        "mean_vector_seconds": null,
-        "remaining_evaluation_hours": null
+        "mean_vector_seconds": 227.10971013704935,
+        "remaining_evaluation_hours": 1.0724625200916218
       },
       "exposures": {
-        "bc_valid": 789175,
-        "bc_invalid": 35165,
-        "effects": 784435,
+        "bc_valid": 1008100,
+        "bc_invalid": 44300,
+        "effects": 1002100,
         "anchors": 0,
         "key_reads": 0
       },
       "preflight_pass": true,
-      "status": "RUNNING_PARTIAL",
+      "status": "MAIN_TRAINING_COMPLETE_EVALUATION_PARTIAL",
       "input_hashes": {
         "count": 288,
         "failures": []
@@ -58,7 +58,7 @@
   "CPU_validation": "PASS_NOT_GPU_ADMISSION",
   "GPU_admission_pending": false,
   "launch_directory": "launch_20261023_001410",
-  "snapshot": "snapshot_readonly_20261023_102144",
+  "snapshot": "snapshot_readonly_20261023_105138",
   "capacity": {
     "/": {
       "free": 7979462656,
@@ -78,8 +78,8 @@
   "monitor_receipt": "AUTOMATION_UPDATE_RECEIPT.json",
   "disk": {
     "/": {
-      "ordinary": 6757253120,
-      "root": 9860780032
+      "ordinary": 6601048064,
+      "root": 9704574976
     },
     "/data": {
       "ordinary": 5019721728,
@@ -88,10 +88,10 @@
   },
   "capacity_recheck": {
     "/": {
-      "free": 6757253120,
+      "free": 6601048064,
       "reserve": 1073741824,
-      "remaining_additional_bound": 3932578610,
-      "margin": 1750932686
+      "remaining_additional_bound": 3776402226,
+      "margin": 1750904014
     },
     "/data": {
       "free": 9889759232,
@@ -108,7 +108,7 @@
     "GOAL_43"
   ],
   "prior_active": null,
-  "capacity_evidence": "capacity_readonly_20261023_102200",
+  "capacity_evidence": "capacity_readonly_20261023_105156",
   "external_light_wrapper_root_prefix": "FIXED_SYNTAX_PASS_NOT_ACTUAL_NEW_FINAL_DOWNLOAD",
   "prior_OBJECT_gate": "PASS_LOCAL_AND_SERVER_MEAN_AUC_2309/2880_VS_703/960",
   "local_connection_attempt": "snapshot_readonly_20261023_062138/LOCAL_CONNECTION_ATTEMPT.json",
@@ -116,16 +116,17 @@
   "active": "TACR_41",
   "prior_queue_local_status": "COMPLETED_LOCAL_INDEPENDENT_PASS",
   "prior_queue_closure": "../20261022_align_object_extension_goal_conditional/aggregate_GOAL_20261023_0925/QUEUE_CLOSURE_AND_TASK_AUDIT.json",
-  "active_process_evidence": "snapshot_readonly_20261023_102144/EVIDENCE.json (GPU PID114927 equals train9 status PID; logs progressing)",
+  "active_process_evidence": "snapshot_readonly_20261023_105138/EVIDENCE.json (GPU evaluate PID115145; actual EVALUATING status)",
   "ETA": {
-    "Task9_completed_epochs": 37,
-    "Task9_mean_last10_seconds": 13.671872186660767,
-    "Task9_remaining_minutes_linear": 14.355465795993807,
-    "main_training_reference_finish_CST": "2026-10-23 10:36–10:42",
-    "formal_evaluation_finish_CST": null,
-    "total_finish_CST": null,
-    "basis": "10:21:58 snapshot Task9 37 complete epochs, last10 actual throughput; deployment preparation and new formal evaluation unmeasured.",
+    "completed_vectors": 3,
+    "mean_vector_seconds": 227.10971013704935,
+    "remaining_evaluation_minutes_linear": 64.3477512054973,
+    "TACR41_and_local_acceptance_reference_finish_CST": "2026-10-23 12:05–12:30",
+    "total_queue_finish_CST": null,
+    "basis": "10:51:54 three completed vectors mean227.109710sec, remaining17 linear64.347751min, plus effective exit/light download/local final acceptance. Small early sample includes startup; calibrate later, not guaranteed.",
     "provisional": true
   },
-  "GPU_admission_pending_other_runs": true
+  "GPU_admission_pending_other_runs": true,
+  "deployment_checkpoint_evidence": "deployment_checkpoint_readonly_20261023_105439",
+  "deployment_progress_audit": "snapshot_readonly_20261023_105138/DEPLOYMENT_PROGRESS_AUDIT.json"
 }

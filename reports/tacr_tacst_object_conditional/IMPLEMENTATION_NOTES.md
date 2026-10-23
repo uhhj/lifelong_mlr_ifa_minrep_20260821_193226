@@ -20,3 +20,5 @@ import_readonly_20261023_002022：六入口各15个实际活动模块全部导�
 2026-10-23 01:25 CST：snapshot_readonly_20261023_012140/LOCAL_AUDIT PASS，新95924仍WAITING、1462hash不变、六输出不存在，无GPU准入。旧ALIGN42已在A/final_OBJECT_42_20261023_012252完整本地独立PASS，AUC83.020833%对同seedRA71.5625%；旧43已自动GPU准入并训练中，本N不越过旧GOAL条件流程。capacity_readonly_20261023_012323按剩余新增分配计当前43已写稳定私有1.009GB的信用，data root13.990GB，对最坏剩余11.017GB＋2GiB后仍余0.826GB；system普通7.979GB仍余1.752GB。不能拿部署时全额四run界重复扣当前已耗的空间而误报满盘；此仍是规划界，不是最终容量验收。
 
 外置resume_light_download.py发现原复制工具仅允许/data元数据路径，已加明确的/root/mlr_ifa/experiments/前缀以匹配冻结TACR41/43与TACRST42输出；仍只.json/.jsonl/.exit、包目录内路径、<8MiB、manifest全SHA，不下载pth或payload。仅外置包装修改/语法验证，无服务器源码或合同修改；实际新组最终下载仍待真实验收。N无新性能结果或可用吞吐ETA。
+
+2026-10-23T10:56:37.860486+08:00：首次正式部署进度由外置deployment_checkpoint_readonly.py在独立CPU进程逐阶段读取主/部署/学生CP，仅结构/参数/元数据检查无forward；audit_deployment_progress.py本地将当前原始episode/attempt/cell的100+14键加载记录及SHA绑定这份证据。主模型CPU未实例化或strict加载，未访问的阶段严格加载仍待正式/最终原审计。1462冻结源不改、探针0CUDA/前向/优化器/环境/服务器写入，不发布CP payload。实际证据deployment_checkpoint_readonly_20261023_105439和snapshot_readonly_20261023_105138/DEPLOYMENT_PROGRESS_AUDIT.json通过，不等于完整run最终验收。
