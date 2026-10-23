@@ -20,3 +20,7 @@ P3各折指标的等权平均（不是合并样本分位数）：
 有限50fits各200epochs：P0/M预算50/100/200、M/Q仅改变帧内融合；G/S仅改变相机输入为重复全局token或真实patch网格，架构/批量/FP32/训练预算相同。先D1全完成，再导出patch及自身GPU准入，再D2。200epochs实际预算与原A不同，单独报告。原50结果重现检查保留。10/25mm、信息改善和动态门槛不放宽。
 
 这些十demo外层结果已在上一轮分析使用，新有限对照明确是探索性；不能宣称新独立确认。B需完整A本地独立验收通过后实施及准入，不能用placeholder启动。容量起步data root8.738GB/system普通6.645GB；新产物规划≤3.3GiB，分别保留2/1GiB，不删除旧资产或新增付费。
+
+
+## User termination 2026-10-23 15:31 CST
+Confirmed controller120819 and worker120854 share the dedicated session. SIGTERM stopped both; no remaining PBD_ROOT process. All checkpoint/log/prediction/recovery assets retained, 139 checkpoint SHA recorded. No source overwrite or experimental acceptance. Replaced by the new user-specified A1/A2/A3 plan. Automation b deleted.
