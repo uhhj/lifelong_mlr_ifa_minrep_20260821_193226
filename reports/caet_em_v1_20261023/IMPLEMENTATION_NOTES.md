@@ -8,3 +8,6 @@
 
 
 工程05：诊断按训练manifest重建历史阶段人口，修复retain后扩大buffer的KeyError。原训练数据构造不改；仅CP加载增添两份SHA+payload fingerprint严格继承白名单。新controller跳过已完整codec/B0 Task6/7，先真实恢复态GPU roundtrip及本版本B0准入，再继续诊断7。旧输出复用、旧失败和源保留，新的合同完整绑定继承资产；详见ENGINEERING_REPAIR_05与RESUME_MANIFEST。
+
+
+2026-10-23 23:15 CST：新增纯本地audit_evaluation_progress.py，实际对snapshot_20261023_230628通过四阶段诊断manifest/CP/codec绑定及已记录formal attempt/episode一致性审计；不计算部分性能，不替代最终CPU严格CP及初态文件字节审计。冻结1875源码未变，B0完整训练结束，按首批实测和用户新规则下次检查90分钟后。
