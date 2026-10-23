@@ -9,5 +9,15 @@ try:
  c.connect('jq1.9gpu.com',port=11920,username='root',password=pw,allow_agent=False,look_for_keys=False,timeout=20);pw=None
  i,o,e=c.exec_command('/data/mlr_ifa/env/bin/python -c '+shlex.quote(script.read_text(encoding='utf8')),timeout=600);raw=o.read();err=e.read().decode();rc=o.channel.recv_exit_status()
  (out/'ATTEMPT.json').write_text(json.dumps(dict(exit=rc,stderr=err),indent=2));assert rc==0,err
- (out/'EVIDENCE.json').write_bytes(raw);print(out);print(raw.decode()[:24000])
+ try:parsed=json.loads(raw)
+ except json.JSONDecodeError:
+  (out/'STDOUT.txt').write_bytes(raw);parsed=json.loads(raw.decode().splitlines()[-1])
+ if 'cases' in parsed:
+  case_manifest={}
+  for name,value in parsed.pop('cases').items():
+   assert '/' not in name and '\\' not in name
+   data=json.dumps(value,separators=(',',':')).encode();(out/(name+'.json')).write_bytes(data)
+   case_manifest[name]=dict(sha256=__import__('hashlib').sha256(data).hexdigest(),bytes=len(data))
+  parsed['case_files']=case_manifest
+ (out/'EVIDENCE.json').write_text(json.dumps(parsed,indent=2));print(out);print(json.dumps({k:v for k,v in parsed.items() if k not in ('files','sources','case_files')})[:8000])
 finally:pw=None;c.close()
