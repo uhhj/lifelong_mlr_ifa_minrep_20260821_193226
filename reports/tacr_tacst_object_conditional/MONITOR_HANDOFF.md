@@ -157,3 +157,13 @@ Task9最近10轮均13.671872秒，余63轮线性14.355466分钟，主训练结�
 3批均227.109710秒，仅早期小样本，10:51余17批线性64.347751分钟，另有效退出/轻量全SHA下载/本地验收，TACR41暂参考12:05–12:30 CST，后续吞吐仍不确定。全队列总ETA未知，各自41门仍701/960；其他5run尚未自身GPU准入，R41不过也独立运行RST41，不调参或重试正常负结果。
 
 `capacity_readonly_20261023_105156`剩余新增界PASS_NOT_FINAL：data root9.889759GB扣余新增5.153961GB+2GiB后余2.588315GB；system普通6.601048GB扣余新增3.776402GB+1GiB后余1.750904GB。TACR41稳定私有1.377559GB抵扣新增界，A全部已验收只读新增界0；不删资产、不降精度batch预算或新付费。本轮保存发布后结束不守候，总PARTIAL；同一30分钟监控继续，全部N所选分支本地验收比较发布后才删。
+
+## 2026-10-23 11:23 CST — TACR41正式评估正常进行，PARTIAL
+
+`snapshot_readonly_20261023_112137/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，观察11:21:54 CST：正式100/200、10完成vector+1进行中、5完整cell、0技术异常；逐episode初态hash/index/env seed/600步、attempt唯一性与成功向量复算通过，不计算部分性能指标或提前判扩展。400完整epoch105500主更新及105500表征已完成；1462冻结源调度和288输入hash不变，train6–9 retain6–9 labels7–9均exit0，自己的8调用GPU准入已PASS。evaluate115145及controller95924/supervisor114098正常，无恢复/重启/改参；完整原账目BC有效1008100/屏蔽44300、效果1002100、ST锚点旧键读取0保持。
+
+`snapshot_readonly_20261023_112137/DEPLOYMENT_PROGRESS_AUDIT.json` PASS_NOT_FINAL：当前143条episode/attempt/cell元数据逐条100+14键加载记录与实际主CP/残差SHA绑定先前`deployment_checkpoint_readonly_20261023_105439`证据，已覆盖stage6/7/8，stage9正式主模型strict及完整融合最终验收仍待后续。4主100键结构/4残差14键strict/4学生20键strict只读证据不重复运行；没有新增模型前向、优化器、环境调用或服务器写入，不把CPU结构检查冒充全部主模型strict。
+
+10批均245.382816秒，11:21余10批线性40.897136分钟，另有效退出/轻量下载/完整本地验收，TACR41暂参考12:10–12:35 CST，后续单元耗时不确定、非保证；全部条件分支总ETA未知。其他5run尚未自身准入，各自41门仍701/960，R41不过仍独立运行RST41，正常负结果不重试，不补rollout。
+
+`capacity_readonly_20261023_112155`剩余新增界PASS_NOT_FINAL：data root9.889759GB扣余新增5.153961GB+2GiB后余2.588315GB；system普通6.600696GB扣余新增3.776054GB+1GiB后余1.750900GB。TACR41稳定私有1.377907GB抵扣新增界，已验收A新增界0。不删旧资产、不下载payload、不降精度batch预算或新增付费。A完整验收只读不重复检查发布。健康无实质变化，无需用户行动；本轮保存发布后结束不守候，总PARTIAL，30分钟监控继续至所有N所选分支本地验收比较发布。
