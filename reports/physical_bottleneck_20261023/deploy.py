@@ -1,0 +1,38 @@
+"""Create one immutable new root; no credential files or overwriting scientific sources."""
+import getpass,json,hashlib,datetime,shlex
+from pathlib import Path
+import paramiko
+R=Path(__file__).resolve().parent
+Q='/data/mlr_ifa/experiment_workspaces/PHYSICAL_BOTTLENECK_OBJECT41_20261023_v1'
+def main():
+ c=paramiko.SSHClient();c.load_system_host_keys();c.set_missing_host_key_policy(paramiko.RejectPolicy());pw=getpass.getpass('SSH password (memory only): ')
+ dest=R/('launch_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S'));dest.mkdir()
+ try:
+  c.connect('jq1.9gpu.com',port=11920,username='root',password=pw,look_for_keys=False,allow_agent=False,timeout=20);pw=None;sftp=c.open_sftp();sftp.mkdir(Q);sftp.mkdir(Q+'/pbd');files={}
+  for p in [R/'PROTOCOL.md',R/'controller.py',*sorted((R/'pbd').glob('*.py'))]:
+   target=Q+'/'+p.relative_to(R).as_posix();raw=p.read_bytes()
+   with sftp.open(target,'wb') as f:f.write(raw)
+   files[target]=hashlib.sha256(raw).hexdigest()
+  code='''
+import hashlib,json,os,subprocess
+from pathlib import Path
+Q=Path(%r);files=%r
+def sha(p):
+ h=hashlib.sha256()
+ with Path(p).open('rb') as f:
+  for b in iter(lambda:f.read(8388608),b''):h.update(b)
+ return h.hexdigest()
+assert all(sha(p)==h for p,h in files.items())
+OLD=Path('/data/mlr_ifa/experiment_workspaces/PHYSICAL_EFFECT_PROBE_OBJECT41_20261023_engineering03');old=json.loads((OLD/'CONTRACT.json').read_text());assert (OLD/'controller.exit').read_text().strip()=='0';assert all(sha(p)==h for p,h in old['files'].items())
+for p in (OLD/'physical_effect_probe').glob('*.py'):files[str(p)]=sha(p)
+for n in ['DEMO_SPLITS.json','NATIVE_VIEW_MANIFEST.json','INPUT_BINDING_AUDIT.json','STATE_PROBE_RESULTS.json']:files[str(OLD/'output'/n)]=sha(OLD/'output'/n)
+contract=dict(version='PBD_A_v1',files=files,old_contract_sha256=sha(OLD/'CONTRACT.json'),scope='D1 readout -> D2 patch -> finite A gate; B requires independent implementation/admission')
+(Q/'CONTRACT.json').write_text(json.dumps(contract,indent=2)+'\\n')
+env=os.environ.copy();env.update(PYTHONPATH=str(Q)+':'+str(OLD),PYTHONDONTWRITEBYTECODE='1',PBD_ROOT=str(Q),PEP_ROOT=str(OLD),CUDA_VISIBLE_DEVICES='0',OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1',LIBERO_CONFIG_PATH='/data/mlr_ifa/config',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',HF_HOME='/data/mlr_ifa/cache/huggingface',MPLBACKEND='Agg',MUJOCO_GL='egl')
+log=open(Q/'controller.log','wb');p=subprocess.Popen(['/data/mlr_ifa/env/bin/python',str(Q/'controller.py')],cwd=str(Q),env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+(Q/'controller.pid').write_text(str(p.pid)+'\\n');print(json.dumps(dict(status='LAUNCHED_NOT_ACCEPTED',pid=p.pid,root=str(Q),contract_sha256=sha(Q/'CONTRACT.json'),frozen_files=len(files))))
+'''%(Q,files)
+  i,o,e=c.exec_command('/data/mlr_ifa/env/bin/python -c '+shlex.quote(code),timeout=180);raw=o.read();err=e.read().decode();rc=o.channel.recv_exit_status();(dest/'ATTEMPT.json').write_text(json.dumps(dict(exit=rc,stderr=err),indent=2));assert rc==0,err
+  (dest/'EVIDENCE.json').write_bytes(raw);sftp.get(Q+'/CONTRACT.json',str(dest/'CONTRACT.json'));(R/'ACTIVE_ROOT.json').write_text(json.dumps(dict(root=Q,launch=dest.name),indent=2));print(raw.decode())
+ finally:pw=None;c.close()
+if __name__=='__main__':main()
