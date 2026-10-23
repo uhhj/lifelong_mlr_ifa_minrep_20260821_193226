@@ -1,9 +1,8 @@
 用户2026-10-23最新定时规则，优先覆盖所有旧短周期：按预计剩余完成时间安排下一次检查。预计1小时就1小时后，2小时就2小时后；没有固定3/5/8/15/30分钟上限，也不因内部Task切换频繁唤醒。优先以当前整组主训练结束、随后整组正式评估结束为下一检查点；以自身实测速度和剩余预算估计，保存/准备另计，不把全部队列与当前一组混淆。下一次醒来重新按实际剩余时间更新同一监控。无自身吞吐时可用最近可比实测作明确标注的不确定估计，不伪造精确总ETA，也不恢复高频轮询。健康无变化安静；失败、完成、需行动或重要阶段变化才通知。
 
-最新2026-10-24 04:35 CST优先：本轮无法连接服务器，当前训练/评估状态未知。check_progress首轮snapshot_20261024_043323、capacity_readonly_20261024_043338、一次只读重试snapshot_20261024_043444均在SSH协议banner阶段EOF，未认证、0远程命令。独立无凭据TCP探针能连接11920，但约5秒返回空banner；不是密码错误证据，也不能据此断言训练失败/实例停止。三次失败与TCP探针摘要、文件SHA保存在各ATTEMPT及snapshot_20261024_043444/CONNECTION_FAILURE_SUMMARY.json。没有重启controller/训练/评估、没有改源码/参数、没有删除或新付费。
-最新可信进度仍是03:14:48的snapshot_20261024_031425：1875hash一致，B0/B1各400epoch105500主步及200正式20vector10关闭cell、服务器audit exit0；B2自己3隔离GPU准入PASS，下载82完整epoch12874步，Task6全部非计时epoch字段与B1前缀精确相同。此后进度、进程、hash、磁盘均未取得新证据；RUN_STATUS保留旧observation时间及计数并显式标记PARTIAL_OBSERVATION_UNAVAILABLE，不能把旧数据当现状。三组完整独立CPU/初态字节/最终路径仍未验收，禁止伪报完成。
-下一次同一监控90分钟后（约06:05 CST）重查只读连接：依据上轮B2主训练04:15–04:50暂估与最近可比B1评估89.915804min，覆盖原预计评估结束窗口；这只是连接失败时的低频重查安排，不是新的可靠完成预测，旧ETA无法确认。保持用户按预计整体完成时间的规则，不恢复短周期轮询。连接恢复后先新check_progress→audit_progress，再按真实phase决定，不重跑deploy/controller或盲重启部分globalRNG评估；若工程失败，须先核停止/hash/完整状态后版本化处理。无连接时不能执行恢复或最终验收。
-上一轮capacity_readonly_20261024_031439仅历史PASS_NOT_FINAL：data剩余预留后0.629070GB/system1.694755GB；本轮容量未知，不沿用为当前PASS。B2最终Task6 tensor相等仍待CPU实际验收，计数原值/原失败全部保留。连接失败证据与报告按既有规则发布；总体PARTIAL，完成完整验收发布后才删除本监控。
+最新2026-10-24 06:06 CST优先：SSH仍在协议banner阶段EOF，snapshot_20261024_060359/ATTEMPT.json留证，未认证、0远程命令。独立无凭据TCP探针结果见同目录CONNECTIVITY_PROBE.json，全部本轮证据SHA绑定CONNECTION_FAILURE_SUMMARY.json。当前训练/评估、进程、冻结hash和容量仍未知；不得把03:14:48旧快照当现状，不宣称训练失败或完成。没有重启、改源码/参数、下载payload、删除或新增付费。
+此前预计完成窗口已经过去但无法核实，当前不能可靠估算剩余时间。连接故障持续，建议用户只读查看租赁平台的实例及SSH服务状态，不重启实例或实验。同一监控延后120分钟低频重查连接；这是故障退避，不是新的完成ETA。恢复后先check_progress→audit_progress，再按实际phase/退出决定最终验收或进度检查；禁止盲重启controller/globalRNG评估。
+最新可信状态仍为snapshot_20261024_031425：B0/B1各400epoch105500步和200正式20vector10cell、服务器audit exit0；B2仅已验证82完整epoch12874步、自己准入PASS。全部三组独立最终CPU/初态字节及600正式验收未完成，整体PARTIAL_OBSERVATION_UNAVAILABLE；旧03:14容量仅历史证据。
 
 只跟踪用户新授权的 CAET-EM-v1 OBJECT seed41。先读 D:/论文课题研究/MLR+IFA/execution/20261023_caet_em_v1 的 USER_METHOD.txt、PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json 和最新证据。原位置探针A失败保留；此新路线不需要10mm/25mm门。旧ALIGN/TACR/readout等已完成或取消的队列不得恢复。没有自动seed扩展。
 
