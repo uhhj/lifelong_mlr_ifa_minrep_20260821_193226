@@ -89,3 +89,9 @@
 `snapshot_readonly_20261023_075148/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，1462冻结源调度hash一致，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，六输出不存在，自己GPU准入尚待，不套用A报告。A当前GPU进程110830，正式进度以同轮A完整独立快照为准。不绕过A自然有效exit0/receipt/GPU空闲/互斥锁，不kill正常工作，所有取消任务不恢复。
 
 `capacity_readonly_20261023_075204`剩余新增界PASS_NOT_FINAL：data root9.890849GB，扣余新增5.610646GB+2GiB后余2.132719GB；system普通7.978910GB，扣三run+1GiB后余1.751207GB。GOAL43稳定私有1.261302GB抵扣新增界，已验收产物不额外预留。0模型前向/0优化器/0环境/0服务器写入，不删旧资产、下载payload、调精度batch更新或新付费。N真实吞吐和总ETA未知；整体PARTIAL，保存发布后结束，不守候。
+
+## 2026-10-23 08:21 CST — 正常等待上游GOAL43
+
+`snapshot_readonly_20261023_082156/LOCAL_AUDIT.json` PASS_PROGRESS_NOT_FINAL，1462冻结源调度hash不变，95924仍WAITING_PRIOR_QUEUE_NATURAL_EXIT，六输出未创建、尚未GPU准入，无失败/恢复。本轮只读连接正常。A当前evaluate110830，具体正式进度以同轮A完整独立快照为准；不绕过A有效退出/receipt/GPU空闲/锁释放，不重复启动或kill正常运行。
+
+`capacity_readonly_20261023_082210`剩余新增界PASS_NOT_FINAL：data root9.890497GB，扣余新增5.610294GB+2GiB后余2.132719GB；system普通7.978893GB，扣三run+1GiB后余1.751191GB。GOAL43稳定私有已分配1.261654GB抵扣新增界，已验收产物不额外预留。0模型前向/0优化器/0环境/0服务器写入，不删旧资产、下载payload、改精度batch更新或新付费。新N真实吞吐与整体ETA未知，总PARTIAL；保存发布后结束不守候。
