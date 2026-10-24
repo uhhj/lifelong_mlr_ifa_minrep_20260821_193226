@@ -14,3 +14,6 @@
 
 
 2026-10-24 01:45 CST：新增外置capacity_readonly.py，仅两次stat稳定私有文件st_blocks计算剩余新增界；symlink与hardlink排除，额外保全恢复只在实际free中计一次。实际远端只读及本地算术PASS，未修改冻结科学源。
+
+
+2026-10-24 recovery06：服务器连接恢复后发现原controller/训练进程消失，无退出标记。冻结1875项保持；独立版本化接续supervisor从B2 Task8完整epoch90使用原train --resume，无科学源码修改。原状态、日志、EVENTS、准入报告及365436131bytes恢复态私有保全；先自己的原准入及实际保存状态下一步精确重放，再继续未完成阶段。完整Task6/7和B0/B1不重跑，未知未提交epoch开销单列。最终外置验收追加执行合同及前90轮精确绑定，尚待最终实际验收。

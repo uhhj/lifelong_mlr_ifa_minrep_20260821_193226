@@ -5,6 +5,10 @@ from fractions import Fraction
 P=Path(sys.argv[1]);F=Path(sys.argv[2]);d=json.loads((P/'EVIDENCE.json').read_text());proof=json.loads((F/'EVIDENCE.json').read_text());assert proof['status']=='PASS' and d['controller_exit']=='0' and not d['own_processes'] and not d['hash_bad'];assert proof['contract']==d['contract_sha256'];assert all(v=='0' for v in d['phase_exits'].values())
 download=json.loads((P/'DOWNLOAD.json').read_text());assert all(v['sha256']==v['at_snapshot']['sha256'] for v in download.values())
 for name,m in download.items():assert hashlib.sha256((P/'metadata'/name).read_bytes()).hexdigest()==m['sha256']
+if proof.get('recovery06'):
+ recovery=proof['recovery06']
+ for key,name in [('binding','RECOVERY06_BINDING.json'),('admission','RECOVERY06_ADMISSION.json'),('resolution','RECOVERY06_RESOLUTION.json')]:assert recovery[key]==json.loads((P/'metadata/shared'/name).read_text())
+ assert recovery['preserved_complete_epoch_prefix_exact'] and recovery['server_recovery_closed'] and recovery['extra_isolated_optimizer_calls']==5
 if proof.get('engineering_lineage'):
  lineage=json.loads((P/'metadata/shared/RESUME_MANIFEST.json').read_text());assert lineage==proof['engineering_lineage']
  admission=json.loads((P/'metadata/shared/CONTINUATION_ADMISSION.json').read_text());assert admission['status']=='PASS' and admission['contract']==d['contract_sha256'] and admission['actual_GPU_full_state_roundtrip']

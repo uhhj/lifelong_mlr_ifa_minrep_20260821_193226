@@ -4,6 +4,10 @@ from pathlib import Path
 F=Path(sys.argv[1]);S=Path(sys.argv[2]);data=json.loads((F/'LOCAL_FINAL_AUDIT.json').read_text());assert data['status']=='PASS_COMPLETE_LOCAL_ACCEPTANCE';meta=S/'metadata';cost={};diagnostics={}
 def js(p):return json.loads(p.read_text())
 codec=js(meta/'shared/CODEC_TRAINING_AND_VALIDATION.json');cost['codec']=dict(epochs=len(codec['epochs']),updates=codec['optimizer_steps'],seconds=sum(r['seconds'] for r in codec['epochs']),selected_epoch=codec['selected_epoch'])
+if (meta/'shared/RECOVERY06_ADMISSION.json').exists():
+ recovery=js(meta/'shared/RECOVERY06_ADMISSION.json');resolution=js(meta/'shared/RECOVERY06_RESOLUTION.json')
+ assert recovery['status']=='PASS' and resolution['repeated_completed_epochs']==0
+ cost['recovery06']=dict(extra_isolated_optimizer_calls=5,extra_target_tokenizer_windows=6162,exact_replay_policy_windows=20,exact_replay_retention_decoder_windows=40,preserved_recovery_bytes=365436131,completed_epochs_repeated=0,interrupted_partial_epoch_work='Unknown; not included in accepted main-update count',preinterruption_cost_preserved=True)
 for arm in ('B0','B1','B2'):
  rows=[r for t in range(6,10) for r in js(meta/arm/'epochs'/('task%d.json'%t))];cost[arm]=dict(main_epochs=len(rows),main_updates=sum(r['batches'] for r in rows),main_epoch_seconds=sum(r['seconds'] for r in rows),action_valid=sum(r['action_valid'] for r in rows),action_masked=sum(r['action_invalid'] for r in rows),policy_windows=sum(r['policy_windows'] for r in rows),retention_decoder_windows=sum(r['extra_retention_decoder_windows'] for r in rows),transfer_anchors=sum(r['transfer_anchors'] for r in rows),retained_steps=sum(r['retained_steps'] for r in rows))
  stages={}

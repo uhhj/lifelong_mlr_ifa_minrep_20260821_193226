@@ -1,10 +1,24 @@
 """Run only after all finite queue processes have exited. CPU, no forward/update/env."""
 import os,sys,json,hashlib
 from pathlib import Path
+os.environ['LIBERO_CONFIG_PATH']='/data/mlr_ifa/config'
 ROOT=Path(os.environ['EM_ROOT']);sys.path.insert(0,str(ROOT))
 from caet_em_exp.common import *
 from caet_em_exp.model import Codec,Policy,strict_policy_restore
 assert (ROOT/'controller.exit').read_text().strip()=='0';contract=verify()
+recovery06=None
+if (ROOT/'RECOVERY06_BINDING.json').exists():
+ binding=js(ROOT/'RECOVERY06_BINDING.json');q=Path(binding['recovery_root'])
+ assert sha(q/'EXECUTION_CONTRACT.json')==binding['execution_contract_sha256'] and sha(q/'RECOVERY_MANIFEST.json')==binding['manifest_sha256']
+ assert binding['science_contract']==contract and all(sha(p)==h for p,h in js(q/'EXECUTION_CONTRACT.json')['files'].items())
+ assert (q/'controller.exit').read_text().strip()=='0'
+ admission=js(q/'RECOVERY_ADMISSION.json');resolution=js(ROOT/'RECOVERY06_RESOLUTION.json')
+ assert admission['status']=='PASS' and admission['exact_next_batch_replay'] and admission['isolated_optimizer_calls']==2
+ assert admission==js(ROOT/'RECOVERY06_ADMISSION.json') and admission['science_contract']==contract
+ assert resolution['status']=='PASS_COMPLETE_EPOCH_CONTINUATION' and resolution['repeated_completed_epochs']==0 and resolution['admission_sha256']==sha(q/'RECOVERY_ADMISSION.json')
+ assert js(arm_root('B2')/'epochs/task8.json')[:90]==js(q/'provenance/task8_epochs.json')
+ assert js(ROOT/'ADMISSION_B2.json')['isolated_optimizer_calls']==3 and (ROOT/'phases/B2_admission_recovery06.exit').read_text().strip()=='0'
+ recovery06=dict(binding=binding,admission=admission,resolution=resolution,preserved_complete_epoch_prefix_exact=True,extra_isolated_optimizer_calls=5,extra_setup_tokenizer_windows=6162,interrupted_partial_epoch_work='Unknown; not included as completed scientific updates',server_recovery_closed=True)
 lineage=None
 if (ROOT/'RESUME_MANIFEST.json').exists():
  lineage=js(ROOT/'RESUME_MANIFEST.json');admission=js(ROOT/'CONTINUATION_ADMISSION.json')
@@ -45,4 +59,4 @@ for arm in ARMS:
  assert recovery['contract']==contract and recovery['codec_sha256']==sha(frozen_codec());assert set(recovery['grads'])==set(recovery['requires']);assert set(recovery['rng'])=={'python','numpy','cpu','cuda'}
  reports[arm]['recovery']=dict(sha256=sha(root/'recovery/latest.pth'),steps=recovery['steps'],optimizer_states=len(recovery['optimizer']['state']),complete_epoch=True)
 assert states['B1'].keys()==states['B2'].keys() and all(torch.equal(states['B1'][k],states['B2'][k]) for k in states['B1']),'B1/B2 Task6 must coincide before T/F starts'
-print(json.dumps(dict(status='PASS',contract=contract,engineering_lineage=lineage,checkpoints=reports,codec_sha256=sha(frozen_codec()),codec_selected_epoch=best,B1_B2_Task6_exact=True,initial=initial,forward_calls=0,optimizer_calls=0,environment_steps=0,server_writes=0)))
+print(json.dumps(dict(status='PASS',contract=contract,engineering_lineage=lineage,recovery06=recovery06,checkpoints=reports,codec_sha256=sha(frozen_codec()),codec_selected_epoch=best,B1_B2_Task6_exact=True,initial=initial,forward_calls=0,optimizer_calls=0,environment_steps=0,server_writes=0)))
