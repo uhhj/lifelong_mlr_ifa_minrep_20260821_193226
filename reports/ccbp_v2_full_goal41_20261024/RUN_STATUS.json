@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-25T03:09:56.491582+08:00",
-  "observation_unix": 1792868996.4915817,
+  "status": "PARTIAL_EVALUATING",
+  "observation": "2026-10-25T04:14:58.354953+08:00",
+  "observation_unix": 1792872898.3549528,
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02",
   "contract": "56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71",
   "counts": {
@@ -36,13 +36,13 @@
       }
     },
     "V": {
-      "epochs": 70,
-      "steps": 7000,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
-        "6": 70,
-        "7": 0,
-        "8": 0,
-        "9": 0
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     }
   },
@@ -59,9 +59,12 @@
     "ADMISSION_N_7.json": 4,
     "ADMISSION_N_8.json": 4,
     "ADMISSION_N_9.json": 4,
-    "ADMISSION_V_6.json": 4
+    "ADMISSION_V_6.json": 4,
+    "ADMISSION_V_7.json": 4,
+    "ADMISSION_V_8.json": 4,
+    "ADMISSION_V_9.json": 4
   },
-  "isolated_optimizer_calls": 58,
+  "isolated_optimizer_calls": 70,
   "teacher_bindings": {
     "TEACHER_B_7.json": {
       "count": 477,
@@ -76,6 +79,12 @@
       "source_sha256": "daf237e78aeda1ae5b7eace68843cf32b97e0899f58aa9a3365cd081a187f76c"
     },
     "TEACHER_N_7.json": {
+      "count": 477,
+      "tau": 0.0038780958857387304,
+      "cache_sha256": "395f35d26e2bee849212de4144e8071eebdf8865a9f59e2c12f20a8f4f5474fd",
+      "source_sha256": "daf237e78aeda1ae5b7eace68843cf32b97e0899f58aa9a3365cd081a187f76c"
+    },
+    "TEACHER_V_7.json": {
       "count": 477,
       "tau": 0.0038780958857387304,
       "cache_sha256": "395f35d26e2bee849212de4144e8071eebdf8865a9f59e2c12f20a8f4f5474fd",
@@ -99,6 +108,12 @@
       "cache_sha256": "c2317c17f4274f50c8518f898fd6d60e48b66b20574ed3e2e5ab231b00cfc219",
       "source_sha256": "7eccffd78fc360d8a0ffee1f2c3517b68f05d76f50e8d25411fbad588727830e"
     },
+    "TEACHER_V_8.json": {
+      "count": 899,
+      "tau": 0.003292765701189637,
+      "cache_sha256": "aadb783cf8a9be9f59d37cf6fc367ed03b754c79cb69702e5f201a504cb14235",
+      "source_sha256": "30bc521a068df8b59c11548dee48a5c09291179aa66e3ac98eb6f56913f36005"
+    },
     "TEACHER_B_9.json": {
       "count": 1329,
       "tau": 0.002811234211549163,
@@ -116,27 +131,30 @@
       "tau": 0.00284577370621264,
       "cache_sha256": "7dafe2d6be9710e11e66d037f1423f68233a63f97c56ffcfd06b6e4ddf1f3dc5",
       "source_sha256": "a4170788856ff6e4f0f0e3b48ae66a417ce874d9f582762bff425503436e99bf"
+    },
+    "TEACHER_V_9.json": {
+      "count": 1329,
+      "tau": 0.002841848647221923,
+      "cache_sha256": "c2f794ba2faf28aea35f668db9677ced9e419c075a6a02e62d1bef125a11b0a3",
+      "source_sha256": "e1989c1abd433280c0f954c83f209b159306b8ad608fd25199d47c9c4dda1d04"
     }
   },
-  "formal_episodes": 0,
+  "formal_episodes": 80,
   "phase": {
-    "arm": "V",
-    "stage": 6,
-    "phase": "train",
-    "epoch_complete": 70,
-    "steps": 7000,
-    "time": 1792868995.3644054,
-    "pid": 21239
+    "phase": "evaluate",
+    "pid": 21481,
+    "time": 1792872449.7537904,
+    "controller": 20530
   },
-  "latest_evidence": "check_readonly_20261025_030945",
+  "latest_evidence": "check_readonly_20261025_041448",
   "capacity": {
     "/root": {
-      "bavail": 1456066560,
-      "bfree": 4559593472
+      "bavail": 1456029696,
+      "bfree": 4559556608
     },
     "/data": {
       "bavail": 0,
-      "bfree": 2791378944
+      "bfree": 2527195136
     }
   },
   "budget": {
@@ -145,17 +163,16 @@
     "episodes": 800
   },
   "automatic_expansion": false,
-  "next_check_minutes": 60,
+  "next_check_minutes": 90,
   "final_acceptance": "PENDING",
-  "capacity_evidence": "capacity_readonly_20261025_031011",
+  "capacity_evidence": "capacity_readonly_20261025_041513",
   "eta": {
-    "target": "V whole training, completing all four training arms",
-    "remaining_steps": 69100,
-    "own_task6_rate": 2.8126484870910646,
-    "comparable_N_later_stage_seconds": 3015.8530399799347,
-    "linear_minutes": 51.670541576544444,
-    "planning_minutes": 60,
-    "extra": "save/cache/admission/preparation; V auxiliary stages not yet measured",
-    "not_evaluation_completion_eta": true
+    "target": "all800 formal episodes completion",
+    "observed_completed_vectors": 8,
+    "remaining_vectors": 72,
+    "mean_linear_minutes": 63.068614233636616,
+    "max_observed_linear_minutes": 86.67589492728875,
+    "planning_minutes": 90,
+    "limitations": "Only8 early Task6/7 batches, three early terminations; future task/model runtimes unknown. Not a guaranteed upper bound; final acceptance extra."
   }
 }
