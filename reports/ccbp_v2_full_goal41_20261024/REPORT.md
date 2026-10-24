@@ -1,3 +1,11 @@
+# 最新2026-10-25 03:11 CST交接
+
+实际观察2026-10-25T03:09:56.491582+08:00，check_readonly_20261025_030945/LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。65冻结项及父源不变，controller20530/GPU21239健康，N已自然exit0后接续V Task6。B/C/N各完整400epoch76100主步，共1200epoch228300步，12阶段CP记录及train_B/C/N.exit0绑定；N epoch纯计算55.068288分钟，48额外梯度autograd另列，B/C此前54.142874/54.757810min保留，保存/准入/教师另计。B/C/N各Task6 tensor与原ALIGN实际相同，但全部16CP最终独立CPU审计仍待后续。
+V Task6下载70完整epoch7000步；自己4隔离GPU调用、完整下一步恢复、原ALIGN更新精确/100键/21633611参数/1–8长度/部署语义准入实际PASS，不能套给V旧阶段。累计58自身隔离优化器更新/0环境，N Task7–9自己的状态化测量与恢复已实际PASS。九份B/C/N阶段教师身份/尺度/tau/w/自身前阶段CP绑定本地通过。正式环境0，无恢复重启改科学参数。
+V Task6最近10轮均2.812648秒，余30轮；V后续辅助阶段未实测，借N Task7–9纯计算50.264217min，合计剩余基线51.670542min，保存/缓存/准入/准备另计。按用户预计完成点规则，下一60分钟检查V整组主训练结束附近（参考04:05–04:15 CST），届时若自然进入评估按新实际vector吞吐估全段剩余。该ETA不含800仿真/最终独立验收，不因内部Task切换短轮询。
+capacity_readonly_20261025_031011/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通free1456066560B、稳定已分配779481088B，扣余新增369422663B及1GiB后余12902073B；data rootfree2791370752B、稳定已分配1394098176B，扣余新增624536453B及2GiB后余19350651B。只stat、0payload/前向/更新/环境/服务器写入，未删除或新增付费。此前短暂REVIEW_CAPACITY和一次复查恢复的原证据保留，不改写为从未出现。
+唯一engineering02 root /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02、合同56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71、controller20530不变。全部四组训练结束后才800正式；final_readonly/audit_final_local仍只静态，须自然controller.exit0无自身进程后实际运行验收。不得重跑deploy/build/controller或已完成训练。整体PARTIAL，无局部科学收益结论。
+
 # 最新2026-10-25 02:06 CST交接
 
 实际观察2026-10-25T02:04:25.582353+08:00，check_readonly_20261025_020414/LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。65冻结项及父源不变；controller20530/GPU20976正常，C已自然完成并接续N Task6。B/C各400epoch76100主步，train_B/C.exit均0，合计800epoch152200步；各自4个CP记录SHA绑定。B/C epoch纯计算分别54.142874/54.757810分钟，各48额外梯度autograd单列，保存/教师/准入另计。B/C均已实际Task6 tensor同原ALIGN；全部16CP最终独立CPU加载与800闭环仍待后续，不计算离线损失为收益。

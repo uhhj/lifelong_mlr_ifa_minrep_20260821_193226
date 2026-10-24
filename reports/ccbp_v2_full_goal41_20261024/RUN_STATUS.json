@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-25T02:04:25.582353+08:00",
-  "observation_unix": 1792865065.5823534,
+  "observation": "2026-10-25T03:09:56.491582+08:00",
+  "observation_unix": 1792868996.4915817,
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02",
   "contract": "56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71",
   "counts": {
@@ -26,20 +26,20 @@
       }
     },
     "N": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
-        "6": 0,
-        "7": 0,
-        "8": 0,
-        "9": 0
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     },
     "V": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 70,
+      "steps": 7000,
       "by_stage": {
-        "6": 0,
+        "6": 70,
         "7": 0,
         "8": 0,
         "9": 0
@@ -55,9 +55,13 @@
     "ADMISSION_C_7.json": 5,
     "ADMISSION_C_8.json": 5,
     "ADMISSION_C_9.json": 5,
-    "ADMISSION_N_6.json": 4
+    "ADMISSION_N_6.json": 4,
+    "ADMISSION_N_7.json": 4,
+    "ADMISSION_N_8.json": 4,
+    "ADMISSION_N_9.json": 4,
+    "ADMISSION_V_6.json": 4
   },
-  "isolated_optimizer_calls": 42,
+  "isolated_optimizer_calls": 58,
   "teacher_bindings": {
     "TEACHER_B_7.json": {
       "count": 477,
@@ -66,6 +70,12 @@
       "source_sha256": "086a12fa3512d1ee1aaa1794c664c6293456bf5d83934a760842859f75da7c63"
     },
     "TEACHER_C_7.json": {
+      "count": 477,
+      "tau": 0.0038780958857387304,
+      "cache_sha256": "395f35d26e2bee849212de4144e8071eebdf8865a9f59e2c12f20a8f4f5474fd",
+      "source_sha256": "daf237e78aeda1ae5b7eace68843cf32b97e0899f58aa9a3365cd081a187f76c"
+    },
+    "TEACHER_N_7.json": {
       "count": 477,
       "tau": 0.0038780958857387304,
       "cache_sha256": "395f35d26e2bee849212de4144e8071eebdf8865a9f59e2c12f20a8f4f5474fd",
@@ -83,6 +93,12 @@
       "cache_sha256": "57347e6d3d739668108f299f8cbe7611aeb2efec45ee1a1de61657ad085d8831",
       "source_sha256": "66ddfe7baadd5066fa86c99e44f4fa9171c2e02e83abfa934c297e8d41c65033"
     },
+    "TEACHER_N_8.json": {
+      "count": 899,
+      "tau": 0.003299310337752104,
+      "cache_sha256": "c2317c17f4274f50c8518f898fd6d60e48b66b20574ed3e2e5ab231b00cfc219",
+      "source_sha256": "7eccffd78fc360d8a0ffee1f2c3517b68f05d76f50e8d25411fbad588727830e"
+    },
     "TEACHER_B_9.json": {
       "count": 1329,
       "tau": 0.002811234211549163,
@@ -94,25 +110,33 @@
       "tau": 0.002813888480886817,
       "cache_sha256": "dc9ff6d8a0511174ffb97ada8699b647c1c45945a6cc65b89d728680db2d6f58",
       "source_sha256": "e68db7907d4e6c4c439514109577970d9c515f740d8cbbb4e823f3476baf1d37"
+    },
+    "TEACHER_N_9.json": {
+      "count": 1329,
+      "tau": 0.00284577370621264,
+      "cache_sha256": "7dafe2d6be9710e11e66d037f1423f68233a63f97c56ffcfd06b6e4ddf1f3dc5",
+      "source_sha256": "a4170788856ff6e4f0f0e3b48ae66a417ce874d9f582762bff425503436e99bf"
     }
   },
   "formal_episodes": 0,
   "phase": {
-    "arm": "N",
+    "arm": "V",
     "stage": 6,
-    "phase": "prepare",
-    "time": 1792865060.9854097,
-    "pid": 20976
+    "phase": "train",
+    "epoch_complete": 70,
+    "steps": 7000,
+    "time": 1792868995.3644054,
+    "pid": 21239
   },
-  "latest_evidence": "check_readonly_20261025_020414",
+  "latest_evidence": "check_readonly_20261025_030945",
   "capacity": {
     "/root": {
-      "bavail": 1802539008,
-      "bfree": 4906065920
+      "bavail": 1456066560,
+      "bfree": 4559593472
     },
     "/data": {
       "bavail": 0,
-      "bfree": 3401736192
+      "bfree": 2791378944
     }
   },
   "budget": {
@@ -121,16 +145,17 @@
     "episodes": 800
   },
   "automatic_expansion": false,
-  "next_check_minutes": 65,
+  "next_check_minutes": 60,
   "final_acceptance": "PENDING",
-  "capacity_evidence": "capacity_readonly_20261025_020512",
+  "capacity_evidence": "capacity_readonly_20261025_031011",
   "eta": {
-    "target": "N whole training",
-    "remaining_steps": 76100,
-    "own_throughput_measured": false,
-    "comparable_C_epoch_minutes": 54.75780982176463,
-    "planning_minutes": 65,
-    "extra": "save/cache/admission/preparation; new N auxiliary route throughput unmeasured",
-    "not_total_queue_eta": true
+    "target": "V whole training, completing all four training arms",
+    "remaining_steps": 69100,
+    "own_task6_rate": 2.8126484870910646,
+    "comparable_N_later_stage_seconds": 3015.8530399799347,
+    "linear_minutes": 51.670541576544444,
+    "planning_minutes": 60,
+    "extra": "save/cache/admission/preparation; V auxiliary stages not yet measured",
+    "not_evaluation_completion_eta": true
   }
 }
