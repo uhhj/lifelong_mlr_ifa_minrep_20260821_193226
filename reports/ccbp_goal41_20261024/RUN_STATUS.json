@@ -1,6 +1,154 @@
 {
-  "status": "PARTIAL_PREPARED_NOT_DEPLOYED",
-  "observation": "2026-10-24T20:51:56.995532+08:00",
-  "formal_updates": 0,
-  "formal_episodes": 0
+  "status": "PARTIAL_TRAINING",
+  "observation_unix": 1792846540.1401618,
+  "observation_cst": "2026-10-24T20:55:40.140162",
+  "phase": {
+    "phase": "train_A",
+    "pid": 14533,
+    "time": 1792846437.9375193,
+    "controller": 14309
+  },
+  "counts": {
+    "A": {
+      "epochs": 9,
+      "steps": 3033
+    },
+    "B": {
+      "epochs": 0,
+      "steps": 0
+    },
+    "C": {
+      "epochs": 0,
+      "steps": 0
+    },
+    "D": {
+      "epochs": 0,
+      "steps": 0
+    }
+  },
+  "own_admission": {
+    "A": {
+      "status": "PASS",
+      "optimizer_calls": 4,
+      "extra_original_ALIGN_call": true,
+      "roundtrip_exact": true,
+      "next_step_exact": true,
+      "original_ALIGN_update_exact": true,
+      "strict_keys": 100,
+      "parameters": 21633611,
+      "lengths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "routing_empty_allgood_gradients": true,
+      "environments": 0,
+      "contract": "4e921bf269b364c20758fb947305d9aceac484048ba7d8e3e0d9ecb26957ae24"
+    },
+    "B": {
+      "status": "PASS",
+      "optimizer_calls": 3,
+      "extra_original_ALIGN_call": false,
+      "roundtrip_exact": true,
+      "next_step_exact": true,
+      "original_ALIGN_update_exact": null,
+      "strict_keys": 100,
+      "parameters": 21633611,
+      "lengths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "routing_empty_allgood_gradients": true,
+      "environments": 0,
+      "contract": "4e921bf269b364c20758fb947305d9aceac484048ba7d8e3e0d9ecb26957ae24"
+    },
+    "C": {
+      "status": "PASS",
+      "optimizer_calls": 3,
+      "extra_original_ALIGN_call": false,
+      "roundtrip_exact": true,
+      "next_step_exact": true,
+      "original_ALIGN_update_exact": null,
+      "strict_keys": 100,
+      "parameters": 21633611,
+      "lengths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "routing_empty_allgood_gradients": true,
+      "environments": 0,
+      "contract": "4e921bf269b364c20758fb947305d9aceac484048ba7d8e3e0d9ecb26957ae24"
+    },
+    "D": {
+      "status": "PASS",
+      "optimizer_calls": 3,
+      "extra_original_ALIGN_call": false,
+      "roundtrip_exact": true,
+      "next_step_exact": true,
+      "original_ALIGN_update_exact": null,
+      "strict_keys": 100,
+      "parameters": 21633611,
+      "lengths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "routing_empty_allgood_gradients": true,
+      "environments": 0,
+      "contract": "4e921bf269b364c20758fb947305d9aceac484048ba7d8e3e0d9ecb26957ae24"
+    }
+  },
+  "formal_episodes": 0,
+  "teacher": {
+    "status": "PASS",
+    "count": 430,
+    "forward_batches": 14,
+    "seconds": 0.9142558574676514,
+    "cache_sha256": "09606c15829e3e5fde250c92063ae48ca0b15c166d0204b892e3c8ae677692c0",
+    "cp_sha256": "7c4e99ef40269d6d2169459d17818bb526afe288188372a7a6ebc2abf0247f3a",
+    "scales": [
+      0.46725568175315857,
+      0.10000000149011612,
+      1.0
+    ],
+    "manifest_sha256": "4673c47a814b6c0bae97f071e108cff0615578ececc5c7c17ceee773060eea61",
+    "label_sha256": "e9d709cca3dbf785b975a15e8d6625b77ec8e6ccfd431ebbafb09200c52f0a27",
+    "optimizer_updates": 0
+  },
+  "source_hash_unchanged": true,
+  "capacity_observed": {
+    "/root": {
+      "bavail": 3619938304,
+      "bfree": 6723465216
+    },
+    "/data": {
+      "bavail": 0,
+      "bfree": 3458539520
+    }
+  },
+  "next_check_minutes": 90,
+  "eta": "Four-arm training approximately 90 minutes from observation; B/C/D throughput and evaluation unmeasured",
+  "latest_evidence": "check_readonly_20261024_205528"
 }

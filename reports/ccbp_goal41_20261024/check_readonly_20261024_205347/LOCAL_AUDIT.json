@@ -1,0 +1,45 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792846433.1329591,
+  "counts": {
+    "A": {
+      "epochs": 0,
+      "steps": 0
+    },
+    "B": {
+      "epochs": 0,
+      "steps": 0
+    },
+    "C": {
+      "epochs": 0,
+      "steps": 0
+    },
+    "D": {
+      "epochs": 0,
+      "steps": 0
+    }
+  },
+  "epoch_seconds_last10": {},
+  "phase": {
+    "phase": "admit_D",
+    "pid": 14441,
+    "time": 1792846426.9284546,
+    "controller": 14309
+  },
+  "failure": null,
+  "processes": [
+    {
+      "pid": 14309,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_GOAL41_20261024_v1/controller.py "
+    },
+    {
+      "pid": 14441,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_GOAL41_20261024_v1/train.py admit D "
+    },
+    {
+      "pid": 14446,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_GOAL41_20261024_v1/train.py admit D "
+    }
+  ],
+  "contract": "4e921bf269b364c20758fb947305d9aceac484048ba7d8e3e0d9ecb26957ae24"
+}
