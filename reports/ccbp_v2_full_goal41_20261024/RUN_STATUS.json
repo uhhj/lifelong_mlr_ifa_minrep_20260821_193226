@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL_EVALUATING",
-  "observation": "2026-10-25T04:14:58.354953+08:00",
-  "observation_unix": 1792872898.3549528,
+  "status": "COMPLETE_ACCEPTED_PRIMARY_CRITERION_NOT_MET",
+  "observation": "2026-10-25T05:51:17.782595+08:00",
+  "observation_unix": 1792878677.7825952,
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02",
   "contract": "56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71",
   "counts": {
@@ -139,40 +139,154 @@
       "source_sha256": "e1989c1abd433280c0f954c83f209b159306b8ad608fd25199d47c9c4dda1d04"
     }
   },
-  "formal_episodes": 80,
+  "formal_episodes": 800,
   "phase": {
-    "phase": "evaluate",
-    "pid": 21481,
-    "time": 1792872449.7537904,
-    "controller": 20530
+    "phase": "complete",
+    "controller_exit": 0,
+    "own_processes": []
   },
-  "latest_evidence": "check_readonly_20261025_041448",
-  "capacity": {
-    "/root": {
-      "bavail": 1456029696,
-      "bfree": 4559556608
-    },
-    "/data": {
-      "bavail": 0,
-      "bfree": 2527195136
-    }
-  },
+  "latest_evidence": "final_readonly_20261025_054702",
   "budget": {
     "epochs": 1600,
     "steps": 304400,
     "episodes": 800
   },
   "automatic_expansion": false,
-  "next_check_minutes": 90,
-  "final_acceptance": "PENDING",
+  "next_check_minutes": null,
+  "final_acceptance": "PASS_COMPLETE_LOCAL_ACCEPTANCE",
   "capacity_evidence": "capacity_readonly_20261025_041513",
-  "eta": {
-    "target": "all800 formal episodes completion",
-    "observed_completed_vectors": 8,
-    "remaining_vectors": 72,
-    "mean_linear_minutes": 63.068614233636616,
-    "max_observed_linear_minutes": 86.67589492728875,
-    "planning_minutes": 90,
-    "limitations": "Only8 early Task6/7 batches, three early terminations; future task/model runtimes unknown. Not a guaranteed upper bound; final acceptance extra."
+  "eta": null,
+  "scientific_main_exploratory_criterion": false,
+  "monitor_status": "DELETE_AFTER_VERIFIED_PUBLICATION",
+  "metrics": {
+    "B": {
+      "AUC": {
+        "fraction": "61/80",
+        "percent": 76.25
+      },
+      "FWT": {
+        "fraction": "67/80",
+        "percent": 83.75
+      },
+      "NBT": {
+        "fraction": "13/90",
+        "percent": 14.444444444444445
+      },
+      "OldFinal": {
+        "fraction": "11/15",
+        "percent": 73.33333333333333
+      },
+      "FinalAll": {
+        "fraction": "11/16",
+        "percent": 68.75
+      }
+    },
+    "C": {
+      "AUC": {
+        "fraction": "133/160",
+        "percent": 83.125
+      },
+      "FWT": {
+        "fraction": "9/10",
+        "percent": 90.0
+      },
+      "NBT": {
+        "fraction": "11/90",
+        "percent": 12.222222222222221
+      },
+      "OldFinal": {
+        "fraction": "43/60",
+        "percent": 71.66666666666667
+      },
+      "FinalAll": {
+        "fraction": "61/80",
+        "percent": 76.25
+      }
+    },
+    "N": {
+      "AUC": {
+        "fraction": "63/80",
+        "percent": 78.75
+      },
+      "FWT": {
+        "fraction": "71/80",
+        "percent": 88.75
+      },
+      "NBT": {
+        "fraction": "17/90",
+        "percent": 18.88888888888889
+      },
+      "OldFinal": {
+        "fraction": "43/60",
+        "percent": 71.66666666666667
+      },
+      "FinalAll": {
+        "fraction": "29/40",
+        "percent": 72.5
+      }
+    },
+    "V": {
+      "AUC": {
+        "fraction": "33/40",
+        "percent": 82.5
+      },
+      "FWT": {
+        "fraction": "71/80",
+        "percent": 88.75
+      },
+      "NBT": {
+        "fraction": "11/90",
+        "percent": 12.222222222222221
+      },
+      "OldFinal": {
+        "fraction": "3/4",
+        "percent": 75.0
+      },
+      "FinalAll": {
+        "fraction": "61/80",
+        "percent": 76.25
+      }
+    }
+  },
+  "final_success_percent": {
+    "B": {
+      "6": 35.0,
+      "7": 100.0,
+      "8": 85.0,
+      "9": 55.0
+    },
+    "C": {
+      "6": 30.0,
+      "7": 100.0,
+      "8": 85.0,
+      "9": 90.0
+    },
+    "N": {
+      "6": 30.0,
+      "7": 100.0,
+      "8": 85.0,
+      "9": 75.0
+    },
+    "V": {
+      "6": 45.0,
+      "7": 100.0,
+      "8": 80.0,
+      "9": 80.0
+    }
+  },
+  "last_capacity_snapshot": {
+    "source": "check_readonly_20261025_054624",
+    "observed": 1792878393.055511,
+    "values": {
+      "/root": {
+        "bavail": 1455644672,
+        "bfree": 4559171584
+      },
+      "/data": {
+        "bavail": 0,
+        "bfree": 2525638656
+      }
+    },
+    "note": "Historical completion snapshot, no remaining training or checkpoint-save budget; no cleanup in closure."
   }
 }

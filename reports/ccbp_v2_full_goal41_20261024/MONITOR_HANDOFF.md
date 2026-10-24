@@ -1,17 +1,23 @@
-# 最新2026-10-25 04:17 CST交接
+# 最终闭合：2026-10-25 CCBP-v2 完整 GOAL seed41
 
-实际观察2026-10-25T04:14:58.354953+08:00，check_readonly_20261025_041448/LOCAL_AUDIT、EVALUATION_PROGRESS_AUDIT及TRAINING_COMPLETION_METADATA_AUDIT实际PASS_PROGRESS_NOT_FINAL。四组B/C/N/V各400完整epoch76100主步全部结束，合计1600epoch304400主更新，train_B/C/N/V.exit均0，16阶段CP记录SHA绑定。各Task6实际tensor同原ALIGN；全部70自身隔离GPU更新准入通过，正式额外192梯度autograd核12组stage/epoch取点。BC合法2857600/屏蔽181600、旧合法累计1082000逐epoch复算通过；12本组前阶段教师身份/tau/w/hash绑定。B/C/N/V epoch计算分钟{'B': 54.14287389914195, 'C': 54.75780982176463, 'N': 55.06828752358754, 'V': 55.47221062978109}，合计219.441182，额外准入/缓存/保存/评估另计，不称等算力。真正全CP独立CPU验收仍待全部队列结束。
-65冻结项及父源不变，controller20530/evaluate21481健康，phase evaluate；外置进度显示优先controller的evaluate以免旧TRAIN_STATUS误显示仍训练，此仅本地展示修复，不改服务器。正式80/800，8完成vector、4关闭cell、当前B_s8_t7_g0；逐记录/attempt/终止、输出分片与全集、事件顺序/策略CP/配对初态记录及独立重生成noiseSHA通过，无快照前进差异，不算部分性能。独立初态文件字节及全部CP CPU严格加载留待最终。
-评估自己缓存准入长度1–8实际PASS，16视觉前向及16策略参数调用、0环境/更新另列，最大feature差9.298325e-6、参数差1.192093e-6。正式8批均52.727389秒，含3个约20秒提前终止批，原时长全部保留；快照当前批已12.255188秒。按均值余63.068614min；按已观测最慢72.400123秒余86.675895min，两者仅早期Task6/7样本外推、不是保证上界。加阶段加载，暂参考05:20–05:50评估结束，最终验收另计。按用户整段完成点规则，同一监控下一90分钟检查全部评估结束附近，不短周期守候。
-capacity_readonly_20261025_041513/LOCAL_AUDIT PASS_NOT_FINAL：system普通free1456017408B扣余新增369422663B及1GiB后余12852921B；data rootfree2527154176B扣余新增361773957B及2GiB后余17896571B。稳定唯一inode信用，仍保守预留原完整保存峰值；只stat、0payload/写入/前向/更新/环境，未删除/付费。此前临时容量review原证据保留。
-唯一engineering02 root /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02、合同56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71、controller20530保持。早期B6完成后设备比较故障已版本化修复、实际GPU完整状态restore和100epoch精确继承证据保留，完成epoch重复0，未复制额外旧恢复payload。绝不重跑deploy/build/controller/训练或部分正式评估。
-下一次check_readonly→audit_progress→audit_evaluation_progress。如果controller.exit0且无自身进程，则立即remote.py final_readonly.py→audit_final_local.py FINAL。新最终路径仍仅静态，外置错误留证修，不重训重评；必须真实16CPU strict/完整恢复/teacher源/800初态字节noise/全部标量/全矩阵和SF-FS及成本验收。完全接受分析发布后删除同一监控，不自动扩seed。整体PARTIAL。
+**四组完整训练、800正式回合及独立验收均已完成；完整v2的主要探索条件未通过，不自动扩展。**
 
-以下科学合同与限制继续有效。
+|组别|最终Task6|Task7|Task8|Task9|AUC|FinalAll|
+|---|---:|---:|---:|---:|---:|---:|
+|B 固定教师蒸馏|35%|100%|85%|55%|76.25%|68.75%|
+|C 专家成本监督|30%|100%|85%|90%|83.125%|76.25%|
+|N 新路由无锚|30%|100%|85%|75%|78.75%|72.50%|
+|V 完整v2软锚|45%|100%|80%|80%|82.50%|76.25%|
 
-继续用户授权CCBP-v2完整GOAL seed41四组，用户离开并明确要求自主解决工程障碍直至全部验收发布完成。先完整读取D:/论文课题研究/MLR+IFA/execution/20261024_ccbp_v2_full的PROTOCOL、IMPLEMENTATION_NOTES、REPORT、RUN_STATUS、ACTIVE_ROOT及最新证据。实际root/controller/合同以ACTIVE_ROOT和最新证据为准，禁止重跑deploy/build/controller或重训已完成阶段。旧Task9分叉已废止exit1/9完整epoch，原监控已删除；旧ALIGN/CAET/TACR/readout不恢复。
-四组B/C/N/V各自官方GOAL初始化，完整Task6→7→8→9各100epoch，单组76100主步、全1600epoch304400主步。原GOAL人口997/1388/1848/3365，合法917/1286/1723/3218；合法旧窗口0/477/899/1329，FP32/b10/sampler0，原RA成员/ALIGNmask/BC+.1IFA及模型不改。Task6辅助0；Task7–9各自上一阶段教师eval/no_grad/cache冻结，全部合法旧窗口，尺度旧训练动作RMS floor.1，tau教师cost中位数冻结。B原教师蒸馏、C原专家cost，N新路由无锚，V一致度软锚。lambda.1/beta.1/rho1不扫参。自己的每阶段隔离准入、完整恢复和状态化梯度测量开关精确，不能套旧PASS。
-remote.py check_readonly.py → audit_progress.py SNAPSHOT。若正常，按整组剩余ETA更新监控；若故障先核进程停/合同一致/完整epoch恢复态/失败保留，再新版本工程修复，不覆盖冻结科学源码，不盲重启正式评估。原分叉因检查p.grad必须None误判已有零tensor，完整版已修精确前后比较并在有历史更新状态下准入，不改目标。
-全四组训练后800正式episode80vector40cell：各阶段评所有已见任务，每cell20初态0–19，同task/index配对Normal噪声，argmax分量600步5zero，无测试重试。完整controller.exit0无自身进程后remote.py final_readonly.py→audit_final_local.py FINAL。新的外置路径只AST，必须真实16CPU严格100键/完整恢复/history/Task6官方ALIGN和四组tensor相等/teacher缓存与本组前阶段CP/原RA成员标签/800初态真实字节与noiseSHA/成本标量独立复算。外置wrapper错误留证修，不重训重评。完成后给出V-C/V-N/V-B全矩阵、AUC/FWT/NBT低好/OldFinal/FinalAll、负单元与SF/FS、离线代理一致性及限制。主要探索门仍V最终Task8>C且Task9>=C，Task6/7副作用单报；不自动扩seed或任何权重扫描，单seed重复探索不称显著/硬保护。
-用户授权自动删除废用数据，已精确删除三份旧中间恢复释放约1.079GB，receipt和旧最终资产留存绑定在AUTHORIZED_CLEANUP_RECEIPT。旧最终模型/最终恢复/原始数据不能当废用自动删。历史中断恢复演练已退休，不伪报原中间payload仍在。新存储layout为准，root1.07GiB/data1.88GiB新增峰值、唯一inode抵扣，system普通留1GiB/data root留2GiB。不得降预算精度、下载weights/features/rawactions/states、新增付费。若新容量障碍可先只读查明确废用中间资产并精确留证清理，不碰未验收/活跃/最终资产。
-SSH root@jq1.9gpu.com:11920已授权，凭据仅现有内存/getpass，不文件日志参数。每轮本目录publish.py按AGENTS精确审查轻量type/size/secret/hash串行stage非force推MLR并核remoteSHA/localreceipt，TLS OpenSSL/HTTP1.1仍验证证书。禁模型/CP/原demo/action/state/latent/buffer/RNG/privatepayload/未审查bundle。发布进度不等于验收。全部独立验收报告和机制解释发布后删除本监控；只实质变化、失败、完成、需行动通知。
+V相对C改善Task6保持15pp，但Task8下降5pp、Task9下降10pp；相同FinalAll不能掩盖这一取舍。V的Task8离线执行专家cost/选择regret明显低于C，闭环却较差，证明本轮这些代理改善不足以支持闭环收益结论。没有同历史动作替换，不能归因于具体失败步骤；单seed重复探索，不声称显著或硬保护。
+
+详见[完整结果与机制分析](final_readonly_20261025_054702/FULL_REPORT.md)、[独立最终验收](final_readonly_20261025_054702/LOCAL_FINAL_AUDIT.json)、[闭合证据索引](final_readonly_20261025_054702/CLOSURE_INDEX.json)。全部矩阵、V-C/V-N/V-B配对SF/FS、负单元、梯度尺度、成本和限制均保留。
+
+controller自然exit0且无自身进程。实际验收16个CPU严格100键模型、4份完整恢复、12份本组教师来源/缓存、800初态真实字节及配对noiseSHA、全部1600epoch304400主更新。各Task6 tensor均精确同原ALIGN。额外70隔离更新、正式192和准入48次梯度autograd、教师10820窗口、评估缓存准入及CPU诊断21640窗口688调用单列；训练epoch合计219.441182分钟、评估vector合计71.319672分钟，准备/缓存/保存/工程停顿额外，不称等算力或墙钟总时长。
+
+外置CPU最终wrapper首次实际调用成功。随后本地报告描述器因NumPy int64 JSON序列化失败，已保留原脚本/错误，仅转换描述性计数为Python int并成功复算；0远程命令/前向/更新/环境，无重训重评。早期完整B Task6继承、旧废止分叉以及已授权中间文件清理记录保持。验收完成后仅发布与删除本监控，不再运行实验。
+
+以下为原历史进度，均由本最终段落取代，不代表当前仍在训练或评估。
+
+
+任务已经闭合。不要再deploy、训练、评估、轮询或扩seed。监控在核验本次远端发布后删除。

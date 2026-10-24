@@ -12,3 +12,7 @@
 updates.py的梯度诊断改为保存并比较p.grad，允许None或已有零tensor，不能用allNone判断无副作用。每个实际旧阶段都做有历史梯度的测量开关对照。原错误源和9epoch失败证据不覆盖。新程序尚须真实准入，不以AST或旧准入冒充PASS。
 
 闭环扩为全部三角矩阵800episodes，无额外环境准入、无科学负结果重试。存储复用原输入payload，自己模型全部重新训练。Stage9硬链接完整恢复，Stage6–8存模型；每组最后恢复完整保留。经授权删除旧中间恢复副本后，相关历史中断状态不再能重新演练，但旧最终模型/最终恢复/独立验收和hash记录完整保留，该限制不能隐瞒。
+
+## 最终真实验收
+
+final_readonly_20261025_054702实际CPU严格16CP及21640窗口688调用通过；audit_final_local实际完整验收通过。describe_full_final首次因NumPy int64不可JSON序列化失败，wrapper_failure_01保留原源/错误；仅builtin int转换后成功。全部源/输入/科学执行不改，0新增环境或训练。完整报告与CLOSURE_INDEX绑定本次真实证据。
