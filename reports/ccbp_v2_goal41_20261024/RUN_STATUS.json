@@ -1,8 +1,50 @@
 {
-  "status": "PREREGISTERED_CPU_ADMITTED_GPU_PENDING",
-  "observation_unix": 1792855888.9231784,
-  "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V2_GOAL41_20261024_v1",
-  "controller": null,
+  "status": "PARTIAL_TRAINING",
+  "observation_unix": 1792856178.6662838,
+  "observation_cst": "2026-10-24T23:36:18.666284+08:00",
+  "phase": {
+    "phase": "train_B",
+    "pid": 19718,
+    "time": 1792856122.6731064,
+    "controller": 19552
+  },
+  "counts": {
+    "B": {
+      "epochs": 3,
+      "steps": 1011
+    },
+    "C": {
+      "epochs": 0,
+      "steps": 0
+    },
+    "N": {
+      "epochs": 0,
+      "steps": 0
+    },
+    "V": {
+      "epochs": 0,
+      "steps": 0
+    }
+  },
+  "contract": "fa6886806120e9cff7547fc0723b602e4fd53497c0a9c1d433618e50be267e47",
+  "latest_evidence": "check_readonly_20261024_233606",
+  "own_admission": {
+    "status": "PASS_OWN_ADMISSION_AND_FROZEN_WEIGHT_BINDING_NOT_FINAL",
+    "observation": 1792856178.6662838,
+    "contract": "fa6886806120e9cff7547fc0723b602e4fd53497c0a9c1d433618e50be267e47",
+    "own_optimizer_calls": 18,
+    "own_admission_extra_gradient_autograd_calls": 16,
+    "formal_environments": 0,
+    "teacher_cache_readonly": true,
+    "teacher_tau": 0.0038629346527159214,
+    "weight_min": 0.0008717290475033224,
+    "weight_max": 0.8297061324119568,
+    "weight_mean": 0.4786851765924989,
+    "weights_sha256": "c1bcd3cf8d3f20a5fd96028e588ce6c9c3ef8d617308593a0b844de64b0e4357",
+    "snapshot_sha256": "91ff2e7d4bf7679eeecc721942fd2e57dbeb1c2fd6723c1d4c58a6ad7e94ca15"
+  },
+  "formal_updates": 1011,
+  "formal_episodes": 0,
   "budget": {
     "arms": [
       "B",
@@ -14,9 +56,17 @@
     "main_updates": 134800,
     "formal_episodes": 320
   },
-  "cpu_admission": "cpu_admission_readonly_20261024_233118",
-  "gpu_admission": false,
-  "formal_updates": 0,
-  "formal_episodes": 0,
+  "capacity_observed": {
+    "/root": {
+      "bavail": 1888186368,
+      "bfree": 4991713280
+    },
+    "/data": {
+      "bavail": 0,
+      "bfree": 3457196032
+    }
+  },
+  "next_check_minutes": 100,
+  "eta": "Approximately90\u2013105min remaining whole training from23:36; later320episodes roughly40min by old comparable throughput, Task6/7 and N/V unmeasured. Final audit extra.",
   "automatic_expansion": false
 }
