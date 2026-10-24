@@ -1,29 +1,29 @@
 {
-  "status": "PARTIAL_TRAINING",
-  "observation_unix": 1792846540.1401618,
-  "observation_cst": "2026-10-24T20:55:40.140162",
+  "status": "PARTIAL_EVALUATION",
+  "observation_unix": 1792852291.8976157,
+  "observation_cst": "2026-10-24T22:31:31.897616",
   "phase": {
-    "phase": "train_A",
-    "pid": 14533,
-    "time": 1792846437.9375193,
+    "phase": "evaluate",
+    "pid": 14795,
+    "time": 1792851462.3741891,
     "controller": 14309
   },
   "counts": {
     "A": {
-      "epochs": 9,
-      "steps": 3033
+      "epochs": 100,
+      "steps": 33700
     },
     "B": {
-      "epochs": 0,
-      "steps": 0
+      "epochs": 100,
+      "steps": 33700
     },
     "C": {
-      "epochs": 0,
-      "steps": 0
+      "epochs": 100,
+      "steps": 33700
     },
     "D": {
-      "epochs": 0,
-      "steps": 0
+      "epochs": 100,
+      "steps": 33700
     }
   },
   "own_admission": {
@@ -120,7 +120,7 @@
       "contract": "4e921bf269b364c20758fb947305d9aceac484048ba7d8e3e0d9ecb26957ae24"
     }
   },
-  "formal_episodes": 0,
+  "formal_episodes": 110,
   "teacher": {
     "status": "PASS",
     "count": 430,
@@ -140,15 +140,23 @@
   "source_hash_unchanged": true,
   "capacity_observed": {
     "/root": {
-      "bavail": 3619938304,
-      "bfree": 6723465216
+      "bavail": 2234646528,
+      "bfree": 5338173440
     },
     "/data": {
       "bavail": 0,
-      "bfree": 3458539520
+      "bfree": 3457658880
     }
   },
-  "next_check_minutes": 90,
-  "eta": "Four-arm training approximately 90 minutes from observation; B/C/D throughput and evaluation unmeasured",
-  "latest_evidence": "check_readonly_20261024_205528"
+  "next_check_minutes": 5,
+  "eta": "At 22:31:31 remaining evaluation linear 301.686229 seconds; finish reference22:36\u201322:39CST, final audit extra",
+  "latest_evidence": "check_readonly_20261024_223121",
+  "complete_vectors": 11,
+  "complete_cells": 5,
+  "epoch_seconds": {
+    "A": 912.8854763507843,
+    "B": 1262.0661826133728,
+    "C": 1254.003398180008,
+    "D": 1255.5390198230743
+  }
 }
