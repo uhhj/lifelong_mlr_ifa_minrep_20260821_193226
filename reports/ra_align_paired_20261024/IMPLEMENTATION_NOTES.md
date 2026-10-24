@@ -9,3 +9,7 @@
 进度：check_progress.py→audit_progress.py <snapshot>。自然worker/supervisor exit0、无自身进程后才collect_final.py（调用final_readonly.py，私有历史重构/动作/noise/12CP hash/全部源验证、只下载白名单标量）→audit_final_local.py <final目录>。这两个新最终路径尚未实际完整验收，当前只AST，不得套此前PASS。最终分析还需解读SF/FS和关键片段，无反事实同状态动作干预不能断言单步因果。用户的保护三组训练是发现可重复有害改变后的条件任务，当前未注册训练预算或启动任何优化器。
 
 发布仅轻量代码/报告/hash/结果标量。完整逐步标量light目录本地留存且SHA清单发布，不将数百MB逐步记录都推仓库；汇总与关键事件片段发布。绝不下载或发布服务器private帧、动作、模型或噪声载荷。共享checkout串行stage，证书验证下OpenSSL/HTTP1.1必要重试；最终确认remoteSHA与receipt。
+
+## 2026-10-24 最终覆盖
+
+上述“仅AST”仅描述运行前状态：final_20261024_193008的远端私有重构及本地完整审计均已实际PASS，无包装失败或重跑；新增analyze_mechanisms.py及close_diagnostic.py已对全量标量实际运行。最终状态与限制见REPORT.md，禁止将描述性关联当保护训练准入。

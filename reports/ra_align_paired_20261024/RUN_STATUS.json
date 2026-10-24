@@ -1,35 +1,42 @@
 {
-  "status": "PARTIAL_PAIRED_DIAGNOSTIC_RUNNING",
-  "observation": "2026-10-24T18:57:21.884779+08:00",
+  "status": "COMPLETE_DIAGNOSTIC_ACCEPTED_NO_PROTECTION_TRAINING",
+  "observation": "2026-10-24T19:29:55.391048+08:00",
   "offline": "COMPLETE_LOCAL_ACCEPTED",
   "closed_loop": {
-    "status": "PASS_PROGRESS_NOT_FINAL",
-    "observation": "2026-10-24T18:57:21.884779+08:00",
-    "episodes": 20,
-    "vectors": 2,
+    "status": "COMPLETE_LOCAL_ACCEPTED",
+    "observation": "2026-10-24T19:29:55.391048+08:00",
+    "episodes": 240,
+    "vectors": 24,
     "admission": true,
-    "active_vector": "RA_s41_driver9_g0",
+    "active_vector": null,
     "training_updates": 0,
     "sources": {
       "ADMISSION.json": "c140387f52866627884db1448afec2bec761894fdf5ac705dd7581c4d3a39c26",
       "ATTEMPT.json": "02f1f4da7c218f1395d6488a04151139207ed9ee7bf00eaef139a33b80e61c3a",
-      "EVENTS.jsonl": "c612180a50e2c3e9f9404acb7af347fb141ca8bac226908d2846a8cd5096f4b2",
-      "OUTCOMES.json": "243f5cb3aaad821e1a9b01e518bca2afd042588421685c4e787c48571fc69e2f",
+      "COMPLETE.json": "c1877e76ffac219472d5575497093aa331bc76012534eb293bf5383e0439079c",
+      "EVENTS.jsonl": "7d9a861159bb4ff12b656b4be103c40b29bbb1fce60d32b5d5d8d7451ae21f75",
+      "OUTCOMES.json": "38c5eeac97275c77613e8991283c8bfac49a8e73030b1ae69e93ac99083e8f42",
       "RUN_STARTED.json": "497970dbd25cf78e738736631b1f34f1f60f226b06c9401a7c292bff466615f1",
-      "SNAPSHOT.json": "7091c3fa34b4196a7a4d8490ca1b63b4b4bc16fab18408e93a40cc48c3493e37"
+      "SNAPSHOT.json": "4096834e625a87df1abc4b22856775acc5fa3e76a2a726676cff3b44800ec6f3",
+      "supervisor.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      "worker.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
     },
-    "exit": null,
-    "gpu": "7052, 3154 MiB\n",
-    "mean_vector_seconds": 76.38655077949988,
-    "remaining_linear_seconds": 1642.4859954296371
+    "exit": "0",
+    "gpu": "",
+    "mean_vector_seconds": 73.79542050033342,
+    "remaining_linear_seconds": 0.0
   },
   "active_root": {
     "root": "/data/mlr_ifa/experiment_workspaces/RA_ALIGN_PAIRED_GOAL_20261024_v1_engineering02",
     "pid": 7051,
     "contract_sha256": "12fc5c69ebacbbb0362d089122c5e07f230c8ed6d17294e34f3073bbe8765e67",
     "time": "2026-10-24T18:53:48.227359+08:00",
-    "status": "LAUNCHED_ADMISSION_PENDING"
+    "status": "NATURAL_EXIT0_NO_OWN_PROCESSES"
   },
   "training_updates": 0,
-  "conditional_protection_training": "NOT_STARTED"
+  "conditional_protection_training": "NOT_STARTED",
+  "final_directory": "final_20261024_193008",
+  "final_audit_sha256": "abc812fc3ef1f3b089a6363ec2e4baf73a2eeb308be27c957cdf662abff488e1",
+  "closure_sha256": "211adf00a58580c26dea6b13c427f9e2407d3219e0041ae458539c193b43a4b8",
+  "mechanism_analysis": "COMPLETE_DESCRIPTIVE_CAUSAL_LIMITS_RETAINED"
 }
