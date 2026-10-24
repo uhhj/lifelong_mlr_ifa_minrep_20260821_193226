@@ -37,7 +37,16 @@ ongoing = []
 cells = []
 for path in sorted((root/'evaluation').glob('attempts_*.jsonl')):
     events = lines(path)
-    trials = lines(path.with_name(path.name.replace('attempts_', 'trials_')))
+    trial_path = path.with_name(path.name.replace('attempts_', 'trials_'))
+    if trial_path.exists():
+        trials = lines(trial_path)
+    else:
+        # A cell can be observed after its first start and before its first
+        # completed vector creates a trials file. Never hide a missing result.
+        assert not any(x['event'] == 'vector_attempt_complete' for x in events)
+        relative = trial_path.relative_to(P/'metadata').as_posix()
+        assert relative not in d['files'] and relative not in js(P/'DOWNLOAD.json')
+        trials = []
     assert events
     stage, task = events[0]['stage'], events[0]['task']
     assert 6 <= task <= stage <= 9
