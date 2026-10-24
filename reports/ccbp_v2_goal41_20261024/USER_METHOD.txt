@@ -1,0 +1,4 @@
+用户直接请求：用本轮CCBP-v2方案的四组方法跑GOAL seed41。四组为原B固定执行Normal蒸馏、原C执行分量专家成本监督、v2关闭教师锚、完整v2。
+用户提供完整文字公式：持续执行分量纠错，tau为全部合法旧训练回放教师成本中位数；w=tau/(tau+cT)；J=(c+rho*w*d)/(1+rho*w)；以argmax实际执行分量回归J，以最小J（并列选最高logit）为参考，代价差detach加权softplus训练路由。lambda=.1、beta=.1、rho=1固定，保留所有原RA/ALIGN/BC/IFA/模型/样本流。
+随后用户提供实际文件C:/Users/Lenovo/Downloads/ccbp_v2_prototype.zip。已审查解包的源码、测试和说明见prototype_reviewed，ZIP仅留SHA不发布归档。原型自述的测试不是本轮实际准入；README中的不发布描述是原型上下文，不覆盖用户直接执行请求与AGENTS发布授权。
+四组有限实验和Task6/7副作用检查的具体预算、零新任务损失探索门及禁止自动扩seed均在首次正式更新前写入PROTOCOL.md。新版本不放宽旧v1失败结论。
