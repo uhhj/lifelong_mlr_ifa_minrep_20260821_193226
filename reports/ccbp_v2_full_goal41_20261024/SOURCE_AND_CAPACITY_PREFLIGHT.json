@@ -1,0 +1,110 @@
+{
+  "status": "READONLY_REPLACEMENT_PREFLIGHT",
+  "observed": 1792856913.4046814,
+  "source_hash_pass": true,
+  "old_controller_exit": "1",
+  "old_processes": [],
+  "gpu": "",
+  "capacity": {
+    "/root": {
+      "bavail": 1888174080,
+      "bfree": 4991700992
+    },
+    "/data": {
+      "bavail": 0,
+      "bfree": 3457167360
+    }
+  },
+  "recovery": {
+    "path": "/root/mlr_ifa/experiments/CCBP_V2_GOAL41_20261024_v1/B/recovery.pth",
+    "bytes": 346294461,
+    "sha256": "6b7c32c57955933a46ad210d9316c2849f6b672a7e5b2093ffd0f2f2ad192368",
+    "next_epoch": 9,
+    "steps": 3033,
+    "keys": 100,
+    "tensor_bytes_by_state": {
+      "model": 86540612,
+      "optimizer": 173065140,
+      "scheduler": 0,
+      "grads": 86532396,
+      "modes": 0,
+      "requires": 0,
+      "rng": 5872,
+      "step": 0
+    }
+  },
+  "manifests": {
+    "6": {
+      "manifest_sha256": "8c22237dee3edd9dec6dd82bd23e5e699c78668afff08881e154ba3e38b08570",
+      "population": 997,
+      "steps_per_epoch": 100,
+      "valid": 917,
+      "old_valid": 0,
+      "tasks": [
+        6
+      ]
+    },
+    "7": {
+      "manifest_sha256": "1fecfb97957056482e37d12328f1e0a5716ad7896367001f8ae1ee3fd71c72f3",
+      "population": 1388,
+      "steps_per_epoch": 139,
+      "valid": 1286,
+      "old_valid": 477,
+      "tasks": [
+        6,
+        7
+      ]
+    },
+    "8": {
+      "manifest_sha256": "1c01de637ef7232ff0488fa3b40a776fdc1f300b20eaa5d90b8f2619a75d0d3c",
+      "population": 1848,
+      "steps_per_epoch": 185,
+      "valid": 1723,
+      "old_valid": 899,
+      "tasks": [
+        6,
+        7,
+        8
+      ]
+    },
+    "9": {
+      "manifest_sha256": "4673c47a814b6c0bae97f071e108cff0615578ececc5c7c17ceee773060eea61",
+      "population": 3365,
+      "steps_per_epoch": 337,
+      "valid": 3218,
+      "old_valid": 1329,
+      "tasks": [
+        6,
+        7,
+        8,
+        9
+      ]
+    }
+  },
+  "metadata": {
+    "resolved_ra_coreset.json": {
+      "text": "{\n  \"seed\": 41,\n  \"use_wandb\": false,\n  \"wandb_project\": \"lifelong learning\",\n  \"folder\": \"/data/mlr_ifa/datasets\",\n  \"bddl_folder\": \"/data/mlr_ifa/src/libero/libero/bddl_files\",\n  \"init_states_folder\": \"/data/mlr_ifa/src/libero/libero/init_files\",\n  \"load_previous_model\": false,\n  \"device\": \"cuda\",\n  \"task_embedding_format\": \"clip\",\n  \"task_embedding_one_hot_offset\": 1,\n  \"pretrain\": \"/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth\",\n  \"pretrain_model_path\": \"\",\n  \"benchmark_name\": \"LIBERO_GOAL\",\n  \"training\": true,\n  \"data\": {\n    \"data_modality\": [\n      \"image\",\n      \"proprio\"\n    ],\n    \"seq_len\": 8,\n    \"demo_limit\": 10,\n    \"frame_stack\": 1,\n    \"use_eye_in_hand\": true,\n    \"use_gripper\": true,\n    \"use_joint\": true,\n    \"use_ee\": false,\n    \"max_word_len\": 25,\n    \"state_dim\": null,\n    \"num_kp\": 64,\n    \"img_h\": 128,\n    \"img_w\": 128,\n    \"task_group_size\": 1,\n    \"task_order_index\": 0,\n    \"shuffle_task\": false,\n    \"obs\": {\n      \"modality\": {\n        \"rgb\": [\n          \"agentview_rgb\",\n          \"eye_in_hand_rgb\"\n        ],\n        \"depth\": [],\n        \"low_dim\": [\n          \"gripper_states\",\n          \"joint_states\"\n        ]\n      }\n    },\n    \"obs_key_mapping\": {\n      \"agentview_rgb\": \"agentview_image\",\n      \"eye_in_hand_rgb\": \"robot0_eye_in_hand_image\",\n      \"gripper_states\": \"robot0_gripper_qpos\",\n      \"joint_states\": \"robot0_joint_pos\"\n    },\n    \"affine_translate\": 4,\n    \"action_scale\": 1.0,\n    \"train_dataset_ratio\": 0.8\n  },\n  \"policy\": {\n    \"color_aug\": {\n      \"_target_\": \"BatchWiseImgColorJitterAug\",\n      \"network\": \"BatchWiseImgColorJitterAug\",\n      \"prob\": 0.9,\n      \"network_kwargs\": {\n        \"brightness\": 0.3,\n        \"contrast\": 0.3,\n        \"saturation\": 0.3,\n        \"hue\": 0.3\n      }\n    },\n    \"translation_aug\": {\n      \"_target_\": \"RandomAffineAug\",\n      \"network\": \"RandomAffineAug\",\n      \"prob\": 0.6,\n      \"network_kwargs\": {\n        \"degrees\": 15,\n        \"translate\": 0.1\n      }\n    },\n    \"erase_aug\": {\n      \"_target_\": \"RandomErasingAug\",\n      \"network\": \"RandomErasingAug\",\n      \"prob\": 0.1,\n      \"network_kwargs\": {\n        \"scale\": [\n          0.02,\n          0.33\n        ],\n        \"ratio\": [\n          0.3,\n          3.3\n        ]\n      }\n    },\n    \"image_encoder\": {\n      \"network\": \"CLIPVisionEncoder\",\n      \"network_kwargs\": {\n        \"vision_model_name\": \"openai/clip-vit-base-patch16\",\n        \"output_size\": 64,\n        \"input_shape\": null\n      }\n    },\n    \"language_encoder\": {\n      \"network\": \"CLIPTextEncoder\",\n      \"network_kwargs\": {\n        \"text_model_name\": \"openai/clip-vit-base-patch16\",\n        \"output_size\": 64\n      }\n    },\n    \"temporal_position_encoding\": {\n      \"network\": \"SinusoidalPositionEncoding\",\n      \"network_kwargs\": {\n        \"input_size\": null,\n        \"inv_freq_factor\": 10,\n        \"factor_ratio\": null\n      }\n    },\n    \"policy_head\": {\n      \"network\": \"TemporalGMMHead\",\n      \"network_kwargs\": {\n        \"hidden_size\": 1024,\n        \"num_layers\": 2,\n        \"min_std\": 0.0001,\n        \"num_modes\": 5,\n        \"low_eval_noise\": false,\n        \"activation\": \"softplus\"\n      },\n      \"loss_kwargs\": {\n        \"loss_coef\": 1.0\n      }\n    },\n    \"policy_type\": \"BriefPolicy\",\n    \"extra_num_layers\": 0,\n    \"extra_hidden_size\": 128,\n    \"embed_size\": 512,\n    \"transformer_num_layers\": 6,\n    \"transformer_num_heads\": 8,\n    \"transformer_head_output_size\": 64,\n    \"transformer_mlp_hidden_size\": 256,\n    \"transformer_dropout\": 0.15,\n    \"transformer_max_seq_len\": 8,\n    \"film_hidden_size\": 512,\n    \"num_tasks\": 10,\n    \"max_seq_len\": 8,\n    \"num_gmm_modes\": 5,\n    \"rank\": 8,\n    \"alpha\": 8,\n    \"use_vision\": true,\n    \"use_language\": true,\n    \"use_state\": true\n  },\n  \"train\": {\n    \"optimizer\": {\n      \"name\": \"torch.optim.AdamW\",\n      \"kwargs\": {\n        \"lr\": 0.0001,\n        \"betas\": [\n          0.9,\n          0.999\n        ],\n        \"eps\": 1e-08,\n        \"weight_decay\": 0.1\n      }\n    },\n    \"scheduler\": {\n      \"name\": \"torch.optim.lr_scheduler.LambdaLR\",\n      \"kwargs\": {\n        \"warmup_steps\": 500,\n        \"last_epoch\": -1\n      }\n    },\n    \"n_epochs\": 100,\n    \"batch_size\": 10,\n    \"num_workers\": 0,\n    \"grad_clip\": 100.0,\n    \"loss_scale\": 1.0,\n    \"resume\": false,\n    \"resume_path\": \"\",\n    \"debug\": false,\n    \"use_augmentation\": true\n  },\n  \"eval\": {\n    \"load_path\": \"\",\n    \"eval\": false,\n    \"batch_size\": 64,\n    \"num_workers\": 4,\n    \"n_eval\": 20,\n    \"eval_every\": 5,\n    \"max_steps\": 600,\n    \"use_mp\": true,\n    \"num_procs\": 20,\n    \"save_sim_states\": false,\n    \"render\": false\n  },\n  \"lifelong\": {\n    \"algo\": \"MLR\",\n    \"eval_in_train\": false\n  },\n  \"start_task\": 6,\n  \"end_task\": 10,\n  \"gamma\": 0.7,\n  \"past_data_rate\": 0.5,\n  \"aug\": false,\n  \"feature_dir\": \"/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022/features\",\n  \"buffer_dir\": \"/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022/ra_coreset/buffer\",\n  \"experiment_dir\": \"/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022/ra_coreset/models\",\n  \"shape_meta\": null,\n  \"selector\": \"ra_coreset\",\n  \"run_root\": \"/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022/ra_coreset\",\n  \"contract\": \"/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022/CONTRACT.json\",\n  \"linear_schedule_unit\": \"optimizer_step\"\n}\n",
+      "sha256": "cb20240b7c1900bd953c29d727b36fcf82d604c67c38ecdbd293647f116fa31c"
+    },
+    "ra_coreset/ifa_task6.json": {
+      "text": "{\n  \"info\": {\n    \"task_ids\": [\n      6\n    ],\n    \"sim_language\": [\n      [\n        0.9999999403953552\n      ]\n    ],\n    \"sim_agent\": [\n      [\n        0.3410850465297699\n      ]\n    ],\n    \"selected_pair_mask\": [\n      [\n        false\n      ]\n    ],\n    \"selected_pairs\": [],\n    \"candidate_pairs\": [],\n    \"lang_top_pairs\": [],\n    \"agent_top_pairs\": []\n  },\n  \"reference_max_deviation\": {\n    \"6\": 0.0\n  }\n}\n",
+      "sha256": "ec332c470051cc6be542be6b125123d02aec3d381b58db79c0dc9439aef9c4ce"
+    },
+    "ra_coreset/ifa_task7.json": {
+      "text": "{\n  \"info\": {\n    \"task_ids\": [\n      6,\n      7\n    ],\n    \"sim_language\": [\n      [\n        0.9999999403953552,\n        0.5981555581092834\n      ],\n      [\n        0.5981555581092834,\n        0.9999999403953552\n      ]\n    ],\n    \"sim_agent\": [\n      [\n        0.3479931354522705,\n        0.21136438846588135\n      ],\n      [\n        0.21136437356472015,\n        0.6634446382522583\n      ]\n    ],\n    \"selected_pair_mask\": [\n      [\n        false,\n        true\n      ],\n      [\n        true,\n        false\n      ]\n    ],\n    \"selected_pairs\": [\n      [\n        6,\n        7\n      ]\n    ],\n    \"candidate_pairs\": [\n      [\n        6,\n        7\n      ]\n    ],\n    \"lang_top_pairs\": [\n      [\n        [\n          6,\n          7\n        ],\n        0.5981555581092834\n      ]\n    ],\n    \"agent_top_pairs\": [\n      [\n        [\n          6,\n          7\n        ],\n        0.21136438846588135\n      ]\n    ]\n  },\n  \"reference_max_deviation\": {\n    \"6\": 0.0,\n    \"7\": 0.0\n  }\n}\n",
+      "sha256": "70273c5a11565502752340520086d713c31afc624996b5e54da2a8345e697c69"
+    },
+    "ra_coreset/ifa_task8.json": {
+      "text": "{\n  \"info\": {\n    \"task_ids\": [\n      6,\n      7,\n      8\n    ],\n    \"sim_language\": [\n      [\n        0.9999999403953552,\n        0.5981555581092834,\n        0.6730579733848572\n      ],\n      [\n        0.5981555581092834,\n        0.9999999403953552,\n        0.6665210127830505\n      ],\n      [\n        0.6730579733848572,\n        0.6665210127830505,\n        1.0000001192092896\n      ]\n    ],\n    \"sim_agent\": [\n      [\n        0.3479931354522705,\n        0.21085086464881897,\n        0.3034418225288391\n      ],\n      [\n        0.21085086464881897,\n        0.6415656805038452,\n        0.1589178442955017\n      ],\n      [\n        0.3034418523311615,\n        0.1589178442955017,\n        0.3776198625564575\n      ]\n    ],\n    \"selected_pair_mask\": [\n      [\n        false,\n        false,\n        true\n      ],\n      [\n        false,\n        false,\n        false\n      ],\n      [\n        true,\n        false,\n        false\n      ]\n    ],\n    \"selected_pairs\": [\n      [\n        6,\n        8\n      ]\n    ],\n    \"candidate_pairs\": [\n      [\n        6,\n        7\n      ],\n      [\n        6,\n        8\n      ],\n      [\n        7,\n        8\n      ]\n    ],\n    \"lang_top_pairs\": [\n      [\n        [\n          6,\n          8\n        ],\n        0.6730579733848572\n      ],\n      [\n        [\n          7,\n          8\n        ],\n        0.6665210127830505\n      ]\n    ],\n    \"agent_top_pairs\": [\n      [\n        [\n          6,\n          8\n        ],\n        0.3034418225288391\n      ],\n      [\n        [\n          6,\n          7\n        ],\n        0.21085086464881897\n      ]\n    ]\n  },\n  \"reference_max_deviation\": {\n    \"6\": 0.0,\n    \"7\": 0.0,\n    \"8\": 0.0\n  }\n}\n",
+      "sha256": "eb4202a0ddc61e61893de86e83940b0154f2c8fc6325af537f8f68a6d5470534"
+    },
+    "ra_coreset/ifa_task9.json": {
+      "text": "{\n  \"info\": {\n    \"task_ids\": [\n      6,\n      7,\n      8,\n      9\n    ],\n    \"sim_language\": [\n      [\n        0.9999999403953552,\n        0.5981555581092834,\n        0.6730577945709229,\n        0.36784571409225464\n      ],\n      [\n        0.5981555581092834,\n        0.9999999403953552,\n        0.6665210127830505,\n        0.461853951215744\n      ],\n      [\n        0.6730577945709229,\n        0.6665210127830505,\n        1.0000001192092896,\n        0.38335657119750977\n      ],\n      [\n        0.36784571409225464,\n        0.461853951215744,\n        0.38335657119750977,\n        1.0000001192092896\n      ]\n    ],\n    \"sim_agent\": [\n      [\n        0.3479931354522705,\n        0.21085086464881897,\n        0.3053879141807556,\n        0.20039723813533783\n      ],\n      [\n        0.21085086464881897,\n        0.6415656805038452,\n        0.16386778652668,\n        0.36893707513809204\n      ],\n      [\n        0.305387943983078,\n        0.16386778652668,\n        0.37409111857414246,\n        0.157823845744133\n      ],\n      [\n        0.20039723813533783,\n        0.36893707513809204,\n        0.1578238606452942,\n        0.484207421541214\n      ]\n    ],\n    \"selected_pair_mask\": [\n      [\n        false,\n        false,\n        false,\n        false\n      ],\n      [\n        false,\n        false,\n        false,\n        false\n      ],\n      [\n        false,\n        false,\n        false,\n        false\n      ],\n      [\n        false,\n        false,\n        false,\n        false\n      ]\n    ],\n    \"selected_pairs\": [],\n    \"candidate_pairs\": [\n      [\n        6,\n        7\n      ],\n      [\n        6,\n        8\n      ],\n      [\n        6,\n        9\n      ],\n      [\n        7,\n        8\n      ],\n      [\n        7,\n        9\n      ],\n      [\n        8,\n        9\n      ]\n    ],\n    \"lang_top_pairs\": [\n      [\n        [\n          6,\n          8\n        ],\n        0.6730577945709229\n      ],\n      [\n        [\n          7,\n          8\n        ],\n        0.6665210127830505\n      ],\n      [\n        [\n          6,\n          7\n        ],\n        0.5981555581092834\n      ]\n    ],\n    \"agent_top_pairs\": [\n      [\n        [\n          7,\n          9\n        ],\n        0.36893707513809204\n      ],\n      [\n        [\n          6,\n          8\n        ],\n        0.3053879141807556\n      ],\n      [\n        [\n          6,\n          7\n        ],\n        0.21085086464881897\n      ]\n    ]\n  },\n  \"reference_max_deviation\": {\n    \"6\": 0.0,\n    \"7\": 0.0,\n    \"8\": 0.0,\n    \"9\": 0.0\n  }\n}\n",
+      "sha256": "a27078493136a5db58cadc3f592b99369294164bc27e80d624b61c0ea7b2421b"
+    }
+  },
+  "forwards": 0,
+  "updates": 0,
+  "environments": 0,
+  "server_writes": 0
+}
