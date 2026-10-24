@@ -1,5 +1,5 @@
 """External CPU-only final audit and fixed expert-cost diagnostic. No server writes."""
-import os,sys,ast,json,hashlib,time
+import os,sys,ast,json,hashlib,time,contextlib
 from pathlib import Path
 os.environ.update(CUDA_VISIBLE_DEVICES='',PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',LIBERO_CONFIG_PATH='/data/mlr_ifa/config',HF_HOME='/data/mlr_ifa/cache/huggingface',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1')
 Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_GOAL41_20261024_v1');P=Path('/root/mlr_ifa/experiments/CCBP_GOAL41_20261024_v1');O=Path('/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022');S=Path('/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source')
@@ -50,8 +50,11 @@ for arm in 'ABCD':
  p=model(P/arm/'stage9.pth');train=js(Q/('TRAIN_'+arm+'.json'));assert sha(P/arm/'stage9.pth')==train['cp_sha256'];rec=torch.load(P/arm/'recovery.pth',map_location='cpu')
  assert rec['next_epoch']==100 and rec['state']['step']==33700 and rec['contract']==sha(Q/'CONTRACT.json') and rec['teacher_sha256']==sha(P/'teacher_cache.pth')
  raw=torch.load(P/arm/'stage9.pth',map_location='cpu')['state_dict'];assert all(torch.equal(raw[k],v) for k,v in rec['state']['model'].items())
- assert set(rec['state']['grads'])==set(raw)==set(rec['state']['requires']) and set(rec['state']['rng'])=={'python','numpy','cpu','cuda'}
- strict[arm]=dict(strict_keys=100,cp_sha256=train['cp_sha256'],recovery_sha256=sha(P/arm/'recovery.pth'),complete_state_fields=sorted(rec['state']),parameters=sum(v.numel() for v in p.parameters()))
+ norm=lambda names:{n[7:] if n.startswith('module.') else n for n in names}
+ assert norm(rec['state']['grads'])==set(dict(p.named_parameters()))==norm(rec['state']['requires']), 'Recovery parameter fields differ from exact native model'
+ assert set(rec['state']['rng'])=={'python','numpy','cpu','cuda'}
+ assert {'model','optimizer','scheduler','grads','modes','requires','rng','step'}==set(rec['state'])
+ strict[arm]=dict(strict_keys=100,cp_sha256=train['cp_sha256'],recovery_sha256=sha(P/arm/'recovery.pth'),complete_state_fields=sorted(rec['state']),parameters=sum(v.numel() for v in p.parameters()),parameter_keys=len(dict(p.named_parameters())),buffer_keys=len(dict(p.named_buffers())),recovery_gradient_keys=len(rec['state']['grads']))
  out=[]
  for start in range(0,len(rows),32):
   chunk=rows[start:start+32];x=torch.stack([torch.load(O/'ra_coreset/buffer'/m['destination'],map_location='cpu')['feature'].squeeze(0) for m,r in chunk]);y=torch.stack([r['next_action'] for m,r in chunk]).double()
@@ -67,7 +70,8 @@ for arm in 'ABCD':
  diags[arm]=out
 records=js(Q/'OUTCOMES.json');assert len(records)==160
 cfg=js(O/'resolved_eval.json');sys.path.insert(0,str(S));from libero.libero.benchmark import get_benchmark
-b=get_benchmark(cfg['benchmark_name'])(cfg['data']['task_order_index']);seen=set()
+with contextlib.redirect_stdout(sys.stderr):b=get_benchmark(cfg['benchmark_name'])(cfg['data']['task_order_index'])
+seen=set()
 for r in records:
  key=(r['arm'],r['task'],r['initial_index']);assert key not in seen;seen.add(key);assert r['attempt']==1 and 0<r['steps']<=600 and (r['success'] or r['steps']==600)
  task=b.get_task(r['task']);fp=Path(cfg['init_states_folder'])/task.problem_folder/task.init_states_file;arr=torch.load(fp,map_location='cpu')[r['initial_index']]

@@ -1,0 +1,14 @@
+{
+  "status": "RESOLVED_EXTERNAL_WRAPPER_ONLY",
+  "failed_attempt_sha256": "4699a103c6a83085571808c378d01547f104a747dc12cd3fd7abe8a8edd7edeb",
+  "failed_wrapper_sha256": "fc938589487ba857f276bfd584c0c338915cbb257a96f7fe968dc54baf9fb56c",
+  "reason": "Wrapper incorrectly required gradient/require keys to equal state_dict keys. Exact native model has 88 parameter keys and 12 attention buffers; buffers correctly have no gradient or requires_grad entry.",
+  "repair": "Compare gradient/require names against exact native named_parameters, retaining full 100-key strict state and recovery tensor equality; verify all eight recovery fields and all four RNG domains. Redirect benchmark informational stdout to stderr for JSON transport.",
+  "successful_attempt_sha256": "1e320b87a1241763b1a7d94b54de307abb3a204979635ea143ee895247913ea1",
+  "successful_evidence_sha256": "e0a6351a0e7e8f1e07ec30ebb6b9053b7e2c5ba7e4770a4c844ca20043ee7d66",
+  "scientific_source_unchanged": true,
+  "additional_training_updates": 0,
+  "additional_environments": 0,
+  "failed_attempt_diagnostic_forwards": 0,
+  "failed_attempt_cpu_construction_and_load_time": "not separately measured"
+}

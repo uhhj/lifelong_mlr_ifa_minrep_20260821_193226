@@ -1,0 +1,97 @@
+"""Bind completed finite run and write the final report from accepted local scalars."""
+import ast,datetime,hashlib,json
+from pathlib import Path
+R=Path(__file__).resolve().parent
+D=R/'final_readonly_20261024_224310';S=R/'check_readonly_20261024_223909';F=R/'final_readonly_20261024_223933'
+read=lambda p:json.loads(p.read_text(encoding='utf8'))
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+write=lambda p,v:p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+v=read(D/'EVIDENCE.json');a=read(D/'LOCAL_FINAL_AUDIT.json');d=read(D/'FINAL_ANALYSIS.json')
+assert a['status']=='COMPLETE_LOCAL_INDEPENDENT_PASS' and not a['scientific_support']
+assert a['final_evidence_sha256']==sha(D/'EVIDENCE.json') and d['source_final_audit_sha256']==sha(D/'LOCAL_FINAL_AUDIT.json')
+light={n:json.loads(x['text']) if n.endswith('.json') else x['text'] for n,x in v['light'].items()}
+snapshot=read(S/'EVIDENCE.json')
+assert all(snapshot['light'][n]['sha256']==v['light'][n]['sha256'] for n in ['OUTCOMES.json','EVAL_EVENTS.jsonl'])
+local_failure=D/'LOCAL_REPORT_WRAPPER_ATTEMPT.json'
+if local_failure.exists():
+ write(D/'LOCAL_REPORT_WRAPPER_RESOLUTION.json',dict(status='RESOLVED_LOCAL_REPORT_ONLY',failed_attempt_sha256=sha(local_failure),fix='Read actual STATUS.json; no change to accepted audit or experiment',successful_phase=light['STATUS.json'],remote_commands=0,forwards=0,updates=0,environments=0))
+resolution=dict(status='RESOLVED_EXTERNAL_WRAPPER_ONLY',failed_attempt_sha256=sha(F/'ATTEMPT.json'),failed_wrapper_sha256=sha(F/'FAILED_WRAPPER.py'),reason='Wrapper incorrectly required gradient/require keys to equal state_dict keys. Exact native model has 88 parameter keys and 12 attention buffers; buffers correctly have no gradient or requires_grad entry.',repair='Compare gradient/require names against exact native named_parameters, retaining full 100-key strict state and recovery tensor equality; verify all eight recovery fields and all four RNG domains. Redirect benchmark informational stdout to stderr for JSON transport.',successful_attempt_sha256=sha(D/'ATTEMPT.json'),successful_evidence_sha256=sha(D/'EVIDENCE.json'),scientific_source_unchanged=True,additional_training_updates=0,additional_environments=0,failed_attempt_diagnostic_forwards=0,failed_attempt_cpu_construction_and_load_time='not separately measured')
+write(D/'WRAPPER_RESOLUTION.json',resolution)
+bound=[S/'EVIDENCE.json',S/'LOCAL_AUDIT.json',S/'EVALUATION_PROGRESS_AUDIT.json',D/'ATTEMPT.json',D/'EVIDENCE.json',D/'LOCAL_FINAL_AUDIT.json',D/'FINAL_ANALYSIS.json',D/'WRAPPER_RESOLUTION.json',F/'ATTEMPT.json',F/'FAILED_WRAPPER.py']
+if local_failure.exists():bound.extend([local_failure,D/'LOCAL_REPORT_WRAPPER_RESOLUTION.json'])
+closure=dict(status='COMPLETE_LOCAL_CLOSURE_PASS',observed=v['observed'],contract=v['contract'],controller_exit=light['controller.exit'],evaluate_exit=light['evaluate.exit'],training_exits={x:light['train_'+x+'.exit'] for x in 'ABCD'},no_residual=v['no_residual'],checkpoint_strict=v['strict'],formal_epochs=400,formal_updates=134800,episodes=160,vectors=16,cells=8,initial_file_bytes_and_noise_sha_verified=True,scientific_support=False,automatic_expansion=False,evidence={str(p.relative_to(R)):sha(p) for p in bound})
+assert closure['controller_exit']==closure['evaluate_exit']=='0' and closure['no_residual']
+write(D/'CLOSURE_INDEX.json',closure)
+status=read(R/'RUN_STATUS.json');status.update(status='COMPLETE_LOCAL_ACCEPTED_SCIENTIFIC_NOT_SUPPORTED',observation_unix=v['observed'],observation_cst=datetime.datetime.fromtimestamp(v['observed'],datetime.timezone(datetime.timedelta(hours=8))).isoformat(),phase=light['STATUS.json'],formal_episodes=160,complete_vectors=16,complete_cells=8,next_check_minutes=None,eta=None,latest_evidence=D.name,final_audit_status=a['status'],scientific_support=False,automatic_expansion=False,final_matrix=a['matrix_success_out_of_20'],closure_sha256=sha(D/'CLOSURE_INDEX.json'),monitor_action='delete after verified final publication')
+write(R/'RUN_STATUS.json',status)
+report='''# CCBP GOAL Task8→Task9：最终有限验证
+
+本轮已完成本地独立验收，科学结论为**未达到预注册支持标准，停止扩展**。四组均完成100 epoch、33700主更新；共134800主更新和160正式回合。controller于2026-10-24 22:36:36 CST自然exit0；22:39只读快照无自身进程、GPU空闲，22:44:04最终CPU证据再次核无残留。没有重训、重跑环境、修改科学参数或追加seed。
+
+## 闭环结果
+
+| 组别 | 方法 | Task8旧任务 | Task9新任务 | 两任务平均 |
+|---|---|---:|---:|---:|
+| A | ALIGN | 13/20，65% | 16/20，80% | 72.5% |
+| B | 固定执行Normal蒸馏 | 16/20，80% | 16/20，80% | 80.0% |
+| C | 执行分量专家cost＋最小cost路由 | 16/20，80% | 17/20，85% | 82.5% |
+| D | CCBP教师cost预算＋可接受集合路由 | 14/20，70% | 16/20，80% | 75.0% |
+
+D相对A旧任务增加5个百分点，新任务持平，平均增加2.5个百分点；相对B旧任务降低10个百分点、平均降低5个百分点；相对C旧任务降低10、新任务降低5、平均降低7.5个百分点。预注册要求D的Task8严格高于A/B/C且Task9不低于任一，实际两项均未满足。不能仅凭超过A宣布CCBP有效，更不能用平均掩盖相对C的新任务下降。本轮C观测最好，但单seed结果不能宣布其普遍优越，不自动扩展C或其他组。
+
+每任务20初态，成功1回合等于5个百分点。四组使用配对初态与预生成逐轨迹Normal噪声；这是新分叉评估，不是历史全矩阵global-RNG AUC，不拼接历史结果。A也从共同Stage8按新分叉seed独立训练，未声称历史Stage9全RNG续流一致。
+
+## 配对退化与改善均保留
+
+下表SF指“对照成功、D失败”，FS指“对照失败、D成功”；不能只报告净差。
+
+| 对照 | Task8 SF / FS | Task9 SF / FS |
+|---|---:|---:|
+| A | 2 / 3 | 3 / 3 |
+| B | 3 / 1 | 2 / 2 |
+| C | 4 / 2 | 2 / 1 |
+
+D相对A的Task8退化初态为0、2，改善为4、12、13；Task9即使总成功率持平，仍有3退化和3改善。D相对C的Task8退化为0、1、2、7，改善为8、9；Task9退化为12、17，改善为13。全部SS/SF/FS/FF初态索引见FINAL_ANALYSIS.json，不把这些最终结果事后当作训练筛选规则。共同初态/噪声提高可比性，但策略各自后续状态会不同，本轮未建立同历史动作替换的因果轨迹证据。
+
+## 离线代理与闭环不一致
+
+完整4个最终CP在CPU上独立strict加载，并在固定430个合法Task8回放窗口计算执行分量cost。该量是按训练尺度归一化的未裁剪Normal期望动作平方误差；没有物理单位，不是成功概率或物理风险。以下均由逐窗口、逐分量、逐动作组标量在本地独立求和复算。
+
+| 组别 | 执行cost均值，低好 | 超教师预算窗口/430 | 平均超预算量，低好 | 比教师cost低的窗口/430 |
+|---|---:|---:|---:|---:|
+| 共同教师 | 0.04506472 | — | — | — |
+| A | 0.00652919 | 3 | 0.00091229 | 339 |
+| B | 0.01565759 | 1 | 0.00001484 | 353 |
+| C | 0.00604634 | 1 | 0.00058936 | 351 |
+| D | 0.01534938 | 2 | 0.00931439 | 342 |
+
+所有组的平均cost都低于教师，不能将这种改善归为D独有。B的平均cost高于A，却有更好的Task8闭环；D的均值约为A的2.35倍，闭环仅多成功1回合。这说明本轮回放动作代理不能按均值可靠排序真实闭环。D超预算窗口数量少于A，但超预算总量更高，不能把违规数量下降视为风险下降。
+
+D的最大异常为t8__480.pt：执行cost4.165125、教师0.128581、超预算3.986544，其中夹爪组cost约4.0；同窗口最小分量cost仅0.001416，实际argmax却选择另一分量。另一个超预算窗口t8__165.pt的超额为0.018643。因此“存在低cost分量”没有保证该窗口执行它，软预算和路由损失也不是逐样本硬约束。该尾部现象是已有离线标量上的证据，不能直接断言它导致哪个闭环失败，也不据此继续扫margin、epsilon或其他阈值。
+
+四组cost中位数均约0.0026、P90约0.0052–0.0055，大多数窗口很接近；少量尾部对均值影响大。执行分量非最小cost计数A/B/C/D为8/9/11/8，C虽计数最多仍有最高观测闭环，进一步说明简单分量切换或非最优路由频率不能单独解释失败。全部分位数和超预算样本均保留。
+
+混合NLL均值A/B/C/D分别为-31.418809/-31.244626/-31.361502/-31.203587（低好）。NLL是连续动作密度指标，可以为负；其排序同样不能代替闭环收益。固定430个训练回放窗口诊断不证明未见轨迹泛化，也没有标定真实危险状态。
+
+## 实际验收与工程边界
+
+final_readonly_20261024_224310/LOCAL_FINAL_AUDIT.json真实COMPLETE_LOCAL_INDEPENDENT_PASS；CLOSURE_INDEX.json绑定最终CPU证据、独立本地复算、全部退出、无残留、4CP SHA、父manifest、原失败和修复。4CP各100键、21633611参数，实际88参数键＋12注意力buffer键；完整恢复文件model与CP逐tensor相等，next_epoch100/step33700，model/optimizer/scheduler/grads/modes/requires/RNG/step字段及四类RNG齐全。自己的13隔离GPU准入另列，保存后下一步精确重放及A原ALIGN精确更新已实际通过，不把CPU字段检查冒充新的GPU恢复实验。
+
+最终核父源码与22冻结文件不变、3365全部输入文件SHA、固定Task8标签/原RA成员/身份顺序mask、teacher缓存与尺度、四组初始化元数据与sampler。最终真实初态文件字节与每轨迹noise SHA通过；本地复算160唯一attempt、16vector、8cell、成功矩阵及配对差。每epoch3218合法/147屏蔽/430旧Task8，累计1287200合法BC、58800屏蔽。所有正式训练和评估仅一次，无科学失败重试。
+
+首次最终wrapper在CPU加载A后错误要求grads/require键等于100个state_dict键，忽略12个无梯度buffer，因此断言失败；在任何诊断前向之前停止。ATTEMPT和FAILED_WRAPPER完整保留。仅外置脚本改为按原生named_parameters核88参数键，保留100键strict与完整恢复tensor检查；随后真实通过。没有修改冻结服务器源码、权重、预算或环境。额外失败的CPU构造/加载耗时未单独计量，不伪称零计算。
+
+## 成本与停止
+
+四组epoch计算A/B/C/D为912.885476/1262.066183/1254.003398/1255.539020秒，总78.074901分钟；B/C/D比A分别增加38.25%/37.37%/37.54%，保存和准备另计，不能称等算力。正式16个vector总1119.248880秒（18.654148分钟），不是含审计的完整墙钟耗时。教师430窗口、14前向、0更新；独立准入13更新另列；评估准入16前端＋16策略参数调用、0环境。最终CPU诊断3440窗口、112批前向，含循环CPU检查用时39.698564秒，0更新、0环境。
+
+本轮结论只适用于此固定seed、两个任务、一次固定权重和尺度；已有重复探索背景保留，不称统计显著、防遗忘保证或夹爪故障因果定位。按预设停止条件，完成发布后删除ccbp监控，不扩seed、不开发保护网络、不扫描更多距离/margin/阈值。原科学失败与旧队列结论不变。此前进度报告保存在REPORT_PROGRESS_20261024_223131.md。
+'''
+(R/'REPORT.md').write_text(report,encoding='utf8')
+(R/'MONITOR_HANDOFF.md').write_text('本轮已经完整独立验收，科学标准未通过。不要再检查服务器、重训或重评。最终包 '+D.name+'；报告REPORT.md，闭合CLOSURE_INDEX.json。发布核远端后删除ccbp监控，无自动扩展。\n',encoding='utf8')
+notes=R/'IMPLEMENTATION_NOTES.md'
+with notes.open('a',encoding='utf8') as f:f.write('\n\n2026-10-24最终状态：完整400epoch/134800主更新/160回合实际验收通过，科学支持条件未过。final_readonly首次将100 state keys错当100 parameter keys的外置断言失败已保留；修为88参数＋12buffer精确分类后实际CPU和本地复算通过，无训练或环境重跑。详见最终包WRAPPER_RESOLUTION与REPORT；此前“仅AST/待准入”描述仅为历史状态。\n')
+sources={}
+for p in sorted(R.glob('*.py')):ast.parse(p.read_text(encoding='utf8'));sources[p.name]=sha(p)
+write(R/'STATIC_REVIEW.json',dict(status='AST_PASS_WITH_ACTUAL_FINAL_RUNTIME_ACCEPTANCE',files=sources,actual_final_audit_sha256=sha(D/'LOCAL_FINAL_AUDIT.json')))
+print(json.dumps(dict(status=status['status'],closure_sha256=sha(D/'CLOSURE_INDEX.json'),report=str(R/'REPORT.md')),ensure_ascii=False))
