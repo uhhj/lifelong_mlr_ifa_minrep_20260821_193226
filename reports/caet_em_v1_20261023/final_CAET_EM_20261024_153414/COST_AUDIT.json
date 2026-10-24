@@ -1,0 +1,179 @@
+{
+  "cost": {
+    "codec": {
+      "epochs": 100,
+      "updates": 1900,
+      "seconds": 73.43577790260315,
+      "selected_epoch": 96
+    },
+    "recovery06": {
+      "extra_isolated_optimizer_calls": 5,
+      "extra_target_tokenizer_windows": 6162,
+      "exact_replay_policy_windows": 20,
+      "exact_replay_retention_decoder_windows": 40,
+      "preserved_recovery_bytes": 365436131,
+      "completed_epochs_repeated": 0,
+      "interrupted_partial_epoch_work": "Unknown; not included in accepted main-update count",
+      "preinterruption_cost_preserved": true
+    },
+    "B0_posthoc_CPU_action_diagnostics": {
+      "windows": 10524,
+      "forward_calls": 331,
+      "valid_positions": 39958,
+      "cpu_seconds": 134.611113314,
+      "wall_seconds": 149.03782677650452,
+      "optimizer_steps": 0,
+      "environment_steps": 0,
+      "cuda_initialized": false,
+      "audit_sha256": "41c0027b35b4acee1d795a7598109203b432e097f9c6155899fa93af76aa49d3",
+      "scope": "Additional user-authorized offline CPU diagnostic; not training or new closed-loop evidence"
+    },
+    "B0": {
+      "main_epochs": 400,
+      "main_updates": 105500,
+      "main_epoch_seconds": 3512.145146369934,
+      "action_valid": 3995800,
+      "action_masked": 213800,
+      "policy_windows": 1052400,
+      "retention_decoder_windows": 0,
+      "transfer_anchors": 0,
+      "retained_steps": 0,
+      "main_target_tokenizer_windows": 10524,
+      "diagnostic_policy_windows": 10524,
+      "diagnostic_tokenizer_windows": 10524,
+      "diagnostic_extra_decoder_windows": 0
+    },
+    "B1": {
+      "main_epochs": 400,
+      "main_updates": 105500,
+      "main_epoch_seconds": 3809.851445198059,
+      "action_valid": 3995800,
+      "action_masked": 213800,
+      "policy_windows": 1052400,
+      "retention_decoder_windows": 0,
+      "transfer_anchors": 0,
+      "retained_steps": 0,
+      "main_target_tokenizer_windows": 10524,
+      "diagnostic_policy_windows": 10524,
+      "diagnostic_tokenizer_windows": 42096,
+      "diagnostic_extra_decoder_windows": 63144
+    },
+    "B2": {
+      "main_epochs": 400,
+      "main_updates": 105500,
+      "main_epoch_seconds": 4353.077869415283,
+      "action_valid": 3995800,
+      "action_masked": 213800,
+      "policy_windows": 1052400,
+      "retention_decoder_windows": 1792400,
+      "transfer_anchors": 85700,
+      "retained_steps": 1779400,
+      "main_target_tokenizer_windows": 10524,
+      "diagnostic_policy_windows": 10524,
+      "diagnostic_tokenizer_windows": 42096,
+      "diagnostic_extra_decoder_windows": 63144
+    }
+  },
+  "not_equal_compute": true,
+  "extra_storage_not_equal_memory": true,
+  "diagnostics_and_admission_separate": true,
+  "diagnostic_counter_reconciliation": "Frozen diagnose.py constants overcount extra decoder (8 vs actual 6 for EM), and B0 tokenizer (4 vs actual 1). Above counts independently derived from actual loop branches and complete dataset population; original records preserved.",
+  "failed_attempts_preserved": {
+    "status": "ENGINEERING_ATTEMPTS_WITH_REUSED_COMPLETE_TRAINING",
+    "attempt01": {
+      "formal_updates": 0,
+      "optimizer_calls": 0,
+      "camera_forwards": 0
+    },
+    "attempt02": {
+      "formal_updates": 0,
+      "optimizer_calls": 0,
+      "camera_forwards": 3124,
+      "determinism_repeat_camera_forwards": 640
+    },
+    "attempt03": {
+      "formal_updates": 0,
+      "isolated_optimizer_calls": 3,
+      "camera_forwards": 3124,
+      "determinism_repeat_camera_forwards": 640,
+      "evidence_reused_by_engineering04": true
+    },
+    "formal_environments": 0,
+    "attempt04": {
+      "completed_main_epochs": 200,
+      "completed_main_updates": 38400,
+      "codec_epochs": 100,
+      "codec_updates": 1900,
+      "completed_training_reused_not_repeated": true,
+      "failed_diagnostic_policy_forwards": 0,
+      "failed_diagnostic_optimizer_calls": 0,
+      "formal_environments": 0,
+      "B0_codec_isolated_optimizer_calls": 6,
+      "failure": "post-retain diagnostic dataset lookup before targets/forward loop"
+    }
+  },
+  "disjoint_isolated_optimizer_calls": {
+    "failed_codec03": {
+      "calls": 3,
+      "source": "FAILED_ATTEMPTS_COST.json",
+      "sha256": "aa6336cd0f524ab1994e1736d42f6513df58e895e9331ae94fbd4c8457e1a981"
+    },
+    "codec04": {
+      "calls": 3,
+      "source": "snapshot_20261023_214425\\metadata\\shared\\ADMISSION_CODEC.json",
+      "sha256": "337bc513319eff3ee4456e5430297612bebdf7f5e8d9ed8530270e4f54106e6f"
+    },
+    "B0_04": {
+      "calls": 3,
+      "source": "snapshot_20261023_214425\\metadata\\shared\\ADMISSION_B0.json",
+      "sha256": "eb616ee225450d07a9a5ae1c1c9fb1c03211c853051be08ece84f9df6eb79fbd"
+    },
+    "B0_05": {
+      "calls": 3,
+      "source": "snapshot_20261023_222317\\metadata\\shared\\ADMISSION_B0.json",
+      "sha256": "419f41592d496658180ace666f9ff22312e1aa7f8ea7e83045ce98b5fe9adef3"
+    },
+    "B1_05": {
+      "calls": 3,
+      "source": "snapshot_20261024_153235\\metadata\\shared\\ADMISSION_B1.json",
+      "sha256": "f9e9bc7374c6c8941d4ac7fc2447e39f4d75214e687e7e540693eba678991b70"
+    },
+    "B2_05": {
+      "calls": 3,
+      "source": "snapshot_20261024_031425\\metadata\\shared\\ADMISSION_B2.json",
+      "sha256": "35cf21bfef7a9c5e516e975372c9043b6d2290eeb1d1babecd1f5e9dd25021a6"
+    },
+    "B2_recovery06": {
+      "calls": 3,
+      "source": "snapshot_20261024_153235\\metadata\\shared\\ADMISSION_B2.json",
+      "sha256": "35cf21bfef7a9c5e516e975372c9043b6d2290eeb1d1babecd1f5e9dd25021a6"
+    },
+    "exact_replay06": {
+      "calls": 2,
+      "source": "snapshot_20261024_153235\\metadata\\shared\\RECOVERY06_ADMISSION.json",
+      "sha256": "5e0833566c4caac9769e4c640149268f8198bb7450904c41f724c4e1db4d1f49"
+    }
+  },
+  "total_isolated_optimizer_calls": 23,
+  "completed_main_updates": 316500,
+  "codec_auxiliary_updates": 1900,
+  "completed_update_sum_including_isolated": 318423,
+  "unknown_interrupted_partial_epoch_work": "Additional unknown; not included in the completed update sum.",
+  "formal_vector_minutes": {
+    "B0": 75.93237142165502,
+    "B1": 89.9158038298289,
+    "B2": 90.72654931942621
+  },
+  "parameters": {
+    "B0": 22946891,
+    "B1": 22826763,
+    "B2": 22826763
+  },
+  "frozen_codec_parameters": 4884372,
+  "storage_observation": {
+    "source": "capacity_readonly_20261024_152446/EVIDENCE.json",
+    "sha256": "56b8a763044c1954b7e1fbc5183468a92b659d48ca3cf9f49b8161401008bc21",
+    "scope": "Private stable allocated-byte observation before final exit, not total incremental experiment storage; preserved recovery and old assets remain."
+  },
+  "inference_latency": "Not isolated; vector duration includes simulation, policy and environment overhead, and early termination."
+}

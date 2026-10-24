@@ -20,3 +20,6 @@
 
 
 2026-10-24 14:12 外置检查修复与收尾准备：新cell尚无完整vector时允许未生成trials，仍要求无完成事件且不在snapshot/download文件表；旧源/失败及真实复算SHA保留于snapshot_20261024_140806。新增本地B2完整训练/Task8恢复前缀与教师绑定审计实际PASS。describe_final追加已验收B0 CPU动作诊断成本SHA绑定，仅AST通过，未对未完队列运行最终验收。服务器源/参数/进程无修改。
+
+
+2026-10-24最终验收：final_readonly、audit_final_local、describe_final首次真实运行均PASS。新增final_payload_binding_readonly实际CPU核3组全RA/sidecar/三教师缓存及mask，无前向。close_final本地schema/index和路径问题保留两次失败源并修复，完整矩阵/成本/闭合真实PASS。无服务器改动或重训重评。最终目录final_CAET_EM_20261024_153414。
