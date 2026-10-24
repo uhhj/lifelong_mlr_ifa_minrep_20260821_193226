@@ -62,3 +62,5 @@ final_readonly_20261024_224310/LOCAL_FINAL_AUDIT.json真实COMPLETE_LOCAL_INDEPE
 本轮结论只适用于此固定seed、两个任务、一次固定权重和尺度；已有重复探索背景保留，不称统计显著、防遗忘保证或夹爪故障因果定位。按预设停止条件，完成发布后删除ccbp监控，不扩seed、不开发保护网络、不扫描更多距离/margin/阈值。原科学失败与旧队列结论不变。此前进度报告保存在REPORT_PROGRESS_20261024_223131.md。
 
 最终结果已发布并核远端b7883531e1fa7be03fc9fde82ae9d91fefba1fa4，随后ccbp监控已实际删除，回执见MONITOR_DELETION_RECEIPT.json。
+
+补充：预算、合格集合和软路由的机制分析见BUDGET_MECHANISM_INTERPRETATION.md，标量复算见最终目录BUDGET_MECHANISM_ANALYSIS.json。本次仅使用已验收证据，0新前向/更新/环境/阈值扫描；不更改最终接受或停止结论。

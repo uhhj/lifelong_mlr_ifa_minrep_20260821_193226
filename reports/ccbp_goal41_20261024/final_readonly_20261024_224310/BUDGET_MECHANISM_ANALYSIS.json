@@ -1,0 +1,528 @@
+{
+  "status": "PASS_LOCAL_FIXED_RULE_RECOMPUTATION",
+  "source_evidence_sha256": "e0a6351a0e7e8f1e07ec30ebb6b9053b7e2c5ba7e4770a4c844ca20043ee7d66",
+  "source_audit_sha256": "05c634007cbd703ad186f4d55c9de8e35a15946ac1217f8f5f9c27b64be7102d",
+  "source_code_sha256": {
+    "losses.py": "5d510f3f4b9737f88a4e90227794ccd7e25a9732205746743c1bd5e0ddc3f5f9",
+    "train.py": "61c0e109166b6fee9c400d00f8efc5d6f6f35219c84839fe596f08b2c374732b"
+  },
+  "arms": {
+    "A": {
+      "fixed_epsilon": 0.05,
+      "accepted_set_cardinality": {
+        "1": 307,
+        "2": 121,
+        "3": 2
+      },
+      "selected_accepted_count": 427,
+      "selected_rejected": [
+        {
+          "sample": "t8__480.pt",
+          "selected_cost": 0.20820941064001972,
+          "minimum_cost": 0.0014101091642348032,
+          "teacher_cost": 0.12858114259318537,
+          "budget": 0.17858114259318536,
+          "good_count": 1,
+          "selected_mode": 2,
+          "good_modes": [
+            1
+          ],
+          "group_costs": [
+            0.16529989181662538,
+            0.042909508823394844,
+            9.99999949475751e-09
+          ]
+        },
+        {
+          "sample": "t8__165.pt",
+          "selected_cost": 0.3108435301875332,
+          "minimum_cost": 0.003923020423103444,
+          "teacher_cost": 0.18820232800249675,
+          "budget": 0.23820232800249674,
+          "good_count": 1,
+          "selected_mode": 2,
+          "good_modes": [
+            1
+          ],
+          "group_costs": [
+            0.10839020514904324,
+            0.20245331503849046,
+            9.99999949475751e-09
+          ]
+        },
+        {
+          "sample": "t8__703.pt",
+          "selected_cost": 0.34420679078444655,
+          "minimum_cost": 0.0050039602423199315,
+          "teacher_cost": 0.0041930886949583255,
+          "budget": 0.05419308869495833,
+          "good_count": 1,
+          "selected_mode": 1,
+          "good_modes": [
+            2
+          ],
+          "group_costs": [
+            0.08294587037691824,
+            0.2612609104075288,
+            9.99999949475751e-09
+          ]
+        }
+      ],
+      "accepted_but_not_minimum": [
+        {
+          "sample": "t8__405.pt",
+          "cost": 0.14358451187547838,
+          "minimum": 0.004141078625624243,
+          "teacher": 0.21967641359468,
+          "budget": 0.26967641359468,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__569.pt",
+          "cost": 0.13462999226395603,
+          "minimum": 0.0019244040853935373,
+          "teacher": 0.09137129149342768,
+          "budget": 0.1413712914934277,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__66.pt",
+          "cost": 0.11645680113343594,
+          "minimum": 0.004179975489398031,
+          "teacher": 0.11458572616982975,
+          "budget": 0.16458572616982975,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__539.pt",
+          "cost": 0.19179636709656026,
+          "minimum": 0.004099096000475196,
+          "teacher": 0.19859621289558188,
+          "budget": 0.24859621289558187,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__755.pt",
+          "cost": 0.10574328459910459,
+          "minimum": 0.00298177293476811,
+          "teacher": 0.1141417800086124,
+          "budget": 0.1641417800086124,
+          "good_count": 2
+        }
+      ],
+      "teacher_cost_median": 0.00386293618703643,
+      "teacher_budget_median": 0.053862936187036435,
+      "selected_cost_median": 0.0026888359781654493,
+      "slack_median": 0.050963319936605606,
+      "online_epoch_statistics": {}
+    },
+    "B": {
+      "fixed_epsilon": 0.05,
+      "accepted_set_cardinality": {
+        "1": 313,
+        "2": 115,
+        "3": 2
+      },
+      "selected_accepted_count": 429,
+      "selected_rejected": [
+        {
+          "sample": "t8__165.pt",
+          "selected_cost": 0.244581587955463,
+          "minimum_cost": 0.0037463462980755957,
+          "teacher_cost": 0.18820232800249675,
+          "budget": 0.23820232800249674,
+          "good_count": 1,
+          "selected_mode": 2,
+          "good_modes": [
+            1
+          ],
+          "group_costs": [
+            0.08784965832967455,
+            0.15673191962578897,
+            9.99999949475751e-09
+          ]
+        }
+      ],
+      "accepted_but_not_minimum": [
+        {
+          "sample": "t8__506.pt",
+          "cost": 0.17239080241045524,
+          "minimum": 0.0014756871370898781,
+          "teacher": 0.1273710696285579,
+          "budget": 0.17737106962855792,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__569.pt",
+          "cost": 0.08692197641971562,
+          "minimum": 0.002349841158778057,
+          "teacher": 0.09137129149342768,
+          "budget": 0.1413712914934277,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__900.pt",
+          "cost": 0.04002870768133135,
+          "minimum": 0.0030748966699988833,
+          "teacher": 0.0049487444571842416,
+          "budget": 0.05494874445718424,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__538.pt",
+          "cost": 0.13510184205568543,
+          "minimum": 0.00580154646273444,
+          "teacher": 0.1548812889782927,
+          "budget": 0.20488128897829272,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__66.pt",
+          "cost": 0.11964098314812287,
+          "minimum": 0.004177649339664794,
+          "teacher": 0.11458572616982975,
+          "budget": 0.16458572616982975,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__539.pt",
+          "cost": 0.16914045634819028,
+          "minimum": 0.003525880836454461,
+          "teacher": 0.19859621289558188,
+          "budget": 0.24859621289558187,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__751.pt",
+          "cost": 0.08610970019702634,
+          "minimum": 0.0020597691514525336,
+          "teacher": 0.10501261278273376,
+          "budget": 0.15501261278273376,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__725.pt",
+          "cost": 4.443723982179423,
+          "minimum": 0.0026953940783405756,
+          "teacher": 4.4274847785089655,
+          "budget": 4.477484778508965,
+          "good_count": 3
+        }
+      ],
+      "teacher_cost_median": 0.00386293618703643,
+      "teacher_budget_median": 0.053862936187036435,
+      "selected_cost_median": 0.002590570967223864,
+      "slack_median": 0.05102706814093802,
+      "online_epoch_statistics": {
+        "all": {
+          "sample_visits": 43000,
+          "mean_expert_cost": 0.06184685364862373,
+          "mean_budget": 0.09506472755604706,
+          "mean_excess": 0.025522573018836422,
+          "mean_route_hinge": 0.05454646402727379,
+          "empty_fallback_visits": 0,
+          "all_good_visits": 0
+        },
+        "first10": {
+          "sample_visits": 4300,
+          "mean_expert_cost": 0.18801572938758318,
+          "mean_budget": 0.0950647275981515,
+          "mean_excess": 0.11579251052768424,
+          "mean_route_hinge": 0.09168581950066741,
+          "empty_fallback_visits": 0,
+          "all_good_visits": 0
+        },
+        "last10": {
+          "sample_visits": 4300,
+          "mean_expert_cost": 0.01202675083463979,
+          "mean_budget": 0.09506472753230916,
+          "mean_excess": 0.00010473233149495235,
+          "mean_route_hinge": 0.04746249981917614,
+          "empty_fallback_visits": 0,
+          "all_good_visits": 0
+        }
+      }
+    },
+    "C": {
+      "fixed_epsilon": 0.05,
+      "accepted_set_cardinality": {
+        "1": 296,
+        "2": 131,
+        "3": 3
+      },
+      "selected_accepted_count": 429,
+      "selected_rejected": [
+        {
+          "sample": "t8__703.pt",
+          "selected_cost": 0.30761631593828265,
+          "minimum_cost": 0.004878379703754014,
+          "teacher_cost": 0.0041930886949583255,
+          "budget": 0.05419308869495833,
+          "good_count": 1,
+          "selected_mode": 1,
+          "good_modes": [
+            2
+          ],
+          "group_costs": [
+            0.1129527099945897,
+            0.19466359594369348,
+            9.99999949475751e-09
+          ]
+        }
+      ],
+      "accepted_but_not_minimum": [
+        {
+          "sample": "t8__535.pt",
+          "cost": 0.008560649257012526,
+          "minimum": 0.006790297853189333,
+          "teacher": 0.009823183030896656,
+          "budget": 0.05982318303089666,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__405.pt",
+          "cost": 0.18023341420357458,
+          "minimum": 0.005621245645762754,
+          "teacher": 0.21967641359468,
+          "budget": 0.26967641359468,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__793.pt",
+          "cost": 0.10475017972331858,
+          "minimum": 0.0030022271841507377,
+          "teacher": 0.10341594116286591,
+          "budget": 0.15341594116286592,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__569.pt",
+          "cost": 0.11723877400539236,
+          "minimum": 0.001915811521043324,
+          "teacher": 0.09137129149342768,
+          "budget": 0.1413712914934277,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__900.pt",
+          "cost": 0.04440304359615094,
+          "minimum": 0.0027289660124876743,
+          "teacher": 0.0049487444571842416,
+          "budget": 0.05494874445718424,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__165.pt",
+          "cost": 0.2195230508056621,
+          "minimum": 0.005693334382384637,
+          "teacher": 0.18820232800249675,
+          "budget": 0.23820232800249674,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__66.pt",
+          "cost": 0.11522370662982036,
+          "minimum": 0.0030686180899629754,
+          "teacher": 0.11458572616982975,
+          "budget": 0.16458572616982975,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__539.pt",
+          "cost": 0.20734845193519297,
+          "minimum": 0.0028467966662064255,
+          "teacher": 0.19859621289558188,
+          "budget": 0.24859621289558187,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__395.pt",
+          "cost": 0.035161526851090856,
+          "minimum": 0.004387691286549539,
+          "teacher": 0.044957549428927025,
+          "budget": 0.09495754942892703,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__823.pt",
+          "cost": 0.04344472121658255,
+          "minimum": 0.0030210504781480814,
+          "teacher": 0.08052713678224167,
+          "budget": 0.13052713678224168,
+          "good_count": 2
+        }
+      ],
+      "teacher_cost_median": 0.00386293618703643,
+      "teacher_budget_median": 0.053862936187036435,
+      "selected_cost_median": 0.0026050565976869005,
+      "slack_median": 0.05097960100376543,
+      "online_epoch_statistics": {
+        "all": {
+          "sample_visits": 43000,
+          "mean_expert_cost": 0.06121225290165857,
+          "mean_budget": 0.09506472755604706,
+          "mean_excess": 0.028337654645706332,
+          "mean_route_hinge": 0.04707406383865448,
+          "empty_fallback_visits": 0,
+          "all_good_visits": 0
+        },
+        "first10": {
+          "sample_visits": 4300,
+          "mean_expert_cost": 0.1764261991425883,
+          "mean_budget": 0.0950647275981515,
+          "mean_excess": 0.10536221518332875,
+          "mean_route_hinge": 0.11007821131757525,
+          "empty_fallback_visits": 0,
+          "all_good_visits": 0
+        },
+        "last10": {
+          "sample_visits": 4300,
+          "mean_expert_cost": 0.006725258369399452,
+          "mean_budget": 0.09506472753230916,
+          "mean_excess": 0.0009005983468405037,
+          "mean_route_hinge": 0.023220592856753704,
+          "empty_fallback_visits": 0,
+          "all_good_visits": 0
+        }
+      }
+    },
+    "D": {
+      "fixed_epsilon": 0.05,
+      "accepted_set_cardinality": {
+        "1": 288,
+        "2": 139,
+        "3": 3
+      },
+      "selected_accepted_count": 428,
+      "selected_rejected": [
+        {
+          "sample": "t8__480.pt",
+          "selected_cost": 4.165125081986295,
+          "minimum_cost": 0.0014162189981731773,
+          "teacher_cost": 0.12858114259318537,
+          "budget": 0.17858114259318536,
+          "good_count": 1,
+          "selected_mode": 0,
+          "good_modes": [
+            1
+          ],
+          "group_costs": [
+            0.09852479502318146,
+            0.06660027696311388,
+            4.000000009999999
+          ]
+        },
+        {
+          "sample": "t8__165.pt",
+          "selected_cost": 0.2568457514388015,
+          "minimum_cost": 0.004063655285789274,
+          "teacher_cost": 0.18820232800249675,
+          "budget": 0.23820232800249674,
+          "good_count": 1,
+          "selected_mode": 2,
+          "good_modes": [
+            1
+          ],
+          "group_costs": [
+            0.08300776276875745,
+            0.17383797867004458,
+            9.99999949475751e-09
+          ]
+        }
+      ],
+      "accepted_but_not_minimum": [
+        {
+          "sample": "t8__793.pt",
+          "cost": 0.12634720351771384,
+          "minimum": 0.003651306957221979,
+          "teacher": 0.10341594116286591,
+          "budget": 0.15341594116286592,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__569.pt",
+          "cost": 0.120159982398895,
+          "minimum": 0.0017352366985261063,
+          "teacher": 0.09137129149342768,
+          "budget": 0.1413712914934277,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__318.pt",
+          "cost": 0.2698027423402652,
+          "minimum": 0.0069080723773496736,
+          "teacher": 0.2448771306304107,
+          "budget": 0.2948771306304107,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__66.pt",
+          "cost": 0.11318767767318577,
+          "minimum": 0.0036795831148122267,
+          "teacher": 0.11458572616982975,
+          "budget": 0.16458572616982975,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__539.pt",
+          "cost": 0.21474518178959714,
+          "minimum": 0.003596003589382432,
+          "teacher": 0.19859621289558188,
+          "budget": 0.24859621289558187,
+          "good_count": 2
+        },
+        {
+          "sample": "t8__755.pt",
+          "cost": 0.06442445371114933,
+          "minimum": 0.0020378250365165563,
+          "teacher": 0.1141417800086124,
+          "budget": 0.1641417800086124,
+          "good_count": 2
+        }
+      ],
+      "teacher_cost_median": 0.00386293618703643,
+      "teacher_budget_median": 0.053862936187036435,
+      "selected_cost_median": 0.002651961860379297,
+      "slack_median": 0.050927974116281305,
+      "online_epoch_statistics": {
+        "all": {
+          "sample_visits": 43000,
+          "mean_expert_cost": 0.0638124903087358,
+          "mean_budget": 0.09506472755604706,
+          "mean_excess": 0.029494757461859738,
+          "mean_route_hinge": 0.0233613355648379,
+          "empty_fallback_visits": 5060,
+          "all_good_visits": 0
+        },
+        "first10": {
+          "sample_visits": 4300,
+          "mean_expert_cost": 0.1816793169256917,
+          "mean_budget": 0.0950647275981515,
+          "mean_excess": 0.110529028808828,
+          "mean_route_hinge": 0.07315775744443716,
+          "empty_fallback_visits": 2238,
+          "all_good_visits": 0
+        },
+        "last10": {
+          "sample_visits": 4300,
+          "mean_expert_cost": 0.010542066971687492,
+          "mean_budget": 0.09506472753230916,
+          "mean_excess": 0.0038326539133870323,
+          "mean_route_hinge": 0.0030421467679877614,
+          "empty_fallback_visits": 0,
+          "all_good_visits": 0
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Final stored scalars have component costs but no logits; cannot reconstruct final routing margin or probabilities.",
+    "Epoch statistics are aggregated online before different updates, not final-model diagnostics.",
+    "No per-loss gradient norms or gradient conflict measurements.",
+    "No trajectory-state causal intervention or held-out risk calibration."
+  ],
+  "new_forward_calls": 0,
+  "new_optimizer_updates": 0,
+  "new_environments": 0,
+  "new_thresholds_tested": 0
+}
