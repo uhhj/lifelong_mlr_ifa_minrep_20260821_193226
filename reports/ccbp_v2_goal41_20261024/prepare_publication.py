@@ -7,7 +7,7 @@ for n,s in bundle.items():
  if n.endswith('.py'):ast.parse(s)
 (R/'DEPLOY_TEXT_BUNDLE.json').write_text(json.dumps(bundle,ensure_ascii=True),encoding='utf8')
 cpu=sorted(R.glob('cpu_admission_readonly_*/EVIDENCE.json'))[-1];v=json.loads(cpu.read_text());assert v['status']=='PASS_LOCAL_SOURCE_CPU_ADMISSION'
-for n,h in v['source_sha256'].items():assert hashlib.sha256((R/(n+'.py')).read_bytes()).hexdigest()==h
+for n,h in v['source_sha256'].items():assert hashlib.sha256((R/(n+'.py')).read_text(encoding='utf8').encode()).hexdigest()==h
 status=dict(status='PREREGISTERED_CPU_ADMITTED_GPU_PENDING',observation_unix=v['observed'],root='/data/mlr_ifa/experiment_workspaces/CCBP_V2_GOAL41_20261024_v1',controller=None,budget=dict(arms=list('BCNV'),epochs=400,main_updates=134800,formal_episodes=320),cpu_admission=str(cpu.parent.name),gpu_admission=False,formal_updates=0,formal_episodes=0,automatic_expansion=False)
 (R/'RUN_STATUS.json').write_text(json.dumps(status,indent=2),encoding='utf8')
 (R/'REPORT.md').write_text('''# CCBP-v2 GOAL seed41：四组有限验证

@@ -26,6 +26,7 @@ def inspect(value):
 
 
 def main():
+    experiment_status=json.loads((R/'RUN_STATUS.json').read_text(encoding='utf8'))['status']
     assert git("branch", "--show-current") == "MLR"
     assert git("remote", "get-url", "origin") == "https://github.com/uhhj/lifelong_mlr_ifa_minrep_20260821_193226.git"
     assert not git("diff", "--cached", "--name-only"), "Unrelated staged edits"
@@ -75,7 +76,7 @@ def main():
     receipt = dict(status="PUSH_VERIFIED", commit=head, remote=remote,
                    time=datetime.datetime.now().astimezone().isoformat(),
                    files=len(paths), bytes=sum(x["bytes"] for x in manifest.values()),
-                   experiment_status=json.loads((R/"RUN_STATUS.json").read_text(encoding="utf8"))["status"])
+                   experiment_status=experiment_status)
     (R/("PUBLICATION_RECEIPT_"+datetime.datetime.now().strftime("%Y%m%d_%H%M%S")+".json")).write_text(json.dumps(receipt, indent=2)+"\n")
     print(json.dumps(receipt, indent=2))
 
