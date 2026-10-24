@@ -1,8 +1,7 @@
 用户2026-10-23最新定时规则，优先覆盖所有旧短周期：按预计剩余完成时间安排下一次检查。预计1小时就1小时后，2小时就2小时后；没有固定3/5/8/15/30分钟上限，也不因内部Task切换频繁唤醒。优先以当前整组主训练结束、随后整组正式评估结束为下一检查点；以自身实测速度和剩余预算估计，保存/准备另计，不把全部队列与当前一组混淆。下一次醒来重新按实际剩余时间更新同一监控。无自身吞吐时可用最近可比实测作明确标注的不确定估计，不伪造精确总ETA，也不恢复高频轮询。健康无变化安静；失败、完成、需行动或重要阶段变化才通知。
 
-最新2026-10-24 06:06 CST优先：SSH仍在协议banner阶段EOF，snapshot_20261024_060359/ATTEMPT.json留证，未认证、0远程命令。独立无凭据TCP探针结果见同目录CONNECTIVITY_PROBE.json，全部本轮证据SHA绑定CONNECTION_FAILURE_SUMMARY.json。当前训练/评估、进程、冻结hash和容量仍未知；不得把03:14:48旧快照当现状，不宣称训练失败或完成。没有重启、改源码/参数、下载payload、删除或新增付费。
-此前预计完成窗口已经过去但无法核实，当前不能可靠估算剩余时间。连接故障持续，建议用户只读查看租赁平台的实例及SSH服务状态，不重启实例或实验。同一监控延后120分钟低频重查连接；这是故障退避，不是新的完成ETA。恢复后先check_progress→audit_progress，再按实际phase/退出决定最终验收或进度检查；禁止盲重启controller/globalRNG评估。
-最新可信状态仍为snapshot_20261024_031425：B0/B1各400epoch105500步和200正式20vector10cell、服务器audit exit0；B2仅已验证82完整epoch12874步、自己准入PASS。全部三组独立最终CPU/初态字节及600正式验收未完成，整体PARTIAL_OBSERVATION_UNAVAILABLE；旧03:14容量仅历史证据。
+最新2026-10-24 08:12 CST优先：snapshot_20261024_081127只读检查再次在SSH协议banner阶段EOF，未认证、0远程命令；ATTEMPT、CONNECTION_FAILURE_SUMMARY及LOCAL_FAILURE_EVIDENCE_AUDIT留证并绑定SHA。与06:07已通知的连接问题相同，本轮没有新训练/评估/进程/hash/容量证据，不重复无变化通知。未重启或修改实验。当前仍PARTIAL_OBSERVATION_UNAVAILABLE，最新可信观察保持03:14:48的snapshot_20261024_031425，B0/B1完整、B2仅已验证82epoch12874步；不得将旧数据当现状或声称训练失败/完成。
+继续同一监控120分钟后低频连接重查；这只是持续故障的重查间隔，不是完成预测。此前已建议只读查看租赁平台实例与SSH服务状态，不重启实例或实验。恢复后先check_progress→audit_progress，再按真实phase/退出决定最终验收或剩余时间。三组独立最终验收仍待连接恢复，旧容量仅历史记录。
 
 只跟踪用户新授权的 CAET-EM-v1 OBJECT seed41。先读 D:/论文课题研究/MLR+IFA/execution/20261023_caet_em_v1 的 USER_METHOD.txt、PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json 和最新证据。原位置探针A失败保留；此新路线不需要10mm/25mm门。旧ALIGN/TACR/readout等已完成或取消的队列不得恢复。没有自动seed扩展。
 

@@ -1,3 +1,8 @@
+最新2026-10-24 08:12 CST优先：snapshot_20261024_081127只读检查再次在SSH协议banner阶段EOF，未认证、0远程命令；ATTEMPT、CONNECTION_FAILURE_SUMMARY及LOCAL_FAILURE_EVIDENCE_AUDIT留证并绑定SHA。与06:07已通知的连接问题相同，本轮没有新训练/评估/进程/hash/容量证据，不重复无变化通知。未重启或修改实验。当前仍PARTIAL_OBSERVATION_UNAVAILABLE，最新可信观察保持03:14:48的snapshot_20261024_031425，B0/B1完整、B2仅已验证82epoch12874步；不得将旧数据当现状或声称训练失败/完成。
+继续同一监控120分钟后低频连接重查；这只是持续故障的重查间隔，不是完成预测。此前已建议只读查看租赁平台实例与SSH服务状态，不重启实例或实验。恢复后先check_progress→audit_progress，再按真实phase/退出决定最终验收或剩余时间。三组独立最终验收仍待连接恢复，旧容量仅历史记录。
+
+以下历史证据保留。
+
 最新2026-10-24 06:06 CST优先：SSH仍在协议banner阶段EOF，snapshot_20261024_060359/ATTEMPT.json留证，未认证、0远程命令。独立无凭据TCP探针结果见同目录CONNECTIVITY_PROBE.json，全部本轮证据SHA绑定CONNECTION_FAILURE_SUMMARY.json。当前训练/评估、进程、冻结hash和容量仍未知；不得把03:14:48旧快照当现状，不宣称训练失败或完成。没有重启、改源码/参数、下载payload、删除或新增付费。
 此前预计完成窗口已经过去但无法核实，当前不能可靠估算剩余时间。连接故障持续，建议用户只读查看租赁平台的实例及SSH服务状态，不重启实例或实验。同一监控延后120分钟低频重查连接；这是故障退避，不是新的完成ETA。恢复后先check_progress→audit_progress，再按实际phase/退出决定最终验收或进度检查；禁止盲重启controller/globalRNG评估。
 最新可信状态仍为snapshot_20261024_031425：B0/B1各400epoch105500步和200正式20vector10cell、服务器audit exit0；B2仅已验证82完整epoch12874步、自己准入PASS。全部三组独立最终CPU/初态字节及600正式验收未完成，整体PARTIAL_OBSERVATION_UNAVAILABLE；旧03:14容量仅历史证据。
