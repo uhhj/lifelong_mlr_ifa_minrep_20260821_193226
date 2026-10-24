@@ -1,0 +1,97 @@
+{
+  "status": "PASS_EXISTING_EVIDENCE_SYNTHESIS_NOT_CAUSAL_IDENTIFICATION",
+  "time": "2026-10-24T15:48:29.609781+08:00",
+  "complete_final_acceptance": true,
+  "task_AUC_decomposition": [
+    {
+      "task": 6,
+      "B0_lifetime_percent": 81.25,
+      "ALIGN_lifetime_percent": 50.0,
+      "AUC_difference_contribution_pp": 7.8125
+    },
+    {
+      "task": 7,
+      "B0_lifetime_percent": 55.0,
+      "ALIGN_lifetime_percent": 88.33333333333333,
+      "AUC_difference_contribution_pp": -8.333333333333334
+    },
+    {
+      "task": 8,
+      "B0_lifetime_percent": 97.5,
+      "ALIGN_lifetime_percent": 97.5,
+      "AUC_difference_contribution_pp": 0.0
+    },
+    {
+      "task": 9,
+      "B0_lifetime_percent": 45.0,
+      "ALIGN_lifetime_percent": 90.0,
+      "AUC_difference_contribution_pp": -11.25
+    }
+  ],
+  "first_action_diagnostics": {
+    "6": {
+      "paired_first": 0.005277364736582419,
+      "paired_future3": 0.006563146652294819,
+      "all_legal_first_count": 1482,
+      "selected_huber": 0.005171138547084782,
+      "oracle_huber": 0.00011362207011011832,
+      "non_oracle_fraction": 0.14237516869095818,
+      "gripper_error_gt1": 14,
+      "gripper_huber_share": 0.9134051959088086
+    },
+    "7": {
+      "paired_first": 0.00273393647989246,
+      "paired_future3": 0.0034551745439004,
+      "all_legal_first_count": 1400,
+      "selected_huber": 0.0030350981346467165,
+      "oracle_huber": 4.581223949518939e-05,
+      "non_oracle_fraction": 0.12,
+      "gripper_error_gt1": 8,
+      "gripper_huber_share": 0.9413674907615541
+    },
+    "8": {
+      "paired_first": 0.0029689965081624043,
+      "paired_future3": 0.004146635214108203,
+      "all_legal_first_count": 1480,
+      "selected_huber": 0.0029118796270756085,
+      "oracle_huber": 4.679186500461306e-05,
+      "non_oracle_fraction": 0.08175675675675675,
+      "gripper_error_gt1": 8,
+      "gripper_huber_share": 0.9281642955196825
+    },
+    "9": {
+      "paired_first": 0.0022273213673554447,
+      "paired_future3": 0.0035284658750646767,
+      "all_legal_first_count": 1239,
+      "selected_huber": 0.0021763937735716533,
+      "oracle_huber": 4.526201824174678e-05,
+      "non_oracle_fraction": 0.05811138014527845,
+      "gripper_error_gt1": 5,
+      "gripper_huber_share": 0.9271099189615353
+    }
+  },
+  "source_sha256": {
+    "final_CAET_EM_20261024_153414\\CLOSURE_INDEX.json": "0cfad3ca3cb3fec8fea0d494fa386befa116d7228c77ee87ac9c46c0bd5cfe56",
+    "final_CAET_EM_20261024_153414\\LOCAL_FINAL_AUDIT.json": "219a05b9a8d6cf01586e7b4f01c61b95f88de8c599f7a6d37e98c32cd9b66a98",
+    "B0_action_diagnostics_20261024_135651\\REPORT_BINDING.json": "dbccd2fdc093be49e41e52102f7f53236ebed46bc144a33a270a9a2448d1e2d1",
+    "B0_action_diagnostics_20261024_135651\\SUMMARY.json": "e13da5a995cf2f004b7d57320c037f0ff86352c73a8919a14dcbf65ebdf390ba",
+    "B0_action_diagnostics_20261024_135651\\PAIRED_HORIZONS.json": "7bb77115915173404e44ca21b7a39eed81f3acba861a30dcda69ae2bd10059a6",
+    "B0_action_diagnostics_20261024_135651\\LOCAL_AUDIT.json": "41c0027b35b4acee1d795a7598109203b432e097f9c6155899fa93af76aa49d3",
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_caet_v3_tac_eftr_object41\\final_ALIGN_seed41_20261022_220252\\LOCAL_FINAL_AUDIT.json": "548be0608381d29fa971915de22b58e88bad4627c18a0225b40665aaaec179bf",
+    "caet_em_exp\\model.py": "0cd35a294edec2ecd0577ee3c10deb9cbb0040a3ca3855d950800304345d43b9",
+    "caet_em_exp\\readout.py": "0a57f74e7a84f902c650c9501a98268c2029292bb67ede49b32a48b022d33681",
+    "caet_em_exp\\train.py": "68b1440e9226fe413250a06554cfb99fca98982d8b95a27251f9faaebe9ba041"
+  },
+  "new_model_forwards": 0,
+  "new_optimizer_updates": 0,
+  "new_environment_steps": 0,
+  "new_experiments_authorized": false,
+  "limitations": [
+    "B0 differs from ALIGN in readout, random adapter and four-step supervision together.",
+    "First versus later horizon errors are not the counterfactual comparison against a one-step model.",
+    "Oracle uses recorded expert target; alternate mode may still be a valid action.",
+    "No matched ALIGN GMM diagnostics or new closed-loop state action labels; differential attribution unproven.",
+    "Training/RA data, overlapping windows, single seed and repeated benchmark exploration."
+  ],
+  "analysis_report_sha256": "8a6a399be65e61bf369d621fbcdf34db322286b4abe15627a5eef8b0dedff86f"
+}
