@@ -1,0 +1,35 @@
+from pathlib import Path
+import json,hashlib,datetime
+R=Path(__file__).resolve().parent
+s=json.loads((R/'RUN_STATUS.json').read_text());a=s['closed_loop'];active=s['active_root']
+report=f'''# RA/ALIGN 漂移与配对轨迹诊断
+
+状态 **PARTIAL**，观察时间 {s['observation']}。离线RA共同窗口诊断已独立接受；新闭环尚未完整接受，保护训练0。
+
+## 已完成：共同窗口离线比较
+
+见 OFFLINE_REPORT.md / OFFLINE_COMPARISON.json。每seed452同字节保留窗口、相同a[u+1]合法mask与指标；三seed合计1356窗口/1283合法标签。RA新增6CP严格100键、174 CPU批前向/2712模型窗口、0环境与更新；ALIGN复用原接受结果，无重复前向。
+
+RA分量切换为28/32/28，ALIGN为20/16/76；RA合法夹爪翻转共15，其中10个专家Huber改善、5个恶化。RA seed41/42平均Huber也改善，但seed43恶化，三seed混合下一步NLL均恶化。RA原本监督a[u]，这是同一a[u+1]诊断目标，不能称RA自身训练损失。旧闭环RA Task8分别75→85、80→70、65→80%，ALIGN95→70、80→55、80→65%。
+
+结论是这些离线现象不具有ALIGN特异性，且离线平均误差与闭环成功率可能分离。不能把每次mode switch/夹爪翻转都判成需要限制的有害漂移；也不能说RA所有离线指标都改善。
+
+## 正在执行：同历史配对闭环
+
+新协议 PAIRED_PROTOCOL.md。GOAL Task8、三seed、RA/ALIGN、Stage8/9各20初态，共240新诊断回合；不是重跑原正式AUC。逐轨迹动作噪声固定，两个检查点每步使用完全相同FP32历史，一条driver实际动作执行，另一个shadow只诊断；反向driver也运行。
+
+实际 {a['episodes']}/240 回合、{a['vectors']}/24 vector 完成，当前 {a['active_vector']}。工程02 supervisor {active['pid']}，GPU worker7052健康；源合同 {active['contract_sha256']}。自己的12CP×100键、长度1–8、argmax Normal、cache对原完整历史编码准入实际PASS。最大feature差9.30e-6/GMM参数差1.91e-6，非旧CUDA逐位重现。工程01仅import配置目录缺失，0前向/0环境，失败与源码留存；02只补环境路径。
+
+前2批平均76.386551秒。18:57观察时余线性27.375分钟，加载保存及最终验收另计；暂参考19:25–19:35完成rollout。按用户预计整项完成时间规则，监控ra-align在约30分钟后检查（实际余量推算，不是固定30分钟策略）。不按内部阶段高频唤醒。只正常进度，不公布部分成功率或判保护有效。
+
+全程精确Temporal输入/低维观测/双GMM/执行动作私有留存；三种首次事件前8帧及终止前16帧+终止后原始双相机留存，非全程原始RGB。逐步公开标量hash用于同历史分析；private不下载或发布。容量按3GiB最坏新增界，system普通保留1GiB/data root2GiB；观察时扣剩余界仍满足。
+
+## 验收及解释边界
+
+完整自然exit0后 collect_final.py→audit_final_local.py（新路径仅AST，尚待首次完整实际验收），独立240回合/120pairs/全history/noise/actions/SF-FS绑定，分析关键事件和失败前历史。源CP不改，无优化器。完整逐步标量本地保留，发布汇总/关键片段及SHA清单，避免推送整批大日志。
+
+同初态噪声的成功→失败只能支持阶段策略差异，单步有害因果仍需同状态干预等更强证据。600步超时没有已知不可逆失败时刻。待出现可重复有害变化、完成机制分析后再固定同Stage8不保护/无条件保护/允许纠错选择性保护三组的有限协议，检查Task8保持和Task9学习；当前未启动这些训练，不自动扫阈值或新seed。
+'''
+(R/'REPORT.md').write_text(report,encoding='utf8')
+(R/'LOCAL_RECOMPUTATION.txt').write_text('audit_ra_local.py: PASS on ra_drift_readonly_20261024_184617\ncompare_offline.py: PASS common 1356 windows/1283 labels\naudit_progress.py: PASS on snapshot_20261024_185657\nAll top-level Python AST parse: PASS\nNew final collection/audit wrappers: STATIC ONLY, not yet exercised on complete experiment\n',encoding='utf8')
+(R/'AUTOMATION_BINDING.json').write_text(json.dumps({'id':'ra-align','interval_minutes':30,'reason':'Measured remaining 27.375 minutes plus load/save allowance; update from actual remaining at next check','created_at':datetime.datetime.now().astimezone().isoformat()},indent=2))

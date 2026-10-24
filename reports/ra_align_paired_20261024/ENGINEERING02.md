@@ -1,0 +1,1 @@
+工程01在导入libero时未设置LIBERO_CONFIG_PATH，input遇EOF。worker/supervisor exit1，0模型前向/0优化器/0环境，未创建私有轨迹目录。原源码、合同、日志、失败快照保留。新工程02只补齐已有运行环境LIBERO_CONFIG_PATH/HF_HOME/MPLBACKEND/OPENBLAS_NUM_THREADS，不改模型、输入、噪声、预算或指标。启动前核旧退出/hash/无进程、GPU空闲；新版本必须自己的准入。导入可能创建了空~/.libero目录，没有初始化配置或修改已有配置。
