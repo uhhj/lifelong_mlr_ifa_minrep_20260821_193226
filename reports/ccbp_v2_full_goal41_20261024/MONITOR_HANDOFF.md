@@ -21,3 +21,5 @@ controller自然exit0且无自身进程。实际验收16个CPU严格100键模型
 
 
 任务已经闭合。不要再deploy、训练、评估、轮询或扩seed。监控在核验本次远端发布后删除。
+
+最终验收与分析已发布并核远端提交8c0c899c721f57f1911e8180740bed901aecfe15；ccbp-v2-goal41监控已实际删除，见MONITOR_DELETION_RECEIPT.json。没有后续自动实验。
