@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-25T01:09:28.785267+08:00",
-  "observation_unix": 1792861768.7852674,
+  "observation": "2026-10-25T02:04:25.582353+08:00",
+  "observation_unix": 1792865065.5823534,
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02",
   "contract": "56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71",
   "counts": {
@@ -16,13 +16,13 @@
       }
     },
     "C": {
-      "epochs": 101,
-      "steps": 10139,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
         "6": 100,
-        "7": 1,
-        "8": 0,
-        "9": 0
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     },
     "N": {
@@ -52,9 +52,12 @@
     "ADMISSION_B_8.json": 5,
     "ADMISSION_B_9.json": 5,
     "ADMISSION_C_6.json": 4,
-    "ADMISSION_C_7.json": 5
+    "ADMISSION_C_7.json": 5,
+    "ADMISSION_C_8.json": 5,
+    "ADMISSION_C_9.json": 5,
+    "ADMISSION_N_6.json": 4
   },
-  "isolated_optimizer_calls": 28,
+  "isolated_optimizer_calls": 42,
   "teacher_bindings": {
     "TEACHER_B_7.json": {
       "count": 477,
@@ -74,32 +77,42 @@
       "cache_sha256": "19d59d8de969d1f25d8b985164d649bf41d3bf22e7d11c9744a524cbd9332105",
       "source_sha256": "59e34313cf344f3e1c280091f2d6adde4d2735b2490eccb17286cba6f7b1b204"
     },
+    "TEACHER_C_8.json": {
+      "count": 899,
+      "tau": 0.0032140547409653664,
+      "cache_sha256": "57347e6d3d739668108f299f8cbe7611aeb2efec45ee1a1de61657ad085d8831",
+      "source_sha256": "66ddfe7baadd5066fa86c99e44f4fa9171c2e02e83abfa934c297e8d41c65033"
+    },
     "TEACHER_B_9.json": {
       "count": 1329,
       "tau": 0.002811234211549163,
       "cache_sha256": "c75ab8d6469daa079e635237857298294692814e9220cca0a624850148195991",
       "source_sha256": "33e67068eefdd14c3b663891b0752d32be66591614f3eb769568dcb3487374b4"
+    },
+    "TEACHER_C_9.json": {
+      "count": 1329,
+      "tau": 0.002813888480886817,
+      "cache_sha256": "dc9ff6d8a0511174ffb97ada8699b647c1c45945a6cc65b89d728680db2d6f58",
+      "source_sha256": "e68db7907d4e6c4c439514109577970d9c515f740d8cbbb4e823f3476baf1d37"
     }
   },
   "formal_episodes": 0,
   "phase": {
-    "arm": "C",
-    "stage": 7,
-    "phase": "train",
-    "epoch_complete": 1,
-    "steps": 10139,
-    "time": 1792861766.8304412,
-    "pid": 20727
+    "arm": "N",
+    "stage": 6,
+    "phase": "prepare",
+    "time": 1792865060.9854097,
+    "pid": 20976
   },
-  "latest_evidence": "check_readonly_20261025_010917",
+  "latest_evidence": "check_readonly_20261025_020414",
   "capacity": {
     "/root": {
-      "bavail": 1802575872,
-      "bfree": 4906102784
+      "bavail": 1802539008,
+      "bfree": 4906065920
     },
     "/data": {
       "bavail": 0,
-      "bfree": 3578470400
+      "bfree": 3401736192
     }
   },
   "budget": {
@@ -108,15 +121,16 @@
     "episodes": 800
   },
   "automatic_expansion": false,
-  "next_check_minutes": 55,
+  "next_check_minutes": 65,
   "final_acceptance": "PENDING",
-  "capacity_evidence": "capacity_readonly_20261025_011027",
+  "capacity_evidence": "capacity_readonly_20261025_020512",
   "eta": {
-    "target": "C whole training",
-    "remaining_steps": 65961,
-    "linear_minutes": 48.24607537693257,
-    "own_rate_samples": 1,
-    "planning_extra": "save/cache/preparation; stages8/9 C rates unmeasured",
+    "target": "N whole training",
+    "remaining_steps": 76100,
+    "own_throughput_measured": false,
+    "comparable_C_epoch_minutes": 54.75780982176463,
+    "planning_minutes": 65,
+    "extra": "save/cache/admission/preparation; new N auxiliary route throughput unmeasured",
     "not_total_queue_eta": true
   }
 }
