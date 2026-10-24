@@ -1,8 +1,6 @@
-继续已授权CCBP-v2 GOAL seed41四组有限验证，先读本目录USER_METHOD/PROTOCOL/IMPLEMENTATION_NOTES/REPORT/RUN_STATUS/ACTIVE_ROOT及最新证据。唯一科学root /data/mlr_ifa/experiment_workspaces/CCBP_V2_GOAL41_20261024_v1，controller19552，合同fa6886806120e9cff7547fc0723b602e4fd53497c0a9c1d433618e50be267e47，32冻结项。禁止重跑deploy/build/controller或已完成科学阶段。旧v1/ALIGN/CAET/TACR/readout/语义筛查不恢复。
-最新23:36:18 check_readonly_20261024_233606 LOCAL_AUDIT及ADMISSION_AND_WEIGHT_AUDIT真实PASS_PROGRESS_NOT_FINAL，四组自己GPU18隔离更新与完整恢复/测量开关精确、B/C旧实现更新精确通过。B3完整epoch1011主步、其余正式0，GPU19723健康，无环境。teacher430 cache原地只读复用，本次额外教师前向0；tau0.0038629346527159214与所有w本地独立复算通过。
-四组B/C/N/V从共同Stage8重新训练Task9各100epoch33700步，全134800。B固定蒸馏、C旧专家cost路由、N关闭教师锚的新路由、V完整v2；lambda.1/beta.1/rho1、原mask/RA人口3365/3218有效147屏蔽430旧Task8、FP32/b10/IFA/模型不改。全部训练后Task6–9各20初态，共320回合32vector16cell，配对噪声原argmax Normal600步5zero。V主要Task8>C且Task9>=C，Task6/7副作用全报，不以mean掩盖；不加uniform，不自动扩seed、不扫描。
-用户定时按预计整段训练或整段评估完成点，不固定短周期。当前B3轮13.505554秒均值，其余组未测，剩训练90–105分钟参考；下一100分钟。320评估旧可比约40min但Task6/7未测，最终审计另计。每次醒来remote.py check_readonly.py→audit_progress.py SNAPSHOT；评价阶段再audit_evaluation_progress.py。保持健康不重启，一轮保存发布后结束不守候。
-新checkpoint/recovery同一文件storage别名，final硬链接只在100轮后创建；B/N在/root，C/V在/data，layout为准。每volume1.04GiB峰值界，唯一inode已分配抵扣；system普通1GiB/data root2GiB保留。不删旧资产、不下载payload、不付费或减预算。
-自然controller.exit0且无自身进程后remote.py final_readonly.py→audit_final_local.py FINAL；新的最终路径仅AST尚未实际PASS，外置错误保留修复，不重训重评。验收4CPU100键/恢复字段/inode/旧B/C最终tensor/所有初态文件字节与noiseSHA/weights中位数/J/route/400epoch134800步/320回合及全部分项梯度成本，报告V对B/C/N的Task6–9、SF/FS和代理一致性。固定epoch0/9/49/99梯度测量每组4batch、正式额外64autograd，准入额外16另列，不称等算力。完成真实验收报告发布后删除本监控，无论科学正负均不自动扩展。
-SSH root@jq1.9gpu.com:11920已授权，口令仅现有内存/getpass不文件日志参数。故障先核停止/hash/完整epoch状态留证后版本化工程修复，不盲重启正式评估，不覆盖冻结源。初CPU类型注解失败及本地发布receipt错误均已留证，科学训练未重试。
-每次检查/验收按AGENTS经本目录publish.py精确审查轻量type/size/secret/hash，串行stage非force推MLR并核remoteSHA/localreceipt。TLS可OpenSSL+HTTP1.1仍验证证书；禁模型/CP/latent/rawactions/states/demos/buffer/RNG/privatepayload/未审查zip。健康无变化安静，仅实质变化/失败/完成/需行动通知。
+# 用户替换为完整序列：本分叉已退出且不恢复
+
+实际只读快照23:46:54核controller.exit1、GPU空闲、无自身进程、32冻结项不变。B保存9完整epoch3033更新，其他0，正式环境0。epoch9诊断断言失败，不能当科学负结果；有状态梯度准入需新增验证。旧监控ccbp-v2-goal41已删除。用户随后要求四组各自从官方初始化跑完整GOAL，并明确授权自动清理废用数据；本分叉恢复权重已按精确SHA清理，日志/源码/失败与哈希保留，不能再声称可恢复此废止分叉。新目录20261024_ccbp_v2_full。
+
+以下历史启动观察保留，不代表现状。
+
