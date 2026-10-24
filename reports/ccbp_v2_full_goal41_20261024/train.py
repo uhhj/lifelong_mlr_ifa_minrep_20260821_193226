@@ -8,7 +8,7 @@ def prepare(arm,stage,ds,a):
  if not ds.ids:return {},torch.ones(3,device='cuda'),{},None
  saved=rng();modes={n:m.training for n,m in a.policy.named_modules()};tic=time.time();teacher=copy.deepcopy(a.policy.module).eval().requires_grad_(False);cache={}
  source=model_path(arm,stage-1);previous=torch.load(source,map_location='cpu')['state_dict']
- assert equal(a.policy.state_dict(),previous)
+ assert equal(cpu(a.policy.state_dict()),previous)
  try:
   with torch.no_grad():
    for k in range(0,len(ds.ids),32):
@@ -61,11 +61,18 @@ def initialization(a,arm):
 
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('arm',choices=list(ARMS));args=ap.parse_args();arm=args.arm;verify();capacity()
- dest=OUTPUT[arm];dest.mkdir(parents=True,exist_ok=True);assert not (dest/'recovery.pth').exists(),'No blind resume'
+ dest=OUTPUT[arm];dest.mkdir(parents=True,exist_ok=True);resume=(arm=='B' and (R/'REPAIR_CONTINUATION.json').exists());assert resume or not (dest/'recovery.pth').exists(),'No blind resume'
  dist.init_process_group('nccl');torch.cuda.set_device(0)
  try:
-  a=make(arm);initialization(a,arm);history=[];gradients=[]
-  for stage in range(6,10):
+  a=make(arm);initialization(a,arm);history=[];gradients=[];first=6
+  if resume:
+   binding=js(R/'REPAIR_CONTINUATION.json');rec=torch.load(dest/'recovery.pth',map_location='cpu')
+   assert sha(dest/'recovery.pth')==binding['recovery_sha256'] and rec['contract']==binding['previous_contract'] and rec['stage']==6 and rec['next_epoch']==100 and rec['steps']==10000
+   setup(a,Dataset(6));restore(a,rec['state']);assert equal(capture(a),rec['state'])
+   history=rec['history'];assert history==js(R/'EPOCHS_B.json') and len(history)==100
+   write(R/'RESTORE_ADMISSION.json',dict(status='PASS_ACTUAL_GPU_FULL_STATE_RESTORE',recovery_sha256=binding['recovery_sha256'],previous_contract=binding['previous_contract'],next_stage=7,completed_epochs_repeated=0,optimizer_updates=0,forwards=0,environments=0,fields=sorted(rec['state']),all_fields_exact=True))
+   first=7
+  for stage in range(first,10):
    write(R/'TRAIN_STATUS.json',dict(arm=arm,stage=stage,phase='prepare',time=time.time(),pid=os.getpid()))
    ds=Dataset(stage);loader,sampler=setup(a,ds);info=js(O/('ra_coreset/ifa_task%d.json'%stage))['info'];a.policy.train()
    cache,scale,weights,teacher=prepare(arm,stage,ds,a);admit(arm,stage,ds,a,cache,scale,weights,info)

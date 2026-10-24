@@ -1,0 +1,95 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792858191.2813337,
+  "contract": "56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71",
+  "counts": {
+    "B": {
+      "epochs": 111,
+      "steps": 11529,
+      "by_stage": {
+        "6": 100,
+        "7": 11,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "C": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "N": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "V": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    }
+  },
+  "rates_last10": {
+    "B": {
+      "6": 2.8611860275268555,
+      "7": 6.162818050384521
+    },
+    "C": {},
+    "N": {},
+    "V": {}
+  },
+  "admissions": {
+    "ADMISSION_B_6.json": 4,
+    "ADMISSION_B_7.json": 5
+  },
+  "isolated_optimizer_calls": 9,
+  "teacher_bindings": {
+    "TEACHER_B_7.json": {
+      "count": 477,
+      "tau": 0.0038780958857387304,
+      "cache_sha256": "4adda6734c8cd8e1c839e92f014876a6d5b403aa24cdbbcfd8eeb2f421e55c20",
+      "source_sha256": "086a12fa3512d1ee1aaa1794c664c6293456bf5d83934a760842859f75da7c63"
+    }
+  },
+  "formal_episodes": 0,
+  "no_partial_performance_claim": true,
+  "failure": null,
+  "phase": {
+    "arm": "B",
+    "stage": 7,
+    "phase": "train",
+    "epoch_complete": 11,
+    "steps": 11529,
+    "time": 1792858185.1428463,
+    "pid": 20536
+  },
+  "processes": [
+    {
+      "pid": 20530,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02/controller.py "
+    },
+    {
+      "pid": 20531,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02/train.py B "
+    },
+    {
+      "pid": 20536,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02/train.py B "
+    }
+  ]
+}

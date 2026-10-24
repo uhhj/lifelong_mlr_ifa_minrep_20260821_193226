@@ -11,11 +11,19 @@ def run(name):
   c.connect('jq1.9gpu.com',port=11920,username='root',password=pw,look_for_keys=False,allow_agent=False,timeout=20);pw=None
   script=(R/name).read_text(encoding='utf8')
   if (R/'DEPLOY_TEXT_BUNDLE.json').exists() and name=='deploy_remote.py':script='BUNDLE='+ascii(json.loads((R/'DEPLOY_TEXT_BUNDLE.json').read_text(encoding='utf8')))+'\n'+script
+  if name=='deploy_engineering02.py':script='BUNDLE='+ascii(json.loads((R/'DEPLOY_TEXT_BUNDLE_ENGINEERING02.json').read_text(encoding='utf8')))+'\n'+script
   script='# -*- coding: utf-8 -*-\n'+script
   i,o,e=c.exec_command('/data/mlr_ifa/env/bin/python -B -',timeout=1800);i.write(script.encode('utf8'));i.flush();i.channel.shutdown_write()
   raw=o.read();err=e.read().decode();rc=o.channel.recv_exit_status()
   (out/'ATTEMPT.json').write_text(json.dumps(dict(exit=rc,stderr=err,script_sha256=hashlib.sha256(script.encode()).hexdigest()),indent=2));assert rc==0,err
-  data=json.loads(raw);(out/'EVIDENCE.json').write_text(json.dumps(data,indent=2))
+  data=json.loads(raw)
+  if isinstance(data.get('diagnostics'),dict):
+   files={}
+   for key,rows in data.pop('diagnostics').items():
+    assert key.replace('_','').isalnum();p=out/'diagnostics'/(key+'.json');p.parent.mkdir(exist_ok=True)
+    encoded=(json.dumps(rows,indent=2)+'\n').encode();p.write_bytes(encoded);files[str(p.relative_to(out))]=dict(sha256=hashlib.sha256(encoded).hexdigest(),rows=len(rows),bytes=len(encoded))
+   data['diagnostic_files']=files
+  (out/'EVIDENCE.json').write_text(json.dumps(data,indent=2))
   if 'sources' in data:
    for n,s in data.pop('sources').items():
     p=R/'reference_source'/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s,encoding='utf8')
