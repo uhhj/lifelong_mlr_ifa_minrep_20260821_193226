@@ -1,3 +1,11 @@
+# 最新2026-10-25 01:11 CST交接
+
+实际观察2026-10-25T01:09:28.785267+08:00，check_readonly_20261025_010917/LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL。65冻结项及父源码不变，controller20530/GPU20727健康，已自然进入C Task7。B完整400epoch76100主步、四阶段CP记录与train_B.exit0通过；epoch纯计算54.142874分钟，48额外梯度autograd另列，保存/准入/教师准备不算在该时间内。B最终CP仍待全部完成后的CPU独立最终验收，不算闭环收益。
+C Task6完整100epoch10000步且服务器实际tensor与原ALIGN相等；Task7下载1完整epoch139步，合计101epoch10139步。自己的C6/C7隔离4/5更新准入实际PASS，包括完整下一步恢复、状态化梯度测量开关、旧C损失更新精确。累计B/C自身28隔离更新、0环境；N/V未准入，正式0。四个已生成阶段教师身份、tau/w与自身前阶段CP/hash本地复核通过。没有本轮恢复重启或改科学参数。
+C剩65961主步，仅首轮6.100154秒/139batch，线性48.246075分钟；B后段近期实测速率提供约49分钟量级交叉参考，C后续阶段尚未测。保存/缓存/准备另计，下一55分钟在C整组训练结束附近检查，约02:05–02:10；不是全队列完成预测，不内部阶段短轮询。
+capacity_readonly_20261025_011027/LOCAL_AUDIT PASS_NOT_FINAL，稳定唯一inode分配量抵扣剩余新增后，system普通保留1GiB之外余12955321B，data root保留2GiB之外余21812347B；余量紧但仍满足预登记峰值，逐epoch原容量保护继续。只stat、0payload读取/服务器写入/前向/更新/环境，无新增删除或付费。已分配B9硬链接仅计一次，不能按全额重复预留误报不足。
+当前唯一engineering02 root/controller20530/合同56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71不变。先前B6后设备比较失败及完整恢复证据保留；新进度不改变恢复历史。不要重跑deploy/build/controller。全部四组训练后才800正式环境，最终wrapper仍仅静态待真实调用。整体PARTIAL。
+
 # 最新实际进度 2026-10-25T00:09:51.281334+08:00
 
 当前engineering02 controller20530，合同56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71。首版Task6完成后GPU/CPU直接比较报错，0 Task7正式更新；原失败和源保留。新版本仅修设备比较及完整已完成Task6接续，真实GPU完整状态恢复PASS，前100epoch精确继承，无完成epoch重训。B7自己的5隔离更新、下一步恢复及状态化梯度测量等价性实际PASS。C/N/V仍待各自准入。

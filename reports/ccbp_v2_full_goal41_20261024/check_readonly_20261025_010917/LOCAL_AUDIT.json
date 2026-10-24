@@ -1,0 +1,122 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792861768.7852674,
+  "contract": "56ec3ca98bde2767e3b0a27170b2e8a71a633fbee2ba028b8a0630e7ff47ff71",
+  "counts": {
+    "B": {
+      "epochs": 400,
+      "steps": 76100,
+      "by_stage": {
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
+      }
+    },
+    "C": {
+      "epochs": 101,
+      "steps": 10139,
+      "by_stage": {
+        "6": 100,
+        "7": 1,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "N": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "V": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    }
+  },
+  "rates_last10": {
+    "B": {
+      "6": 2.8611860275268555,
+      "7": 6.290282917022705,
+      "8": 8.26225941181183,
+      "9": 14.866269826889038
+    },
+    "C": {
+      "6": 2.912116599082947,
+      "7": 6.100154161453247
+    },
+    "N": {},
+    "V": {}
+  },
+  "admissions": {
+    "ADMISSION_B_6.json": 4,
+    "ADMISSION_B_7.json": 5,
+    "ADMISSION_B_8.json": 5,
+    "ADMISSION_B_9.json": 5,
+    "ADMISSION_C_6.json": 4,
+    "ADMISSION_C_7.json": 5
+  },
+  "isolated_optimizer_calls": 28,
+  "teacher_bindings": {
+    "TEACHER_B_7.json": {
+      "count": 477,
+      "tau": 0.0038780958857387304,
+      "cache_sha256": "4adda6734c8cd8e1c839e92f014876a6d5b403aa24cdbbcfd8eeb2f421e55c20",
+      "source_sha256": "086a12fa3512d1ee1aaa1794c664c6293456bf5d83934a760842859f75da7c63"
+    },
+    "TEACHER_C_7.json": {
+      "count": 477,
+      "tau": 0.0038780958857387304,
+      "cache_sha256": "395f35d26e2bee849212de4144e8071eebdf8865a9f59e2c12f20a8f4f5474fd",
+      "source_sha256": "daf237e78aeda1ae5b7eace68843cf32b97e0899f58aa9a3365cd081a187f76c"
+    },
+    "TEACHER_B_8.json": {
+      "count": 899,
+      "tau": 0.0032182426657527685,
+      "cache_sha256": "19d59d8de969d1f25d8b985164d649bf41d3bf22e7d11c9744a524cbd9332105",
+      "source_sha256": "59e34313cf344f3e1c280091f2d6adde4d2735b2490eccb17286cba6f7b1b204"
+    },
+    "TEACHER_B_9.json": {
+      "count": 1329,
+      "tau": 0.002811234211549163,
+      "cache_sha256": "c75ab8d6469daa079e635237857298294692814e9220cca0a624850148195991",
+      "source_sha256": "33e67068eefdd14c3b663891b0752d32be66591614f3eb769568dcb3487374b4"
+    }
+  },
+  "formal_episodes": 0,
+  "no_partial_performance_claim": true,
+  "failure": null,
+  "phase": {
+    "arm": "C",
+    "stage": 7,
+    "phase": "train",
+    "epoch_complete": 1,
+    "steps": 10139,
+    "time": 1792861766.8304412,
+    "pid": 20727
+  },
+  "processes": [
+    {
+      "pid": 20530,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02/controller.py "
+    },
+    {
+      "pid": 20722,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02/train.py C "
+    },
+    {
+      "pid": 20727,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V2_FULL_GOAL41_20261024_v1_engineering02/train.py C "
+    }
+  ]
+}
