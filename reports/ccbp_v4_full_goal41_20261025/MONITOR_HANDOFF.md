@@ -1,3 +1,11 @@
+# 最终闭合：2026-10-26
+
+完整独立验收PASS_COMPLETE_LOCAL_ACCEPTANCE，证据final_readonly_20261026_014654；12CPU严格CP、3完整恢复、12固定缓存、120训练采集、600正式/60vector/30cell及初态真实字节/噪声/父输入均已实际通过。新controller自然exit0且无自身进程；D旧合同自然退出继承保留。此前仅静态的最终路径本轮首次实际完成，0重训/重评/额外环境。
+
+D/O/S对C整体预登记门均未通过；O-D及S-O通过其增量比较。C/D/O/S的AUC为87.5/78.333333/87.5/86.875，FinalAll为82.5/72.5/80/85。S最终Task8/9=100/95，但早期7_6=70低于C80，不能宣称整体通过。O/S筛选前已存在Task7历史SHA差异，最终增量不可独立因果归因成功标签；详见FINAL_ANALYSIS.md和OS_HISTORY_COMPARISON。所有负单元保留，单seed开发数据不称显著。
+
+本版本停止自动扩展。完成本次精确审核发布并核远端SHA后删除ccbp-v4-goal41-d-o-s；不再运行deploy/controller/训练/采集/评估或重复最终前向。凭据保持系统凭据库；不导出。完整报告见FINAL_ANALYSIS.md，闭合文件SHA见FINAL_CLOSURE.json。以下为历史记录，不再表示活跃队列。
+
 # 最新2026-10-26 00:57 CST交接
 
 实际观察00:54:36 CST，check_readonly_20261026_005436的LOCAL_AUDIT、TRAINING_COMPLETION_METADATA_AUDIT、EVALUATION_PROGRESS_AUDIT均实际PASS_PROGRESS_NOT_FINAL。D/O/S各400完整epoch76100主更新已完成，合计1200epoch228300；train_D/O/S.exit0（D真实自然子进程退出继承），12阶段CP记录绑定，89冻结项及父源不变。120次训练采集及12次父完整训练状态不变通过；D/O各512缓存窗口，S四任务128/128/115/128共499，Task8成功筛选少13窗口，不补采不重分配。所有66自身隔离GPU更新及O/S短历史16autograd/34策略调用已PASS；正式额外216autograd、原准入54autograd另列。BC合法2143200/屏蔽136200/旧合法811500复算通过；三组Task6服务器tensor精确绑定，最终独立CPU仍待全部完成。

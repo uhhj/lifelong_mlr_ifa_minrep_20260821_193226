@@ -38,3 +38,24 @@ for arm in 'DOS':
    lines.append('|%s/%d/%d|%.8g|%+.8g|%+d|'%(arm,stage,task,cost,delta,closed))
 lines+=['','保持缓存来自不同访问历史，不能把不同组缓存上的距离下降当作同分布性能提升。S有效数据量更少或某任务为空，是成功筛选策略的实际组成部分；O/S还产生不同后续策略与状态分布，不能只归因标签。','', '固定任务获得时参考避免滚动覆盖，但可能永久保留早期错误；轨迹成功不是逐步正确性标签。只有配对闭环支持条件通过才有继续研究依据，离线改善或非零梯度不是任务保持保证。','', '梯度仅四个点的范数，没有方向/裁剪/AdamW后的因果分解；没有不可逆失败时刻标签和物理状态干预，不宣布唯一失败原因。所有负单元和早期7/6、晚期9/8都保留。单seed与反复开发初态仅探索，不自动扩展。']
 (D/'MECHANISM_REPORT.md').write_text('\n'.join(lines)+'\n',encoding='utf8');print('Accepted scalar analysis saved; no new experiment calls.')
+
+# Equal collection budgets do not imply identical realized history inputs.
+comparison={}
+for task in range(6,10):
+ oo=L['MEMORY_O_%d.json'%task]['rows'];ss=L['MEMORY_S_%d.json'%task]['rows']
+ om={(r['trajectory'],r['step']):r for r in oo};sm={(r['trajectory'],r['step']):r for r in ss};keys=om.keys()&sm.keys()
+ comparison[str(task)]=dict(O_count=len(oo),S_count=len(ss),common_trajectory_step_count=len(keys),
+  identical_feature_hashes=sum(om[k]['feature_sha256']==sm[k]['feature_sha256'] for k in keys),
+  identical_teacher_mu_hashes=sum(om[k]['mu_sha256']==sm[k]['mu_sha256'] for k in keys),
+  O_successes=L['MEMORY_O_%d.json'%task]['collection_successes'],S_successes=L['MEMORY_S_%d.json'%task]['collection_successes'])
+first=None
+for i,(x,y) in enumerate(zip(L['EPOCHS_O.json'],L['EPOCHS_S.json'])):
+ keys=[k for k in x if k!='seconds' and x[k]!=y[k]]
+ if keys:first=dict(global_epoch_index=i,stage=x['stage'],epoch=x['epoch'],different_fields=keys);break
+prefix=dict(status='ACCEPTED_METADATA_COMPARISON',acceptance_sha256=sha(D/'LOCAL_FINAL_AUDIT.json'),
+ cache_comparison=comparison,first_non_timing_epoch_difference=first,
+ limitation='Common trajectory/time indices are not proof of identical inputs. Hash inequality gives no magnitude or root cause. No extra model or environment calls.')
+(D/'OS_HISTORY_COMPARISON.json').write_text(json.dumps(prefix,indent=2)+'\n',encoding='utf8')
+with (D/'MECHANISM_REPORT.md').open('a',encoding='utf8') as f:
+ f.write('\n## O/S在筛选生效前已存在输入差异\n\n')
+ f.write('Task6缓存128个相同轨迹/时间键全部feature与教师均值SHA相同；前200个epoch非计时字段精确相同。Task7两组采集均10/10成功、均128窗口，尚未剔除失败轨迹，但128个共同键中只有121个feature SHA、123个教师均值SHA相同；首次epoch非计时差异出现在Task8 epoch0。此时数据量未减少，不能把Stage8的O/S性能差异归因于成功筛选或丢失13个窗口。SHA不等不提供数值幅度或原因，现有证据不判定渲染/数值来源。Task8采集之后S才保留115窗口，且两组已经访问不同历史，因此最终S-O只能解释为整个运行策略的探索比较，不能证明单独筛选机制的因果收益。详见OS_HISTORY_COMPARISON.json。\n')
