@@ -1,0 +1,37 @@
+{
+  "status": "PASS_LOCAL_SYNTHETIC_ONLY",
+  "torch_version": "2.10.0+cpu",
+  "real_checkpoints_loaded": 0,
+  "optimizer_updates": 0,
+  "environment_steps": 0,
+  "notes": [
+    "Output-coordinate gradient property does not imply parameter-gradient compatibility.",
+    "No claim of closed-loop benefit, novelty, convergence or physical feasibility.",
+    "C parity preserves first-index ties, not arbitrary-index symmetry at exact cost ties."
+  ],
+  "checks": {
+    "cost_coordinate_identity_max_abs": 8.526512829121202e-14,
+    "correction_path_max_anchor": 3.478999851541103e-30,
+    "projection_test_vectors": 4096,
+    "anchor_minus_expert_cost_max": 5.684341886080802e-14,
+    "output_gradient_dot_min": 62.258247928701905,
+    "coincident_endpoint_handling": true,
+    "backward_sideways_overshoot_examples": [
+      0.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "student_gradient_l1": [
+      185.81496626192492,
+      6.38409782827979,
+      0.17500000000000002
+    ],
+    "teacher_and_weight_frozen": true,
+    "anchor_off_exact_C_loss_and_gradients": true,
+    "unique_component_permutation_loss_invariant": true,
+    "tiny_sigma_loss_finite": 68.88573294213052,
+    "fp32_and_empty_batch": true,
+    "invalid_scale_rejected": true
+  }
+}
