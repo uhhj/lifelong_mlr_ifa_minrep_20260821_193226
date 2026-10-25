@@ -11,7 +11,7 @@ def inventory(base):
   except FileNotFoundError:pass
  return out
 result={}
-for mount,bound,reserve,rootfree in [('/root',int(1.10*1024**3),1024**3,False),('/data',int(1.40*1024**3),2*1024**3,True)]:
+for mount,bound,reserve,rootfree in [('/root',0,1024**3,False),('/data',int(2.50*1024**3),2*1024**3,True)]:
  base=Path(mount)/'mlr_ifa/experiments/CCBP_V3_FULL_GOAL41_20261025_v1'
  first=inventory(base);second=inventory(base);seen=set();allocated=0
  for p,s in first.items():

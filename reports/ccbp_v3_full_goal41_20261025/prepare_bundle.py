@@ -24,7 +24,7 @@ for arm in 'BCNV':
 assert all(x['headroom']>=0 for x in v['volumes'].values())
 assert json.loads((R/'INDEPENDENT_CPU_REVIEW.json').read_text())['status']=='PASS_SYNTHETIC_NOT_REAL_ADMISSION'
 assert json.loads((R/'cpu_review/synthetic_test_results.json').read_text())['status']=='PASS_LOCAL_SYNTHETIC_ONLY'
-accept=dict(status='PASS_LOCAL_PREDEPLOY_ACCEPTANCE',remote_observed=v['observed'],parent_contract=parent['contract'],preflight_evidence_sha256=sha(D/'EVIDENCE.json'),parent_local_acceptance_sha256=sha(R/'PARENT_LOCAL_ACCEPTANCE.json'),capacity=v['volumes'],actual_GPU_admission='PENDING',controller='NOT_DISPATCHED')
+accept=dict(status='PASS_LOCAL_PREDEPLOY_ACCEPTANCE',remote_observed=v['observed'],parent_contract=parent['contract'],preflight_evidence_sha256=sha(D/'EVIDENCE.json'),parent_local_acceptance_sha256=sha(R/'PARENT_LOCAL_ACCEPTANCE.json'),capacity=v['volumes'],hardware=v['hardware'],actual_GPU_admission='PENDING',controller='NOT_DISPATCHED')
 (R/'PREDEPLOY_ACCEPTANCE.json').write_text(json.dumps(accept,indent=2)+'\n',encoding='utf8')
 names=['runtime.py','layout.py','losses.py','legacy_losses.py','directional_prototype.py','synthetic_checks.py','updates.py','train.py','evaluate.py','controller.py','PROTOCOL.md','PARENT_LOCAL_ACCEPTANCE.json','PREDEPLOY_ACCEPTANCE.json']
 bundle={n:(R/n).read_text(encoding='utf8') for n in names}

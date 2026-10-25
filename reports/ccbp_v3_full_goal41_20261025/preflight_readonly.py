@@ -24,7 +24,7 @@ for p in Path('/proc').glob('[0-9]*'):
 assert not procs
 gpu=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip()
 volumes={}
-for mount,bound,reserve,rootfree in [('/root',int(1.10*1024**3),1024**3,False),('/data',int(1.40*1024**3),2*1024**3,True)]:
+for mount,bound,reserve,rootfree in [('/root',0,1024**3,False),('/data',int(2.50*1024**3),2*1024**3,True)]:
     s=os.statvfs(mount);free=(s.f_bfree if rootfree else s.f_bavail)*s.f_frsize
     volumes[mount]=dict(free=free,new_peak_bound=bound,reserve=reserve,headroom=free-bound-reserve)
 # Metadata only. Being listed is NOT authorization to delete a final or active asset.
@@ -41,4 +41,5 @@ stage={}
 for a in 'BCNV':
     for t in range(6,10):
         x=json.loads((P/('STAGE_%s_%d.json'%(a,t))).read_text());assert sha(x['model'])==x['sha256'];stage[a+str(t)]=x
-print(json.dumps(dict(status='PASS_PREDEPLOY_READONLY' if not gpu and all(v['headroom']>=0 for v in volumes.values()) else 'REVIEW_RESOURCE_REQUIRED_NOT_DEPLOYED',observed=time.time(),parent_contract=sha(P/'CONTRACT.json'),parent_stage_checkpoints=stage,parent_frozen_files=len(c['files']),gpu=gpu,processes=procs,volumes=volumes,unclassified_intermediate_name_inventory=inventory,model_forwards=0,optimizer_updates=0,environments=0,server_writes=0)))
+hardware=subprocess.check_output(['nvidia-smi','--query-gpu=name,memory.total,driver_version','--format=csv,noheader'],text=True).strip()
+print(json.dumps(dict(status='PASS_PREDEPLOY_READONLY' if not gpu and all(v['headroom']>=0 for v in volumes.values()) else 'REVIEW_RESOURCE_REQUIRED_NOT_DEPLOYED',observed=time.time(),parent_contract=sha(P/'CONTRACT.json'),parent_stage_checkpoints=stage,parent_frozen_files=len(c['files']),gpu=gpu,hardware=hardware,processes=procs,volumes=volumes,unclassified_intermediate_name_inventory=inventory,model_forwards=0,optimizer_updates=0,environments=0,server_writes=0)))

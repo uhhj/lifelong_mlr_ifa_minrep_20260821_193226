@@ -61,8 +61,13 @@ def admit(arm,stage,ds,a,cache,scale,weights,info):
 def initialization(a,arm):
  r=rng();digest={k:hashlib.sha256(pickle.dumps(v) if k in ('python','numpy') else b''.join(x.cpu().numpy().tobytes() for x in (v if isinstance(v,list) else [v]))).hexdigest() for k,v in r.items()}
  tensor={k:hashlib.sha256(v.detach().cpu().numpy().tobytes()).hexdigest() for k,v in a.policy.state_dict().items()}
- expected=js(O/'ra_coreset/INITIAL_STATE.json');assert tensor==expected['tensors'] and digest==expected['rng'],'Official initialization/RNG mismatch'
- write(R/('INITIAL_'+arm+'.json'),dict(status='PASS_OFFICIAL_INITIALIZATION',tensors=tensor,rng=digest,official_cp_sha256=sha(a.cfg.pretrain),parent_initial_sha256=sha(O/'ra_coreset/INITIAL_STATE.json')))
+ expected=js(O/'ra_coreset/INITIAL_STATE.json')
+ assert tensor==expected['tensors'] and all(digest[k]==expected['rng'][k] for k in digest if k!='cuda'),'Official initialization/non-CUDA RNG mismatch'
+ props=torch.cuda.get_device_properties(0)
+ hardware=dict(device=props.name,capability=[props.major,props.minor],total_memory=props.total_memory,torch_version=torch.__version__,cuda_version=torch.version.cuda,cudnn_version=torch.backends.cudnn.version(),matmul_tf32=torch.backends.cuda.matmul.allow_tf32,cudnn_tf32=torch.backends.cudnn.allow_tf32)
+ if arm!='C':
+  first=js(R/'INITIAL_C.json');assert tensor==first['tensors'] and digest==first['rng'] and hardware==first['hardware'],'Same-device arm initialization/RNG/hardware mismatch'
+ write(R/('INITIAL_'+arm+'.json'),dict(status='PASS_OFFICIAL_INITIALIZATION',tensors=tensor,rng=digest,hardware=hardware,historical_cuda_rng_equal=digest['cuda']==expected['rng']['cuda'],historical_cuda_rng_gate=False,official_cp_sha256=sha(a.cfg.pretrain),parent_initial_sha256=sha(O/'ra_coreset/INITIAL_STATE.json')))
 
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('arm',choices=list(ARMS));args=ap.parse_args();arm=args.arm;verify();capacity()
@@ -92,7 +97,9 @@ def main():
    else:save(target,dict(state_dict=cpu(a.policy.state_dict()),stage=stage,epoch=99,steps=a.step,contract=verify()))
    if stage==6:
     baseline=torch.load(O/'ra_coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];same=equal(cpu(a.policy.state_dict()),baseline)
-    write(R/('TASK6_PARITY_'+arm+'.json'),dict(equal=same,source_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),actual_sha256=sha(target)));assert same,'Task6 must reproduce original ALIGN'
+    actual=cpu(a.policy.state_dict());reference=actual if arm=='C' else torch.load(model_path('C',6),map_location='cpu')['state_dict']
+    same_device=equal(actual,reference);assert same_device,'Task6 must match current-card C exactly'
+    write(R/('TASK6_PARITY_'+arm+'.json'),dict(historical_ALIGN_equal=same,historical_equality_gate=False,historical_max_abs=max(float((actual[k].double()-baseline[k].double()).abs().max()) for k in actual),same_device_C_equal=same_device,source_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),actual_sha256=sha(target),current_C_sha256=sha(model_path('C',6))))
    write(R/('STAGE_%s_%d.json'%(arm,stage)),dict(status='PASS_TRAINING_PENDING_FINAL',model=str(target),sha256=sha(target),steps=a.step,epochs=100,stage=stage,teacher=teacher['cache_sha256'] if teacher else None))
   assert a.step==76100 and len(history)==400
   write(R/('TRAIN_'+arm+'.json'),dict(status='PASS',epochs=400,steps=a.step,summed_epoch_seconds=sum(r['seconds'] for r in history),gradient_autograd_calls=sum(r['extra_autograd_calls'] for r in gradients),checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))

@@ -25,7 +25,7 @@ for p in Path('/proc').glob('[0-9]*'):
     except OSError:continue
     assert int(p.name)==os.getpid() or not any(str(q) in cmd for q in (P,Q))
 cap={}
-for mount,bound,reserve,rootfree in [('/root',int(1.10*1024**3),1024**3,False),('/data',int(1.40*1024**3),2*1024**3,True)]:
+for mount,bound,reserve,rootfree in [('/root',0,1024**3,False),('/data',int(2.50*1024**3),2*1024**3,True)]:
     v=os.statvfs(mount);free=(v.f_bfree if rootfree else v.f_bavail)*v.f_frsize
     assert free-bound>=reserve,(mount,free,bound,reserve)
     cap[mount]=dict(free=free,new_peak_bound=bound,reserve=reserve,headroom=free-bound-reserve)
@@ -33,7 +33,7 @@ lock=open('/data/mlr_ifa/CCBP_V3_FULL_GOAL41_20261025.lock','a');fcntl.flock(loc
 for n,s in BUNDLE.items():
     assert Path(n).name==n and Path(n).suffix in ['.py','.md','.txt','.json']
     if n.endswith('.py'):compile(s,n,'exec')
-Q.mkdir();PR.mkdir();PD.mkdir();files={}
+Q.mkdir();PD.mkdir();files={}
 for n,s in BUNDLE.items():(Q/n).write_text(s);files[str(Q/n)]=sha(Q/n)
 # Bind unchanged parent metadata/input files without copying any payload.
 for p,h in pc['files'].items():

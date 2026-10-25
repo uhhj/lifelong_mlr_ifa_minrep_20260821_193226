@@ -37,7 +37,7 @@ def main():
     for p in sorted(R.rglob("*")):
         if (not p.is_file() or p.suffix not in allowed or p.name in exclude or
                 any(x.startswith(("inspect_inputs_", "inspect_assets_readonly_")) for x in p.relative_to(R).parts) or
-                "reference_source" in p.relative_to(R).parts or
+                "reference_source" in p.relative_to(R).parts or ".session_control" in p.relative_to(R).parts or
                 "light" in p.relative_to(R).parts or
                 ("BUNDLE" in p.name and p.suffix == ".json") or
                 p.name.startswith("PUBLICATION_RECEIPT") or

@@ -37,7 +37,8 @@ for arm in 'CRG':
    assert a['baseline_or_legacy_update_exact']
    admissions[key]=a['optimizer_calls']
  if 'INITIAL_'+arm+'.json' in light:
-  a=light['INITIAL_'+arm+'.json'];parent_initial=json.loads((parent/'ra_coreset/INITIAL_STATE.json').read_text(encoding='utf8'));assert a['tensors']==parent_initial['tensors'] and a['rng']==parent_initial['rng']
+  a=light['INITIAL_'+arm+'.json'];parent_initial=json.loads((parent/'ra_coreset/INITIAL_STATE.json').read_text(encoding='utf8'));assert a['tensors']==parent_initial['tensors'] and all(a['rng'][k]==parent_initial['rng'][k] for k in a['rng'] if k!='cuda')
+  if arm!='C':assert a['tensors']==light['INITIAL_C.json']['tensors'] and a['rng']==light['INITIAL_C.json']['rng'] and a['hardware']==light['INITIAL_C.json']['hardware']
  for other in 'CRG':
   for x,y in zip(rows,light.get('EPOCHS_'+other+'.json',[])):assert x['sampler_sha256']==y['sampler_sha256']
 records=light.get('OUTCOMES.json',[]);seen=set();initials={}

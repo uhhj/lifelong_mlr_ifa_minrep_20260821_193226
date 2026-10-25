@@ -56,7 +56,7 @@ for stage in range(6,10):
   aligned.append(r)
  manifests[stage]=manifest;stage_labels[stage]=aligned
 from directional_prototype import directional_anchor
-strict={};diags={};teacher_audits={};calls=0;windows=0;tic=time.time();task6={}
+strict={};diags={};teacher_audits={};calls=0;windows=0;tic=time.time();task6={};historical_task6={}
 for arm in ARMS:
  strict[arm]={};hist=js(Q/('EPOCHS_'+arm+'.json'));assert len(hist)==400
  for stage in range(6,10):
@@ -64,7 +64,10 @@ for arm in ARMS:
   raw=torch.load(cp,map_location='cpu');strict[arm][str(stage)]=dict(strict_keys=100,parameters=sum(v.numel() for v in p.parameters()),sha256=sha(cp),steps=meta['steps'])
   if stage==6:
    task6[arm]={k:hashlib.sha256(v.numpy().tobytes()).hexdigest() for k,v in raw['state_dict'].items()}
-   baseline=torch.load(O/'ra_coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];assert all(torch.equal(v,baseline[k]) for k,v in raw['state_dict'].items());continue
+   baseline=torch.load(O/'ra_coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict']
+   historical_task6[arm]=dict(equal=all(torch.equal(v,baseline[k]) for k,v in raw['state_dict'].items()),max_abs=max(float((v.double()-baseline[k].double()).abs().max()) for k,v in raw['state_dict'].items()),equality_gate=False)
+   parity=js(Q/('TASK6_PARITY_'+arm+'.json'));assert parity['same_device_C_equal'] and parity['actual_sha256']==sha(cp)
+   continue
   tm=js(Q/('TEACHER_%s_%d.json'%(arm,stage)));tc=torch.load(teacher_path(arm,stage),map_location='cpu');assert tm['source_sha256']==sha(model_path(arm,stage-1))==tc['source_sha256'] and tm['cache_sha256']==sha(teacher_path(arm,stage))
   ids=[i for i,r in enumerate(manifests[stage]) if r['task']<stage and r['bc_valid']];assert ids==tc['ids'] and set(ids)==set(tc['cache']) and len(ids)==OLD[stage]
   targets=torch.stack([torch.as_tensor(stage_labels[stage][i]['next_action']) for i in ids]).float()
@@ -117,4 +120,4 @@ for r in records:
 assert len(seen)==600;verify();light={}
 for fp in Q.rglob('*'):
  if fp.is_file() and fp.suffix in ['.json','.jsonl','.exit'] and fp.name!='CONTRACT.json' and fp.stat().st_size<8*1024**2:light[str(fp.relative_to(Q))]=dict(text=fp.read_text(),sha256=sha(fp))
-print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,contract=sha(Q/'CONTRACT.json'),contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diags,teacher_audits=teacher_audits,task6_equal_to_ALIGN_and_between_arms=True,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,light=light,episodes=600,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time())))
+print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,contract=sha(Q/'CONTRACT.json'),contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diags,teacher_audits=teacher_audits,task6_between_current_arms_exact=True,historical_task6=historical_task6,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,light=light,episodes=600,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time())))

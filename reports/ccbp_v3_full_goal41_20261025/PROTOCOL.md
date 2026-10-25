@@ -13,7 +13,7 @@
 |8|1848|1723|125|899|185|
 |9|3365|3218|147|1329|337|
 
-每组400 epoch、76100正式更新；三组1200 epoch、228300更新。FP32、batch10、sampler0、seed41、AdamW 1e-4 / wd0.1、500 warmup、clip100、IFA gamma0.7保持。每阶段100轮后固定ep99检查点，不按测试挑轮次。Task6辅助为零，须实际复现官方ALIGN Task6 tensor。
+每组400 epoch、76100正式更新；三组1200 epoch、228300更新。FP32、batch10、sampler0、seed41、AdamW 1e-4 / wd0.1、500 warmup、clip100、IFA gamma0.7保持。每阶段100轮后固定ep99检查点，不按测试挑轮次。Task6辅助为零，新卡C/R/G须逐位一致；与旧卡ALIGN Task6 tensor的差异只记录，不作准入否决。官方初始化模型及非CUDA随机状态仍须核验，三组本卡全部初始RNG保持一致。
 
 Task7–9只使用本组上一阶段检查点生成教师，eval/no_grad、保存恢复全RNG，整阶段冻结。对当时全部合法旧窗口计算尺度（分组动作RMS、floor0.1）和tau（教师执行专家cost的float64中位数、floor1e-8），冻结w=tau/(tau+cT)。不使用当前batch重估，不读取未来任务数据。
 
@@ -49,8 +49,8 @@ G-C检验“在持续专家监督和原路由上添加方向保持”的整体�
 
 ## 结束验收、容量与发布
 
-全部controller自然exit0且无自身进程后，才运行外置CPU final_readonly→audit_final_local。必须实际12CPU strict完整CP、3完整最终恢复、9教师源/缓存、Task6四方（C/R/G/原ALIGN）tensor一致、全部epoch/更新、600初态真实字节和noiseSHA、30cell/60vector唯一attempt及标量独立验收。最终wrapper静态检查不是实际PASS。
+全部controller自然exit0且无自身进程后，才运行外置CPU final_readonly→audit_final_local。必须实际12CPU strict完整CP、3完整最终恢复、9教师源/缓存、Task6本卡C/R/G tensor一致及旧卡ALIGN差异记录、全部epoch/更新、600初态真实字节和noiseSHA、30cell/60vector唯一attempt及标量独立验收。最终wrapper静态检查不是实际PASS。
 
-新科学目录CCBP_V3_FULL_GOAL41_20261025_v1；不得恢复旧v2/Task9分叉/CAET/TACR/readout。新布局暂以root1.10GiB/data1.40GiB新增峰值预检（含原子保存），独占inode抵扣实际已分配；system普通保留1GiB、data root保留2GiB。这是拟定界，必须新远程实际核算才准入。容量不足先查明确废用中间资产，用户既有授权允许精确留证清理；旧最终模型/最终恢复/原始数据/活跃或未验收资产不可当废用。不得付费、降预算/精度或下载私有payload。
+新科学目录CCBP_V3_FULL_GOAL41_20261025_v1；不得恢复旧v2/Task9分叉/CAET/TACR/readout。4080S恢复执行后，新产物全部放/data，root新增0/data新增2.50GiB峰值预检（含原子保存），独占inode抵扣实际已分配；system普通保留1GiB、data root保留2GiB。这是拟定界，必须新远程实际核算才准入。容量不足先查明确废用中间资产，用户既有授权允许精确留证清理；旧最终模型/最终恢复/原始数据/活跃或未验收资产不可当废用。不得付费、降预算/精度或下载私有payload。
 
 每次检查/审计/实施按根AGENTS只发布精确审核的代码、报告、hash、标量及outcomes，非force推MLR并核remoteSHA和本地receipt。进行中标PARTIAL并记真实观察时间。按预计整组训练/整段评估完成点调整同一监控；连接故障退避明确区分于完成ETA。全验收、分析和发布后删除监控，不自动扩展。
