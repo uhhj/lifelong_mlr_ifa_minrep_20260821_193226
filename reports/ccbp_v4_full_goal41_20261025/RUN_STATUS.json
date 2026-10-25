@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-25T21:06:39.842449+08:00",
+  "observation": "2026-10-25T22:58:37.796149+08:00",
   "counts": {
     "D": {
       "epochs": 400,
@@ -13,20 +13,20 @@
       }
     },
     "O": {
-      "epochs": 92,
-      "steps": 9200,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
-        "6": 92,
-        "7": 0,
-        "8": 0,
-        "9": 0
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     },
     "S": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 96,
+      "steps": 9600,
       "by_stage": {
-        "6": 0,
+        "6": 96,
         "7": 0,
         "8": 0,
         "9": 0
@@ -38,11 +38,15 @@
     "D_7": 6,
     "D_8": 6,
     "D_9": 6,
-    "O_6": 4
+    "O_6": 4,
+    "O_7": 6,
+    "O_8": 6,
+    "O_9": 6,
+    "S_6": 4
   },
-  "training_collection_episodes": 40,
+  "training_collection_episodes": 80,
   "formal_episodes": 0,
-  "latest_evidence": "check_readonly_20261025_210637",
+  "latest_evidence": "check_readonly_20261025_225837",
   "root": {
     "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02",
     "controller": 19033,
@@ -64,13 +68,13 @@
     "status": "VERSIONED_DISPATCH_HANDOFF_D_CONTINUES"
   },
   "phase": {
-    "arm": "O",
+    "arm": "S",
     "stage": 6,
     "phase": "train",
-    "epoch_complete": 92,
-    "steps": 9200,
-    "time": 1792933599.7669005,
-    "pid": 19950
+    "epoch_complete": 96,
+    "steps": 9600,
+    "time": 1792940316.2146,
+    "pid": 21808
   },
   "D_natural_exit_observed": true,
   "old_dispatcher_retired": true,
@@ -78,30 +82,30 @@
   "collection_attempts_repeated": 0,
   "OS_short_history_admission": {
     "O": "ACTUAL_PASS",
-    "S": "PENDING"
+    "S": "ACTUAL_PASS"
   },
   "final_acceptance": "PENDING_ACTUAL_FULL_AUDIT",
-  "next_check_minutes": 105,
+  "next_check_minutes": 110,
   "monitor_id": "ccbp-v4-goal41-d-o-s",
   "eta": {
     "status": "PASS_PROGRESS_NOT_FINAL",
-    "evidence_sha256": "f5f34e7858b0f76ca7177ad1b0cb0fc19cb7ec6ff96a6068c718b5b52bed6921",
-    "observation": 1792933599.8424487,
-    "inherited_files_verified": 41,
-    "inherited_D_natural_exit": true,
-    "old_dispatcher_not_claimed_exit0": true,
-    "completed_epochs_repeated": 0,
-    "collection_attempts_repeated": 0,
-    "O_short_history_actual_PASS": true,
-    "S_short_history": "PENDING",
-    "D_epoch_minutes": 95.08949752648671,
-    "D_collection_seconds": 168.46409229100027,
-    "O_remaining6_minutes": 0.4081352710723877,
-    "D_later_stages_reference_minutes": 89.95838721990586,
-    "O_remaining_reference_including_collection_minutes": 93.17425736249491,
+    "observation": 1792940317.7961485,
+    "evidence_sha256": "901b563659fb853d6cec06f1aad6c87afd87142f4594d88608093907dcbf5d84",
+    "O_natural_exit0": true,
+    "O_full_parent_state_parity": true,
+    "O_Task6_tensor_equal_D": true,
+    "O_epoch_minutes": 101.78618942896524,
+    "O_collection_minutes": 2.7811732388833357,
+    "OS_short_history_actual_PASS": true,
+    "OS_extra_autograd_calls": 16,
+    "OS_extra_policy_calls": 34,
+    "S_remaining6_minutes": 0.19219517707824707,
+    "O_later_stage_reference_minutes": 96.5765597820282,
+    "S_remaining_reference_including_collection_minutes": 99.54992819798979,
     "planning_allowance_minutes": 10,
     "allowance_not_measured": true,
-    "next_check_minutes": 105,
-    "no_partial_scientific_performance": true
+    "next_check_minutes": 110,
+    "S_later_stages_not_measured": true,
+    "final_CPU_and_scientific_acceptance_pending": true
   }
 }
