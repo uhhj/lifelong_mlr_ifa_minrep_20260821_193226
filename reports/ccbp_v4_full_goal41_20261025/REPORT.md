@@ -1,3 +1,12 @@
+# 最新2026-10-25 21:10 CST交接
+
+实际观察21:06:39 CST，check_readonly_20261025_210637/LOCAL_AUDIT及TRANSITION_LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。89冻结项及父源不变，controller19033/GPU19950正常，已自然接续O Task6。D完整400epoch76100主步、40训练采集和四份各128窗口缓存完成；原torchrun18454自然Z且真实exit_code0，继承41份轻量文件SHA逐项核验，旧dispatcher已退休且不冒称其exit0。重复完整epoch和采集attempt均0。D纯epoch计算95.089498分钟，四采集实录168.464092秒，保存/准备/准入另计；不把训练采集当正式收益。
+O下载92完整Task6 epoch9200步，自己的4隔离GPU更新和完整恢复/原ALIGN更新准入PASS；SHORT_HISTORY_ADMISSION_O实际长度1–8保持梯度有限、8帧旧路径精确、全部状态恢复PASS，额外8autograd/17策略调用、0优化器/环境。S自己的准入尚未运行，不能套O报告。累计26隔离优化器调用，正式0。D最终CPU和完整缓存重放仍待全队列验收。
+O剩余Task6按自己最近10轮3.061015秒约0.408135分钟；Task7–9尚未实测，借D对应阶段89.958387分钟及四次采集2.807735分钟，剩余参考93.174257分钟，另加10分钟未实测规划余量用于准备/缓存/保存。按用户整组结束点规则下一105分钟检查O整组完成附近，参考22:45–23:00 CST；不是三组全队列或600正式结束预测，不为内部Task切换短轮询。
+capacity_readonly_20261025_210708/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通保留1GiB后余372682752B，data root稳定唯一inode抵扣余新增3308433408B并保留2GiB后余47092604928B。仅stat，0payload/服务器写入/前向/优化器/环境；无删除、付费或本轮重启改参。此前短历史缺陷及旧源完整保留。当前唯一派发工程02合同和root不变，D以原合同精确继承。不要再次deploy/build/controller。全部实际最终验收和发布后才删除监控。整体PARTIAL。
+
+以下历史进度、等待D和间隔由本段覆盖，科学合同与限制继续有效。
+
 # 最新实际状态 2026-10-25 19:36 CST
 
 check_readonly_20261025_193559/LOCAL_AUDIT和ENGINEERING02_LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。D原进程18459未中断，已182完整epoch21398主步（Task6 100、Task7 82），首100轮逐字段精确原前缀。D6/D7自己的4/6隔离更新PASS，共10，正式0。D6已10固定训练回合、128示范历史缓存及采集后父全部状态精确不变通过；该成功数不是正式性能。

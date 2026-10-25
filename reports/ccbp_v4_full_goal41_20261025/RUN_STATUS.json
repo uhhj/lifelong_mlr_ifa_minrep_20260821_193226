@@ -1,22 +1,22 @@
 {
-  "status": "PARTIAL_TRAINING_VERSIONED_DISPATCH",
-  "observation": "2026-10-25T19:36:00.780485+08:00",
+  "status": "PARTIAL_TRAINING",
+  "observation": "2026-10-25T21:06:39.842449+08:00",
   "counts": {
     "D": {
-      "epochs": 182,
-      "steps": 21398,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
         "6": 100,
-        "7": 82,
-        "8": 0,
-        "9": 0
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     },
     "O": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 92,
+      "steps": 9200,
       "by_stage": {
-        "6": 0,
+        "6": 92,
         "7": 0,
         "8": 0,
         "9": 0
@@ -35,11 +35,14 @@
   },
   "own_admissions": {
     "D_6": 4,
-    "D_7": 6
+    "D_7": 6,
+    "D_8": 6,
+    "D_9": 6,
+    "O_6": 4
   },
-  "training_collection_episodes": 10,
+  "training_collection_episodes": 40,
   "formal_episodes": 0,
-  "latest_evidence": "check_readonly_20261025_193559",
+  "latest_evidence": "check_readonly_20261025_210637",
   "root": {
     "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02",
     "controller": 19033,
@@ -61,22 +64,44 @@
     "status": "VERSIONED_DISPATCH_HANDOFF_D_CONTINUES"
   },
   "phase": {
-    "arm": "D",
-    "stage": 7,
+    "arm": "O",
+    "stage": 6,
     "phase": "train",
-    "epoch_complete": 82,
-    "steps": 21398,
-    "time": 1792928156.5226696,
-    "pid": 18459
+    "epoch_complete": 92,
+    "steps": 9200,
+    "time": 1792933599.7669005,
+    "pid": 19950
   },
-  "new_dispatch_phase": "await_existing_D",
-  "old_controller_intentionally_paused": true,
-  "D_worker_uninterrupted": true,
-  "OS_short_history_admission": "PENDING",
+  "D_natural_exit_observed": true,
+  "old_dispatcher_retired": true,
+  "completed_epochs_repeated": 0,
+  "collection_attempts_repeated": 0,
+  "OS_short_history_admission": {
+    "O": "ACTUAL_PASS",
+    "S": "PENDING"
+  },
   "final_acceptance": "PENDING_ACTUAL_FULL_AUDIT",
-  "D_remaining_linear_minutes": 58.65218321676734,
-  "planning_allowance_minutes": 25,
-  "allowance_not_measured": true,
-  "next_check_minutes": 85,
-  "monitor_id": "ccbp-v4-goal41-d-o-s"
+  "next_check_minutes": 105,
+  "monitor_id": "ccbp-v4-goal41-d-o-s",
+  "eta": {
+    "status": "PASS_PROGRESS_NOT_FINAL",
+    "evidence_sha256": "f5f34e7858b0f76ca7177ad1b0cb0fc19cb7ec6ff96a6068c718b5b52bed6921",
+    "observation": 1792933599.8424487,
+    "inherited_files_verified": 41,
+    "inherited_D_natural_exit": true,
+    "old_dispatcher_not_claimed_exit0": true,
+    "completed_epochs_repeated": 0,
+    "collection_attempts_repeated": 0,
+    "O_short_history_actual_PASS": true,
+    "S_short_history": "PENDING",
+    "D_epoch_minutes": 95.08949752648671,
+    "D_collection_seconds": 168.46409229100027,
+    "O_remaining6_minutes": 0.4081352710723877,
+    "D_later_stages_reference_minutes": 89.95838721990586,
+    "O_remaining_reference_including_collection_minutes": 93.17425736249491,
+    "planning_allowance_minutes": 10,
+    "allowance_not_measured": true,
+    "next_check_minutes": 105,
+    "no_partial_scientific_performance": true
+  }
 }

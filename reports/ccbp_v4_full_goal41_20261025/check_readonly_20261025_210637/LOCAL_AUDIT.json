@@ -1,0 +1,113 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792933599.8424487,
+  "contract": "ef4f4b759632c7c81ebc5ca8da87011e1d4bad4fea48a205b9b30b7c2da1a54a",
+  "counts": {
+    "D": {
+      "epochs": 400,
+      "steps": 76100,
+      "by_stage": {
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
+      }
+    },
+    "O": {
+      "epochs": 92,
+      "steps": 9200,
+      "by_stage": {
+        "6": 92,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "S": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    }
+  },
+  "rates_last10": {
+    "D": {
+      "6": 3.069669485092163,
+      "7": 8.751618576049804,
+      "8": 14.612964868545532,
+      "9": 30.714820981025696
+    },
+    "O": {
+      "6": 3.0610145330429077
+    },
+    "S": {}
+  },
+  "admissions": {
+    "D_6": 4,
+    "D_7": 6,
+    "D_8": 6,
+    "D_9": 6,
+    "O_6": 4
+  },
+  "isolated_optimizer_calls": 26,
+  "memory": {
+    "D_6": {
+      "count": 128,
+      "successes": 10,
+      "source_sha256": "96a8ca820c42c5012920cda0b2965354338dcf7400c945684cb150a39e541d5c",
+      "cache_sha256": "40a370403ea0dbe631d2ef4968ee4df71b2884baf00abe485731eb563b5b4d9b"
+    },
+    "D_7": {
+      "count": 128,
+      "successes": 10,
+      "source_sha256": "f14bc7b385e8c3e339910775a6495e738c2d13ab2c6c4b6d1e29d375809b707f",
+      "cache_sha256": "a66bff724794bab9e0f80894be56940b699a39850d11058aec17089c73caad05"
+    },
+    "D_8": {
+      "count": 128,
+      "successes": 9,
+      "source_sha256": "e57f56957a0fd9eaa0e1a369a686b8584e70195072ff112b86176e755e386609",
+      "cache_sha256": "1a698518ac521fd37b863d1626bd63a6420d6a40443cf292f80207aa5879b1df"
+    },
+    "D_9": {
+      "count": 128,
+      "successes": 8,
+      "source_sha256": "a2fb0d8e59c51b511a1d434534bc7bbee7d0ee6d03194228b833cb2ad3dd02c7",
+      "cache_sha256": "ec3c9237707df67296545b843f03621d9606b9bf99c49f0138392b40e1b8bf6b"
+    }
+  },
+  "training_collection_episodes": 40,
+  "formal_episodes": 0,
+  "failure": null,
+  "phase": {
+    "arm": "O",
+    "stage": 6,
+    "phase": "train",
+    "epoch_complete": 92,
+    "steps": 9200,
+    "time": 1792933599.7669005,
+    "pid": 19950
+  },
+  "processes": [
+    {
+      "pid": 19033,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 19944,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02/train.py O ",
+      "state": "S"
+    },
+    {
+      "pid": 19950,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02/train.py O ",
+      "state": "R"
+    }
+  ],
+  "no_partial_performance_claim": true
+}
