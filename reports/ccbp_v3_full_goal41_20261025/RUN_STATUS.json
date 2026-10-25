@@ -1,17 +1,22 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-25T13:54:29.340302+08:00",
+  "observation": "2026-10-25T15:14:37.859279+08:00",
   "user_resumed": true,
   "hardware": "NVIDIA GeForce RTX 4080 SUPER, 32760 MiB, 535.230.02",
-  "latest_evidence": "check_readonly_20261025_135427",
+  "latest_evidence": "check_readonly_20261025_151435",
   "actual_remote_root": "/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02",
   "controller": 2177,
   "contract": "232a34dbef9b268f4be82580f0b4299a2ecb944f436c1aac8fc146088f41243b",
-  "formal_epochs": 3,
-  "formal_updates": 300,
+  "formal_epochs": 562,
+  "formal_updates": 94718,
   "formal_episodes": 0,
   "own_gpu_admission": {
-    "ADMISSION_C_6.json": 4
+    "ADMISSION_C_6.json": 4,
+    "ADMISSION_C_7.json": 5,
+    "ADMISSION_C_8.json": 5,
+    "ADMISSION_C_9.json": 5,
+    "ADMISSION_R_6.json": 4,
+    "ADMISSION_R_7.json": 5
   },
   "final_wrappers": "AST_ONLY_NOT_EXECUTED",
   "automation_id": "ccbp-v3-goal41",
@@ -22,21 +27,21 @@
   },
   "counts": {
     "C": {
-      "epochs": 3,
-      "steps": 300,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
-        "6": 3,
-        "7": 0,
-        "8": 0,
-        "9": 0
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     },
     "R": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 162,
+      "steps": 18618,
       "by_stage": {
-        "6": 0,
-        "7": 0,
+        "6": 100,
+        "7": 62,
         "8": 0,
         "9": 0
       }
@@ -52,18 +57,33 @@
       }
     }
   },
-  "isolated_optimizer_calls": 4,
-  "next_check_minutes": 75,
-  "next_check_basis": "C entire training estimated 60-75min; own auxiliary stages not yet measured; not full-queue ETA",
+  "isolated_optimizer_calls": 28,
+  "next_check_minutes": 55,
+  "next_check_basis": "R remaining 57482 steps; own stage7 per-batch linear 46.96min plus preparation/save; stages8/9 unmeasured, check entire R completion",
   "hardware_policy": "same-card exact controls; historical-card equality descriptive",
   "fresh_remote_capacity": {
     "/root": {
-      "bavail": 1447448576,
-      "bfree": 4550975488
+      "free": 1447428096,
+      "stable_unique_allocated": 0,
+      "remaining_bound": 0,
+      "reserve": 1073741824,
+      "headroom": 373686272
     },
     "/data": {
-      "bavail": 48006471680,
-      "bfree": 55023939584
+      "free": 54326095872,
+      "stable_unique_allocated": 1042505728,
+      "remaining_bound": 1641848832,
+      "reserve": 2147483648,
+      "headroom": 50536763392
     }
+  },
+  "phase": {
+    "arm": "R",
+    "stage": 7,
+    "phase": "train",
+    "epoch_complete": 62,
+    "steps": 18618,
+    "time": 1792912476.1078076,
+    "pid": 2315
   }
 }

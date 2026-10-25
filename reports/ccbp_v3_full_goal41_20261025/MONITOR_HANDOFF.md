@@ -1,3 +1,12 @@
+# 最新2026-10-25 15:16 CST交接
+
+实际观察2026-10-25T15:14:37.859279+08:00，check_readonly_20261025_151435/LOCAL_AUDIT和TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。67冻结项及父源不变；controller2177/GPU2315正常，已自然进入R Task7。C完整400epoch76100主步，train_C.exit0，四CP记录SHA绑定；epoch纯计算59.430075min，48额外梯度autograd单列，保存/教师/准入另计。C最终独立CPU检查尚待全队列结束，不作闭环收益结论。
+R已完整162epoch18618步（Task6 100、Task7 62），自己的R6/R7隔离4/5更新准入实际PASS，含完整下一步恢复、状态化梯度测量、独立R公式更新精确。C/R当前卡Task6服务器tensor逐位相等且均与历史ALIGN相等，绑定源CP/hash；本地最终CPU仍待完成。累计28自身隔离更新/0环境；G未自身准入，正式环境0。四教师身份/tau/w与本组前阶段CP绑定通过。无恢复重启改参。
+R Task7最近10轮均6.813857秒，剩57482步线性46.963323min纯训练，R Task8/9尚未实测；保存/缓存/准备另计。下一55分钟检查R整组训练结束附近，暂参考16:05–16:15，不是全三组/600评估完成预测，不内部切换短轮询。
+capacity_readonly_20261025_151458/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通保留1GiB后余373686272B；data root按唯一稳定inode抵扣余新增并留2GiB后余50536763392B。仅stat，0payload/前向/更新/环境/服务器写入；无删除/付费。旧首版导入失败与工程02修复记录保留，最终wrapper仍仅静态。整体PARTIAL。
+
+以下历史进度与ETA以本段覆盖，科学合同及限制继续。
+
 继续用户授权CCBP-v3完整GOAL seed41 C/R/G三组。先完整读D:/论文课题研究/MLR+IFA/execution/20261025_ccbp_v3_full的PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json、MONITOR_HANDOFF.md及最新证据。用户已恢复4080S执行，要求自主完成工程障碍和全部验收发布。唯一活跃root=/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02，controller2177，合同232a34dbef9b268f4be82580f0b4299a2ecb944f436c1aac8fc146088f41243b，67冻结项。禁止重跑deploy/build/prepare/controller，禁止重训已完成阶段或恢复旧实验。新产物全/data，2.50GiB峰值，root新增0，保留system普通1GiB/data root2GiB，无需删除旧资产。首版v1因Python3.8运行时tuple类型别名导入失败exit1，0更新/0环境，旧源/失败保留；02只改typing.Tuple并实际Python3.8导入通过。科学源冻结，外置final wrappers只能留证工程修复，不能借此改科学实验。
 
 最新check_readonly_20261025_135427实际13:54:29CST，LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL，C6完整3epoch300步，自己的4隔离GPU更新/0env/100键/完整保存加载下一步精确重放与官方ALIGN更新对照PASS，R/G未准入。67hash与父输入不变，controller2177/GPU2183健康。C6首3轮均3.178394秒，旧卡完整C54.76min仅可比参考，后续辅助阶段未测；暂估C整组60–75min，下一75min检查整组结束附近，非整个三组或600仿真结束预测。根据实际整组训练/全部评估剩余时间更新同一监控，不内部Task切换短轮询。
