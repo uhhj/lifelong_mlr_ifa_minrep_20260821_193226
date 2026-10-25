@@ -1,3 +1,12 @@
+# 最新2026-10-25 17:27 CST交接
+
+实际观察2026-10-25T17:25:12.928852+08:00，check_readonly_20261025_172510/LOCAL_AUDIT、TRAINING_COMPLETION_METADATA_AUDIT、EVALUATION_PROGRESS_AUDIT实际PASS_PROGRESS_NOT_FINAL。C/R/G各400完整epoch76100主更新全部完成，合计1200epoch228300步，train_C/R/G.exit0和12阶段CP记录SHA绑定；67冻结项及父源不变，controller2177/evaluate2696正常，phase evaluate。三组自己的全部60隔离GPU更新/0环境准入通过，G各旧阶段关锚=原C更新、完整状态下一步恢复、状态化梯度测量都实际PASS。正式额外156autograd、准入39autograd单列，BC合法2143200/屏蔽136200/旧合法811500独立复算。九份本组前阶段教师身份/tau/w与SHA绑定；三组Task6服务器tensor同卡/历史ALIGN相等绑定，最终独立CPU仍待全部完成。
+三组epoch纯计算分钟C59.430075/R60.743915/G57.371243，合计177.545233；保存/教师/准入/评估另计，不称等算力。评估缓存自己的长度1–8实际PASS，16视觉前向16策略参数调用/0环境/0更新另列，最大feature差1.716614e-5、参数差1.192093e-6。
+正式200/600、20完整vector/10关闭cell，当前R_s6_t6_g0；全部记录/attempt/终止/输出分片全集/事件/CP/配对初态记录hash和独立重生成noiseSHA通过，record_event_advance0。真实初态字节及全CP严格CPU加载仍待最终，不统计部分科学性能。20批均42.646378秒，含提前终止批，原时长保留；当前批已34.901秒。余40批均值线性27.849235min、按已观测最慢43.170643min，后者不是保证上界；加载额外，暂参考17:55–18:15评估结束，最终审计另计。按用户整体完成点规则，下一45分钟检查全部评估结束附近，不短周期守候。
+capacity_readonly_20261025_172525/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通保留1GiB后余373174272B，data root扣余新增及2GiB后余50533998592B。仅stat、0payload/前向/更新/环境/服务器写入，无删除/付费或重启改参。下一自然controller.exit0且无自身进程后立即final_readonly→audit_final_local；新最终路径仅静态尚待真实运行，错误留证外置修、不重训重评。整体PARTIAL。
+
+以下旧进度与ETA以本段覆盖，科学合同及限制继续。
+
 # 最新2026-10-25 16:13 CST交接
 
 实际观察2026-10-25T16:11:35.930229+08:00，check_readonly_20261025_161133/LOCAL_AUDIT及TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。67冻结项及父源不变，controller2177/GPU2531健康，R已自然完成后进入G Task6。C/R各400完整epoch76100主步，合计800epoch152200步，train_C/R.exit0及8阶段CP记录SHA绑定；epoch纯计算C59.430075/R60.743915min，各48额外梯度autograd单列，缓存/保存/准入另计。尚待全队列后的独立CPU验收，不作闭环收益结论。
