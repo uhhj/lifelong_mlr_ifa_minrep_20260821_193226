@@ -1,3 +1,19 @@
+# 最终接受完成：CCBP-v3 GOAL seed41
+
+C/R/G完整1200epoch、228300主更新、600正式回合均自然完成。实际12CP CPU严格加载、3完整恢复态、9教师缓存源、真实初态字节与配对noise，以及本地全部结果/标量独立验收PASS。科学主条件未通过，停止本版本，不自动扩seed或调参。
+
+|组别|最终Task6|Task7|Task8|Task9|AUC|OldFinal|FinalAll|
+|---|---:|---:|---:|---:|---:|---:|---:|
+|C|40%|100%|100%|90%|87.5%|80%|82.5%|
+|R|35%|100%|60%|80%|77.8125%|65%|68.75%|
+|G|50%|100%|80%|85%|83.125%|76.6667%|78.75%|
+
+G对C最终Task6 +10pp，但Task8 −20pp、Task9 −5pp；OldFinal、Task8、Task9三项主条件均未满足。Task7之后G的Task6离线cost和路由regret更低，闭环却40%对C80%；最终Task8离线较好的R也只有60%。因此不能用代理改善宣布保持有效，不能归因于某个未做干预验证的单步物理失败。
+
+完整报告：[最终机制分析](final_readonly_20261025_181226/ANALYSIS.md)、[全矩阵及SF/FS](final_readonly_20261025_181226/RESULT_TABLES.md)、[独立最终验收](final_readonly_20261025_181226/LOCAL_FINAL_AUDIT.json)、[闭合SHA索引](final_readonly_20261025_181226/CLOSURE_INDEX.json)。历史进度均保留下方，其PARTIAL不再代表当前状态。验收成功不等于方法改进成功。
+
+---
+
 # 最新2026-10-25 17:27 CST交接
 
 实际观察2026-10-25T17:25:12.928852+08:00，check_readonly_20261025_172510/LOCAL_AUDIT、TRAINING_COMPLETION_METADATA_AUDIT、EVALUATION_PROGRESS_AUDIT实际PASS_PROGRESS_NOT_FINAL。C/R/G各400完整epoch76100主更新全部完成，合计1200epoch228300步，train_C/R/G.exit0和12阶段CP记录SHA绑定；67冻结项及父源不变，controller2177/evaluate2696正常，phase evaluate。三组自己的全部60隔离GPU更新/0环境准入通过，G各旧阶段关锚=原C更新、完整状态下一步恢复、状态化梯度测量都实际PASS。正式额外156autograd、准入39autograd单列，BC合法2143200/屏蔽136200/旧合法811500独立复算。九份本组前阶段教师身份/tau/w与SHA绑定；三组Task6服务器tensor同卡/历史ALIGN相等绑定，最终独立CPU仍待全部完成。

@@ -1,15 +1,15 @@
 {
-  "status": "PARTIAL_EVALUATING",
-  "observation": "2026-10-25T17:25:12.928852+08:00",
+  "status": "COMPLETE_ACCEPTED_SCIENTIFIC_CRITERION_NOT_MET",
+  "observation": "2026-10-25T18:16:06.517329+08:00",
   "user_resumed": true,
   "hardware": "NVIDIA GeForce RTX 4080 SUPER, 32760 MiB, 535.230.02",
-  "latest_evidence": "check_readonly_20261025_172510",
+  "latest_evidence": "final_readonly_20261025_181226",
   "actual_remote_root": "/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02",
   "controller": 2177,
   "contract": "232a34dbef9b268f4be82580f0b4299a2ecb944f436c1aac8fc146088f41243b",
   "formal_epochs": 1200,
   "formal_updates": 228300,
-  "formal_episodes": 200,
+  "formal_episodes": 600,
   "own_gpu_admission": {
     "ADMISSION_C_6.json": 4,
     "ADMISSION_C_7.json": 5,
@@ -24,7 +24,7 @@
     "ADMISSION_G_8.json": 6,
     "ADMISSION_G_9.json": 6
   },
-  "final_wrappers": "AST_ONLY_NOT_EXECUTED",
+  "final_wrappers": "ACTUAL_REMOTE_CPU_AND_LOCAL_ACCEPTANCE_PASS",
   "automation_id": "ccbp-v3-goal41",
   "budget": {
     "epochs": 1200,
@@ -64,29 +64,101 @@
     }
   },
   "isolated_optimizer_calls": 60,
-  "next_check_minutes": 45,
-  "next_check_basis": "All evaluation remaining: own 20-vector mean 27.85min, observed maximum 43.17min not a bound; stage loading extra; check whole evaluation completion",
+  "next_check_minutes": null,
+  "next_check_basis": "Finished; delete monitor after verified publication",
   "hardware_policy": "same-card exact controls; historical-card equality descriptive",
   "fresh_remote_capacity": {
-    "/root": {
-      "free": 1446916096,
-      "stable_unique_allocated": 0,
-      "remaining_bound": 0,
-      "reserve": 1073741824,
-      "headroom": 373174272
+    "observation": 1792923128.4722128,
+    "source": "check_readonly_20261025_181206/EVIDENCE.json",
+    "capacity": {
+      "/root": {
+        "bavail": 1446772736,
+        "bfree": 4550299648
+      },
+      "/data": {
+        "bavail": 46520283136,
+        "bfree": 53537751040
+      }
     },
-    "/data": {
-      "free": 53538619392,
-      "stable_unique_allocated": 1827217408,
-      "remaining_bound": 857137152,
-      "reserve": 2147483648,
-      "headroom": 50533998592
-    }
+    "note": "Completion observed; earlier full peak reservation retained only as historical evidence."
   },
   "phase": {
-    "phase": "evaluate",
-    "pid": 2696,
-    "time": 1792919404.9772937,
-    "controller": 2177
-  }
+    "phase": "complete",
+    "controller": 2177,
+    "natural_exit": 0,
+    "residual_processes": 0
+  },
+  "completed_acceptance": "2026-10-25T18:20:22.909671+08:00",
+  "scientific_main_exploratory_criterion": false,
+  "no_automatic_expansion": true,
+  "monitoring": "DELETE_AFTER_VERIFIED_PUBLICATION",
+  "final_metrics": {
+    "C": {
+      "AUC": {
+        "fraction": "7/8",
+        "percent": 87.5
+      },
+      "FWT": {
+        "fraction": "37/40",
+        "percent": 92.5
+      },
+      "NBT": {
+        "fraction": "7/90",
+        "percent": 7.777777777777778
+      },
+      "OldFinal": {
+        "fraction": "4/5",
+        "percent": 80.0
+      },
+      "FinalAll": {
+        "fraction": "33/40",
+        "percent": 82.5
+      }
+    },
+    "R": {
+      "AUC": {
+        "fraction": "249/320",
+        "percent": 77.8125
+      },
+      "FWT": {
+        "fraction": "71/80",
+        "percent": 88.75
+      },
+      "NBT": {
+        "fraction": "2/9",
+        "percent": 22.22222222222222
+      },
+      "OldFinal": {
+        "fraction": "13/20",
+        "percent": 65.0
+      },
+      "FinalAll": {
+        "fraction": "11/16",
+        "percent": 68.75
+      }
+    },
+    "G": {
+      "AUC": {
+        "fraction": "133/160",
+        "percent": 83.125
+      },
+      "FWT": {
+        "fraction": "15/16",
+        "percent": 93.75
+      },
+      "NBT": {
+        "fraction": "19/90",
+        "percent": 21.11111111111111
+      },
+      "OldFinal": {
+        "fraction": "23/30",
+        "percent": 76.66666666666667
+      },
+      "FinalAll": {
+        "fraction": "63/80",
+        "percent": 78.75
+      }
+    }
+  },
+  "final_audit_sha256": "055e4964429354cb6fc8b41e938f37a62ad048cd02a16a3f2db45d172d41b332"
 }
