@@ -1,5 +1,11 @@
-# 当前恢复执行，尚未部署
+继续用户授权CCBP-v3完整GOAL seed41 C/R/G三组。先完整读D:/论文课题研究/MLR+IFA/execution/20261025_ccbp_v3_full的PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json、MONITOR_HANDOFF.md及最新证据。用户已恢复4080S执行，要求自主完成工程障碍和全部验收发布。唯一活跃root=/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02，controller2177，合同232a34dbef9b268f4be82580f0b4299a2ecb944f436c1aac8fc146088f41243b，67冻结项。禁止重跑deploy/build/prepare/controller，禁止重训已完成阶段或恢复旧实验。新产物全/data，2.50GiB峰值，root新增0，保留system普通1GiB/data root2GiB，无需删除旧资产。首版v1因Python3.8运行时tuple类型别名导入失败exit1，0更新/0环境，旧源/失败保留；02只改typing.Tuple并实际Python3.8导入通过。科学源冻结，外置final wrappers只能留证工程修复，不能借此改科学实验。
 
+最新check_readonly_20261025_135427实际13:54:29CST，LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL，C6完整3epoch300步，自己的4隔离GPU更新/0env/100键/完整保存加载下一步精确重放与官方ALIGN更新对照PASS，R/G未准入。67hash与父输入不变，controller2177/GPU2183健康。C6首3轮均3.178394秒，旧卡完整C54.76min仅可比参考，后续辅助阶段未测；暂估C整组60–75min，下一75min检查整组结束附近，非整个三组或600仿真结束预测。根据实际整组训练/全部评估剩余时间更新同一监控，不内部Task切换短轮询。
 
-## 4080S恢复执行 2026-10-25T13:51:51.859848+08:00
-用户恢复三组完整运行，地址不变。实际预检GPU为 NVIDIA GeForce RTX 4080 SUPER, 32760 MiB, 535.230.02，GPU空闲、父65冻结项/16CP及闭合绑定通过。新产物统一/data，新增峰值2.50GiB；root新增0。保留1/2GiB后分别余373764096/50538754048字节，无删除、无新付费。跨卡旧Task6逐位差异仅记录，同卡C/R/G精确性、官方初始化和完整恢复仍严格。当前尚未部署/训练/环境，自己的GPU准入待实际运行。旧暂停记录保留；build_local/build_final_wrapper是历史派生工具，不可重跑覆盖硬件与布局修订。
+凭据只内存/getpass，禁止聊天复述或写文件参数日志。当前本机credential_session.py PID23384会话18903的内存通道可用：先读.session_control/status.json，queue_remote.py check_readonly.py创建仅脚本名和SHA的请求，等对应result文件获得证据目录；不重启活跃凭据会话、不搜索密码。然后audit_progress.py SNAPSHOT。evaluate时加audit_evaluation_progress.py。若通道失效不得虚构连接。SSH root@jq1.9gpu.com:11920地址未变，known-host校验保留。所有密码仅通过非回显getpass，文件中没有凭据。每轮只读检查→本地审计→记录→publish后结束，不hover。
+
+三组各自官方GOAL初始化，Task6→7→8→9每阶段100epoch，400epoch76100步/组，共1200epoch228300步。人口997/1388/1848/3365，合法917/1286/1723/3218，旧合法0/477/899/1329。RA/ALIGN输入mask、BC+.1IFA、FP32/b10/sampler0/seed41/优化器与网络不改。C原专家cost+margin；R保留J仅改margin；G原专家cost+纠错线段距离锚+C margin；lambda.1/beta.1/rho1/margin.1。每阶段自己的准入不可套旧PASS，预计60隔离更新、正式156额外autograd/准入39另列。滚动本组上一阶段教师；不加固定任务教师或扫描。用户忽略硬件差异：旧卡Task6逐位差异只记录，不作准入失败；本卡C/R/G初态全部RNG和Task6 tensor仍须精确，官方初始化/同卡原ALIGN更新/恢复仍严格。新C为同卡主要对照，旧结果外部参考。
+
+全部训练后600正式episode60vector30cell，各stage评已见任务，每cell20初态0–19，配对逐轨迹Normal噪声，argmax分量/600步5zero。无测试重试。主要探索门G最终OldFinal>C且Task8>=C且Task9>=C，Task9容许下降0pp；完整报告矩阵/AUC/FWT/NBT低好/OldFinal/FinalAll/所有负单元及G-C/G-R/R-C SF/FS。开发seed及旧初态不称确认集或显著。未过就停止版本，不自动扩seed或调参。全部controller自然exit0无自身进程后queue_remote.py final_readonly.py→audit_final_local.py FINAL，必须真实12CPU严格CP/3完整恢复/9教师缓存源与父输入/600初态字节noise/全部标量独立复算。外置最终路径仅静态，不能套PASS；完成实际验收分析发布后删除监控。失败先确认停/hash/完整状态/保留原失败再版本化，不盲重启评估。
+
+每轮本目录publish.py按根AGENTS精确审查轻量类型大小secret/hash串行stage非force推https://github.com/uhhj/lifelong_mlr_ifa_minrep_20260821_193226分支MLR，核remoteSHA与本地receipt。OpenSSL/HTTP1.1仍验证证书。仅代码报告hash/scalars/outcomes，禁止CP/weights/features/rawactions/states/demos/buffer/RNG/privatepayload/凭据和未审查ZIP，.session_control不发布。健康无变化安静，仅实质变化、失败、完成或需行动通知。
