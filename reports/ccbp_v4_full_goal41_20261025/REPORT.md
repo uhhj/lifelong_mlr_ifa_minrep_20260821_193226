@@ -1,7 +1,17 @@
-# CCBP-v4 GOAL seed41 D/O/S
+# CCBP-v4 GOAL seed41 D/O/S完整序列
 
-PARTIAL_PREPARING_NOT_DEPLOYED. 2026-10-25T19:15:02.770250+08:00
+状态：PARTIAL_TRAINING_COLLECTION。实际观察2026-10-25 19:22:39 CST。
 
-Three independent complete sequences are prepared: 1200 epochs / 228300 main updates, 120 training-collection episodes, then 600 formal episodes. No new training or environment run has started. Actual CPU synthetic review and remote parent/input/resource preflight passed; GPU/model/collection admission and final acceptance remain pending.
+D Task6已完成100epoch、10000主更新，自身4隔离GPU优化器调用/0环境、完整下一步恢复和原ALIGN更新对照实际PASS。Task6最终tensor服务器核验与历史ALIGN精确相等；所有组最终CPU审计仍待完成。controller18453、训练18459、采集18614在快照中存在，67冻结项/父源不变，无重启改参。
 
-Existing same-card C is a read-only external reference. DOS have equal collection attempt budgets, but S may retain fewer histories and no equal-compute claim is made.
+D6实际采集缓存准入长度1–8通过，16视觉前向及16策略参数调用、0环境/更新另列；最大feature差1.1563301086425781e-5、参数差1.9073486328125e-6。已下载10个固定训练初态20–29的回合记录，初态记录/noise/attempt/CP绑定本地通过。该快照尚无MEMORY/父完整状态不变的最终标记，不冒称采集阶段完全关闭。正式评估0；O/S及D旧阶段准入仍待实际发生，不套用D6 PASS，不算局部性能。
+
+三组独立官方初始化，完整Task6→7→8→9各100epoch，共1200epoch228300主更新；每任务10次训练采集、全120，之后600正式回合。D示范历史、O全部执行历史、S成功轨迹候选。固定128/task、512/arm缓存和每更新4锚。D/O/S采集预算相同，S不成功不补采，样本量可能更少。已验收同卡C只读复用为外部参考，不称交互等资源。
+
+D6近期3.069669秒/轮；后续保持前向、采集和准备的完整耗时尚未实测。借同卡C完整59.43分钟再加35–45分钟规划余量，首次约100分钟后检查D整组完成附近；此为不确定规划，不是全三组或600评估完成保证，不按内部阶段短周期守候。
+
+19:19:47 stat-only容量审计PASS_NOT_FINAL：保留system普通1GiB后余372969472B；data扣余新增峰值并留2GiB后余47094865920B。无删除、付费或降预算。
+
+独立最终remote/local/describe wrappers已AST检查，尚未运行完整路径。待全部自然exit0无自身进程，实际验收12CPU CP、3恢复、12固定缓存、120训练/600正式及初态字节noise，再复算全矩阵、SF/FS和离线成本；不继承父实验PASS。单seed重复探索，不自动扩seed/调参。
+
+SSH凭据已按用户明确授权保存在本机Windows Credential Manager。项目及Git不含明文凭据。发布只含代码、协议、报告、hash、scalars和outcomes。
