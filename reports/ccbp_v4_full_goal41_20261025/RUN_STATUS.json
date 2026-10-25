@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-25T22:58:37.796149+08:00",
+  "status": "PARTIAL_EVALUATING",
+  "observation": "2026-10-26T00:54:36.669079+08:00",
   "counts": {
     "D": {
       "epochs": 400,
@@ -23,13 +23,13 @@
       }
     },
     "S": {
-      "epochs": 96,
-      "steps": 9600,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
-        "6": 96,
-        "7": 0,
-        "8": 0,
-        "9": 0
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     }
   },
@@ -42,11 +42,14 @@
     "O_7": 6,
     "O_8": 6,
     "O_9": 6,
-    "S_6": 4
+    "S_6": 4,
+    "S_7": 6,
+    "S_8": 6,
+    "S_9": 6
   },
-  "training_collection_episodes": 80,
-  "formal_episodes": 0,
-  "latest_evidence": "check_readonly_20261025_225837",
+  "training_collection_episodes": 120,
+  "formal_episodes": 170,
+  "latest_evidence": "check_readonly_20261026_005436",
   "root": {
     "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02",
     "controller": 19033,
@@ -68,13 +71,10 @@
     "status": "VERSIONED_DISPATCH_HANDOFF_D_CONTINUES"
   },
   "phase": {
-    "arm": "S",
-    "stage": 6,
-    "phase": "train",
-    "epoch_complete": 96,
-    "steps": 9600,
-    "time": 1792940316.2146,
-    "pid": 21808
+    "phase": "evaluate",
+    "pid": 23138,
+    "time": 1792946440.2790844,
+    "controller": 19033
   },
   "D_natural_exit_observed": true,
   "old_dispatcher_retired": true,
@@ -85,27 +85,58 @@
     "S": "ACTUAL_PASS"
   },
   "final_acceptance": "PENDING_ACTUAL_FULL_AUDIT",
-  "next_check_minutes": 110,
+  "next_check_minutes": 50,
   "monitor_id": "ccbp-v4-goal41-d-o-s",
   "eta": {
+    "completed_vectors": 17,
+    "closed_cells": 8,
+    "mean_seconds": 45.92838574594113,
+    "current_elapsed": 40.91869783401489,
+    "remaining_mean_minutes": 32.233364820690895,
+    "remaining_max_observed_minutes": 45.868677385335346
+  },
+  "training_completion": {
     "status": "PASS_PROGRESS_NOT_FINAL",
-    "observation": 1792940317.7961485,
-    "evidence_sha256": "901b563659fb853d6cec06f1aad6c87afd87142f4594d88608093907dcbf5d84",
-    "O_natural_exit0": true,
-    "O_full_parent_state_parity": true,
-    "O_Task6_tensor_equal_D": true,
-    "O_epoch_minutes": 101.78618942896524,
-    "O_collection_minutes": 2.7811732388833357,
-    "OS_short_history_actual_PASS": true,
-    "OS_extra_autograd_calls": 16,
-    "OS_extra_policy_calls": 34,
-    "S_remaining6_minutes": 0.19219517707824707,
-    "O_later_stage_reference_minutes": 96.5765597820282,
-    "S_remaining_reference_including_collection_minutes": 99.54992819798979,
-    "planning_allowance_minutes": 10,
-    "allowance_not_measured": true,
-    "next_check_minutes": 110,
-    "S_later_stages_not_measured": true,
-    "final_CPU_and_scientific_acceptance_pending": true
+    "evidence_sha256": "af5b71f5e2c072746b1f4fc7ad1a22eba26a405de4524aca9b118f6dce12076f",
+    "observation": 1792947276.6690786,
+    "epochs": 1200,
+    "main_updates": 228300,
+    "own_isolated_updates": 66,
+    "formal_extra_autograd": 216,
+    "short_history_extra_autograd": 16,
+    "short_history_policy_calls": 34,
+    "training_collection_episodes": 120,
+    "BC_valid": 2143200.0,
+    "BC_masked": 136200.0,
+    "old_valid": 811500.0,
+    "epoch_minutes": {
+      "D": 95.08949752648671,
+      "O": 101.78618942896524,
+      "S": 99.44941960573196
+    },
+    "total_epoch_minutes": 296.32510656118393,
+    "cache_counts": {
+      "D": {
+        "6": 128,
+        "7": 128,
+        "8": 128,
+        "9": 128
+      },
+      "O": {
+        "6": 128,
+        "7": 128,
+        "8": 128,
+        "9": 128
+      },
+      "S": {
+        "6": 128,
+        "7": 128,
+        "8": 115,
+        "9": 128
+      }
+    },
+    "parent_state_parity_all12": true,
+    "OS_Task6_tensor_equal_D_server_report_bound": true,
+    "final_CPU_cache_replay_initial_bytes_and_scientific_acceptance": "PENDING"
   }
 }

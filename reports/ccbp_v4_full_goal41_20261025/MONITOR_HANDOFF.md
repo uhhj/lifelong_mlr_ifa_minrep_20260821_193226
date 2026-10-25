@@ -1,3 +1,13 @@
+# 最新2026-10-26 00:57 CST交接
+
+实际观察00:54:36 CST，check_readonly_20261026_005436的LOCAL_AUDIT、TRAINING_COMPLETION_METADATA_AUDIT、EVALUATION_PROGRESS_AUDIT均实际PASS_PROGRESS_NOT_FINAL。D/O/S各400完整epoch76100主更新已完成，合计1200epoch228300；train_D/O/S.exit0（D真实自然子进程退出继承），12阶段CP记录绑定，89冻结项及父源不变。120次训练采集及12次父完整训练状态不变通过；D/O各512缓存窗口，S四任务128/128/115/128共499，Task8成功筛选少13窗口，不补采不重分配。所有66自身隔离GPU更新及O/S短历史16autograd/34策略调用已PASS；正式额外216autograd、原准入54autograd另列。BC合法2143200/屏蔽136200/旧合法811500复算通过；三组Task6服务器tensor精确绑定，最终独立CPU仍待全部完成。
+纯epoch分钟D95.089498/O101.786189/S99.449420，合计296.325107，采集/缓存/保存/准入/正式评估另计，不称等算力。controller19033/evaluate23138健康，phase evaluate，无恢复重启改参。
+正式170/600，17完整vector/8关闭cell，当前D_s9_t8_g1；逐episode/attempt/终止/CP/配对初态记录及noise独立重生成SHA、分片与全集、事件顺序已核，record_event_advance0。评估自身缓存准入PASS。仍未真实验收初态文件字节和全部CP CPU/缓存重放，不算部分科学性能。
+17批均45.928386秒，当前已40.918698秒；余43批均值线性32.233365分钟，按已观测最慢批外推45.868677分钟，后者非保证上界，阶段加载另计。暂参考01:30–01:45评估结束，最终验收另计；同一监控下一50分钟检查全部评估自然退出附近，不短周期守候。
+capacity_readonly_20261026_005452/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通保留1GiB后余373014528B，data root稳定唯一inode抵扣余新增2377662464B且留2GiB后余47090298880B。仅stat，0payload/写入/前向/优化器/环境，无删除/付费。下一次若新controller自然exit0且无自身进程，立即queue_remote.py final_readonly.py→audit_final_local.py FINAL→describe_final.py FINAL，真实12CP/3完整恢复/12固定缓存/120训练及600正式初态字节noise与全部标量验收。最终wrapper仍未实际验收；外置错误留证修复，不重训重评。完整验收机制分析及发布后删除监控；整体PARTIAL。
+
+以下旧训练进度和110分钟间隔由本段覆盖，科学合同及限制继续有效。
+
 # 最新2026-10-25 23:01 CST交接
 
 实际观察22:58:37 CST，check_readonly_20261025_225837/LOCAL_AUDIT及O_TO_S_LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。89冻结项及父源不变，controller19033/GPU21808正常，O已自然train_O.exit0并接续S Task6。D/O各完整400epoch76100主步及40训练采集，累计800epoch152200步/80训练回合，八份各128窗口缓存身份/源CP/采集记录/父完整状态不变绑定通过。O四个采集exit0、Task6实际tensor同D精确；最终独立CPU及缓存重放仍待全队列完成。O纯epoch101.786189分钟、采集2.781173分钟，保存/准备/准入另计，不作正式收益结论。
