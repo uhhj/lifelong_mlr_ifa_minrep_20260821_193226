@@ -1,13 +1,13 @@
 {
-  "status": "PARTIAL_TRAINING_COLLECTION",
-  "observation": "2026-10-25T19:22:39.417067+08:00",
+  "status": "PARTIAL_TRAINING_VERSIONED_DISPATCH",
+  "observation": "2026-10-25T19:36:00.780485+08:00",
   "counts": {
     "D": {
-      "epochs": 100,
-      "steps": 10000,
+      "epochs": 182,
+      "steps": 21398,
       "by_stage": {
         "6": 100,
-        "7": 0,
+        "7": 82,
         "8": 0,
         "9": 0
       }
@@ -34,29 +34,49 @@
     }
   },
   "own_admissions": {
-    "D_6": 4
+    "D_6": 4,
+    "D_7": 6
   },
   "training_collection_episodes": 10,
   "formal_episodes": 0,
-  "latest_evidence": "check_readonly_20261025_192237",
+  "latest_evidence": "check_readonly_20261025_193559",
   "root": {
-    "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1",
-    "controller": 18453,
-    "contract": "8edb70c911328d8440f25dea66f719c8259a4c332bef5be5a55caec84aea452c",
-    "frozen_files": 67,
-    "deployment_evidence": "deploy_remote_20261025_191518",
-    "status": "DISPATCHED_NOT_YET_ADMITTED"
+    "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02",
+    "controller": 19033,
+    "contract": "ef4f4b759632c7c81ebc5ca8da87011e1d4bad4fea48a205b9b30b7c2da1a54a",
+    "frozen_files": 89,
+    "deployment_evidence": "deploy_remote_20261025_193445",
+    "original_D": {
+      "old_root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1",
+      "old_controller": 18453,
+      "old_torchrun": 18454,
+      "controller_starttime": "2007756",
+      "worker_starttime": "2007758",
+      "observed_D_epochs": 174,
+      "observed_D_steps": 20286,
+      "only_dispatch_paused": true,
+      "no_D_restart": true
+    },
+    "private_output_root": "/data/mlr_ifa/experiments/CCBP_V4_FULL_GOAL41_20261025_v1",
+    "status": "VERSIONED_DISPATCH_HANDOFF_D_CONTINUES"
   },
   "phase": {
     "arm": "D",
-    "stage": 6,
-    "phase": "training_collection",
-    "time": 1792927330.8149962,
+    "stage": 7,
+    "phase": "train",
+    "epoch_complete": 82,
+    "steps": 21398,
+    "time": 1792928156.5226696,
     "pid": 18459
   },
-  "collection_finalization": "NOT_OBSERVED_IN_THIS_SNAPSHOT",
-  "final_acceptance": "PENDING_ACTUAL_COMPLETE_QUEUE_CPU_AND_LOCAL_AUDIT",
-  "monitor_id": "ccbp-v4-goal41-d-o-s",
-  "next_check_minutes": 100,
-  "ETA_scope": "D whole training including collection; borrowed C rate plus unmeasured extra-anchor allowance; not full queue completion"
+  "new_dispatch_phase": "await_existing_D",
+  "old_controller_intentionally_paused": true,
+  "D_worker_uninterrupted": true,
+  "OS_short_history_admission": "PENDING",
+  "final_acceptance": "PENDING_ACTUAL_FULL_AUDIT",
+  "D_remaining_linear_minutes": 58.65218321676734,
+  "planning_allowance_minutes": 25,
+  "allowance_not_measured": true,
+  "next_check_minutes": 85,
+  "monitor_id": "ccbp-v4-goal41-d-o-s"
 }

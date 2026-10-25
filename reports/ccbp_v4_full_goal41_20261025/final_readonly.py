@@ -2,7 +2,7 @@
 import os,sys,ast,json,hashlib,time,contextlib
 from pathlib import Path
 os.environ.update(CUDA_VISIBLE_DEVICES='',PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',LIBERO_CONFIG_PATH='/data/mlr_ifa/config',HF_HOME='/data/mlr_ifa/cache/huggingface',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1')
-Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1');P=Path('/root/mlr_ifa/experiments/CCBP_GOAL41_20261024_v1');O=Path('/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022');S=Path('/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source')
+Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02');P=Path('/root/mlr_ifa/experiments/CCBP_GOAL41_20261024_v1');O=Path('/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022');S=Path('/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source')
 sys.path.insert(0,str(Q))
 from layout import *
 import numpy as np
@@ -81,7 +81,7 @@ for arm in ARMS:
   if stage==6:task6[arm]={k:ah(v.numpy()) for k,v in policy.state_dict().items()}
   # Immutable acquisition cache: actual CPU replay under its source checkpoint.
   key='%s_%d'%(arm,stage);mp=memory_path(arm,stage);cache=torch.load(mp,map_location='cpu');m=js(Q/('MEMORY_'+key+'.json'))
-  assert sha(mp)==m['cache_sha256'] and cache['source_sha256']==m['source_sha256']==cp_sha and cache['contract']==sha(Q/'CONTRACT.json')
+  assert sha(mp)==m['cache_sha256'] and cache['source_sha256']==m['source_sha256']==cp_sha and cache['contract']==(contract['inherited_D_contract'] if arm=='D' else sha(Q/'CONTRACT.json'))
   assert len(cache['rows'])==len(m['rows'])==m['count']<=128 and cache['task']==stage and cache['arm']==arm
   current=[i for i,r in enumerate(manifests[stage]) if r['task']==stage and r['bc_valid']]
   yy=torch.stack([torch.as_tensor(labels[stage][i]['next_action']) for i in current]).float()
@@ -141,7 +141,7 @@ for arm in ARMS:
      out.append(dict(task=task,index=i,feature_sha256=ah(row['feature'].numpy()),student_mode=int(z[0].argmax()),component_group_distances=dd[0].tolist(),logits=z[0].tolist()))
    diagnostics['retain_'+key]=out
  assert sum(len(c['rows']) for c in cached.values())<=512
- rec=torch.load(OUTPUT[arm]/'recovery.pth',map_location='cpu');assert rec['stage']==9 and rec['next_epoch']==100 and rec['steps']==rec['state']['step']==rec['retention_sampling_cursor']==76100 and rec['history']==hist and rec['contract']==sha(Q/'CONTRACT.json')
+ rec=torch.load(OUTPUT[arm]/'recovery.pth',map_location='cpu');assert rec['stage']==9 and rec['next_epoch']==100 and rec['steps']==rec['state']['step']==rec['retention_sampling_cursor']==76100 and rec['history']==hist and rec['contract']==(contract['inherited_D_contract'] if arm=='D' else sha(Q/'CONTRACT.json'))
  assert set(rec['state'])=={'model','optimizer','scheduler','grads','modes','requires','rng','step'} and set(rec['state']['rng'])=={'python','numpy','cpu','cuda'}
  assert (OUTPUT[arm]/'recovery.pth').stat().st_ino==model_path(arm,9).stat().st_ino
  assert all(torch.equal(rec['state_dict'][k],x) for k,x in rec['state']['model'].items())
@@ -158,6 +158,11 @@ for arm in ARMS:
  finite_state(rec['state']['optimizer']);finite_state(rec['state']['grads'])
  assert rec['memory_bindings']==js(Q/('TRAIN_INPUT_%s_9.json'%arm))['memory']
  strict[arm]['recovery']=dict(sha256=sha(OUTPUT[arm]/'recovery.pth'),complete_state_fields=sorted(rec['state']),history_exact=True,final_hardlink=True,sampling_cursor=rec['retention_sampling_cursor'])
+inherited=js(Q/'INHERITED_D_EXIT_OBSERVATION.json');assert inherited['status']=='PASS_OBSERVED_NATURAL_D_EXIT' and inherited['wait_status']['exit_code']==0 and inherited['completed_epochs_repeated']==inherited['collection_attempts_repeated']==0
+assert inherited['source_contract']==contract['inherited_D_contract']
+for name,h in inherited['files'].items():assert sha(Q/name)==h==sha(Path(contract['inherited_D_root'])/name)
+for arm in 'OS':
+ path_ad=js(Q/('SHORT_HISTORY_ADMISSION_'+arm+'.json'));assert path_ad['status']=='PASS' and path_ad['eight_frame_legacy_exact'] and path_ad['all_state_restored'] and [x['length'] for x in path_ad['lengths']]==list(range(1,9))
 assert all(x==task6['D'] for x in task6.values()) and len(collections)==120
 records=js(Q/'OUTCOMES.json');assert len(records)==600;seen=set();reference=js(Q/'REFERENCE_C.json')['records'];ref={(r['stage'],r['task'],r['initial_index']):r for r in reference}
 for r in records:

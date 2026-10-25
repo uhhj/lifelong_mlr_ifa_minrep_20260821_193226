@@ -1,0 +1,93 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792928160.7804852,
+  "contract": "ef4f4b759632c7c81ebc5ca8da87011e1d4bad4fea48a205b9b30b7c2da1a54a",
+  "counts": {
+    "D": {
+      "epochs": 182,
+      "steps": 21398,
+      "by_stage": {
+        "6": 100,
+        "7": 82,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "O": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "S": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    }
+  },
+  "rates_last10": {
+    "D": {
+      "6": 3.069669485092163,
+      "7": 8.942254543304443
+    },
+    "O": {},
+    "S": {}
+  },
+  "admissions": {
+    "D_6": 4,
+    "D_7": 6
+  },
+  "isolated_optimizer_calls": 10,
+  "memory": {
+    "D_6": {
+      "count": 128,
+      "successes": 10,
+      "source_sha256": "96a8ca820c42c5012920cda0b2965354338dcf7400c945684cb150a39e541d5c",
+      "cache_sha256": "40a370403ea0dbe631d2ef4968ee4df71b2884baf00abe485731eb563b5b4d9b"
+    }
+  },
+  "training_collection_episodes": 10,
+  "formal_episodes": 0,
+  "failure": null,
+  "phase": {
+    "arm": "D",
+    "stage": 7,
+    "phase": "train",
+    "epoch_complete": 82,
+    "steps": 21398,
+    "time": 1792928156.5226696,
+    "pid": 18459
+  },
+  "processes": [
+    {
+      "pid": 18453,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1/controller.py ",
+      "state": "T"
+    },
+    {
+      "pid": 18454,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1/train.py D ",
+      "state": "S"
+    },
+    {
+      "pid": 18459,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1/train.py D ",
+      "state": "S"
+    },
+    {
+      "pid": 19033,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02/controller.py ",
+      "state": "S"
+    }
+  ],
+  "no_partial_performance_claim": true
+}

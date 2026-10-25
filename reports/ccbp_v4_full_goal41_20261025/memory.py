@@ -38,7 +38,9 @@ def retention(policy,memory,stage,step):
     for (task,length),rows in sorted(groups.items()):
         x=torch.stack([r['feature'] for r in rows]).cuda()
         tm=torch.stack([r['mu'] for r in rows]).cuda();ts=torch.stack([r['sd'] for r in rows]).cuda()
-        a,b=retain(params(policy,x),tm,ts,memory[task]['scales'].cuda())
+        assert x.ndim==4 and 1<=x.shape[1]<=8 and tuple(x.shape[2:])==(4,512)
+        q=policy.policy_head.forward_fn(policy.temporal_encode(x)[:,-1])
+        a,b=retain(q,tm,ts,memory[task]['scales'].cuda())
         ex=ex+a.sum()/ANCHOR_BATCH;rt=rt+b.sum()/ANCHOR_BATCH
         forwards+=1;actual+=len(rows)
     return ex,rt,dict(slots=len(selection),actual=actual,empty_slots=len(selection)-actual,forward_calls=forwards,selection=selection)

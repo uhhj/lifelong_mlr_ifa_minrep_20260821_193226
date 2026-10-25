@@ -1,7 +1,7 @@
 import argparse,io,subprocess
 from runtime import *
 from updates import update
-from memory import load_memory,slots
+from memory import load_memory,slots,retention
 from initialization import initialization
 import torch.distributed as dist
 
@@ -31,6 +31,20 @@ def admit(arm,stage,ds,a,memory,scale,info):
             h=policy.temporal_encode(x[:,:length])[:,-1];mu,sd,z=policy.policy_head.forward_fn(h);ix=torch.arange(len(mu),device='cuda');k=z.argmax(-1);actual=policy.policy_head(h,train=False)
             assert torch.equal(actual.base_dist.loc,mu[ix,k]) and torch.equal(actual.base_dist.scale,sd[ix,k])
     restore(a,initial);assert equal(initial,capture(a))
+    if stage==6:
+        # Versioned engineering check for the real retention path at lengths 1..8.
+        policy.eval();saved=rng();checks=[];pars=[p for p in policy.parameters() if p.requires_grad]
+        for length in range(1,9):
+            xx=x[:1,:length].detach();q=policy.policy_head.forward_fn(policy.temporal_encode(xx)[:,-1]);kk=int(q[2][0].argmax())
+            fake={6:dict(rows=[dict(feature=xx[0].cpu(),mu=q[0][0,kk].detach().cpu(),sd=q[1][0,kk].detach().cpu())],scales=torch.ones(3))}
+            er,route,ct=retention(policy,fake,7,a.step)
+            gs=torch.autograd.grad(er+.1*route,pars,allow_unused=True)
+            assert all(g is None or torch.isfinite(g).all() for g in gs) and ct['actual']==4 and ct['slots']==4
+            if length==8:
+                old=params(policy,xx);assert all(torch.equal(u,v) for u,v in zip(q,old))
+            checks.append(dict(length=length,finite_gradient=True,actual_slots=ct['actual']))
+        assert equal(saved,rng());restore(a,initial);assert equal(initial,capture(a))
+        write(R/('SHORT_HISTORY_ADMISSION_'+arm+'.json'),dict(status='PASS',lengths=checks,eight_frame_legacy_exact=True,all_state_restored=True,extra_autograd_calls=8,policy_calls=17,optimizer_calls=0,environments=0))
     assert loaded['sampling_cursor']==initial['step']+1
     write(R/('ADMISSION_%s_%d.json'%(arm,stage)),dict(status='PASS',arm=arm,stage=stage,optimizer_calls=calls,roundtrip_exact=True,next_step_exact=True,restore_initial_exact=True,baseline_or_legacy_update_exact=True,stateful_gradient_measurement_exact=stage>6,gradient_measurement=grad,retention_actual_slots_first_update=first['anchor_actual'],retention_empty_slots_first_update=first['anchor_empty'],memory_sha256=loaded['memory_sha256'],stateless_sampling_replay_exact=True,strict_keys=len(policy.state_dict()),parameters=sum(p.numel() for p in policy.parameters()),serialized_bytes=size,lengths=list(range(1,9)),environments=0,contract=verify()))
 

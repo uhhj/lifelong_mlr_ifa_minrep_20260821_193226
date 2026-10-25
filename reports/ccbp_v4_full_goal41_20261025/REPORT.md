@@ -1,17 +1,16 @@
-# CCBP-v4 GOAL seed41 D/O/S完整序列
+# 最新实际状态 2026-10-25 19:36 CST
 
-状态：PARTIAL_TRAINING_COLLECTION。实际观察2026-10-25 19:22:39 CST。
+check_readonly_20261025_193559/LOCAL_AUDIT和ENGINEERING02_LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。D原进程18459未中断，已182完整epoch21398主步（Task6 100、Task7 82），首100轮逐字段精确原前缀。D6/D7自己的4/6隔离更新PASS，共10，正式0。D6已10固定训练回合、128示范历史缓存及采集后父全部状态精确不变通过；该成功数不是正式性能。
 
-D Task6已完成100epoch、10000主更新，自身4隔离GPU优化器调用/0环境、完整下一步恢复和原ALIGN更新对照实际PASS。Task6最终tensor服务器核验与历史ALIGN精确相等；所有组最终CPU审计仍待完成。controller18453、训练18459、采集18614在快照中存在，67冻结项/父源不变，无重启改参。
+发现旧示范params wrapper只接受8帧，而O/S缓存有1–7帧。服务器CPU实际复现旧helper拒绝1–7、接受8（0模型/更新/环境）。原D全部8帧不受影响，不停止或重训D。工程02只使保持路径直接调用原temporal_encode并显式验证1–8；原C示范学习与loss/预算不变。新O/S各自Task6准入另加实际保持路径长度1–8有限梯度检查及8帧旧路径精确对照（共16额外autograd、34策略参数调用，0优化器/环境），目前仍待实际发生；不能把静态修复写为GPU已PASS。
 
-D6实际采集缓存准入长度1–8通过，16视觉前向及16策略参数调用、0环境/更新另列；最大feature差1.1563301086425781e-5、参数差1.9073486328125e-6。已下载10个固定训练初态20–29的回合记录，初态记录/noise/attempt/CP绑定本地通过。该快照尚无MEMORY/父完整状态不变的最终标记，不冒称采集阶段完全关闭。正式评估0；O/S及D旧阶段准入仍待实际发生，不套用D6 PASS，不算局部性能。
+新root /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02，controller19033，合同ef4f4b759632c7c81ebc5ca8da87011e1d4bad4fea48a205b9b30b7c2da1a54a，89冻结项/父源不变。原D仍按旧v1合同8edb70c911328d8440f25dea66f719c8259a4c332bef5be5a55caec84aea452c运行，旧dispatcher18453的T状态是有意仅暂停后续派发，不是训练停止。新controller等待原torchrun18454自然成为Z并读取真实exit_code0，再绑定全部D结果、不重复任何D epoch/采集，退休旧dispatcher并开始新O/S，最后600正式。不要发送CONT、重跑controller或重建输出。旧dispatcher最终不声明exit0；以新controller最终exit0和INHERITED_D_EXIT_OBSERVATION验证接续。
 
-三组独立官方初始化，完整Task6→7→8→9各100epoch，共1200epoch228300主更新；每任务10次训练采集、全120，之后600正式回合。D示范历史、O全部执行历史、S成功轨迹候选。固定128/task、512/arm缓存和每更新4锚。D/O/S采集预算相同，S不成功不补采，样本量可能更少。已验收同卡C只读复用为外部参考，不称交互等资源。
+D7最近10轮8.942255秒/139batch，余54702步线性58.652183min纯训练；Task8/9额外锚组数和采集尚未实测，另25min规划余量不是实测或上界。按整组D结束点85min后检查，约21:00–21:20量级，不是整个DOS或600评估结束时间。新外置final/audit/describe已适配D旧合同精确继承与O/S新合同，仍仅AST待全队列真实验收。总自身隔离更新预算66不变，正式autograd216、原准入54加工程短历史16=70另列。
 
-D6近期3.069669秒/轮；后续保持前向、采集和准备的完整耗时尚未实测。借同卡C完整59.43分钟再加35–45分钟规划余量，首次约100分钟后检查D整组完成附近；此为不确定规划，不是全三组或600评估完成保证，不按内部阶段短周期守候。
+凭据已获用户明确授权存Windows Credential Manager，本机内存worker25408/会话51693继续可用；不需要再次索取、不导出或复述。每轮queue_remote只发明确脚本，result真实输出目录有时比request时间晚一秒，必须读取返回路径，不猜目录。新科学root检查会只读合并运行中原D轻量证据，继承完成后转读新root。旧C/R/G不恢复。
 
-19:19:47 stat-only容量审计PASS_NOT_FINAL：保留system普通1GiB后余372969472B；data扣余新增峰值并留2GiB后余47094865920B。无删除、付费或降预算。
+最终：final_readonly→audit_final_local→describe_final，补充机制解释、完整闭合绑定和发布；只有全部实际完成才删除监控。不自动扩seed/调参。以下早期root/controller/进度均由本段覆盖。
 
-独立最终remote/local/describe wrappers已AST检查，尚未运行完整路径。待全部自然exit0无自身进程，实际验收12CPU CP、3恢复、12固定缓存、120训练/600正式及初态字节noise，再复算全矩阵、SF/FS和离线成本；不继承父实验PASS。单seed重复探索，不自动扩seed/调参。
 
-SSH凭据已按用户明确授权保存在本机Windows Credential Manager。项目及Git不含明文凭据。发布只含代码、协议、报告、hash、scalars和outcomes。
+完整科学方案与停止条件见PROTOCOL。旧C仅外部只读参考，不等交互资源。120训练采集与600正式分账；PARTIAL不代表科学接受。

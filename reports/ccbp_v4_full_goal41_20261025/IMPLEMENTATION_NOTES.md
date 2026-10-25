@@ -11,3 +11,21 @@ Training collection runs in an isolated child after every fixed ep99 checkpoint.
 The original CPU preflight emitted a benchmark info line before JSON; that external wrapper failure is preserved and fixed by redirecting constructor stdout. A local text-bundle hash check initially compared CRLF file bytes with normalized source text; the acceptance now explicitly hashes exactly the normalized UTF-8 text that is transported. Neither failure dispatched an experiment or generated environments/updates.
 
 Scientific source freezes only at deployment. Final external wrappers are separate, may receive evidenced engineering fixes, and require actual full CPU/model/cache/state-byte acceptance after natural controller exit; no inherited PASS. No model/private cache download. Formal 600 and training-collection 120 outcomes remain separate.
+
+## Proactive engineering02 short-history repair
+
+# 最新实际状态 2026-10-25 19:36 CST
+
+check_readonly_20261025_193559/LOCAL_AUDIT和ENGINEERING02_LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。D原进程18459未中断，已182完整epoch21398主步（Task6 100、Task7 82），首100轮逐字段精确原前缀。D6/D7自己的4/6隔离更新PASS，共10，正式0。D6已10固定训练回合、128示范历史缓存及采集后父全部状态精确不变通过；该成功数不是正式性能。
+
+发现旧示范params wrapper只接受8帧，而O/S缓存有1–7帧。服务器CPU实际复现旧helper拒绝1–7、接受8（0模型/更新/环境）。原D全部8帧不受影响，不停止或重训D。工程02只使保持路径直接调用原temporal_encode并显式验证1–8；原C示范学习与loss/预算不变。新O/S各自Task6准入另加实际保持路径长度1–8有限梯度检查及8帧旧路径精确对照（共16额外autograd、34策略参数调用，0优化器/环境），目前仍待实际发生；不能把静态修复写为GPU已PASS。
+
+新root /data/mlr_ifa/experiment_workspaces/CCBP_V4_FULL_GOAL41_20261025_v1_engineering02，controller19033，合同ef4f4b759632c7c81ebc5ca8da87011e1d4bad4fea48a205b9b30b7c2da1a54a，89冻结项/父源不变。原D仍按旧v1合同8edb70c911328d8440f25dea66f719c8259a4c332bef5be5a55caec84aea452c运行，旧dispatcher18453的T状态是有意仅暂停后续派发，不是训练停止。新controller等待原torchrun18454自然成为Z并读取真实exit_code0，再绑定全部D结果、不重复任何D epoch/采集，退休旧dispatcher并开始新O/S，最后600正式。不要发送CONT、重跑controller或重建输出。旧dispatcher最终不声明exit0；以新controller最终exit0和INHERITED_D_EXIT_OBSERVATION验证接续。
+
+D7最近10轮8.942255秒/139batch，余54702步线性58.652183min纯训练；Task8/9额外锚组数和采集尚未实测，另25min规划余量不是实测或上界。按整组D结束点85min后检查，约21:00–21:20量级，不是整个DOS或600评估结束时间。新外置final/audit/describe已适配D旧合同精确继承与O/S新合同，仍仅AST待全队列真实验收。总自身隔离更新预算66不变，正式autograd216、原准入54加工程短历史16=70另列。
+
+凭据已获用户明确授权存Windows Credential Manager，本机内存worker25408/会话51693继续可用；不需要再次索取、不导出或复述。每轮queue_remote只发明确脚本，result真实输出目录有时比request时间晚一秒，必须读取返回路径，不猜目录。新科学root检查会只读合并运行中原D轻量证据，继承完成后转读新root。旧C/R/G不恢复。
+
+最终：final_readonly→audit_final_local→describe_final，补充机制解释、完整闭合绑定和发布；只有全部实际完成才删除监控。不自动扩seed/调参。以下早期root/controller/进度均由本段覆盖。
+
+
