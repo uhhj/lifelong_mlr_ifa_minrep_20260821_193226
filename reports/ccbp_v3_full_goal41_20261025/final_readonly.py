@@ -2,7 +2,7 @@
 import os,sys,ast,json,hashlib,time,contextlib
 from pathlib import Path
 os.environ.update(CUDA_VISIBLE_DEVICES='',PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',LIBERO_CONFIG_PATH='/data/mlr_ifa/config',HF_HOME='/data/mlr_ifa/cache/huggingface',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1')
-Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1');P=Path('/root/mlr_ifa/experiments/CCBP_GOAL41_20261024_v1');O=Path('/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022');S=Path('/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source')
+Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02');P=Path('/root/mlr_ifa/experiments/CCBP_GOAL41_20261024_v1');O=Path('/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022');S=Path('/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source')
 sys.path.insert(0,str(Q))
 from layout import *
 import numpy as np

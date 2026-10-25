@@ -24,13 +24,13 @@ The segment is NOT a set of proven physically feasible or safe robot actions.
 from __future__ import annotations
 
 import math
-from typing import Mapping
+from typing import Mapping, Tuple
 
 import torch
 from torch import Tensor
 import torch.nn.functional as F
 
-GaussianParams = tuple[Tensor, Tensor, Tensor]
+GaussianParams = Tuple[Tensor, Tensor, Tensor]
 GROUPS = ((0, 3), (3, 6), (6, 7))
 
 

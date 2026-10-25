@@ -12,7 +12,7 @@ def inventory(base):
  return out
 result={}
 for mount,bound,reserve,rootfree in [('/root',0,1024**3,False),('/data',int(2.50*1024**3),2*1024**3,True)]:
- base=Path(mount)/'mlr_ifa/experiments/CCBP_V3_FULL_GOAL41_20261025_v1'
+ base=Path(mount)/'mlr_ifa/experiments/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02'
  first=inventory(base);second=inventory(base);seen=set();allocated=0
  for p,s in first.items():
   if second.get(p)!=s:continue

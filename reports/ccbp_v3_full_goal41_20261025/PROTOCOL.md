@@ -51,6 +51,6 @@ G-C检验“在持续专家监督和原路由上添加方向保持”的整体�
 
 全部controller自然exit0且无自身进程后，才运行外置CPU final_readonly→audit_final_local。必须实际12CPU strict完整CP、3完整最终恢复、9教师源/缓存、Task6本卡C/R/G tensor一致及旧卡ALIGN差异记录、全部epoch/更新、600初态真实字节和noiseSHA、30cell/60vector唯一attempt及标量独立验收。最终wrapper静态检查不是实际PASS。
 
-新科学目录CCBP_V3_FULL_GOAL41_20261025_v1；不得恢复旧v2/Task9分叉/CAET/TACR/readout。4080S恢复执行后，新产物全部放/data，root新增0/data新增2.50GiB峰值预检（含原子保存），独占inode抵扣实际已分配；system普通保留1GiB、data root保留2GiB。这是拟定界，必须新远程实际核算才准入。容量不足先查明确废用中间资产，用户既有授权允许精确留证清理；旧最终模型/最终恢复/原始数据/活跃或未验收资产不可当废用。不得付费、降预算/精度或下载私有payload。
+新科学目录CCBP_V3_FULL_GOAL41_20261025_v1_engineering02；不得恢复旧v2/Task9分叉/CAET/TACR/readout。4080S恢复执行后，新产物全部放/data，root新增0/data新增2.50GiB峰值预检（含原子保存），独占inode抵扣实际已分配；system普通保留1GiB、data root保留2GiB。这是拟定界，必须新远程实际核算才准入。容量不足先查明确废用中间资产，用户既有授权允许精确留证清理；旧最终模型/最终恢复/原始数据/活跃或未验收资产不可当废用。不得付费、降预算/精度或下载私有payload。
 
 每次检查/审计/实施按根AGENTS只发布精确审核的代码、报告、hash、标量及outcomes，非force推MLR并核remoteSHA和本地receipt。进行中标PARTIAL并记真实观察时间。按预计整组训练/整段评估完成点调整同一监控；连接故障退避明确区分于完成ETA。全验收、分析和发布后删除监控，不自动扩展。

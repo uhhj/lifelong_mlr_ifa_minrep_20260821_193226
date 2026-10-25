@@ -1,7 +1,7 @@
 from pathlib import Path
 ARMS='CRG'
-ROOT_PRIVATE=Path('/root/mlr_ifa/experiments/CCBP_V3_FULL_GOAL41_20261025_v1')
-DATA_PRIVATE=Path('/data/mlr_ifa/experiments/CCBP_V3_FULL_GOAL41_20261025_v1')
+ROOT_PRIVATE=Path('/root/mlr_ifa/experiments/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02')
+DATA_PRIVATE=Path('/data/mlr_ifa/experiments/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02')
 OUTPUT={a:DATA_PRIVATE/a for a in ARMS}
 # Conservative proposed bounds, must pass fresh remote preflight before dispatch.
 VOLUME_BOUND={'/root':0,'/data':int(2.50*1024**3)}

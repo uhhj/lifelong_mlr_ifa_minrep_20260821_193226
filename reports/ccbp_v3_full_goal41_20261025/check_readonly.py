@@ -1,6 +1,6 @@
 import json,os,hashlib,time,subprocess
 from pathlib import Path
-Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1')
+Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02')
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 contract=json.loads((Q/'CONTRACT.json').read_text());assert all(sha(p)==h for p,h in contract['files'].items())
 assert all(sha(Path(contract['source_root'])/n)==h for n,h in contract['parent_source'].items())
