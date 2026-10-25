@@ -1,14 +1,14 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-25T15:14:37.859279+08:00",
+  "observation": "2026-10-25T16:11:35.930229+08:00",
   "user_resumed": true,
   "hardware": "NVIDIA GeForce RTX 4080 SUPER, 32760 MiB, 535.230.02",
-  "latest_evidence": "check_readonly_20261025_151435",
+  "latest_evidence": "check_readonly_20261025_161133",
   "actual_remote_root": "/data/mlr_ifa/experiment_workspaces/CCBP_V3_FULL_GOAL41_20261025_v1_engineering02",
   "controller": 2177,
   "contract": "232a34dbef9b268f4be82580f0b4299a2ecb944f436c1aac8fc146088f41243b",
-  "formal_epochs": 562,
-  "formal_updates": 94718,
+  "formal_epochs": 874,
+  "formal_updates": 159600,
   "formal_episodes": 0,
   "own_gpu_admission": {
     "ADMISSION_C_6.json": 4,
@@ -16,7 +16,10 @@
     "ADMISSION_C_8.json": 5,
     "ADMISSION_C_9.json": 5,
     "ADMISSION_R_6.json": 4,
-    "ADMISSION_R_7.json": 5
+    "ADMISSION_R_7.json": 5,
+    "ADMISSION_R_8.json": 5,
+    "ADMISSION_R_9.json": 5,
+    "ADMISSION_G_6.json": 4
   },
   "final_wrappers": "AST_ONLY_NOT_EXECUTED",
   "automation_id": "ccbp-v3-goal41",
@@ -37,53 +40,53 @@
       }
     },
     "R": {
-      "epochs": 162,
-      "steps": 18618,
+      "epochs": 400,
+      "steps": 76100,
       "by_stage": {
         "6": 100,
-        "7": 62,
-        "8": 0,
-        "9": 0
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     },
     "G": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 74,
+      "steps": 7400,
       "by_stage": {
-        "6": 0,
+        "6": 74,
         "7": 0,
         "8": 0,
         "9": 0
       }
     }
   },
-  "isolated_optimizer_calls": 28,
-  "next_check_minutes": 55,
-  "next_check_basis": "R remaining 57482 steps; own stage7 per-batch linear 46.96min plus preparation/save; stages8/9 unmeasured, check entire R completion",
+  "isolated_optimizer_calls": 42,
+  "next_check_minutes": 70,
+  "next_check_basis": "G remaining Task6 own rate plus same-card R stages7-9 reference; G auxiliary stages not measured, preparation and extra anchor cost uncertain; check whole G training completion",
   "hardware_policy": "same-card exact controls; historical-card equality descriptive",
   "fresh_remote_capacity": {
     "/root": {
-      "free": 1447428096,
+      "free": 1447407616,
       "stable_unique_allocated": 0,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "headroom": 373686272
+      "headroom": 373665792
     },
     "/data": {
-      "free": 54326095872,
-      "stable_unique_allocated": 1042505728,
-      "remaining_bound": 1641848832,
+      "free": 53471838208,
+      "stable_unique_allocated": 1564454912,
+      "remaining_bound": 1119899648,
       "reserve": 2147483648,
-      "headroom": 50536763392
+      "headroom": 50204454912
     }
   },
   "phase": {
-    "arm": "R",
-    "stage": 7,
+    "arm": "G",
+    "stage": 6,
     "phase": "train",
-    "epoch_complete": 62,
-    "steps": 18618,
-    "time": 1792912476.1078076,
-    "pid": 2315
+    "epoch_complete": 74,
+    "steps": 7400,
+    "time": 1792915895.171465,
+    "pid": 2531
   }
 }

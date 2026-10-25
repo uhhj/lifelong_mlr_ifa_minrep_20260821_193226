@@ -1,3 +1,12 @@
+# 最新2026-10-25 16:13 CST交接
+
+实际观察2026-10-25T16:11:35.930229+08:00，check_readonly_20261025_161133/LOCAL_AUDIT及TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。67冻结项及父源不变，controller2177/GPU2531健康，R已自然完成后进入G Task6。C/R各400完整epoch76100主步，合计800epoch152200步，train_C/R.exit0及8阶段CP记录SHA绑定；epoch纯计算C59.430075/R60.743915min，各48额外梯度autograd单列，缓存/保存/准入另计。尚待全队列后的独立CPU验收，不作闭环收益结论。
+G Task6已74完整epoch7400步，自己的4隔离GPU更新/完整下一步恢复/官方ALIGN更新精确/1–8长度及部署语义实际PASS；G Task7–9自己的方向锚及状态化梯度测量准入仍待实际运行，不能套C/R报告。累计42隔离更新/0环境，正式评估0；C/R Task6同卡及历史ALIGN服务器tensor相等绑定保留，G Task6最终tensor尚未核。六份教师身份/tau/w与本组前阶段CP本地绑定通过。无恢复重启或改参。
+G Task6最近10轮均3.095680秒，余26轮约1.341461min；借同卡R Task7–9实测55.540179min，剩余计算参考56.881640min。G方向锚辅助阶段吞吐未测，缓存/保存/准入和额外耗时另计，暂参考17:10–17:25完成全部主训练，下一70分钟在G整组结束附近检查；不是600正式仿真及最终验收完成时间，不内部Task切换短轮询。
+capacity_readonly_20261025_161148/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通保留1GiB后余373665792B；data root唯一稳定inode抵扣余新增且保留2GiB后余50204454912B。只stat、0payload/前向/更新/环境/服务器写入，无删除或付费。全部自然exit0无自身进程后才运行最终wrappers；目前仍仅静态待真实验证。整体PARTIAL。
+
+以下旧进度和ETA由顶部覆盖，科学合同和恢复限制继续有效。
+
 # 最新2026-10-25 15:16 CST交接
 
 实际观察2026-10-25T15:14:37.859279+08:00，check_readonly_20261025_151435/LOCAL_AUDIT和TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。67冻结项及父源不变；controller2177/GPU2315正常，已自然进入R Task7。C完整400epoch76100主步，train_C.exit0，四CP记录SHA绑定；epoch纯计算59.430075min，48额外梯度autograd单列，保存/教师/准入另计。C最终独立CPU检查尚待全队列结束，不作闭环收益结论。
