@@ -1,3 +1,17 @@
+# 最新2026-10-26 19:17 CST进度覆盖
+
+实际观察2026-10-26T19:14:37.625632+08:00，check_readonly_20261026_191436/LOCAL_AUDIT及TRAINING_TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。48冻结项和父源不变，controller15770/GPU17115健康，已自然进入seed42 Task7。seed41完整400epoch105500主步、train_S.exit0和40训练采集全部结束，四CP记录、缓存源和四次父完整状态不变已绑定。纯epoch110.236147分钟，四采集3.251255分钟，保存/准备/准入另计；72正式额外梯度autograd另列。最终独立CPU和正式评估仍待全队列完成。
+
+seed42已134完整epoch23418步（Task6 100、Task7 34），自己的Task6/7共10隔离GPU更新、完整下一步恢复、状态化测量及短历史1–8准入通过；10训练采集完成。seed43尚未开始。总534epoch128918主步、50训练采集、32自身隔离更新；正式0/600。seed41/42 Task6与各自历史ALIGN的服务器tensor相等记录绑定，不能代替最终CPU验收。无重启或改科学参数。
+
+成功筛选缓存严格保留缺额：seed41各任务13/128/128/76，共345窗口；seed42 Task6为13。Task6两seed的10次训练采集各仅1条成功轨迹，所以按冻结quota各保留13窗口，不补采、不重分配。这是训练缓存覆盖事实，不能冒充正式成功率或提前归因为最终遗忘。
+
+seed42 Task7最近10轮12.063894秒，余66轮13.270283分钟；Task8/9自身尚未测，借刚完成seed41对应阶段82.502841分钟，剩余计算参考95.773124分钟。另加10分钟未实测采集/准备/保存余量，下一110分钟检查seed42整段结束附近，暂参考21:00–21:15 CST；不是seed43或全部600正式完成时间，也不是保证上界，不内部Task短轮询。
+
+capacity_readonly_20261026_191459/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余372547584B；data按唯一inode抵扣剩余6GiB界且留2GiB后余41741115392B。只stat，无payload/前向/更新/环境/服务器写入，无删除/付费。整体PARTIAL；全部自然退出后才运行最终独立验收，最终wrappers仍待真实调用。
+
+以下历史进度和首次140分钟间隔由本段覆盖，原科学协议与限制不变。
+
 # S OBJECT seed41/42/43监控交接
 
 继续用户授权的S OBJECT seed41、42、43完整有限实验。先完整读本目录PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json及最新证据。用户授权自主完成工程障碍、实验、独立验收与发布；不因此增加科学预算或重试正常负结果。

@@ -1,0 +1,86 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1793013277.6256323,
+  "contract": "89a392b088cfcc63c20567a23e3484d5c4ed869b5aa9a613c50cbf13c36f4012",
+  "counts": {
+    "S": {
+      "epochs": 400,
+      "steps": 105500,
+      "by_stage": {
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
+      }
+    }
+  },
+  "rates_last10": {
+    "S": {
+      "6": 4.308508372306823,
+      "7": 12.031463551521302,
+      "8": 21.11114945411682,
+      "9": 29.233196115493776
+    }
+  },
+  "admissions": {
+    "S_6": 4,
+    "S_7": 6,
+    "S_8": 6,
+    "S_9": 6
+  },
+  "isolated_optimizer_calls": 22,
+  "memory": {
+    "S_6": {
+      "count": 13,
+      "successes": 1,
+      "source_sha256": "d58da19545af94b4d8e9de7fa97aeead2e9637b5fad75c0e244bb38a735dd0b6",
+      "cache_sha256": "237573c75649c58a346903bf4368fa1fe0a38336a57668186d9bcd9dffc84f57"
+    },
+    "S_7": {
+      "count": 128,
+      "successes": 10,
+      "source_sha256": "b5b725042f48f4208dbf5ba3d1d33b967e0f9fcdc67adff4840dbac7301e7b87",
+      "cache_sha256": "6d1f7667ef501076e317fe27d8f8742b97ce30561a69664ac4f248f372797046"
+    },
+    "S_8": {
+      "count": 128,
+      "successes": 10,
+      "source_sha256": "2d6c7db5bc36c72822cf1d1eb590371c512284a949e15d0c374064eaad6f4e42",
+      "cache_sha256": "976fdc4bae31b03df5e4c999824bfaab0560366b98420977f6be11cc5fb1b4c3"
+    },
+    "S_9": {
+      "count": 76,
+      "successes": 6,
+      "source_sha256": "e2c520e71cabab641af87ecc47637f2a6db9ed13969e6cf12bd1c688acc85c19",
+      "cache_sha256": "6a97af5485faa9f1682cfa7736fbd2a7f3f3f9dccaf5ea800b7a31da4acd358c"
+    }
+  },
+  "training_collection_episodes": 40,
+  "formal_episodes": 0,
+  "failure": null,
+  "phase": {
+    "arm": "S",
+    "stage": 9,
+    "phase": "training_collection",
+    "time": 1793012159.5543015,
+    "pid": 15776
+  },
+  "processes": [
+    {
+      "pid": 15770,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_OBJECT41_42_43_20261026_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 17110,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_OBJECT41_42_43_20261026_v1/seed42/train.py S ",
+      "state": "S"
+    },
+    {
+      "pid": 17115,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_OBJECT41_42_43_20261026_v1/seed42/train.py S ",
+      "state": "R"
+    }
+  ],
+  "no_partial_performance_claim": true
+}
