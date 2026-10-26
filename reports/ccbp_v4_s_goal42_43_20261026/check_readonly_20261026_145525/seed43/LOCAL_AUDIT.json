@@ -1,0 +1,74 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792997725.445159,
+  "contract": "36c51b465003623dc638d601e0d40f86dfe2952ff7a4d825a5373531705059b3",
+  "counts": {
+    "S": {
+      "epochs": 251,
+      "steps": 33335,
+      "by_stage": {
+        "6": 100,
+        "7": 100,
+        "8": 51,
+        "9": 0
+      }
+    }
+  },
+  "rates_last10": {
+    "S": {
+      "6": 2.715316891670227,
+      "7": 8.367415165901184,
+      "8": 13.050015187263488
+    }
+  },
+  "admissions": {
+    "S_6": 4,
+    "S_7": 6,
+    "S_8": 6
+  },
+  "isolated_optimizer_calls": 16,
+  "memory": {
+    "S_6": {
+      "count": 128,
+      "successes": 10,
+      "source_sha256": "ee75d95c5659c3eb6f544146e405a45e83fa8536da9f1f42d2d17ebc94588f16",
+      "cache_sha256": "baca54f2bcab4b2023c0a060bf9509ece679ebc0fed7339f70131f14278c7eb8"
+    },
+    "S_7": {
+      "count": 128,
+      "successes": 10,
+      "source_sha256": "f84ac7df4ab57d1618e6b9a46da0f3190ffd3f6816d5e1535e045390e70b57a8",
+      "cache_sha256": "9d6bd2625f56cccec49721f2b9c1e88e37d27f47165ba55405cc689d5f24536d"
+    }
+  },
+  "training_collection_episodes": 20,
+  "formal_episodes": 0,
+  "failure": null,
+  "phase": {
+    "arm": "S",
+    "stage": 8,
+    "phase": "train",
+    "epoch_complete": 50,
+    "steps": 33150,
+    "time": 1792997711.1838932,
+    "pid": 3430
+  },
+  "processes": [
+    {
+      "pid": 2033,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 3425,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed43/train.py S ",
+      "state": "S"
+    },
+    {
+      "pid": 3430,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed43/train.py S ",
+      "state": "D"
+    }
+  ],
+  "no_partial_performance_claim": true
+}

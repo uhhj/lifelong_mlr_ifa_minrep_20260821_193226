@@ -1,0 +1,24 @@
+{
+  "status": "EXTERNAL_WRAPPER_REPAIR_PENDING_REAL_REAUDIT",
+  "time": "2026-10-26T14:56:38.158338+08:00",
+  "before": {
+    "audit_seed_progress.py": "160823232b7796218473c2d66592edceaa02759572c3c056672934c02e6962e3",
+    "audit_progress.py": "b4b0105b4520db061d82e930a4632cfc6c8034b84e286a7adc4e7ca4cc391a38",
+    "prepare_audits.py": "7b84ddc6cf691a59631884aae6ae00426409badfcbdf6ea69ad3cf2c6e439a68"
+  },
+  "after": {
+    "audit_seed_progress.py": "57b7f25e4923025fd1b2ea474ea576f932f6c61638b2ffb147e751777775a222",
+    "audit_progress.py": "af5511694d544f61cfe522237a51cce8c9b08c0f9edc93d7cd9a7da63a3b9c01",
+    "prepare_audits.py": "dcbfa19da7cbdc603aabfafd5a05ead28a55bc8fb895892e8fcbcd141e44a150"
+  },
+  "snapshot": "check_readonly_20261026_145525",
+  "observed_errors": [
+    "audit_seed_progress.py line44 KeyError: stages: inner loop binding overwrote parent binding after first nonempty memory.",
+    "Parent audit subprocess reader UnicodeDecodeError utf8 byte0xc2: child interpreter lacked explicit UTF8 for Chinese path traceback."
+  ],
+  "repair": "Rename local memory binding and make child interpreter/output UTF8 explicit; scientific source and contract untouched.",
+  "server_writes": 0,
+  "model_calls": 0,
+  "optimizer_calls": 0,
+  "environments": 0
+}

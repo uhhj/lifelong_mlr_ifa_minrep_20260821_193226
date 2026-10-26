@@ -13,6 +13,7 @@ s=s.replace("'DOS'","'S'").replace('41+i//10 if formal else 141','seed+i//10 if 
 s=s.replace("sha(parent/('ra_coreset/dataset_manifests/task%d.json'%t))", "binding['stages'][str(t)]['manifest_sha256']")
 start=s.index(" if 'INITIAL_'+arm+'.json' in L:");end=s.index("records=L.get",start)
 s=s[:start]+" if 'INITIAL_'+arm+'.json' in L:\n  a=L['INITIAL_'+arm+'.json'];assert a['status']=='PASS_OFFICIAL_INITIALIZATION' and a['parent_initial_sha256']==binding['files'][binding['output']+'/ra_coreset/INITIAL_STATE.json'] and a['official_cp_sha256']==binding['official_initialization']['sha256']\n sh=L.get('SHORT_HISTORY_ADMISSION_'+arm+'.json')\n if sh:assert sh['status']=='PASS' and sh['all_state_restored'] and sh['eight_frame_legacy_exact'] and [x['length'] for x in sh['lengths']]==list(range(1,9)) and sh['extra_autograd_calls']==8 and sh['optimizer_calls']==sh['environments']==0\n"+s[end:]
+s=s.replace("for j,binding in inp['memory'].items():","for j,memory_binding in inp['memory'].items():").replace("assert binding==dict(cache_sha256=","assert memory_binding==dict(cache_sha256=")
 put('audit_seed_progress.py',s)
 s=(P/'audit_evaluation_progress.py').read_text(encoding='utf8').replace("D=Path(sys.argv[1]);","D=Path(sys.argv[1]);seed=int(sys.argv[2]);").replace('[DOS]','[S]').replace('41+group','seed+group').replace('(60-len(completed))','(20-len(completed))')
 put('audit_seed_evaluation.py',s)

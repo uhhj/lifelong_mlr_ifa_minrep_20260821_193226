@@ -1,0 +1,183 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792997725.445159,
+  "contract": "3c4827cae5eb6234354f368701c71f2b96b4a998beb6d432a5f91165139e33f0",
+  "phase": {
+    "phase": "train",
+    "seed": 43,
+    "pid": 3425,
+    "time": 1792995715.013369,
+    "controller": 2033
+  },
+  "failure": null,
+  "seeds": {
+    "42": {
+      "status": "PASS_PROGRESS_NOT_FINAL",
+      "observation": 1792997725.445159,
+      "contract": "ca3e44f0e6b0992c4e7d998be9e09c2492d276da4bba1972b0720ca1dcfd9ce7",
+      "counts": {
+        "S": {
+          "epochs": 400,
+          "steps": 76100,
+          "by_stage": {
+            "6": 100,
+            "7": 100,
+            "8": 100,
+            "9": 100
+          }
+        }
+      },
+      "rates_last10": {
+        "S": {
+          "6": 2.672381567955017,
+          "7": 7.916882586479187,
+          "8": 12.797049713134765,
+          "9": 25.83913199901581
+        }
+      },
+      "admissions": {
+        "S_6": 4,
+        "S_7": 6,
+        "S_8": 6,
+        "S_9": 6
+      },
+      "isolated_optimizer_calls": 22,
+      "memory": {
+        "S_6": {
+          "count": 115,
+          "successes": 9,
+          "source_sha256": "77ebd3abb0fbe6de808fdd70a5f5051805edf87ad6d0681ae48c9c62b4dee9d4",
+          "cache_sha256": "bea83370a8ec04968f4ed150a55e7fad567aed549dc7d1f6c1f5f428b1104c45"
+        },
+        "S_7": {
+          "count": 115,
+          "successes": 9,
+          "source_sha256": "ec954f20b4aca5d8db55cdc589a4503be9b7a6698e58cd5983048169afb9611f",
+          "cache_sha256": "06c17b92519acf3220f94a4111b487dcdfa4005868b79268280f81f8ec0e5e13"
+        },
+        "S_8": {
+          "count": 102,
+          "successes": 8,
+          "source_sha256": "25e33715f9349bc716d19bf5238d979441006cef41a9c52171771996f05dbc18",
+          "cache_sha256": "dc5738e12d1d7d6ca6310cbd8df79c4f9b1aebb8cda8ee0c8f0065740e81e746"
+        },
+        "S_9": {
+          "count": 128,
+          "successes": 10,
+          "source_sha256": "10ddde811886564e5a1972b414c2faa7593c285bdbfbd6398b27add2bd26fb44",
+          "cache_sha256": "2ecab551502b7fbeb30bfb765e706a30821d9c4975a7cb79a2899c778188fbf7"
+        }
+      },
+      "training_collection_episodes": 40,
+      "formal_episodes": 0,
+      "failure": null,
+      "phase": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1792995649.0729108,
+        "pid": 2039
+      },
+      "processes": [
+        {
+          "pid": 2033,
+          "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/controller.py ",
+          "state": "S"
+        },
+        {
+          "pid": 3425,
+          "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed43/train.py S ",
+          "state": "S"
+        },
+        {
+          "pid": 3430,
+          "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed43/train.py S ",
+          "state": "D"
+        }
+      ],
+      "no_partial_performance_claim": true
+    },
+    "43": {
+      "status": "PASS_PROGRESS_NOT_FINAL",
+      "observation": 1792997725.445159,
+      "contract": "36c51b465003623dc638d601e0d40f86dfe2952ff7a4d825a5373531705059b3",
+      "counts": {
+        "S": {
+          "epochs": 251,
+          "steps": 33335,
+          "by_stage": {
+            "6": 100,
+            "7": 100,
+            "8": 51,
+            "9": 0
+          }
+        }
+      },
+      "rates_last10": {
+        "S": {
+          "6": 2.715316891670227,
+          "7": 8.367415165901184,
+          "8": 13.050015187263488
+        }
+      },
+      "admissions": {
+        "S_6": 4,
+        "S_7": 6,
+        "S_8": 6
+      },
+      "isolated_optimizer_calls": 16,
+      "memory": {
+        "S_6": {
+          "count": 128,
+          "successes": 10,
+          "source_sha256": "ee75d95c5659c3eb6f544146e405a45e83fa8536da9f1f42d2d17ebc94588f16",
+          "cache_sha256": "baca54f2bcab4b2023c0a060bf9509ece679ebc0fed7339f70131f14278c7eb8"
+        },
+        "S_7": {
+          "count": 128,
+          "successes": 10,
+          "source_sha256": "f84ac7df4ab57d1618e6b9a46da0f3190ffd3f6816d5e1535e045390e70b57a8",
+          "cache_sha256": "9d6bd2625f56cccec49721f2b9c1e88e37d27f47165ba55405cc689d5f24536d"
+        }
+      },
+      "training_collection_episodes": 20,
+      "formal_episodes": 0,
+      "failure": null,
+      "phase": {
+        "arm": "S",
+        "stage": 8,
+        "phase": "train",
+        "epoch_complete": 50,
+        "steps": 33150,
+        "time": 1792997711.1838932,
+        "pid": 3430
+      },
+      "processes": [
+        {
+          "pid": 2033,
+          "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/controller.py ",
+          "state": "S"
+        },
+        {
+          "pid": 3425,
+          "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed43/train.py S ",
+          "state": "S"
+        },
+        {
+          "pid": 3430,
+          "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed43/train.py S ",
+          "state": "D"
+        }
+      ],
+      "no_partial_performance_claim": true
+    }
+  },
+  "evaluations": {},
+  "total_epochs": 651,
+  "total_main_updates": 109435,
+  "training_collection_episodes": 60,
+  "formal_episodes": 0,
+  "isolated_optimizer_updates": 38,
+  "source_files": 33,
+  "evidence_sha256": "548c374af9ffd234874ed7aa3f03735fc2e24a1b921f37d0266d419ddd4ebda9"
+}

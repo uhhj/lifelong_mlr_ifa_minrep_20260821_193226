@@ -43,8 +43,8 @@ for arm in 'S':
   if inp:
    assert inp['manifest_sha256']==binding['stages'][str(t)]['manifest_sha256']
    assert set(inp['memory'])=={str(j) for j in range(6,t)}
-   for j,binding in inp['memory'].items():
-    m=L['MEMORY_%s_%s.json'%(arm,j)];assert binding==dict(cache_sha256=m['cache_sha256'],source_sha256=m['source_sha256'],count=m['count'])
+   for j,memory_binding in inp['memory'].items():
+    m=L['MEMORY_%s_%s.json'%(arm,j)];assert memory_binding==dict(cache_sha256=m['cache_sha256'],source_sha256=m['source_sha256'],count=m['count'])
   rr=L.get('COLLECTION_OUTCOMES_'+key+'.json')
   if rr:
    assert len(rr)==10 and [r['initial_index'] for r in rr]==list(range(20,30));outcomes(rr,False);collection+=rr
