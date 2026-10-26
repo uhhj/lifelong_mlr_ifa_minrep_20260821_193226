@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-26T14:55:25.445159+08:00",
-  "latest_evidence": "check_readonly_20261026_145525",
+  "status": "PARTIAL_EVALUATION",
+  "observation": "2026-10-26T15:56:30.685816+08:00",
+  "latest_evidence": "check_readonly_20261026_155630",
   "controller": 2033,
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1",
   "contract": "3c4827cae5eb6234354f368701c71f2b96b4a998beb6d432a5f91165139e33f0",
@@ -52,19 +52,20 @@
     },
     "43": {
       "counts": {
-        "epochs": 251,
-        "steps": 33335,
+        "epochs": 400,
+        "steps": 76100,
         "by_stage": {
           "6": 100,
           "7": 100,
-          "8": 51,
-          "9": 0
+          "8": 100,
+          "9": 100
         }
       },
       "admissions": {
         "S_6": 4,
         "S_7": 6,
-        "S_8": 6
+        "S_8": 6,
+        "S_9": 6
       },
       "memory": {
         "S_6": {
@@ -78,29 +79,37 @@
           "successes": 10,
           "source_sha256": "f84ac7df4ab57d1618e6b9a46da0f3190ffd3f6816d5e1535e045390e70b57a8",
           "cache_sha256": "9d6bd2625f56cccec49721f2b9c1e88e37d27f47165ba55405cc689d5f24536d"
+        },
+        "S_8": {
+          "count": 102,
+          "successes": 8,
+          "source_sha256": "d50b377e15e9d62af6781aa58e16c33f9e386a89f8502bbc19c76d7ea88ce67e",
+          "cache_sha256": "70aba81f77808b87e5e84215c53f1ce1761a84d3b6e7f17b174047b7c7570925"
+        },
+        "S_9": {
+          "count": 115,
+          "successes": 9,
+          "source_sha256": "3b1e5ed1de5f03fa9d3573bf9d8f65be5cad349e4ba870fd4917bd2e4e17d27c",
+          "cache_sha256": "cba21fb160d708ffeac604774746a4fc92c859781fc1cf35be8af540eb40c0f0"
         }
       }
     }
   },
-  "main_updates": 109435,
-  "formal_episodes": 0,
-  "training_collection_episodes": 60,
-  "isolated_optimizer_updates": 38,
-  "metadata_skew": [
-    {
-      "seed": 43,
-      "epochs_metadata_steps": 33335,
-      "status_steps": 33150,
-      "reason": "Files sampled separately during natural progress; completed EPOCHS ledger is the count source."
-    }
-  ],
-  "next_check_minutes": 60,
+  "main_updates": 152200,
+  "formal_episodes": 20,
+  "training_collection_episodes": 80,
+  "isolated_optimizer_updates": 44,
+  "metadata_skew": [],
+  "next_check_minutes": 50,
   "eta": {
-    "current_stage8_remaining_minutes": 10.657512402931848,
-    "reference_seed42_stage9_minutes": 43.059337397416435,
-    "remaining_compute_reference_minutes": 53.716849800348285,
-    "scope": "seed43 remaining whole training; own stage9 unmeasured; collection/save/admission extra; not final evaluation ETA"
+    "remaining_all_evaluation_mean_minutes": 43.6642260552461,
+    "remaining_all_evaluation_max_observed_minutes": 43.96171222001261,
+    "observed_vectors": 2,
+    "seed43_speed": "UNMEASURED; extrapolated from current seed42",
+    "loading_and_final_audit_extra": true,
+    "not_guaranteed_upper_bound": true,
+    "next_check_minutes": 50
   },
-  "capacity_evidence": "capacity_readonly_20261026_145549",
+  "capacity_evidence": "capacity_readonly_20261026_155644",
   "scientific_status": "PARTIAL"
 }
