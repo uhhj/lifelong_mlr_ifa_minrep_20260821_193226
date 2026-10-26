@@ -15,7 +15,7 @@ function base(s,sub,num){s.background.fill='#FFFFFF';text(s,0,21,1280,66,'4. 前
  text(s,46,694,1090,18,'机器人终身学习 · MLR＋IFA复现与方法验证',14,false,C.muted);text(s,1190,691,44,23,String(num),17,false,C.muted,'right');
 }
 function summary(s,t){rect(s,85,589,1110,72,'#FFFFFF','#2C619A','solid',12);text(s,110,599,1060,52,t,25,true,'#152D49','center');}
-function panel(s,x,w,col,head,body,tag){rect(s,x,203,w,335,'#FFFFFF',col,'dashed',13);text(s,x+10,219,w-20,45,head,29,true,col,'center');rect(s,x+15,274,w-30,2,col);text(s,x+18,292,w-36,172,body,23,false,C.dark,'center');rect(s,x+14,482,w-28,40,col);text(s,x+17,486,w-34,31,tag,22,true,'#FFFFFF','center');}
+function panel(s,x,w,col,head,body,tag){rect(s,x,203,w,335,'#FFFFFF',col,'dashed',13);text(s,x+10,219,w-20,45,head,29,true,col,'center');rect(s,x+15,274,w-30,2,col);text(s,x+12,310,w-24,136,body,26,false,C.dark,'center');rect(s,x+14,482,w-28,40,col);text(s,x+17,486,w-34,31,tag,22,true,'#FFFFFF','center');}
 function table(s,x,y,w,h,vals,widths,size=24){const tb=s.tables.add({rows:vals.length,columns:vals[0].length,left:x,top:y,width:w,height:h,values:vals,columnWidths:widths});
 tb.borders.assign({fill:'#D2DFEA',width:1,style:'solid'});
 for(let r=0;r<vals.length;r++)for(let c=0;c<vals[0].length;c++){let cell=tb.getCell(r,c);cell.fill=r===0?'#E9F3FA':r%2?'#FFFFFF':'#F6FAFD';cell.text.style={fontSize:size,typeface:FONT,bold:r===0,color:r===0?'#1A527E':C.dark,alignment:c===0?'left':'center',verticalAlignment:'middle'};}
@@ -29,14 +29,13 @@ results:'证据来源：execution/20261025_ccbp_v4_full/GOAL_THREE_SEED_BASELINE
 export async function first({presentation}){
  presentation.theme.defaultFont=FONT;const s=presentation.slides.getItem(0);base(s,'4.1 基线建立与方法改进',1);
  const xs=[40,287,534,781,1028],w=212;
- panel(s,xs[0],w,C.cyan,'MLR＋IFA','官方模型初始化\n多模态时序策略\nTask6–9续训\nBC＋0.1 IFA','建立复现基线');
- panel(s,xs[1],w,C.orange,'RA-Coreset','视觉与动作覆盖\n保留随机硬锚点\n最少成员交换\n回放预算不变','改进回放选样');
- panel(s,xs[2],w,'#D0A300','ALIGN','观测与动作对齐\n监督下一步动作\n有效性mask\n保留训练人口','校正监督时序');
- panel(s,xs[3],w,C.green,'S 方法','C组专家监督\n成功历史回放\n固定获得时教师\n保持执行分布','补充行为保持');
- panel(s,xs[4],w,'#388052','闭环验证','GOAL / OBJECT\n分阶段闭环评估\nAUC与成功率\n逐回合独立复算','形成实验依据');
+ panel(s,xs[0],w,C.cyan,'MLR＋IFA','复现原有方法\n搭建实验平台','基线复现');
+ panel(s,xs[1],w,C.orange,'RA-Coreset','筛选代表样本\n兼顾场景与动作','回放选样');
+ panel(s,xs[2],w,'#D0A300','TASA','对齐观测与动作\n提供准确监督','监督对齐');
+ panel(s,xs[3],w,C.green,'SHBR','回放成功经验\n保持已学技能','技能保持');
+ panel(s,xs[4],w,'#388052','闭环验证','机器人仿真测试\n评估学习与保持','效果验证');
  for(let i=0;i<4;i++)arrow(s,xs[i]+w+5,360,25);
- text(s,48,549,1184,24,'研究路线示意：RA关注“保存哪些样本”，ALIGN关注“监督哪个动作”，S关注“保持哪些执行行为”',20,false,C.muted,'center');
- summary(s,'已完成MLR＋IFA基线复现，并围绕回放选样、监督时序和成功执行历史开展方法验证');s.speakerNotes.text=NOTES.base;
+ summary(s,'完成基线复现，从回放选样、监督对齐与成功经验保持三个方面开展改进');s.speakerNotes.text=NOTES.base+' 本页为方法概览。TASA对应历史ALIGN，SHBR对应历史S；后续证据页保留原实验标识以便追溯。';
  return {slide:1};
 }
 export async function middle({presentation}){
