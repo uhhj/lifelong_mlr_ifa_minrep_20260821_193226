@@ -1,0 +1,127 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1792990212.1766229,
+  "contract": "3c4827cae5eb6234354f368701c71f2b96b4a998beb6d432a5f91165139e33f0",
+  "phase": {
+    "phase": "train",
+    "seed": 42,
+    "pid": 2034,
+    "time": 1792990198.672417,
+    "controller": 2033
+  },
+  "failure": null,
+  "seeds": {
+    "42": {
+      "status": "PASS_PROGRESS_NOT_FINAL",
+      "observation": 1792990212.1766229,
+      "contract": "ca3e44f0e6b0992c4e7d998be9e09c2492d276da4bba1972b0720ca1dcfd9ce7",
+      "counts": {
+        "S": {
+          "epochs": 0,
+          "steps": 0,
+          "by_stage": {
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0
+          }
+        }
+      },
+      "rates_last10": {
+        "S": {}
+      },
+      "admissions": {
+        "S_6": 4
+      },
+      "isolated_optimizer_calls": 4,
+      "memory": {},
+      "training_collection_episodes": 0,
+      "formal_episodes": 0,
+      "failure": null,
+      "phase": {
+        "arm": "S",
+        "stage": 6,
+        "phase": "prepare",
+        "time": 1792990206.6380014,
+        "pid": 2039
+      },
+      "processes": [
+        {
+          "pid": 2033,
+          "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/controller.py ",
+          "state": "S"
+        },
+        {
+          "pid": 2034,
+          "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed42/train.py S ",
+          "state": "S"
+        },
+        {
+          "pid": 2039,
+          "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed42/train.py S ",
+          "state": "R"
+        }
+      ],
+      "no_partial_performance_claim": true
+    },
+    "43": {
+      "status": "PASS_PROGRESS_NOT_FINAL",
+      "observation": 1792990212.1766229,
+      "contract": "36c51b465003623dc638d601e0d40f86dfe2952ff7a4d825a5373531705059b3",
+      "counts": {
+        "S": {
+          "epochs": 0,
+          "steps": 0,
+          "by_stage": {
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0
+          }
+        }
+      },
+      "rates_last10": {
+        "S": {}
+      },
+      "admissions": {},
+      "isolated_optimizer_calls": 0,
+      "memory": {},
+      "training_collection_episodes": 0,
+      "formal_episodes": 0,
+      "failure": null,
+      "phase": {
+        "phase": "train",
+        "seed": 42,
+        "pid": 2034,
+        "time": 1792990198.672417,
+        "controller": 2033
+      },
+      "processes": [
+        {
+          "pid": 2033,
+          "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/controller.py ",
+          "state": "S"
+        },
+        {
+          "pid": 2034,
+          "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed42/train.py S ",
+          "state": "S"
+        },
+        {
+          "pid": 2039,
+          "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1/seed42/train.py S ",
+          "state": "R"
+        }
+      ],
+      "no_partial_performance_claim": true
+    }
+  },
+  "evaluations": {},
+  "total_epochs": 0,
+  "total_main_updates": 0,
+  "training_collection_episodes": 0,
+  "formal_episodes": 0,
+  "isolated_optimizer_updates": 4,
+  "source_files": 33,
+  "evidence_sha256": "d08e67e3e0a38c7fc9451d715914bc1838acc1cffe34c78bae39bf8b7c91e857"
+}

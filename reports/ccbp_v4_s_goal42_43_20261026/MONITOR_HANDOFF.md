@@ -1,0 +1,21 @@
+# S GOAL seed42/43 有限扩展交接
+
+用户明确要求S跑GOAL seed42、43，协议同已接受S41。先读本目录PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json和最新证据。不要恢复旧实验、不重跑deploy_remote/build_extension/record_launch/controller，不重训完成阶段。两seed都完整执行，不因第一个seed结果筛掉第二个。
+
+2026-10-26 12:52:14CST实际check_readonly_20261026_125214，LOCAL_AUDIT PASS_PROGRESS_NOT_FINAL。唯一root /data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1，controller2033/GPU2039健康，合同3c4827cae5eb6234354f368701c71f2b96b4a998beb6d432a5f91165139e33f0，33冻结项+两个父源不变。子合同42 ca3e44f0e6b0992c4e7d998be9e09c2492d276da4bba1972b0720ca1dcfd9ce7、43 36c51b465003623dc638d601e0d40f86dfe2952ff7a4d825a5373531705059b3。
+
+seed42 Task6完整36epoch3600步，自己的4隔离GPU更新/0环境、完整下一步恢复、官方ALIGN更新精确PASS；short-history自身1–8保持梯度、8帧原路径精确、状态恢复PASS，额外8autograd/17策略调用。seed43未准入，采集/正式0；禁止套旧PASS。实际卡3090，既有用户授权硬件差异只记录，自己的官方初始化/同卡更新/恢复严格，历史Task6相等不作为gate。
+
+有限顺序train42→train43→evaluate42→evaluate43。各自官方GOAL初始化完整Task6–9每阶段100epoch，400epoch76100步/seed，总800epoch152200步。各用本seed原RA/ALIGN父manifest与mask，合法旧窗口42为0/479/899/1326，43为0/476/889/1315，不能套41。S核心losses/legacy_losses/memory/updates与接受版本原文本精确相同。每阶段10训练初态20–29，成功轨迹固定reservoir最多128/task512/seed，缺额不补采；固定获得时教师、4均衡旧任务锚、原C主干/FP32/b10/sampler0/系数不改。共80训练采集、400正式/40vector/20cell，正式初态0–19；无负结果重试，无新种子扫描。
+
+本目录credential_session.py隐藏worker PID10876已读用户授权Windows Credential Manager，.session_control/status.json为READY_IN_MEMORY。先读状态，不重启活跃worker；queue_remote.py check_readonly.py只排一个只读请求，读对应result的output第一行真实目录再audit_progress.py目录。请求与执行时间可能差一秒，禁止猜目录。audit_progress会自动逐seed执行audit_seed_progress和已有评估的audit_seed_evaluation。capacity_readonly.py只stat全队列唯一inode4GiB新增界，system普通1GiB/data root2GiB保留。若worker确实结束，隐藏启动credential_session.py自动读系统凭据，不索要或输出密码。SSH root@jq1.9gpu.com:11920，RejectPolicy不变。.session_control/privatepayload/部署bundle禁止发布。
+
+最新容量capacity_readonly_20261026_125121实际PASS_NOT_FINAL：root保留后余372883456B，data扣余新增及2GiB后余45169770496B，无需删除/付费。后续核实际容量不沿用旧PASS。无重启改参。历史一次本地审计参数错用请求时间导致FileNotFound已留证，纠正实际目录后PASS，0额外远程/环境/更新。
+
+seed42 Task6最近10轮2.700276秒，余64轮2.88min；辅助阶段尚未实测，以S41全epoch99.45min参考加保存/采集/准备，下一115min检查整组seed42结束附近，约14:50。不是全队列ETA。以后按当前整seed含采集训练或全部剩余评估预计结束时间改同一监控，不为内部Task切换短轮询。一次检查审计保存发布后结束，不守候。
+
+故障先核停止/合同/完整epoch恢复/原失败/环境attempt，再版本化工程修复，不覆盖冻结科学源、不盲重启部分采集评估。已完成epoch与回合不重跑。新seed43仍必须自己的每阶段准入；预计总44隔离更新、正式144额外autograd、准入36+short16=52另列。
+
+全部controller自然exit0且无自身进程后queue_remote.py final_readonly.py→audit_final_local.py FINAL→describe_final.py FINAL。外置wrappers仅AST尚未真实最终PASS，出错留证外置修不重训重评。需要8CPU strict100键CP/2完整恢复/8固定缓存教师源重放和抽样/80训练400正式初态实际字节noise/原RA身份mask和主步全标量独立验收。最后在REPORT补完整机制解释：三seed结果及离线代理是否一致，所有负单元，额外交互/计算，成功轨迹非逐步最优，非物理重演，历史基线非同动作RNG配对。REFERENCE_RESULTS冻结S41和三基线标量来源SHA；没有C/O42/43，不能假造同seedC门或O-S消融，不将开发seed称确认或显著。seed41未过C门保留。
+
+每轮按根AGENTS本目录publish.py经publish_mlr_branch精确类型/大小/secret/hash审查，仅代码报告hash/scalars/outcomes；串行stage非force推https://github.com/uhhj/lifelong_mlr_ifa_minrep_20260821_193226分支MLR，验证remoteSHA与本地receipt。TLS必要每命令OpenSSL+HTTP1.1仍校验证书。不能发布模型/CP/features/actions/states/demos/latent/buffer/RNG/privatepayload/未审核ZIP。完全独立验收、分析和发布后删除本监控，无论正负，不自动扩seed。

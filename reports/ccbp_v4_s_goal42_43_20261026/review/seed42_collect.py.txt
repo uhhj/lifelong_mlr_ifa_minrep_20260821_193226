@@ -1,0 +1,47 @@
+--- accepted_seed41/collect.py
++++ seed42/collect.py
+@@ -14,7 +14,7 @@
+     ap=argparse.ArgumentParser();ap.add_argument('arm',choices=list(ARMS));ap.add_argument('task',type=int);args=ap.parse_args();arm=args.arm;taskid=args.task
+     assert taskid in range(6,10);verify();capacity()
+     key='%s_%d'%(arm,taskid);assert not (R/('COLLECTION_STARTED_'+key+'.json')).exists(),'No blind collection retry'
+-    c=EasyDict(js(O/'resolved_eval.json'));c.training=False;control_seed(41)
++    c=EasyDict(js(O/'resolved_eval.json'));c.training=False;control_seed(SEED)
+     with contextlib.redirect_stdout(io.StringIO()):b,_,shape=data_setup(c,False)
+     c.shape_meta=shape;front=complete(c,shape).eval().requires_grad_(False);policy=load(arm,taskid,c,shape)
+     cp=sha(model_path(arm,taskid));instr,mask=b.get_task_emb(taskid);task=b.get_task(taskid)
+@@ -33,14 +33,14 @@
+     write(R/('COLLECTION_ADMISSION_'+key+'.json'),dict(status='PASS',cp_sha256=cp,cache_parity=parity,frontend_calls=16,policy_calls=16,updates=0,environments=0))
+     write(R/('COLLECTION_STARTED_'+key+'.json'),dict(time=time.time(),pid=os.getpid(),attempt_budget=10,cp_sha256=cp))
+     args_env=dict(bddl_file_name=str(Path(c.bddl_folder)/task.problem_folder/task.bddl_file),camera_heights=c.data.img_h,camera_widths=c.data.img_w)
+-    eps=np.stack([np.random.RandomState(20271025+41*1000+taskid*100+i).standard_normal((600,7)).astype(np.float32) for i in indices])
++    eps=np.stack([np.random.RandomState(20271025+SEED*1000+taskid*100+i).standard_normal((600,7)).astype(np.float32) for i in indices])
+     quotas=[MEMORY_PER_TASK//10+int(j<MEMORY_PER_TASK%10) for j in range(10)]
+-    reservoirs=[[] for _ in indices];generators=[np.random.RandomState(90141+taskid*100+i) for i in indices]
++    reservoirs=[[] for _ in indices];generators=[np.random.RandomState((90100+SEED)+taskid*100+i) for i in indices]
+     seen=[0]*10;hashers=[hashlib.sha256() for _ in indices];tic=time.monotonic();calls=0;parameter_calls=0
+     event('start',arm=arm,task=taskid,cp_sha256=cp,initial_indices=indices)
+     env=SubprocVectorEnv([lambda:OffScreenRenderEnv(**args_env) for _ in indices])
+     try:
+-        control_seed(41);env.seed(141);env.reset();env.seed(141);ob=env.set_init_state(initials[indices])
++        control_seed(SEED);env.seed(SEED+100);env.reset();env.seed(SEED+100);ob=env.set_init_state(initials[indices])
+         for _ in range(5):ob,_,_,_=env.step(np.zeros((10,7)))
+         hist=collections.deque(maxlen=8);done=np.zeros(10,dtype=bool);end=np.full(10,600)
+         for step in range(600):
+@@ -61,7 +61,7 @@
+             for j in range(10):
+                 if not done[j] and success[j]:done[j]=True;end[j]=step+1
+             if done.all():break
+-        outcomes=[dict(arm=arm,task=taskid,initial_index=i,initial_sha256=ah(np.asarray(initials[i])),initial_file_sha256=sha(path),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp,success=bool(done[j]),steps=int(end[j]),env_seed=141,attempt=1,termination='success' if done[j] else 'timeout600',purpose='training_collection_not_formal_evaluation') for j,i in enumerate(indices)]
++        outcomes=[dict(arm=arm,task=taskid,initial_index=i,initial_sha256=ah(np.asarray(initials[i])),initial_file_sha256=sha(path),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp,success=bool(done[j]),steps=int(end[j]),env_seed=SEED+100,attempt=1,termination='success' if done[j] else 'timeout600',purpose='training_collection_not_formal_evaluation') for j,i in enumerate(indices)]
+         assert sum(seen)==sum(int(r['steps']) for r in outcomes)
+         write(R/('COLLECTION_OUTCOMES_'+key+'.json'),outcomes)
+     finally:env.close()
+@@ -72,7 +72,7 @@
+         demos=sorted({ds.rows[i]['demo'] for i in valid});rows=[];extra_calls=0
+         for j,demo in enumerate(demos):
+             ids=sorted([i for i in valid if ds.rows[i]['demo']==demo],key=lambda i:ds.rows[i]['u']);quota=MEMORY_PER_TASK//len(demos)+int(j<MEMORY_PER_TASK%len(demos))
+-            chosen=np.random.RandomState(90141+taskid*100+j).choice(len(ids),size=min(quota,len(ids)),replace=False)
++            chosen=np.random.RandomState((90100+SEED)+taskid*100+j).choice(len(ids),size=min(quota,len(ids)),replace=False)
+             for pos in sorted(chosen):
+                 i=ids[int(pos)];feature=ds.native[i][0]['feature'].squeeze(0).float();q=params(policy,feature[None].cuda());extra_calls+=1;k=int(q[2][0].argmax())
+                 rows.append(dict(feature=feature.clone(),mu=q[0][0,k].cpu(),sd=q[1][0,k].cpu(),task=taskid,trajectory=j,demo=demo,u=ds.rows[i]['u'],source_index=i,source_sha256=ds.rows[i]['sample_sha256'],length=len(feature),mode=k,source='demonstration'))

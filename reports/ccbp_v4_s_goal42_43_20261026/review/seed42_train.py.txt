@@ -1,0 +1,12 @@
+--- accepted_seed41/train.py
++++ seed42/train.py
+@@ -80,8 +80,7 @@
+             else:save(target,dict(state_dict=cpu(a.policy.state_dict()),stage=stage,epoch=99,steps=a.step,contract=verify(),memory_bindings=binding))
+             if stage==6:
+                 baseline=torch.load(O/'ra_coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];actual=cpu(a.policy.state_dict())
+-                ref=actual if arm=='D' else torch.load(model_path('D',6),map_location='cpu')['state_dict'];assert equal(actual,ref)
+-                write(R/('TASK6_PARITY_'+arm+'.json'),dict(same_device_D_equal=True,historical_ALIGN_equal=equal(actual,baseline),historical_equality_gate=False,actual_sha256=sha(target),current_D_sha256=sha(model_path('D',6))))
++                write(R/('TASK6_PARITY_'+arm+'.json'),dict(historical_ALIGN_equal=equal(actual,baseline),historical_equality_gate=False,actual_sha256=sha(target),historical_ALIGN_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),same_seed_new_arm_comparator='NOT_RUN_SINGLE_S'))
+             write(R/('STAGE_%s_%d.json'%(arm,stage)),dict(status='PASS_TRAINING_PENDING_FINAL',model=str(target),sha256=sha(target),steps=a.step,epochs=100,stage=stage,memory_bindings=binding))
+             before=capture(a);subenv=dict(os.environ)
+             for k in ['RANK','WORLD_SIZE','LOCAL_RANK','LOCAL_WORLD_SIZE','MASTER_ADDR','MASTER_PORT','GROUP_RANK','ROLE_RANK','ROLE_WORLD_SIZE']:subenv.pop(k,None)
