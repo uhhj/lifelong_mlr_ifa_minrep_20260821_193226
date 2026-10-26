@@ -1,0 +1,20 @@
+% Source: audited GOAL/OBJECT seeds 41,42,43; units percent; sample SD.
+\begin{table}[htbp]
+\centering
+\caption{MLR+IFA复现与回放方法的已完成闭环结果}
+\label{tab:preliminary-baselines}
+\begin{tabular}{llcc}
+\toprule
+套件 & 方法 & AUC（\%） & 最终成功率（\%） \\
+\midrule
+GOAL & 原MLR+IFA & 76.35 $\pm$ 6.38 & 76.67 $\pm$ 9.21 \\
+GOAL & MLR+IFA+RA & 81.98 $\pm$ 3.00 & 80.83 $\pm$ 5.05 \\
+OBJECT & 原MLR+IFA & 68.30 $\pm$ 3.12 & 65.42 $\pm$ 5.20 \\
+OBJECT & MLR+IFA+RA & 73.23 $\pm$ 1.78 & 69.58 $\pm$ 5.64 \\
+OBJECT & MLR+IFA+RA+ALIGN & 80.17 $\pm$ 3.66 & 75.83 $\pm$ 3.82 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+{\footnotesize seed41、42、43的均值$\pm$样本标准差，每个阶段--任务单元20回合。
+最终成功率为最后阶段四任务平均，数值为项目复现结果。}
+\end{table}

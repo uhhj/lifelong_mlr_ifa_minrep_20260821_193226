@@ -1,0 +1,36 @@
+\documentclass[UTF8,a4paper,11pt]{ctexart}
+\usepackage[margin=22mm]{geometry}
+\usepackage{booktabs,amsmath,graphicx}
+\title{前期工作：指标表与实验依据}
+\author{}
+\date{2026年10月26日}
+\begin{document}
+\maketitle
+\section*{已完成的基线与方法验证}
+\input{table_baselines.tex}
+\input{table_S41.tex}
+\input{metric_definitions.tex}
+\clearpage
+\section*{真实训练记录}
+\begin{figure}[htbp]
+\centering\includegraphics[width=\linewidth]{images/training_curves_S41.pdf}
+\caption{S方法在GOAL seed41上的实际训练曲线。记录总量除以每轮batch数，未平滑。}
+\end{figure}
+S完成Task6至Task9各100轮训练，共400轮、76\,100次主更新。epoch从0编号，第99轮对应阶段的第100个完整训练轮次。
+\begin{verbatim}
+arm: S      stage: 9       epoch: 99
+steps: 76100              batches: 337
+valid: 3218               invalid: 147
+lr_after: 0.0
+\end{verbatim}
+\section*{真实双相机关键帧}
+\begin{figure}[htbp]
+\centering
+\begin{tabular}{ccc}
+第0步 & 第65步 & 第77步\\
+\includegraphics[width=.26\linewidth]{images/first_mean_delta_agentview_image.png}&\includegraphics[width=.26\linewidth]{images/first_mode_switch_agentview_image.png}&\includegraphics[width=.26\linewidth]{images/terminal_agentview_image.png}\\
+\includegraphics[width=.26\linewidth]{images/first_mean_delta_robot0_eye_in_hand_image.png}&\includegraphics[width=.26\linewidth]{images/first_mode_switch_robot0_eye_in_hand_image.png}&\includegraphics[width=.26\linewidth]{images/terminal_robot0_eye_in_hand_image.png}
+\end{tabular}
+\caption{已有ALIGN诊断rollout的成功示例：GOAL Task8（将碗放到盘子上），seed41，Stage9，初态3。上行为外部相机，下行为腕部相机。图片是已保存的稀疏关键帧。}
+\end{figure}
+\end{document}

@@ -1,0 +1,8 @@
+\paragraph{指标定义}
+令$r_{s,t}$表示学完阶段$s$后在任务$t$上的闭环成功率，$T=4$，任务索引重编号为$1,\ldots,T$。
+\begin{align}
+\mathrm{AUC}&=\frac{1}{T}\sum_{t=1}^{T}\frac{1}{T-t+1}\sum_{s=t}^{T}r_{s,t},\\
+\mathrm{OldFinal}&=\frac{1}{T-1}\sum_{t=1}^{T-1}r_{T,t},\\
+\mathrm{FinalAll}&=\frac{1}{T}\sum_{t=1}^{T}r_{T,t}.
+\end{align}
+表中数值为上述比例乘以100。三种子的离散程度使用样本标准差（分母$n-1$）。
