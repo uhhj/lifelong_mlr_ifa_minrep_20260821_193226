@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL_EVALUATION",
-  "observation": "2026-10-26T16:24:41.363022+08:00",
-  "latest_evidence": "check_readonly_20261026_162441",
+  "status": "COMPLETE_ACCEPTED_FINITE_EXTENSION",
+  "observation": "2026-10-26T16:43:06.609071+08:00",
+  "latest_evidence": "final_readonly_20261026_164119",
   "controller": 2033,
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_S_GOAL42_43_20261026_v1",
   "contract": "3c4827cae5eb6234354f368701c71f2b96b4a998beb6d432a5f91165139e33f0",
@@ -96,19 +96,14 @@
     }
   },
   "main_updates": 152200,
-  "formal_episodes": 330,
+  "formal_episodes": 400,
   "training_collection_episodes": 80,
   "isolated_optimizer_updates": 44,
   "metadata_skew": [],
-  "next_check_minutes": 10,
-  "eta": {
-    "remaining_active_seed_mean_minutes": 6.843399112841882,
-    "remaining_active_seed_max_observed_minutes": 7.9121128946778,
-    "scope": "Remaining seed43 formal evaluation; final independent acceptance extra",
-    "not_upper_bound": true
-  },
-  "capacity_evidence": "capacity_readonly_20261026_162504",
-  "scientific_status": "PARTIAL",
+  "next_check_minutes": null,
+  "eta": null,
+  "capacity_evidence": "capacity_readonly_20261026_164412",
+  "scientific_status": "FINITE_RESULTS_ACCEPTED_NO_CAUSAL_OR_SIGNIFICANCE_CLAIM",
   "evaluation": {
     "42": {
       "episodes": 200,
@@ -119,12 +114,60 @@
       "vector_seconds_total": 1006.8303960700032
     },
     "43": {
-      "episodes": 130,
-      "vectors": 13,
-      "cells": 6,
+      "episodes": 200,
+      "vectors": 20,
+      "cells": 10,
       "record_event_advance": 0,
-      "mean_seconds": 61.74797488469225,
-      "vector_seconds_total": 802.7236735009992
+      "mean_seconds": 57.8939002428001,
+      "vector_seconds_total": 1157.878004856002
     }
-  }
+  },
+  "final_audit_sha256": "67e2337e7914adcce49303bd73a9113690ef41bd6a525c08f0228dfe88a56495",
+  "metrics": {
+    "42": {
+      "AUC": {
+        "fraction": "251/320",
+        "percent": 78.4375
+      },
+      "FWT": {
+        "fraction": "61/80",
+        "percent": 76.25
+      },
+      "NBT": {
+        "fraction": "-1/30",
+        "percent": -3.3333333333333335
+      },
+      "OldFinal": {
+        "fraction": "4/5",
+        "percent": 80.0
+      },
+      "FinalAll": {
+        "fraction": "63/80",
+        "percent": 78.75
+      }
+    },
+    "43": {
+      "AUC": {
+        "fraction": "797/960",
+        "percent": 83.02083333333333
+      },
+      "FWT": {
+        "fraction": "67/80",
+        "percent": 83.75
+      },
+      "NBT": {
+        "fraction": "1/60",
+        "percent": 1.6666666666666667
+      },
+      "OldFinal": {
+        "fraction": "4/5",
+        "percent": 80.0
+      },
+      "FinalAll": {
+        "fraction": "67/80",
+        "percent": 83.75
+      }
+    }
+  },
+  "monitor_state": "PENDING_REMOVAL_AFTER_PUBLICATION"
 }

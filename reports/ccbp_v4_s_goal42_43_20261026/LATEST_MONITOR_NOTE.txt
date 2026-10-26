@@ -1,10 +1,8 @@
-# 最新2026-10-26 16:26 CST即时检查覆盖
+# 最终验收完成：2026-10-26T16:43:06.609071+08:00
 
-用户请求检查进度。实际观察2026-10-26T16:24:41.363022+08:00，check_readonly_20261026_162441/LOCAL_AUDIT及两seed EVALUATION_PROGRESS_AUDIT实际PASS_PROGRESS_NOT_FINAL。33冻结项及父源不变，controller2033/evaluate10040健康，phase seed43 evaluate；无重启改参。seed42完整200正式/20vector/10cell且evaluate.exit0，逐attempt/终止/策略CP/记录初态SHA/独立重生成noise/事件分片全集核验通过，正式vector共16.780507min。seed43已130/200、13vector/6关闭cell，当前S_s9_t6_g1，总330/400、33vector/16关闭cell；record_event_advance均0。seed43自己的评估长度1–8缓存准入PASS，0更新/0环境，不套seed42报告。不统计部分科学收益，初态真实字节/8CP CPU/缓存重放仍待最终。
+S GOAL seed42、43已完成；controller自然exit0，训练/采集/正式评估全部结束且无自身进程。final_readonly_20261026_164119/LOCAL_FINAL_AUDIT实际PASS_COMPLETE_LOCAL_ACCEPTANCE，8个CPU严格CP、2完整恢复、8固定成功缓存教师重放和采样、80训练及400正式回合初态字节/噪声/身份/源SHA通过。33冻结项和父源不变，800epoch152200主更新、44隔离GPU更新、144正式额外autograd和52准入autograd已分别记账。最终CPU诊断2523调用7736窗口，0更新0环境；没有补采、重训或重评。此前包装修复及所有历史进度保留。
 
-seed43前13批均61.747975秒，快照当前批已21.631877秒，余7批均值线性6.843399min，按已观测最慢批7.912113min，后者不是保证上界。评估结束暂参考16:32–16:36，独立最终验收另计；同一监控改为10分钟后检查全部自然退出附近，不短周期守候。
+AUC seed41/42/43为86.875/78.4375/83.020833%，平均82.777778±4.223998%；OldFinal平均80.555556%、FinalAll82.5%。三seed相对RA+ALIGN的AUC平均+1.666667pp，但seed42下降4.270833pp，不能称稳定逐seed提高。相对RA平均AUC仅+0.798611pp，新seed42/43均低于RA。完整矩阵、负单元、同seed跨阶段SF/FS、离线与成本解释见[final_readonly_20261026_164119/REPORT.md](final_readonly_20261026_164119/REPORT.md)。历史基线非同噪声/等交互，无C/O42/43；seed41原未过C门保留，有限扩展完成不等于证明成功筛选因果或显著。
 
-两seed各400完整epoch76100步/40训练采集仍完整，合计800/152200/80；44自身隔离更新、144正式额外autograd及52准入autograd另列。seed42/43缓存460/473，成功筛选缺额不补采。前轮训练完成账本和外置wrapper修复保留，本轮没有新错误。
-
-capacity_readonly_20261026_162504/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通保留1GiB后余372670464B，data扣余新增及2GiB后余45167030272B。仅stat，无payload/模型/环境/服务器写入，无删除/付费。全部自然controller.exit0无自身进程后final_readonly→audit_final_local→describe_final，外置最终路径仍仅静态须真实验收，错误留证外置修不重训重评。完整分析发布后删除监控，当前PARTIAL。本段替换旧20/400和50分钟间隔，其余科学约束不变。
+最新容量capacity_readonly_20261026_164412真实stat审计通过，无删除/付费。最终报告发布并核remoteSHA/localreceipt后删除s-goal-seed42-43监控，结束此有限授权；不得再派发训练、评估或自动扩seed。以下全部旧PARTIAL/ETA/待最终条目仅历史记录，不再作为当前状态。
 
