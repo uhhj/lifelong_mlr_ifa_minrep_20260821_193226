@@ -1,3 +1,13 @@
+# 最新2026-10-26 16:26 CST即时检查覆盖
+
+用户请求检查进度。实际观察2026-10-26T16:24:41.363022+08:00，check_readonly_20261026_162441/LOCAL_AUDIT及两seed EVALUATION_PROGRESS_AUDIT实际PASS_PROGRESS_NOT_FINAL。33冻结项及父源不变，controller2033/evaluate10040健康，phase seed43 evaluate；无重启改参。seed42完整200正式/20vector/10cell且evaluate.exit0，逐attempt/终止/策略CP/记录初态SHA/独立重生成noise/事件分片全集核验通过，正式vector共16.780507min。seed43已130/200、13vector/6关闭cell，当前S_s9_t6_g1，总330/400、33vector/16关闭cell；record_event_advance均0。seed43自己的评估长度1–8缓存准入PASS，0更新/0环境，不套seed42报告。不统计部分科学收益，初态真实字节/8CP CPU/缓存重放仍待最终。
+
+seed43前13批均61.747975秒，快照当前批已21.631877秒，余7批均值线性6.843399min，按已观测最慢批7.912113min，后者不是保证上界。评估结束暂参考16:32–16:36，独立最终验收另计；同一监控改为10分钟后检查全部自然退出附近，不短周期守候。
+
+两seed各400完整epoch76100步/40训练采集仍完整，合计800/152200/80；44自身隔离更新、144正式额外autograd及52准入autograd另列。seed42/43缓存460/473，成功筛选缺额不补采。前轮训练完成账本和外置wrapper修复保留，本轮没有新错误。
+
+capacity_readonly_20261026_162504/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通保留1GiB后余372670464B，data扣余新增及2GiB后余45167030272B。仅stat，无payload/模型/环境/服务器写入，无删除/付费。全部自然controller.exit0无自身进程后final_readonly→audit_final_local→describe_final，外置最终路径仍仅静态须真实验收，错误留证外置修不重训重评。完整分析发布后删除监控，当前PARTIAL。本段替换旧20/400和50分钟间隔，其余科学约束不变。
+
 # 最新2026-10-26 15:59 CST进度覆盖
 
 实际观察15:56:30 CST，check_readonly_20261026_155630的LOCAL_AUDIT、TRAINING_TRANSITION_AUDIT、TRAINING_COMPLETION_LEDGER及seed42 EVALUATION_PROGRESS_AUDIT实际PASS_PROGRESS_NOT_FINAL（账本为PASS_METADATA_NOT_FINAL_CPU）。33冻结项及父源不变；controller2033/evaluate4858健康，phase evaluate seed42，无恢复重启改参。两seed各400epoch76100步已自然train_S.exit0，合计800epoch152200主步及80训练采集全部完成。所有44自身隔离GPU更新、16短历史额外autograd/34策略调用实际PASS；正式额外144autograd、准入总52另列。完整人口账本BC合法1426200/屏蔽93400/旧合法538400已复算，8CP记录及源绑定通过，实际最终CPU仍待全队列。
