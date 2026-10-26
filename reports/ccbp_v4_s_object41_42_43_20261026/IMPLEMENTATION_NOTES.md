@@ -1,0 +1,15 @@
+# OBJECT S三seed实施边界
+
+已验收S GOAL42/43为直接代码来源，原CCBP-v4 engineering02为方法源。三个OBJECT子目录losses.py、legacy_losses.py、memory.py、updates.py、initialization.py、collect.py、evaluate.py、synthetic_checks.py与已验收GOAL42文本完全相同。只改layout的suite命名、各seed人口mask与6GiB容量界，runtime的本seedOBJECT父路径/seed，train结束总步断言105500。UPLOAD_REVIEW及review逐项绑定差异；无新损失或测试筛选。
+
+三个父资产已实际全SHA/身份/顺序/合法mask/官方OBJECT初始化及初态训练20–29与正式0–19字节不交叠预检。seed41父源是旧CAETv3 ALIGN OBJECT41，seed42/43父源是ALIGN扩展各自OBJECT目录，不能统一改成同一个源。GPU空闲后一次部署，三个Python3.8导入与原合成兼容检查实际exit0；controller15770/seed41 GPU15776。48项顶层冻结合同8319d05c3795f500e1ad546dca1aa1de14b0b05f5f57dd6f6ce32f8c5260e311。不可重跑deploy/build/controller或已完成阶段。
+
+首次只读预检包装错误将benchmark_name断言为小写libero_object，而实际历史配置规范标识是LIBERO_OBJECT。原错误和preflight_wrapper_repair旧脚本/SHA保留，改为规范标识后真实预检通过；此前0远程写入/模型/优化器/环境，不是训练或科学重试。
+
+check_readonly核48项/各父源、实际进程GPU退出和轻量账目；audit_progress逐seed复算自身准入/完整epoch/窗口身份mask/缓存/噪声，并在评估阶段自动追加评估审计。每轮capacity只stat按稳定唯一inode抵扣6GiB总新增界，留system普通1GiB/data root2GiB，未删资产或付费。
+
+最终路径final_readonly→audit_final_local→describe_final仅AST，必须等自然exit0无自身进程后实际CPU严格12CP/3恢复/12缓存教师和抽样/120训练600正式初态字节noise全验收。为避免重复大元数据，最终top light只存一份，seeds只保留审计摘要；PARENT_BINDING已本地冻结且由源验证，不再在final重复携带。没有删减CPU模型或初态检查。若外置wrapper失败，留证修复，不重训重评。
+
+describe_final输出三seed完整矩阵/指标/所有负单元/本S跨阶段配对SF-FS/离线分任务统计及成本；还需要最终实际读结果后写机制解释，不能把自动表格当已完成解释。参考结果只读绑定OBJECT_THREE_SEED_BASELINES，不混用GOAL。历史基线非同动作噪声/等交互，无C/O OBJECT对照，不造因果或显著。
+
+凭据worker17968从用户授权Windows Credential Manager加载，仅内存，不输出或写入参数日志。.session_control和部署bundle不发布。每轮经publish.py按根AGENTS审核代码/报告/hash/scalars/outcomes，串行stage非force推MLR并核远端和本地receipt。旧报告保留；整体PARTIAL至最终真实验收。
