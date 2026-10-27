@@ -1,3 +1,15 @@
+# 最新2026-10-27 14:44 CST交接
+
+实际观察2026-10-27T14:41:39.262325+08:00，check_readonly_20261027_144138/LOCAL_AUDIT及TRAINING_TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。68冻结项及父源不变，controller2559/GPU2808健康，GOAL42完整400epoch76100主更新已自然train_C.exit0，四阶段CP记录绑定，前29完整epoch逐字段精确保留，无重训。纯epoch计算57.671685分钟，48正式额外autograd另列，保存/教师/准入另计；最终独立CPU仍待全队列结束。
+
+GOAL43已101完整epoch10139步（Task6 100/Task7 1）；自己的Task6/7 4+5隔离GPU调用及完整下一步恢复、原ALIGN/原C更新、状态化梯度开关PASS。两GOAL Task6服务器tensor各自与本seed历史ALIGN精确相等记录绑定，不替代最终CPU。累计501epoch86239步、28自身隔离更新、四份教师身份/tau/w/前阶段CP绑定通过，正式0/1000；OBJECT三seed未开始，不套GOAL准入。无恢复重启改参。
+
+GOAL43 Task7仅首1轮6.939847秒/139batch，余65961步按每batch线性54.887196min；按Task7余99轮11.450747min加刚完成GOAL42 Task8/9实测41.408408min，剩纯计算参考52.859155min。自身Task8/9未测，保存/准备/教师另计，下一60分钟在GOAL43整组完成附近检查，参考15:35–15:45 CST；不是OBJECT三seed或1000评估总ETA，不内部Task短轮询。
+
+capacity_readonly_20261027_144204/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余364380160B，data唯一inode抵扣余新增5399965696B且留2GiB后余39819362304B。仅stat、0payload/前向/优化器/环境/服务器写入，无删除付费。全部最终独立验收仍待自然结束，整体PARTIAL。旧启动/工程记录保留。
+
+本段覆盖旧13:33进度和65分钟间隔，其余科学合同和恢复限制不变。
+
 # C 五组有限扩展交接
 
 继续用户授权的C完整GOAL seed42/43和OBJECT seed41/42/43有限扩展。先完整读D:/论文课题研究/MLR+IFA/execution/20261027_c_goal42_43_object41_42_43的MONITOR_HANDOFF.md、PROTOCOL.md、IMPLEMENTATION_NOTES.md、REPORT.md、RUN_STATUS.json、ACTIVE_ROOT.json及最新证据。唯一root /data/mlr_ifa/experiment_workspaces/CCBP_C_GOAL42_43_OBJECT41_42_43_20261027_v1，controller2559，合同437079ad07605ce4da40a82ef3b2d93e1b1b0ff4eef370c72deea80294b55f08，68冻结项。不重跑prepare_local/build_extension/deploy_remote/controller/record_launch，不恢复旧实验或重训完成阶段。顺序GOAL42→43→OBJECT41→42→43全训练，再同序评估。各400epoch，GOAL各76100步/OBJECT各105500步，共2000epoch468700主更新/1000正式100vector50cell；无S训练采集/保持，C原专家cost+原margin路由/BC+.1IFA、RA/ALIGN身份mask、FP32/b10/sampler0、初始化/优化器/预算不改。每run自己的19隔离GPU更新（总95）、正式48额外autograd（总240）、准入12（总60）另列，不能套旧PASS。现存GOAL41 C只读复用v3已验收结果，不重训。硬件按用户授权只记录，跨卡Task6差异不作为重试理由；官方初始/nonCUDA RNG、当前卡原ALIGN更新与完整恢复仍严格。
