@@ -1,5 +1,11 @@
 # 支持度门控机制实验 → 最新完整S OBJECT41/42/43
 
+## 最新2026-10-28 02:32 CST覆盖
+
+实际02:29:42观察check_readonly_20261028_022941/LOCAL_AUDIT及GOAL42_C_TO_S_LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。56冻结项不变，controller29838/GPU30654健康。GOAL42 C完整100epoch18500接受步、train_C.exit0，纯epoch14.478232min，已自然接续S；GOAL41四组全部原100轮和1900门控记录、GOAL42 C原81轮逐字段精确保留，无重训或重启。GOAL42 S完整35epoch6475步，自己的29隔离GPU调用/11autograd及完整恢复、lambda0=原C、q1=原S、10步重放、测量和探针状态不变均PASS，共同初始全state SHA与同seed C精确相等；不能套给未启动Q/G。
+
+累计535完整epoch98975接受/117475物理训练调用、174自身隔离调用，正式0/1120。最终CPU与闭环仍待全队列，门控接受与训练代理不算收益。S最近10轮13.608543秒，余65轮14.742588min纯计算，保存准备另计；同一监控下一20min在当前S整run结束附近检查，约02:45–02:50。不是后续Q/G或全队列ETA，不固定20min。system留1GiB后余364077056B；data扣剩余6338654208B及2GiB后余34607849472B，无删除付费或改参。整体PARTIAL，健康无需用户操作。本段覆盖02:17旧C进度与5min间隔；机制全部对照、之后仅最新完整S OBJECT41/42/43的授权与限制不变。
+
 ## 最新2026-10-28 02:21 CST覆盖
 
 实际02:17:41观察check_readonly_20261028_021740/LOCAL_AUDIT及GOAL41_TO_GOAL42_LOCAL_AUDIT实际PASS_PROGRESS_NOT_FINAL。56冻结项不变，controller29838/GPU30499正常，GOAL41 C/S/Q/G各100完整epoch18500接受步、各train.exit0，已自然接续GOAL42 C。G纯epoch67.127813min（含双候选和探针），1900块中1085块接受Q，接受率57.105263%；它不是闭环收益。上轮C/S/Q全部100轮、G前7轮以及137条门控记录逐字段精确保留，无重复或重启。全部CPU最终验收仍待全队列结束。
