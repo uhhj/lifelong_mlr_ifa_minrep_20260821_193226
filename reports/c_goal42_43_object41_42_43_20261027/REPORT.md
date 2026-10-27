@@ -54,3 +54,16 @@ OBJECT42 Task7最近10轮均10.876291秒，余75轮13.595363min；Task8/9自身�
 capacity_readonly_20261027_172454/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余364335104B；data唯一inode抵扣余新增3833294848B且留2GiB后余39816261632B。仅stat，0payload/服务器写入/模型/优化器/环境，无删除付费。整体PARTIAL；最终wrappers仍待全队列自然退出后真实验收。
 
 本段覆盖旧OBJECT41进度和90分钟间隔，其余冻结协议/恢复/发布权限不变。
+
+
+# 最新2026-10-27 18:50 CST交接
+
+实际观察2026-10-27T18:48:05.114352+08:00，check_readonly_20261027_184804/LOCAL_AUDIT及OBJECT42_TO_43_TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。68冻结项及父源不变，controller2559/GPU3504健康，已自然进入最后一组OBJECT43 Task7。GOAL42/43及OBJECT41/42各完整400epoch，四run train_C.exit均0，十六CP记录SHA绑定；上轮已完成三组全400轮及OBJECT42前125轮逐字段精确保留，无重复训练。OBJECT42纯epoch计算81.532284min，48额外autograd另列；保存/教师/准入另计，最终独立CPU仍待全部自然退出。
+
+OBJECT43已106完整epoch17062步（Task6 100/Task7 6），自己的4+5隔离GPU更新、完整下一步恢复、原ALIGN/原C更新和状态化测量准入实际PASS，Task8/9须待自身准入。累计1706epoch380262主步、85隔离优化器调用、十三份本组教师源CP/身份/tau/w绑定通过，正式0/1000。五run Task6服务器tensor与各自历史ALIGN相等记录绑定，不能替代最终CPU验收。无恢复重启改参；此前外置FP32权重审计修复和原错误保留，本轮未再失败。
+
+OBJECT43 Task7前6轮均10.873446秒，余94轮17.035066min；Task8/9自身未测，借刚完成同卡OBJECT42实测共55.124352min，剩纯计算参考72.159418min。另加10min未实测准备/缓存/保存余量，下一85分钟检查最后整组训练结束附近，暂参考20:00–20:15 CST。此后1000正式及最终验收另计，不把当前整组ETA当全队列完成时间，不为内部Task切换短轮询。
+
+capacity_readonly_20261027_184827/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余364306432B，data唯一稳定inode抵扣余新增3568668672B并留2GiB后余39814590464B。仅stat，0payload/前向/优化器/环境/服务器写入，无删除或付费。整体PARTIAL，最终wrappers仍须全部自然exit0且无自身进程后真实运行验收。
+
+本段覆盖旧OBJECT42进度和80分钟间隔；其余冻结科学协议和恢复限制保持。
