@@ -67,3 +67,18 @@ OBJECT43 Task7前6轮均10.873446秒，余94轮17.035066min；Task8/9自身未�
 capacity_readonly_20261027_184827/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余364306432B，data唯一稳定inode抵扣余新增3568668672B并留2GiB后余39814590464B。仅stat，0payload/前向/优化器/环境/服务器写入，无删除或付费。整体PARTIAL，最终wrappers仍须全部自然exit0且无自身进程后真实运行验收。
 
 本段覆盖旧OBJECT42进度和80分钟间隔；其余冻结科学协议和恢复限制保持。
+
+
+# 最新2026-10-27 20:18 CST即时检查覆盖
+
+用户请求检查进度。实际观察2026-10-27T20:15:34.810744+08:00，check_readonly_20261027_201533/LOCAL_AUDIT、TRAINING_COMPLETION_METADATA_AUDIT及EVALUATION_PROGRESS_AUDIT实际PASS_PROGRESS_NOT_FINAL。五组GOAL42/43及OBJECT41/42/43各400完整epoch、共2000epoch468700主更新全部完成，五train_C.exit均0，20阶段CP记录SHA绑定。上轮四组全400轮及OBJECT43前106轮逐字段精确保留，无重复。95自身隔离GPU更新全部准入PASS，240正式额外autograd及60准入autograd另列；15教师身份/源CP/tau/w绑定通过，人口账目{'valid': 4449600.0, 'invalid': 227200.0, 'old_eligible': 1881500.0}逐epoch复算。五组Task6服务器tensor同本seed历史ALIGN相等记录绑定，完整20CP及恢复态仍待最终独立CPU验收。
+
+纯epoch分钟{'GOAL_42': 57.67168507178624, 'GOAL_43': 59.46354522307714, 'OBJECT_41': 83.3231707016627, 'OBJECT_42': 81.53228398561478, 'OBJECT_43': 80.3075275182724}，合计362.298213min；教师/准入/保存/评估另计，不称等算力。68冻结项及父源不变，controller2559/evaluate3732健康，phase GOAL42 evaluate，无重启改参。
+
+正式130/1000记录，12个完整vector事件/6关闭cell，当前事件C_s9_t6_g0。OUTCOMES比完整事件前进10条，为顺序下载跨越批次完成的快照差异，保留原记录，不伪补complete事件。全部已保存episode唯一attempt、终止/CP/初态记录及独立重生成noiseSHA、分片和事件顺序核验通过。真实初态文件字节和所有CP加载待最终，不统计部分性能。GOAL42自身评估长度1–8缓存准入PASS，16视觉及16策略参数调用、0更新/环境另列；后续run须各自准入。
+
+12已关闭批均53.255148秒，含提前终止批；快照当前事件已75.701253秒。剩余按事件批均值外推76.845863min，按已观测最慢批外推112.588937min，后者不是保证上界且目前仅早期GOAL样本，OBJECT吞吐尚未测。加载/准备另计，暂参考21:40–22:20完成全段评估，最终独立验收另计。同一监控下一120分钟在全段评估结束附近检查，不按内部run短轮询。
+
+capacity_readonly_20261027_201558/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余364240896B；data唯一inode抵扣余新增3391442944B及2GiB后余39812972544B。仅stat，0payload/模型/优化器/环境/服务器写入，无删除付费。此前外置FP32审计修复和原错误保留，本轮无新错误。整体PARTIAL_EVALUATING；所有自然exit0且无自身进程后才final_readonly→audit_final_local→describe_final及机制分析，最终wrapper仍未实际验收。
+
+本段覆盖旧OBJECT43训练进度及85分钟间隔，其他冻结科学协议和恢复发布限制不变。
