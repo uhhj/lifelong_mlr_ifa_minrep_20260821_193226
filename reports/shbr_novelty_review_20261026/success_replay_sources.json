@@ -1,0 +1,334 @@
+{
+  "scope": "Success filtering, self-imitation, autonomous robot data and continual replay",
+  "cutoff": "2026-10-26",
+  "status": "LITERATURE_REVIEW_NOT_PROOF_OF_ABSENCE",
+  "search_families": [
+    "robot continual learning successful trajectories replay self imitation policy distillation",
+    "lifelong imitation learning robot success trajectories replay distillation",
+    "robot continual imitation learning successful distillation",
+    "robot lifelong learning success replay teacher",
+    "continual robot successful trajectories imitation replay",
+    "lifelong robot successful distillation replay",
+    "robot success-filtered continual",
+    "robot successful historical policy replay",
+    "successful trajectories continual imitation",
+    "Generative Adversarial Self-Imitation Learning",
+    "Temporal Self-Imitation Learning",
+    "Scalable Multi-Task Imitation Learning with Autonomous Improvement",
+    "RoboCat successful trajectories self improvement",
+    "SOAR autonomous robot successful trajectories",
+    "robot CEL continual experience learning success replay",
+    "robot continual success filtering policy",
+    "robot continual success-filtered replay policy",
+    "Dual-Memory Consolidation Success-Failure",
+    "DMC-VLA"
+  ],
+  "sources": [
+    {
+      "id": "SIL2018",
+      "title": "Self-Imitation Learning",
+      "year": 2018,
+      "publication": "ICML 2018",
+      "primary_url": "https://proceedings.mlr.press/v80/oh18b.html",
+      "fulltext_url": "https://proceedings.mlr.press/v80/oh18b/oh18b.pdf",
+      "read_depth": "method fulltext",
+      "evidence_locations": [
+        "§3",
+        "Algorithm 1",
+        "Equations 1–3"
+      ],
+      "setting": "actor-critic RL, Atari and MuJoCo; not sequential-task robot retention",
+      "success_rule": "positive past return minus current value; not simple success-only",
+      "replay_target": "stored sampled action with positive-advantage weighted log likelihood plus value loss",
+      "SHBR_overlap": [
+        "self-generated good experience replay"
+      ],
+      "SHBR_difference": [
+        "not frozen execution-distribution distillation",
+        "not task-acquisition success-only cache",
+        "not sequential task retention"
+      ]
+    },
+    {
+      "id": "GASIL2018",
+      "title": "Generative Adversarial Self-Imitation Learning",
+      "year": 2018,
+      "publication": "arXiv preprint; under-review label does not establish acceptance",
+      "version": "v1 2018-12-03",
+      "primary_url": "https://arxiv.org/abs/1812.00950",
+      "fulltext_url": "https://arxiv.org/html/1812.00950",
+      "read_depth": "method fulltext",
+      "evidence_locations": [
+        "§4.1",
+        "Algorithm 1",
+        "§5.1"
+      ],
+      "setting": "PPO/general RL in Point Mass and MuJoCo",
+      "success_rule": "top-K returns",
+      "replay_target": "good-trajectory occupancy matching by discriminator; policy-gradient reward shaping",
+      "SHBR_overlap": [
+        "quality-filtered auxiliary memory",
+        "reusing good trajectories"
+      ],
+      "SHBR_difference": [
+        "adversarial objective rather than fixed Gaussian target",
+        "no verified continual-task protocol"
+      ]
+    },
+    {
+      "id": "MILI2020",
+      "title": "Scalable Multi-Task Imitation Learning with Autonomous Improvement",
+      "year": 2020,
+      "publication": "arXiv version verified",
+      "version": "v1 2020-02-25",
+      "primary_url": "https://arxiv.org/abs/2003.02636",
+      "fulltext_url": "https://arxiv.org/html/2003.02636",
+      "read_depth": "method fulltext",
+      "evidence_locations": [
+        "§III filtering function",
+        "§IV Algorithm 1 lines 12–24",
+        "§IV-B"
+      ],
+      "setting": "multi-task/meta imitation learning of robot manipulation; no RL",
+      "success_rule": "trial accomplishes some useful task; failures of intended task may succeed on another",
+      "replay_target": "expanded imitation data organized by latent task pairing",
+      "SHBR_overlap": [
+        "autonomous robot execution",
+        "successful/useful filtering",
+        "own trials used for imitation learning"
+      ],
+      "SHBR_difference": [
+        "not task-acquisition fixed teacher distribution",
+        "not sequence anti-forgetting distillation"
+      ]
+    },
+    {
+      "id": "TSIL2026",
+      "title": "Temporal Self-Imitation Learning",
+      "year": 2026,
+      "publication": "arXiv preprint",
+      "version": "v1 2026-06-18 read",
+      "primary_url": "https://arxiv.org/abs/2606.19752",
+      "fulltext_url": "https://arxiv.org/html/2606.19752v1",
+      "code_url": "https://github.com/generalroboticslab/TSIL",
+      "read_depth": "method fulltext; author code README",
+      "evidence_locations": [
+        "§3.2–3.3",
+        "Equations 1–3",
+        "Appendix A"
+      ],
+      "setting": "long-horizon robot manipulation PPO; v1 15 tasks, not continual task stream",
+      "success_rule": "fastest successful trajectories per initial configuration",
+      "replay_target": "efficiency and positive return-value gap weighted stored-action log likelihood plus value loss",
+      "SHBR_overlap": [
+        "success-only auxiliary replay",
+        "preserving rare good robot behaviors"
+      ],
+      "SHBR_difference": [
+        "not frozen Gaussian targets",
+        "online value-gated self improvement rather than task retention"
+      ]
+    },
+    {
+      "id": "RIFAR2026",
+      "title": "RIFAR: Reliability-Informed and Forgetting-Aware Replay for Continual Robot Learning with World-Action Models",
+      "year": 2026,
+      "publication": "arXiv preprint",
+      "version": "v1 2026-10-02; v3 2026-10-19 read",
+      "primary_url": "https://arxiv.org/abs/2610.03079",
+      "fulltext_url": "https://arxiv.org/html/2610.03079v3",
+      "read_depth": "method and algorithm/termination appendices",
+      "evidence_locations": [
+        "§3.1–3.4",
+        "Appendix B.4",
+        "Appendix C.2–C.3"
+      ],
+      "setting": "continual robot learning on LIBERO and real robot",
+      "success_rule": "WAM value-based predicted termination then IDM consistency; not environment ground-truth success filtering",
+      "replay_target": "generated WAM actions; reliable replay then same-context action-drift prioritization",
+      "SHBR_overlap": [
+        "reliable past behavior replay for continual robot learning",
+        "temporal historical context",
+        "action drift and old task retention"
+      ],
+      "SHBR_difference": [
+        "imagined rather than actual rollout input",
+        "no fixed execution Gaussian distillation verified",
+        "rolling prior checkpoint for drift comparison"
+      ]
+    },
+    {
+      "id": "ReDOA2026",
+      "title": "ReDOA: Real-World Distillation via Observation Alignment for Image-Based Manipulation Policy Learning",
+      "year": 2026,
+      "publication": "arXiv preprint",
+      "version": "v1 2026-10-19",
+      "primary_url": "https://arxiv.org/abs/2610.25691",
+      "fulltext_url": "https://arxiv.org/html/2610.25691",
+      "read_depth": "method and collection protocol",
+      "evidence_locations": [
+        "§III-B",
+        "§III-D",
+        "§IV-B"
+      ],
+      "setting": "sim-trained state teacher to image-based robot student; separate tasks",
+      "success_rule": "collect successful execution, retry failures and restrict some initial regions",
+      "replay_target": "offline action imitation",
+      "SHBR_overlap": [
+        "real successful robot trajectories",
+        "teacher-to-student transfer"
+      ],
+      "SHBR_difference": [
+        "not continual old task retention",
+        "not Gaussian target preservation",
+        "collection budget/retry differs"
+      ]
+    },
+    {
+      "id": "RoboCat2023",
+      "title": "RoboCat: A Self-Improving Generalist Agent for Robotic Manipulation",
+      "year": 2023,
+      "publication": "TMLR 12/2023",
+      "primary_url": "https://openreview.net/pdf/2a72d6fcd3472bdf5725a3e011fe30f7ad1c46e0.pdf",
+      "supporting_author_pdf": "https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/robocat-a-self-improving-robotic-agent/robocat-a-self-improving-foundation-agent-for-robotic-manipulation.pdf",
+      "read_depth": "self improvement section and appendix data caveat",
+      "evidence_locations": [
+        "§2.1.2",
+        "Appendix G.1.1"
+      ],
+      "setting": "generalist multi-task/multi-embodiment self improvement",
+      "success_rule": "hindsight goals; failed self-generated episodes are also used",
+      "replay_target": "action-labelled dataset enlargement and next generalist training",
+      "SHBR_overlap": [
+        "autonomous self-generated robot data",
+        "historical input/action modeling"
+      ],
+      "SHBR_difference": [
+        "not success-only",
+        "not fixed-cache distribution distillation"
+      ]
+    },
+    {
+      "id": "SOAR2024",
+      "title": "Autonomous Improvement of Instruction Following Skills via Foundation Models",
+      "year": 2024,
+      "publication": "arXiv preprint version",
+      "primary_url": "https://arxiv.org/abs/2407.20635",
+      "fulltext_url": "https://auto-improvement.github.io/static/paper.pdf",
+      "project_url": "https://auto-improvement.github.io/",
+      "read_depth": "author project and primary paper method screening",
+      "evidence_locations": [
+        "autonomous collection",
+        "hindsight-relabeled goal-conditioned learning"
+      ],
+      "setting": "multi-task autonomous robot self improvement",
+      "success_rule": "VLM success detection; hindsight relabeling permits broader data use",
+      "replay_target": "goal-conditioned learning",
+      "SHBR_overlap": [
+        "autonomous experience",
+        "success signal"
+      ],
+      "SHBR_difference": [
+        "not success-only fixed teacher retention"
+      ]
+    },
+    {
+      "id": "SelfImprovingEFM2025",
+      "title": "Self-Improving Embodied Foundation Models",
+      "year": 2025,
+      "publication": "NeurIPS 2025 indicated by author paper",
+      "version": "v1 2025-09-18",
+      "primary_url": "https://arxiv.org/abs/2509.15155",
+      "fulltext_url": "https://arxiv.org/html/2509.15155",
+      "read_depth": "primary text screening",
+      "evidence_locations": [
+        "§2.2",
+        "Appendix A.3"
+      ],
+      "setting": "robot SFT followed by RL self improvement",
+      "success_rule": "steps-to-go derived success detector and reward",
+      "replay_target": "RL actor updates; not claimed equivalent to filtered distillation",
+      "SHBR_overlap": [
+        "self practice and success detection"
+      ],
+      "SHBR_difference": [
+        "not sequential task behavior preservation"
+      ]
+    },
+    {
+      "id": "SILP2021",
+      "title": "Self-Imitation Learning by Planning",
+      "year": 2021,
+      "publication": "ICRA 2021",
+      "primary_url": "https://ieeexplore.ieee.org/document/9561411/",
+      "fulltext_url": "https://pure.rug.nl/ws/portalfiles/portal/192059744/Self_Imitation_Learning_by_Planning.pdf",
+      "read_depth": "author-institution PDF method screening",
+      "evidence_locations": [
+        "§IV-A"
+      ],
+      "setting": "robot motion planning",
+      "success_rule": "planner builds demonstrations from visited states",
+      "replay_target": "BC sampled actions plus off-policy RL",
+      "SHBR_overlap": [
+        "self-generated robot demonstrations",
+        "separate demonstration and interaction buffers"
+      ],
+      "SHBR_difference": [
+        "not frozen policy-output sequential retention"
+      ]
+    },
+    {
+      "id": "SILPPlus2023",
+      "title": "Reinforcement Learning in Robotic Motion Planning by Combined Experience-based Planning and Self-Imitation Learning",
+      "year": 2023,
+      "publication": "arXiv metadata checked",
+      "primary_url": "https://arxiv.org/abs/2306.06754",
+      "read_depth": "abstract screening only",
+      "setting": "robot planning/self imitation",
+      "SHBR_overlap": [
+        "reuse successful visited states"
+      ],
+      "SHBR_difference": [
+        "not established exact match"
+      ]
+    },
+    {
+      "id": "CELFERT2026",
+      "title": "Learning from Fleet Experience: A Collective Learning Paradigm for Robots",
+      "year": 2026,
+      "publication": "arXiv preprint",
+      "version": "v1 2026-10-19",
+      "primary_url": "https://arxiv.org/abs/2610.25736",
+      "fulltext_url": "https://arxiv.org/html/2610.25736v1",
+      "project_url": "https://cel-robot-learning.github.io/",
+      "read_depth": "method and implementation appendix",
+      "evidence_locations": [
+        "§3.1.1–3.1.4",
+        "Equations 10–13",
+        "§4.1",
+        "Appendix F"
+      ],
+      "setting": "five independently trained task-specific real robot policies; not sequential task anti-forgetting",
+      "success_rule": "successful autonomous trajectories rolling memory; failed histories retrieval queries",
+      "replay_target": "recorded action chunks NLL formulation / conditional flow-matching implementation",
+      "SHBR_overlap": [
+        "success-only robot data cache",
+        "frozen feature encoding for retrieval",
+        "additional supervised updates from self-generated experience"
+      ],
+      "SHBR_difference": [
+        "not frozen historical action distribution targets",
+        "not GMM component selection",
+        "not sequential retention protocol"
+      ]
+    }
+  ],
+  "unverified_leads": [
+    {
+      "title": "Dual-Memory Consolidation with Success-Failure Contrastive Margins for Continual Vision-Language-Action Deployment",
+      "url": "https://www.researchgate.net/publication/404051087_Dual-Memory_Consolidation_with_Success-Failure_Contrastive_Margins_for_Continual_Vision-Language-Action_Deployment",
+      "status": "UNVERIFIED_ONLY_RESEARCHGATE_HIT",
+      "reason": "Exact-title and acronym searches did not establish arXiv DOI publisher or author-project provenance; do not use as verified prior art or infer nonexistence."
+    }
+  ]
+}

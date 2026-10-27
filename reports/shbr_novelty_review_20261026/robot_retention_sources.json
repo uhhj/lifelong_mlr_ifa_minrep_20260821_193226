@@ -1,0 +1,26 @@
+{
+  "review_date": "2026-10-26",
+  "timezone": "Asia/Shanghai",
+  "scope": "robot continual/lifelong retention; primary-paper verification; no experiment changes",
+  "sources": [
+    {"id":"clonex","title":"Disentangling Transfer in Continual Reinforcement Learning","date":"2022-09-28","venue":"NeurIPS 2022","url":"https://arxiv.org/html/2209.13900","sections":["5.2","6","Appendix B.1","Algorithm 1"],"verified":"task-end random SAC-buffer subset and cached actor distributions; fixed expert buffer; actor reverse KL; simulated robotic RL","confidence":"high"},
+    {"id":"recall","title":"Replay-enhanced Continual Reinforcement Learning","date":"2023-11-20","venue":"TMLR 2023","url":"https://arxiv.org/html/2311.11557","sections":["4","Algorithm 1"],"code_commit":"55770cc2d711353d78c8b476a32acf0298570d7c","code_commit_date":"2023-11-20T05:39:06Z","code_files":[{"url":"https://github.com/Sweety-dm/RECALL/blob/55770cc2d711353d78c8b476a32acf0298570d7c/myrecall/methods/recall.py","sha256":"23ef9844f1264721e84d07da758efd648219b351d53d560550b014a5edfd31f4","locations":"on_task_end lines44-55; auxiliary_loss lines73-85"},{"url":"https://github.com/Sweety-dm/RECALL/blob/55770cc2d711353d78c8b476a32acf0298570d7c/myrecall/sac/replay_buffers.py","sha256":"1d33fb519d0e62ec84bef9b2a1ab8a01ab43f5513a63218956af47bbd0c938b8","locations":"ExpertReplayBuffer.store lines82-93"}],"confidence":"high_paper_and_code"},
+    {"id":"cider","title":"CIDER: Continual Interactive Distillation for Embodied Reinforcement Learning","date":"2026-08-22","venue":"arXiv preprint","url":"https://arxiv.org/html/2608.21899v1","sections":["4.1","4.2","5","Appendix B/C"],"verified":"real robot HIL-RL; prior-stage teacher refreshed; cached diagonal Gaussian; task-balanced reverse KL; adapter gradient routing","unresolved":"Archive selection does not explicitly specify success-only filtering in reviewed text; no code audit","confidence":"high_method_identity"},
+    {"id":"accrue","title":"ACCRUE: Continual Off-Policy Reinforcement Learning for Robot Foundation Models","date":"2026-10-13","venue":"arXiv preprint","url":"https://arxiv.org/html/2610.18596","project":"https://accrue-rl.github.io/","sections":["4.1","4.3"],"verified":"last N episodes; fixed visual features; stage-refreshed deterministic teacher outputs; MSE retention; simulation and real robot","confidence":"high"},
+    {"id":"cpc","title":"Continual Policy Consolidation for Lifelong Robot Learning","date":"2026-01-30","reviewed_version":"v2 2026-09-06","venue":"arXiv preprint","url":"https://arxiv.org/html/2601.22475v2","sections":["4.1-4.3","Appendix A/B"],"code_entry":"https://github.com/Agentic-Intelligence-Lab/Continual-Policy-Distillation/tree/cpc","verified":"independent RL teachers to offline continual student; fixed action trajectories; DPP replay; expandable Transformer MoE; not GMM component routing","unresolved":"code not line-audited","confidence":"high_paper"},
+    {"id":"zhou2022","title":"Forgetting and Imbalance in Robot Lifelong Learning with Off-policy Data","date":"2022","venue":"CoLLAs / PMLR 199","url":"https://proceedings.mlr.press/v199/zhou22a/zhou22a.pdf","sections":["5-7","Appendix B"],"verified":"simulated bipedal dynamic variation; MPO online data followed by CRR offline RL; data-to-policy distillation not frozen-teacher policy distillation","confidence":"high"},
+    {"id":"cpd","title":"Continual Policy Distillation of Reinforcement Learning-based Controllers for Soft Robotic In-Hand Manipulation","date":"2024-04-05","url":"https://arxiv.org/html/2404.04219","sections":["III-C","III-D","IV"],"verified":"simulated soft hand; expert demonstration replay; sampled action used as teacher mean with sigma1e-6 for KL variant","unresolved":"real hardware evaluation not verified","confidence":"high_method"},
+    {"id":"memory_anchors","title":"Memory Anchors for Continual Robot Learning","date":"2026-08-27","url":"https://arxiv.org/html/2608.26545","project":"https://robot-adaptation.github.io/MemoryAnchors/","sections":["3-5"],"verified":"robot continual IL; LIBERO and real robot; representation overlap/action conflict selection; not historical Gaussian cache","confidence":"high"},
+    {"id":"d2r","title":"Dream to Remember: Continual Steering of Generalist Robot Policies with World Models","date":"2026-10-09","url":"https://arxiv.org/abs/2610.13816","sections":["abstract"],"verified":"frozen world-model imagined rehearsal for steering-module retention; simulation and real robot stated","unresolved":"HTML404; PDF web content-size limit; detailed loss not independently verified","confidence":"abstract_only"}
+  ],
+  "search_queries": [
+    "\"Replay-enhanced Continual Reinforcement Learning\" RECALL",
+    "\"CIDER\" \"Continual Interactive Distillation\"",
+    "\"Forgetting and Imbalance\" continual robot",
+    "continual robot learning CPC ACCRUE distillation replay",
+    "ClonEx SAC continual learning behavioral cloning exploration Wolczyk 2022",
+    "robot continual learning successful trajectories distillation replay buffer success policy",
+    "\"Continual Policy Distillation\" soft robotic replay successful"
+  ],
+  "limitations": ["No claim of exhaustive coverage or proof of absence.","Newness judgments are limited to checked primary sources.","No training, rollout, private payload or credential access."]
+}

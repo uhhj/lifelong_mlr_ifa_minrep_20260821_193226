@@ -1,0 +1,33 @@
+{
+  "cutoff": "2026-10-26",
+  "scope": "SHBR primary literature mechanism review and local method definition",
+  "sources": [
+    {"id":"mlr_ifa","title":"Lifelong Imitation Learning with Multimodal Latent Replay and Incremental Adjustment","url":"https://arxiv.org/html/2603.10929","reviewed_version":"v2 2026-03-12","sections":["2 Related Work","3.2","Table 1","A.1","C.2"],"verified":"MLR+IFA explicitly cites M2Distill as GMM distillation baseline; frozen multimodal latent replay and temporal GMM architecture are baseline contributions","evidence_level":"primary_fulltext","code_url":"https://github.com/yfqi/lifelong_mlr_ifa"},
+    {"id":"polytask","title":"PolyTask: Learning Unified Policies through Behavior Distillation","url":"https://arxiv.org/html/2310.08573","reviewed_version":"v1 2023-10-12","project":"https://poly-task.github.io/","sections":["II-C equation 2","II-D","III-D"],"verified":"Task-expert relabeling of RL replay inputs and offline MSE behavior distillation, including lifelong real-robot experiments; not SHBR executed Gaussian W2 retention","evidence_level":"primary_fulltext"},
+    {"id":"m2distill","title":"M2Distill: Multi-Modal Distillation for Lifelong Imitation Learning","url":"https://arxiv.org/html/2410.00064v3","reviewed_version":"v3 2025-03-07","sections":["IV-B equations 7-8","V-B","References"],"verified":"Reverse KL of full GMM estimated with samples from current mixture; robot lifelong imitation on LIBERO","evidence_level":"primary_fulltext","also_in":"mixture_distillation_sources.json"},
+    {"id":"spread","title":"SPREAD: Subspace Representation Distillation for Lifelong Imitation Learning","url":"https://arxiv.org/abs/2603.08763","reviewed_version":"v1 2026-03-09","sections":["abstract","version history","comments"],"verified":"Identity and date; confidence-guided GMM distillation; ICRA 2026 stated by arXiv comments","evidence_level":"primary_metadata_plus_agent_method_review","method_review_in":"mixture_distillation_sources.json"},
+    {"id":"fame","title":"Principled Fast and Meta Knowledge Learners for Continual Reinforcement Learning","url":"https://arxiv.org/abs/2603.00903","reviewed_version":"v1 2026-03-01","verified":"Identity and date; arXiv comments state published ICLR 2026; Gaussian W2 and Meta-World method checked in mixture subreport","evidence_level":"primary_metadata_plus_agent_method_review","method_review_in":"mixture_distillation_sources.json"},
+    {"id":"hrediff","title":"Hierarchically Aware Replay-Enhanced Diffusion Policy for Robot Continual Imitation Learning","url":"https://ieeexplore.ieee.org/abstract/document/11610937","doi":"10.1109/TII.2026.3708547","date":"2026-07-16","verified":"Publisher abstract identifies interference-aware buffer and uncertainty/key-frame sampling; full method not reviewed","evidence_level":"publisher_abstract_only","not_used_for_formula_equivalence":true}
+  ],
+  "queries": [
+    "\"continual imitation learning\" \"distillation\" robot success replay",
+    "\"lifelong robot\" \"successful\" \"replay\"",
+    "\"robot\" \"continual\" \"success-filtered\"",
+    "\"robot\" \"continual\" \"successful trajectories\" distillation",
+    "\"PolyTask\" \"Behavior Distillation\" continual robot",
+    "\"SHBR\" robot lifelong learning",
+    "\"success\" \"policy distillation\" \"lifelong imitation\"",
+    "\"continual robot\" \"success\" \"distillation\" memory",
+    "\"lifelong\" \"mixture\" \"Wasserstein\" robot distillation",
+    "\"MLR\" \"IFA\" robot continual learning",
+    "\"policy distillation\" \"successful trajectories\" robot continual learning",
+    "\"continual imitation learning\" success replay distillation gaussian",
+    "\"selected component\" \"Wasserstein\" policy distillation"
+  ],
+  "limitations": [
+    "Queries are actual issued queries, not claims of a database-complete systematic review.",
+    "Search result snippets and AI aggregation pages are discovery leads, not factual method evidence.",
+    "No patents or all paywalled full texts surveyed; exact-combination non-discovery is not proof of absence.",
+    "No experiment performance was newly measured or accepted in this review."
+  ]
+}

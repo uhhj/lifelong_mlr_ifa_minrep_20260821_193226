@@ -1,0 +1,229 @@
+{
+  "scope": "GMM execution-component distillation, component matching, routing and nearest-mode supervision",
+  "cutoff": "2026-10-26",
+  "language": "zh-CN",
+  "status": "PRIMARY_SOURCE_MECHANISM_REVIEW_COMPLETE_NOT_EXHAUSTIVE_PROOF",
+  "exact_shbr_combination_found": false,
+  "absence_claim_allowed": false,
+  "sources": [
+    {
+      "id": "m2distill",
+      "title": "M2Distill: Multi-Modal Distillation for Lifelong Imitation Learning",
+      "year": 2025,
+      "venue": "ICRA 2025",
+      "url": "https://arxiv.org/html/2410.00064v3",
+      "metadata_url": "https://arxiv.org/abs/2410.00064",
+      "verified_sections": [
+        "IV-B Policy Distillation equations 7–8",
+        "V-B LIBERO"
+      ],
+      "mechanism": "机器人 lifelong IL 中完整新旧 GMM 的 Monte Carlo KL 蒸馏。",
+      "difference": "未见 teacher argmax Gaussian W2 与 nearest-component margin。",
+      "evidence_level": "primary_fulltext",
+      "code_status": "official training code not verified in this review"
+    },
+    {
+      "id": "spread",
+      "title": "SPREAD: Subspace Representation Distillation for Lifelong Imitation Learning",
+      "year": 2026,
+      "venue": "ICRA 2026 (arXiv comments)",
+      "url": "https://arxiv.org/html/2603.08763v1",
+      "metadata_url": "https://arxiv.org/abs/2603.08763",
+      "verified_sections": [
+        "III-C equations 6–7"
+      ],
+      "mechanism": "教师 GMM 采样中选最高密度 90% 动作做选择性蒸馏。",
+      "difference": "动作密度筛选不等于整轨迹成功筛选。",
+      "caveat": "Equation 6 sign versus minimization prose requires implementation clarification; no correctness claim.",
+      "evidence_level": "primary_fulltext",
+      "code_status": "official training code not verified in this review"
+    },
+    {
+      "id": "lanegcn",
+      "title": "Learning Lane Graph Representations for Motion Forecasting",
+      "year": 2020,
+      "venue": "ECCV 2020",
+      "url": "https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123470528.pdf",
+      "metadata_url": "https://arxiv.org/abs/2007.13732",
+      "code_url": "https://github.com/uber-research/LaneGCN/blob/master/lanegcn.py#L712",
+      "raw_code_url": "https://raw.githubusercontent.com/uber-research/LaneGCN/master/lanegcn.py",
+      "verified_sections": [
+        "3.5 equation 8",
+        "PredLoss around lines 712–740"
+      ],
+      "mechanism": "选择 GT 距离最小模式，再用 margin 训练其置信度。",
+      "difference": "预测轨迹，不是 Gaussian KD；回归最佳模式而非当前 argmax 执行模式。",
+      "evidence_level": "primary_paper_and_official_function"
+    },
+    {
+      "id": "w2_gmm",
+      "title": "Wasserstein Gradient Flows for Optimizing Gaussian Mixture Policies",
+      "year": 2023,
+      "venue": "NeurIPS 2023",
+      "url": "https://papers.neurips.cc/paper_files/paper/2023/file/429b5216a4d08850c586fbf809e17877-Paper-Conference.pdf",
+      "metadata_url": "https://arxiv.org/abs/2305.10411",
+      "verified_sections": [
+        "2.3 equations 6–7",
+        "3"
+      ],
+      "mechanism": "Gaussian W2 与 GMM 最优传输匹配用于机器人策略更新。",
+      "difference": "无成功历史缓存与 SHBR 路由。",
+      "evidence_level": "official_proceedings_fulltext"
+    },
+    {
+      "id": "vdd",
+      "title": "Variational Distillation of Diffusion Policies into Mixture of Experts",
+      "year": 2024,
+      "venue": "NeurIPS 2024",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/175fa4fc8f275f877ec85340131c5d7a-Paper-Conference.pdf",
+      "html_url": "https://arxiv.org/html/2406.12538v1",
+      "metadata_url": "https://arxiv.org/abs/2406.12538",
+      "project_url": "https://intuitive-robots.github.io/vdd-website/",
+      "code_url": "https://github.com/intuitive-robots/vdd",
+      "verified_sections": [
+        "3 conditional Gaussian mixture policy",
+        "4.2 mixture experts and gating optimization",
+        "Appendix A/B"
+      ],
+      "mechanism": "将 diffusion teacher 蒸馏为 Gaussian mixture experts 并优化 gating。",
+      "difference": "非 continual success-history distillation，变分目标也不同。",
+      "evidence_level": "official_proceedings_fulltext",
+      "code_status": "official repo identity verified; algorithm assessment from paper"
+    },
+    {
+      "id": "fame",
+      "title": "Principled Fast and Meta Knowledge Learners for Continual Reinforcement Learning",
+      "year": 2026,
+      "venue": "ICLR 2026",
+      "url": "https://arxiv.org/html/2603.00903v1",
+      "metadata_url": "https://arxiv.org/abs/2603.00903",
+      "openreview_url": "https://openreview.net/pdf?id=loNTDX3wTn",
+      "code_url": "https://github.com/datake/FAME",
+      "verified_sections": [
+        "3.2.1 Method 2 / Proposition 2",
+        "Appendix C.3",
+        "Appendix D Algorithm 2",
+        "4.2 Meta-World"
+      ],
+      "mechanism": "旧状态缓冲与 Gaussian W2 用于持续 RL 的策略知识整合。",
+      "difference": "非 GMM 最近分量 hinge 路由。",
+      "evidence_level": "primary_fulltext",
+      "code_status": "official repo identity verified; algorithm assessment from paper"
+    },
+    {
+      "id": "bet",
+      "title": "Behavior Transformers: Cloning k modes with one stone",
+      "year": 2022,
+      "venue": "NeurIPS 2022",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2022/file/90d17e882adbdda42349db6f50123817-Paper-Conference.pdf",
+      "metadata_url": "https://arxiv.org/abs/2206.11251",
+      "verified_sections": [
+        "2.1–2.2 nearest action bin and residual"
+      ],
+      "mechanism": "机器人模仿学习的最近动作 bin 分类监督和残差预测。",
+      "difference": "固定 bins，非动态 Gaussian teacher matching。",
+      "evidence_level": "official_proceedings_fulltext"
+    },
+    {
+      "id": "moflow",
+      "title": "MoFlow: One-Step Flow Matching for Human Trajectory Forecasting via Implicit Maximum Likelihood Estimation based Distillation",
+      "year": 2025,
+      "venue": "CVPR 2025",
+      "url": "https://openaccess.thecvf.com/content/CVPR2025/papers/Fu_MoFlow_One-Step_Flow_Matching_for_Human_Trajectory_Forecasting_via_Implicit_CVPR_2025_paper.pdf",
+      "verified_sections": [
+        "4.3",
+        "Algorithm 1"
+      ],
+      "mechanism": "教师多模态轨迹集与候选学生集匹配蒸馏。",
+      "difference": "人轨迹预测，无执行 Gaussian margin 保持。",
+      "evidence_level": "official_proceedings_fulltext"
+    },
+    {
+      "id": "state_to_vision",
+      "title": "Revisiting Distribution Matching for State-to-Vision Policy Distillation in Laparoscopic Robotic Manipulation",
+      "year": 2026,
+      "venue": "arXiv preprint 2026-10-22",
+      "url": "https://arxiv.org/html/2610.31010v1",
+      "metadata_url": "https://arxiv.org/abs/2610.31010",
+      "verified_sections": [
+        "III-C equation 11"
+      ],
+      "mechanism": "机器人连续 Gaussian 策略蒸馏比较 W2、KL 等距离。",
+      "difference": "非 lifelong mixture routing。",
+      "evidence_level": "primary_preprint_fulltext",
+      "not_claimed_peer_reviewed": true
+    },
+    {
+      "id": "teacher_student_mixit",
+      "title": "Teacher-Student MixIT for Unsupervised and Semi-Supervised Speech Separation",
+      "year": 2021,
+      "venue": "Interspeech 2021",
+      "url": "https://www.isca-archive.org/interspeech_2021/zhang21v_interspeech.pdf",
+      "metadata_url": "https://arxiv.org/abs/2106.07843",
+      "verified_sections": [
+        "teacher-student permutation-invariant training"
+      ],
+      "mechanism": "跨领域教师输出到学生的 permutation-invariant 匹配蒸馏。",
+      "difference": "语音源分离，不是机器人策略；仅限定置换不变性源流。",
+      "evidence_level": "official_proceedings_fulltext"
+    },
+    {
+      "id": "multipathpp",
+      "title": "MultiPath++: Efficient Information Fusion and Trajectory Aggregation for Behavior Prediction",
+      "year": 2022,
+      "venue": "ICRA 2022",
+      "url": "https://openreview.net/pdf/c282fae762be4ae391e5a75c9a27f5d434b98922.pdf",
+      "verified_sections": [
+        "3.4 GMM classification and hard closest-mode assignment"
+      ],
+      "mechanism": "多模态 GMM 轨迹的最近 GT 分量硬分配训练。",
+      "difference": "预测任务，无 teacher execution KD。",
+      "evidence_level": "primary_pdf"
+    }
+  ],
+  "queries": [
+    "policy distillation Gaussian mixture component matching Wasserstein robot continual learning",
+    "mixture density network winner take all logits component loss imitation learning",
+    "robot policy distillation multimodal Gaussian mixture mode matching teacher student",
+    "\"mixture\" \"distillation\" \"Wasserstein\" \"policy\"",
+    "\"Gaussian mixture\" \"distillation\" \"component\"",
+    "\"winner-take-all\" \"imitation learning\" mixture",
+    "\"policy\" \"mixture\" \"margin loss\"",
+    "Behavior Transformers nearest cluster classification residual action multimodal imitation paper",
+    "robot imitation learning mixture density network winner takes all classification loss hypothesis",
+    "multimodal knowledge distillation trajectory prediction Gaussian components nearest mode classification",
+    "\"Gaussian mixture\" \"distillation\" \"robot\" -site:researchgate.net -site:medium.com",
+    "\"policy distillation\" \"mixture\" \"component\"",
+    "\"Gaussian mixture\" \"knowledge distillation\" policy matching",
+    "\"mixture density\" \"distillation\" robot continual",
+    "\"multimodal\" \"distillation\" \"permutation\" policy",
+    "\"Gaussian mixture\" \"distill\" \"policy\" robot -language -LLM -datasets",
+    "\"mode\" \"distillation\" \"trajectory prediction\" \"matching\"",
+    "\"permutation invariant\" \"distillation\" \"mixture\"",
+    "\"winner\" \"distillation\" \"trajectory\"",
+    "M2Distill github Roy policy distillation",
+    "SPREAD subspace representation distillation github 2603.08763",
+    "Variational distillation diffusion policies mixture experts 2024 VDD",
+    "\"M2Distill\" \"github.com\"",
+    "\"SPREAD\" \"kaushik\" \"github\"",
+    "\"margin\" \"mode\" \"LaneGCN\" loss",
+    "\"MultiPath\" \"closest\" \"anchor\" \"classification\"",
+    "LaneGCN Learning Lane Graph Representations Motion Forecasting ECCV 2020 paper github",
+    "\"Wasserstein\" \"Gaussian\" \"policy distillation\" robotics",
+    "\"selected component\" \"distillation\" Gaussian",
+    "\"mixture\" \"teacher\" \"margin\" \"distillation\" policy",
+    "FAME continual reinforcement learning Wasserstein forgetting minimization 2026",
+    "\"Revisiting Distribution Matching for State-to-Vision Policy Distillation\"",
+    "\"Gaussian mixture\" \"argmax\" \"distillation\"",
+    "\"Gaussian mixture\" \"Wasserstein\" \"margin\"",
+    "\"mixture policy\" \"distillation\" \"argmax\"",
+    "\"policy distillation\" \"component matching\""
+  ],
+  "exclusions": [
+    "AI-generated aggregation summaries were not used as factual evidence",
+    "ResearchGate-only unverified candidates excluded",
+    "Exact SHBR combination absence is not certified",
+    "No scientific reruns or code changes"
+  ],
+  "publication": "Parent agent handles reviewed publication; this branch did not push."
+}
