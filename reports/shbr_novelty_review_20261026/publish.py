@@ -10,6 +10,7 @@ URL = 'https://github.com/uhhj/lifelong_mlr_ifa_minrep_20260821_193226.git'
 NAMES = ['REPORT.md', 'robot_retention.md', 'success_replay.md', 'mixture_distillation.md',
          'LATEST_GOAL_EVIDENCE.md', 'LATEST_OBJECT_EVIDENCE.md', 'MECHANISM_EXPERIMENT_EVIDENCE.md',
          'LATEST_RESULTS_RECOMPUTED.json', 'LATEST_METRICS.csv', 'audit_latest_results.py',
+         'SUBMISSION_STRATEGY_20261027.md', 'submission_sources_20261027.json',
          'root_sources.json', 'robot_retention_sources.json', 'success_replay_sources.json',
          'mixture_distillation_sources.json', 'REFERENCES.csv', 'QUERY_LOG.json',
          'LOCAL_METHOD_AUDIT.json', 'audit_review.py', 'publish.py']
@@ -45,7 +46,7 @@ def main():
     git('diff', '--cached', '--check')
     changed = bool(git('diff', '--cached', '--name-only'))
     if changed:
-        git('commit', '-m', 'Review SHBR prior art with accepted GOAL and OBJECT three-seed evidence')
+        git('commit', '-m', 'Document joint replay paper positioning and prioritized controlled experiments')
     head = git('rev-parse', 'HEAD')
     remote = git('ls-remote', 'origin', 'refs/heads/MLR').split()[0]
     if head != remote:

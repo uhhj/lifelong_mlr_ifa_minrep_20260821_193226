@@ -9,9 +9,11 @@ METHOD_NAMES = ['PROTOCOL.md', 'IMPLEMENTATION_NOTES.md', 'losses.py',
                 'legacy_losses.py', 'memory.py', 'collect.py', 'updates.py']
 DOCUMENTS = ['REPORT.md', 'robot_retention.md', 'success_replay.md',
              'mixture_distillation.md', 'LATEST_GOAL_EVIDENCE.md',
-             'LATEST_OBJECT_EVIDENCE.md', 'MECHANISM_EXPERIMENT_EVIDENCE.md']
+             'LATEST_OBJECT_EVIDENCE.md', 'MECHANISM_EXPERIMENT_EVIDENCE.md',
+             'SUBMISSION_STRATEGY_20261027.md']
 SOURCES = ['root_sources.json', 'robot_retention_sources.json',
-           'success_replay_sources.json', 'mixture_distillation_sources.json']
+           'success_replay_sources.json', 'mixture_distillation_sources.json',
+           'submission_sources_20261027.json']
 RESULTS = ['LATEST_RESULTS_RECOMPUTED.json', 'LATEST_METRICS.csv']
 
 def fingerprint(path):
@@ -60,6 +62,9 @@ def main():
         'status': 'PASS_LOCAL_REVIEW_ARTIFACT_INTEGRITY_NOT_EXPERIMENT_ACCEPTANCE',
         'observed_at': datetime.datetime.now().astimezone().isoformat(),
         'scientific_source_files_read_only': {str((METHOD / n).relative_to(WORKSPACE)): fingerprint(METHOD / n) for n in METHOD_NAMES},
+        'additional_method_summary_read_only': {
+            'execution/20261023_caet_em_v1/RA_ALIGN_METHOD_SUMMARY.md': fingerprint(WORKSPACE / 'execution/20261023_caet_em_v1/RA_ALIGN_METHOD_SUMMARY.md')
+        },
         'review_artifacts': {n: fingerprint(HERE / n) for n in DOCUMENTS + SOURCES + RESULTS + ['REFERENCES.csv', 'QUERY_LOG.json', 'audit_latest_results.py']},
         'source_record_count_including_cross_report_duplicates': len(rows),
         'documented_query_count': len(queries),
