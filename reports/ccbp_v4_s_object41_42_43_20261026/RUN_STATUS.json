@@ -1,7 +1,7 @@
 {
-  "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-26T21:05:08.106187+08:00",
-  "latest_evidence": "check_readonly_20261026_210507",
+  "status": "COMPLETE_ACCEPTED",
+  "observation": "2026-10-27T12:12:17.706750+08:00",
+  "latest_evidence": "final_readonly_20261027_120754",
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_V4_S_OBJECT41_42_43_20261026_v1",
   "controller": 15770,
   "contract": "8319d05c3795f500e1ad546dca1aa1de14b0b05f5f57dd6f6ce32f8c5260e311",
@@ -53,7 +53,8 @@
           "source_sha256": "e2c520e71cabab641af87ecc47637f2a6db9ed13969e6cf12bd1c688acc85c19",
           "cache_sha256": "6a97af5485faa9f1682cfa7736fbd2a7f3f3f9dccaf5ea800b7a31da4acd358c"
         }
-      }
+      },
+      "formal_episodes": 200
     },
     "42": {
       "counts": {
@@ -97,47 +98,159 @@
           "source_sha256": "23a4927f5f51cbee6e045162e7528f93c156fcd0bb97c7021937e0fc7400664a",
           "cache_sha256": "a8c43f486dc137a4dc1ff339a45a982fc795065c326ef200b396bef0219572a9"
         }
-      }
+      },
+      "formal_episodes": 200
     },
     "43": {
       "counts": {
-        "epochs": 100,
-        "steps": 15700,
+        "epochs": 400,
+        "steps": 105500,
         "by_stage": {
           "6": 100,
-          "7": 0,
-          "8": 0,
-          "9": 0
+          "7": 100,
+          "8": 100,
+          "9": 100
         }
       },
       "admissions": {
-        "S_6": 4
+        "S_6": 4,
+        "S_7": 6,
+        "S_8": 6,
+        "S_9": 6
       },
-      "memory": {}
+      "memory": {
+        "S_6": {
+          "count": 63,
+          "successes": 5,
+          "source_sha256": "d43fb1f509f69726c518120fdf6809df5a6f76ebacbde0550cd9c027394f8af4",
+          "cache_sha256": "8e56bdb8949e24014bea0744a93d6bdecdddbc02a5c1148b704fc1a41ea101b9"
+        },
+        "S_7": {
+          "count": 90,
+          "successes": 7,
+          "source_sha256": "4881a8220f666eef070d884b2ba9675fed8d48972f0c240c71605c63f7ae0d9d",
+          "cache_sha256": "2492775f3530d356a26125853390a398a8b1ed082a53821ae6f782290f7f59e0"
+        },
+        "S_8": {
+          "count": 128,
+          "successes": 10,
+          "source_sha256": "a880e8a2180f3120a283a0b739fc6233434b0fd76f159820ce881363613bfca8",
+          "cache_sha256": "27bcc7765a5a5e1d4541430df576a3f823cc55ca142c18a6ae6210860a259ce6"
+        },
+        "S_9": {
+          "count": 128,
+          "successes": 10,
+          "source_sha256": "f7ce8c80bf8dbe3b1490ce757a0d9ffce905b11ac92495cac08ca89eef2651d8",
+          "cache_sha256": "21f789363984de95d8942b1e4685a777c293b8fd1ec906dcf545fafdaf741d5d"
+        }
+      },
+      "formal_episodes": 200
     }
   },
-  "main_updates": 226700,
-  "training_collection_episodes": 80,
-  "formal_episodes": 0,
-  "isolated_optimizer_updates": 48,
-  "next_check_minutes": 115,
-  "eta": {
-    "scope": "seed43 remaining whole training including collection",
-    "comparable_seed42_task7_9_compute_minutes": 101.43547432820003,
-    "comparable_seed42_four_collections_minutes": 4.069326512250033,
-    "unmeasured_prepare_save_margin_minutes": 10,
-    "next_check_minutes": 115,
-    "seed43_auxiliary_throughput_not_measured": true,
-    "not_upper_bound": true,
-    "whole_queue_eta_known": false
-  },
-  "capacity_evidence": "capacity_readonly_20261026_210529",
-  "scientific_status": "PARTIAL",
+  "main_updates": 316500,
+  "training_collection_episodes": 120,
+  "formal_episodes": 600,
+  "isolated_optimizer_updates": 66,
+  "next_check_minutes": null,
+  "eta": null,
+  "capacity_evidence": "capacity_readonly_20261027_121222",
+  "scientific_status": "FINITE_EXPERIMENT_ACCEPTED_NO_SIGNIFICANCE_CLAIM",
   "phase": {
-    "phase": "train",
-    "seed": 43,
-    "pid": 18429,
-    "time": 1793019366.9709704,
-    "controller": 15770
-  }
+    "phase": "complete",
+    "controller_exit": 0,
+    "no_residual": true
+  },
+  "completed_at": "2026-10-26T23:48:56.813406+08:00",
+  "final_audit": "LOCAL_FINAL_AUDIT.json",
+  "metrics": {
+    "41": {
+      "AUC": {
+        "fraction": "751/960",
+        "percent": 78.22916666666667
+      },
+      "FWT": {
+        "fraction": "3/4",
+        "percent": 75.0
+      },
+      "NBT": {
+        "fraction": "-19/360",
+        "percent": -5.277777777777778
+      },
+      "OldFinal": {
+        "fraction": "17/20",
+        "percent": 85.0
+      },
+      "FinalAll": {
+        "fraction": "31/40",
+        "percent": 77.5
+      }
+    },
+    "42": {
+      "AUC": {
+        "fraction": "863/960",
+        "percent": 89.89583333333333
+      },
+      "FWT": {
+        "fraction": "33/40",
+        "percent": 82.5
+      },
+      "NBT": {
+        "fraction": "-49/360",
+        "percent": -13.61111111111111
+      },
+      "OldFinal": {
+        "fraction": "53/60",
+        "percent": 88.33333333333333
+      },
+      "FinalAll": {
+        "fraction": "9/10",
+        "percent": 90.0
+      }
+    },
+    "43": {
+      "AUC": {
+        "fraction": "167/192",
+        "percent": 86.97916666666667
+      },
+      "FWT": {
+        "fraction": "69/80",
+        "percent": 86.25
+      },
+      "NBT": {
+        "fraction": "-1/45",
+        "percent": -2.2222222222222223
+      },
+      "OldFinal": {
+        "fraction": "11/15",
+        "percent": 73.33333333333333
+      },
+      "FinalAll": {
+        "fraction": "4/5",
+        "percent": 80.0
+      }
+    }
+  },
+  "three_seed_statistics": {
+    "AUC": {
+      "mean": 85.03472222222223,
+      "sample_sd": 6.071525831776217
+    },
+    "FWT": {
+      "mean": 81.25,
+      "sample_sd": 5.7282196186948
+    },
+    "NBT": {
+      "mean": -7.037037037037037,
+      "sample_sd": 5.894738534221113
+    },
+    "OldFinal": {
+      "mean": 82.22222222222221,
+      "sample_sd": 7.876359377087682
+    },
+    "FinalAll": {
+      "mean": 82.5,
+      "sample_sd": 6.614378277661476
+    }
+  },
+  "monitor_status": "DELETE_AFTER_VERIFIED_PUBLICATION"
 }
