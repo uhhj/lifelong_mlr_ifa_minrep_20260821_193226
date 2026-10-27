@@ -171,3 +171,7 @@ Task6暴露了方法仍未解决的长期保持问题。seed43从Stage8的75%降
 成本分列：三seed纯epoch共329.964972分钟，316500主更新；66隔离准入优化器调用、216正式额外梯度autograd、78准入autograd、120训练采集、600正式评估分别保留。最终CPU核验及诊断为2866次策略调用、15873窗口，250.821875秒，0优化器/0环境。CPU诊断时间不含外围进程启动和传输。采集event计时与缓存metadata计时的起止边界略有不同，原数值均保留，不混写为墙钟总时间。
 
 证据：LOCAL_FINAL_AUDIT.json、COMPARISON.json、MATCHED_DIAGNOSTIC_ANALYSIS.json、全部diagnostics与逐episode结果。最后一项明确记录共同窗口标识、统一尺度、配对SF/FS及输入SHA。完整验收是工程和记录接受，不是科学优越性保证。
+
+## 发布与监控收尾
+
+全部S OBJECT seed41/42/43已完成并独立验收；完整报告已发布核验提交996620d11efd1082072ca1355444816c92a0a307。s-object-seed41-42-43已由应用删除。无进一步检查、训练、采集、评估或扩seed计划。详见REPORT.md及final_readonly_20261027_120754。
