@@ -1,3 +1,9 @@
+# 最终完成 2026-10-27T22:34:21.567241+08:00
+
+C GOAL42/43、OBJECT41/42/43全部2000epoch468700主更新及1000正式回合实际完成。controller与五组train/evaluate自然exit0，无自身残留。final_readonly_20261027_222119/LOCAL_FINAL_AUDIT实际PASS_COMPLETE_LOCAL_ACCEPTANCE：20严格CPU CP、5完整恢复、15教师缓存、1000初态真实字节noise及独立标量复算通过。三seed完整矩阵、C/S初态配对和36个共同专家窗口单元、机制分析与所有负结果已完成。GOAL41沿用v3接受结果，不重训。
+
+外置最终FP32权重断言与Windows路径修复已保留失败/原脚本/成本并实际重审通过，冻结科学代码未改，0额外优化器/环境。最终报告：final_readonly_20261027_222119/REPORT.md。全部本轮工作完成；经本目录publish.py核远端SHA后删除监控c-goal42-43-object41-43，不再派发任何实验，不自动扩seed。以下历史PARTIAL仅为当时观察，不作为当前状态。
+
 # 最新2026-10-27 20:18 CST即时检查覆盖
 
 用户请求检查进度。实际观察2026-10-27T20:15:34.810744+08:00，check_readonly_20261027_201533/LOCAL_AUDIT、TRAINING_COMPLETION_METADATA_AUDIT及EVALUATION_PROGRESS_AUDIT实际PASS_PROGRESS_NOT_FINAL。五组GOAL42/43及OBJECT41/42/43各400完整epoch、共2000epoch468700主更新全部完成，五train_C.exit均0，20阶段CP记录SHA绑定。上轮四组全400轮及OBJECT43前106轮逐字段精确保留，无重复。95自身隔离GPU更新全部准入PASS，240正式额外autograd及60准入autograd另列；15教师身份/源CP/tau/w绑定通过，人口账目{'valid': 4449600.0, 'invalid': 227200.0, 'old_eligible': 1881500.0}逐epoch复算。五组Task6服务器tensor同本seed历史ALIGN相等记录绑定，完整20CP及恢复态仍待最终独立CPU验收。

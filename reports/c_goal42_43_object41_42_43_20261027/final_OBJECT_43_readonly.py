@@ -80,7 +80,10 @@ for arm in ARMS:
   targets=torch.stack([torch.as_tensor(stage_labels[stage][i]['next_action']) for i in ids]).float()
   scale=torch.stack([targets[:,a:b].square().mean().sqrt().clamp_min(.1) for a,b in [(0,3),(3,6),(6,7)]]).double();assert torch.allclose(tc['scales'].double(),scale,atol=1e-7,rtol=1e-7)
   ct=np.array([r['teacher_cost'] for r in tm['rows']]);assert abs(tm['tau']-max(1e-8,float(np.median(ct))))<1e-14
-  assert all(abs(r['weight']-tm['tau']/(tm['tau']+r['teacher_cost']))<1e-7 for r in tm['rows'])
+  for r in tm['rows']:
+   ref=np.float32(tm['tau'])/(np.float32(tm['tau'])+np.float32(r['teacher_cost']))
+   assert np.isfinite(r['weight']) and 0<=r['weight']<=1
+   assert abs(r['weight']-float(ref))<=float(np.spacing(ref))
   teacher=model(model_path(arm,stage-1));out=[];maxcache=0.
   for start in range(0,len(ids),32):
    chunk=ids[start:start+32];x=torch.stack([torch.load(manifests[stage][i]['path'],map_location='cpu')['feature'].squeeze(0) for i in chunk]);y=torch.stack([torch.as_tensor(stage_labels[stage][i]['next_action']) for i in chunk]).double()

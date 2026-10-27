@@ -41,7 +41,7 @@ for case,remote in v['cases'].items():
    if delta<0:neg.append(dict(case=case,stage=stage,task=task,delta_pp=delta))
  pairs[case]=pp
  for stage in range(7,10):
-  name=case+'_C_'+str(stage);filename='diagnostics/'+name+'.json';meta=v['diagnostic_files'][filename];p=D/filename;assert sha(p)==meta['sha256'];rows=js(p)
+  name=case+'_C_'+str(stage);filename='diagnostics/'+name+'.json';meta={k.replace('\\','/'):x for k,x in v['diagnostic_files'].items()}[filename];p=D/filename;assert sha(p)==meta['sha256'];rows=js(p)
   expected={i:x for i,x in enumerate(stages[str(stage)]['rows']) if x['task']<stage and x['bc_valid']};assert len(rows)==meta['rows']==len(expected) and {x['index'] for x in rows}==set(expected)
   scored=[]
   for row in rows:
