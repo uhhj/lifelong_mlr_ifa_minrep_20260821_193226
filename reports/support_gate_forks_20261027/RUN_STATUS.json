@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-28T05:37:48.798744+08:00",
+  "observation": "2026-10-28T06:52:28.059188+08:00",
   "counts": {
     "GOAL_41": {
       "C": {
@@ -78,20 +78,20 @@
         "last_epoch_seconds": 14.856539487838745
       },
       "G": {
-        "epochs": 7,
-        "accepted_updates": 1295,
-        "physical_optimizer_calls": 2590,
-        "last_epoch_seconds": 43.31412935256958
+        "epochs": 100,
+        "accepted_updates": 18500,
+        "physical_optimizer_calls": 37000,
+        "last_epoch_seconds": 44.89176559448242
       },
-      "gate_blocks_observed": 146,
-      "gate_Q_accepts": 79
+      "gate_blocks_observed": 1900,
+      "gate_Q_accepts": 1111
     },
     "OBJECT_41": {
       "C": {
-        "epochs": 0,
-        "accepted_updates": 0,
-        "physical_optimizer_calls": 0,
-        "last_epoch_seconds": null
+        "epochs": 20,
+        "accepted_updates": 7240,
+        "physical_optimizer_calls": 7240,
+        "last_epoch_seconds": 16.315473318099976
       },
       "S": {
         "epochs": 0,
@@ -119,10 +119,10 @@
       }
     }
   },
-  "epochs": 1107,
-  "accepted_updates": 204795,
-  "physical_training_optimizer_calls": 243090,
-  "own_isolated_optimizer_calls": 348,
+  "epochs": 1220,
+  "accepted_updates": 229240,
+  "physical_training_optimizer_calls": 284740,
+  "own_isolated_optimizer_calls": 377,
   "formal_episodes": 0,
   "failures": {},
   "processes": [
@@ -131,31 +131,31 @@
       "command": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/controller.py "
     },
     {
-      "pid": 31444,
-      "command": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/GOAL_43/train.py G "
+      "pid": 31681,
+      "command": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/OBJECT_41/train.py C "
     },
     {
-      "pid": 31460,
-      "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/GOAL_43/train.py G "
+      "pid": 31697,
+      "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/OBJECT_41/train.py C "
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1437704192,
+      "free": 1437687808,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 363962368
+      "spare": 363945984
     },
     "/data": {
-      "free": 40926347264,
-      "remaining_bound": 4173971456,
+      "free": 40491503616,
+      "remaining_bound": 3741020160,
       "reserve": 2147483648,
-      "spare": 34604892160
+      "spare": 34602999808
     }
   },
-  "snapshot_sha256": "04c2097dc3498723034287fbacba5946d1382bbb179b49bf7c9dea3e070a1775",
+  "snapshot_sha256": "8d6dee8faaad574384ef4b6779eb6918f30875a52c21610290d248f440ed7fd7",
   "contract": "9b53df5a8fbe894e7b27887462b7b25b4e8477a9ad12820deb8df162632fb978",
-  "latest_evidence": "check_readonly_20261028_053747",
+  "latest_evidence": "check_readonly_20261028_065227",
   "root": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1",
   "controller": 29838,
   "mechanism_budget": {
