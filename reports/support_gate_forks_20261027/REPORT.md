@@ -1,8 +1,8 @@
 # 支持度与门控共同起点机制实验
 
-状态：PARTIAL_TRAINING；观察 2026-10-28T02:51:36.001291+08:00。
+状态：PARTIAL_TRAINING；观察 2026-10-28T03:18:11.484447+08:00。
 
-已实际接受完整epoch账目 620；主更新 114700；候选实际训练优化器调用 133200；隔离准入 203；正式环境 0/1120。尚无科学收益或最终验收结论。
+已实际接受完整epoch账目 709；主更新 131165；候选实际训练优化器调用 151330；隔离准入 232；正式环境 0/1120。尚无科学收益或最终验收结论。
 
 {
   "GOAL_41": {
@@ -47,17 +47,19 @@
       "last_epoch_seconds": 15.774545192718506
     },
     "Q": {
-      "epochs": 20,
-      "accepted_updates": 3700,
-      "physical_optimizer_calls": 3700,
-      "last_epoch_seconds": 14.574110269546509
+      "epochs": 100,
+      "accepted_updates": 18500,
+      "physical_optimizer_calls": 18500,
+      "last_epoch_seconds": 14.738142251968384
     },
     "G": {
-      "epochs": 0,
-      "accepted_updates": 0,
-      "physical_optimizer_calls": 0,
-      "last_epoch_seconds": null
-    }
+      "epochs": 9,
+      "accepted_updates": 1665,
+      "physical_optimizer_calls": 3330,
+      "last_epoch_seconds": 42.868476152420044
+    },
+    "gate_blocks_observed": 181,
+    "gate_Q_accepts": 90
   },
   "GOAL_43": {
     "C": {
@@ -121,10 +123,10 @@
 
 {
   "case": "GOAL_42",
-  "arm": "Q",
-  "observed_epochs": 20,
-  "recent_epoch_seconds": 14.287142300605774,
-  "remaining_training_minutes": 19.049523067474365,
+  "arm": "G",
+  "observed_epochs": 9,
+  "recent_epoch_seconds": 42.44180862108866,
+  "remaining_training_minutes": 64.37007640865114,
   "preparation_saving_extra": true,
   "not_total_queue_prediction": true
 }
