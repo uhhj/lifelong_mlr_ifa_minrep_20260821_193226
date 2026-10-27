@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-28T06:52:28.059188+08:00",
+  "observation": "2026-10-28T07:19:17.083839+08:00",
   "counts": {
     "GOAL_41": {
       "C": {
@@ -88,16 +88,16 @@
     },
     "OBJECT_41": {
       "C": {
-        "epochs": 20,
-        "accepted_updates": 7240,
-        "physical_optimizer_calls": 7240,
-        "last_epoch_seconds": 16.315473318099976
+        "epochs": 100,
+        "accepted_updates": 36200,
+        "physical_optimizer_calls": 36200,
+        "last_epoch_seconds": 17.098241329193115
       },
       "S": {
-        "epochs": 0,
-        "accepted_updates": 0,
-        "physical_optimizer_calls": 0,
-        "last_epoch_seconds": null
+        "epochs": 4,
+        "accepted_updates": 1448,
+        "physical_optimizer_calls": 1448,
+        "last_epoch_seconds": 31.040600299835205
       },
       "Q": {
         "epochs": 0,
@@ -119,10 +119,10 @@
       }
     }
   },
-  "epochs": 1220,
-  "accepted_updates": 229240,
-  "physical_training_optimizer_calls": 284740,
-  "own_isolated_optimizer_calls": 377,
+  "epochs": 1304,
+  "accepted_updates": 259648,
+  "physical_training_optimizer_calls": 315148,
+  "own_isolated_optimizer_calls": 406,
   "formal_episodes": 0,
   "failures": {},
   "processes": [
@@ -131,31 +131,31 @@
       "command": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/controller.py "
     },
     {
-      "pid": 31681,
-      "command": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/OBJECT_41/train.py C "
+      "pid": 31930,
+      "command": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/OBJECT_41/train.py S "
     },
     {
-      "pid": 31697,
-      "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/OBJECT_41/train.py C "
+      "pid": 31946,
+      "command": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1/OBJECT_41/train.py S "
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1437687808,
+      "free": 1437622272,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 363945984
+      "spare": 363880448
     },
     "/data": {
-      "free": 40491503616,
-      "remaining_bound": 3741020160,
+      "free": 40145022976,
+      "remaining_bound": 3394678784,
       "reserve": 2147483648,
-      "spare": 34602999808
+      "spare": 34602860544
     }
   },
-  "snapshot_sha256": "8d6dee8faaad574384ef4b6779eb6918f30875a52c21610290d248f440ed7fd7",
+  "snapshot_sha256": "bdac66941b964bcd7db271b68ea3c1d1c4af7255b1b2838dbeae4575a8d199a8",
   "contract": "9b53df5a8fbe894e7b27887462b7b25b4e8477a9ad12820deb8df162632fb978",
-  "latest_evidence": "check_readonly_20261028_065227",
+  "latest_evidence": "check_readonly_20261028_071915",
   "root": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1",
   "controller": 29838,
   "mechanism_budget": {
