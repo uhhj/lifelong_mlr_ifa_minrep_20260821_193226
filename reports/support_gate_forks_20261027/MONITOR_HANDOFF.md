@@ -1,5 +1,14 @@
 # 支持度门控机制实验 → 最新完整S OBJECT41/42/43
 
+## 最新2026-10-28 05:39 CST覆盖
+
+实际05:37:48观察check_readonly_20261028_053747/LOCAL_AUDIT、TRANSITION_AUDIT及Q_ONE_PREFIX_AUDIT实际PASS_PROGRESS_NOT_FINAL。56冻结项不变，controller29838/GPU31460健康。GOAL43 C/S/Q均100完整epoch18500步且各train.exit0，Q纯epoch23.910168min；Q全部100轮非计时字段与S精确相同，最终tensor CPU相等仍待实际验收。上轮Q前14轮、其他完成组全部epoch及门控前缀逐字段保留。已自然接续G，其自身29隔离调用/11autograd及完整候选恢复、lambda0=原C、q1=原S、10步重放、测量/探针状态不变准入实际PASS，共同初态SHA与同seed C相等。
+
+G完整7epoch1295接受步/2590物理训练调用；快照共146门控块（含第8轮13块），79接受Q，已记录决策均独立复算通过。部分轮不计入完整epoch总账，门控接受不是闭环收益。累计1107完整epoch204795接受/243090物理训练调用、348自身隔离调用，正式0/1120。OBJECT机制五组尚未启动，不能套GOAL准入。没有恢复重启或改参。
+
+G自身前7轮平均42.988171秒，余93轮66.631666min纯计算（含双候选/探针），保存准备另计；同一监控下一70min检查当前G整run结束附近，参考06:45–06:50，不是OBJECT/全队列或正式评估ETA。system普通留1GiB后余363962368B；data扣剩余4173971456B及2GiB后余34604892160B，无删除付费。整体PARTIAL，最终CPU/闭环待全部队列自然结束。本段覆盖旧Q进度与25min间隔，机制全部对照及随后仅最新完整S OBJECT三seed的授权不变。
+
+
 ## 最新2026-10-28 05:11 CST覆盖
 
 实际05:09:43观察check_readonly_20261028_050942/LOCAL_AUDIT、TRANSITION_AUDIT及Q_ONE_PREFIX_AUDIT实际PASS_PROGRESS_NOT_FINAL。56冻结项不变，controller29838/GPU31341正常；GOAL43 S完整100epoch18500步、train_S.exit0，纯epoch24.138734min，已自然接续Q。原S前32轮、其他已完成全部epoch及门控前缀逐字段精确保留。Q完整14epoch2590步，自身29隔离调用/11autograd、完整恢复、lambda0/q1、10步重放及测量探针状态不变实际PASS，共同初态SHA与同seed C相等；Q全部14轮非计时字段与S前缀逐项精确一致（该seed q全1），最终tensor CPU相等仍待真实验收。
