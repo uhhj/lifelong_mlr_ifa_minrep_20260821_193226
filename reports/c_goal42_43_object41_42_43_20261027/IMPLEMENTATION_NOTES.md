@@ -1,0 +1,7 @@
+# 派生实现边界
+
+科学父本为已验收20261025_ccbp_v3_full engineering02 C；其冻结服务端9源文件全部和本地归一LF文本SHA一致。保留losses/legacy_losses/updates及其未启用R/G辅助定义，ARMS仅C，未派发任何R/G。OBJECT和GOAL各父manifest允许合法mask数量随seed改变。
+
+服务端部署一次，实际Python3.8 import与原合成数值检查五case通过后才controller启动。合成检查不是自己的GPU更新准入；只有GOAL42 Task6首4隔离更新当前PASS。最终外置检查不能在活跃训练/评估运行，不得重跑build_extension、prepare_local、deploy_remote或controller。
+
+凭据worker26908通过用户已授权Windows Credential Manager取入内存，.session_control不发布。来源和容量只读预检未增加科学环境。源码冻结后只允许外置检查器留证修复；不得借修复改变目标、seed、预算或重试正常负结果。

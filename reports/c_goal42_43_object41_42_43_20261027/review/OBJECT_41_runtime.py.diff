@@ -1,0 +1,13 @@
+--- accepted_C/runtime.py
++++ OBJECT_41/runtime.py
+@@ -1,8 +1,8 @@
+ import os,sys,json,hashlib,time,copy
+ from pathlib import Path
+ R=Path(__file__).resolve().parent
+-O=Path('/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022')
+-S=Path('/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source')
++O=Path('/data/mlr_ifa/experiments/CAETv3_ALIGN_OBJECT_seed41_20261022_collate01')
++S=Path('/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/ALIGN/source')
+ from layout import *
+ os.environ.update(CORESET_OUT=str(O),CORESET_SEED='41',CAET_VARIANT='ALIGN',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',TOKENIZERS_PARALLELISM='false',LIBERO_CONFIG_PATH='/data/mlr_ifa/config',HF_HOME='/data/mlr_ifa/cache/huggingface',MUJOCO_GL='egl',MPLBACKEND='Agg',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',PYTHONDONTWRITEBYTECODE='1')
+ sys.path.insert(0,str(S))

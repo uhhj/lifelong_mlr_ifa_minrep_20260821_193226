@@ -1,0 +1,52 @@
+--- accepted_C/evaluate.py
++++ OBJECT_42/evaluate.py
+@@ -1,4 +1,4 @@
+-"""Exactly 600 paired episodes, no retries; no raw observations/actions exported."""
++"""Exactly 200 paired episodes, no retries; no raw observations/actions exported."""
+ import collections
+ from runtime import *
+ from coreset_exp.model import data_setup,complete
+@@ -18,7 +18,7 @@
+ @torch.no_grad()
+ def main():
+  verify();capacity();assert not (R/'EVALUATION_STARTED.json').exists(),'No blind formal evaluation resume'
+- c=EasyDict(js(O/'resolved_eval.json'));c.training=False;control_seed(41);b,ds,shape=data_setup(c,True);c.shape_meta=shape
++ c=EasyDict(js(O/'resolved_eval.json'));c.training=False;control_seed(SEED);b,ds,shape=data_setup(c,True);c.shape_meta=shape
+  front=complete(c,shape).eval().requires_grad_(False);instr,mask=b.get_task_emb(8)
+  gen=torch.Generator().manual_seed(20261024);obs={k:torch.rand((2,8,*v),generator=gen).cuda() for k,v in shape['all_shapes'].items()}
+  base={'task_emb':instr.repeat(2,1).cuda(),'masks':mask.repeat(2,1).cuda()};frames=[encode(front,dict(obs={k:v[:,i:i+1] for k,v in obs.items()},**base)) for i in range(8)]
+@@ -29,7 +29,7 @@
+   q0=p.policy_head.forward_fn(p.temporal_encode(whole)[:,-1]);q1=p.policy_head.forward_fn(p.temporal_encode(cached)[:,-1]);assert all(torch.allclose(x,y,atol=1e-4,rtol=1e-4) for x,y in zip(q0,q1))
+   parity.append(dict(length=n,max_feature_abs=float((whole-cached).abs().max()),max_param_abs=max(float((x-y).abs().max()) for x,y in zip(q0,q1))))
+  write(R/'EVAL_ADMISSION.json',dict(status='PASS',cache_parity=parity,frontend_calls=16,policy_parameter_calls=16,environments=0,updates=0,official_cp_sha256=sha(c.pretrain)))
+- write(R/'EVALUATION_STARTED.json',dict(time=time.time(),pid=os.getpid(),budget=600));records=[]
++ write(R/'EVALUATION_STARTED.json',dict(time=time.time(),pid=os.getpid(),budget=200));records=[]
+  for arm in ARMS:
+   for stage in range(6,10):
+    p=load(arm,stage,c,shape);cp_sha=sha(model_path(arm,stage))
+@@ -38,11 +38,11 @@
+     args=dict(bddl_file_name=str(Path(c.bddl_folder)/task.problem_folder/task.bddl_file),camera_heights=c.data.img_h,camera_widths=c.data.img_w)
+     for group in [0,1]:
+      capacity();run='%s_s%d_t%d_g%d'%(arm,stage,taskid,group);indices=list(range(group*10,(group+1)*10));tic=time.monotonic()
+-     eps=np.stack([np.random.RandomState(20261024+41*1000+taskid*100+i).standard_normal((600,7)).astype(np.float32) for i in indices])
++     eps=np.stack([np.random.RandomState(20261024+SEED*1000+taskid*100+i).standard_normal((600,7)).astype(np.float32) for i in indices])
+      event('start',run=run,cp_sha256=cp_sha,initial_file_sha256=initial_sha)
+      env=SubprocVectorEnv([lambda:OffScreenRenderEnv(**args) for _ in indices])
+      try:
+-      control_seed(41);env.seed(41+group);env.reset();env.seed(41+group);ob=env.set_init_state(initials[indices])
++      control_seed(SEED);env.seed(SEED+group);env.reset();env.seed(SEED+group);ob=env.set_init_state(initials[indices])
+       for _ in range(5):ob,_,_,_=env.step(np.zeros((10,7)))
+       hist=collections.deque(maxlen=8);done=np.zeros(10,dtype=bool);end=np.full(10,600);hashers=[hashlib.sha256() for _ in indices]
+       for step in range(600):
+@@ -54,9 +54,9 @@
+        for j in range(10):
+         if not done[j] and success[j]:done[j]=True;end[j]=step+1
+        if done.all():break
+-      batch=[dict(arm=arm,stage=stage,task=taskid,initial_index=i,env_seed=41+group,initial_file_sha256=initial_sha,initial_sha256=ah(np.asarray(initials[i])),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp_sha,success=bool(done[j]),steps=int(end[j]),attempt=1,termination='success' if done[j] else 'timeout600') for j,i in enumerate(indices)]
++      batch=[dict(arm=arm,stage=stage,task=taskid,initial_index=i,env_seed=SEED+group,initial_file_sha256=initial_sha,initial_sha256=ah(np.asarray(initials[i])),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp_sha,success=bool(done[j]),steps=int(end[j]),attempt=1,termination='success' if done[j] else 'timeout600') for j,i in enumerate(indices)]
+       records.extend(batch);write(R/'outcomes'/(run+'.json'),batch);write(R/'OUTCOMES.json',records)
+      finally:env.close()
+      event('complete',run=run,seconds=time.monotonic()-tic,episodes=len(records))
+- assert len(records)==600;verify();write(R/'EVALUATION_COMPLETE.json',dict(status='PASS_EXECUTION_PENDING_LOCAL_AUDIT',episodes=600,vectors=60,cells=30,time=time.time()))
++ assert len(records)==200;verify();write(R/'EVALUATION_COMPLETE.json',dict(status='PASS_EXECUTION_PENDING_LOCAL_AUDIT',episodes=200,vectors=20,cells=10,time=time.time()))
+ if __name__=='__main__':main()

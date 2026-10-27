@@ -1,0 +1,11 @@
+--- accepted_C/train.py
++++ OBJECT_42/train.py
+@@ -101,7 +101,7 @@
+     same_device=equal(actual,reference);assert same_device,'Task6 must match current-card C exactly'
+     write(R/('TASK6_PARITY_'+arm+'.json'),dict(historical_ALIGN_equal=same,historical_equality_gate=False,historical_max_abs=max(float((actual[k].double()-baseline[k].double()).abs().max()) for k in actual),same_device_C_equal=same_device,source_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),actual_sha256=sha(target),current_C_sha256=sha(model_path('C',6))))
+    write(R/('STAGE_%s_%d.json'%(arm,stage)),dict(status='PASS_TRAINING_PENDING_FINAL',model=str(target),sha256=sha(target),steps=a.step,epochs=100,stage=stage,teacher=teacher['cache_sha256'] if teacher else None))
+-  assert a.step==76100 and len(history)==400
++  assert a.step==105500 and len(history)==400
+   write(R/('TRAIN_'+arm+'.json'),dict(status='PASS',epochs=400,steps=a.step,summed_epoch_seconds=sum(r['seconds'] for r in history),gradient_autograd_calls=sum(r['extra_autograd_calls'] for r in gradients),checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))
+  finally:dist.destroy_process_group()
+ if __name__=='__main__':main()
