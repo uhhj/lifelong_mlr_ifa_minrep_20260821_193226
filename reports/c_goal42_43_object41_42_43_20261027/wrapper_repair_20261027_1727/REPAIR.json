@@ -1,0 +1,81 @@
+{
+  "status": "FP32_RECOMPUTATION_VERIFIED_PENDING_FULL_REAUDIT",
+  "original_error": "AssertionError audit_progress.py line34: float64 weight recomputation absolute error <1e-7",
+  "reason": "Frozen train.py computes tau/(tau+ct) on FP32 CUDA tensor; independent NumPy FP32 reference differs by at most one output ULP. One float64 comparison exceeds threshold by 5.26518e-12.",
+  "before_sha256": "f6628fc7cd66e81d4729e79ebadcee12d9881ec90bd652cdaf342ec15f3d0bc2",
+  "after_sha256": "b00fdfb4bc9e6d1d47abac9755ddf3d69133fb02fab57e147575438879d6987f",
+  "frozen_train_source_sha256": "87ef83f9c3d47702f3e075755e6a92675434b9942ca064c860c430e92bb6fe2b",
+  "checks": [
+    {
+      "file": "check_readonly_20261027_172427\\light\\GOAL_42\\TEACHER_C_7.json",
+      "count": 479,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\GOAL_42\\TEACHER_C_8.json",
+      "count": 899,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\GOAL_42\\TEACHER_C_9.json",
+      "count": 1326,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\GOAL_43\\TEACHER_C_7.json",
+      "count": 476,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\GOAL_43\\TEACHER_C_8.json",
+      "count": 889,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\GOAL_43\\TEACHER_C_9.json",
+      "count": 1315,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\OBJECT_41\\TEACHER_C_7.json",
+      "count": 764,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\OBJECT_41\\TEACHER_C_8.json",
+      "count": 1480,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\OBJECT_41\\TEACHER_C_9.json",
+      "count": 2236,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": []
+    },
+    {
+      "file": "check_readonly_20261027_172427\\light\\OBJECT_42\\TEACHER_C_7.json",
+      "count": 762,
+      "max_fp32_ulp": 1.0,
+      "old_assertion_failures": [
+        {
+          "index": 1765,
+          "teacher_cost": 0.00038153829518705606,
+          "weight": 0.8931519985198975,
+          "float64_delta": 1.000052651800587e-07,
+          "fp32_reference": 0.8931519389152527
+        }
+      ]
+    }
+  ],
+  "remote_changes": 0,
+  "extra_optimizer_calls": 0,
+  "extra_environments": 0
+}

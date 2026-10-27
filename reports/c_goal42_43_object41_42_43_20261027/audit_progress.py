@@ -31,7 +31,10 @@ for case in cases:
    assert m['source_sha256']==get('STAGE_C_%d.json'%(t-1))['sha256']
    for r in m['rows']:
     assert r['sample_sha256']==expected[r['index']]['sha256'] and r['task']==expected[r['index']]['task']
-    assert abs(r['weight']-m['tau']/(m['tau']+r['teacher_cost']))<1e-7
+    # Frozen teacher weights use FP32 CUDA arithmetic, not Python float64.
+    ref=np.float32(m['tau'])/(np.float32(m['tau'])+np.float32(r['teacher_cost']))
+    assert np.isfinite(r['weight']) and 0<=r['weight']<=1
+    assert abs(r['weight']-float(ref))<=float(np.spacing(ref))
    assert abs(m['tau']-max(1e-8,statistics.median(r['teacher_cost'] for r in m['rows'])))<1e-14
    teachers[case+'_'+str(t)]=dict(count=m['count'],tau=m['tau'],cache_sha256=m['cache_sha256'],source_sha256=m['source_sha256'])
   sm=get('STAGE_C_%d.json'%t)

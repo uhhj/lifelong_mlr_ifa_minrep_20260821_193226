@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL_TRAINING",
-  "observation": "2026-10-27T15:47:17.144416+08:00",
-  "latest_evidence": "check_readonly_20261027_154716",
+  "observation": "2026-10-27T17:24:28.723134+08:00",
+  "latest_evidence": "check_readonly_20261027_172427",
   "counts": {
     "GOAL_42": {
       "epochs": 400,
@@ -24,21 +24,21 @@
       }
     },
     "OBJECT_41": {
-      "epochs": 70,
-      "steps": 10990,
+      "epochs": 400,
+      "steps": 105500,
       "by_stage": {
-        "6": 70,
-        "7": 0,
-        "8": 0,
-        "9": 0
+        "6": 100,
+        "7": 100,
+        "8": 100,
+        "9": 100
       }
     },
     "OBJECT_42": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 125,
+      "steps": 21375,
       "by_stage": {
-        "6": 0,
-        "7": 0,
+        "6": 100,
+        "7": 25,
         "8": 0,
         "9": 0
       }
@@ -64,25 +64,29 @@
     "GOAL_43_7": 5,
     "GOAL_43_8": 5,
     "GOAL_43_9": 5,
-    "OBJECT_41_6": 4
+    "OBJECT_41_6": 4,
+    "OBJECT_41_7": 5,
+    "OBJECT_41_8": 5,
+    "OBJECT_41_9": 5,
+    "OBJECT_42_6": 4,
+    "OBJECT_42_7": 5
   },
   "root": "/data/mlr_ifa/experiment_workspaces/CCBP_C_GOAL42_43_OBJECT41_42_43_20261027_v1",
   "controller": 2559,
   "contract": "437079ad07605ce4da40a82ef3b2d93e1b1b0ff4eef370c72deea80294b55f08",
   "hardware": "NVIDIA GeForce RTX 3090, 24576 MiB, 535.230.02\n",
-  "next_check_minutes": 90,
+  "next_check_minutes": 80,
   "eta": {
-    "active_case": "OBJECT_41",
-    "task6_remaining_measured_minutes": 2.42985577583313,
-    "aux_reference": "GOAL43 same3090 per-stage seconds/batch scaled by OBJECT batches",
-    "aux_reference_minutes": {
-      "7": 18.974410411351016,
-      "8": 25.16549758086333,
-      "9": 29.612998643827012
+    "active_case": "OBJECT_42",
+    "task7_remaining_measured_minutes": 13.595363318920135,
+    "later_stage_reference": "OBJECT41 same3090 completed stage8/9",
+    "later_stage_reference_minutes": {
+      "8": 25.92731250921885,
+      "9": 30.222567915916443
     },
-    "remaining_pure_reference_minutes": 76.18276241187449,
+    "remaining_pure_reference_minutes": 69.74524374405543,
     "extra_preparation_minutes_planning_only": 10,
-    "own_aux_speed_measured": false,
+    "own_later_stage_speed_measured": false,
     "whole_queue_eta": "not measured"
   },
   "final_acceptance": "PENDING_REAL_CPU_AND_COMPLETE_FORMAL_EVALUATION"

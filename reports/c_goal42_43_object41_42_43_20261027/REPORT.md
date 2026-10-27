@@ -39,3 +39,18 @@ OBJECT41 Task6最近10轮均4.859712秒，余30轮约2.429856min。OBJECT辅助�
 capacity_readonly_20261027_154747/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余364351488B；data唯一inode抵扣余新增4878020608B并留2GiB后余39818235904B。仅stat，0payload/服务器写入/模型/优化器/环境，无删除付费。整体PARTIAL；全队列自然退出后才真实最终验收，外置最终wrappers仍未实际运行。
 
 本段覆盖旧GOAL43进度和60分钟间隔，其余冻结协议/恢复/发布权限不变。
+
+
+# 最新2026-10-27 17:29 CST交接
+
+实际观察2026-10-27T17:24:28.723134+08:00，check_readonly_20261027_172427/LOCAL_AUDIT及OBJECT41_TO_42_TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。68冻结项及父源不变，controller2559/GPU3254健康，已自然接续OBJECT42 Task7。GOAL42/43及OBJECT41各完整400epoch，分别76100/76100/105500主步，train_C.exit均0、十二CP记录绑定；前轮GOAL两组全400轮和OBJECT41前70轮逐字段精确保留，无重训。OBJECT41纯epoch83.323171分钟，48额外autograd另列，准备/教师/保存另计；最终独立CPU仍待全队列结束。
+
+OBJECT42已125完整epoch21375步（Task6 100/Task7 25），自己的4+5隔离GPU更新、完整下一步恢复/原ALIGN和原C更新/状态化测量准入实际PASS；旧后续阶段待自身准入，OBJECT43未开始。累计1325epoch279075主步、66隔离优化器调用，十份教师身份/tau/w与本组前阶段CP绑定通过，正式0/1000。OBJECT41/42 Task6服务器tensor与各自历史ALIGN精确相等记录已绑定，不能替代最终CPU验收。
+
+本轮外置audit_progress首次因用Python float64复算FP32教师权重的固定1e-7断言失败：单窗口差1.0000526518e-7。已保留原脚本与错误；按冻结train.py的FP32加法/除法独立复算全部十份教师，最大仅1输出ULP，改为有限值/0–1范围及FP32参考1ULP检查。同一快照重审实际PASS，wrapper_repair_20261027_1727/RESOLUTION绑定SHA。仅外置审计修复，服务器源码/参数/进程未改，0额外优化器/环境，不把包装精度断言当科学失败。
+
+OBJECT42 Task7最近10轮均10.876291秒，余75轮13.595363min；Task8/9自身未测，借刚完成同卡OBJECT41实测共56.149880min，剩纯计算参考69.745244min。另加10min未实测准备/缓存/保存余量，下一80分钟检查OBJECT42整组结束附近，暂参考18:35–18:50 CST；不是OBJECT43或全部1000正式完成时间，不作保证上界，不内部Task短轮询。
+
+capacity_readonly_20261027_172454/LOCAL_AUDIT实际PASS_NOT_FINAL：system普通留1GiB后余364335104B；data唯一inode抵扣余新增3833294848B且留2GiB后余39816261632B。仅stat，0payload/服务器写入/模型/优化器/环境，无删除付费。整体PARTIAL；最终wrappers仍待全队列自然退出后真实验收。
+
+本段覆盖旧OBJECT41进度和90分钟间隔，其余冻结协议/恢复/发布权限不变。
