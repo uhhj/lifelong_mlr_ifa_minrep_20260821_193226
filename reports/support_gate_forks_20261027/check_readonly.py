@@ -1,39 +1,45 @@
-"""Read-only lightweight progress snapshot; never touches checkpoint payloads."""
-import json,hashlib,os,subprocess,time
+"""Read-only observation of the new full-S root, including split gate records."""
+import json,os,hashlib,time,subprocess
 from pathlib import Path
-Q=Path('/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1');P=Path('/data/mlr_ifa/experiments/SUPPORT_GATE_FORKS_20261027_v1')
+Q=Path('/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1')
+PRIVATE=Path('/data/mlr_ifa/experiments')/Q.name
+OLD=Path('/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1')
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
-js=lambda p:json.loads(Path(p).read_text())
-contract=js(Q/'CONTRACT.json');hashes={p:sha(p) for p in contract['files']};assert hashes==contract['files']
-E=Q/'engineering_resume_20261028_v1'
-engineering=None
-if E.exists():
-    ec=js(E/'CONTRACT.json');eh=sha(E/'CONTRACT.json')
-    assert eh=='f853cc7498f0a634e8d8a5c631630bfd0353452d525bfda5f14c0721bdb77050'
-    engineering_hashes={p:sha(E/p) for p in ec['files']}
-    assert engineering_hashes==ec['files']
-    engineering=dict(contract_sha256=eh,files=engineering_hashes)
-light={};tails={};procs=[]
-for p in Q.rglob('*'):
-    if not p.is_file():continue
-    n=p.relative_to(Q).as_posix()
-    if p.suffix in ['.json','.jsonl','.exit'] and p.name not in ['BINDING.json','CASES.json','PREDEPLOY.json']:
-        assert p.stat().st_size<12*1024**2
-        raw=p.read_bytes();light[n]=dict(sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw),text=raw.decode())
-    elif p.suffix=='.log':tails[n]=p.read_text(errors='replace')[-3000:]
+c=json.loads((Q/'CONTRACT.json').read_text());assert all(sha(p)==h for p,h in c['files'].items())
+for seed in (41,42,43):
+ q=Q/('seed%d'%seed);cc=json.loads((q/'CONTRACT.json').read_text());assert sha(q/'CONTRACT.json')==c['children'][str(seed)]
+ assert all(sha(Path(cc['source_root'])/n)==h for n,h in cc['parent_source'].items())
+procs=[];oldprocs=[]
 for p in Path('/proc').glob('[0-9]*'):
-    try:cmd=(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
-    except OSError:continue
-    if str(Q) in cmd and int(p.name)!=os.getpid():procs.append(dict(pid=int(p.name),command=cmd))
-capacity={};seen=set();allocated=0
-for p in P.rglob('*') if P.exists() else []:
-    if p.is_file() and not p.is_symlink():
-        st=p.stat();key=(st.st_dev,st.st_ino)
-        if key not in seen:seen.add(key);allocated+=st.st_blocks*512
-for mount,bound,reserve,root in [('/root',0,1024**3,False),('/data',max(0,8*1024**3+(346305333 if engineering else 0)-allocated),2*1024**3,True)]:
-    st=os.statvfs(mount);free=(st.f_bfree if root else st.f_bavail)*st.f_frsize;capacity[mount]=dict(free=free,remaining_bound=bound,reserve=reserve,spare=free-bound-reserve)
-gpu_result=subprocess.run(['nvidia-smi','--query-compute-apps=pid,used_memory','--format=csv,noheader'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
-gpu_diagnostic=dict(exit=gpu_result.returncode,stdout=gpu_result.stdout,stderr=gpu_result.stderr)
-perf=subprocess.run(['nvidia-smi','--query-gpu=name,utilization.gpu,utilization.memory,power.draw,power.limit,clocks.sm,clocks.mem,temperature.gpu','--format=csv,noheader'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
-performance=dict(gpu_exit=perf.returncode,gpu=perf.stdout,gpu_error=perf.stderr,loadavg=Path('/proc/loadavg').read_text(),cpu_count=os.cpu_count())
-print(json.dumps(dict(status='READONLY_SNAPSHOT_NOT_FINAL',observed=time.time(),contract=sha(Q/'CONTRACT.json'),frozen=hashes,engineering=engineering,processes=procs,capacity=capacity,light=light,log_tails=tails,gpu=gpu_result.stdout,gpu_diagnostic=gpu_diagnostic,performance=performance,host_uptime=Path('/proc/uptime').read_text(),boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip())))
+ try:
+  cmd=(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
+  if int(p.name)!=os.getpid():
+   item=dict(pid=int(p.name),cmd=cmd,state=(p/'stat').read_text().split(')')[-1].split()[0])
+   if str(Q) in cmd:procs.append(item)
+   if str(OLD) in cmd:oldprocs.append(item)
+ except OSError:pass
+assert not oldprocs,'Canceled mechanism must remain stopped'
+light={};gate_sources={}
+def add(name,raw):
+ light[name]=dict(text=raw.decode(),sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw))
+for p in Q.rglob('*'):
+ if not p.is_file() or p.suffix not in ['.json','.jsonl','.exit'] or p.name in ['CONTRACT.json','PARENT_BINDING.json','PREDEPLOY.json']:continue
+ if p.name=='GATES.jsonl':
+  raw=p.read_bytes();full=raw[:raw.rfind(b'\n')+1];parts={}
+  for line in full.splitlines(True):
+   g=json.loads(line);parts.setdefault(g['stage'],[]).append(line)
+  for stage,lines in parts.items():add(p.parent.name+'/GATES_stage%d.jsonl'%stage,b''.join(lines))
+  gate_sources[str(p.relative_to(Q))]=dict(sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw),complete_bytes=len(full),partial_line_bytes=len(raw)-len(full))
+ else:
+  assert p.stat().st_size<8*1024**2,str(p)
+  add(str(p.relative_to(Q)),p.read_bytes())
+capacity={};allocated=0;seen=set()
+for p in PRIVATE.rglob('*') if PRIVATE.exists() else []:
+ if not p.is_file() or p.is_symlink():continue
+ st=p.stat();key=(st.st_dev,st.st_ino)
+ if key not in seen:seen.add(key);allocated+=st.st_blocks*512
+for mount,bound,reserve,usefree in [('/root',0,1024**3,False),('/data',8*1024**3,2*1024**3,True)]:
+ v=os.statvfs(mount);free=(v.f_bfree if usefree else v.f_bavail)*v.f_frsize;remaining=max(0,bound-allocated) if mount=='/data' else 0
+ capacity[mount]=dict(free=free,remaining_bound=remaining,reserve=reserve,spare=free-remaining-reserve)
+gpu=subprocess.run(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],capture_output=True,text=True)
+print(json.dumps(dict(status='READ_ONLY_SNAPSHOT_NOT_FINAL',observed=time.time(),contract_sha256=sha(Q/'CONTRACT.json'),children=c['children'],source_files=len(c['files']),processes=procs,canceled_mechanism_processes=oldprocs,gpu_diagnostic=dict(exit=gpu.returncode,stdout=gpu.stdout,stderr=gpu.stderr),capacity=capacity,light=light,gate_sources=gate_sources,log_tails={str(p.relative_to(Q)):p.read_text(errors='replace')[-4000:] for p in Q.rglob('*.log')})))
