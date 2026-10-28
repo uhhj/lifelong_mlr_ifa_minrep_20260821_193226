@@ -1,5 +1,12 @@
 # 支持度门控机制实验 → 最新完整S OBJECT41/42/43
 
+## 最新2026-10-28 10:00 CST连接复查覆盖
+
+本轮check_readonly真实目录check_readonly_20261028_095737，仍在认证前SSH banner失败，authenticated=false/remote_commands=0。新connectivity_readonly_20261028_0957/LOCAL_AUDIT绑定实际ATTEMPT SHA和时间。worker4572仍READY_IN_MEMORY，未重启。尝试通过电脑操作工具查找服务器管理页面，但cua.getState初始化失败（kernel assets路径不存在），未打开/访问/修改服务商页面；不把工具失败当服务器停机证据。
+
+当前服务器进程、训练/评估、hash、容量均未知。最后成功快照仍071915（07:19:17），旧进度和失效ETA只作历史，不能推算已完成。保持PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE，无新增训练/优化器/环境/重启/改参/删除/付费。继续同一监控60分钟传输恢复检查，已有故障无新需用户操作情况保持静默。恢复后必须先审计071915到新快照前缀、退出和冻结状态，再按原协议推进。所有机制对照及后续仅最新完整S OBJECT三seed仍未完成，不能删除监控。本段替换旧08:55连接观察，科学约束不变。
+
+
 ## 最新2026-10-28 08:58 CST连接复查覆盖
 
 08:55:32 CST再次check_readonly连接失败，实际目录check_readonly_20261028_085527（request为085526，不能猜目录）。ATTEMPT仍SSHException/Error reading SSH protocol banner、authenticated=false、remote_commands=0。connectivity_readonly_20261028_0855/LOCAL_AUDIT绑定原错误SHA；本地误按请求秒数读路径未找到后已通过文件清单定位，不涉及服务器操作。worker4572仍READY_IN_MEMORY，未重启。
