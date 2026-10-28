@@ -1,0 +1,65 @@
+{
+  "status": "SCENARIO_ETA_NOT_COMPLETION_CLAIM",
+  "observation": "2026-10-28T22:02:34.593443+08:00",
+  "recent10_epoch_seconds": 56.2296626329422,
+  "all60_epoch_seconds": 90.82771240472793,
+  "stage7_recent_range": [
+    45.83684706687927,
+    76.9217460155487
+  ],
+  "own_stage6_training_seconds": 1614.8969445228577,
+  "own_stage6_collection_seconds": 198.87078316500083,
+  "historical_600_formal_vector_seconds": 3067.6055436209863,
+  "historical_3_seed_CPU_seconds": 250.8218755722046,
+  "linear_scenarios": {
+    "recent10": {
+      "stage7_remaining_minutes": 37.4864417552948,
+      "seed41_training_plus_collection_hours": 5.407497188831256,
+      "all_seeds_training_plus_collection_hours": 19.10446239186287
+    },
+    "all60": {
+      "stage7_remaining_minutes": 60.55180826981862,
+      "seed41_training_plus_collection_hours": 8.632753468340113,
+      "all_seeds_training_plus_collection_hours": 29.93349955611563
+    }
+  },
+  "user_planning_range_hours": {
+    "seed41": [
+      6,
+      10
+    ],
+    "all_training_formal_and_acceptance": [
+      24,
+      40
+    ]
+  },
+  "all_finish_window": [
+    "2026-10-29T22:02:34.593443+08:00",
+    "2026-10-30T14:02:34.593443+08:00"
+  ],
+  "seed41_finish_window": [
+    "2026-10-29T04:02:34.593443+08:00",
+    "2026-10-29T08:02:34.593443+08:00"
+  ],
+  "next_check_minutes": 360,
+  "assumptions": [
+    "Task8/9 and seed42/43 gate throughput not measured; scaled by main-batch count from Task7.",
+    "Planning range adds allowance for more old-task/cache probe work, fluctuation, checkpoint/preparation/admission time; not a statistical confidence interval.",
+    "Current formal evaluation is not started. Historical identical evaluator timings are a reference only; allow roughly 2\u20134 hours for formal evaluation, CPU audit, reporting/publication under current variability.",
+    "No new outage, engineering failure, or changed resource allocation assumed."
+  ],
+  "limits": [
+    "Do not claim future stages have run, or use elapsed clock time as completion evidence.",
+    "Task7 current remaining time is not seed41 full-sequence time or three-seed total time.",
+    "Canceled mechanism results/costs remain separate and are never resumed."
+  ],
+  "sources": {
+    "snapshot_sha256": "e969513c0961eb1c619bcb970e9439b0ccf647ff8bcc4595f8d81a0c90e2e9bd",
+    "historical_final_audit_sha256": "b228530b2dcaae7e88dc85f71027604bde7afb16d8128d898956b0429ec05a36",
+    "historical_evaluation_audit_sha256": {
+      "41": "8ab0c159a2aaa6bdfd5fce02486ea6484d11f964730eb344982904c7e1ff38f5",
+      "42": "cce5914545a72e6217aa0d964757ce064f68278bb74f9e6e59283ee995dce896",
+      "43": "7c6499b83c861508fc305cff81ec048c5d78c854a9a0629128c7fc5808284559"
+    }
+  }
+}
