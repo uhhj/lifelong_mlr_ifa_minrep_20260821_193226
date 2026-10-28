@@ -24,4 +24,6 @@ for p in P.rglob('*') if P.exists() else []:
         if key not in seen:seen.add(key);allocated+=st.st_blocks*512
 for mount,bound,reserve,root in [('/root',0,1024**3,False),('/data',max(0,8*1024**3-allocated),2*1024**3,True)]:
     st=os.statvfs(mount);free=(st.f_bfree if root else st.f_bavail)*st.f_frsize;capacity[mount]=dict(free=free,remaining_bound=bound,reserve=reserve,spare=free-bound-reserve)
-print(json.dumps(dict(status='READONLY_SNAPSHOT_NOT_FINAL',observed=time.time(),contract=sha(Q/'CONTRACT.json'),frozen=hashes,processes=procs,capacity=capacity,light=light,log_tails=tails,gpu=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid,used_memory','--format=csv,noheader'],text=True))))
+gpu_result=subprocess.run(['nvidia-smi','--query-compute-apps=pid,used_memory','--format=csv,noheader'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+gpu_diagnostic=dict(exit=gpu_result.returncode,stdout=gpu_result.stdout,stderr=gpu_result.stderr)
+print(json.dumps(dict(status='READONLY_SNAPSHOT_NOT_FINAL',observed=time.time(),contract=sha(Q/'CONTRACT.json'),frozen=hashes,processes=procs,capacity=capacity,light=light,log_tails=tails,gpu=gpu_result.stdout,gpu_diagnostic=gpu_diagnostic,host_uptime=Path('/proc/uptime').read_text(),boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip())))

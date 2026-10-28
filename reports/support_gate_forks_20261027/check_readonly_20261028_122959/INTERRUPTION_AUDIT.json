@@ -1,0 +1,51 @@
+{
+  "status": "PARTIAL_INTERRUPTED_GPU_UNAVAILABLE",
+  "observation": "2026-10-28T12:30:00.152478+08:00",
+  "snapshot_sha256": "06333e445306e88aabaf7fff23b4c3a65e7e7569fb9f3290e68d665eb0a66409",
+  "diagnostic_sha256": "7ff4548a673309dea1ba98323505bce7b6e4739814a93bc9ba48b7091406c6e1",
+  "frozen_files": 56,
+  "previous_prefixes_exact": true,
+  "no_experiment_processes": true,
+  "signal": "SIGHUP recorded in OBJECT_41/train_S.log",
+  "missing_exit_markers": [
+    "controller.exit",
+    "OBJECT_41/train_S.exit"
+  ],
+  "gpu": {
+    "exit": 9,
+    "stdout": "NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.\n\n",
+    "stderr": ""
+  },
+  "checkpoint": {
+    "sha256": "df2c9101552a50f0478b36b1df942166c614b598a6d11af0d595fb4c9da7bb97",
+    "bytes": 346305333,
+    "mtime": 1793143235.6637695,
+    "next_epoch": 7,
+    "step": 71834,
+    "state_keys": [
+      "grads",
+      "model",
+      "modes",
+      "optimizer",
+      "requires",
+      "rng",
+      "scheduler",
+      "step"
+    ],
+    "rng_keys": [
+      "cpu",
+      "cuda",
+      "numpy",
+      "python"
+    ],
+    "history_exact": true,
+    "origin_exact": true,
+    "probe_exact": true,
+    "contract": "faa82b774815f9d298f3e39cbfabeb3fba184aec28c39933d9707d4bc084c297",
+    "physical_optimizer_calls": 2534
+  },
+  "checkpoint_last_saved_cst": "2026-10-28T07:20:35.663769+08:00",
+  "recovery_executed": false,
+  "partial_epoch_unlogged_cost": "UNKNOWN; do not treat as zero or claim exact total physical calls",
+  "next_action": "GPU must become visible; then versioned resume engineering from next_epoch7 with own restore verification; never rerun completed runs"
+}
