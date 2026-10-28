@@ -1,5 +1,9 @@
 # 支持度门控机制实验 → 最新完整S OBJECT41/42/43
 
+## 最新2026-10-28 16:00 CST连接复查覆盖
+
+15:59:39 CST只读复查仍在SSH认证前失败，authenticated=false、remote_commands=0，实际目录check_readonly_20261028_155933；错误SHA绑定于connectivity_readonly_20261028_1559/LOCAL_AUDIT.json。worker4572仍READY_IN_MEMORY且存活，未重启。没有新GPU/进程/hash/容量观察；最新真实状态仍为12:30训练中断、GPU不可见、OBJECT41 S保存7轮，总1307完整epoch，原账目与中断部分轮成本未知标记均保留。保持PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE，未恢复/重训/改参/删除/付费。继续同一监控60分钟复查；相同基础设施故障无新需行动情况静默。恢复后先核冻结hash、进程、失败证据与完整状态，再版本化从第8轮续跑，全部机制及后续仅最新完整S OBJECT三seed授权保持。
+
 ## 最新2026-10-28 15:00 CST连接复查覆盖
 
 14:59:23 CST只读复查仍在SSH认证前失败，authenticated=false、remote_commands=0，实际目录check_readonly_20261028_145918；错误SHA见connectivity_readonly_20261028_1459/LOCAL_AUDIT.json。worker4572仍READY_IN_MEMORY且存活，未重启。没有新的服务器GPU/进程/hash/容量观察，最后核实仍为12:30训练中断、GPU不可见、OBJECT41 S保存7轮，总1307完整epoch；原账目及中断部分轮成本未知的标记保留。当前PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE，未恢复或重训。继续同一监控60分钟复查传输和GPU；持续同一基础设施故障无新需行动情况静默。连接与GPU恢复后先核冻结hash、进程、原失败及完整恢复，再版本化从第8轮继续；全部机制及后续仅最新完整S OBJECT三seed仍须完成。
