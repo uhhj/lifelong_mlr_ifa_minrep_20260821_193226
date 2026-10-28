@@ -1,3 +1,5 @@
+本轮连接状态：PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE（2026-10-28T08:24:32.285406+08:00）。两次SSH在认证前失败，远程命令0；独立端口检查TCP连接成功但读取0字节即断开，未返回SSH banner。不能据此判断训练失败或停止。以下07:19:17为最后成功观察，非当前进度；未重启worker/训练、未改参。原失败证据和SHA见connectivity_readonly_20261028_0820/LOCAL_AUDIT.json。30分钟后复查传输，恢复后先检查冻结hash、进程和原账本，不盲重启。
+
 # 支持度与门控共同起点机制实验
 
 状态：PARTIAL_TRAINING；观察 2026-10-28T07:19:17.083839+08:00。

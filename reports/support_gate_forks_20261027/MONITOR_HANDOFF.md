@@ -1,5 +1,14 @@
 # 支持度门控机制实验 → 最新完整S OBJECT41/42/43
 
+## 最新2026-10-28 08:23 CST连接故障覆盖
+
+本轮两次只读请求check_readonly_20261028_081617和081933在SSH认证前失败（Error reading SSH protocol banner），各ATTEMPT真实authenticated=false/remote_commands=0，未执行服务器脚本。08:22:19独立socket只读诊断TCP连接成功、recv为0字节（对端关闭），没有SSH banner；connectivity_readonly_20261028_0820/LOCAL_AUDIT.json绑定原错误和诊断SHA。worker4572仍READY_IN_MEMORY，未重启worker或任何服务器训练/评估。不能将通信失败当训练停止或科学失败。
+
+最新真实训练观察仍为07:19:17的check_readonly_20261028_071915：OBJECT41 C100轮、S4轮，累计1304epoch259648接受/315148物理训练调用，正式0。当前实际进度未知，不沿用旧吞吐声称完成。RUN_STATUS保留原观察时间/账目，状态PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE。没有新容量或冻结hash观察，旧PASS不能套本轮。
+
+同一监控下一30min仅复查SSH传输恢复，不是训练完成ETA，也不恢复固定内部任务轮询。恢复后先queue check_readonly，读实际result目录、audit_progress、audit_transition对071915核前缀；核进程/冻结hash/exit/原失败/完整状态后决定后续，不盲重启。若全部自然结束，才最终独立验收。用户授权工程修复仍有效，但未知服务器状态不允许猜测启动或恢复。机制全部对照及随后仅最新完整S OBJECT41/42/43仍必须完成，不能删除监控。
+
+
 ## 最新2026-10-28 07:21 CST覆盖
 
 实际07:19:17观察check_readonly_20261028_071915/LOCAL_AUDIT及TRANSITION_AUDIT实际PASS_PROGRESS_NOT_FINAL。56冻结项不变，controller29838/GPU31946健康，已自然接续OBJECT41 S。C完整100epoch36200接受/物理训练调用、train_C.exit0，纯epoch27.930843min，保存准备另计。原C前20轮、GOAL三seed十二组全部epoch和5700条门控前缀逐字段精确保留，无重复训练或重启。
