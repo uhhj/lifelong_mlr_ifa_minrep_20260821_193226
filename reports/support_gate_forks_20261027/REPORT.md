@@ -1,3 +1,5 @@
+11:54:59 CST只读请求仍在SSH认证前失败（Error reading SSH protocol banner），authenticated=false、remote_commands=0。实际目录check_readonly_20261028_115454与请求秒数不同，已按本地清单定位；新connectivity_readonly_20261028_1154/LOCAL_AUDIT绑定实际错误SHA。worker4572仍READY_IN_MEMORY且进程存活，未重启。当前服务器训练/评估、进程、冻结hash和容量未知；最后真实训练观察仍07:19:17的071915快照，1304完整epoch和原账目保持不变，旧ETA无效。保持PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE，未新增科学运行/恢复/改参/删除/付费。继续同一监控60分钟传输复查，已有通信故障无新需用户行动情况保持静默。恢复后先检查原进程、冻结hash、退出及完整状态，并对071915审计前缀；不盲重启。机制全部对照及其后仅最新完整S OBJECT41/42/43仍待完成，保留监控。
+
 10:55:38 CST只读复查仍在SSH认证前失败，authenticated=false、remote_commands=0，实际目录check_readonly_20261028_105532；原错误SHA绑定于connectivity_readonly_20261028_1055/LOCAL_AUDIT.json。worker4572仍READY_IN_MEMORY且进程存活，未重启。当前训练/评估、进程、冻结hash、容量均未知；最后成功训练观察仍07:19:17的071915快照（1304完整epoch），旧ETA无效，不推算完成。保持PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE，未操作科学运行，继续同一监控60分钟传输恢复复查。恢复后先审计071915到新快照前缀/进程/hash/退出及完整状态，禁止盲重启。机制全部对照和后续仅最新完整S OBJECT41/42/43仍须完成；已有通信故障无新需行动情况保持静默。
 
 连接复查 2026-10-28T09:57:42.421798+08:00：SSH仍在认证前失败，远程命令0，当前实验状态未知。已尝试查找可用服务器管理页面，但电脑操作工具初始化因本机kernel assets路径缺失失败，未访问或修改服务商页面。worker4572保持，原训练未操作；错误SHA见connectivity_readonly_20261028_0957/LOCAL_AUDIT.json。继续60分钟传输复查。
