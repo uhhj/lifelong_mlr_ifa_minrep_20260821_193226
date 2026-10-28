@@ -1,0 +1,80 @@
+{
+  "status": "READ_ONLY_TIMING_COMPARISON_NOT_PROFILING",
+  "observation": 1793196154.5934434,
+  "old_accepted_full_S": {
+    "41": {
+      "training_epoch_minutes": 110.23614670832951,
+      "collection_minutes": 3.2510053183000007,
+      "formal_vector_minutes": 17.71114345323343,
+      "CPU_minutes": 1.3919498125712078,
+      "stage_epoch_means": {
+        "6": 4.218408010005951,
+        "7": 12.421575217247009,
+        "8": 20.984842398166656,
+        "9": 28.516862399578095
+      }
+    },
+    "42": {
+      "training_epoch_minutes": 108.48727434078852,
+      "collection_minutes": 4.069052133900004,
+      "formal_vector_minutes": 16.12742568446665,
+      "CPU_minutes": 1.4011945565541586,
+      "stage_epoch_means": {
+        "6": 4.231080007553101,
+        "7": 12.085786197185516,
+        "8": 20.543501288890837,
+        "9": 28.231997110843658
+      }
+    },
+    "43": {
+      "training_epoch_minutes": 111.24155112902324,
+      "collection_minutes": 3.1966951298665665,
+      "formal_vector_minutes": 17.28818992264969,
+      "CPU_minutes": 1.3872202237447102,
+      "stage_epoch_means": {
+        "6": 4.247392880916595,
+        "7": 12.777040131092072,
+        "8": 20.944279222488404,
+        "9": 28.77621844291687
+      }
+    }
+  },
+  "new_seed41": {
+    "task6_minutes": 26.91494907538096,
+    "task7_completed_epochs": 60,
+    "task7_mean_seconds": 90.82771240472793,
+    "task7_recent10_mean_seconds": 56.2296626329422
+  },
+  "per_seed_updates": {
+    "old": 105500,
+    "new": 195300,
+    "ratio": 1.8511848341232227
+  },
+  "known_implementation_costs": [
+    "Two candidate trajectories per 10 accepted updates for Task7-9.",
+    "Two training probe measurements per gate block plus epoch-end probe.",
+    "CPU full-state capture and restore of model/optimizer/scheduler/grads/modes/requires/RNG/step, including equality validation, per block."
+  ],
+  "unresolved": [
+    "No component-level timing collected; cannot state whether GPU compute, CPU state copying, storage, host load or resource sharing is the primary bottleneck.",
+    "Task6 has no gate yet logged time increased, so double-candidate gates cannot explain the whole slowdown.",
+    "24-40 hours is a conservative planning extrapolation of current logs, not a necessary algorithmic runtime or a guarantee."
+  ],
+  "private_data_downloaded": false,
+  "new_model_or_environment_calls": 0,
+  "sources": {
+    "historical": {
+      "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261026_ccbp_v4_s_object41_42_43\\final_readonly_20261027_120754\\LOCAL_FINAL_AUDIT.json": "b228530b2dcaae7e88dc85f71027604bde7afb16d8128d898956b0429ec05a36",
+      "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261026_ccbp_v4_s_object41_42_43\\final_readonly_20261027_120754\\seed41\\light\\EPOCHS_S.json": "03ae01e11ce1586eec2c6b49d70aab0b99740427fe2c9fe1fd49757df0a0dd00",
+      "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261026_ccbp_v4_s_object41_42_43\\final_readonly_20261027_120754\\seed41\\EVALUATION_PROGRESS_AUDIT.json": "8ab0c159a2aaa6bdfd5fce02486ea6484d11f964730eb344982904c7e1ff38f5",
+      "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261026_ccbp_v4_s_object41_42_43\\final_readonly_20261027_120754\\seed42\\light\\EPOCHS_S.json": "fc8e34d3f79391e6e52daaf4c1340e3b12ae29851bb17d3a18b46a7b08c25122",
+      "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261026_ccbp_v4_s_object41_42_43\\final_readonly_20261027_120754\\seed42\\EVALUATION_PROGRESS_AUDIT.json": "cce5914545a72e6217aa0d964757ce064f68278bb74f9e6e59283ee995dce896",
+      "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261026_ccbp_v4_s_object41_42_43\\final_readonly_20261027_120754\\seed43\\light\\EPOCHS_S.json": "b1683ae17c1b10f347c96c86ca016e436372f2359c508fb21fd364cf7e516607",
+      "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261026_ccbp_v4_s_object41_42_43\\final_readonly_20261027_120754\\seed43\\EVALUATION_PROGRESS_AUDIT.json": "7c6499b83c861508fc305cff81ec048c5d78c854a9a0629128c7fc5808284559"
+    },
+    "current_snapshot_sha256": "e969513c0961eb1c619bcb970e9439b0ccf647ff8bcc4595f8d81a0c90e2e9bd",
+    "train_source_sha256": "f35fa6678b40855969463be3c5e90167be0fdb50b5df41548df1dda44845f63c",
+    "runtime_source_sha256": "5a0057585c3b8419185b211eff89371e1b503b5b2b54989a941b242673d4050d",
+    "probe_source_sha256": "963ac6ba68628ca89da3735648a8515298f4f1ee3daafac16bb982494d0fa1ec"
+  }
+}
