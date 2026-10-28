@@ -18,13 +18,13 @@ write(R/'RUN_STATUS.json',status)
 active=read(R/'ACTIVE_ROOT.json');active.update(status=status['status'],controller=2020,original_controller=29838,observed=v['observed'],latest_evidence=D.name,engineering_contract=ra['engineering_contract_sha256'],latest_diagnostic_evidence='capacity_readonly_20261028_161926',latest_connectivity_evidence=D.name)
 write(R/'ACTIVE_ROOT.json',active)
 n=a['counts']['OBJECT_41']['S']['epochs']
-text=f'''## 最新 {a['observation']}：GPU恢复并已实际续训
+text=f'''## 最新 {a['observation']}：恢复后进度复查
 
 用户“已启动”后，16:17 SSH/GPU恢复，16:19 CPU/PCI/驱动诊断通过。16:28:12已唯一启动版本化 engineering_resume_20261028_v1/controller_resume.py，controller2020、GPU进程2037。禁止再次部署/启动原controller或本恢复入口。工程合同 {ra['engineering_contract_sha256']}，原56冻结项及工程4项SHA实际通过。原13组完成epoch文件与S前7轮逐字段精确保留。
 
 最新实际快照 {D.name}，GPU完整state恢复、原29调用准入及下一步双重重放实际PASS，诊断后恢复原checkpoint全state，再从第8轮继续。S现已完整{n}/100轮；累计{a['epochs']}完整epoch、{a['accepted_updates']}接受、{a['physical_training_optimizer_calls']}已记账训练调用，原隔离{a['own_isolated_optimizer_calls']}加本次31=共{ra['total_known_isolated_optimizer_calls']}，恢复额外autograd11、环境0，正式{a['formal_episodes']}/1120。中断时未记账部分轮物理成本仍UNKNOWN，不能声称总实际成本精确或为零。原checkpoint已另存私有 interrupted_20261028_epoch7.pth，原失败日志/工程attempt保留。
 
-恢复后已完成{ra['resumed_complete_epochs']}轮，最近均{ra['resumed_recent_epoch_mean_seconds']:.6f}秒，明显慢于原环境；单轮样本不足，不沿用旧50分钟预测。当前线性纯计算估计{ra['S_remaining_compute_minutes_estimate']:.2f}分钟仅作暂定，不含保存/准备或Q/G/U与正式评估。下一{interval}分钟复查以核实恢复后稳定吞吐，再按当前整run剩余时间更新同一监控，不恢复固定短周期。单次GPU利用率采样不能判断持续瓶颈。容量已把额外346305333B私有备份计入峰值，root留1GiB后余{a['capacity']['/root']['spare']}B，data扣剩余和2GiB后余{a['capacity']['/data']['spare']}B。
+恢复后已完成{ra['resumed_complete_epochs']}轮，最近至多10轮均{ra['resumed_recent_epoch_mean_seconds']:.6f}秒；恢复后轮时有波动，不沿用旧50分钟预测。当前线性纯计算估计{ra['S_remaining_compute_minutes_estimate']:.2f}分钟仅作暂定，不含保存/准备或Q/G/U与正式评估。下一{interval}分钟在当前S整run预计结束附近复查，再按实际当前run吞吐更新同一监控，不恢复固定短周期；这是检查安排而非完成承诺。单次GPU利用率采样不能判断持续瓶颈。容量已把额外346305333B私有备份计入峰值，root留1GiB后余{a['capacity']['/root']['spare']}B，data扣剩余和2GiB后余{a['capacity']['/data']['spare']}B。
 
 后续队列为S剩余→原Q/G/U各自准入与100轮→原4case正式评估。原根controller.exit保持不存在；最终成功标记改为 engineering_resume_20261028_v1/controller.exit==0 且无自身进程。现有 final_readonly.py/audit_final_local.py/describe_final.py 尚需外置版本化适配这一真实完成来源和恢复额外31调用、UNKNOWN成本，不能伪造根exit；仅全部训练/评估完成后才执行真实最终验收。当前record_progress.py仍硬编码旧deployment，不使用；使用audit_progress→audit_transition→engineering_resume_20261028_v1/audit_resume.py，再record_resume.py SNAPSHOT INTERVAL记录。capacity_readonly.py仍固定next_epoch7，续训后不要原样执行。
 
