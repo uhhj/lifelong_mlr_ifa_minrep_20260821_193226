@@ -1,5 +1,14 @@
 # 支持度门控机制实验 → 最新完整S OBJECT41/42/43
 
+## 最新2026-10-28 08:58 CST连接复查覆盖
+
+08:55:32 CST再次check_readonly连接失败，实际目录check_readonly_20261028_085527（request为085526，不能猜目录）。ATTEMPT仍SSHException/Error reading SSH protocol banner、authenticated=false、remote_commands=0。connectivity_readonly_20261028_0855/LOCAL_AUDIT绑定原错误SHA；本地误按请求秒数读路径未找到后已通过文件清单定位，不涉及服务器操作。worker4572仍READY_IN_MEMORY，未重启。
+
+与上一轮相同，当前训练/评估、进程、冻结hash、容量均未知；最后成功快照仍071915、07:19:17，OBJECT C100/S4、1304完整epoch。旧ETA已明确失效，不能按时间推算完成。RUN_STATUS仍PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE，旧训练观察时间和账目保留。无科学运行、重启、改参、删除或付费。
+
+同一监控退避为60分钟复查SSH恢复（不是训练ETA），避免相同通信失败短周期重复。恢复后按071915审计前缀/进程/hash/退出和完整恢复证据，再继续原队列；不盲重启、不把连接失败当科学失败。现有连接故障已通知用户，本轮未出现新需操作情况保持静默。全部机制验收分析发布及后续仅最新完整S OBJECT三seed仍未完成，保留监控。此段覆盖上一30min传输间隔；其余协议不变。
+
+
 ## 最新2026-10-28 08:23 CST连接故障覆盖
 
 本轮两次只读请求check_readonly_20261028_081617和081933在SSH认证前失败（Error reading SSH protocol banner），各ATTEMPT真实authenticated=false/remote_commands=0，未执行服务器脚本。08:22:19独立socket只读诊断TCP连接成功、recv为0字节（对端关闭），没有SSH banner；connectivity_readonly_20261028_0820/LOCAL_AUDIT.json绑定原错误和诊断SHA。worker4572仍READY_IN_MEMORY，未重启worker或任何服务器训练/评估。不能将通信失败当训练停止或科学失败。

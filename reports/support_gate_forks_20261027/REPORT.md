@@ -1,3 +1,5 @@
+08:55:32 CST复查：SSH仍在认证前失败，remote_commands=0，worker4572未重启。最新训练观察仍为07:19:17，当前状态未知；原错误保留在check_readonly_20261028_085527/ATTEMPT.json，新绑定见connectivity_readonly_20261028_0855/LOCAL_AUDIT.json。将传输复查退避为60分钟，旧训练ETA已标失效。
+
 本轮连接状态：PARTIAL_REMOTE_OBSERVATION_UNAVAILABLE（2026-10-28T08:24:32.285406+08:00）。两次SSH在认证前失败，远程命令0；独立端口检查TCP连接成功但读取0字节即断开，未返回SSH banner。不能据此判断训练失败或停止。以下07:19:17为最后成功观察，非当前进度；未重启worker/训练、未改参。原失败证据和SHA见connectivity_readonly_20261028_0820/LOCAL_AUDIT.json。30分钟后复查传输，恢复后先检查冻结hash、进程和原账本，不盲重启。
 
 # 支持度与门控共同起点机制实验
