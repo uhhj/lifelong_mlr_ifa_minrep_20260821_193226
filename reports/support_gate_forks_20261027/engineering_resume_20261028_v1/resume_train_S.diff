@@ -1,0 +1,68 @@
+--- frozen_OBJECT_41_train.py
++++ resume_train_S.py
+@@ -1,3 +1,6 @@
++import sys
++from pathlib import Path
++sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'OBJECT_41'))
+ """One new-stage branch only. Full-state candidate comparison, finite budget."""
+ import argparse,io,math
+ from runtime import *
+@@ -62,23 +65,45 @@
+ 
+ def main():
+     ap=argparse.ArgumentParser();ap.add_argument('arm',choices=ARMS);arm=ap.parse_args().arm
+-    verify();capacity();dest=OUTPUT[arm];assert not dest.exists(),'No blind retraining/resume';dest.mkdir(parents=True)
++    assert arm=='S' and CASE=='OBJECT_41' and STAGE==9
++    verify();capacity();dest=OUTPUT[arm]
++    eng=R.parent/'engineering_resume_20261028_v1'
++    assert not (eng/'RESUME_STARTED.json').exists(),'Recovery already attempted; inspect, never retry blindly'
++    write(eng/'RESUME_STARTED.json',dict(time=time.time(),pid=os.getpid(),isolated_calls_planned=31,extra_autograd_planned=11))
++    recovery=dest/'recovery.pth'
++    expected='df2c9101552a50f0478b36b1df942166c614b598a6d11af0d595fb4c9da7bb97'
++    assert sha(recovery)==expected
++    cp=torch.load(recovery,map_location='cpu')
++    assert cp['history']==js(R/'EPOCHS_S.json') and cp['next_epoch']==7 and cp['state']['step']==71834
++    assert cp['physical_optimizer_calls']==2534 and cp['contract']==verify()
++    assert cp['origin_sha256']==sha(BINDING['checkpoint']) and cp['probe_sha256']==sha(R/'PROBES.json')
++    assert not model_path(arm,STAGE).exists() and not (R/'train_S.exit').exists()
++    # An immutable private copy retains the original interrupted checkpoint.
++    import shutil
++    archived=dest/'interrupted_20261028_epoch7.pth'
++    assert not archived.exists()
++    shutil.copyfile(recovery,archived);assert sha(archived)==expected
++    write(eng/'INTERRUPTED_CHECKPOINT.json',dict(sha256=expected,bytes=archived.stat().st_size,next_epoch=7,partial_epoch_unlogged_cost='UNKNOWN',no_completed_epoch_repeated=True))
+     dist.init_process_group('nccl');torch.cuda.set_device(0)
+     try:
+         a=make(arm);ds=Dataset(STAGE);loader,sampler=setup(a,ds)
+-        cp=torch.load(BINDING['checkpoint'],map_location='cpu');a.policy.load_state_dict(cp['state_dict'],strict=True);a.step=BINDING['checkpoint_steps']
+-        a.optimizer.zero_grad(set_to_none=True);a.policy.train();control_seed(SEED)
+-        initial=capture(a);initial_path=DATA_PRIVATE/CASE/'COMMON_INITIAL.pth'
+-        if initial_path.exists():assert equal(initial,torch.load(initial_path,map_location='cpu'))
+-        else:save(initial_path,initial)
+-        write(R/('INITIAL_'+arm+'.json'),dict(status='PASS_COMMON_ALL_STATE',checkpoint_sha256=sha(BINDING['checkpoint']),common_state_sha256=sha(initial_path),step=a.step,origin='S_model_new_stage_optimizer_explicit_common_RNG'))
+         memory=load_memory(arm,STAGE);scale=scale_for(ds);info=js(O/('ra_coreset/ifa_task%d.json'%STAGE))['info'];pr=setup_probes(ds,memory)
+-        pp=R/'PROBES.json'
+-        if pp.exists():assert js(pp)==json.loads(json.dumps(pr['metadata']))
+-        else:write(pp,pr['metadata'])
+-        write(R/('ADMISSION_'+arm+'.json'),admission(a,ds,memory,scale,info,pr,arm))
+-        history=[];gradients=[];gates=[];physical=0
+-        for ep in range(100):
++        pp=R/'PROBES.json';assert js(pp)==json.loads(json.dumps(pr['metadata']))
++        restore(a,cp['state']);assert equal(cp['state'],capture(a))
++        ad=admission(a,ds,memory,scale,info,pr,arm)
++        assert ad['optimizer_calls']==29 and equal(cp['state'],capture(a))
++        write(eng/'GPU_ADMISSION.json',ad)
++        sampler.set_epoch(7);it=iter(loader);batch=next(it);base=capture(a)
++        write(eng/'REPLAY_ATTEMPT.json',dict(status='STARTED',isolated_optimizer_calls_planned=2,environments=0))
++        step(a,batch,arm,memory,scale,info);once=capture(a)
++        restore(a,base);step(a,batch,arm,memory,scale,info);assert equal(once,capture(a))
++        restore(a,cp['state']);assert equal(cp['state'],capture(a))
++        write(eng/'RECOVERY_ADMISSION.json',dict(status='PASS_GPU_FULL_STATE_RESTORE_AND_NEXT_STEP_REPLAY',checkpoint_sha256=expected,next_epoch=7,step=a.step,optimizer_calls=31,extra_autograd_calls=11,environments=0,full_state_exact=True,next_step_replay_exact=True,checkpoint_restored_after_admission=True,partial_epoch_unlogged_cost='UNKNOWN',device=torch.cuda.get_device_name(0)))
++        del base,once,batch,it
++        history=cp['history'];gradients=js(R/'GRADIENTS_S.json');gates=[];physical=cp['physical_optimizer_calls']
++        assert all(x['epoch']<7 for x in gradients)
++        del cp
++        for ep in range(7,100):
+             capacity();sampler.set_epoch(ep);order=list(iter(sampler));a.policy.train();tic=time.time();measured=False;rows=[];iterator=iter(loader);bi=0
+             while True:
+                 block=[]

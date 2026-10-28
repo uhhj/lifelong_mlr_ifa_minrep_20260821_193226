@@ -1,33 +1,44 @@
-"""One finite dispatch after text/import/asset review. Never a resume path."""
+"""Deploy only reviewed recovery helpers into a new engineering directory; no bootstrap."""
 import os,json,hashlib,subprocess,time,fcntl
 from pathlib import Path
-Q=Path('/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1');P=Path('/data/mlr_ifa/experiments/SUPPORT_GATE_FORKS_20261027_v1')
+Q=Path('/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1')
+P=Path('/data/mlr_ifa/experiments/SUPPORT_GATE_FORKS_20261027_v1')
+E=Q/'engineering_resume_20261028_v1'
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
-assert not Q.exists() and not P.exists(),'Existing root: no redeploy'
-pre=json.loads(BUNDLE['PREDEPLOY.json']);assert time.time()-pre['observed']<7200
+js=lambda p:json.loads(Path(p).read_text())
+assert not E.exists(),'No repeated deployment'
+assert sha(Q/'CONTRACT.json')=='9b53df5a8fbe894e7b27887462b7b25b4e8477a9ad12820deb8df162632fb978'
+c=js(Q/'CONTRACT.json');assert all(sha(p)==h for p,h in c['files'].items())
+assert sha(P/'OBJECT_41/S/recovery.pth')=='df2c9101552a50f0478b36b1df942166c614b598a6d11af0d595fb4c9da7bb97'
+assert len(js(Q/'OBJECT_41/EPOCHS_S.json'))==7
+assert not (Q/'controller.exit').exists() and not (Q/'OBJECT_41/train_S.exit').exists()
+for p in Path('/proc').glob('[0-9]*'):
+    try:cmd=(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
+    except OSError:continue
+    assert int(p.name)==os.getpid() or str(Q) not in cmd,(p.name,cmd)
+gpu=subprocess.check_output(['nvidia-smi','--query-gpu=name,uuid,driver_version,memory.total','--format=csv,noheader'],text=True).strip();assert gpu
 assert not subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip()
-cases=json.loads(BUNDLE['CASES.json'])
-for name,c in cases.items():
-    b=json.loads(BUNDLE[name+'/BINDING.json']);assert all(sha(p)==h for p,h in b['files'].items())
-    assert all(sha(Path(b['source'])/n)==h for n,h in b['parent_source_sha256'].items())
-    assert (Path(c['controller_root'])/'controller.exit').read_text().strip()=='0'
-for mount,bound,reserve,root in [('/root',0,1024**3,False),('/data',8*1024**3,2*1024**3,True)]:
-    v=os.statvfs(mount);assert (v.f_bfree if root else v.f_bavail)*v.f_frsize-bound>=reserve
+allocated=0;seen=set()
+for p in P.rglob('*'):
+    if p.is_file() and not p.is_symlink():
+        st=p.stat();key=(st.st_dev,st.st_ino)
+        if key not in seen:seen.add(key);allocated+=st.st_blocks*512
+capacity={}
+for mount,bound,reserve,root in [('/root',0,1024**3,False),('/data',max(0,8*1024**3-allocated)+(P/'OBJECT_41/S/recovery.pth').stat().st_size,2*1024**3,True)]:
+    v=os.statvfs(mount);free=(v.f_bfree if root else v.f_bavail)*v.f_frsize;assert free-bound>=reserve
+    capacity[mount]=dict(free=free,remaining_bound_including_extra_archive=bound,reserve=reserve,spare=free-bound-reserve)
+assert set(BUNDLE)=={'resume_train_S.py','controller_resume.py','BUILD_AUDIT.json','resume_train_S.diff'}
 for n,s in BUNDLE.items():
-    assert not Path(n).is_absolute() and '..' not in Path(n).parts and Path(n).suffix in ['.py','.md','.json']
     if n.endswith('.py'):compile(s,n,'exec')
 lock=open('/data/mlr_ifa/SUPPORT_GATE_FORKS_20261027.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-Q.mkdir();files={}
+E.mkdir();files={}
 for n,s in BUNDLE.items():
-    p=Q/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s);files[str(p)]=sha(p)
-children={}
-for name in cases:
-    child=Q/name;cf={p:h for p,h in files.items() if p.startswith(str(child)+'/')}
-    (child/'CONTRACT.json').write_text(json.dumps(dict(files=cf,created=time.time()),indent=2));children[name]=sha(child/'CONTRACT.json');files[str(child/'CONTRACT.json')]=children[name]
-    check="import runtime,updates,legacy_updates,support_memory,fork_tools,train,evaluate; import torch; b=runtime.BINDING; cp=torch.load(b['checkpoint'],map_location='cpu'); assert len(cp['state_dict'])==100; assert all(torch.isfinite(v).all() for v in cp['state_dict'].values()); print('PASS_IMPORT_CPU_CP_SCHEMA_NO_FORWARD')"
-    p=subprocess.run(['/data/mlr_ifa/env/bin/python','-B','-c',check],cwd=child,capture_output=True,text=True)
-    (child/'IMPORT_REVIEW.json').write_text(json.dumps(dict(exit_code=p.returncode,stdout=p.stdout,stderr=p.stderr)));assert p.returncode==0,(name,p.stderr)
-(Q/'CONTRACT.json').write_text(json.dumps(dict(files=files,children=children,created=time.time(),budget=dict(epochs=1700,accepted_updates=403000,physical_training_optimizer_calls=494700,formal_episodes=1120,collection_episodes=0)),indent=2))
+    p=E/n;p.write_text(s);files[n]=sha(p)
+for n in ['OBJECT_41/train_S.log','OBJECT_41/EPOCHS_S.json','OBJECT_41/GRADIENTS_S.json','controller.log','STATUS.json','STARTED.json']:
+    p=Q/n;(E/('original_'+n.replace('/','_'))).write_bytes(p.read_bytes())
+(E/'CONTRACT.json').write_text(json.dumps(dict(files=files,parent_contract=sha(Q/'CONTRACT.json'),checkpoint_sha256=sha(P/'OBJECT_41/S/recovery.pth'),capacity=capacity,gpu=gpu,isolated_extra_planned=31,autograd_extra_planned=11,unlogged_interrupted_cost='UNKNOWN',created=time.time()),indent=2))
+assert all(sha(p)==h for p,h in c['files'].items())
 fcntl.flock(lock,fcntl.LOCK_UN);lock.close()
-with (Q/'controller.log').open('x') as log:p=subprocess.Popen(['/data/mlr_ifa/env/bin/python','-B',str(Q/'controller.py')],cwd=Q,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
-print(json.dumps(dict(status='DISPATCHED_PENDING_OWN_GPU_ADMISSION',root=str(Q),controller=p.pid,contract=sha(Q/'CONTRACT.json'),children=children,frozen_files=len(files),observed=time.time())))
+with (E/'controller.log').open('x') as log:
+    p=subprocess.Popen(['/data/mlr_ifa/env/bin/python','-B',str(E/'controller_resume.py')],cwd=Q,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+print(json.dumps(dict(status='RESUME_DISPATCHED_GPU_ADMISSION_PENDING',root=str(Q),engineering=str(E),controller=p.pid,engineering_contract_sha256=sha(E/'CONTRACT.json'),parent_contract_sha256=sha(Q/'CONTRACT.json'),gpu=gpu,capacity=capacity,observed=time.time(),scientific_parameters_changed=False)))
