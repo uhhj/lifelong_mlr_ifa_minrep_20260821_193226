@@ -1,0 +1,107 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-10-28T20:35:38.552951+08:00",
+  "counts": {
+    "41": {
+      "epochs": 101,
+      "accepted_updates": 15927,
+      "physical_optimizer_calls": 16154,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 1,
+        "steps": 15927,
+        "physical_optimizer_calls": 16154,
+        "time": 1793190883.1947894,
+        "pid": 3019
+      },
+      "current_stage_epochs": 1,
+      "recent_epoch_mean_seconds": 304.82082414627075,
+      "current_stage_compute_minutes_estimate": 502.95435984134673,
+      "gate_blocks_observed": 27,
+      "gate_Q_accepts_observed": 4
+    },
+    "42": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 101,
+  "accepted_updates": 15927,
+  "physical_training_optimizer_calls": 16154,
+  "own_isolated_optimizer_calls": 33,
+  "own_extra_autograd_calls": 19,
+  "training_collection_completed_episodes": 10,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 3013,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 3014,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/train.py S ",
+      "state": "S"
+    },
+    {
+      "pid": 3019,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/train.py S ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1437433856,
+      "remaining_bound": 0,
+      "reserve": 1073741824,
+      "spare": 363692032
+    },
+    "/data": {
+      "free": 39012581376,
+      "remaining_bound": 8155283456,
+      "reserve": 2147483648,
+      "spare": 28709814272
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "3019\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "b640b75ee0917e0ec363f72e42407b0decb948b44bdeab5f88887cec32f17f47",
+  "contract": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
+  "prefix_checked": "check_readonly_20261028_195359"
+}

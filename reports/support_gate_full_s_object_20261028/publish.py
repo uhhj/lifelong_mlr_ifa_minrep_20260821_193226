@@ -42,12 +42,16 @@ def main():
         if (not p.is_file() or p.suffix not in allowed or p.name in exclude or
                 any(x.startswith(("inspect_inputs_", "inspect_assets_readonly_")) for x in p.relative_to(R).parts) or
                 "reference_source" in p.relative_to(R).parts or ".session_control" in p.relative_to(R).parts or
-                "light" in p.relative_to(R).parts or
                 ("BUNDLE" in p.name and p.suffix == ".json") or
                 p.name.startswith("PUBLICATION_RECEIPT") or
                 {"__pycache__", "asset_sources"} & set(p.relative_to(R).parts)):
             continue
         raw = p.read_bytes()
+        if p.name == 'EVIDENCE.json' and len(raw) >= 8*1024**2:
+            audit = json.loads((p.parent/'LOCAL_AUDIT.json').read_text(encoding='utf8'))
+            assert audit['snapshot_sha256'] == hashlib.sha256(raw).hexdigest()
+            assert (p.parent/'light').is_dir()
+            continue  # Reviewed split scalar/outcome records and raw SHA are published.
         assert len(raw) < 8*1024**2, str(p)
         txt = raw.decode("utf-8-sig")
         assert not secret.search(txt), str(p)

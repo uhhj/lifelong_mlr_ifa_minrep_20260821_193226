@@ -1,0 +1,76 @@
+--- accepted_full_S/final_seed41_readonly.py
++++ latest_full_S/final_seed41_readonly.py
+@@ -1,8 +1,8 @@
+ """External CPU-only final audit and fixed expert-cost diagnostic. No server writes."""
+-import os,sys,ast,json,hashlib,time,contextlib
++import os,sys,ast,json,hashlib,time,contextlib,math
+ from pathlib import Path
+ os.environ.update(CUDA_VISIBLE_DEVICES='',PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',LIBERO_CONFIG_PATH='/data/mlr_ifa/config',HF_HOME='/data/mlr_ifa/cache/huggingface',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1')
+-Q=Path('/data/mlr_ifa/experiment_workspaces/CCBP_V4_S_OBJECT41_42_43_20261026_v1/seed41');O=Path('/data/mlr_ifa/experiments/CAETv3_ALIGN_OBJECT_seed41_20261022_collate01');S=Path('/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/ALIGN/source')
++Q=Path('/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41');O=Path('/data/mlr_ifa/experiments/CAETv3_ALIGN_OBJECT_seed41_20261022_collate01');S=Path('/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/ALIGN/source')
+ sys.path.insert(0,str(Q))
+ from layout import *
+ import numpy as np
+@@ -141,6 +141,48 @@
+      out.append(dict(task=task,index=i,feature_sha256=ah(row['feature'].numpy()),student_mode=int(z[0].argmax()),component_group_distances=dd[0].tolist(),logits=z[0].tolist()))
+    diagnostics['retain_'+key]=out
+  assert sum(len(c['rows']) for c in cached.values())<=512
++
++ # Independent gate, support, fixed-probe, and physical-cost audit.
++ gates=[json.loads(line) for line in (Q/'GATES.jsonl').read_text().splitlines()]
++ assert len(gates)==9100
++ physical=0;offset=0;by_stage={}
++ for stage in range(6,10):
++  nb=(POP[stage]+9)//10
++  if stage>6:
++   pr=js(Q/('PROBES_%d.json'%stage));ids=[i for i,r in enumerate(manifests[stage]) if r['task']==stage and r['bc_valid']]
++   gen=np.random.RandomState(20261027+SEED*100+stage)
++   assert pr['new_indices']==sorted(int(x) for x in gen.choice(ids,min(64,len(ids)),replace=False))
++   yy=torch.stack([torch.as_tensor(labels[stage][i]['next_action']).float() for i in ids])
++   sc=torch.stack([yy[:,a:b].square().mean().sqrt().clamp_min(.1) for a,b in [(0,3),(3,6),(6,7)]])
++   assert np.allclose(sc.numpy(),pr['new_scale'],atol=1e-7,rtol=1e-7) and pr['new_population']==len(ids)
++   assert pr['source']=='TRAINING_ONLY_FIXED_NOT_VALIDATION'
++   assert set(pr['old_indices'])==set(pr['support'])==set(pr['support_trajectories'])=={str(t) for t in range(6,stage)}
++   for t in range(6,stage):
++    rows=cached[t]['rows'];meta=js(Q/('MEMORY_S_%d.json'%t));trajectories=sorted({int(x['trajectory']) for x in rows})
++    assert meta['training_attempts']==10 and len(trajectories)==meta['collection_successes']
++    assert pr['support'][str(t)]==len(trajectories)/10. and pr['support_trajectories'][str(t)]==trajectories
++    gen=np.random.RandomState(20261027+SEED*1000+t)
++    expected=sorted(int(x) for x in gen.choice(len(rows),min(8,len(rows)),replace=False)) if rows else []
++    assert pr['old_indices'][str(t)]==expected
++    binding=js(Q/('TRAIN_INPUT_S_%d.json'%stage))['memory'][str(t)]
++    assert binding['support']==len(trajectories)/10. and binding['support_trajectories']==trajectories
++  subset=[g for g in gates if g['stage']==stage];accepted_q=0
++  for ep in range(100):
++   rr=hist[(stage-6)*100+ep];gg=[g for g in subset if g['epoch']==ep]
++   assert [g['batch'] for g in gg]==(list(range(0,nb,10)) if stage>6 else [])
++   kept=0
++   for g in gg:
++    step=offset+ep*nb+g['batch'];assert g['start_step']==step and g['steps']==min(10,nb-g['batch']) and g['end_step']==step+g['steps']
++    c,q=g['C'],g['Q'];checks=dict(bc_new=q['bc_new']<=c['bc_new'],exec_new=q['exec_new']<=c['exec_new'],retain_improved=q['retain_support']<c['retain_support'])
++    assert all(math.isfinite(x[k]) for x in [c,q] for k in ['bc_new','exec_new','retain_support'])
++    assert checks==g['checks'] and g['accepted']==('Q' if all(checks.values()) else 'C')
++    if g['accepted']=='Q':kept+=g['steps'];accepted_q+=1
++   physical+=nb*(2 if stage>6 else 1)
++   assert rr['physical_optimizer_calls']==physical and rr['totals']['anchor_slots']==kept*4
++  offset+=100*nb
++  if stage>6:by_stage[str(stage)]=dict(blocks=len(subset),Q_accepts=accepted_q,support=pr['support'],fixed_probes_verified=True)
++ assert physical==195300 and offset==105500
++ gate_audit=dict(status='PASS_INDEPENDENT_RECOMPUTATION',blocks=9100,physical_training_optimizer_calls=physical,accepted_updates=offset,by_stage=by_stage)
+  rec=torch.load(OUTPUT[arm]/'recovery.pth',map_location='cpu');assert rec['stage']==9 and rec['next_epoch']==100 and rec['steps']==rec['state']['step']==rec['retention_sampling_cursor']==105500 and rec['history']==hist and rec['contract']==sha(Q/'CONTRACT.json')
+  assert set(rec['state'])=={'model','optimizer','scheduler','grads','modes','requires','rng','step'} and set(rec['state']['rng'])=={'python','numpy','cpu','cuda'}
+  assert (OUTPUT[arm]/'recovery.pth').stat().st_ino==model_path(arm,9).stat().st_ino
+@@ -156,6 +198,7 @@
+   elif isinstance(x,(list,tuple)):
+    for y in x:finite_state(y)
+  finite_state(rec['state']['optimizer']);finite_state(rec['state']['grads'])
++ assert rec['physical_optimizer_calls']==195300 and rec['gate_blocks']==9100 and rec['probe_sha256']==sha(Q/'PROBES_9.json')
+  assert rec['memory_bindings']==js(Q/('TRAIN_INPUT_%s_9.json'%arm))['memory']
+  strict[arm]['recovery']=dict(sha256=sha(OUTPUT[arm]/'recovery.pth'),complete_state_fields=sorted(rec['state']),history_exact=True,final_hardlink=True,sampling_cursor=rec['retention_sampling_cursor'])
+ for arm in ARMS:
+@@ -173,4 +216,4 @@
+ verify();light={}
+ for fp in Q.rglob('*'):
+  if fp.is_file() and fp.suffix in ['.json','.jsonl','.exit'] and fp.name not in ['CONTRACT.json','PARENT_BINDING.json'] and fp.stat().st_size<8*1024**2:light[str(fp.relative_to(Q))]=dict(text=fp.read_text(),sha256=sha(fp))
+-print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,memory_audits=memory_audit,contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diagnostics,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,task6_current_arms_exact=False,single_S_only=True,initial_state_bytes_verified=True,reference_C_pairing_exact=False,light=light,episodes=200,training_collection_episodes=40,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time(),limitation='Online retained-feature hashes and teacher CPU replay verified; no raw camera or full physics replay is claimed.')))
++print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,gate_audit=gate_audit,memory_audits=memory_audit,contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diagnostics,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,task6_current_arms_exact=False,single_S_only=True,initial_state_bytes_verified=True,reference_C_pairing_exact=False,light=light,episodes=200,training_collection_episodes=40,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time(),limitation='Online retained-feature hashes and teacher CPU replay verified; no raw camera or full physics replay is claimed.')))

@@ -76,6 +76,9 @@ for seed in (41,42,43):
 for n,x in v['light'].items():
  if n.endswith('.exit') and x['text'].strip()!='0':failures[n]=x['text']
  if n.endswith('FAILURE.json'):failures[n]=js(n)
+if not v['processes'] and v['light'].get('controller.exit',{}).get('text','').strip()!='0':
+ failures['missing_controller_without_success']='No own process and no successful controller exit'
+if any(x['spare']<0 for x in v['capacity'].values()):failures['capacity']='Reserve or remaining-budget bound violated'
 prior=Path(sys.argv[2]) if len(sys.argv)>2 else None
 if prior:
  old=json.loads((prior/'EVIDENCE.json').read_text(encoding='utf8'))

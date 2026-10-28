@@ -1,5 +1,13 @@
 # 完整 S 实现与来源
 
+## 2026-10-28 20:35 实际进度与外置验收准备
+
+check_readonly_20261028_203536 已核 63 冻结项及首快照全部已完成 epoch 前缀不变。seed41 Task6 100 轮、10 次原定采集完成，2 条成功轨迹产生 26 个缓存窗口，Task7 自己的 q6=.2。Task7 的29调用/11autograd GPU准入实际通过（全state恢复、q1=原S、关闭保持=原C、10步重放、探针/测量不改变state及短历史）。Task7 完整1轮，23完整块中4接受Q；快照另见第2轮4块，共27块，局部块不混入完整轮总账。门控接受不等于闭环收益；正式仍0。Task7首轮304.820824秒，仅1轮不足以稳定推算后续或总ETA，60分钟再核吞吐。
+
+外置 build_final_wrappers.py 已生成并做 Python3.8 AST 检查：final_seed41/42/43_readonly.py、final_readonly.py、audit_final_local.py、audit_seed_evaluation.py；describe_final.py 生成矩阵、三seed统计、SF/FS及门控支持/接受率。FINAL_WRAPPER_REVIEW 只标 STATIC_ONLY，尚未运行真实最终CPU检查。旧源逐seed CPU检查（12CP/3全state/12缓存teacher/初态noise/RA与mask）保留，并独立增加每seed9100块、195300物理调用、q与固定探针抽样核对。真实自然完成前禁止运行最终检查。新旧预算替换已静态审核，禁止把包装存在当作验收通过。
+
+外置 audit_progress 另外检测无进程却无成功exit及容量reserve违例。publish.py 对大于8MiB的原始EVIDENCE仅在SHA与LOCAL_AUDIT匹配且已拆出light记录时跳过整份，发布小块标量/结果及原SHA；不下载或发布私有tensor。所有改动均本地外置，63冻结训练源不变。
+
 build_local.py 在新目录组合已验收原完整 S OBJECT seed41/42/43 与已运行机制门控实现。runtime、初始化、采集、评估、旧缓存读取、losses、synthetic_checks 对各 seed 原文件文本精确不变。逐文件原SHA/新SHA及diff位于UPLOAD_REVIEW和review。三seed各自PARENT_BINDING来自本轮真实只读preflight，不能互套数据mask。
 
 support_memory读取本轮自己的成功采集缓存并派生q，不使用机制旧BINDING。fork_tools的stage由真实Dataset提供；gate_admission每stage指定自己的stage。Task6按原完整S的4更新准入；Task7–9每stage真实29更新准入，完整状态恢复后才训练。新train仅改变支持加权/双候选选择及其记账，阶段采集和正式评估未改变。
