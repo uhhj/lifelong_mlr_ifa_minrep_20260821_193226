@@ -1,0 +1,29 @@
+--- reference/support_memory.py
++++ new/seed43/support_memory.py
+@@ -3,18 +3,15 @@
+ from losses import retain
+ 
+ def load_memory(arm,stage):
+-    out={}
+-    for task in range(6,stage):
+-        b=BINDING['caches'][str(task)];meta=b['metadata'];p=Path(b['path'])
+-        assert sha(p)==meta['cache_sha256'] and sha(b['teacher'])==meta['source_sha256']
+-        x=torch.load(p,map_location='cpu');assert len(x['rows'])==meta['count']
+-        ids=set()
+-        for row,m in zip(x['rows'],meta['rows']):
+-            assert tensor_sha(row['feature'])==m['feature_sha256'] and tensor_sha(row['mu'])==m['mu_sha256'] and tensor_sha(row['sd'])==m['sd_sha256']
+-            assert 1<=len(row['feature'])<=8 and row['source']=='online'
+-            ids.add(int(row['trajectory']))
++    from memory import load_memory as load_acquired
++    out=load_acquired(arm,stage)
++    for task,x in out.items():
++        meta=js(R/('MEMORY_%s_%d.json'%(arm,task)))
++        ids=set(int(row['trajectory']) for row in x['rows'])
+         assert meta['training_attempts']==10 and len(ids)==meta['collection_successes']
+-        x['support']=len(ids)/10.;x['support_trajectories']=sorted(ids);out[task]=x
++        assert all(row['source']=='online' for row in x['rows'])
++        assert all(0<=i<10 for i in ids)
++        x['support']=len(ids)/10.;x['support_trajectories']=sorted(ids)
+     return out
+ 
+ def weights(memory,arm):

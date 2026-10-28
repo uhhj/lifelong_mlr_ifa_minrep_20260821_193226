@@ -1,0 +1,31 @@
+--- reference/fork_tools.py
++++ new/seed43/fork_tools.py
+@@ -15,9 +15,10 @@
+         restore_rng(rr)
+ 
+ def setup_probes(ds,memory):
+-    ids=[i for i,r in enumerate(ds.rows) if r['task']==STAGE and r['bc_valid']]
++    stage=ds.stage
++    ids=[i for i,r in enumerate(ds.rows) if r['task']==stage and r['bc_valid']]
+     assert ids
+-    g=np.random.RandomState(20261027+SEED*100+STAGE);chosen=sorted(int(x) for x in g.choice(ids,min(64,len(ids)),replace=False))
++    g=np.random.RandomState(20261027+SEED*100+stage);chosen=sorted(int(x) for x in g.choice(ids,min(64,len(ids)),replace=False))
+     y=torch.stack([torch.as_tensor(ds.rows[i]['next_action']).float() for i in ids])
+     sc=torch.stack([y[:,lo:hi].square().mean().sqrt().clamp_min(.1) for lo,hi in [(0,3),(3,6),(6,7)]]).cuda()
+     old={}
+@@ -56,12 +57,13 @@
+     return ('Q' if all(checks.values()) else 'C'),checks
+ 
+ def directional_diagnostic(a,batch,memory,pr,arm):
+-    tasks=[int(t) for t in batch[1]];ids=[i for i,t in enumerate(tasks) if t==STAGE and bool(batch[0]['causal_bc_valid'][i])]
++    stage=pr['ds'].stage
++    tasks=[int(t) for t in batch[1]];ids=[i for i,t in enumerate(tasks) if t==stage and bool(batch[0]['causal_bc_valid'][i])]
+     if not ids:return None
+     before=capture(a)
+     with auxiliary(a):
+         allx=a.map_tensor_to_device(batch[0]);x={k:(v[ids] if torch.is_tensor(v) else v) for k,v in allx.items()}
+-        bc,ex=new_terms(a,x,pr['scale']);rx,rt,ct=retention(a.policy.module,memory,STAGE,a.step,arm if arm!='C' else 'Q')
++        bc,ex=new_terms(a,x,pr['scale']);rx,rt,ct=retention(a.policy.module,memory,stage,a.step,arm if arm!='C' else 'Q')
+         re=.1*(rx+.1*rt);pars=[p for p in a.policy.parameters() if p.requires_grad]
+         gs=[torch.autograd.grad(a.loss_scale*v,pars,retain_graph=True,allow_unused=True) for v in [bc,ex,re]]
+         def norm(g):return sum(float(v.double().square().sum()) for v in g if v is not None)**.5
