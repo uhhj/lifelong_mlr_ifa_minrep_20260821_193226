@@ -1,0 +1,103 @@
+{
+  "status": "OBSERVED_STAGE9_PROGRESS_CONDITIONAL_ETA_NOT_FINAL",
+  "observation": "2026-10-29T17:59:37.191257+08:00",
+  "snapshot_sha256": "97bd6b516aa62e6be818ffdc5905b85d49ede4e52d0c607d8a84119e5e92cb81",
+  "stage9_completed": 65,
+  "recent10_mean_seconds": 94.36828112602234,
+  "recent10_min_max_seconds": [
+    82.45326805114746,
+    103.95016050338745
+  ],
+  "all_stage9_mean_seconds": 101.34696818131667,
+  "remaining_compute_minutes_recent10": 55.048163990179695,
+  "remaining_compute_minutes_all": 59.119064772434726,
+  "cross_seed_matched_prefix_comparisons": {
+    "7": {
+      "matched_first_epochs": 100,
+      "original_seed42_mean_seconds": 70.45541273355484,
+      "optimized_seed43_mean_seconds": 46.15002336740494,
+      "mean_time_reduction_fraction": 0.3449754734681201,
+      "original_seed42_median_seconds": 53.47026228904724,
+      "optimized_seed43_median_seconds": 46.37074518203735,
+      "median_time_reduction_fraction": 0.13277505669659195
+    },
+    "8": {
+      "matched_first_epochs": 100,
+      "original_seed42_mean_seconds": 85.18879143714905,
+      "optimized_seed43_mean_seconds": 58.5009907078743,
+      "mean_time_reduction_fraction": 0.31327831137227236,
+      "original_seed42_median_seconds": 75.57475566864014,
+      "optimized_seed43_median_seconds": 58.45661520957947,
+      "median_time_reduction_fraction": 0.22650606419577046
+    },
+    "9": {
+      "matched_first_epochs": 65,
+      "original_seed42_mean_seconds": 96.52471154286312,
+      "optimized_seed43_mean_seconds": 101.34696818131667,
+      "mean_time_reduction_fraction": -0.049958778030765316,
+      "original_seed42_median_seconds": 90.62062096595764,
+      "optimized_seed43_median_seconds": 94.57749891281128,
+      "median_time_reduction_fraction": -0.04366421135361742
+    }
+  },
+  "all_four_actual_stage_copy_checks": {
+    "status": "PASS_OBSERVED_STAGE_STARTS",
+    "checked": {
+      "0": {
+        "time": 1793249775.1173599,
+        "all_state_exact": true,
+        "optimizer_calls_added": 0,
+        "environments_added": 0
+      },
+      "15700": {
+        "time": 1793250492.7322128,
+        "all_state_exact": true,
+        "optimizer_calls_added": 0,
+        "environments_added": 0
+      },
+      "38400": {
+        "time": 1793255272.5211177,
+        "all_state_exact": true,
+        "optimizer_calls_added": 0,
+        "environments_added": 0
+      },
+      "69300": {
+        "time": 1793261289.9806542,
+        "all_state_exact": true,
+        "optimizer_calls_added": 0,
+        "environments_added": 0
+      }
+    },
+    "candidate_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+    "engineering_contract_sha256": "befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf"
+  },
+  "planning_hours": {
+    "remaining_seed43_training_and_collection": [
+      1,
+      1.5
+    ],
+    "all_three_seed_formal": [
+      1,
+      3
+    ],
+    "total_training_and_formal": [
+      2,
+      4.5
+    ]
+  },
+  "finish_window_training_and_formal": [
+    "2026-10-29T19:59:37.191257+08:00",
+    "2026-10-29T22:29:37.191257+08:00"
+  ],
+  "historical_600_formal_seconds": 3067.6055436209863,
+  "historical_timing_audit_sha256": "553223fff0e13e3d9ab09c7a062e2825041a09bc95fcb02ccdf75d03cd50bba5",
+  "next_check_minutes": 75,
+  "limitations": [
+    "Cross-seed comparisons differ in own cache content, data masks and resource conditions; they are not causal optimization speedup estimates.",
+    "Task9 is now directly measured. It is not assumed to share Task7/8 speedups.",
+    "Epoch timers exclude checkpoint saving, stage preparation and final ten training collection episodes.",
+    "Current formal evaluation has not begun; 1-3 hours is a historical planning allowance, not this run measurement.",
+    "Final independent CPU acceptance, analysis and publication are additional.",
+    "All scientific and engineering costs are unchanged; this audit performs no training or environment calls."
+  ]
+}
