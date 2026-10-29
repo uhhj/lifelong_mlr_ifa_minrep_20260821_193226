@@ -1,0 +1,69 @@
+{
+  "status": "PLANNING_ONLY_NOT_COMPLETION",
+  "observation": "2026-10-29T22:34:36.568462+08:00",
+  "snapshot_sha256": "ef98677023e9f7f40796d4e5d5337902997d946b95595fab8e5103f6c78a530f",
+  "measured_stage_mean_seconds": {
+    "6": 3.37577525138855,
+    "7": 27.1678054022789,
+    "8": 42.873022716695615
+  },
+  "stage8_recent10_seconds": 43.183268547058105,
+  "stage8_remaining_compute_minutes": 32.38745141029358,
+  "unmeasured_stage9_batch_scaled_seconds_per_epoch": 78.66357567761395,
+  "seed41_remaining_linear_compute_minutes": 163.4934108729835,
+  "full_seed_linear_compute_minutes": 253.9840414638992,
+  "all_remaining_linear_compute_hours": 11.191024896679698,
+  "planning_hours": {
+    "seed41_remaining_train_and_collect": [
+      3,
+      4
+    ],
+    "each_seed42_43_train_and_collect": [
+      4.5,
+      6
+    ],
+    "all_remaining_training_and_collection": [
+      12,
+      16
+    ],
+    "all_600_formal": [
+      1,
+      2
+    ],
+    "training_plus_formal": [
+      13,
+      18
+    ]
+  },
+  "estimated_training_plus_formal_finish_CST": [
+    "2026-10-30T11:34:36.568462+08:00",
+    "2026-10-30T16:34:36.568462+08:00"
+  ],
+  "historical_evaluation": [
+    {
+      "suite": "GOAL",
+      "seed": 42,
+      "source": "..\\20261026_ccbp_v4_s_goal42_43\\final_readonly_20261026_164119\\seed42\\light\\EVAL_EVENTS.jsonl",
+      "sha256": "1e6f648d89bd2ae6c566f2ff7229a576d9c60884bfa15b4a3a322c32483b0014",
+      "episodes": 200,
+      "wall_seconds": 1009.1462161540985
+    },
+    {
+      "suite": "GOAL",
+      "seed": 43,
+      "source": "..\\20261026_ccbp_v4_s_goal42_43\\final_readonly_20261026_164119\\seed43\\light\\EVAL_EVENTS.jsonl",
+      "sha256": "4d718542dc384ddcd61af409932b76ec588c543fd02ac79b78734e530a4820e7",
+      "episodes": 200,
+      "wall_seconds": 1160.3533012866974
+    }
+  ],
+  "next_check_minutes": 180,
+  "limits": [
+    "Task9 is unmeasured; batch ratio 337/185 from Task8 omits extra old-cache/probe work",
+    "Seed42/43 own successful caches and resource variation unknown; extrapolation is not observation",
+    "Epoch seconds exclude checkpoint saves, setup and collection; reserve added",
+    "Historical GOAL evaluation 16.8/19.3 minutes per 200 episodes, not current-run measurement; reserve 1–2h for all600",
+    "Independent final CPU acceptance and explanation/publication excluded; no guarantee or completion inferred from clock"
+  ],
+  "new_scientific_calls": 0
+}
