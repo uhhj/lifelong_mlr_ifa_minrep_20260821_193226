@@ -1,0 +1,50 @@
+{
+  "status": "CONDITIONAL_SCHEDULING_ESTIMATE_NOT_SPEEDUP_ACCEPTANCE",
+  "observation": "2026-10-29T13:18:49.646750+08:00",
+  "evidence_sha256": "88f201aab9cdc764b96f92e1efd87c0b418a0b45b430451f7108be476a36499f",
+  "current": {
+    "seed": 43,
+    "stage": 7,
+    "completed_epochs": 13,
+    "all_mean_seconds": 47.039671439390915,
+    "recent10_mean_seconds": 46.51029977798462,
+    "remaining_stage_compute_minutes": 67.4399346780777
+  },
+  "references": {
+    "41": {
+      "7": 83.91452173233033,
+      "8": 91.69751996040344,
+      "9": 132.76130061388017
+    },
+    "42": {
+      "7": 70.45541273355484,
+      "8": 85.18879143714905,
+      "9": 95.66874661207198
+    }
+  },
+  "seed43_to_seed42_stage7_mean_ratio": 0.667651634052354,
+  "unmeasured_stage8_9_reference_compute_minutes": 301.4292300820351,
+  "remaining_collection_reference_minutes": 4.135353363433387,
+  "remaining_seed_training_collection_linear_minutes": [
+    272.8250060569248,
+    373.0045181235462
+  ],
+  "planning_training_hours": [
+    5,
+    7
+  ],
+  "planning_all_training_and_formal_hours": [
+    6,
+    10
+  ],
+  "next_check_minutes": 270,
+  "assumptions": [
+    "Only current seed43 stage7 has measured optimized gated throughput; stages8/9 remain unmeasured.",
+    "Lower linear scenario scales seed42 stages8/9 by current stage7 speed ratio; upper scenario makes no such credit.",
+    "Later caches, history-length grouping, preparation/checkpoint overhead and resource fluctuation may change speed.",
+    "Cross-seed timing ratios do not isolate clone optimization: data masks, acquired caches/support and machine conditions differ.",
+    "Formal 600 episodes are unstarted; 1-3h remains a historical planning allowance, not current measured evaluation throughput.",
+    "Final independent CPU acceptance/report/publication are additional.",
+    "No scientific benefit is inferred from gate acceptance or training probes."
+  ]
+}
