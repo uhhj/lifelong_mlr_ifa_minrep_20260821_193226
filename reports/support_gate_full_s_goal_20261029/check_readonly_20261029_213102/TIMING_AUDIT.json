@@ -1,0 +1,31 @@
+{
+  "status": "PLANNING_ONLY_NOT_COMPLETION",
+  "observation": "2026-10-29T21:31:03.158825+08:00",
+  "snapshot_sha256": "ac9bf773c886f80d3fdefb5c44ec7234da6a1e67d2054f39d7c0fae1f8b8ecbc",
+  "stage7": {
+    "epochs": 53,
+    "all_epoch_mean_seconds": 27.166639296513683,
+    "recent10_mean_seconds": 26.535537123680115,
+    "recent10_min_seconds": 24.8076434135437,
+    "recent10_max_seconds": 29.17985486984253,
+    "remaining_compute_minutes": 20.786170746882757
+  },
+  "seed41_remaining_batch_scaled_compute_minutes": 186.8719067008518,
+  "seed41_remaining_planning_minutes": [
+    190,
+    300
+  ],
+  "next_check_minutes": 180,
+  "unmeasured": [
+    "Task8/9 additional old-cache probe costs",
+    "Remaining collection and save/prepare overhead",
+    "seed42/43 own cache and resource variation",
+    "All 600 formal episodes"
+  ],
+  "assumptions": [
+    "Task8/9 batch-scaled from Task7 current 139 batches at same compute rate; extra old probes can increase cost",
+    "190–300 minutes is a coarse current-seed planning range, not a measured total-queue ETA",
+    "Next check near earlier current-seed completion estimate; no fixed short polling"
+  ],
+  "new_scientific_calls": 0
+}
