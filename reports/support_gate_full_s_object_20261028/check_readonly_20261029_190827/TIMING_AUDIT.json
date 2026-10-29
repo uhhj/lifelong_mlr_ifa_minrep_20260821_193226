@@ -1,0 +1,38 @@
+{
+  "status": "PARTIAL_EVALUATION_MEASURED_TIMING_NOT_FINAL",
+  "observation": "2026-10-29T19:08:28.344227+08:00",
+  "snapshot_sha256": "ed75f8d835d7d913cdb4cf6e2951ab070ae1a3e93726d305fff94d713f5f33b7",
+  "outcome_episodes": 80,
+  "complete_vector_events": 7,
+  "complete_event_episodes": 70,
+  "mean_vector_seconds": 62.66574757585892,
+  "range_vector_seconds": [
+    35.51658643700648,
+    74.6045326970052
+  ],
+  "remaining_vectors_including_inflight": 53,
+  "remaining_minutes_mean": 55.35474369200871,
+  "remaining_minutes_observed_max": 65.90067054902126,
+  "planning_remaining_formal_minutes": [
+    60,
+    90
+  ],
+  "planning_finish_window": [
+    "2026-10-29T20:08:28.344227+08:00",
+    "2026-10-29T20:38:28.344227+08:00"
+  ],
+  "next_check_minutes": 70,
+  "completed_epoch_compute_hours": {
+    "41": 9.014508659773403,
+    "42": 7.252488663130336,
+    "43": 5.848337583409416
+  },
+  "seed43_vs_seed42_epoch_time_reduction_fraction": 0.19360955183001383,
+  "limitations": [
+    "Snapshot reads outcomes and events sequentially; an outcome vector may precede its complete event. Remaining estimate conservatively includes that in-flight vector.",
+    "Only completed vector event durations are used, not differences between episode timestamps.",
+    "Later tasks, episode lengths and resource conditions may differ; estimate is conditional.",
+    "Epoch compute excludes saves, preparation and collection; cross-seed speed differences do not identify causal optimization gain.",
+    "Independent final CPU acceptance, analysis and publication remain additional."
+  ]
+}

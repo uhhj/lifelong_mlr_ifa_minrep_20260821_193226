@@ -1,0 +1,36 @@
+{
+  "status": "BOUNDARY_GUARD_ONLY",
+  "time": 1793247490.8360233,
+  "controller": {
+    "pid": 3013,
+    "state": "S",
+    "start": "1301193",
+    "exit_code": 0,
+    "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/controller.py "
+  },
+  "child": {
+    "pid": 5055,
+    "state": "S",
+    "start": "4710026",
+    "exit_code": 0,
+    "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S "
+  },
+  "deadline": 1793252890.836024,
+  "contract_sha256": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
+  "training_signals": 0,
+  "controller_after": {
+    "pid": 3013,
+    "state": "T",
+    "start": "1301193",
+    "exit_code": 0,
+    "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/controller.py "
+  },
+  "watchdog_pid": 7156,
+  "child_after": {
+    "pid": 5055,
+    "state": "S",
+    "start": "4710026",
+    "exit_code": 0,
+    "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S "
+  }
+}

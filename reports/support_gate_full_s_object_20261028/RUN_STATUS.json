@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_OPTIMIZED_SEED43_OR_EVALUATION",
-  "observation": "2026-10-29T17:59:37.191257+08:00",
+  "observation": "2026-10-29T19:08:28.344227+08:00",
   "engineering": {
     "contract": "befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf",
     "diagnostic_optimizer_calls": 3914,
@@ -17,7 +17,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 80,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -53,37 +53,34 @@
       "gate_Q_accepts_observed": 4107
     },
     "43": {
-      "epochs": 365,
-      "accepted_updates": 92830,
-      "physical_optimizer_calls": 169960,
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
-      "training_collection_completed_episodes": 30,
+      "training_collection_completed_episodes": 40,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
         "stage": 9,
-        "phase": "train",
-        "epoch_complete": 65,
-        "steps": 92830,
-        "physical_optimizer_calls": 169960,
-        "time": 1793267970.4511213,
+        "phase": "training_collection",
+        "time": 1793271502.554704,
         "pid": 8320
       },
-      "current_stage_epochs": 65,
-      "recent_epoch_mean_seconds": 94.36828112602234,
-      "current_stage_compute_minutes_estimate": 55.048163990179695,
-      "gate_blocks_observed": 7807,
-      "gate_Q_accepts_observed": 3797
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 98.45927369594574,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4000
     }
   },
-  "epochs": 1165,
-  "accepted_updates": 303830,
-  "physical_training_optimizer_calls": 560560,
+  "epochs": 1200,
+  "accepted_updates": 316500,
+  "physical_training_optimizer_calls": 585900,
   "own_isolated_optimizer_calls": 273,
   "own_extra_autograd_calls": 123,
-  "training_collection_completed_episodes": 110,
-  "formal_episodes": 0,
+  "training_collection_completed_episodes": 120,
+  "formal_episodes": 80,
   "failures": {},
   "processes": [
     {
@@ -92,53 +89,48 @@
       "state": "S"
     },
     {
-      "pid": 8315,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/train43_optimized.py S ",
+      "pid": 10081,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/evaluate.py ",
       "state": "S"
-    },
-    {
-      "pid": 8320,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/train43_optimized.py S ",
-      "state": "R"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1428955136,
+      "free": 1428922368,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 355213312
+      "spare": 355180544
     },
     "/data": {
-      "free": 37524443136,
-      "remaining_bound": 6697717760,
+      "free": 37515653120,
+      "remaining_bound": 6690185216,
       "reserve": 2147483648,
-      "spare": 28679241728
+      "spare": 28677984256
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "8320\n",
+    "stdout": "10081\n",
     "stderr": ""
   },
-  "snapshot_sha256": "97bd6b516aa62e6be818ffdc5905b85d49ede4e52d0c607d8a84119e5e92cb81",
+  "snapshot_sha256": "ed75f8d835d7d913cdb4cf6e2951ab070ae1a3e93726d305fff94d713f5f33b7",
   "contract": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
-  "prefix_checked": "check_readonly_20261029_142301",
+  "prefix_checked": "check_readonly_20261029_175935",
   "root": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1",
   "controller": 7806,
   "original_controller": 3013,
   "original_controller_state": "REPLACED_AFTER_SEED42_NATURAL_EXIT",
   "engineering_status": {
-    "phase": "train",
-    "seed": 43,
-    "pid": 8315,
-    "time": 1793249766.6886415,
+    "phase": "evaluate",
+    "seed": 41,
+    "pid": 10081,
+    "time": 1793271593.9661984,
     "controller": 7806,
     "engineering_contract": "befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf"
   },
-  "latest_evidence": "check_readonly_20261029_175935",
-  "next_check_minutes": 75,
+  "latest_evidence": "check_readonly_20261029_190827",
+  "next_check_minutes": 70,
   "final_CPU_acceptance": "PENDING",
   "scientific_conclusion": "PENDING_FORMAL_CLOSED_LOOP",
-  "timing_audit": "check_readonly_20261029_175935\\TIMING_AUDIT.json"
+  "timing_audit": "check_readonly_20261029_190827/TIMING_AUDIT.json"
 }
