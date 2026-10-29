@@ -1,5 +1,11 @@
 # 完整 S 实现与来源
 
+## 用户纠正后的主对照口径
+
+主对照为已验收完整C OBJECT41/42/43（execution/20261027_c_goal42_43_object41_42_43/final_readonly_20261027_222119），不是原S、内部C候选或取消的单阶段机制C。本轮报告此前漏掉已有完整C，现已更正；历史原S仅作版本参考。只复算已有证据，600条C/S初态字节、noise、环境seed和唯一attempt逐条配对通过，无新增训练/模型前向/采集/评估。新S对C均值ΔAUC+1.4931pp、ΔOldFinal+3.8889pp、ΔFinalAll+2.50pp、ΔFWT−0.8333pp。保留全部负cell及配对SF/FS，seed43最终Task6两者均30%。S多120训练采集和269400生产候选optimizer，不能单独归因门控或宣称等算力/等交互。详见FINAL_REPORT.md首节与PRIMARY_C_COMPARISON.json。
+
+实验仍COMPLETE_ACCEPTED，同一监控已删除，不恢复旧实验或开启新监控。本次仅更正分析与轻量发布，验收结论和原始结果不变。
+
 ## 最终独立验收及分析完成
 
 2026-10-29T20:33:29.346703+08:00：最终CPU与本地验收实际通过，见final_readonly_20261029_201235/LOCAL_FINAL_AUDIT.json及FINAL_REPORT.md。没有重训、重评或新增科学实验；最终接受替代下文所有PENDING/STATIC_ONLY历史状态，原证据保留。发布远端核验后关闭监控。
