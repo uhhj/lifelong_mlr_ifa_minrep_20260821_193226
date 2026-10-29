@@ -1,0 +1,66 @@
+{
+  "status": "STATIC_REVIEW_NOT_RUNTIME_ACCEPTANCE",
+  "shared_training_functions": {
+    "train.py": {
+      "identical": true,
+      "seed41_sha256": "f35fa6678b40855969463be3c5e90167be0fdb50b5df41548df1dda44845f63c",
+      "seed43_sha256": "f35fa6678b40855969463be3c5e90167be0fdb50b5df41548df1dda44845f63c"
+    },
+    "updates.py": {
+      "identical": true,
+      "seed41_sha256": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+      "seed43_sha256": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663"
+    },
+    "fork_tools.py": {
+      "identical": true,
+      "seed41_sha256": "963ac6ba68628ca89da3735648a8515298f4f1ee3daafac16bb982494d0fa1ec",
+      "seed43_sha256": "963ac6ba68628ca89da3735648a8515298f4f1ee3daafac16bb982494d0fa1ec"
+    },
+    "gate_admission.py": {
+      "identical": true,
+      "seed41_sha256": "a56ab84ce1aa87bdaa32e365a3c08201e05b2d788264b57433e8676f5eb1c5fa",
+      "seed43_sha256": "a56ab84ce1aa87bdaa32e365a3c08201e05b2d788264b57433e8676f5eb1c5fa"
+    },
+    "support_memory.py": {
+      "identical": true,
+      "seed41_sha256": "b48009354c765a30c0f3c2c4a508c6df08360607c135636d417e940a638bab16",
+      "seed43_sha256": "b48009354c765a30c0f3c2c4a508c6df08360607c135636d417e940a638bab16"
+    },
+    "losses.py": {
+      "identical": true,
+      "seed41_sha256": "28df46f59d010a158ff2a394a52430a896d414b399645959d8d9d0c3fb180099",
+      "seed43_sha256": "28df46f59d010a158ff2a394a52430a896d414b399645959d8d9d0c3fb180099"
+    },
+    "memory.py": {
+      "identical": true,
+      "seed41_sha256": "94f7f45c0994a9b5370917cfef4a7228b1038e8d96f74be6b4945d5b8424f4fe",
+      "seed43_sha256": "94f7f45c0994a9b5370917cfef4a7228b1038e8d96f74be6b4945d5b8424f4fe"
+    },
+    "legacy_losses.py": {
+      "identical": true,
+      "seed41_sha256": "eb539028b9b244c7ae9e5c4399e930d2e59e89efc2194c3a5c273a261e8f0504",
+      "seed43_sha256": "eb539028b9b244c7ae9e5c4399e930d2e59e89efc2194c3a5c273a261e8f0504"
+    },
+    "legacy_memory.py": {
+      "identical": true,
+      "seed41_sha256": "94f7f45c0994a9b5370917cfef4a7228b1038e8d96f74be6b4945d5b8424f4fe",
+      "seed43_sha256": "94f7f45c0994a9b5370917cfef4a7228b1038e8d96f74be6b4945d5b8424f4fe"
+    }
+  },
+  "scope": "Same arithmetic/training functions; seed-specific runtime/layout/input masks remain frozen and seed43 retains its own actual admission.",
+  "handoff_review": {
+    "signals_only_old_waiting_coordinator": true,
+    "seed42_kernel_zombie_exit_required": true,
+    "same_root_lock_after_old_coordinator_exit": true,
+    "exclusive_new_logs_and_single_use_controller": true,
+    "validation_PASS_required_before_deploy": true,
+    "original_controller_exit_never_fabricated": true,
+    "jobs": [
+      "train43",
+      "evaluate41",
+      "evaluate42",
+      "evaluate43"
+    ]
+  },
+  "local_auxiliary_error": "First evidence copy used Path(.) parent without resolve and raised FileNotFoundError before any copy; corrected using absolute resolved directory. No remote action or scientific effect."
+}

@@ -1,0 +1,225 @@
+{
+  "time": 1793248020.5143583,
+  "engineering": {
+    "VALIDATION_PROGRESS.json": {
+      "sha256": "e81dd5f083353f510f29a027d295f3b2e3fa44d3c2980c51d061344b4e21a309",
+      "data": {
+        "status": "RUNNING",
+        "started": 1793247840.8334818,
+        "optimizer_calls_started": 310,
+        "optimizer_calls_completed": 310,
+        "extra_autograd_calls": 0,
+        "environments": 0,
+        "accepted_scientific_epochs": 0,
+        "stages": [],
+        "contract_sha256": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
+        "checkpoint_sha256": {
+          "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/S/stage6.pth": "12af997649fac1cc543d690ccc0ff02f925606fc7c5004e44e64435c4b9fda2f",
+          "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/S/stage7.pth": "d8f599a448809194e7d7a27272b79f8587d62fea2887ccc61bf930cf90dd4796",
+          "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/S/stage8.pth": "303fd9bf8da67999e279fdee3ddbcae1d83feb44a2a11b82f59afb0a62354209",
+          "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/S/stage9.pth": "c51a6ab85c88d3998b9d21ab38ca66520df772cb1ec8eeab35b82092121c16be"
+        },
+        "scope": "Every batch of one complete epoch per Task6/7/8/9, paired original/candidate from identical full state; not a repeat of accepted scientific epochs or a full 400-epoch duplicate.",
+        "current": {
+          "stage": 6,
+          "batches": 154,
+          "blocks": 154,
+          "seconds": 176.01211857795715
+        }
+      }
+    },
+    "GUARD.json": {
+      "sha256": "fc8f9063ca82ef65235b01c2c0a2919d1bae2e6632d6780c5e19f1b279febc60",
+      "data": {
+        "status": "BOUNDARY_GUARD_ONLY",
+        "time": 1793247490.8360233,
+        "controller": {
+          "pid": 3013,
+          "state": "S",
+          "start": "1301193",
+          "exit_code": 0,
+          "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/controller.py "
+        },
+        "child": {
+          "pid": 5055,
+          "state": "S",
+          "start": "4710026",
+          "exit_code": 0,
+          "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S "
+        },
+        "deadline": 1793252890.836024,
+        "contract_sha256": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
+        "training_signals": 0,
+        "controller_after": {
+          "pid": 3013,
+          "state": "T",
+          "start": "1301193",
+          "exit_code": 0,
+          "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/controller.py "
+        },
+        "watchdog_pid": 7156,
+        "child_after": {
+          "pid": 5055,
+          "state": "S",
+          "start": "4710026",
+          "exit_code": 0,
+          "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S "
+        }
+      }
+    },
+    "VALIDATION_DISPATCH.json": {
+      "sha256": "ea7c2d6772c2d126a3cfba8aee94609f9f3f281ae29584f5cbe559896abfae2a",
+      "data": {
+        "time": 1793247837.1091657,
+        "files": {
+          "candidate.py": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "validate_training.py": "fe46b30f893906c31128e71f87cd9c69b685d634ac27000c366e004b71083c13"
+        },
+        "pid": 7224
+      }
+    }
+  },
+  "training": {
+    "41": {
+      "epochs": 400,
+      "last": {
+        "stage": 9,
+        "epoch": 99,
+        "steps": 105500,
+        "batches": 362,
+        "seconds": 219.12918138504028,
+        "lr_first": 1.0140056022408963e-06,
+        "lr_after": 0.0,
+        "sampler_sha256": "bb1b83b5bf325b31bd4da05690a95558334f6c63bc11ff18b0186e5562d7b86e",
+        "totals": {
+          "loss": -12217.02661705017,
+          "bc": -12217.446182250977,
+          "ifa": 0.0,
+          "expert_loss": 2.0677662755479105,
+          "expert_route": 8.58841467066668,
+          "retain_loss": 0.7032082884106785,
+          "retain_route": 5.6616536900401115,
+          "valid": 3475.0,
+          "invalid": 145.0,
+          "old_eligible": 2236.0,
+          "anchor_slots": 240.0,
+          "anchor_actual": 240.0,
+          "anchor_empty": 0.0,
+          "anchor_forwards": 182.0
+        },
+        "physical_optimizer_calls": 195300,
+        "gate_blocks": 9100,
+        "gate_Q_accepts": 4268,
+        "training_probe": {
+          "bc_new": -31.888630628585815,
+          "exec_new": 0.012195970171887893,
+          "retain_support": 0.01521859411150217,
+          "retain_by_task": {
+            "6": 0.0053435456939041615,
+            "7": 0.007914393208920956,
+            "8": 0.0019606552086770535
+          },
+          "probe_windows": 88,
+          "policy_calls": 11
+        }
+      },
+      "train_exit": "0"
+    },
+    "42": {
+      "epochs": 383,
+      "last": {
+        "stage": 9,
+        "epoch": 82,
+        "steps": 99346,
+        "batches": 362,
+        "seconds": 99.97887372970581,
+        "lr_first": 1.8252100840336136e-05,
+        "lr_after": 1.723809523809524e-05,
+        "sampler_sha256": "0797b288ffa5e347c591d18c872585d1f63c3e476d384a40ab0c975236c541c1",
+        "totals": {
+          "loss": -11453.637187957764,
+          "bc": -11455.73364830017,
+          "ifa": 0.0,
+          "expert_loss": 3.1457194533431903,
+          "expert_route": 7.586316684028134,
+          "retain_loss": 13.00224625878036,
+          "retain_route": 40.580714555457234,
+          "valid": 3480.0,
+          "invalid": 140.0,
+          "old_eligible": 2241.0,
+          "anchor_slots": 720.0,
+          "anchor_actual": 720.0,
+          "anchor_empty": 0.0,
+          "anchor_forwards": 560.0
+        },
+        "physical_optimizer_calls": 182992,
+        "gate_blocks": 8471,
+        "gate_Q_accepts": 3985,
+        "training_probe": {
+          "bc_new": -31.562967538833618,
+          "exec_new": 0.006576321196916979,
+          "retain_support": 0.03408083016984165,
+          "retain_by_task": {
+            "6": 0.013396389782428741,
+            "7": 0.0195393618196249,
+            "8": 0.0011450785677880049
+          },
+          "probe_windows": 88,
+          "policy_calls": 12
+        }
+      },
+      "train_exit": null
+    },
+    "43": {
+      "epochs": 0,
+      "last": null,
+      "train_exit": null
+    }
+  },
+  "processes": [
+    {
+      "pid": 3013,
+      "state": "T",
+      "start": "1301193",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/controller.py "
+    },
+    {
+      "pid": 5055,
+      "state": "S",
+      "start": "4710026",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S "
+    },
+    {
+      "pid": 5060,
+      "state": "R",
+      "start": "4710547",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S "
+    },
+    {
+      "pid": 7156,
+      "state": "S",
+      "start": "7216461",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/watchdog.py "
+    },
+    {
+      "pid": 7224,
+      "state": "S",
+      "start": "7251088",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/validate_training.py "
+    },
+    {
+      "pid": 7228,
+      "state": "R",
+      "start": "7251199",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/validate_training.py "
+    }
+  ],
+  "validation_log_tail": "[W socket.cpp:426] [c10d] The server socket has failed to bind to [::]:29400 (errno: 98 - Address already in use).\n[W socket.cpp:426] [c10d] The server socket has failed to bind to ?UNKNOWN? (errno: 98 - Address already in use).\n[E socket.cpp:462] [c10d] The server socket has failed to listen on any local network address.\n[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\nGym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.\nPlease upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.\nSee the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.\n[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.\n  warnings.warn(\ntemporal_transformer.decoder.wte.weight\ntemporal_transformer.decoder.wpe.weight\ntemporal_transformer.decoder.h.0.ln_1.weight\ntemporal_transformer.decoder.h.0.ln_1.bias\ntemporal_transformer.decoder.h.0.attn.c_attn.weight\ntemporal_transformer.decoder.h.0.attn.c_attn.bias\ntemporal_transformer.decoder.h.0.attn.c_proj.weight\ntemporal_transformer.decoder.h.0.attn.c_proj.bias\ntemporal_transformer.decoder.h.0.ln_2.weight\ntemporal_transformer.decoder.h.0.ln_2.bias\ntemporal_transformer.decoder.h.0.mlp.c_fc.weight\ntemporal_transformer.decoder.h.0.mlp.c_fc.bias\ntemporal_transformer.decoder.h.0.mlp.c_proj.weight\ntemporal_transformer.decoder.h.0.mlp.c_proj.bias\ntemporal_transformer.decoder.h.1.ln_1.weight\ntemporal_transformer.decoder.h.1.ln_1.bias\ntemporal_transformer.decoder.h.1.attn.c_attn.weight\ntemporal_transformer.decoder.h.1.attn.c_attn.bias\ntemporal_transformer.decoder.h.1.attn.c_proj.weight\ntemporal_transformer.decoder.h.1.attn.c_proj.bias\ntemporal_transformer.decoder.h.1.ln_2.weight\ntemporal_transformer.decoder.h.1.ln_2.bias\ntemporal_transformer.decoder.h.1.mlp.c_fc.weight\ntemporal_transformer.decoder.h.1.mlp.c_fc.bias\ntemporal_transformer.decoder.h.1.mlp.c_proj.weight\ntemporal_transformer.decoder.h.1.mlp.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_1.weight\ntemporal_transformer.decoder.h.2.ln_1.bias\ntemporal_transformer.decoder.h.2.attn.c_attn.weight\ntemporal_transformer.decoder.h.2.attn.c_attn.bias\ntemporal_transformer.decoder.h.2.attn.c_proj.weight\ntemporal_transformer.decoder.h.2.attn.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_2.weight\ntemporal_transformer.decoder.h.2.ln_2.bias\ntemporal_transformer.decoder.h.2.mlp.c_fc.weight\ntemporal_transformer.decoder.h.2.mlp.c_fc.bias\ntemporal_transformer.decoder.h.2.mlp.c_proj.weight\ntemporal_transformer.decoder.h.2.mlp.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_1.weight\ntemporal_transformer.decoder.h.3.ln_1.bias\ntemporal_transformer.decoder.h.3.attn.c_attn.weight\ntemporal_transformer.decoder.h.3.attn.c_attn.bias\ntemporal_transformer.decoder.h.3.attn.c_proj.weight\ntemporal_transformer.decoder.h.3.attn.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_2.weight\ntemporal_transformer.decoder.h.3.ln_2.bias\ntemporal_transformer.decoder.h.3.mlp.c_fc.weight\ntemporal_transformer.decoder.h.3.mlp.c_fc.bias\ntemporal_transformer.decoder.h.3.mlp.c_proj.weight\ntemporal_transformer.decoder.h.3.mlp.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_1.weight\ntemporal_transformer.decoder.h.4.ln_1.bias\ntemporal_transformer.decoder.h.4.attn.c_attn.weight\ntemporal_transformer.decoder.h.4.attn.c_attn.bias\ntemporal_transformer.decoder.h.4.attn.c_proj.weight\ntemporal_transformer.decoder.h.4.attn.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_2.weight\ntemporal_transformer.decoder.h.4.ln_2.bias\ntemporal_transformer.decoder.h.4.mlp.c_fc.weight\ntemporal_transformer.decoder.h.4.mlp.c_fc.bias\ntemporal_transformer.decoder.h.4.mlp.c_proj.weight\ntemporal_transformer.decoder.h.4.mlp.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_1.weight\ntemporal_transformer.decoder.h.5.ln_1.bias\ntemporal_transformer.decoder.h.5.attn.c_attn.weight\ntemporal_transformer.decoder.h.5.attn.c_attn.bias\ntemporal_transformer.decoder.h.5.attn.c_proj.weight\ntemporal_transformer.decoder.h.5.attn.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_2.weight\ntemporal_transformer.decoder.h.5.ln_2.bias\ntemporal_transformer.decoder.h.5.mlp.c_fc.weight\ntemporal_transformer.decoder.h.5.mlp.c_fc.bias\ntemporal_transformer.decoder.h.5.mlp.c_proj.weight\ntemporal_transformer.decoder.h.5.mlp.c_proj.bias\ntemporal_transformer.decoder.ln_f.weight\ntemporal_transformer.decoder.ln_f.bias\npolicy_head.share.0.weight\npolicy_head.share.0.bias\npolicy_head.share.2.weight\npolicy_head.share.2.bias\npolicy_head.share.4.weight\npolicy_head.share.4.bias\npolicy_head.mean_layer.weight\npolicy_head.mean_layer.bias\npolicy_head.logstd_layer.weight\npolicy_head.logstd_layer.bias\npolicy_head.logits_layer.weight\npolicy_head.logits_layer.bias\n",
+  "controller_log_tail": null
+}

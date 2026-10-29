@@ -1,5 +1,9 @@
 # 完整 S 实现与来源
 
+## 2026-10-29 用户授权完整路径等价验证和seed43边界切换
+
+本轮最高优先级改为：验证通过后在seed43启动前切换CPU复制优化，seed42不中断、完成部分不重跑。见engineering_copy_20261029_v1/README.md、STATIC_REVIEW.json及实际VALIDATION/交接证据；此授权覆盖下文“候选未部署、继续原队列”的历史决定。原63冻结项不改，工程合同单列，科学训练与工程验证成本分列。验收包装在该工程目录外置适配真实完成来源，原根controller.exit不得伪造。正式采集和评估代码不变。
+
 ## 2026-10-29 09:49 性能诊断与原队列保持
 
 用户要求具体瓶颈与结果不变的优化可行性。PERFORMANCE_REPORT_20261029.md及PERFORMANCE_AUDIT_20261029.json记录120秒非阻塞外部采样：主线程训练更新45.16%、state捕获28.19%/恢复9.43%/检查2.85%、探针6.38%、读数据/保存各1.53%，GPU均23.68%、进程CPU99.70%单核，未见quota限制。无forward/backward/optimizer/环境或已完成epoch重跑；独立state复制验证454张量全值/dtype/stride/独立性/RNG实际PASS，省去CUDA→CPU后冗余CPUclone中位117.53→56.75ms，条件整段节时约14.6%，不是整训练实测。

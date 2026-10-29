@@ -1,0 +1,113 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-10-29T12:13:16.327082+08:00",
+  "counts": {
+    "41": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1793222243.7766988,
+        "pid": 3019
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 126.18298938274384,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4268
+    },
+    "42": {
+      "epochs": 374,
+      "accepted_updates": 96088,
+      "physical_optimizer_calls": 176476,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 30,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "train",
+        "epoch_complete": 74,
+        "steps": 96088,
+        "physical_optimizer_calls": 176476,
+        "time": 1793247138.968239,
+        "pid": 5060
+      },
+      "current_stage_epochs": 74,
+      "recent_epoch_mean_seconds": 94.40793533325196,
+      "current_stage_compute_minutes_estimate": 40.91010531107585,
+      "gate_blocks_observed": 8159,
+      "gate_Q_accepts_observed": 3865
+    },
+    "43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 774,
+  "accepted_updates": 201588,
+  "physical_training_optimizer_calls": 371776,
+  "own_isolated_optimizer_calls": 182,
+  "own_extra_autograd_calls": 82,
+  "training_collection_completed_episodes": 70,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 3013,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 5055,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S ",
+      "state": "S"
+    },
+    {
+      "pid": 5060,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1429057536,
+      "remaining_bound": 0,
+      "reserve": 1073741824,
+      "spare": 355315712
+    },
+    "/data": {
+      "free": 38166794240,
+      "remaining_bound": 7333093376,
+      "reserve": 2147483648,
+      "spare": 28686217216
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "5060\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "62250daad76ee75a650a84ee578e665c9c7784ef41673f18204fbaded7df5c7a",
+  "contract": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
+  "prefix_checked": "check_readonly_20261029_094951"
+}
