@@ -1,0 +1,66 @@
+{
+  "status": "PASS_DIAGNOSTIC_COPY_PRIMITIVE_ONLY_NOT_DEPLOYED",
+  "main_thread_samples": 5999,
+  "category_samples": {
+    "training_update": 2709,
+    "fixed_probe": 383,
+    "state_restore": 566,
+    "data_load": 92,
+    "other_or_incomplete": 295,
+    "state_capture": 1691,
+    "state_equality": 171,
+    "checkpoint_save": 92
+  },
+  "category_percent": {
+    "training_update": 45.15752625437573,
+    "fixed_probe": 6.384397399566595,
+    "state_restore": 9.434905817636272,
+    "data_load": 1.5335889314885813,
+    "other_or_incomplete": 4.917486247707951,
+    "state_capture": 28.188031338556428,
+    "state_equality": 2.8504750791798634,
+    "checkpoint_save": 1.5335889314885813
+  },
+  "duration_seconds": 118.12638449668884,
+  "process_cpu_percent_one_core": 99.6983023748612,
+  "gpu_utilization_percent": {
+    "mean": 23.683333333333334,
+    "minimum": 0.0,
+    "maximum": 33.0
+  },
+  "disk_read_bytes": 0,
+  "disk_write_bytes": 693497856,
+  "logical_read_bytes": 901395400,
+  "scheduler_wait_seconds": 0.00950718,
+  "cpu_quota": "-1",
+  "cpu_throttling": "nr_periods 0\nnr_throttled 0\nthrottled_time 0\n",
+  "copy_median_seconds": {
+    "original": 0.11753419500018936,
+    "candidate": 0.056747394999547396
+  },
+  "copy_speedup": 2.071182210234087,
+  "conditional_whole_training_time_reduction_fraction": 0.1457839757515587,
+  "conditional_whole_training_speedup": 1.1706640610960473,
+  "candidate": "performance_copy_candidate.py",
+  "deployment": "NOT_DEPLOYED",
+  "reason": "Current interpreters have already imported the original function. The frozen controller starts fixed train.py paths, has no boundary hook, and forbids a second dispatch. Safe adoption would require a separate versioned queue handoff and full training admission; no hot patch, controller interruption, or replay was performed for this diagnostic.",
+  "added_optimizer_calls": 0,
+  "added_autograd_calls": 0,
+  "added_environment_attempts": 0,
+  "limits": [
+    "Sample percentages are asynchronous wall-stack occupancy, not GPU kernel timings; about 5% other/incomplete frames retained.",
+    "Only a two-minute Task8 window was sampled; cannot attribute all historical slowdown or other stages with certainty.",
+    "Copy equivalence validates values/dtypes/strides, source isolation and RNG on a completed checkpoint in a separate process; it does not certify a modified whole training run.",
+    "Amdahl estimate assumes the microbenchmark reduction transfers to production; no production speedup claimed."
+  ],
+  "sources": {
+    "capacity_readonly_20261029_093957\\EVIDENCE.json": "4325b8f5b31a40f9041e48dd62bf088545838d6b0b672a18f3bbe8ad26adc26c",
+    "capacity_readonly_20261029_094623\\EVIDENCE.json": "3de31f34ff762283efb0c7b800d4cc5e60d035d69c0d0f9791c8054ecd4bea21",
+    "capacity_readonly_20261029_093718\\EVIDENCE.json": "ce133633579b47b871463b38dcf77a0e4872b1c0de5dfc13fb77f25e7a66abba",
+    "capacity_readonly_20261029_093843\\EVIDENCE.json": "d06dbba338eae8ac1e9c0c9834778309ac430ab0983c0eae8d9535b3ef5c083d",
+    "performance_copy_candidate.py": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+    "controller.py": "95046f9c9de2953a42d06986baf7b8db279722ec5f8b04dbf2765724745cba5b",
+    "seed42\\train.py": "f35fa6678b40855969463be3c5e90167be0fdb50b5df41548df1dda44845f63c",
+    "seed42\\runtime.py": "a39ed7e85129e408ad33ef997d21e3703c83245a31040e1f09cc76675891c09c"
+  }
+}

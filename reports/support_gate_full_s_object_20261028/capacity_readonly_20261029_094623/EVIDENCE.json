@@ -1,0 +1,41 @@
+{
+  "status": "PASS_COPY_ONLY_EXACT_NO_TRAINING_REPLAY",
+  "time": 1793238396.0314815,
+  "checkpoint_sha256": "c51a6ab85c88d3998b9d21ab38ca66520df772cb1ec8eeab35b82092121c16be",
+  "checkpoint_bytes": 346497013,
+  "state_tensor_bytes": 346150168,
+  "tensor_count": 454,
+  "dtype_shape_stride_value_exact": true,
+  "source_mutation_isolation": true,
+  "cpu_input_independence": true,
+  "rng_exact": true,
+  "frozen_files_exact": true,
+  "timings_seconds": {
+    "original": [
+      0.11950909000006504,
+      0.11485956999968039,
+      0.13091438000265043,
+      0.11289032999775372,
+      0.11555930000031367,
+      0.11964851000084309
+    ],
+    "candidate": [
+      0.06902231999993091,
+      0.05586828999366844,
+      0.05728670999815222,
+      0.05620808000094257,
+      0.05616141999780666,
+      0.0712726100027794
+    ]
+  },
+  "median_speedup": 2.071182210234087,
+  "extra_optimizer_calls": 0,
+  "extra_autograd_calls": 0,
+  "extra_environments": 0,
+  "target_process_modified": false,
+  "limits": [
+    "Copy primitive only; not full optimizer replay or whole-run performance acceptance.",
+    "Separate process shares the GPU during bounded copy microbenchmark; do not use these times as isolated production speedup.",
+    "Current training interpreter already imported original helper; editing files would not safely replace it."
+  ]
+}

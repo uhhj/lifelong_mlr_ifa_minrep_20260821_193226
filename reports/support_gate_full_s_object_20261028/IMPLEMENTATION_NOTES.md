@@ -1,5 +1,13 @@
 # 完整 S 实现与来源
 
+## 2026-10-29 09:49 性能诊断与原队列保持
+
+用户要求具体瓶颈与结果不变的优化可行性。PERFORMANCE_REPORT_20261029.md及PERFORMANCE_AUDIT_20261029.json记录120秒非阻塞外部采样：主线程训练更新45.16%、state捕获28.19%/恢复9.43%/检查2.85%、探针6.38%、读数据/保存各1.53%，GPU均23.68%、进程CPU99.70%单核，未见quota限制。无forward/backward/optimizer/环境或已完成epoch重跑；独立state复制验证454张量全值/dtype/stride/独立性/RNG实际PASS，省去CUDA→CPU后冗余CPUclone中位117.53→56.75ms，条件整段节时约14.6%，不是整训练实测。
+
+候选performance_copy_candidate.py尚未部署，复制原语PASS不能等同完整训练等价。当前解释器无安全热替换接口，原controller无seed边界切换钩子；未来采用需另行版本化队列接管和完整准入，不能并行再启动队列。本轮未暂停/停止/重启任何科学进程，63冻结项保持。工具py-spy0.4.1仅隔离/data/mlr_ifa/diagnostics/support_gate_performance_20261029_v1，官方wheel及binary SHA留证，原环境未改，诊断包装已还原。
+
+最后check_readonly_20261029_094951/LOCAL_AUDIT真实PASS，092535全部前缀保留：seed41完成训练和40采集；seed42 Task8完整85轮，总285轮64665接受/113630物理、20采集；seed43尚未开始。累计685epoch170165接受/308930完整轮物理、153隔离/71autograd、60采集，正式0。controller3013/GPU5060健康，旧机制无进程；独立最终CPU验收待全队列自然结束。监控仍240分钟围绕当前seed末尾复查，09:25总ETA只是条件估计，未把候选提速计入ETA。
+
 ## 2026-10-29 09:25 用户请求进度与总耗时复查
 
 check_readonly_20261029_092535实际PASS_PROGRESS_NOT_FINAL，063734所有已完成epoch和门控前缀精确保留，63冻结项、controller3013/GPU5060、容量通过，旧机制无进程。seed41保持400轮/40采集/train_S.exit0；seed42 Task6/7各100轮、Task8完整66轮，266轮58794接受/101888完整轮物理、20采集，自身Task8准入PASS后隔离共62/30额外autograd。seed43未启动。合计666epoch164294接受/297188物理、153隔离/71autograd、60采集、正式0/600。seed42观察4370门控2106接受Q含部分轮，不作为闭环收益。
