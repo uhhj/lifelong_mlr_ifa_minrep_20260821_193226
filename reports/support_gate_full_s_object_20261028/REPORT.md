@@ -1,19 +1,19 @@
 # 最新完整 S OBJECT 三 seed：运行报告
 
-## 最新 2026-10-29T12:46:40.108874+08:00：用户授权复制优化验证与安全交接
+## 最新 2026-10-29T12:57:32.739626+08:00：用户授权复制优化验证与安全交接
 
 实际验证PASS_FULL_TRAINING_PATH_EXACT：Task6–9各一整轮全部batch，157/227/309/362批，C/Q完整候选与两分支恢复、每步标量、探针、门控、所选完整state和保存加载下一步逐位相等。额外诊断3914 optimizer、18 autograd、0环境、0生产接受epoch，独立记账；这是完整路径覆盖，不是重跑400epoch或已经验收三seed。原seed41已有CP/JSON及63冻结项实际保持。
 
-工程合同 befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf，目录engineering_copy_20261029_v1，controller7806，当前 {"phase": "wait_seed42", "time": 1793249194.812188, "pid": 7806, "child": {"pid": 5055, "state": "S", "start": "4710026", "exit_code": 0, "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py S "}}。仅CUDA→CPU后的重复CPUclone被去掉，CPU源clone保留。冻结训练文件未修改，wrapper在新seed43解释器导入时替换函数；原各阶段自身GPU准入保留，并核seed43实际阶段开始完整state复制。
+工程合同 befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf，目录engineering_copy_20261029_v1，controller7806，当前 {"phase": "train", "seed": 43, "pid": 8315, "time": 1793249766.6886415, "controller": 7806, "engineering_contract": "befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf"}。仅CUDA→CPU后的重复CPUclone被去掉，CPU源clone保留。冻结训练文件未修改，wrapper在新seed43解释器导入时替换函数；原各阶段自身GPU准入保留，并核seed43实际阶段开始完整state复制。
 
-seed42继续原launcher5055/train5060，不接收任何信号。只有原等待调度器3013暂停以保留seed43交接点。新调度器等seed42自然退出且400轮/40采集核验后接管；owner watchdog在接管前工程owner失败时只释放旧调度器。不可盲SIGCONT旧调度器或启动其他队列。
+seed42已自然完成400轮和40采集、launcher内核Z/exit_code0被记录后才结束原等待调度器3013；新调度器持有同一根锁，仅train43→evaluate41→evaluate42→evaluate43。
 禁止重跑guard/validation/dispatch/controller/build或已完成epoch；不得恢复旧机制。原root/controller.exit保持不存在，最终真实完成来源为engineering_copy_20261029_v1/controller.exit==0且无自身进程，不可伪造原exit。
 
 seed41：400/400轮，105500接受/195300已完成轮物理调用，采集40/40，正式0/200；阶段状态{"arm": "S", "stage": 9, "phase": "training_collection", "time": 1793222243.7766988, "pid": 3019}。
-seed42：395/400轮，103690接受/191680已完成轮物理调用，采集30/40，正式0/200；阶段状态{"arm": "S", "stage": 9, "phase": "train", "epoch_complete": 95, "steps": 103690, "physical_optimizer_calls": 191680, "time": 1793249155.6296484, "pid": 5060}。
-seed43：0/400轮，0接受/0已完成轮物理调用，采集0/40，正式0/200；阶段状态{}。
+seed42：400/400轮，105500接受/195300已完成轮物理调用，采集40/40，正式0/200；阶段状态{"arm": "S", "stage": 9, "phase": "training_collection", "time": 1793249619.0206304, "pid": 5060}。
+seed43：11/400轮，1727接受/1727已完成轮物理调用，采集0/40，正式0/200；阶段状态{"arm": "S", "stage": 6, "phase": "train", "epoch_complete": 11, "steps": 1727, "physical_optimizer_calls": 1727, "time": 1793249846.7447133, "pid": 8320}。
 
-合计795/1200完整epoch、209190/316500接受、386980/585900生产物理调用，自身准入182/273、82/123额外autograd，采集70/120、正式0/600。额外3914诊断调用不混入生产计数。
+合计811/1200完整epoch、212727/316500接受、392327/585900生产物理调用，自身准入186/273、90/123额外autograd，采集80/120、正式0/600。额外3914诊断调用不混入生产计数。
 
 科学协议仍是官方OBJECT初始化、Task6–9各100轮，Task6无保持，Task7–9自己的成功缓存q与固定10步C参照门控、两个epsilon0、原4槽分母；每阶段10采集20–29不补采，正式0–19原600步5zero配对Normal。内部C/Q属于新S。禁止扩seed、扫参、改变损失阈值或采样预算、因负结果追加实验。旧机制永久停止，14完整组及Q3轮保留，旧未记账中断成本UNKNOWN。
 
