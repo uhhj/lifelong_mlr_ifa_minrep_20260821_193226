@@ -1,5 +1,13 @@
 # 完整 S 实现与来源
 
+## 2026-10-29 20:11 全部训练与600闭环已结束，真实最终CPU验收正在运行
+
+实际check_readonly_20261029_201114/LOCAL_AUDIT PASS：三个seed各400轮、40训练采集、200正式回合，合计1200轮/316500接受/585900生产物理、273准入/123额外autograd、120采集、600正式。175935和190827历史前缀精确保留，63科学项/5工程源不变。三seed train/evaluate.exit均0，工程controller.exit=0，进程为空；自然完成时间2026-10-29 19:57:28 CST。600正式vector计时共3396.010650秒（约56.6002分钟）。原root controller.exit仍不存在，没有恢复旧机制或重复训练。
+
+20:12已唯一提交真正final_readonly只读CPU验收：旧机制目录.session_control/request_20261029_201235_eaedf056.json。worker4572正RUNNING_REQUEST，先查对应result和status，不得重复提交或重启worker。结果返回后按output首行真实目录复制至当前目录，engineering_copy_20261029_v1/audit_final_local.py FINAL，再describe_final.py与engineering_copy_20261029_v1/analyze_accepted_results.py FINAL；原失败若有须保留后外置版本化修复，不能重训重评。CPU最终尚未通过，报告仍PARTIAL，不能仅600正式就删除监控。
+
+最新时间预算仅CPU验收、解释报告及发布；训练和正式剩余均0。额外3914工程optimizer/18autograd单列。全部验收与分析发布完成后才删除同一监控。以下历史完成来源与协议不变。
+
 ## 2026-10-29 19:08 全部训练完成，正式闭环运行中
 
 check_readonly_20261029_190827/LOCAL_AUDIT实际PASS，175935全部epoch/门控前缀精确保留，63科学项和5工程源不变、旧机制无进程。三个seed均400/400轮及40/40训练采集完成，train_S.exit均0；合计1200轮、316500接受、585900生产物理调用、273准入/123额外autograd、120采集。3914工程optimizer/18autograd仍单列。seed43全9100门控块4000接受Q，非闭环收益。controller7806已自然进入evaluate41，评估进程10081正常；正式outcomes为41=80/200、42=0/200、43=0/200，尚未最终CPU验收，不称实验完成。

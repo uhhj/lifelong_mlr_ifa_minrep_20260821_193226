@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL_OPTIMIZED_SEED43_OR_EVALUATION",
-  "observation": "2026-10-29T19:08:28.344227+08:00",
+  "status": "PARTIAL_TRAINING_AND_EVALUATION_COMPLETE_CPU_AUDIT_RUNNING",
+  "observation": "2026-10-29T20:11:15.841302+08:00",
   "engineering": {
     "contract": "befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf",
     "diagnostic_optimizer_calls": 3914,
@@ -17,7 +17,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 80,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -38,7 +38,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -59,7 +59,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -80,57 +80,45 @@
   "own_isolated_optimizer_calls": 273,
   "own_extra_autograd_calls": 123,
   "training_collection_completed_episodes": 120,
-  "formal_episodes": 80,
+  "formal_episodes": 600,
   "failures": {},
-  "processes": [
-    {
-      "pid": 7806,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/controller.py ",
-      "state": "S"
-    },
-    {
-      "pid": 10081,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/evaluate.py ",
-      "state": "S"
-    }
-  ],
+  "processes": [],
   "capacity": {
     "/root": {
-      "free": 1428922368,
+      "free": 1428750336,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 355180544
+      "spare": 355008512
     },
     "/data": {
-      "free": 37515653120,
+      "free": 37514452992,
       "remaining_bound": 6690185216,
       "reserve": 2147483648,
-      "spare": 28677984256
+      "spare": 28676784128
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "10081\n",
+    "stdout": "",
     "stderr": ""
   },
-  "snapshot_sha256": "ed75f8d835d7d913cdb4cf6e2951ab070ae1a3e93726d305fff94d713f5f33b7",
+  "snapshot_sha256": "6f0f6a3185195d7639c5150a6ce9f15f7ec36e045fe3a59a2b638eb8c69f6d51",
   "contract": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
-  "prefix_checked": "check_readonly_20261029_175935",
+  "prefix_checked": "check_readonly_20261029_190827",
   "root": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1",
   "controller": 7806,
   "original_controller": 3013,
   "original_controller_state": "REPLACED_AFTER_SEED42_NATURAL_EXIT",
   "engineering_status": {
-    "phase": "evaluate",
-    "seed": 41,
-    "pid": 10081,
-    "time": 1793271593.9661984,
-    "controller": 7806,
-    "engineering_contract": "befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf"
+    "phase": "complete",
+    "time": 1793275048.0455334,
+    "controller": 7806
   },
-  "latest_evidence": "check_readonly_20261029_190827",
-  "next_check_minutes": 70,
-  "final_CPU_acceptance": "PENDING",
+  "latest_evidence": "check_readonly_20261029_201114",
+  "next_check_minutes": 30,
+  "final_CPU_acceptance": "RUNNING_READ_ONLY",
   "scientific_conclusion": "PENDING_FORMAL_CLOSED_LOOP",
-  "timing_audit": "check_readonly_20261029_190827/TIMING_AUDIT.json"
+  "final_audit_request": "request_20261029_201235_eaedf056.json",
+  "final_audit_transport_directory": "../20261027_support_gate_forks/.session_control",
+  "server_completed_at": "2026-10-29T19:57:28.045533+08:00"
 }
