@@ -1,0 +1,13 @@
+# GOAL完整S实现与边界
+
+按用户2026-10-29授权新建，不复用旧训练状态。GOAL三个seed的RA/manifest/mask/官方初始化经新的只读preflight逐文件哈希绑定。全序列门控训练从已完成OBJECT最新S源移植，唯一算术差异是GOAL批次数与对应预算断言；损失、门控、阈值、探针选择、缓存与采集策略相同。
+
+GOAL41旧源是D/O/S多方法目录，因此只取其布局与父数据绑定；初始化、采集、评估使用已接受GOAL42/43的参数化SEED单S实现（与OBJECT单S相同），避免错误读取INITIAL_D或执行600回合/seed。这不是补跑D/O。所有改动diff/source SHA保留在review和UPLOAD_REVIEW。
+
+候选cpu_snapshot与已验证OBJECT优化逐字相同；GOAL每阶段实际完整初态与原cpu复制进行精确比较并记录COPY_EQ，零额外训练/环境调用。现有GPU准入保持不变。真实执行仍须各自准入通过，不能用静态检查替代。
+
+每seed接受76100、生产物理142200、门控6700；总228300/426600/20100。自己273隔离optimizer/123准入autograd、最多108方向autograd分列。已完成OBJECT的3914优化诊断和旧机制未记账成本不混进GOAL。
+
+主对照已有完整C：GOAL41证据 execution/20261025_ccbp_v3_full/final_readonly_20261025_181226；GOAL42/43证据 execution/20261027_c_goal42_43_object41_42_43/final_readonly_20261027_222119。最终必须按600回合的初态文件、实际字节、noise、env_seed逐项验证配对并报告负单元。额外120次采集与双候选意味着不等交互、不等算力，不能声称门控单因素因果作用。
+
+只读preflight实际无GPU占用、无旧实验进程且存储预留通过后唯一部署。训练更新不会因发布或监控而重复。最终CPU包装为外置脚本，仅静态适配时标记STATIC_ONLY；全部自然结束后才实际执行接受检查。包装错误只版本化修复包装，不重训重评。

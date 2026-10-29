@@ -1,0 +1,25 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261026_ccbp_v4_s_goal42_43\seed43\runtime.py
++++ new/seed43/runtime.py
+@@ -80,3 +80,22 @@
+  if isinstance(a,dict):return a.keys()==b.keys() and all(equal(a[k],b[k]) for k in a)
+  if isinstance(a,(tuple,list)):return len(a)==len(b) and all(equal(x,y) for x,y in zip(a,b))
+  return a==b
++
++# Independent snapshots: CPU inputs retain clone; CUDA transfer already owns storage.
++from candidate import cpu_snapshot
++_reference_cpu=cpu
++_reference_capture=capture
++_copy_checked={}
++cpu=cpu_snapshot
++def capture(a):
++ result=_reference_capture(a)
++ key=str(a.step)
++ if a.step in [0,10000,23900,42400] and a.scheduler.last_epoch==0 and key not in _copy_checked:
++  global cpu
++  try:
++   cpu=_reference_cpu;oracle=_reference_capture(a)
++  finally:cpu=cpu_snapshot
++  assert equal(result,oracle),'GOAL actual stage initial full state copy mismatch'
++  _copy_checked[key]=dict(all_state_exact=True,optimizer_calls_added=0,environments_added=0,time=time.time())
++  write(R/'COPY_EQ.json',dict(status='PASS_OBSERVED_STAGE_STARTS',checked=_copy_checked,candidate_sha256=sha(R/'candidate.py')))
++ return result

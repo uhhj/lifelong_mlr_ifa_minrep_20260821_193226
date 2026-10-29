@@ -1,0 +1,16 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261026_ccbp_v4_s_goal42_43\seed42\layout.py
++++ new/seed42/layout.py
+@@ -1,11 +1,11 @@
+ from pathlib import Path
+ ARMS='S'
+ SEED=42
+-NAME='CCBP_V4_S_GOAL42_43_20261026_v1'
++NAME='SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1'
+ ROOT_PRIVATE=Path('/root/mlr_ifa/experiments')/NAME
+ DATA_PRIVATE=Path('/data/mlr_ifa/experiments')/NAME
+ OUTPUT={a:DATA_PRIVATE/('seed%d'%SEED)/a for a in ARMS}
+-VOLUME_BOUND={'/root':0,'/data':4*1024**3}
++VOLUME_BOUND={'/root':0,'/data':8*1024**3}
+ POP={6: 997, 7: 1388, 8: 1848, 9: 3365}
+ VALID={6: 917, 7: 1288, 8: 1723, 9: 3215}
+ OLD={6: 0, 7: 479, 8: 899, 9: 1326}

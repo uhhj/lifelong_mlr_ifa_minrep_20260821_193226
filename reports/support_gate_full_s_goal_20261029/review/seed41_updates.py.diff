@@ -1,0 +1,20 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261025_ccbp_v4_full\updates.py
++++ new/seed41/updates.py
+@@ -1,7 +1,7 @@
+ from runtime import *
+ from losses import expert
+ from legacy_losses import aux as legacy_aux
+-from memory import retention
++from support_memory import retention
+ 
+ def update(a,batch,arm,memory,scale,info,stage,measure=False,retain_weight=RETAIN_WEIGHT,legacy=False):
+     x=a.map_tensor_to_device(batch[0]);tasks=torch.tensor([int(v) for v in batch[1]],device='cuda');a.optimizer.zero_grad()
+@@ -18,7 +18,7 @@
+                 extra,ex,rr=expert(q,y,scale)
+                 if legacy:extra,_=legacy_aux('C',q,y,tuple(v.detach() for v in q),scale)
+             if stage>6 and retain_weight!=0:
+-                rx,rt,anchor=retention(a.policy.module,memory,stage,a.step)
++                rx,rt,anchor=retention(a.policy.module,memory,stage,a.step,arm)
+         finally:
+             for n,m in a.policy.named_modules():m.training=modes[n]
+             restore_rng(saved)
