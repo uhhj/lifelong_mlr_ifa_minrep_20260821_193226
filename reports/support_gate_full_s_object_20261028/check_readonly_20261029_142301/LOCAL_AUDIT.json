@@ -1,0 +1,127 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-10-29T14:23:02.390973+08:00",
+  "engineering": {
+    "contract": "befceb11089903813ba65c839e604a44ab1d0c18d7f2dc8282436c581c5ed3cf",
+    "diagnostic_optimizer_calls": 3914,
+    "diagnostic_extra_autograd_calls": 18,
+    "diagnostic_environments": 0,
+    "completion_source": "engineering_copy_20261029_v1/controller.exit",
+    "validation_scope": "Every batch of one complete epoch per Task6/7/8/9, paired original/candidate from identical full state; not a repeat of accepted scientific epochs or a full 400-epoch duplicate."
+  },
+  "counts": {
+    "41": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1793222243.7766988,
+        "pid": 3019
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 126.18298938274384,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4268
+    },
+    "42": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1793249619.0206304,
+        "pid": 5060
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 91.52719731330872,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4107
+    },
+    "43": {
+      "epochs": 194,
+      "accepted_updates": 37038,
+      "physical_optimizer_calls": 58376,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 94,
+        "steps": 37038,
+        "physical_optimizer_calls": 58376,
+        "time": 1793254952.624099,
+        "pid": 8320
+      },
+      "current_stage_epochs": 94,
+      "recent_epoch_mean_seconds": 45.148860692977905,
+      "current_stage_compute_minutes_estimate": 4.51488606929779,
+      "gate_blocks_observed": 2175,
+      "gate_Q_accepts_observed": 893
+    }
+  },
+  "epochs": 994,
+  "accepted_updates": 248038,
+  "physical_training_optimizer_calls": 448976,
+  "own_isolated_optimizer_calls": 215,
+  "own_extra_autograd_calls": 101,
+  "training_collection_completed_episodes": 90,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 7806,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 8315,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/train43_optimized.py S ",
+      "state": "S"
+    },
+    {
+      "pid": 8320,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/engineering_copy_20261029_v1/train43_optimized.py S ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1429000192,
+      "remaining_bound": 0,
+      "reserve": 1073741824,
+      "spare": 355258368
+    },
+    "/data": {
+      "free": 37718691840,
+      "remaining_bound": 6887702528,
+      "reserve": 2147483648,
+      "spare": 28683505664
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "8320\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "9004c9f6dd665ed57842be296b04e0e0660b66233c7eb1f12e8e4e3982b36d02",
+  "contract": "8594c0b609b8bf948e7914fbf071567ed991d1698a9d8357b90fcb03dec3573d",
+  "prefix_checked": "check_readonly_20261029_131848"
+}

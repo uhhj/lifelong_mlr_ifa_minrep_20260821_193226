@@ -1,0 +1,85 @@
+{
+  "status": "OBSERVED_MATCHED_PREFIX_COMPARISON_AND_CONDITIONAL_ETA",
+  "observation": "2026-10-29T14:23:02.390973+08:00",
+  "snapshot_sha256": "9004c9f6dd665ed57842be296b04e0e0660b66233c7eb1f12e8e4e3982b36d02",
+  "stage7_completed": 94,
+  "current_recent10_seconds": 45.148860692977905,
+  "comparisons": {
+    "41": {
+      "matched_first_epochs": 94,
+      "original_mean_seconds": 83.32647831642882,
+      "optimized_mean_seconds": 46.223059509662875,
+      "mean_time_reduction_fraction": 0.44527765431136146,
+      "observed_mean_throughput_ratio": 1.8027036548502273,
+      "original_median_seconds": 57.81664597988129,
+      "optimized_median_seconds": 46.42128300666809,
+      "median_time_reduction_fraction": 0.197094846649847,
+      "original_min_max": [
+        45.83684706687927,
+        304.82082414627075
+      ],
+      "optimized_min_max": [
+        39.78544855117798,
+        51.831300497055054
+      ]
+    },
+    "42": {
+      "matched_first_epochs": 94,
+      "original_mean_seconds": 71.697942074309,
+      "optimized_mean_seconds": 46.223059509662875,
+      "mean_time_reduction_fraction": 0.35530842068303037,
+      "observed_mean_throughput_ratio": 1.5511293028822688,
+      "original_median_seconds": 54.84126257896423,
+      "optimized_median_seconds": 46.42128300666809,
+      "median_time_reduction_fraction": 0.1535336565268255,
+      "original_min_max": [
+        46.56488919258118,
+        228.9415717124939
+      ],
+      "optimized_min_max": [
+        39.78544855117798,
+        51.831300497055054
+      ]
+    }
+  },
+  "remaining_current_stage_compute_minutes": 4.51488606929779,
+  "unmeasured_stage8_9_seed42_reference_minutes": 301.4292300820351,
+  "remaining_training_collection_linear_minutes": [
+    202.97912582661658,
+    310.0794695147663
+  ],
+  "planning_hours": {
+    "training_collection": [
+      4,
+      6
+    ],
+    "all_three_seed_formal": [
+      1,
+      3
+    ],
+    "total_training_and_formal": [
+      5,
+      9
+    ]
+  },
+  "training_finish_window": [
+    "2026-10-29T18:23:02.390973+08:00",
+    "2026-10-29T20:23:02.390973+08:00"
+  ],
+  "training_and_all_formal_finish_window": [
+    "2026-10-29T19:23:02.390973+08:00",
+    "2026-10-29T23:23:02.390973+08:00"
+  ],
+  "historical_formal_seconds": 3067.6055436209863,
+  "historical_timing_audit_sha256": "553223fff0e13e3d9ab09c7a062e2825041a09bc95fcb02ccdf75d03cd50bba5",
+  "next_check_minutes": 210,
+  "limitations": [
+    "Times measure epoch computation, with epoch checkpoint saving and stage preparation/collection outside that timer.",
+    "Matched epoch counts are cross-seed observations, not randomized same-state timing tests; data masks, own caches, grouped retention forwards and resource conditions differ.",
+    "A mean time reduction is not identical to a throughput increase; both are reported separately.",
+    "Original seed42 contains large slow outliers; median comparison reduces their influence but is still not a causal estimate.",
+    "No isolated end-to-end causal speedup has been measured; earlier copy-primitive timing and conditional Amdahl estimate remain separate.",
+    "Seed43 Task8/9 and current 600 formal episodes are unmeasured; scenarios are scheduling allowances, not guarantees.",
+    "Final independent CPU acceptance, analysis and publication are additional; no training or environment was executed by this audit."
+  ]
+}
