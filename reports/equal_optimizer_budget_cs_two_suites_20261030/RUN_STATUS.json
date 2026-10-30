@@ -1,15 +1,15 @@
 {
   "status": "PARTIAL_C_TRAINING_OR_EVALUATION",
-  "observation": "2026-10-30T16:21:08.282835+08:00",
+  "observation": "2026-10-30T17:34:11.122492+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1",
   "controller": 47046,
   "contract": "f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7",
   "frozen_files": 88,
-  "latest_evidence": "check_readonly_20261030_162106",
-  "epochs": 1167,
-  "accepted_updates": 210895,
-  "production_physical_calls": 210895,
-  "own_isolated_calls": 153,
+  "latest_evidence": "check_readonly_20261030_173410",
+  "epochs": 1500,
+  "accepted_updates": 294400,
+  "production_physical_calls": 294400,
+  "own_isolated_calls": 215,
   "new_formal_episodes": 0,
   "new_training_collection": 0,
   "new_S_runs": 0,
@@ -25,20 +25,20 @@
       }
     },
     "GOAL_42": {
-      "epochs": 467,
-      "steps": 68695,
+      "epochs": 700,
+      "steps": 142200,
       "by_stage": {
         "6": 100,
         "7": 200,
-        "8": 167,
-        "9": 0
+        "8": 200,
+        "9": 200
       }
     },
     "GOAL_43": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 100,
+      "steps": 10000,
       "by_stage": {
-        "6": 0,
+        "6": 100,
         "7": 0,
         "8": 0,
         "9": 0
@@ -85,9 +85,12 @@
     "GOAL_42": {
       "6": 3.3985373258590696,
       "7": 6.930472660064697,
-      "8": 9.118325805664062
+      "8": 9.063669872283935,
+      "9": 15.933764338493347
     },
-    "GOAL_43": {},
+    "GOAL_43": {
+      "6": 3.3219771862030028
+    },
     "OBJECT_41": {},
     "OBJECT_42": {},
     "OBJECT_43": {}
@@ -143,59 +146,34 @@
     }
   },
   "phase": {
-    "phase": "wait_GOAL_42_natural_exit",
-    "time": 1793348440.1830895,
+    "phase": "train",
+    "case": "GOAL_43",
+    "pid": 47195,
+    "time": 1793352386.0941927,
     "controller": 47046,
-    "original_controller": {
-      "pid": 46492,
-      "state": "S",
-      "ppid": 1,
-      "start": "16094066",
-      "exit_code": 0,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/controller.py "
-    },
-    "child": {
-      "pid": 46718,
-      "state": "S",
-      "ppid": 46492,
-      "start": "16936633",
-      "exit_code": 0,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_42/train.py C "
-    },
-    "watchdog_pid": 47047,
-    "training_signals": 0
+    "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510"
   },
   "failure": null,
   "processes": [
-    {
-      "pid": 46492,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/controller.py ",
-      "state": "T"
-    },
-    {
-      "pid": 46718,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_42/train.py C ",
-      "state": "S"
-    },
-    {
-      "pid": 46723,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_42/train.py C ",
-      "state": "R"
-    },
     {
       "pid": 47046,
       "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/engineering_suite_order_20261030_v1/controller.py ",
       "state": "S"
     },
     {
-      "pid": 47047,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/engineering_suite_order_20261030_v1/watchdog.py ",
+      "pid": 47195,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_43/train.py C ",
       "state": "S"
+    },
+    {
+      "pid": 47200,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_43/train.py C ",
+      "state": "R"
     }
   ],
-  "next_check_minutes": 70,
+  "next_check_minutes": 130,
   "completion_source": "engineering_suite_order_20261030_v1/controller.exit",
   "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510",
   "final_CPU_acceptance": "PENDING_ACTUAL_FINAL",
-  "source_evidence_sha256": "354848ce200eedb9e9738070bd8c8948a382da2718698455d38369d4cf1a5e2d"
+  "source_evidence_sha256": "6201cb295d49547f811158c4d347ab36c8fa62f25f457ee8aade4e3a05eda8fb"
 }
