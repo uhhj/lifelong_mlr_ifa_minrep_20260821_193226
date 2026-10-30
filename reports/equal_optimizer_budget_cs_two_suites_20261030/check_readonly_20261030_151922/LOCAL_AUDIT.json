@@ -1,0 +1,191 @@
+{
+  "prefix_verified": "execution/20261030_equal_optimizer_budget_cs_two_suites/check_readonly_20261030_133226",
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": 1793344763.1697295,
+  "contract": "f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7",
+  "source_files": 88,
+  "counts": {
+    "GOAL_41": {
+      "epochs": 700,
+      "steps": 142200,
+      "by_stage": {
+        "6": 100,
+        "7": 200,
+        "8": 200,
+        "9": 200
+      }
+    },
+    "GOAL_42": {
+      "epochs": 14,
+      "steps": 1400,
+      "by_stage": {
+        "6": 14,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "GOAL_43": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "OBJECT_41": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "OBJECT_42": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "OBJECT_43": {
+      "epochs": 0,
+      "steps": 0,
+      "by_stage": {
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      }
+    }
+  },
+  "rates_last10": {
+    "GOAL_41": {
+      "6": 3.2570101261138915,
+      "7": 7.136656975746154,
+      "8": 9.105334615707397,
+      "9": 17.561861157417297
+    },
+    "GOAL_42": {
+      "6": 3.3906481504440307
+    },
+    "GOAL_43": {},
+    "OBJECT_41": {},
+    "OBJECT_42": {},
+    "OBJECT_43": {}
+  },
+  "admissions": {
+    "GOAL_41_6": 4,
+    "GOAL_41_7": 29,
+    "GOAL_41_8": 29,
+    "GOAL_41_9": 29,
+    "GOAL_42_6": 4
+  },
+  "isolated_optimizer_calls": 95,
+  "teachers": {
+    "GOAL_41_7": {
+      "count": 477,
+      "tau": 0.0038780958857387304,
+      "cache_sha256": "153044f6825b38b6334b41ba21cea313ebc5ac473a6ae250d6c5cc02f62f7c0f",
+      "source_sha256": "ebae86521bf71587f17321eb8a5865e4c2940e4a62235e9e1d1fbf7a447a87de"
+    },
+    "GOAL_41_8": {
+      "count": 899,
+      "tau": 0.0019100216450169683,
+      "cache_sha256": "d624561888d595782556954cd9d8bf7a3ab078276cc555981fe8a12320f7dbe8",
+      "source_sha256": "66a8f0770ee337a13716f035e150d7c0116ca0db95da0f1e3a0f9e85854174f7"
+    },
+    "GOAL_41_9": {
+      "count": 1329,
+      "tau": 0.0015912242233753204,
+      "cache_sha256": "af0516adabf13085339ce9df43373ea8725dfa7f5b24b7f9dd3443b03d840fbf",
+      "source_sha256": "cbc4a5fd87dc4718876eae8c595a8c760eec248aa7149e184ca52b2f88d11a3a"
+    }
+  },
+  "evaluations": {
+    "GOAL_41": {
+      "episodes": 0,
+      "vectors": 0,
+      "cells": 0,
+      "ongoing": [],
+      "vector_seconds": [],
+      "record_event_advance": 0
+    },
+    "GOAL_42": {
+      "episodes": 0,
+      "vectors": 0,
+      "cells": 0,
+      "ongoing": [],
+      "vector_seconds": [],
+      "record_event_advance": 0
+    },
+    "GOAL_43": {
+      "episodes": 0,
+      "vectors": 0,
+      "cells": 0,
+      "ongoing": [],
+      "vector_seconds": [],
+      "record_event_advance": 0
+    },
+    "OBJECT_41": {
+      "episodes": 0,
+      "vectors": 0,
+      "cells": 0,
+      "ongoing": [],
+      "vector_seconds": [],
+      "record_event_advance": 0
+    },
+    "OBJECT_42": {
+      "episodes": 0,
+      "vectors": 0,
+      "cells": 0,
+      "ongoing": [],
+      "vector_seconds": [],
+      "record_event_advance": 0
+    },
+    "OBJECT_43": {
+      "episodes": 0,
+      "vectors": 0,
+      "cells": 0,
+      "ongoing": [],
+      "vector_seconds": [],
+      "record_event_advance": 0
+    }
+  },
+  "formal_episodes": 0,
+  "phase": {
+    "phase": "train",
+    "case": "GOAL_42",
+    "pid": 46718,
+    "time": 1793344692.1000702,
+    "controller": 46492
+  },
+  "failure": null,
+  "processes": [
+    {
+      "pid": 46492,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 46718,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_42/train.py C ",
+      "state": "S"
+    },
+    {
+      "pid": 46723,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_42/train.py C ",
+      "state": "R"
+    }
+  ],
+  "source_evidence_sha256": "1f38903fad558e4c62399a9993ba312a86ee9d5e2a7f07f825f168d2eb3a1f8c",
+  "snapshot_sha256": "1f38903fad558e4c62399a9993ba312a86ee9d5e2a7f07f825f168d2eb3a1f8c",
+  "no_partial_performance_claim": true
+}
