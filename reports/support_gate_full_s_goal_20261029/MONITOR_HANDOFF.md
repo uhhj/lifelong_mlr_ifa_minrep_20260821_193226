@@ -1,13 +1,11 @@
 # 最新完整 S GOAL 三 seed：当前交接
 
-## 2026-10-30 11:02 实际复查：正式550/600
+## 2026-10-30 11:06 用户请求检查进度
 
-实际check_readonly_20261030_110232/LOCAL_AUDIT PASS，100427全部epoch/门控及已完成正式outcome前缀精确保留。三seed训练和120采集全部完成，原1200轮/228300接受/426600生产物理、273隔离/123准入autograd不变。seed41/42各200正式且evaluate.exit0，seed43正式150/200，总550/600。controller25726/evaluate40687健康，66冻结项不变、旧机制无进程、容量预留通过。controller尚未自然退出，最终CPU验收仍待全队列结束。
-
-seed43已完成15vector，均99.11秒，近5个均105.88秒；余5vector/50回合线性约8.26–8.82分钟，计当前vector和收尾规划9–15分钟。下一12分钟围绕全部正式结束复查，实际controller.exit0且无自身进程后直接继续final_readonly真实CPU验收、主C比较解释和发布。不得把正式完成当作最终验收完成，不按时间推断完成。此段覆盖10:04旧评估进度和55–90分钟估时。
+实际check_readonly_20261030_110625/LOCAL_AUDIT PASS，110232全部epoch/门控及正式outcome前缀精确保留。三个seed训练及120采集全部完成。seed41/42正式各200/200，seed43正式170/200，总570/600；controller25726/evaluate40687运行正常，66冻结项不变，无失败、重跑或旧机制进程。seed43完成17个vector平均99.63秒，近5个平均118.37秒，剩3vector/30回合线性约4.98–5.92分钟，规划6–10分钟。下一8分钟在全部正式结束附近复查；必须真实controller.exit0且无自身进程后继续final_readonly CPU验收、已有完整C配对解释和发布，当前仍PARTIAL。此段覆盖11:02旧进度与12分钟间隔，科学协议不变。
 
 
-实际观察 2026-10-30T11:02:33.884619+08:00，check_readonly_20261030_110232/LOCAL_AUDIT.json=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-10-30T11:06:26.267721+08:00，check_readonly_20261030_110625/LOCAL_AUDIT.json=PASS_PROGRESS_NOT_FINAL。
 
 唯一root `/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1`，controller 25726，合同 `e6a2242424286d4de4a6c5621037ccd34946e0593a2dd040e0136a78d77cb032`，66冻结项。唯一部署证据deploy_remote_20261029_205707。禁止再次运行prepare_local/deploy/controller或重复已完成epoch。
 
@@ -15,7 +13,7 @@ seed41：400/400完整epoch，76100/76100接受、142200/142200已完成轮物�
 当前阶段最近至多10轮均82.7211秒；该阶段纯计算余None分钟，保存/采集/后续另计，首轮不能当稳定吞吐。
 seed42：400/400完整epoch，76100/76100接受、142200/142200已完成轮物理调用；采集40/40、正式200/200。当前{"arm": "S", "stage": 9, "phase": "training_collection", "time": 1793309107.095611, "pid": 27499}。
 当前阶段最近至多10轮均102.7653秒；该阶段纯计算余None分钟，保存/采集/后续另计，首轮不能当稳定吞吐。
-seed43：400/400完整epoch，76100/76100接受、142200/142200已完成轮物理调用；采集40/40、正式150/200。当前{"arm": "S", "stage": 9, "phase": "training_collection", "time": 1793324982.7293167, "pid": 28797}。
+seed43：400/400完整epoch，76100/76100接受、142200/142200已完成轮物理调用；采集40/40、正式170/200。当前{"arm": "S", "stage": 9, "phase": "training_collection", "time": 1793324982.7293167, "pid": 28797}。
 当前阶段最近至多10轮均69.1078秒；该阶段纯计算余None分钟，保存/采集/后续另计，首轮不能当稳定吞吐。
 
 累计1200/1200epoch、228300/228300接受、426600/426600生产物理调用；自己的隔离273/273、额外准入autograd123/123。训练方向最多108autograd另记。
@@ -30,6 +28,6 @@ seed43：400/400完整epoch，76100/76100接受、142200/142200已完成轮物�
 
 运输使用旧目录20261027_support_gate_forks现有worker22172，先读.session_control/status.json，不重启活跃worker或输出凭据。本目录check_readonly.py复制至旧目录，queue_remote.py check_readonly.py；按result.output第一行实际目录复制完整证据回来，不猜秒数；audit_progress.py NEW PREVIOUS→record_progress.py NEW INTERVAL。异常先核进程/hash/退出/完整恢复和已耗候选成本，禁止盲重启部分块/环境attempt。
 
-下一12分钟复查：初期核首个门控阶段自己的准入和吞吐，之后按整seed训练含采集或全部评估真实剩余时间调整，不固定高频，不靠时钟推断完成。健康进展静默，只实质变化/完成/新失败/需行动通知。
+下一8分钟复查：初期核首个门控阶段自己的准入和吞吐，之后按整seed训练含采集或全部评估真实剩余时间调整，不固定高频，不靠时钟推断完成。健康进展静默，只实质变化/完成/新失败/需行动通知。
 
 每次进度审计按根AGENTS经本目录publish.py审查轻量code/report/hash/scalars/outcomes，串行nonforce推MLR核remoteSHA/localreceipt；禁模型/CP/state/RNG/cache/凭据/未审bundle。沿用本轮GOAL新监控（见MONITOR_RECEIPT.json），不是已删除s-object-seed。三个seed独立验收、主C比较/解释报告和发布后才删除本轮监控。
