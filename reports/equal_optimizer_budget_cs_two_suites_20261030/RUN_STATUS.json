@@ -1,16 +1,16 @@
 {
   "status": "PARTIAL_C_TRAINING_OR_EVALUATION",
-  "observation": "2026-10-30T19:22:27.128359+08:00",
+  "observation": "2026-10-30T19:39:04.086802+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1",
   "controller": 47046,
   "contract": "f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7",
   "frozen_files": 88,
-  "latest_evidence": "check_readonly_20261030_192225",
-  "epochs": 2060,
-  "accepted_updates": 413120,
-  "production_physical_calls": 413120,
+  "latest_evidence": "check_readonly_20261030_193902",
+  "epochs": 2100,
+  "accepted_updates": 426600,
+  "production_physical_calls": 426600,
   "own_isolated_calls": 273,
-  "new_formal_episodes": 0,
+  "new_formal_episodes": 60,
   "new_training_collection": 0,
   "new_S_runs": 0,
   "counts": {
@@ -35,13 +35,13 @@
       }
     },
     "GOAL_43": {
-      "epochs": 660,
-      "steps": 128720,
+      "epochs": 700,
+      "steps": 142200,
       "by_stage": {
         "6": 100,
         "7": 200,
         "8": 200,
-        "9": 160
+        "9": 200
       }
     },
     "OBJECT_41": {
@@ -92,7 +92,7 @@
       "6": 3.3219771862030028,
       "7": 6.995336484909058,
       "8": 8.43278272151947,
-      "9": 16.594990801811218
+      "9": 17.183577609062194
     },
     "OBJECT_41": {},
     "OBJECT_42": {},
@@ -100,11 +100,26 @@
   },
   "evaluations": {
     "GOAL_41": {
-      "episodes": 0,
-      "vectors": 0,
-      "cells": 0,
-      "ongoing": [],
-      "vector_seconds": [],
+      "episodes": 60,
+      "vectors": 6,
+      "cells": 3,
+      "ongoing": [
+        {
+          "kind": "start",
+          "time": 1793360335.329587,
+          "run": "C_s8_t6_g0",
+          "cp_sha256": "cbc4a5fd87dc4718876eae8c595a8c760eec248aa7149e184ca52b2f88d11a3a",
+          "initial_file_sha256": "524de11d240f33b93d5218b1779a1ded1037950fcf865f07d0c0029cc48cf3f5"
+        }
+      ],
+      "vector_seconds": [
+        78.04760856198845,
+        27.904068639007164,
+        81.85014242099714,
+        69.77903669897933,
+        25.191826627007686,
+        25.765008829010185
+      ],
       "record_event_advance": 0
     },
     "GOAL_42": {
@@ -149,10 +164,10 @@
     }
   },
   "phase": {
-    "phase": "train",
-    "case": "GOAL_43",
-    "pid": 47195,
-    "time": 1793352386.0941927,
+    "phase": "evaluate",
+    "case": "GOAL_41",
+    "pid": 47514,
+    "time": 1793360010.8964388,
     "controller": 47046,
     "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510"
   },
@@ -164,19 +179,14 @@
       "state": "S"
     },
     {
-      "pid": 47195,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_43/train.py C ",
-      "state": "S"
-    },
-    {
-      "pid": 47200,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_43/train.py C ",
+      "pid": 47514,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_41/evaluate.py ",
       "state": "R"
     }
   ],
-  "next_check_minutes": 15,
+  "next_check_minutes": 60,
   "completion_source": "engineering_suite_order_20261030_v1/controller.exit",
   "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510",
   "final_CPU_acceptance": "PENDING_ACTUAL_FINAL",
-  "source_evidence_sha256": "e34272275edc6797466d52f1300489881ba08055501432f6a562b989ce43e1c0"
+  "source_evidence_sha256": "4675658d43faa9ccdde8db7ff2e56b31011001531e247b8c6ae95b0f8e2b9253"
 }
