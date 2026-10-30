@@ -1,3 +1,9 @@
+## 2026-10-31 06:50 最终CPU验收正在执行（禁止重复提交）
+
+实际check_readonly_20261031_064912及工程audit_progress PASS，052910全部前缀保留。六C全部700轮、1200正式回合完成；真实engineering_suite_order_20261030_v1/controller.exit==0且自身进程为空，原root/controller.exit不存在。当前PARTIAL_FINAL_CPU_AUDIT_RUNNING，尚未宣称接受。
+
+已唯一提交request_20261031_065009_3d9fc0aa.json，运输worker22172正在执行final_readonly.py。包装来自engineering_suite_order_20261030_v1/final_transport_20261031_v2：六个CPU case脚本与原版字节相同，只在每个case完成后flush空白以避免SSH1800秒空闲超时，科学源不变。不要再提交最终请求或重启worker；等该result实际返回目录，复制回本目录后运行工程audit_final_local.py、根compare_primary_s.py和describe_final.py。最后报告仍须人工核对，不能只给自动均值；全部接受发布后删除同一监控。GOAL原独立接受及报告永久保留。
+
 ## 2026-10-31 05:29 实际复查：六C训练全部完成，OBJECT正式评估进行中
 
 check_readonly_20261031_052910及工程audit_progress实际PASS，052240全部epoch/诊断/正式前缀精确保留。六C各700完整轮且各train_C.exit0，总4200/4200轮1012500/1012500生产、546/546自身隔离；全部阶段自己的准入及schedule/COPY_EQ已实际通过。已自然接续OBJECT41正式评估30/200，OBJECT42/43各0/200，连同已接受GOAL共630/1200正式。88科学项与3工程项不变，controller47046/evaluate63829健康，无失败、重跑或新S调用。
@@ -50,7 +56,7 @@ Task7最近10轮12.0464秒，剩126轮约25.3分钟纯计算；尚未实测Task8
 
 # 仅C匹配已有完整S预算：当前交接
 
-实际观察 2026-10-31T05:29:11.124053+08:00，check_readonly_20261031_052910/LOCAL_AUDIT.json=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-10-31T06:49:13.918818+08:00，check_readonly_20261031_064912/LOCAL_AUDIT.json=PASS_PROGRESS_NOT_FINAL。
 
 唯一root `/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1`，controller47046，合同`f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7`，88冻结项。禁止重跑prepare/deploy/controller或已完成轮。用户最新明确S不重跑，只跑C；已有GOAL/OBJECT六S仅只读配对，旧机制永久取消。
 
@@ -59,11 +65,11 @@ Task7最近10轮12.0464秒，剩126轮约25.3分钟纯计算；尚未实测Task8
 |GOAL_41|700|142200|200|
 |GOAL_42|700|142200|200|
 |GOAL_43|700|142200|200|
-|OBJECT_41|700|195300|30|
-|OBJECT_42|700|195300|0|
-|OBJECT_43|700|195300|0|
+|OBJECT_41|700|195300|200|
+|OBJECT_42|700|195300|200|
+|OBJECT_43|700|195300|200|
 
-累计4200/4200轮、1012500/1012500生产调用、546/546隔离调用、新正式630/1200。没有新S或训练环境采集。
+累计4200/4200轮、1012500/1012500生产调用、546/546隔离调用、新正式1200/1200。没有新S或训练环境采集。
 
 先完整读PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、LOCAL_BUILD_REVIEW.json和最新EVIDENCE/LOCAL_AUDIT。C每seedTask6=100轮、Task7–9各200轮；GOAL142200、OBJECT195300生产调用，逐阶段匹配已接受S的双候选成本；自身4/29隔离=91，C每seed12准入autograd和48方向autograd另记。延长原线性调度终点为实际C更新数，warmup500不变；实际SCHEDULE/COPY_EQ/初始化/Task6对已有S全部tensor需通过。不能套未来stage准入。
 

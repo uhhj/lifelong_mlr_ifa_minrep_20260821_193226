@@ -1,16 +1,16 @@
 {
-  "status": "PARTIAL_C_TRAINING_OR_EVALUATION",
-  "observation": "2026-10-31T05:29:11.124053+08:00",
+  "status": "PARTIAL_FINAL_CPU_AUDIT_RUNNING",
+  "observation": "2026-10-31T06:49:13.918818+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1",
   "controller": 47046,
   "contract": "f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7",
   "frozen_files": 88,
-  "latest_evidence": "check_readonly_20261031_052910",
+  "latest_evidence": "check_readonly_20261031_064912",
   "epochs": 4200,
   "accepted_updates": 1012500,
   "production_physical_calls": 1012500,
   "own_isolated_calls": 546,
-  "new_formal_episodes": 630,
+  "new_formal_episodes": 1200,
   "new_training_collection": 0,
   "new_S_runs": 0,
   "counts": {
@@ -202,68 +202,105 @@
       "record_event_advance": 0
     },
     "OBJECT_41": {
-      "episodes": 30,
-      "vectors": 3,
-      "cells": 1,
-      "ongoing": [
-        {
-          "kind": "start",
-          "time": 1793395727.2741914,
-          "run": "C_s7_t6_g1",
-          "cp_sha256": "beb7fca65d3a3f962df4d02dc151785cb33be6576abd6f0d51842eb1aea6fd1b",
-          "initial_file_sha256": "f0925a8653c5902c5a4d78a2053365382ad7d05be7f059abe19c2004ffc5dc59"
-        }
-      ],
+      "episodes": 200,
+      "vectors": 20,
+      "cells": 10,
+      "ongoing": [],
       "vector_seconds": [
         80.53209045299445,
         110.97504207101883,
-        32.76196428399999
+        32.76196428399999,
+        79.06928252699436,
+        65.48083646100713,
+        34.74704260501312,
+        75.9873282139888,
+        66.29779016799876,
+        58.075420929992106,
+        77.9734680489928,
+        72.97275054999045,
+        58.74989988497691,
+        81.08533969902783,
+        65.08834016899345,
+        69.64370689698262,
+        29.643722317006905,
+        63.87188430101378,
+        66.51590650901198,
+        89.72422424700926,
+        78.9951466829807
       ],
       "record_event_advance": 0
     },
     "OBJECT_42": {
-      "episodes": 0,
-      "vectors": 0,
-      "cells": 0,
+      "episodes": 200,
+      "vectors": 20,
+      "cells": 10,
       "ongoing": [],
-      "vector_seconds": [],
+      "vector_seconds": [
+        67.80727869301336,
+        73.87702633600566,
+        83.70677807598258,
+        81.69671891498729,
+        74.62146347999806,
+        55.87850280400016,
+        70.14655601300183,
+        81.15541390699218,
+        58.294555622007465,
+        35.781405529996846,
+        76.50215990800643,
+        44.99177500899532,
+        128.45655478397384,
+        75.6068007349968,
+        62.91769749199739,
+        46.81339391702204,
+        54.535869228013325,
+        53.598536153003806,
+        90.69387749399175,
+        54.161294065008406
+      ],
       "record_event_advance": 0
     },
     "OBJECT_43": {
-      "episodes": 0,
-      "vectors": 0,
-      "cells": 0,
+      "episodes": 200,
+      "vectors": 20,
+      "cells": 10,
       "ongoing": [],
-      "vector_seconds": [],
+      "vector_seconds": [
+        143.70334463199833,
+        153.933988520992,
+        128.23671166601707,
+        53.764147195004625,
+        103.84105368997552,
+        180.2043989090016,
+        148.50556424300885,
+        89.05306705401745,
+        59.56741733499803,
+        116.78444670699537,
+        123.28942620300222,
+        145.74757262098137,
+        166.26871607001522,
+        112.03927686699899,
+        48.981145793019095,
+        70.06428527200478,
+        81.40806539202458,
+        78.09241655000369,
+        45.831499360007,
+        34.40818386999308
+      ],
       "record_event_advance": 0
     }
   },
   "phase": {
-    "phase": "evaluate",
-    "case": "OBJECT_41",
-    "pid": 63829,
-    "time": 1793395485.9765868,
-    "controller": 47046,
-    "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510"
+    "phase": "complete",
+    "time": 1793400363.9814084,
+    "controller": 47046
   },
   "failure": null,
-  "processes": [
-    {
-      "pid": 47046,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/engineering_suite_order_20261030_v1/controller.py ",
-      "state": "S"
-    },
-    {
-      "pid": 63829,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/OBJECT_41/evaluate.py ",
-      "state": "S"
-    }
-  ],
+  "processes": [],
   "next_check_minutes": 75,
   "completion_source": "engineering_suite_order_20261030_v1/controller.exit",
   "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510",
-  "final_CPU_acceptance": "PENDING_ACTUAL_FINAL",
-  "source_evidence_sha256": "e5daa9d9448be5fe950c1f1839d4352c5df5fa2ac69a334e4b732d82b1dfc870",
+  "final_CPU_acceptance": "RUNNING_NOT_ACCEPTED",
+  "source_evidence_sha256": "e4663e34859d938709c8929622d5f5441ba49a037d6e0646a860e61cc639a158",
   "suite_acceptance": {
     "GOAL": {
       "status": "ACCEPTED_GOAL_THREE_C_EQUAL_OPTIMIZER_BUDGET",
@@ -283,7 +320,8 @@
       "new_S_runs": 0
     },
     "OBJECT": {
-      "status": "PENDING"
+      "status": "PENDING_FINAL_CPU"
     }
-  }
+  },
+  "final_request": "request_20261031_065009_3d9fc0aa.json"
 }
