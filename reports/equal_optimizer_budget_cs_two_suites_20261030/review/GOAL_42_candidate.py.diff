@@ -1,0 +1,15 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261027_c_goal42_43_object41_42_43\GOAL_42\candidate.py
++++ GOAL_42/candidate.py
+@@ -0,0 +1,12 @@
++"""Candidate only: retain independent CPU snapshots without a second CUDA->CPU clone."""
++import copy
++import torch
++def cpu_snapshot(x):
++    if torch.is_tensor(x):
++        detached=x.detach()
++        # CUDA -> CPU creates independent storage already. CPU inputs still need clone.
++        return detached.cpu() if x.device.type=='cuda' else detached.cpu().clone()
++    if isinstance(x,dict):return {k:cpu_snapshot(v) for k,v in x.items()}
++    if isinstance(x,list):return [cpu_snapshot(v) for v in x]
++    if isinstance(x,tuple):return tuple(cpu_snapshot(v) for v in x)
++    return copy.deepcopy(x)

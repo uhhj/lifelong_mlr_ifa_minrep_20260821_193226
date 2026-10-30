@@ -37,10 +37,7 @@ def main():
     for p in sorted(R.rglob("*")):
         # Raw preflight is 27 MB of repeated metadata. Publish its reviewed per-case
         # bindings and exact SHA in PREFLIGHT_LOCAL_AUDIT, preserving the raw locally.
-        if p.name == 'EVIDENCE.json' and p.parent.name.startswith('preflight_readonly_'):
-            pre_audit=json.loads((R/'PREFLIGHT_LOCAL_AUDIT.json').read_text(encoding='utf8'))
-            assert hashlib.sha256(p.read_bytes()).hexdigest()==pre_audit['sha256']
-            continue
+        # Both preflight snapshots here are small reviewed metadata, published below.
         if (not p.is_file() or p.suffix not in allowed or p.name in exclude or
                 any(x.startswith(("inspect_inputs_", "inspect_assets_readonly_")) for x in p.relative_to(R).parts) or
                 "reference_source" in p.relative_to(R).parts or ".session_control" in p.relative_to(R).parts or

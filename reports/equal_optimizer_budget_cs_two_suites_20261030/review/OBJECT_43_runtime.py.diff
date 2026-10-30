@@ -1,0 +1,53 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261027_c_goal42_43_object41_42_43\OBJECT_43\runtime.py
++++ OBJECT_43/runtime.py
+@@ -62,7 +62,14 @@
+ def setup(a,ds):
+  sampler=torch.utils.data.DistributedSampler(ds,num_replicas=1,rank=0,shuffle=True,seed=0)
+  loader=torch.utils.data.DataLoader(ds,batch_size=10,sampler=sampler,num_workers=0,persistent_workers=False)
++ a.cfg.train.n_epochs=STAGE_EPOCHS[ds.stage]
++ a.total_steps=STAGE_EPOCHS[ds.stage]*len(loader)
+  a.start_task(-1,loader);a.refs={}
++ fn=a.scheduler.lr_lambdas[0];total=a.total_steps
++ assert a.scheduler.last_epoch==0 and fn(0)==0 and fn(total)==0
++ assert abs(fn(500)-1.)<1e-12 and fn(total-1)>0 and fn(total//2)>0
++ assert a.cfg.train.scheduler.kwargs.warmup_steps==500
++ write(R/('SCHEDULE_C_%d.json'%ds.stage),dict(status='PASS_ACTUAL_SCHEDULE',epochs=STAGE_EPOCHS[ds.stage],batches=len(loader),total_steps=total,warmup_steps=500,base_lrs=a.scheduler.base_lrs,values={str(k):fn(k) for k in [0,1,500,total//2,total-1,total]},production_calls_before=CALLS['production'],isolated_calls_before=CALLS['admission']))
+  for t in range(6,ds.stage+1):
+   i=next(i for i,r in enumerate(ds.rows) if r['task']==t)
+   f=ds.native[i][0]['feature'][0,:,0,:];a.refs[t]=f[0].cuda()
+@@ -80,3 +87,35 @@
+  if isinstance(a,dict):return a.keys()==b.keys() and all(equal(a[k],b[k]) for k in a)
+  if isinstance(a,(tuple,list)):return len(a)==len(b) and all(equal(x,y) for x,y in zip(a,b))
+  return a==b
++
++# Physical step counter survives candidate/state restore; it does not alter updates.
++import functools
++CALLS={'production':0,'admission':0}
++_count_mode='admission'
++_original_adamw_step=torch.optim.AdamW.step
++@functools.wraps(_original_adamw_step)
++def _counted_step(self,*args,**kwargs):
++ result=_original_adamw_step(self,*args,**kwargs)
++ CALLS[_count_mode]+=1
++ return result
++torch.optim.AdamW.step=_counted_step
++def set_count_mode(mode):
++ global _count_mode
++ assert mode in CALLS;_count_mode=mode
++
++from candidate import cpu_snapshot
++_reference_cpu=cpu
++_reference_capture=capture
++cpu=cpu_snapshot
++_copy_checked={}
++def capture(a):
++ result=_reference_capture(a)
++ if a.scheduler.last_epoch==0 and str(a.step) not in _copy_checked:
++  global cpu
++  try:
++   cpu=_reference_cpu;oracle=_reference_capture(a)
++  finally:cpu=cpu_snapshot
++  assert equal(result,oracle),'Actual C stage full-state copy mismatch'
++  _copy_checked[str(a.step)]=dict(all_state_exact=True,optimizer_calls_added=0,environments_added=0)
++  write(R/'COPY_EQ.json',dict(status='PASS_OBSERVED_STAGE_STARTS',checked=_copy_checked,candidate_sha256=sha(R/'candidate.py')))
++ return result
