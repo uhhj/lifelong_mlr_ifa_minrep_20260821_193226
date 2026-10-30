@@ -1,4 +1,19 @@
+# 最新完整S GOAL三seed已完成
+
+2026-10-30实际独立验收通过，seed41/42/43各400轮、40训练采集、200正式回合全部完成。主对照为已有完整C，600回合初态/noise逐项配对通过，无新训C、重训、重评或恢复旧机制。
+
+三seed平均最终全部任务成功率C80%→S85%（+5个百分点），AUC82.50%→87.26%（+4.76），旧任务最终80.56%→83.89%（+3.33）。NBT仅改善0.28个百分点，seed41 AUC下降、最终总体持平，所有7个负单元保留。不能声称全面减少遗忘或单机制因果收益；训练交互及算力不等。
+
+完整解释见[FINAL_REPORT.md](FINAL_REPORT.md)，实际验收见[LOCAL_FINAL_AUDIT.json](final_readonly_20261030_111546/LOCAL_FINAL_AUDIT.json)，主C配对见[PRIMARY_C_COMPARISON.md](final_readonly_20261030_111546/PRIMARY_C_COMPARISON.md)。发布以本地PUBLICATION_RECEIPT的remote SHA核验为准。
+
+全部科学运行、实际验收和解释已完成；发布remote SHA核验后删除s-goal-seed。禁止再次运行训练、评估、final_readonly或恢复旧机制。下方历史记录仅供追溯。
+
 # 最新完整 S GOAL 三 seed：当前交接
+
+## 2026-10-30 11:15 全部600正式完成，CPU最终验收已唯一启动
+
+check_readonly_20261030_111520实际600/600正式、三seed各evaluate.exit0、controller.exit0且无自身进程，66冻结项不变；全部已记录epoch/门控/outcome前缀精确保留。未重训重评。已唯一queue final_readonly.py，请求为旧机制运输目录.session_control/request_20261030_111545_e23e777e.json，worker22172正RUNNING_REQUEST。必须先读对应result_20261030_111545_e23e777e.json，按实际返回目录取证，禁止重复queue或启动训练。CPU验收尚未完成，不是科学接受。成功后audit_final_local→describe_final→compare_primary_c并人工解释、报告发布；失败保留原错误后只修外置包装。当前等待本请求；最终监控不可提前删除。本段优先于下文8分钟训练/评估复查安排。
+
 
 ## 2026-10-30 11:06 用户请求检查进度
 

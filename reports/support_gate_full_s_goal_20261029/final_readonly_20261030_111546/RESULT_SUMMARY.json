@@ -1,0 +1,214 @@
+{
+  "status": "ACCEPTED_EXECUTION_SCIENTIFIC_INTERPRETATION_REQUIRED",
+  "statistics": {
+    "AUC": {
+      "mean": 87.25694444444444,
+      "sample_sd": 2.64823818967616
+    },
+    "FWT": {
+      "mean": 89.58333333333333,
+      "sample_sd": 1.9094065395649333
+    },
+    "NBT": {
+      "mean": 5.277777777777778,
+      "sample_sd": 5.204164998665331
+    },
+    "OldFinal": {
+      "mean": 83.88888888888889,
+      "sample_sd": 2.545875386086579
+    },
+    "FinalAll": {
+      "mean": 85.0,
+      "sample_sd": 2.5
+    }
+  },
+  "within_seed_stage_pairs": [
+    {
+      "seed": "41",
+      "task": 6,
+      "first_successes": 18,
+      "last_successes": 13,
+      "SF": 5,
+      "FS": 0
+    },
+    {
+      "seed": "41",
+      "task": 7,
+      "first_successes": 20,
+      "last_successes": 20,
+      "SF": 0,
+      "FS": 0
+    },
+    {
+      "seed": "41",
+      "task": 8,
+      "first_successes": 19,
+      "last_successes": 17,
+      "SF": 3,
+      "FS": 1
+    },
+    {
+      "seed": "42",
+      "task": 6,
+      "first_successes": 14,
+      "last_successes": 15,
+      "SF": 2,
+      "FS": 3
+    },
+    {
+      "seed": "42",
+      "task": 7,
+      "first_successes": 20,
+      "last_successes": 20,
+      "SF": 0,
+      "FS": 0
+    },
+    {
+      "seed": "42",
+      "task": 8,
+      "first_successes": 20,
+      "last_successes": 17,
+      "SF": 3,
+      "FS": 0
+    },
+    {
+      "seed": "43",
+      "task": 6,
+      "first_successes": 15,
+      "last_successes": 14,
+      "SF": 2,
+      "FS": 1
+    },
+    {
+      "seed": "43",
+      "task": 7,
+      "first_successes": 19,
+      "last_successes": 19,
+      "SF": 1,
+      "FS": 1
+    },
+    {
+      "seed": "43",
+      "task": 8,
+      "first_successes": 17,
+      "last_successes": 16,
+      "SF": 4,
+      "FS": 3
+    }
+  ],
+  "gate_audits": {
+    "41": {
+      "status": "PASS_INDEPENDENT_RECOMPUTATION",
+      "blocks": 6700,
+      "physical_training_optimizer_calls": 142200,
+      "accepted_updates": 76100,
+      "by_stage": {
+        "7": {
+          "blocks": 1400,
+          "Q_accepts": 652,
+          "support": {
+            "6": 1.0
+          },
+          "fixed_probes_verified": true
+        },
+        "8": {
+          "blocks": 1900,
+          "Q_accepts": 1162,
+          "support": {
+            "6": 1.0,
+            "7": 1.0
+          },
+          "fixed_probes_verified": true
+        },
+        "9": {
+          "blocks": 3400,
+          "Q_accepts": 1461,
+          "support": {
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0
+          },
+          "fixed_probes_verified": true
+        }
+      }
+    },
+    "42": {
+      "status": "PASS_INDEPENDENT_RECOMPUTATION",
+      "blocks": 6700,
+      "physical_training_optimizer_calls": 142200,
+      "accepted_updates": 76100,
+      "by_stage": {
+        "7": {
+          "blocks": 1400,
+          "Q_accepts": 647,
+          "support": {
+            "6": 0.9
+          },
+          "fixed_probes_verified": true
+        },
+        "8": {
+          "blocks": 1900,
+          "Q_accepts": 838,
+          "support": {
+            "6": 0.9,
+            "7": 1.0
+          },
+          "fixed_probes_verified": true
+        },
+        "9": {
+          "blocks": 3400,
+          "Q_accepts": 1656,
+          "support": {
+            "6": 0.9,
+            "7": 1.0,
+            "8": 1.0
+          },
+          "fixed_probes_verified": true
+        }
+      }
+    },
+    "43": {
+      "status": "PASS_INDEPENDENT_RECOMPUTATION",
+      "blocks": 6700,
+      "physical_training_optimizer_calls": 142200,
+      "accepted_updates": 76100,
+      "by_stage": {
+        "7": {
+          "blocks": 1400,
+          "Q_accepts": 733,
+          "support": {
+            "6": 1.0
+          },
+          "fixed_probes_verified": true
+        },
+        "8": {
+          "blocks": 1900,
+          "Q_accepts": 950,
+          "support": {
+            "6": 1.0,
+            "7": 1.0
+          },
+          "fixed_probes_verified": true
+        },
+        "9": {
+          "blocks": 3400,
+          "Q_accepts": 1579,
+          "support": {
+            "6": 1.0,
+            "7": 1.0,
+            "8": 0.8
+          },
+          "fixed_probes_verified": true
+        }
+      }
+    }
+  },
+  "final_audit_sha256": "5ddcc718280fd37f5dfcd68145e3168ebe1fd72375ea9b8a41aa34587a22367c",
+  "limits": [
+    "Only latest support-gated S GOAL41/42/43; the canceled mechanism experiment is not resumed or required for acceptance.",
+    "No retries, refills, outcome filtering of runs, or automatic further seeds.",
+    "Historical methods are read-only references; extra acquisition and double candidates prohibit equal-interaction or equal-compute causal claims.",
+    "Success filtering does not prove every retained action optimal; cached-feature replay is not raw-camera or physical replay.",
+    "Development states and previous method selection remain limitations."
+  ]
+}
