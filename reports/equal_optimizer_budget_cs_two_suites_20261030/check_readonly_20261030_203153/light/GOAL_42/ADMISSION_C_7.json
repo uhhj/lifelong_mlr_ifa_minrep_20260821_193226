@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "arm": "C",
+  "stage": 7,
+  "optimizer_calls": 29,
+  "ten_step_and_checkpoint_continuation_exact": true,
+  "physical_calls_observed": {
+    "production": 10000,
+    "admission": 33
+  },
+  "roundtrip_exact": true,
+  "next_step_exact": true,
+  "restore_initial_exact": true,
+  "stateful_gradient_measurement_exact": true,
+  "gradient_measurement": {
+    "bc": {
+      "loss": 68.60267639160156,
+      "l2": 2815.437157330407,
+      "nonzero_tensors": 87
+    },
+    "ifa_weighted": {
+      "loss": 0.033844709396362305,
+      "l2": 0.058303217738272975,
+      "nonzero_tensors": 75
+    },
+    "exec_weighted": {
+      "loss": 0.0002881627297028899,
+      "l2": 0.08040646980600703,
+      "nonzero_tensors": 85
+    },
+    "route_weighted": {
+      "loss": 0.0,
+      "l2": 0.0,
+      "nonzero_tensors": 0
+    },
+    "seconds": 0.052532196044921875,
+    "extra_autograd_calls": 4
+  },
+  "baseline_or_legacy_update_exact": true,
+  "strict_keys": 100,
+  "parameters": 21633611,
+  "serialized_bytes": 346294077,
+  "synthetic": {
+    "status": "PASS_SYNTHETIC_NOT_REAL_ADMISSION",
+    "archived_C_exact_loss_and_output_gradient_cases": 8,
+    "R_independent_formula_and_gradient_exact": true,
+    "teacher_weight_no_gradient": true,
+    "projection_bound_and_gradient_vectors": 4096,
+    "real_checkpoints": 0,
+    "optimizer_calls": 0,
+    "environments": 0
+  },
+  "lengths": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "environments": 0,
+  "contract": "ab130afe03267bc1207a34c9ac5881d52d7e31843c78264b54e520c242bac69f"
+}

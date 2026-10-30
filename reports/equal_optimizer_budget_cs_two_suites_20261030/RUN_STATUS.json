@@ -1,16 +1,16 @@
 {
   "status": "PARTIAL_C_TRAINING_OR_EVALUATION",
-  "observation": "2026-10-30T19:39:04.086802+08:00",
+  "observation": "2026-10-30T20:31:54.788064+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1",
   "controller": 47046,
   "contract": "f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7",
   "frozen_files": 88,
-  "latest_evidence": "check_readonly_20261030_193902",
+  "latest_evidence": "check_readonly_20261030_203153",
   "epochs": 2100,
   "accepted_updates": 426600,
   "production_physical_calls": 426600,
   "own_isolated_calls": 273,
-  "new_formal_episodes": 60,
+  "new_formal_episodes": 550,
   "new_training_collection": 0,
   "new_S_runs": 0,
   "counts": {
@@ -100,42 +100,93 @@
   },
   "evaluations": {
     "GOAL_41": {
-      "episodes": 60,
-      "vectors": 6,
-      "cells": 3,
-      "ongoing": [
-        {
-          "kind": "start",
-          "time": 1793360335.329587,
-          "run": "C_s8_t6_g0",
-          "cp_sha256": "cbc4a5fd87dc4718876eae8c595a8c760eec248aa7149e184ca52b2f88d11a3a",
-          "initial_file_sha256": "524de11d240f33b93d5218b1779a1ded1037950fcf865f07d0c0029cc48cf3f5"
-        }
-      ],
+      "episodes": 200,
+      "vectors": 20,
+      "cells": 10,
+      "ongoing": [],
       "vector_seconds": [
         78.04760856198845,
         27.904068639007164,
         81.85014242099714,
         69.77903669897933,
         25.191826627007686,
-        25.765008829010185
+        25.765008829010185,
+        66.75907506799558,
+        66.75859998600208,
+        30.458787028997904,
+        27.599686998000834,
+        66.97608370301896,
+        65.86867824898218,
+        65.10637254800531,
+        67.54046070200275,
+        34.209417544014286,
+        30.271032174001448,
+        69.28764947500895,
+        71.09534114497364,
+        72.0093038220075,
+        72.34942678298103
       ],
       "record_event_advance": 0
     },
     "GOAL_42": {
-      "episodes": 0,
-      "vectors": 0,
-      "cells": 0,
+      "episodes": 200,
+      "vectors": 20,
+      "cells": 10,
       "ongoing": [],
-      "vector_seconds": [],
+      "vector_seconds": [
+        75.02507765300106,
+        79.64967091300059,
+        72.17462566299946,
+        67.46843258300214,
+        28.66666144898045,
+        26.476008325989824,
+        73.13589479902294,
+        68.10012129999814,
+        34.0518631740124,
+        29.56289321600343,
+        70.94418256601784,
+        65.72044564498356,
+        81.57147796000936,
+        70.16197375999764,
+        37.926078981981846,
+        28.395895854017,
+        84.15292411699193,
+        67.82838661602,
+        39.16967239798396,
+        39.739114341005916
+      ],
       "record_event_advance": 0
     },
     "GOAL_43": {
-      "episodes": 0,
-      "vectors": 0,
-      "cells": 0,
-      "ongoing": [],
-      "vector_seconds": [],
+      "episodes": 150,
+      "vectors": 15,
+      "cells": 7,
+      "ongoing": [
+        {
+          "kind": "start",
+          "time": 1793363510.2236938,
+          "run": "C_s9_t7_g1",
+          "cp_sha256": "3acc89369d8d3e3ae29023e3e856ad083b4c75cb4880729ba28938f58ba4faa8",
+          "initial_file_sha256": "ed121db31d749647d70741c4c4ef0bd8e0876663986578795968e962d9b91340"
+        }
+      ],
+      "vector_seconds": [
+        91.8847367890121,
+        71.76149459299631,
+        74.66045338200638,
+        84.52853250299813,
+        60.318312758987304,
+        43.88463062100345,
+        71.28916165200644,
+        67.83150403900072,
+        32.63247005199082,
+        65.71948066700133,
+        72.83537408299162,
+        72.59718939699815,
+        112.56059486998129,
+        123.54243224300444,
+        145.02168944198638
+      ],
       "record_event_advance": 0
     },
     "OBJECT_41": {
@@ -165,9 +216,9 @@
   },
   "phase": {
     "phase": "evaluate",
-    "case": "GOAL_41",
-    "pid": 47514,
-    "time": 1793360010.8964388,
+    "case": "GOAL_43",
+    "pid": 57629,
+    "time": 1793362303.30964,
     "controller": 47046,
     "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510"
   },
@@ -179,14 +230,14 @@
       "state": "S"
     },
     {
-      "pid": 47514,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_41/evaluate.py ",
-      "state": "R"
+      "pid": 57629,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_43/evaluate.py ",
+      "state": "S"
     }
   ],
-  "next_check_minutes": 60,
+  "next_check_minutes": 10,
   "completion_source": "engineering_suite_order_20261030_v1/controller.exit",
   "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510",
   "final_CPU_acceptance": "PENDING_ACTUAL_FINAL",
-  "source_evidence_sha256": "4675658d43faa9ccdde8db7ff2e56b31011001531e247b8c6ae95b0f8e2b9253"
+  "source_evidence_sha256": "9de991faf05a5c164f1729f90508c4611acdfa983af2933cb3770612a814a0a9"
 }
