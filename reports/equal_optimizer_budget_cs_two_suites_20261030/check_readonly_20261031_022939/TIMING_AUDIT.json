@@ -1,0 +1,36 @@
+{
+  "status": "PLANNING_NOT_COMPLETION",
+  "observation": "2026-10-31T02:29:40.277681+08:00",
+  "source_evidence_sha256": "1eee15dc68f3df1c88729930398f4c7f099b96d8d2742287e30d711a32c8f94f",
+  "object42_stage_mean_seconds": {
+    "6": 5.339380002021789,
+    "7": 11.161657427549363,
+    "8": 15.443271722793579,
+    "9": 18.79048577427864
+  },
+  "object42_pure_epoch_minutes": 160.21701641877493,
+  "object42_dispatch_to_object43_minutes": 172.8731867313385,
+  "object43_task6_completed": 50,
+  "object43_task6_last10_seconds": 5.374631881713867,
+  "remaining_seed_pure_minutes_reference": 155.79690965016684,
+  "formula": "(50*OBJECT43_Task6_last10 + 200*(OBJECT42_Task7_mean+Task8_mean+Task9_mean))/60",
+  "remaining_training_planning_minutes": [
+    170,
+    210
+  ],
+  "object_formal_planning_minutes": [
+    60,
+    120
+  ],
+  "all_remaining_training_formal_minutes": [
+    230,
+    330
+  ],
+  "next_check_minutes": 170,
+  "limitations": [
+    "OBJECT43 Task7-9 and OBJECT C formal throughput not measured in this snapshot",
+    "Formal interval is historical planning allowance, not this run measured speed",
+    "Preparation, checkpoint saves and resource variation may change completion time",
+    "Final CPU acceptance, interpretation and publication additional; no completion inferred from clock"
+  ]
+}
