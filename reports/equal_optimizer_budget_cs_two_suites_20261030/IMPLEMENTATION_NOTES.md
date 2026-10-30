@@ -18,3 +18,8 @@ final_readonly从已验收C真实CPU包装外置适配六case、700轮/200最后
 ## 2026-10-30 16:20 用户调度修订（覆盖此前全训练后统一评估顺序）
 
 GOAL41/42/43训练→GOAL41/42/43正式评估→OBJECT41/42/43训练→OBJECT41/42/43正式评估。S只读，所有科学预算与配置不变。不打断现有GOAL42或重跑完成部分。工程目录engineering_suite_order_20261030_v1实现自然训练边界交接，保持原科学冻结源；工程完成标记为该目录controller.exit，原root/controller.exit不伪造。详细安全证据、使用方式与当前ARMED/完成状态以MONITOR_HANDOFF及实际快照为准。
+
+
+## 2026-10-30 用户要求先独立验收GOAL
+
+GOAL三个C已自然完成训练和600正式回合。用户明确要求先验收GOAL，故新增goal_acceptance_20261030_v1外置只读包装：以GOAL_EVALUATION_COMPLETE和各GOAL自身train/evaluate.exit0、无GOAL进程为完成门槛，允许原OBJECT继续。只保留原GOAL三case CPU检查，原检查内容及容差不变；独立低优先级单线程CPU，审计前后GOAL证据SHA一致。新状态PASS_COMPLETE_GOAL_LOCAL_ACCEPTANCE明确仅GOAL接受，不伪造原root/controller.exit、不修改全六C最终包装、不把OBJECT未完成算作接受。没有重训、重评、环境回合或优化器调用。全六C完成后仍执行原工程最终验收。

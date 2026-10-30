@@ -1,16 +1,16 @@
 {
   "status": "PARTIAL_C_TRAINING_OR_EVALUATION",
-  "observation": "2026-10-30T20:38:23.579024+08:00",
+  "observation": "2026-10-30T21:05:04.604573+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1",
   "controller": 47046,
   "contract": "f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7",
   "frozen_files": 88,
-  "latest_evidence": "check_readonly_20261030_203822",
-  "epochs": 2100,
-  "accepted_updates": 426600,
-  "production_physical_calls": 426600,
-  "own_isolated_calls": 273,
-  "new_formal_episodes": 590,
+  "latest_evidence": "check_readonly_20261030_210503",
+  "epochs": 2274,
+  "accepted_updates": 459098,
+  "production_physical_calls": 459098,
+  "own_isolated_calls": 306,
+  "new_formal_episodes": 600,
   "new_training_collection": 0,
   "new_S_runs": 0,
   "counts": {
@@ -45,11 +45,11 @@
       }
     },
     "OBJECT_41": {
-      "epochs": 0,
-      "steps": 0,
+      "epochs": 174,
+      "steps": 32498,
       "by_stage": {
-        "6": 0,
-        "7": 0,
+        "6": 100,
+        "7": 74,
         "8": 0,
         "9": 0
       }
@@ -94,7 +94,10 @@
       "8": 8.43278272151947,
       "9": 17.183577609062194
     },
-    "OBJECT_41": {},
+    "OBJECT_41": {
+      "6": 5.2818697690963745,
+      "7": 12.046383094787597
+    },
     "OBJECT_42": {},
     "OBJECT_43": {}
   },
@@ -158,18 +161,10 @@
       "record_event_advance": 0
     },
     "GOAL_43": {
-      "episodes": 190,
-      "vectors": 19,
-      "cells": 9,
-      "ongoing": [
-        {
-          "kind": "start",
-          "time": 1793363844.612588,
-          "run": "C_s9_t9_g1",
-          "cp_sha256": "3acc89369d8d3e3ae29023e3e856ad083b4c75cb4880729ba28938f58ba4faa8",
-          "initial_file_sha256": "fa09aa4ade871c1c6be3dd8c93eb3437ea15190fd7dc73b8c986c8d2d3cfb062"
-        }
-      ],
+      "episodes": 200,
+      "vectors": 20,
+      "cells": 10,
+      "ongoing": [],
       "vector_seconds": [
         91.8847367890121,
         71.76149459299631,
@@ -189,7 +184,8 @@
         75.12691283901222,
         94.46030468700337,
         90.81609295497765,
-        73.96226385800401
+        73.96226385800401,
+        73.54904503500438
       ],
       "record_event_advance": 0
     },
@@ -219,10 +215,10 @@
     }
   },
   "phase": {
-    "phase": "evaluate",
-    "case": "GOAL_43",
-    "pid": 57629,
-    "time": 1793362303.30964,
+    "phase": "train",
+    "case": "OBJECT_41",
+    "pid": 62825,
+    "time": 1793363920.2215323,
     "controller": 47046,
     "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510"
   },
@@ -234,14 +230,41 @@
       "state": "S"
     },
     {
-      "pid": 57629,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_43/evaluate.py ",
+      "pid": 62825,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/OBJECT_41/train.py C ",
       "state": "S"
+    },
+    {
+      "pid": 62830,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/OBJECT_41/train.py C ",
+      "state": "R"
     }
   ],
-  "next_check_minutes": 3,
+  "next_check_minutes": 150,
   "completion_source": "engineering_suite_order_20261030_v1/controller.exit",
   "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510",
   "final_CPU_acceptance": "PENDING_ACTUAL_FINAL",
-  "source_evidence_sha256": "e32c1db265b22441ad1ad4e371bb12e1c9d92ad169100de3b003531d6ffcb889"
+  "source_evidence_sha256": "0976fd0d90b0d5eb11fa9f481c919e970cc2d9856f227e8b089933a1badb04e5",
+  "suite_acceptance": {
+    "GOAL": {
+      "status": "ACCEPTED_GOAL_THREE_C_EQUAL_OPTIMIZER_BUDGET",
+      "suite": "GOAL",
+      "seeds": [
+        41,
+        42,
+        43
+      ],
+      "observation": "2026-10-30T21:01:30.830572+08:00",
+      "final_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261030_equal_optimizer_budget_cs_two_suites\\goal_acceptance_20261030_v1\\final_readonly_20261030_204804",
+      "audit_sha256": "0cac0698473f1e96db9c9a6816d030b9172a97162729b1dfca07e3b127db523e",
+      "comparison_sha256": "7e2862f990e8a40329d80a3c2d432c33065b27f7e2115db40ce188f17f98cfa9",
+      "report_sha256": "199fd8630c6dc262188e4464a69fe49ed0a420be1540d91a97167b804e05bb3c",
+      "whole_six_C_status": "PARTIAL_OBJECT_PENDING",
+      "environment_retries": 0,
+      "new_S_runs": 0
+    },
+    "OBJECT": {
+      "status": "PENDING"
+    }
+  }
 }

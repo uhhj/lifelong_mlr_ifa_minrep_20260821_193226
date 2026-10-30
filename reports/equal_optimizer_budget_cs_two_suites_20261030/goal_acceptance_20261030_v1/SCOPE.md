@@ -1,0 +1,3 @@
+# GOAL单套件提前验收
+
+用户授权：先把GOAL验收了。此目录为外置只读CPU与本地复算包装，不部署或修改冻结科学源码。GOAL完成标记和三个自身退出0、无GOAL进程是套件门槛；OBJECT继续运行，整体保持PARTIAL。真实成功须由本目录实际final_readonly证据及LOCAL_FINAL_AUDIT/PRIMARY_S_COMPARISON验真。静态审查不是接受。
