@@ -13,3 +13,8 @@ LOCAL_BUILD_REVIEW验证六C逐阶段预算等于实际接受S EPOCHS物理预�
 final_readonly从已验收C真实CPU包装外置适配六case、700轮/200最后epoch、新恢复计数和已有S Task6 tensor检查。audit_progress按100/200/200/200分段、schedule/copy/隔离与formal事件noise校验；final local实际独立复算全部24CP/18cache/scalars/6recovery/1200回合后，compare_primary_s核已有S每阶段预算、共同初态和1200回合字节noise配对。FINAL_WRAPPER_REVIEW仅STATIC_ONLY，代码存在不等于验收通过。
 
 每个阶段C消耗的全部生产更新均保留，而S从双候选只保留一个；scheduler按各自保留轨迹长度衰减。等物理optimizer不等每次调用LR、FLOPs、墙钟、额外数据或交互。C0采集；已有S共240采集。旧S工程与中断未记账成本保持独立披露。
+
+
+## 2026-10-30 16:20 用户调度修订（覆盖此前全训练后统一评估顺序）
+
+GOAL41/42/43训练→GOAL41/42/43正式评估→OBJECT41/42/43训练→OBJECT41/42/43正式评估。S只读，所有科学预算与配置不变。不打断现有GOAL42或重跑完成部分。工程目录engineering_suite_order_20261030_v1实现自然训练边界交接，保持原科学冻结源；工程完成标记为该目录controller.exit，原root/controller.exit不伪造。详细安全证据、使用方式与当前ARMED/完成状态以MONITOR_HANDOFF及实际快照为准。

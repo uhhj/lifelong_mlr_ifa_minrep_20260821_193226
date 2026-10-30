@@ -1,0 +1,67 @@
+{
+  "status": "TIMING_ESTIMATE_NOT_FINAL",
+  "observation": "2026-10-30T16:12:47.066570+08:00",
+  "source_sha256": "7383a12260b867d6de534166206d0d1d92af05bc503e403f598d90a1aa63b73c",
+  "historical_source": "execution\\20261027_c_goal42_43_object41_42_43\\final_readonly_20261027_222119\\EVIDENCE.json",
+  "historical_sha256": "658c3fcdcfab643c302ac082acd7fb83730878411f23bf79a478612e96a6054a",
+  "current_stage_means": {
+    "GOAL41": {
+      "6": 4.945058102607727,
+      "7": 7.750578237771988,
+      "8": 11.211603306531906,
+      "9": 16.47240231394768
+    },
+    "GOAL42": {
+      "6": 3.2813776564598083,
+      "7": 6.864334548711777,
+      "8": 9.428512286739188
+    }
+  },
+  "GOAL42_remaining_pure_minutes": 67.63649930025684,
+  "GOAL43_pure_reference_minutes": 126.35704303185145,
+  "OBJECT_pure_minutes_at_historical_rates_with_new_epoch_budget": {
+    "OBJECT_41": 158.39410223960877,
+    "OBJECT_42": 154.80936608711878,
+    "OBJECT_43": 152.55715310573578
+  },
+  "historical_200_episode_evaluation_minutes": {
+    "GOAL_42": 18.01013481093317,
+    "GOAL_43": 19.650525041299748,
+    "OBJECT_41": 19.57899893686675,
+    "OBJECT_42": 16.48872500418341,
+    "OBJECT_43": 20.641417106850227
+  },
+  "planning_remaining_training_hours": [
+    12,
+    15
+  ],
+  "planning_1200_formal_hours": [
+    2,
+    3
+  ],
+  "planning_training_plus_formal_hours": [
+    14,
+    18
+  ],
+  "completion_window_CST": [
+    "2026-10-31 06:15",
+    "2026-10-31 10:15"
+  ],
+  "CPU_acceptance_report_publication": "extra, not included",
+  "assumptions": [
+    "GOAL42 Task9 uses GOAL41 measured rate; GOAL43 uses GOAL41 full-stage rates",
+    "OBJECT rates are historical C, scaled to 100/200/200/200 epochs, not measured in this run",
+    "Allow roughly 0–25 percent rate variation plus per-run preparation/saving overhead (GOAL41 observed overhead about14 minutes)",
+    "Formal estimate based on historical 16.5–20.6 minutes per200 with overhead and resource margin, not measured current C",
+    "No clock-based completion claim; update after OBJECT starts"
+  ],
+  "next_check_minutes": 70,
+  "schedule_amendment": "GOAL training then GOAL evaluation then OBJECT training/evaluation",
+  "latest_snapshot": "check_readonly_20261030_162106",
+  "latest_snapshot_sha256": "354848ce200eedb9e9738070bd8c8948a382da2718698455d38369d4cf1a5e2d",
+  "current_GOAL42_remaining_pure_minutes": 59.92308690627417,
+  "GOAL_suite_training_plus_evaluation_planning_hours": [
+    4.5,
+    5.5
+  ]
+}

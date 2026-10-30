@@ -24,3 +24,8 @@ C在Task6为100轮，Task7–9各200轮，700轮/seed；对应已有S四阶段�
 全部自然exit0且无自身进程后独立实际CPU24阶段CP、6完整recovery、18滚动teacher缓存重放、全部RA/标签/初态字节/noise与1200正式回合验收。与已接受S逐一核同suite/seed数据、官方初态、任务顺序、正式初态/noise/envseed与阶段预算；比较两套件各自三seed矩阵/AUC/FWT/NBT低好/OldFinal/FinalAll，全部负单元及配对SF/FS。等optimizer调用不是等FLOPs/墙钟/交互；S额外240训练采集保留，开发seed及旧测试初态不能宣称新独立确认集或单机制因果。
 
 每次检查和最终接受按根AGENTS审查轻量文件nonforce发布MLR并核remoteSHA和本地receipt，禁CP/状态/缓存/RNG/凭据。按整seed或全部评估实测余时调整同一新监控；健康进展静默，完成/新失败/需操作才通知。六C独立验收、与已有S解释及发布后才删除监控。
+
+
+## 2026-10-30 16:20 用户调度修订（覆盖此前全训练后统一评估顺序）
+
+GOAL41/42/43训练→GOAL41/42/43正式评估→OBJECT41/42/43训练→OBJECT41/42/43正式评估。S只读，所有科学预算与配置不变。不打断现有GOAL42或重跑完成部分。工程目录engineering_suite_order_20261030_v1实现自然训练边界交接，保持原科学冻结源；工程完成标记为该目录controller.exit，原root/controller.exit不伪造。详细安全证据、使用方式与当前ARMED/完成状态以MONITOR_HANDOFF及实际快照为准。

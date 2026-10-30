@@ -1,0 +1,34 @@
+{
+  "status": "ARMED_WAITING_GOAL42_NATURAL_EXIT",
+  "engineering_root": "/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/engineering_suite_order_20261030_v1",
+  "controller": 47046,
+  "original_controller": 46492,
+  "training_pid": 46723,
+  "training_signals": 0,
+  "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510",
+  "engineering_files": 3,
+  "armed": {
+    "phase": "wait_GOAL_42_natural_exit",
+    "time": 1793348440.1830895,
+    "controller": 47046,
+    "original_controller": {
+      "pid": 46492,
+      "state": "S",
+      "ppid": 1,
+      "start": "16094066",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/controller.py "
+    },
+    "child": {
+      "pid": 46718,
+      "state": "S",
+      "ppid": 46492,
+      "start": "16936633",
+      "exit_code": 0,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1/GOAL_42/train.py C "
+    },
+    "watchdog_pid": 47047,
+    "training_signals": 0
+  },
+  "observed": 1793348440.2607884
+}
