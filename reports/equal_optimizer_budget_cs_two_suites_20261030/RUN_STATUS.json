@@ -1,11 +1,11 @@
 {
-  "status": "PARTIAL_FINAL_CPU_AUDIT_RUNNING",
-  "observation": "2026-10-31T06:49:13.918818+08:00",
+  "status": "ACCEPTED_SIX_C_EQUAL_OPTIMIZER_BUDGET",
+  "observation": "2026-10-31T07:28:02.585754+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1",
   "controller": 47046,
   "contract": "f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7",
   "frozen_files": 88,
-  "latest_evidence": "check_readonly_20261031_064912",
+  "latest_evidence": "final_readonly_20261031_065009",
   "epochs": 4200,
   "accepted_updates": 1012500,
   "production_physical_calls": 1012500,
@@ -296,32 +296,96 @@
   },
   "failure": null,
   "processes": [],
-  "next_check_minutes": 75,
+  "next_check_minutes": null,
   "completion_source": "engineering_suite_order_20261030_v1/controller.exit",
   "engineering_contract": "c539eebe4fe66dfed1ba5bc48e8860119569d6644b9ef677ba2bbc893216b510",
-  "final_CPU_acceptance": "RUNNING_NOT_ACCEPTED",
-  "source_evidence_sha256": "e4663e34859d938709c8929622d5f5441ba49a037d6e0646a860e61cc639a158",
+  "final_CPU_acceptance": "PASS_COMPLETE_LOCAL_ACCEPTANCE",
+  "source_evidence_sha256": "f28ca2087e5e3fb820c376896c8818502e9609a24a0b19a3a8c5ef47f2fab0c8",
   "suite_acceptance": {
     "GOAL": {
-      "status": "ACCEPTED_GOAL_THREE_C_EQUAL_OPTIMIZER_BUDGET",
-      "suite": "GOAL",
-      "seeds": [
-        41,
-        42,
-        43
-      ],
-      "observation": "2026-10-30T21:01:30.830572+08:00",
-      "final_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261030_equal_optimizer_budget_cs_two_suites\\goal_acceptance_20261030_v1\\final_readonly_20261030_204804",
-      "audit_sha256": "0cac0698473f1e96db9c9a6816d030b9172a97162729b1dfca07e3b127db523e",
-      "comparison_sha256": "7e2862f990e8a40329d80a3c2d432c33065b27f7e2115db40ce188f17f98cfa9",
-      "report_sha256": "199fd8630c6dc262188e4464a69fe49ed0a420be1540d91a97167b804e05bb3c",
-      "whole_six_C_status": "PARTIAL_OBJECT_PENDING",
-      "environment_retries": 0,
-      "new_S_runs": 0
+      "status": "ACCEPTED",
+      "original_receipt": "GOAL_ACCEPTANCE.json",
+      "original_receipt_sha256": "d7f12835fd6d6e298ba04eafd822fc46c4f4c8a76f09ddf7508f4f173ddf0031",
+      "final_reconfirmation": "3a2d8103b7478f08552ff9c52d71dcc2f4a68e3705eb472d27e89ff3af4c9744"
     },
     "OBJECT": {
-      "status": "PENDING_FINAL_CPU"
+      "status": "ACCEPTED",
+      "receipt": "ACCEPTANCE.json",
+      "final_audit": "3a2d8103b7478f08552ff9c52d71dcc2f4a68e3705eb472d27e89ff3af4c9744"
     }
   },
-  "final_request": "request_20261031_065009_3d9fc0aa.json"
+  "final_request": "request_20261031_065009_3d9fc0aa.json",
+  "acceptance": {
+    "status": "ACCEPTED_SIX_C_EQUAL_OPTIMIZER_BUDGET",
+    "observation": "2026-10-31T07:28:02.585754+08:00",
+    "final_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261030_equal_optimizer_budget_cs_two_suites\\final_readonly_20261031_065009",
+    "audit_sha256": "3a2d8103b7478f08552ff9c52d71dcc2f4a68e3705eb472d27e89ff3af4c9744",
+    "comparison_sha256": "3271b55c2df4ded778ea5bf5675dbd68b4fe9ebae33b247007a06460940842e4",
+    "report_sha256": "2ccbddf26d47cae9b59aacad3e95cbabd912bc1a0d88fa983a9c4f36e147754d",
+    "training_epochs": 4200,
+    "production_calls": 1012500,
+    "isolated_calls": 546,
+    "formal_episodes": 1200,
+    "new_S_runs": 0,
+    "environment_retries": 0,
+    "completion_source": "engineering_suite_order_20261030_v1/controller.exit"
+  },
+  "final_metrics": {
+    "GOAL": {
+      "AUC": {
+        "C_mean": 83.71527777777777,
+        "S_mean": 87.25694444444444,
+        "S_minus_C_pp": 3.5416666666666665
+      },
+      "FWT": {
+        "C_mean": 87.08333333333333,
+        "S_mean": 89.58333333333333,
+        "S_minus_C_pp": 2.5
+      },
+      "NBT": {
+        "C_mean": 7.592592592592593,
+        "S_mean": 5.277777777777778,
+        "S_minus_C_pp": -2.314814814814815
+      },
+      "OldFinal": {
+        "C_mean": 77.22222222222221,
+        "S_mean": 83.88888888888889,
+        "S_minus_C_pp": 6.666666666666667
+      },
+      "FinalAll": {
+        "C_mean": 80.0,
+        "S_mean": 85.0,
+        "S_minus_C_pp": 5.0
+      }
+    },
+    "OBJECT": {
+      "AUC": {
+        "C_mean": 80.90277777777777,
+        "S_mean": 86.49305555555556,
+        "S_minus_C_pp": 5.590277777777778
+      },
+      "FWT": {
+        "C_mean": 79.58333333333333,
+        "S_mean": 80.41666666666667,
+        "S_minus_C_pp": 0.8333333333333334
+      },
+      "NBT": {
+        "C_mean": -2.4074074074074074,
+        "S_mean": -11.018518518518519,
+        "S_minus_C_pp": -8.61111111111111
+      },
+      "OldFinal": {
+        "C_mean": 72.77777777777779,
+        "S_mean": 81.11111111111111,
+        "S_minus_C_pp": 8.333333333333334
+      },
+      "FinalAll": {
+        "C_mean": 77.5,
+        "S_mean": 85.0,
+        "S_minus_C_pp": 7.5
+      }
+    }
+  },
+  "publication": "PENDING_FINAL_PUBLISH",
+  "monitor": "DELETE_AFTER_VERIFIED_PUBLICATION"
 }

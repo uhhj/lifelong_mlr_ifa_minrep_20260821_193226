@@ -1,3 +1,17 @@
+## 2026-10-31 最终六C已实际接受
+
+# 六C等优化器预算已完成并接受
+
+实际CPU验收观察：2026-10-31T07:28:02.585754+08:00。最终证据：final_readonly_20261031_065009。
+
+六C各700轮，共4200轮、1012500生产optimizer调用、546自身隔离调用、1200正式回合均实际完成。真实工程controller.exit0且无自身进程；原根exit未伪造。CPU24CP、6完整恢复、18teacher缓存及1200初态/noise通过，本地复算与已有S逐阶段等预算及1200配对通过。GOAL原独立接受证据SHA精确保留。
+
+最终四任务成功率三seed均值：GOAL新C80%、S85%；OBJECT新C77.5%、S85%。旧C历史分别80%和82.5%，但硬件及schedule差异不允许把新旧C差值严格归因于增加预算。新C18个扩展阶段训练BC/执行cost继续降低，不等于闭环提高。保留全部负单元、SF/FS及训练代理局限。
+
+详见FINAL_REPORT.md、ACCEPTANCE.json及最终目录的LOCAL_FINAL_AUDIT、PRIMARY_S_COMPARISON、INTERPRETATION_AUDIT。S未重训重评，旧机制永久停止；没有额外训练/补采/重评/扩seed。等optimizer不等FLOPs、墙钟、交互或可用信息。最终发布核验后删除c-goal-object-seed；不恢复旧监控或启动任何科学入口。
+
+以下为历史记录，仅供追溯；全部旧未完成状态与继续运行指令已被上述最终接受状态覆盖。
+
 ## 2026-10-31 06:50 最终CPU验收正在执行（禁止重复提交）
 
 实际check_readonly_20261031_064912及工程audit_progress PASS，052910全部前缀保留。六C全部700轮、1200正式回合完成；真实engineering_suite_order_20261030_v1/controller.exit==0且自身进程为空，原root/controller.exit不存在。当前PARTIAL_FINAL_CPU_AUDIT_RUNNING，尚未宣称接受。

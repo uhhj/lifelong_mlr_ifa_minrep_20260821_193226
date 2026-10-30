@@ -63,7 +63,7 @@ for suite,vals in c['suites'].items():
 lines+=['','AUC先对每个任务的已见阶段取均值，再跨四任务平均；FWT沿用实验中的刚学完任务对角成功率定义，不是未训练任务的零样本迁移。NBT越低越好，可为负：负值表示后续阶段相对刚学完时有净改善；它不保证每个任务都不遗忘。OldFinal是最终旧任务6–8均值；FinalAll是最终四任务均值。','',
 'GOAL：追加C预算后AUC和FWT较旧C提高，但最终总体成功率仍为80%，旧任务最终均值反而下降。S最终85%，平均领先新C 5 pp；seed41新C略好，seed42/43由S领先。额外优化没有消除这三个seed的S均值优势。','',
 'OBJECT：额外C预算也没有使新C达到S的最终均值。S的收益在seed41明显集中于最终Task6恢复和Task9；seed42在旧Task6上获益，但新Task7刚学完时低于C，最终Task8也低于C；seed43在Task7/8获益，却仍未解决最终Task6仅30%的问题。不能将均值优势写成全面胜出或门控单机制的因果结论。','',
-'旧C比较是历史描述，不能把差值严格归因于增加100轮：本轮同时延长了学习率衰减终点；历史环境/硬件轨迹也有差异（OBJECT41历史Task6为45%，本轮与S匹配的Task6为35%）。本轮新C与已有S的官方初始化、实际完整初始状态、硬件记录及Task6 tensor一致已逐项验真；这不意味着旧C也逐位相同。','',
+'旧C比较是历史描述，不能把差值严格归因于增加100轮：本轮同时延长了学习率衰减终点；历史环境/硬件轨迹也有差异（旧OBJECT C为RTX3090，本轮新C与S为RTX4080 SUPER；OBJECT41历史Task6为45%，本轮与S匹配的Task6为35%）。本轮新C与已有S的官方初始化、实际完整初始状态、硬件记录及Task6 tensor一致已逐项验真；这不意味着旧C也逐位相同。','',
 '## 各seed与最终新旧任务','', '|case|新C FinalAll|S FinalAll|ΔFinalAll|ΔAUC|ΔNBT|ΔOldFinal|最终Task9 C/S|','|---|---:|---:|---:|---:|---:|---:|---|']
 for case,v in c['cases'].items():
  x=v['cells']['9_9'];lines.append('|%s|%.2f|%.2f|%+.2f|%+.4f|%+.4f|%+.4f|%.1f / %.1f|'%(case,v['C_metrics']['FinalAll'],v['S_metrics']['FinalAll'],v['delta_pp']['FinalAll'],v['delta_pp']['AUC'],v['delta_pp']['NBT'],v['delta_pp']['OldFinal'],x['C_percent'],x['S_percent']))
@@ -81,12 +81,20 @@ for case,ts in within.items():
  for t,x in ts.items():lines.append('|%s|%s|%d / %d|%d / %d|'%(case,t,x['C']['SF'],x['C']['FS'],x['S']['SF'],x['S']['FS']))
 lines+=['','## 训练损失和离线诊断的边界','', '|case|stage|BC第100轮|BC第200轮|旧样本执行cost第100轮|第200轮|','|---|---:|---:|---:|---:|---:|']
 for x in training:lines.append('|%s|%d|%.6f|%.6f|%.6f|%.6f|'%(x['case'],x['stage'],x['BC100'],x['BC200'],x['exec100'],x['exec200']))
-lines+=['','额外100轮实际有正学习率，第101轮非零、最后更新后才归零。BC为batch标量平均，连续动作负对数似然可为负；训练损失继续降低不能保证闭环成功率提高。原C目标没有加入S的成功保持项，额外更新仍在优化原C目标。方向诊断仅覆盖固定batch/epoch，局部为零的项不能外推为全程零梯度。','',
+lines+=['','额外100轮实际有正学习率，第101轮非零、最后更新后才归零。本轮18个扩展阶段的第200轮BC和旧样本执行cost均低于第100轮。BC为batch标量平均，连续动作负对数似然可为负；训练损失继续降低不能保证闭环成功率提高。没有对新C第100轮另做闭环评估，不能将其后闭环变化直接测定或归因于追加轮数。原C目标没有加入S的成功保持项，额外更新仍在优化原C目标。方向诊断仅覆盖固定batch/epoch，局部为零的项不能外推为全程零梯度。','',
 '独立CPU重放的旧窗口执行cost、expert regret、margin路由和teacher距离见LOCAL_FINAL_AUDIT/offline与RECOMPUTED文件。它们来自训练窗口，不是独立验证集，不用于重新选择检查点或调整超参数。完整闭环矩阵及负单元优先于训练代理解释；本实验比较完整方法，不隔离支持度、保持损失和门控各自贡献。','',
 '## 调用预算与适用范围','',
 'GOAL双方生产调用各426600，OBJECT各585900；双方自身隔离各546。新C保留1012500次生产更新，S保留544800次更新、其余是被丢弃候选但照样计费。C无训练采集，已有S额外240次训练采集形成自身成功缓存；每次更新LR、前向/探针次数、FLOPs、墙钟和可用信息并不相等。OBJECT历史3914次工程验证、18额外autograd及旧中断UNKNOWN保持原账，不能隐去或算作零。','',
 '新C另有72准入autograd、288训练方向autograd；最终CPU仅前向重放，0 optimizer、0环境回合。传输包装仅在每个CPU case完成后输出空白并flush，六个审计脚本字节不变，以避免整段无输出触发SSH空闲超时；不修改科学冻结源。','',
 '只有两个套件各三个已用于开发的seed和既有初态，不能给出统计显著、普适追上概率或独立确认集结论。既有S不重跑、旧机制不恢复；所有正负结果保留，不因负单元追加训练、评估、种子或扫参。']
+lines+=['','## 实际离线重放与闭环的对应','',
+'最终阶段CPU重放中，GOAL三个C的全部旧任务窗口均为expert regret=0、margin route=0，然而其最终旧任务均值仍只有77.2222%。这说明在所记录旧训练窗口上选到最低cost专家，不等价于闭环轨迹保持成功；它不能证明所有新访问状态上的路由都已解决。',
+'OBJECT41最终Task6有764个旧窗口，仅5个窗口没有选择最低cost专家，平均执行cost为0.00138972、regret为0.00000495538，但20个正式初态仅5个成功（25%）。OBJECT43最终Task6为761个窗口中12个非最低cost选择，平均regret为0.000262928，闭环为30%。这些数据支持“训练窗口代理与长轨迹成功存在缺口”的描述，不足以确定缺口由哪一机制造成。',
+'OBJECT41 Task9第200轮首个诊断batch中，BC梯度L2为1351.827，已加权执行项为0.0404353，IFA及route项在该batch为零。该尺度比较只描述当前参数化和所选batch；未计算跨项梯度夹角，也不能把局部零梯度解释为全程没有作用，更不能仅据范数推断闭环失败因果。']
+lines+=['','## 已记录耗时','', '|case|训练epoch合计分钟|正式vector合计分钟|','|---|---:|---:|']
+for case,x in a['costs'].items():
+ lines.append('|%s|%.2f|%.2f|'%(case,x['epoch_seconds']/60,x['evaluation_vector_seconds']/60))
+lines+=['','训练列是epoch内部计时之和，逐轮保存、teacher准备、调度和最终CPU验收另计；正式列是实际vector计时之和，不能冒充完整墙钟时间。跨seed与历史运行资源不同，不据此作严格速度归因。']
 report='\n'.join(lines)+'\n';(D/'FINAL_REPORT.md').write_text(report,encoding='utf8');(R/'FINAL_REPORT.md').write_text(report,encoding='utf8')
 receipt=dict(status='ACCEPTED_SIX_C_EQUAL_OPTIMIZER_BUDGET',observation=observed,final_directory=str(D),audit_sha256=sha(D/'LOCAL_FINAL_AUDIT.json'),comparison_sha256=sha(D/'PRIMARY_S_COMPARISON.json'),report_sha256=sha(D/'FINAL_REPORT.md'),training_epochs=4200,production_calls=1012500,isolated_calls=546,formal_episodes=1200,new_S_runs=0,environment_retries=0,completion_source='engineering_suite_order_20261030_v1/controller.exit')
 write(R/'ACCEPTANCE.json',receipt)
