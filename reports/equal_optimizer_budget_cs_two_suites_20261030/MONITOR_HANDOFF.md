@@ -1,3 +1,11 @@
+## 2026-10-31 05:29 实际复查：六C训练全部完成，OBJECT正式评估进行中
+
+check_readonly_20261031_052910及工程audit_progress实际PASS，052240全部epoch/诊断/正式前缀精确保留。六C各700完整轮且各train_C.exit0，总4200/4200轮1012500/1012500生产、546/546自身隔离；全部阶段自己的准入及schedule/COPY_EQ已实际通过。已自然接续OBJECT41正式评估30/200，OBJECT42/43各0/200，连同已接受GOAL共630/1200正式。88科学项与3工程项不变，controller47046/evaluate63829健康，无失败、重跑或新S调用。
+
+OBJECT41前三个完整vector耗时80.53/110.98/32.76秒，均74.7564秒；剩57vector/570回合线性参考71.02分钟。仅三个早期vector样本，不能当稳定全套件吞吐；不同任务成功终止长度及资源波动另计，规划再75–120分钟。下一75分钟在全部OBJECT正式预计完成较早侧复查，覆盖旧5分钟间隔，不固定短轮询。须真实工程controller.exit0且无自身进程后才执行最终CPU验收、已有S比较解释与发布，当前全六C仍PARTIAL。
+
+GOAL已接受证据逐项SHA精确保留，GOAL_ACCEPTANCE及报告有效。S只读、旧机制永久停止；正常进展无需用户操作，保留同一监控至全部验收解释发布完成。
+
 ## 2026-10-31 05:22 实际复查：最后六轮训练进行中
 
 check_readonly_20261031_052240及工程audit_progress实际PASS，022939全部epoch/诊断/正式前缀精确保留。OBJECT43 Task6/7/8完整100/200/200轮、Task9完整194/200轮，共694/700轮193128生产；自己的四阶段91隔离均通过，新增Task7–9完整恢复/10步及保存加载重放、schedule和四个COPY_EQ起点通过，Task6与已有S全部tensor相等。累计4194/4200轮1010328/1012500生产、546/546隔离、正式600/1200。OBJECT正式仍0/600，尚不能宣称全部训练完成。88科学项与3工程项不变，controller47046/GPU63453健康，无失败/重跑/新S调用。
@@ -42,7 +50,7 @@ Task7最近10轮12.0464秒，剩126轮约25.3分钟纯计算；尚未实测Task8
 
 # 仅C匹配已有完整S预算：当前交接
 
-实际观察 2026-10-31T05:22:41.459201+08:00，check_readonly_20261031_052240/LOCAL_AUDIT.json=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-10-31T05:29:11.124053+08:00，check_readonly_20261031_052910/LOCAL_AUDIT.json=PASS_PROGRESS_NOT_FINAL。
 
 唯一root `/data/mlr_ifa/experiment_workspaces/C_MATCH_FULL_S_BUDGET_GOAL_OBJECT_20261030_v1`，controller47046，合同`f0ab336c42a9e5f36a7e8d659e1c3bec9047fd775db569a68ff04f75c65808b7`，88冻结项。禁止重跑prepare/deploy/controller或已完成轮。用户最新明确S不重跑，只跑C；已有GOAL/OBJECT六S仅只读配对，旧机制永久取消。
 
@@ -51,11 +59,11 @@ Task7最近10轮12.0464秒，剩126轮约25.3分钟纯计算；尚未实测Task8
 |GOAL_41|700|142200|200|
 |GOAL_42|700|142200|200|
 |GOAL_43|700|142200|200|
-|OBJECT_41|700|195300|0|
+|OBJECT_41|700|195300|30|
 |OBJECT_42|700|195300|0|
-|OBJECT_43|694|193128|0|
+|OBJECT_43|700|195300|0|
 
-累计4194/4200轮、1010328/1012500生产调用、546/546隔离调用、新正式600/1200。没有新S或训练环境采集。
+累计4200/4200轮、1012500/1012500生产调用、546/546隔离调用、新正式630/1200。没有新S或训练环境采集。
 
 先完整读PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、LOCAL_BUILD_REVIEW.json和最新EVIDENCE/LOCAL_AUDIT。C每seedTask6=100轮、Task7–9各200轮；GOAL142200、OBJECT195300生产调用，逐阶段匹配已接受S的双候选成本；自身4/29隔离=91，C每seed12准入autograd和48方向autograd另记。延长原线性调度终点为实际C更新数，warmup500不变；实际SCHEDULE/COPY_EQ/初始化/Task6对已有S全部tensor需通过。不能套未来stage准入。
 
@@ -65,6 +73,6 @@ Task7最近10轮12.0464秒，剩126轮约25.3分钟纯计算；尚未实测Task8
 
 仅工程目录engineering_suite_order_20261030_v1/controller.exit0且无自身进程后执行该工程目录final_readonly.py→audit_final_local.py FINAL→根compare_primary_s.py FINAL。原root/controller.exit保持不存在。外置final包装目前仅STATIC_ONLY，须实际24CP、6完整恢复、18teacher缓存CPU重放、1200初态/noise及预算验收；与已有六S的实际1200正式逐项配对，解释两套件三seed、新旧任务/SF/FS、全部负单元及成本边界。然后完成FINAL_REPORT、接受状态和发布。不因负结果追加实验。包装错误保留证据后外置版本化修复，不重训重评。
 
-下一5分钟复查，初期核首个扩展阶段准入/200轮scheduler，随后依据当前整seed或全部评估剩余时间调整，禁止固定高频和按时钟推断完成。健康进展静默，只完成/新失败/需行动通知。
+下一75分钟复查，初期核首个扩展阶段准入/200轮scheduler，随后依据当前整seed或全部评估剩余时间调整，禁止固定高频和按时钟推断完成。健康进展静默，只完成/新失败/需行动通知。
 
 每轮按根AGENTS经publish.py审查轻量code/report/hash/scalars/outcomes，串行nonforce推MLR并核remoteSHA/localreceipt；禁CP/model/state/cache/RNG/凭据。六C实际独立验收、已有S比较解释和发布后才删除本新监控；不恢复旧s-goal-seed或s-object-seed。
