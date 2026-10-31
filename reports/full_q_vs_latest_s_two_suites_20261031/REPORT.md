@@ -1,14 +1,14 @@
-## 2026-10-31 17:06 实际复查：GOAL600正式完成，OBJECT已自然接续
+## 2026-10-31 17:38 实际复查：OBJECT41保持阶段准入通过
 
-check_readonly_20261031_170522实际审计PASS，165851全部epoch/方向诊断/正式outcome前缀精确保留。GOAL三Q各400轮76100生产、40采集和200正式，均train_Q.exit0/evaluate.exit0，无GOAL进程；GOAL_EVALUATION_COMPLETE实际600回合。SUITE_TRANSITION_AUDIT独立核验三个末vector均早于套件完成标记，标记早于OBJECT41 dispatch，原套件顺序实际满足。GOAL仍待最终CPU独立验收，不把执行完成称科学接受；该快照保存GOAL全部轻量证据SHA供后续核对。
+check_readonly_20261031_173723实际审计PASS，170522全部epoch/方向诊断/正式前缀精确保留。OBJECT41 Task6完整100轮及10采集，Task7完整91/100轮，共191/400轮36357接受及生产物理调用、33隔离/19准入autograd。Task7自己的29/11、完整恢复/10步重放/q1与关保持/探针测量状态不变实际PASS；COPY_EQ起点0/15700通过，Task6与已有S全部tensor相等。自己的Task6成功缓存支持度q6=.2，训练缓存不代表正式收益。Task8/9及其他OBJECT尚未自身准入，不套PASS。
 
-OBJECT41 Task6完整46/100轮7222生产，自己的4隔离/8准入autograd、初始化/RNG/hardware与对应S一致、COPY_EQ起点0通过；Task6尚未完成，不能提前称最终tensor与S相等，未来阶段须自己的准入。OBJECT42/43未开始。累计1246/2400轮235522/544800生产、277/546隔离、131/246准入autograd、120/240采集、600/1200正式。135冻结项不变，controller80131/OBJECT41 launcher99578/GPU99584健康，无失败/重训/新S调用。
+GOAL三Q的400轮/40采集/200正式与全部已完成轻量SHA对170522逐项精确保留，GOAL_PRESERVATION_AUDIT通过；仍待六Q最终CPU独立验收。累计1391/2400轮264657/544800生产、306/546隔离、142/246准入autograd、130/240采集、600/1200正式。135冻结项不变，controller80131/GPU99584健康，无失败、重训、新S或生产C候选。
 
-OBJECT41 Task6近10轮均5.5536秒，余54轮约5.00分钟纯计算，保存采集另计。OBJECT保持阶段尚未有自己的实测速率，下一30分钟一次性核首个保持阶段准入与吞吐，之后按当前整seed或整套件正式余时调整，不固定30分钟；不以Task6速度冒充后续保持训练或全队列ETA。整体PARTIAL，最终CPU验收/比较解释发布仍待六Q自然结束，数据泄露与成本边界保留。本段覆盖旧GOAL580/600及5分钟间隔。
+Task7前91轮均15.2176秒，近10轮15.6437秒，余9轮约2.35分钟纯计算。Task8/9未测，按227→309/362批次比例外推当前整seed余纯计算77.25–79.42分钟仅为条件参考；计旧缓存增加、固定探针、保存准备、余30采集及波动，规划100–150分钟。下一100分钟在当前整seed预计结束较早侧复查，不再固定30分钟；随后按新事实调整，不靠时钟断言完成。其余OBJECT、正式与最终CPU验收另计。数据泄露/开发集与成本边界保留，整体PARTIAL，健康静默。本段覆盖旧Task6进度与30分钟间隔。
 
 # 完整Q对最新S：GOAL和OBJECT各三seed
 
-实际观察 2026-10-31T17:05:23.458710+08:00；check_readonly_20261031_170522/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-10-31T17:37:24.032036+08:00；check_readonly_20261031_173723/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
 唯一活动root `/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2`；controller 80131；合同 `562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0`；135冻结项；唯一部署证据 deploy_remote_20261031_095422。禁止重复部署或启动任何controller/prepare/train入口。
 
@@ -17,13 +17,13 @@ OBJECT41 Task6近10轮均5.5536秒，余54轮约5.00分钟纯计算，保存采�
 |GOAL_41|400|76100|40|200|
 |GOAL_42|400|76100|40|200|
 |GOAL_43|400|76100|40|200|
-|OBJECT_41|46|7222|0|0|
+|OBJECT_41|191|36357|10|0|
 |OBJECT_42|0|0|0|0|
 |OBJECT_43|0|0|0|0|
 
-总1246/2400轮、235522/544800生产、277/546隔离、131/246准入autograd、120/240采集、600/1200正式。方向诊断最多216autograd另计。
+总1391/2400轮、264657/544800生产、306/546隔离、142/246准入autograd、130/240采集、600/1200正式。方向诊断最多216autograd另计。
 
-下一30分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
+下一100分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
 
 先完整读取PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、FINAL_WRAPPER_REVIEW.json及最新实际EVIDENCE/LOCAL_AUDIT。
 
