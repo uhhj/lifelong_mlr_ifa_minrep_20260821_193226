@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL_TRAINING_OR_EVALUATION",
-  "observation": "2026-11-01T03:13:07.516886+08:00",
+  "status": "PARTIAL_FINAL_CPU_ACCEPTANCE_IN_PROGRESS",
+  "observation": "2026-11-01T03:22:05.966696+08:00",
   "counts": {
     "GOAL_41": {
       "epochs": 400,
@@ -114,7 +114,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 170,
+      "formal_episodes": 200,
       "current": {
         "arm": "Q",
         "stage": 9,
@@ -135,47 +135,36 @@
   "own_isolated_optimizer_calls": 546,
   "own_extra_autograd_calls": 246,
   "training_collection_completed_episodes": 240,
-  "formal_episodes": 1170,
+  "formal_episodes": 1200,
   "failures": {},
-  "processes": [
-    {
-      "pid": 80131,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/controller.py ",
-      "state": "S"
-    },
-    {
-      "pid": 114046,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/OBJECT_43/evaluate.py ",
-      "state": "S"
-    }
-  ],
+  "processes": [],
   "capacity": {
     "/root": {
-      "free": 1429536768,
+      "free": 1429524480,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 355794944
+      "spare": 355782656
     },
     "/data": {
-      "free": 28064944128,
+      "free": 28064866304,
       "remaining_bound": 4791271424,
       "reserve": 2147483648,
-      "spare": 21126189056
+      "spare": 21126111232
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "114046\n",
+    "stdout": "",
     "stderr": ""
   },
-  "snapshot_sha256": "369e80bec5acffc0a4adf0459d2b34704cee4c58c2d76654ddae454b5c4d22f0",
+  "snapshot_sha256": "e2e84d9f007fe35a0a18c3da050f91376bee216b88a6399fb2c1cfc9a14c9fa2",
   "contract": "562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0",
-  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\check_readonly_20261101_013432",
+  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\check_readonly_20261101_031303",
   "root": "/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2",
   "controller": 80131,
-  "latest_evidence": "check_readonly_20261101_031303",
-  "next_check_minutes": 8,
-  "final_CPU_acceptance": "PENDING",
+  "latest_evidence": "check_readonly_20261101_032200",
+  "next_check_minutes": 30,
+  "final_CPU_acceptance": "QUEUED_ACTUAL_REMOTE_CPU",
   "scientific_conclusion": "GOAL_ACCEPTED_INTERPRETED_OBJECT_PENDING",
   "primary_reference": "Six existing accepted latest full S; no rerun",
   "suite_acceptance": {
@@ -234,5 +223,6 @@
       }
     },
     "OBJECT": "PENDING"
-  }
+  },
+  "final_request": "request_20261101_032229_f12a76fc.json"
 }

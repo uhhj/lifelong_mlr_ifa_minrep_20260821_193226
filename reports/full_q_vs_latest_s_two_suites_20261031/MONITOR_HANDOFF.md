@@ -1,12 +1,14 @@
-## 2026-11-01 03:13 实际复查：正式评估剩30回合
+## 2026-11-01 03:22 实际全部退出，最终CPU验收已唯一提交
 
-check_readonly_20261101_031303实际审计PASS，013432全部训练/诊断/正式前缀及已接受GOAL轻量SHA精确保留。六Q训练2400轮544800生产546隔离/246准入autograd、240采集均完成。OBJECT41/42正式各200/200且evaluate.exit0；OBJECT43正式170/200，总1170/1200。三个OBJECT自己的评估准入均PASS，135冻结项和controller80131/evaluate114046正常，无失败重跑或新S调用。
+check_readonly_20261101_032200实际audit_progress PASS，031303全部训练/诊断/正式前缀保留；六Q各400轮40采集200正式，各自train_Q.exit/evaluate.exit均0，v2 controller.exit真实0且自身进程为空，135冻结项不变。累计2400轮544800生产546自身隔离/246准入autograd240采集1200正式。GOAL已接受全部轻量SHA再次核对不变。训练和环境运行已完成，但全六Q尚未最终接受。
 
-OBJECT43已完成17vector均128.2672秒，近5均123.4607秒；剩3vector/30回合线性约6.17–6.41分钟，规划6–10分钟，CPU验收解释发布另计。下一8分钟在全部正式结束附近复查。尚无自然controller.exit0，不能提前最终CPU验收或宣称接受；真实结束后继续24CP/6恢复/24缓存teacher/1200初态noise及S配对、解释发布。GOAL独立接受保持有效。
+03:22:29已唯一提交真实final_readonly CPU验收：旧运输目录.session_control/request_20261101_032229_f12a76fc.json；对应result_20261101_032229_f12a76fc.json。见FINAL_PENDING_REQUEST.json。不得重复排队final或启动任何科学运行；下一30分钟直接检查这个已有请求结果，按output第一行实际目录复制至本目录，audit_final_local.py FINAL→compare_primary_s.py FINAL，再完成FINAL_REPORT/ACCEPTANCE、人工新旧任务/SF/FS/全部负单元及训练代理/成本/泄露边界解释和发布。仅外置CPU读取24CP/6恢复/24缓存teacher/1200初态noise，0optimizer/0环境；真实完成结果尚未取得，不套静态PASS。
+
+此前8分钟正式余时已失效。状态PARTIAL_FINAL_CPU_ACCEPTANCE_IN_PROGRESS；已有GOAL独立接受永久有效，无需再次单独GOAL验收。本次是全六Q既定最终验收。全部实际验收、解释发布完成后才删除监控。
 
 # 完整Q对最新S：GOAL和OBJECT各三seed
 
-实际观察 2026-11-01T03:13:07.516886+08:00；check_readonly_20261101_031303/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-11-01T03:22:05.966696+08:00；check_readonly_20261101_032200/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
 唯一活动root `/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2`；controller 80131；合同 `562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0`；135冻结项；唯一部署证据 deploy_remote_20261031_095422。禁止重复部署或启动任何controller/prepare/train入口。
 
@@ -17,11 +19,11 @@ OBJECT43已完成17vector均128.2672秒，近5均123.4607秒；剩3vector/30回�
 |GOAL_43|400|76100|40|200|
 |OBJECT_41|400|105500|40|200|
 |OBJECT_42|400|105500|40|200|
-|OBJECT_43|400|105500|40|170|
+|OBJECT_43|400|105500|40|200|
 
-总2400/2400轮、544800/544800生产、546/546隔离、246/246准入autograd、240/240采集、1170/1200正式。方向诊断最多216autograd另计。
+总2400/2400轮、544800/544800生产、546/546隔离、246/246准入autograd、240/240采集、1200/1200正式。方向诊断最多216autograd另计。
 
-下一8分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
+下一30分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
 
 先完整读取PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、FINAL_WRAPPER_REVIEW.json及最新实际EVIDENCE/LOCAL_AUDIT。
 
