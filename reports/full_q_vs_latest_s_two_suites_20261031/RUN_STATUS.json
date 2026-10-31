@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL_FINAL_CPU_ACCEPTANCE_IN_PROGRESS",
-  "observation": "2026-11-01T03:22:05.966696+08:00",
+  "status": "ACCEPTED_ALL_SIX_Q",
+  "observation": "2026-11-01T03:47:03.340565+08:00",
   "counts": {
     "GOAL_41": {
       "epochs": 400,
@@ -140,10 +140,10 @@
   "processes": [],
   "capacity": {
     "/root": {
-      "free": 1429524480,
+      "free": 1429520384,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 355782656
+      "spare": 355778560
     },
     "/data": {
       "free": 28064866304,
@@ -157,15 +157,15 @@
     "stdout": "",
     "stderr": ""
   },
-  "snapshot_sha256": "e2e84d9f007fe35a0a18c3da050f91376bee216b88a6399fb2c1cfc9a14c9fa2",
+  "snapshot_sha256": "78fb130345fa2b028f3810aeef7d60db439c98e63bfd8fb845265b80b62bd461",
   "contract": "562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0",
-  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\check_readonly_20261101_031303",
+  "prefix_checked": null,
   "root": "/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2",
   "controller": 80131,
-  "latest_evidence": "check_readonly_20261101_032200",
-  "next_check_minutes": 30,
-  "final_CPU_acceptance": "QUEUED_ACTUAL_REMOTE_CPU",
-  "scientific_conclusion": "GOAL_ACCEPTED_INTERPRETED_OBJECT_PENDING",
+  "latest_evidence": "final_readonly_20261101_032229",
+  "next_check_minutes": null,
+  "final_CPU_acceptance": "PASS_COMPLETE_LOCAL_ACCEPTANCE",
+  "scientific_conclusion": "INTERPRETED_PAIRED_DEVELOPMENT_RESULTS_WITH_LIMITATIONS",
   "primary_reference": "Six existing accepted latest full S; no rerun",
   "suite_acceptance": {
     "GOAL": {
@@ -222,7 +222,230 @@
         }
       }
     },
-    "OBJECT": "PENDING"
+    "OBJECT": {
+      "status": "PASS_COMPLETE_LOCAL_ACCEPTANCE_AND_INTERPRETATION",
+      "observed": "2026-11-01T03:55:41.822179+08:00",
+      "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\final_readonly_20261101_032229",
+      "evidence_sha256": "78fb130345fa2b028f3810aeef7d60db439c98e63bfd8fb845265b80b62bd461",
+      "audit_sha256": "0bb3877637827276d7cd5080434e735d695919ae9e28e5458ba1b2179b262843",
+      "comparison_sha256": "7ec281d6e454bba3d170e9a94ebf497bc01abdee953fe06e2a51fde8c64bbb11",
+      "interpretation_sha256": "d6a562354f5428540d7bc1d327f46157733d81771b2865e25d5e1bdbf1914dcf",
+      "report_sha256": "2c88b0bd67b3c50f6a78dc24f03e9c47ba1af39b018884a50e4cdafc83df014a",
+      "checkpoints": 24,
+      "complete_recoveries": 6,
+      "cache_teacher_replays": 24,
+      "production_optimizer": 544800,
+      "isolated_optimizer": 546,
+      "admission_autograd": 246,
+      "direction_autograd": 216,
+      "training_collection": 240,
+      "formal_episodes": 1200,
+      "acceptance_optimizer": 0,
+      "acceptance_environments": 0,
+      "suite_means": {
+        "GOAL": {
+          "AUC": {
+            "Q_mean": 83.50694444444444,
+            "S_mean": 87.25694444444444,
+            "S_minus_Q_pp": 3.75
+          },
+          "FWT": {
+            "Q_mean": 85.83333333333333,
+            "S_mean": 89.58333333333333,
+            "S_minus_Q_pp": 3.75
+          },
+          "NBT": {
+            "Q_mean": 4.444444444444445,
+            "S_mean": 5.277777777777778,
+            "S_minus_Q_pp": 0.8333333333333331
+          },
+          "OldFinal": {
+            "Q_mean": 78.33333333333333,
+            "S_mean": 83.88888888888889,
+            "S_minus_Q_pp": 5.555555555555556
+          },
+          "FinalAll": {
+            "Q_mean": 80.41666666666667,
+            "S_mean": 85.0,
+            "S_minus_Q_pp": 4.583333333333333
+          }
+        },
+        "OBJECT": {
+          "AUC": {
+            "Q_mean": 84.61805555555556,
+            "S_mean": 86.49305555555556,
+            "S_minus_Q_pp": 1.8749999999999998
+          },
+          "FWT": {
+            "Q_mean": 78.75,
+            "S_mean": 80.41666666666667,
+            "S_minus_Q_pp": 1.6666666666666667
+          },
+          "NBT": {
+            "Q_mean": -10.925925925925926,
+            "S_mean": -11.018518518518519,
+            "S_minus_Q_pp": -0.09259259259259278
+          },
+          "OldFinal": {
+            "Q_mean": 78.33333333333333,
+            "S_mean": 81.11111111111111,
+            "S_minus_Q_pp": 2.7777777777777777
+          },
+          "FinalAll": {
+            "Q_mean": 82.91666666666667,
+            "S_mean": 85.0,
+            "S_minus_Q_pp": 2.0833333333333335
+          }
+        }
+      },
+      "paired_summary": {
+        "GOAL": {
+          "S_win": 11,
+          "ties": 15,
+          "S_loss": 4,
+          "S_success_Q_fail": 50,
+          "Q_success_S_fail": 30
+        },
+        "OBJECT": {
+          "S_win": 16,
+          "ties": 5,
+          "S_loss": 9,
+          "S_success_Q_fail": 58,
+          "Q_success_S_fail": 47
+        }
+      },
+      "source_S": {
+        "GOAL": {
+          "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\final_readonly_20261030_111546",
+          "evidence_sha256": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78",
+          "audit_sha256": "5ddcc718280fd37f5dfcd68145e3168ebe1fd72375ea9b8a41aa34587a22367c",
+          "physical_calls": 426600,
+          "isolated_calls": 273,
+          "formal": 600
+        },
+        "OBJECT": {
+          "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261028_support_gate_full_s_object\\final_readonly_20261029_201235",
+          "evidence_sha256": "0835f5d08fa662f8b5d6cbc832bb2bfa279858181c4de26010247f682d978e38",
+          "audit_sha256": "f00f4b62a00135260c292490d36cda7d75083c3adafe1c629071834884caa1d2",
+          "physical_calls": 585900,
+          "isolated_calls": 273,
+          "formal": 600
+        }
+      },
+      "prior_GOAL_acceptance_sha256": "cced87444c769d86e4462361ad639ce94cafd2d6950dc6346199f6b86c873439"
+    }
   },
-  "final_request": "request_20261101_032229_f12a76fc.json"
+  "acceptance": {
+    "status": "PASS_COMPLETE_LOCAL_ACCEPTANCE_AND_INTERPRETATION",
+    "observed": "2026-11-01T03:55:41.822179+08:00",
+    "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\final_readonly_20261101_032229",
+    "evidence_sha256": "78fb130345fa2b028f3810aeef7d60db439c98e63bfd8fb845265b80b62bd461",
+    "audit_sha256": "0bb3877637827276d7cd5080434e735d695919ae9e28e5458ba1b2179b262843",
+    "comparison_sha256": "7ec281d6e454bba3d170e9a94ebf497bc01abdee953fe06e2a51fde8c64bbb11",
+    "interpretation_sha256": "d6a562354f5428540d7bc1d327f46157733d81771b2865e25d5e1bdbf1914dcf",
+    "report_sha256": "2c88b0bd67b3c50f6a78dc24f03e9c47ba1af39b018884a50e4cdafc83df014a",
+    "checkpoints": 24,
+    "complete_recoveries": 6,
+    "cache_teacher_replays": 24,
+    "production_optimizer": 544800,
+    "isolated_optimizer": 546,
+    "admission_autograd": 246,
+    "direction_autograd": 216,
+    "training_collection": 240,
+    "formal_episodes": 1200,
+    "acceptance_optimizer": 0,
+    "acceptance_environments": 0,
+    "suite_means": {
+      "GOAL": {
+        "AUC": {
+          "Q_mean": 83.50694444444444,
+          "S_mean": 87.25694444444444,
+          "S_minus_Q_pp": 3.75
+        },
+        "FWT": {
+          "Q_mean": 85.83333333333333,
+          "S_mean": 89.58333333333333,
+          "S_minus_Q_pp": 3.75
+        },
+        "NBT": {
+          "Q_mean": 4.444444444444445,
+          "S_mean": 5.277777777777778,
+          "S_minus_Q_pp": 0.8333333333333331
+        },
+        "OldFinal": {
+          "Q_mean": 78.33333333333333,
+          "S_mean": 83.88888888888889,
+          "S_minus_Q_pp": 5.555555555555556
+        },
+        "FinalAll": {
+          "Q_mean": 80.41666666666667,
+          "S_mean": 85.0,
+          "S_minus_Q_pp": 4.583333333333333
+        }
+      },
+      "OBJECT": {
+        "AUC": {
+          "Q_mean": 84.61805555555556,
+          "S_mean": 86.49305555555556,
+          "S_minus_Q_pp": 1.8749999999999998
+        },
+        "FWT": {
+          "Q_mean": 78.75,
+          "S_mean": 80.41666666666667,
+          "S_minus_Q_pp": 1.6666666666666667
+        },
+        "NBT": {
+          "Q_mean": -10.925925925925926,
+          "S_mean": -11.018518518518519,
+          "S_minus_Q_pp": -0.09259259259259278
+        },
+        "OldFinal": {
+          "Q_mean": 78.33333333333333,
+          "S_mean": 81.11111111111111,
+          "S_minus_Q_pp": 2.7777777777777777
+        },
+        "FinalAll": {
+          "Q_mean": 82.91666666666667,
+          "S_mean": 85.0,
+          "S_minus_Q_pp": 2.0833333333333335
+        }
+      }
+    },
+    "paired_summary": {
+      "GOAL": {
+        "S_win": 11,
+        "ties": 15,
+        "S_loss": 4,
+        "S_success_Q_fail": 50,
+        "Q_success_S_fail": 30
+      },
+      "OBJECT": {
+        "S_win": 16,
+        "ties": 5,
+        "S_loss": 9,
+        "S_success_Q_fail": 58,
+        "Q_success_S_fail": 47
+      }
+    },
+    "source_S": {
+      "GOAL": {
+        "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\final_readonly_20261030_111546",
+        "evidence_sha256": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78",
+        "audit_sha256": "5ddcc718280fd37f5dfcd68145e3168ebe1fd72375ea9b8a41aa34587a22367c",
+        "physical_calls": 426600,
+        "isolated_calls": 273,
+        "formal": 600
+      },
+      "OBJECT": {
+        "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261028_support_gate_full_s_object\\final_readonly_20261029_201235",
+        "evidence_sha256": "0835f5d08fa662f8b5d6cbc832bb2bfa279858181c4de26010247f682d978e38",
+        "audit_sha256": "f00f4b62a00135260c292490d36cda7d75083c3adafe1c629071834884caa1d2",
+        "physical_calls": 585900,
+        "isolated_calls": 273,
+        "formal": 600
+      }
+    },
+    "prior_GOAL_acceptance_sha256": "cced87444c769d86e4462361ad639ce94cafd2d6950dc6346199f6b86c873439"
+  },
+  "publication": "Awaiting final reviewed push; see local publication receipt"
 }
