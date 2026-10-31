@@ -1,14 +1,16 @@
-## 2026-10-31 18:00 用户要求的GOAL Q独立验收完成，OBJECT持续训练
+## 2026-10-31 19:27 实际复查：OBJECT41最后阶段训练中
 
-用户要求“先把GOAL的Q结果验收一下，看看和最新S相比怎么样，OBJECT继续跑”。goal_acceptance_20261031_v1/final_readonly_20261031_174746真实CPU12CP/3完整恢复/12自身缓存teacher/600实际初态noise、本地预算与600配对复算通过PASS_COMPLETE_GOAL_LOCAL_ACCEPTANCE。完成依据是GOAL_EVALUATION_COMPLETE、各自train/evaluate.exit0与无GOAL进程；没有伪造全六Q controller完成。本次0optimizer/0环境，审计前后GOAL轻量SHA精确保留。GOAL_ACCEPTANCE.json与GOAL_FINAL_REPORT.md永久保留，record_progress已核接受源SHA并保持GOAL接受状态；无需重复单独GOAL CPU验收。
+check_readonly_20261031_192633实际审计PASS，175859全部epoch/方向诊断/正式前缀精确保留。OBJECT41 Task6/7/8各100完整轮、Task9完整71轮，共371/400轮95002生产、自己的91隔离/41准入autograd、30采集。Task9自己的29/11准入、完整恢复/10步重放/q1/关保持/测量和探针状态不变实际PASS，COPY_EQ四起点0/15700/38400/69300通过。OBJECT42/43尚未启动，正式0/600，未来阶段不得套PASS。
 
-三seed Q/S均值：AUC83.5069/87.2569，FWT85.8333/89.5833，NBT4.4444/5.2778（低好，Q更好），OldFinal78.3333/83.8889，FinalAll80.4167/85。S最终对Q各seed差值0/+7.5/+6.25pp；30单元11胜15平4负；600配对S成功Q失败50、Q成功S失败30。Task8初学较一致改善，但seed41最终Task8退化10pp，不能称全部指标更好或门控单步因果。两者228300接受、120采集，Q/S生产228300/426600；缓存不同，不等物理调用/FLOPs/墙钟。开发集重复使用与预训练来源未闭合限制保留。
+累计1571/2400轮323302/544800生产364/546隔离164/246准入autograd150/240采集600/1200正式。135冻结项、controller80131/GPU99584正常；无失败、重训、新S调用或生产C候选。已接受GOAL全部轻量SHA对独立接受源逐项精确相同，GOAL_ACCEPTANCE与报告继续有效，无需重复单独CPU验收。全六Q仍PARTIAL。
 
-最新check_readonly_20261031_175859实际PASS，17:37→CPU快照→17:59全部epoch/诊断/正式前缀精确保留；接受后GOAL全部SHA也精确不变。OBJECT41 Task6/7各100轮，Task8完整41轮，共241/400轮51069生产、62自身隔离/30准入autograd、20采集，Task8自身准入/COPY_EQ通过；Task9与42/43尚未自身准入。总1441轮279369生产335隔离/153准入autograd140采集600正式。135冻结项与controller80131/GPU99584正常，OBJECT未中断或重跑。Task8近10轮22.9760秒，余59轮22.59分钟；Task9未测按362/309参考，整seed余纯计算约67.45分钟，准备保存及余20采集另计，规划85–110分钟。下一85分钟在整seed结束较早侧复查。全六Q仍PARTIAL，OBJECT和最终全六Q接受解释发布完成前保留监控。
+Task9前71轮均39.3640秒，近10轮48.8048秒（35.29–75.45），余29轮纯计算19.03–23.59分钟；保存准备与最后10采集另计，当前整seed规划30–40分钟。下一35分钟在整seed结束附近复查，覆盖旧85分钟间隔；后续按当前整seed或全部正式实际余时调整，不固定高频、不按时钟推断完成。两后续OBJECT及正式仍未实测。健康进展静默，最终全六Q接受、解释和发布后才删除监控。
+
+用户已询问Q/C比较，GOAL_Q_VS_BUDGET_C.json/md保存已接受Q对增加预算C的600逐项配对复算；最终80.4167/80%，NBT4.4444/7.5926低好，均值接近且种子不一致；不等更新预算/采集信息，不能单独归因于保持机制。不得把GOAL结论套到未接受OBJECT。
 
 # 完整Q对最新S：GOAL和OBJECT各三seed
 
-实际观察 2026-10-31T17:59:00.431155+08:00；check_readonly_20261031_175859/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-10-31T19:26:35.956950+08:00；check_readonly_20261031_192633/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
 唯一活动root `/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2`；controller 80131；合同 `562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0`；135冻结项；唯一部署证据 deploy_remote_20261031_095422。禁止重复部署或启动任何controller/prepare/train入口。
 
@@ -17,13 +19,13 @@
 |GOAL_41|400|76100|40|200|
 |GOAL_42|400|76100|40|200|
 |GOAL_43|400|76100|40|200|
-|OBJECT_41|241|51069|20|0|
+|OBJECT_41|371|95002|30|0|
 |OBJECT_42|0|0|0|0|
 |OBJECT_43|0|0|0|0|
 
-总1441/2400轮、279369/544800生产、335/546隔离、153/246准入autograd、140/240采集、600/1200正式。方向诊断最多216autograd另计。
+总1571/2400轮、323302/544800生产、364/546隔离、164/246准入autograd、150/240采集、600/1200正式。方向诊断最多216autograd另计。
 
-下一85分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
+下一35分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
 
 先完整读取PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、FINAL_WRAPPER_REVIEW.json及最新实际EVIDENCE/LOCAL_AUDIT。
 
