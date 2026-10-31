@@ -19,3 +19,7 @@ final_readonly.py与audit_final_local.py是外置CPU包装，当前仅STATIC_ONL
 最终报告FINAL_REPORT.md须解释两套件各seed、新任务对角/旧任务保持、SF/FS逐回合差异、所有S相对Q负单元、训练BC/执行误差/保持梯度方向与闭环是否一致。探针是训练数据、门控接受率不是闭环收益；不得仅自动均值推断显著性或单步机制因果。Q/S同接受更新和采集次数，不同optimizer/FLOPs/墙钟及自身缓存；三个开发seed并非独立确认集。完成实际验收、人工解释、ACCEPTANCE/RUN_STATUS与发布后，才删除新Q监控。
 
 用户2026-10-31要求的数据泄露审计见leakage_audit_20261031/REPORT.md及LEAKAGE_AUDIT.json：最新C/S2400正式及S240采集未发现直接回流；开发评估集重复使用和预训练来源不完整仍为限制，不能称全局无泄露/独立确认。Q继续原授权，最终解释必须保留这些限制，不自行追加实验。
+
+## 用户要求先接受GOAL（2026-10-31）
+
+GOAL_ACCEPTANCE.json、GOAL_FINAL_REPORT.md及goal_acceptance_20261031_v1/final_readonly_20261031_174746保存真实CPU12CP/3恢复/12缓存teacher/600初态noise与已有S600配对接受。完成来源为GOAL_EVALUATION_COMPLETE、各自train/evaluate.exit0及无GOAL进程；不是全六Q controller成功。外置单线程低优先级CPU请求0 optimizer/0环境，GOAL审计前后SHA精确，OBJECT原进程持续运行。record_progress已增加接受源GOAL轻量SHA核对并保留套件接受状态。无需重复单独GOAL验收；OBJECT完成后仍按原全部自然退出来源执行六Q最终验收、解释与发布。

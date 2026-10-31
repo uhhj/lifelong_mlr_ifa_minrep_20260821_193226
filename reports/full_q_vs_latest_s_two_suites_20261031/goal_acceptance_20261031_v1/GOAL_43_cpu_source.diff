@@ -1,0 +1,18 @@
+--- original/GOAL_43
++++ goal_only/GOAL_43
+@@ -17,12 +17,13 @@
+ js=lambda p:json.loads(Path(p).read_text())
+ def verify():
+  c=js(Q/'CONTRACT.json');assert all(sha(p)==h for p,h in c['files'].items());assert all(sha(S/n)==h for n,h in c['parent_source'].items())
+-verify();assert (Q.parent/'controller.exit').read_text()=='0'
++verify();assert js(Q.parent/'GOAL_EVALUATION_COMPLETE.json')['episodes']==600
++os.nice(10)
+ copyeq=js(Q/'COPY_EQ.json');assert set(copyeq['checked'])=={'42400', '0', '23900', '10000'} and all(x['all_state_exact'] and x['optimizer_calls_added']==x['environments_added']==0 for x in copyeq['checked'].values())
+ for p in Path('/proc').glob('[0-9]*'):
+  try:
+   cmd=(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
+-  assert int(p.name)==os.getpid() or str(Q.parent) not in cmd,('Residual',p.name)
++  assert int(p.name)==os.getpid() or not any(str(Q.parent/('GOAL_'+str(seed)))+'/' in cmd for seed in (41,42,43)),('Residual GOAL',p.name)
+  except OSError:pass
+ def exact_class(name,path):
+  n=next(x for x in ast.parse((S/path).read_text()).body if isinstance(x,ast.ClassDef) and x.name==name);exec(compile(ast.Module(body=[n],type_ignores=[]),str(S/path),'exec'),globals())

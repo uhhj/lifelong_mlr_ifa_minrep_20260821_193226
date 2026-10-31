@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_TRAINING_OR_EVALUATION",
-  "observation": "2026-10-31T17:37:24.032036+08:00",
+  "observation": "2026-10-31T17:59:00.431155+08:00",
   "counts": {
     "GOAL_41": {
       "epochs": 400,
@@ -66,26 +66,26 @@
       "gate_Q_accepts_observed": 0
     },
     "OBJECT_41": {
-      "epochs": 191,
-      "accepted_updates": 36357,
-      "physical_optimizer_calls": 36357,
-      "own_isolated_optimizer_calls": 33,
-      "own_extra_autograd_calls": 19,
-      "training_collection_completed_episodes": 10,
+      "epochs": 241,
+      "accepted_updates": 51069,
+      "physical_optimizer_calls": 51069,
+      "own_isolated_optimizer_calls": 62,
+      "own_extra_autograd_calls": 30,
+      "training_collection_completed_episodes": 20,
       "formal_episodes": 0,
       "current": {
         "arm": "Q",
-        "stage": 7,
+        "stage": 8,
         "phase": "train",
-        "epoch_complete": 91,
-        "steps": 36357,
-        "physical_optimizer_calls": 36357,
-        "time": 1793439431.228026,
+        "epoch_complete": 41,
+        "steps": 51069,
+        "physical_optimizer_calls": 51069,
+        "time": 1793440725.8082235,
         "pid": 99584
       },
-      "current_stage_epochs": 91,
-      "recent_epoch_mean_seconds": 15.643701791763306,
-      "current_stage_compute_minutes_estimate": 2.346555268764496,
+      "current_stage_epochs": 41,
+      "recent_epoch_mean_seconds": 22.97599835395813,
+      "current_stage_compute_minutes_estimate": 22.593065048058826,
       "gate_blocks_observed": 0,
       "gate_Q_accepts_observed": 0
     },
@@ -120,12 +120,12 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 1391,
-  "accepted_updates": 264657,
-  "physical_training_optimizer_calls": 264657,
-  "own_isolated_optimizer_calls": 306,
-  "own_extra_autograd_calls": 142,
-  "training_collection_completed_episodes": 130,
+  "epochs": 1441,
+  "accepted_updates": 279369,
+  "physical_training_optimizer_calls": 279369,
+  "own_isolated_optimizer_calls": 335,
+  "own_extra_autograd_calls": 153,
+  "training_collection_completed_episodes": 140,
   "formal_episodes": 600,
   "failures": {},
   "processes": [
@@ -142,21 +142,21 @@
     {
       "pid": 99584,
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/OBJECT_41/train.py Q ",
-      "state": "S"
+      "state": "R"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1427689472,
+      "free": 1427677184,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 353947648
+      "spare": 353935360
     },
     "/data": {
-      "free": 29528055808,
-      "remaining_bound": 6249619456,
+      "free": 29433782272,
+      "remaining_bound": 6155575296,
       "reserve": 2147483648,
-      "spare": 21130952704
+      "spare": 21130723328
     }
   },
   "gpu": {
@@ -164,14 +164,71 @@
     "stdout": "99584\n",
     "stderr": ""
   },
-  "snapshot_sha256": "d7a09a5156cb78ced963eecb86898cc5707521a6868bdf5f2c961137da135385",
+  "snapshot_sha256": "3e871d0b569f5cb18289375e4dad727148abd57e70f07be240d456b9c74d5c18",
   "contract": "562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0",
-  "prefix_checked": "execution\\20261031_full_q_vs_latest_s_two_suites\\check_readonly_20261031_170522",
+  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\goal_acceptance_20261031_v1\\final_readonly_20261031_174746",
   "root": "/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2",
   "controller": 80131,
-  "latest_evidence": "check_readonly_20261031_173723",
-  "next_check_minutes": 100,
+  "latest_evidence": "check_readonly_20261031_175859",
+  "next_check_minutes": 85,
   "final_CPU_acceptance": "PENDING",
-  "scientific_conclusion": "PENDING_FORMAL_CLOSED_LOOP",
-  "primary_reference": "Six existing accepted latest full S; no rerun"
+  "scientific_conclusion": "GOAL_ACCEPTED_INTERPRETED_OBJECT_PENDING",
+  "primary_reference": "Six existing accepted latest full S; no rerun",
+  "suite_acceptance": {
+    "GOAL": {
+      "status": "PASS_COMPLETE_GOAL_LOCAL_ACCEPTANCE",
+      "scope": "GOAL only; OBJECT pending",
+      "observed": "2026-10-31T17:58:49.583577+08:00",
+      "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\goal_acceptance_20261031_v1\\final_readonly_20261031_174746",
+      "evidence_sha256": "2e141228726390d891704cbe315113aee95063bc268143d95af1c6ac00b11017",
+      "audit_sha256": "97ab80be66d8a38fa0b02cf8968c794bacc46356a8f234e5a4324b91bf319bb7",
+      "comparison_sha256": "1832cd1a09e0de195e3f263ded21ea151ae0860c6a887a7bb40f84259ab352fc",
+      "interpretation_sha256": "c94e2c991c25653b0ed073724ade513bc5678dac564e64cd90015b40febc3239",
+      "report_sha256": "e62375314ed42469785b45d1397aff5d3427e142fe422f4bb9a74d4cf39212d8",
+      "CPs": 12,
+      "complete_recoveries": 3,
+      "cache_teacher_replays": 12,
+      "formal_episodes": 600,
+      "main_optimizer": 228300,
+      "isolated_optimizer": 273,
+      "acceptance_optimizer": 0,
+      "acceptance_environments": 0,
+      "source_S": {
+        "final_path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\final_readonly_20261030_111546",
+        "evidence_sha256": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78",
+        "audit_sha256": "5ddcc718280fd37f5dfcd68145e3168ebe1fd72375ea9b8a41aa34587a22367c",
+        "physical_calls": 426600,
+        "isolated_calls": 273,
+        "formal": 600
+      },
+      "means": {
+        "AUC": {
+          "Q_mean": 83.50694444444444,
+          "S_mean": 87.25694444444444,
+          "S_minus_Q_pp": 3.75
+        },
+        "FWT": {
+          "Q_mean": 85.83333333333333,
+          "S_mean": 89.58333333333333,
+          "S_minus_Q_pp": 3.75
+        },
+        "NBT": {
+          "Q_mean": 4.444444444444445,
+          "S_mean": 5.277777777777778,
+          "S_minus_Q_pp": 0.8333333333333331
+        },
+        "OldFinal": {
+          "Q_mean": 78.33333333333333,
+          "S_mean": 83.88888888888889,
+          "S_minus_Q_pp": 5.555555555555556
+        },
+        "FinalAll": {
+          "Q_mean": 80.41666666666667,
+          "S_mean": 85.0,
+          "S_minus_Q_pp": 4.583333333333333
+        }
+      }
+    },
+    "OBJECT": "PENDING"
+  }
 }

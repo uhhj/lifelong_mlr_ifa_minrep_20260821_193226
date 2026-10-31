@@ -1,0 +1,476 @@
+{
+  "status": "PASS_GOAL_INTERPRETATION_AND_SOURCE_CHECK",
+  "source_audit_sha256": "97ab80be66d8a38fa0b02cf8968c794bacc46356a8f234e5a4324b91bf319bb7",
+  "source_comparison_sha256": "1832cd1a09e0de195e3f263ded21ea151ae0860c6a887a7bb40f84259ab352fc",
+  "wins_ties_losses_S_vs_Q": [
+    11,
+    15,
+    4
+  ],
+  "paired_S_success_Q_fail": 50,
+  "paired_S_fail_Q_success": 30,
+  "by_stage_task_means": [
+    {
+      "stage": 6,
+      "task": 6,
+      "Q": 78.33333333333333,
+      "S": 78.33333333333333,
+      "delta": 0.0
+    },
+    {
+      "stage": 7,
+      "task": 6,
+      "Q": 78.33333333333333,
+      "S": 78.33333333333333,
+      "delta": 0.0
+    },
+    {
+      "stage": 7,
+      "task": 7,
+      "Q": 100,
+      "S": 98.33333333333333,
+      "delta": -1.6666666666666714
+    },
+    {
+      "stage": 8,
+      "task": 6,
+      "Q": 71.66666666666667,
+      "S": 71.66666666666667,
+      "delta": 0.0
+    },
+    {
+      "stage": 8,
+      "task": 7,
+      "Q": 95,
+      "S": 96.66666666666667,
+      "delta": 1.6666666666666714
+    },
+    {
+      "stage": 8,
+      "task": 8,
+      "Q": 78.33333333333333,
+      "S": 93.33333333333333,
+      "delta": 15.0
+    },
+    {
+      "stage": 9,
+      "task": 6,
+      "Q": 60,
+      "S": 70,
+      "delta": 10
+    },
+    {
+      "stage": 9,
+      "task": 7,
+      "Q": 98.33333333333333,
+      "S": 98.33333333333333,
+      "delta": 0.0
+    },
+    {
+      "stage": 9,
+      "task": 8,
+      "Q": 76.66666666666667,
+      "S": 83.33333333333333,
+      "delta": 6.666666666666657
+    },
+    {
+      "stage": 9,
+      "task": 9,
+      "Q": 86.66666666666667,
+      "S": 88.33333333333333,
+      "delta": 1.6666666666666572
+    }
+  ],
+  "training_diagnostics": {
+    "GOAL_41": {
+      "Q_last_gradient": {
+        "stage": 9,
+        "epoch": 99,
+        "batch": 0,
+        "steps": 75763,
+        "bc_new": -28.98980712890625,
+        "exec_new": 0.008099530823528767,
+        "retain_weighted": 0.0004090438596904278,
+        "norms": {
+          "bc_new": 1047.7031477170829,
+          "exec_new": 0.7952901950180477,
+          "retain": 0.13352702045186854
+        },
+        "retain_vs_bc": {
+          "dot": 12.088952000323358,
+          "cosine": 0.08641343048357185
+        },
+        "retain_vs_exec": {
+          "dot": 0.008623609553171999,
+          "cosine": 0.0812071555386229
+        },
+        "contributions": {
+          "6": {
+            "windows": 1,
+            "weighted_regression": 0.000936283147893846,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "7": {
+            "windows": 2,
+            "weighted_regression": 0.0012938531581312418,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "8": {
+            "windows": 1,
+            "weighted_regression": 0.0005449653835967183,
+            "weighted_route": 0.013153369538486004,
+            "support_weight": 0.7
+          }
+        },
+        "current_valid": 5,
+        "extra_autograd_calls": 3,
+        "retain_counterfactual_only": false
+      },
+      "S_last_gradient": {
+        "stage": 9,
+        "epoch": 99,
+        "batch": 0,
+        "steps": 75763,
+        "bc_new": -29.70179557800293,
+        "exec_new": 0.007152696140110493,
+        "retain_weighted": 0.0008681711042299867,
+        "norms": {
+          "bc_new": 1011.9230500582734,
+          "exec_new": 0.6365830163457592,
+          "retain": 0.1247570254825767
+        },
+        "retain_vs_bc": {
+          "dot": -15.00940434172732,
+          "cosine": -0.11889154128237903
+        },
+        "retain_vs_exec": {
+          "dot": -0.006066327913452427,
+          "cosine": -0.0763846025102199
+        },
+        "contributions": {
+          "6": {
+            "windows": 1,
+            "weighted_regression": 0.002494464162737131,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "7": {
+            "windows": 2,
+            "weighted_regression": 0.003075764048844576,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "8": {
+            "windows": 1,
+            "weighted_regression": 0.0031114830635488033,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          }
+        },
+        "current_valid": 5,
+        "extra_autograd_calls": 3,
+        "retain_counterfactual_only": false
+      },
+      "Q_negative_retain_bc": 7,
+      "S_negative_retain_bc": 5,
+      "Q_stage9_support": {
+        "6": 1.0,
+        "7": 1.0,
+        "8": 0.7
+      },
+      "S_stage9_support": {
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0
+      },
+      "S_gate_blocks": 6700,
+      "S_gate_Q_accepts": 3275,
+      "final_Q": 82.5,
+      "final_S": 82.5
+    },
+    "GOAL_42": {
+      "Q_last_gradient": {
+        "stage": 9,
+        "epoch": 99,
+        "batch": 0,
+        "steps": 75763,
+        "bc_new": -31.40469741821289,
+        "exec_new": 0.008581328205764294,
+        "retain_weighted": 0.0008729475666768849,
+        "norms": {
+          "bc_new": 787.2369986899051,
+          "exec_new": 0.6024465803222672,
+          "retain": 0.14608706428930923
+        },
+        "retain_vs_bc": {
+          "dot": 39.71444348911098,
+          "cosine": 0.34532754610053673
+        },
+        "retain_vs_exec": {
+          "dot": 0.016423086093077327,
+          "cosine": 0.18660551044051907
+        },
+        "contributions": {
+          "6": {
+            "windows": 1,
+            "weighted_regression": 0.0025271286722272635,
+            "weighted_route": 0.0,
+            "support_weight": 0.9
+          },
+          "7": {
+            "windows": 2,
+            "weighted_regression": 0.0018403207650408149,
+            "weighted_route": 0.0,
+            "support_weight": 0.9
+          },
+          "8": {
+            "windows": 1,
+            "weighted_regression": 0.004362026229500771,
+            "weighted_route": 0.0,
+            "support_weight": 0.9
+          }
+        },
+        "current_valid": 4,
+        "extra_autograd_calls": 3,
+        "retain_counterfactual_only": false
+      },
+      "S_last_gradient": {
+        "stage": 9,
+        "epoch": 99,
+        "batch": 0,
+        "steps": 75763,
+        "bc_new": -29.57787322998047,
+        "exec_new": 0.09651950746774673,
+        "retain_weighted": 0.0005616249982267618,
+        "norms": {
+          "bc_new": 1002.4986516777788,
+          "exec_new": 4.117335067264689,
+          "retain": 0.09191235769498315
+        },
+        "retain_vs_bc": {
+          "dot": 30.12667452688686,
+          "cosine": 0.3269591471109243
+        },
+        "retain_vs_exec": {
+          "dot": 0.01155589557281293,
+          "cosine": 0.030536094493277547
+        },
+        "contributions": {
+          "6": {
+            "windows": 1,
+            "weighted_regression": 0.0012819054536521435,
+            "weighted_route": 0.0,
+            "support_weight": 0.9
+          },
+          "7": {
+            "windows": 2,
+            "weighted_regression": 0.004068948328495026,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "8": {
+            "windows": 1,
+            "weighted_regression": 0.00026539614191278815,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          }
+        },
+        "current_valid": 4,
+        "extra_autograd_calls": 3,
+        "retain_counterfactual_only": false
+      },
+      "Q_negative_retain_bc": 3,
+      "S_negative_retain_bc": 5,
+      "Q_stage9_support": {
+        "6": 0.9,
+        "7": 0.9,
+        "8": 0.9
+      },
+      "S_stage9_support": {
+        "6": 0.9,
+        "7": 1.0,
+        "8": 1.0
+      },
+      "S_gate_blocks": 6700,
+      "S_gate_Q_accepts": 3141,
+      "final_Q": 80.0,
+      "final_S": 87.5
+    },
+    "GOAL_43": {
+      "Q_last_gradient": {
+        "stage": 9,
+        "epoch": 99,
+        "batch": 0,
+        "steps": 75763,
+        "bc_new": -28.802417755126953,
+        "exec_new": 0.008393771015107632,
+        "retain_weighted": 0.0006139808101579547,
+        "norms": {
+          "bc_new": 958.9718698797591,
+          "exec_new": 0.6697071269515489,
+          "retain": 0.08274701701979678
+        },
+        "retain_vs_bc": {
+          "dot": -13.554254377959104,
+          "cosine": -0.1708116222577379
+        },
+        "retain_vs_exec": {
+          "dot": -0.0011075297364152629,
+          "cosine": -0.019985643128450782
+        },
+        "contributions": {
+          "6": {
+            "windows": 1,
+            "weighted_regression": 0.0012868791818618774,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "7": {
+            "windows": 2,
+            "weighted_regression": 0.004221546929329634,
+            "weighted_route": 0.0,
+            "support_weight": 0.8
+          },
+          "8": {
+            "windows": 1,
+            "weighted_regression": 0.0006313816993497312,
+            "weighted_route": 0.0,
+            "support_weight": 0.8
+          }
+        },
+        "current_valid": 5,
+        "extra_autograd_calls": 3,
+        "retain_counterfactual_only": false
+      },
+      "S_last_gradient": {
+        "stage": 9,
+        "epoch": 99,
+        "batch": 0,
+        "steps": 75763,
+        "bc_new": -29.047229766845703,
+        "exec_new": 0.009494922123849392,
+        "retain_weighted": 0.0005036014481447637,
+        "norms": {
+          "bc_new": 1004.4700035843407,
+          "exec_new": 0.7318003804597588,
+          "retain": 0.1090737529903774
+        },
+        "retain_vs_bc": {
+          "dot": 18.799966417373792,
+          "cosine": 0.17159310976456024
+        },
+        "retain_vs_exec": {
+          "dot": 0.005531617384199387,
+          "cosine": 0.0693009591354614
+        },
+        "contributions": {
+          "6": {
+            "windows": 1,
+            "weighted_regression": 0.0010732297087088227,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "7": {
+            "windows": 2,
+            "weighted_regression": 0.0024176244623959064,
+            "weighted_route": 0.0,
+            "support_weight": 1.0
+          },
+          "8": {
+            "windows": 1,
+            "weighted_regression": 0.001545160310342908,
+            "weighted_route": 0.0,
+            "support_weight": 0.8
+          }
+        },
+        "current_valid": 5,
+        "extra_autograd_calls": 3,
+        "retain_counterfactual_only": false
+      },
+      "Q_negative_retain_bc": 4,
+      "S_negative_retain_bc": 3,
+      "Q_stage9_support": {
+        "6": 1.0,
+        "7": 0.8,
+        "8": 0.8
+      },
+      "S_stage9_support": {
+        "6": 1.0,
+        "7": 1.0,
+        "8": 0.8
+      },
+      "S_gate_blocks": 6700,
+      "S_gate_Q_accepts": 3262,
+      "final_Q": 78.75,
+      "final_S": 85.0
+    }
+  },
+  "all_negative_cells": [
+    {
+      "case": "GOAL_41",
+      "stage": 9,
+      "task": 8,
+      "Q_percent": 95,
+      "S_percent": 85,
+      "Q_success_S_fail": [
+        10,
+        12,
+        14
+      ],
+      "Q_fail_S_success": [
+        2
+      ],
+      "S_minus_Q_pp": -10
+    },
+    {
+      "case": "GOAL_43",
+      "stage": 7,
+      "task": 6,
+      "Q_percent": 85,
+      "S_percent": 80,
+      "Q_success_S_fail": [
+        5
+      ],
+      "Q_fail_S_success": [],
+      "S_minus_Q_pp": -5
+    },
+    {
+      "case": "GOAL_43",
+      "stage": 7,
+      "task": 7,
+      "Q_percent": 100,
+      "S_percent": 95,
+      "Q_success_S_fail": [
+        2
+      ],
+      "Q_fail_S_success": [],
+      "S_minus_Q_pp": -5
+    },
+    {
+      "case": "GOAL_43",
+      "stage": 8,
+      "task": 6,
+      "Q_percent": 70,
+      "S_percent": 65,
+      "Q_success_S_fail": [
+        13,
+        15,
+        18
+      ],
+      "Q_fail_S_success": [
+        4,
+        6
+      ],
+      "S_minus_Q_pp": -5
+    }
+  ],
+  "scope": "GOAL only; OBJECT ongoing",
+  "causal_limits": [
+    "Different own caches and states; full-path gate ablation, not matched-state single-step causality",
+    "Three reused development seeds; no significance or independent confirmation",
+    "Upstream pretraining provenance not fully closed",
+    "Training gradients and probes do not establish closed-loop gain"
+  ]
+}
