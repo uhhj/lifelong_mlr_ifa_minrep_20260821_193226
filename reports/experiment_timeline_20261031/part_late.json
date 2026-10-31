@@ -1,0 +1,122 @@
+[
+  {
+    "id": "20261027_support_gate_forks",
+    "date_label": "2026-10-27T23:47:32+08:00",
+    "start_time_cst": "2026-10-27T23:47:32+08:00",
+    "start_basis": "STARTED.json为机制队列派发；非首个optimizer完成时间",
+    "method": "支持度/门控单阶段机制分叉",
+    "suite_seeds": "GOAL 41/42/43与OBJECT 41",
+    "change": "以共同起点比较C、原S、支持度加权Q、门控G等；尚非新完整S序列",
+    "result": "10月28日用户取消：保存1403完整epoch；正式评估0，不能作为完成的闭环消融。",
+    "status": "USER_STOPPED_PARTIAL_PRESERVED",
+    "role": "branch",
+    "sources": [
+      "execution/20261027_support_gate_forks/check_readonly_20261027_234808/EVIDENCE.json",
+      "execution/20261027_support_gate_forks/RUN_STATUS.json",
+      "execution/20261027_support_gate_forks/PROTOCOL.md"
+    ]
+  },
+  {
+    "id": "20261028_support_gate_full_s_object",
+    "date_label": "2026-10-28T19:52:17+08:00",
+    "start_time_cst": "2026-10-28T19:52:17+08:00",
+    "start_basis": "原始STARTED.json派发时刻；后续CPU状态复制工程优化不另算科学轮次",
+    "method": "完整支持度加权＋门控S：OBJECT",
+    "suite_seeds": "OBJECT 41/42/43",
+    "change": "q按成功缓存贡献轨迹数/10加权保持；每10接受更新从完整同状态比较C/Q候选并按固定训练探针选择，全部候选计费",
+    "result": "已接受600正式回合；AUC均值86.4931%，OldFinal81.1111%，FinalAll85%；对原C分别+1.4931/+3.8889/+2.5pp，部分新任务和单seed负单元保留。",
+    "status": "COMPLETE_ACCEPTED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261028_support_gate_full_s_object/final_readonly_20261029_201235/EVIDENCE.json",
+      "execution/20261028_support_gate_full_s_object/FINAL_REPORT.md",
+      "execution/20261028_support_gate_full_s_object/RUN_STATUS.json",
+      "execution/20261030_publication_readiness/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261029_support_gate_full_s_goal",
+    "date_label": "2026-10-29T20:57:22+08:00",
+    "start_time_cst": "2026-10-29T20:57:22+08:00",
+    "start_basis": "STARTED.json原始派发时刻",
+    "method": "完整支持度加权＋门控S：GOAL",
+    "suite_seeds": "GOAL 41/42/43",
+    "change": "同一冻结支持度/候选门控方法完整迁移至GOAL；已有原S不混作本轮",
+    "result": "已接受600正式回合；AUC均值87.2569%，OldFinal83.8889%，FinalAll85%；对原C分别+4.7569/+3.3333/+5pp。",
+    "status": "COMPLETE_ACCEPTED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261029_support_gate_full_s_goal/final_readonly_20261030_111546/EVIDENCE.json",
+      "execution/20261029_support_gate_full_s_goal/FINAL_REPORT.md",
+      "execution/20261029_support_gate_full_s_goal/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261030_equal_optimizer_budget_cs_two_suites",
+    "date_label": "2026-10-30T12:57:46+08:00",
+    "start_time_cst": "2026-10-30T12:57:46+08:00",
+    "start_basis": "STARTED.json首次C队列派发；后续套件先训后评的调度交接不重复计新实验",
+    "method": "等优化器预算C对完整S",
+    "suite_seeds": "GOAL/OBJECT，各41/42/43",
+    "change": "仅新增六个C，首任务100轮、后续各200轮，阶段物理optimizer调用匹配已有S；延长LR终点，既有S只读",
+    "result": "10月31日接受：4200epoch、1012500生产调用、1200新增正式回合。S对新C AUC六组全胜；FinalAll五胜一负；GOAL/OBJECT AUC领先3.5417/5.5903pp、FinalAll领先5/7.5pp。",
+    "status": "ACCEPTED_SIX_C_EQUAL_OPTIMIZER_BUDGET",
+    "role": "mainline",
+    "sources": [
+      "execution/20261030_equal_optimizer_budget_cs_two_suites/check_readonly_20261030_125934/EVIDENCE.json",
+      "execution/20261030_equal_optimizer_budget_cs_two_suites/FINAL_REPORT.md",
+      "execution/20261030_equal_optimizer_budget_cs_two_suites/ACCEPTANCE.json",
+      "execution/20261031_publication_readiness/EVIDENCE_REVIEW.json"
+    ]
+  },
+  {
+    "id": "20261031_full_q_vs_latest_s_two_suites",
+    "date_label": "2026-10-31T09:55:01+08:00",
+    "start_time_cst": "2026-10-31T09:55:01+08:00",
+    "start_basis": "v2 STARTED.json派发；v1属性检查失败发生在首个更新/环境前，0正式成本",
+    "method": "完整Q去门控对照",
+    "suite_seeds": "GOAL/OBJECT，各41/42/43",
+    "change": "保留支持度加权、固定教师、各自成功缓存，关闭双候选门控；每阶段100轮，同采集规则但不等物理optimizer预算",
+    "result": "截至本地已保存2026-10-31 10:27:49：GOAL41完成205epoch/24825更新/20训练采集，正式0；其余五Q未开始，尚无闭环结论。",
+    "status": "PARTIAL_TRAINING_OR_EVALUATION",
+    "role": "mainline",
+    "sources": [
+      "execution/20261031_full_q_vs_latest_s_two_suites/check_readonly_20261031_102748/EVIDENCE.json",
+      "execution/20261031_full_q_vs_latest_s_two_suites/PROTOCOL.md",
+      "execution/20261031_full_q_vs_latest_s_two_suites/RUN_STATUS.json",
+      "execution/20261031_full_q_vs_latest_s_two_suites/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261030_publication_readiness",
+    "date_label": "20261030（本地审阅日期）",
+    "start_time_cst": null,
+    "start_basis": "文献/实验资料复核，无训练启动",
+    "method": "论文证据充分性复核",
+    "suite_seeds": "已有GOAL/OBJECT结果",
+    "change": "只读复算配对结果、成本和主张边界",
+    "result": "10月30日指出等预算缺口；10月31日确认该缺口已补，主要效果证据形成，门控必要性仍待Q完成。",
+    "status": "LOCAL_READONLY_REVIEW",
+    "role": "audit",
+    "sources": [
+      "execution/20261030_publication_readiness/REPORT.md",
+      "execution/20261030_publication_readiness/EVIDENCE_REVIEW.json"
+    ]
+  },
+  {
+    "id": "20261031_publication_readiness",
+    "date_label": "20261031（本地审阅日期）",
+    "start_time_cst": null,
+    "start_basis": "文献/实验资料复核，无训练启动",
+    "method": "论文证据充分性复核",
+    "suite_seeds": "已有GOAL/OBJECT结果",
+    "change": "只读复算配对结果、成本和主张边界",
+    "result": "10月30日指出等预算缺口；10月31日确认该缺口已补，主要效果证据形成，门控必要性仍待Q完成。",
+    "status": "LOCAL_READONLY_REVIEW",
+    "role": "audit",
+    "sources": [
+      "execution/20261031_publication_readiness/REPORT.md",
+      "execution/20261031_publication_readiness/EVIDENCE_REVIEW.json"
+    ]
+  }
+]

@@ -1,0 +1,678 @@
+[
+  {
+    "id": "20260927_223849",
+    "date_label": "2026-09-27（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "MLR+IFA 状态模态预检",
+    "suite_seeds": "GOAL seed42",
+    "change": "核对 state 模态及复现协议；尚未作出正式模态选择。",
+    "result": "用户暂停；只做 smoke，正式训练和正式环境均为0；后续由 state_v2 单独启动。",
+    "status": "BLOCKED_BEFORE_FORMAL_RUN",
+    "role": "branch",
+    "sources": [
+      "execution/20260927_223849/BLOCKED.md",
+      "execution/20260927_223849/protocol_audit.md"
+    ]
+  },
+  {
+    "id": "20260927_state_v2",
+    "date_label": "2026-09-27",
+    "start_time_cst": "2026-09-27T23:42:30+08:00",
+    "start_basis": "commands.log：23:34:03特征导出，23:42:30正式训练；二者不可混淆。",
+    "method": "MLR+IFA state_v2 复现",
+    "suite_seeds": "GOAL seed42",
+    "change": "启用状态模态，核正 IFA 平均与当前语言参考，固定 ep99，完整四阶段。",
+    "result": "400epoch/76100主更新/200正式；AUC78.4375%、FWT78.75%、NBT1.1111、FinalAvg78.75%；9月28日01:33:42汇总完成。官方预训练模态元数据未知边界保留。",
+    "status": "COMPLETED",
+    "role": "mainline",
+    "sources": [
+      "execution/20260927_state_v2/report.md",
+      "execution/20260927_state_v2/final_evidence/run/logs/commands.log"
+    ]
+  },
+  {
+    "id": "20260928_E1_paired_audit",
+    "date_label": "2026-09-28",
+    "start_time_cst": "2026-09-28T12:46:29+08:00",
+    "start_basis": "报告记录分析开始UTC2026-09-28T04:46:29.438469，换算CST；不是训练开始。",
+    "method": "E1 既有闭环配对审计",
+    "suite_seeds": "GOAL seed42",
+    "change": "在既有200回合中区分成功→失败与失败→成功；没有新训练或环境。",
+    "result": "AUC保持78.4375%；SF7.2222pp、FS6.1111pp，解释有符号NBT1.1111，不把净遗忘当所有轨迹都稳定。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20260928_E1_paired_audit/results/OPERATOR_REPORT.md"
+    ]
+  },
+  {
+    "id": "20260928_E2_repeat",
+    "date_label": "2026-09-28",
+    "start_time_cst": "2026-09-28T13:53:30+08:00",
+    "start_basis": "REPORT.md记录正式评估13:53:30—17:30:12，汇总17:30:21；0训练。",
+    "method": "E2 固定检查点配对重复闭环",
+    "suite_seeds": "GOAL seed42 Stage8/9",
+    "change": "固定已有检查点和配对初态，多次动作随机采样检验变化，不重新训练。",
+    "result": "600正式+20独立A/A；Task6从67%至79%，Task7均100%，Task8从73%至54%；属于独立重复诊断，不替换原协议指标。",
+    "status": "COMPLETED",
+    "role": "branch",
+    "sources": [
+      "execution/20260928_E2_repeat/REPORT.md"
+    ]
+  },
+  {
+    "id": "20260928_E3_replay",
+    "date_label": "2026-09-28",
+    "start_time_cst": "2026-09-28T19:58:36+08:00",
+    "start_basis": "首次R在19:55:56启动但序列化失败、0正式更新；修复后实际成功R训练19:58:36，C训练20:20:14。",
+    "method": "E3 回放覆盖试验",
+    "suite_seeds": "GOAL seed42，P8共同起点，R/C两臂仅训Task9",
+    "change": "比较原随机检索R与时间/覆盖检索C；此C不是后来的专家成本C，也不是10月普通Coreset存储方案。",
+    "result": "各100epoch/33700更新；1500正式+20A/A。C−R的Task6/7/8/9为−28/0/−3/−6pp，四任务均值84%→74.75%；负结果，9月29日05:42:02退出。",
+    "status": "COMPLETED_NEGATIVE",
+    "role": "branch",
+    "sources": [
+      "execution/20260928_E3_replay/FINAL_REPORT_ZH.md",
+      "execution/20260928_E3_replay/LATEST_STATUS.md",
+      "execution/20260928_E3_replay/final_evidence/run/logs/commands.jsonl"
+    ]
+  },
+  {
+    "id": "20261008_E1_protective_selection",
+    "date_label": "2026-10-08",
+    "start_time_cst": "2026-10-08T19:54:26+08:00",
+    "start_basis": "19:54:06 prepare，19:54:26正式train。",
+    "method": "E1 保护性回放检索",
+    "suite_seeds": "OBJECT seed42",
+    "change": "不改随机入库存储，按头部梯度代理给固定64候选池评分，50%旧槽优先检索；原BC+IFA及预算保持。",
+    "result": "400epoch/105500更新，主200+次680。主AUC77.291667%对E0 77.708333%，−0.416667pp；不扩seed。首次评估导入故障留证后只恢复评估，10月9日03:53:40完成。",
+    "status": "COMPLETED_GATE_FAILED",
+    "role": "branch",
+    "sources": [
+      "execution/20261008_E1_protective_selection/launch_evidence/commands.log",
+      "execution/20261008_E1_protective_selection/final_20261009/FINAL_REPORT.txt"
+    ]
+  },
+  {
+    "id": "20261009_E1_selection_diagnostics",
+    "date_label": "2026-10-09（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "E1 选择偏好与固定池重复诊断",
+    "suite_seeds": "OBJECT seed42",
+    "change": "只读181次刷新、389个候选池、230710次优先赋值。",
+    "result": "最高分四分位实际占37.435%，评分确实影响检索；周期内重复率89.248%，主要由64固定池支持集限制解释。不能据此确证闭环下降因果。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261009_E1_selection_diagnostics/REPORT.txt"
+    ]
+  },
+  {
+    "id": "20261009_E1U_uniform_pool",
+    "date_label": "2026-10-09",
+    "start_time_cst": "2026-10-09T12:55:05+08:00",
+    "start_basis": "pipeline/prepare12:55:02，正式train12:55:05。",
+    "method": "E1-U 均匀候选池对照",
+    "suite_seeds": "OBJECT seed42",
+    "change": "保留同候选池、替换位置与预算，仅把评分抽样改为均匀1/64。",
+    "result": "AUC73.645833%，比E1低3.645833pp、比E0低4.0625pp；400epoch/105500更新、880主次正式记录；停止扩展。",
+    "status": "COMPLETED_GATE_FAILED",
+    "role": "branch",
+    "sources": [
+      "execution/20261009_E1U_uniform_pool/launch_evidence/commands.log",
+      "execution/20261009_E1U_uniform_pool/final_20261009/FINAL_REPORT.txt"
+    ]
+  },
+  {
+    "id": "20261009_E1O_coverage_order",
+    "date_label": "2026-10-09",
+    "start_time_cst": "2026-10-09T21:43:41+08:00",
+    "start_basis": "21:43:38 prepare，21:43:41正式train。",
+    "method": "E1-O 覆盖式回放次序",
+    "suite_seeds": "OBJECT seed42",
+    "change": "改变旧样本出现顺序以缓解短周期小池重复，保持原入库存储与科学预算。",
+    "result": "AUC62.395833%，比E0低15.3125pp；Task9为30%对75%。400epoch/105500更新、880正式；10月10日02:29:01结束，停止扩展。",
+    "status": "COMPLETED_GATE_FAILED",
+    "role": "branch",
+    "sources": [
+      "execution/20261009_E1O_coverage_order/launch_evidence/commands.log",
+      "execution/20261009_E1O_coverage_order/final_20261010/FINAL_REPORT.txt"
+    ]
+  },
+  {
+    "id": "20261010_stage6_consistency",
+    "date_label": "2026-10-10（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "Stage6 参数与闭环一致性审计",
+    "suite_seeds": "OBJECT seed42 E1/E1-U/E1-O",
+    "change": "只读CPU逐张量比对7个同epoch检查点与480条既有阶段6记录。",
+    "result": "三方法同epoch参数和buffer完全相等；E1/E1-U的160条记录一致，E1-O有25/160翻转。历史RNG/硬件/环境证据不足，不能唯一归因；E0缺少对应原始资产。",
+    "status": "COMPLETED_WITH_EVIDENCE_GAPS",
+    "role": "audit",
+    "sources": [
+      "execution/20261010_stage6_consistency/REPORT.txt"
+    ]
+  },
+  {
+    "id": "20261011_R1_paired_memory",
+    "date_label": "2026-10-11",
+    "start_time_cst": "2026-10-11T14:41:51+08:00",
+    "start_basis": "14:41:43 prepare，14:41:51正式train；结束状态依据最后可信观察，而非旧RUN_STATUS。",
+    "method": "R1 成对记忆入库",
+    "suite_seeds": "OBJECT seed42",
+    "change": "从改检索转向改缓存成员，恢复真实时间身份、关键位置成对入库；保持缓存条目/训练预算。",
+    "result": "已核训练400epoch/105500步/28CP完成；原pipeline exit1，修复换行后首次评估环境组已启动。最新本目录证据10月12日22:05仍SSH中断，正式闭环及最终退出未核实，不写成科学失败或完成。",
+    "status": "FINAL_STATUS_UNVERIFIED_SSH_BLOCKED",
+    "role": "branch",
+    "sources": [
+      "execution/20261011_R1_paired_memory/launch_evidence/commands.log",
+      "execution/20261011_R1_paired_memory/RESEARCH_VALUE.md",
+      "execution/20261011_R1_paired_memory/LATEST_STATUS.md"
+    ]
+  },
+  {
+    "id": "20261013_coreset_object",
+    "date_label": "2026-10-13",
+    "start_time_cst": "2026-10-13T13:50:24+08:00",
+    "start_basis": "pipeline/export12:48:53；Random正式12:57:05；Coreset自身正式13:50:24，采用后者为本方法训练起点。",
+    "method": "普通 Greedy Coreset 首轮",
+    "suite_seeds": "OBJECT seed42，Random/Coreset",
+    "change": "仅改任务结束的固定预算缓存成员，用视觉+动作几何覆盖选代表窗口，完整复用MLR+IFA主干。",
+    "result": "C AUC68.125%对Random66.145833%，+1.979167pp；FWT65%对66.25%；各400epoch/105500更新/200正式。完整结果于17:26:43汇总。",
+    "status": "COMPLETED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261013_coreset_object/START_REPORT.md",
+      "execution/20261013_coreset_object/FINAL_REPORT.md",
+      "execution/20261013_coreset_object/final_evidence/remote/commands.log"
+    ]
+  },
+  {
+    "id": "20261013_coreset_extension",
+    "date_label": "2026-10-13",
+    "start_time_cst": "2026-10-13T18:58:53+08:00",
+    "start_basis": "队列17:56:55，seed43 pipeline17:59:10、Random训练18:07:40、Coreset训练18:58:53；该时间取新C正式训练。",
+    "method": "普通 Coreset 扩展",
+    "suite_seeds": "OBJECT seeds43/44，连同已有42汇总",
+    "change": "按相同协议新增两个seed的Random/Coreset完整序列。",
+    "result": "三seed2400epoch/633000更新/1200正式；AUC Random76.354167%→C82.916667%，均值+6.5625pp；42/43/44分别+1.979167/+15.625/+2.083333。10月14日02:25:37完成。",
+    "status": "COMPLETED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261013_coreset_extension/START_REPORT.md",
+      "execution/20261013_coreset_extension/FINAL_REPORT.md",
+      "execution/20261013_coreset_extension/final_evidence/remote/seed43/commands.log",
+      "execution/20261013_coreset_extension/final_evidence/remote/queue/commands.log"
+    ]
+  },
+  {
+    "id": "20261014_coreset_result_review",
+    "date_label": "2026-10-14（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "Coreset 三seed结果及机制复核",
+    "suite_seeds": "OBJECT seeds42–44",
+    "change": "重新核1200条episode、120次vector、2400epoch及覆盖/成员/IFA身份，0新训练和环境。",
+    "result": "三seed平均AUC改善可追溯；覆盖距离收益与IFA输入统计一起改变，不能把所有增益单独归因于几何覆盖，也不能声称稳定显著。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261014_coreset_result_review/REVIEW_REPORT.md"
+    ]
+  },
+  {
+    "id": "20261014_coreset_validation",
+    "date_label": "2026-10-14",
+    "start_time_cst": "2026-10-14T12:41:00+08:00",
+    "start_basis": "LAUNCH_STATUS只记录启动至分钟12:41；秒00是格式占位，精度为分钟。",
+    "method": "Coreset 固定模型新初态重复验证（取消）",
+    "suite_seeds": "OBJECT seeds42–44，Random/Coreset",
+    "change": "拟用20–49新初态×5重复检验既有CP，计划9000正式，无新训练。",
+    "result": "用户取消，实际仅11正式+20A/A；未完成，不能当验证集结论；trap退出0不等于科学预算完成。",
+    "status": "CANCELLED_BY_USER",
+    "role": "branch",
+    "sources": [
+      "execution/20261014_coreset_validation/LAUNCH_STATUS.md",
+      "execution/20261014_coreset_validation/CANCELLATION.json",
+      "execution/20261014_coreset_validation/TASK6_REPORT.md"
+    ]
+  },
+  {
+    "id": "20261014_ifaoff_original_protocol",
+    "date_label": "2026-10-14",
+    "start_time_cst": "2026-10-14T12:54:33+08:00",
+    "start_basis": "队列12:53:40/41；首臂Random正式train12:54:33；两种时间均在报告记录。",
+    "method": "IFA-off 机制对照",
+    "suite_seeds": "OBJECT seeds42–44，Random/Coreset共六组",
+    "change": "固定原协议，关闭IFA单独检验Coreset增量；重新训练所有对照而非复用不匹配模型。",
+    "result": "2400epoch/633000更新/1200正式；C−R AUC均值+6.493056pp，三seed分别+20.208333/+3.541667/−4.270833。说明覆盖增益并非完全依赖IFA，仍有负seed；10月15日00:36:47完成。",
+    "status": "COMPLETED",
+    "role": "branch",
+    "sources": [
+      "execution/20261014_ifaoff_original_protocol/LAUNCH_STATUS.md",
+      "execution/20261014_ifaoff_original_protocol/final_evidence/FINAL_REPORT.md"
+    ]
+  },
+  {
+    "id": "20261015_event_coreset",
+    "date_label": "2026-10-15",
+    "start_time_cst": "2026-10-15T19:59:55+08:00",
+    "start_basis": "真实commands.log正式train开始；不是报告生成或目录日期。",
+    "method": "Event-Coreset 首轮",
+    "suite_seeds": "OBJECT seed42",
+    "change": "在普通Coreset上保证事件窗口配额50%，尽量少改原成员；不改模型及BC+IFA。",
+    "result": "AUC70.625%对C68.125%，+2.5pp；FWT均65%；首seed门槛通过。最终Task6仍30%→20%，不属于所有单元均改善。",
+    "status": "COMPLETED_SEED_GATE_PASSED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261015_event_coreset/START_REPORT.md",
+      "execution/20261015_event_coreset/FINAL_REPORT.md",
+      "execution/20261015_event_coreset/launch_evidence/run/commands.log"
+    ]
+  },
+  {
+    "id": "20261015_event_coreset_extension",
+    "date_label": "2026-10-15",
+    "start_time_cst": "2026-10-15T22:28:21+08:00",
+    "start_basis": "此时间是队列exact_binding开始；正式训练启动时刻本轮未单独核实，不冒充训练时间。",
+    "method": "Event-Coreset 扩展",
+    "suite_seeds": "OBJECT seeds43/44，连同42",
+    "change": "固定首轮事件规则扩展，不因后续负结果改阈值。",
+    "result": "新增800epoch/211000更新/400正式；seed43 AUC78.020833%（对C−16.354167pp），44为86.770833%（+.520833pp）；三seedEC−C平均−4.444444pp。10月16日02:46:56服务器队列完成；当时下载中断，本目录注明归档待补，后续五seed汇总另核。",
+    "status": "SERVER_COMPLETED_ARCHIVE_GAP_RECORDED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261015_event_coreset_extension/START_REPORT.md",
+      "execution/20261015_event_coreset_extension/RESULTS_SERVER_VERIFIED_ARCHIVE_PENDING.md",
+      "execution/20261015_event_coreset_extension/launch_evidence/queue/commands.log"
+    ]
+  },
+  {
+    "id": "20261016_seed43_readonly_audit",
+    "date_label": "2026-10-16（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "seed43 高差异只读审计",
+    "suite_seeds": "OBJECT seed43，Random/Coreset/Event",
+    "change": "先局部检查，随后完成三组600记录和30份RNG证据的分析。",
+    "result": "首次C−R AUC+15.625pp，其中约80%来自Task6和Task9；Event退化主要涉及新任务学习，不能只称旧任务遗忘。采用completed_analysis而非早期partial报告。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261016_seed43_readonly_audit/completed_analysis/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261016_seed43_three_arm_repeat_v1",
+    "date_label": "2026-10-16",
+    "start_time_cst": "2026-10-16T12:31:08+08:00",
+    "start_basis": "launch.json记录队列进程启动unix1792125068.867577；非已核首优化步。",
+    "method": "seed43 三臂完整重复",
+    "suite_seeds": "OBJECT seed43，Random/Coreset/Event",
+    "change": "另跑同协议三臂检验首次高分，不覆盖首次，不将重复算新seed。",
+    "result": "repeat1 AUC为71.875/78.645833/72.8125%；首次为78.75/94.375/78.020833%。C仍优于Random，但首次优势幅度不能视为稳定值。",
+    "status": "COMPLETED",
+    "role": "branch",
+    "sources": [
+      "execution/20261016_seed43_three_arm_repeat_v1/launch_evidence/queue/launch.json",
+      "execution/20261016_seed43_three_arm_repeat_v1/completion_evidence/queue/FINAL_REPORT.md"
+    ]
+  },
+  {
+    "id": "20261016_seeds40_41_three_arm",
+    "date_label": "2026-10-16",
+    "start_time_cst": "2026-10-16T18:44:47+08:00",
+    "start_basis": "launch.json记录supervise队列启动unix1792147487.5400577；非已核首训练step。",
+    "method": "普通/Event Coreset 五seed扩展",
+    "suite_seeds": "OBJECT seeds40/41，Random/Coreset/Event",
+    "change": "新增两seed三臂，形成40–44首次五seed完整比较。",
+    "result": "seed40 AUC75/81.145833/78.333333%；41为66.875/70.104167/64.791667%。普通C改善，两seedEvent均低于C；全部完成。",
+    "status": "COMPLETED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261016_seeds40_41_three_arm/launch_evidence/launch.json",
+      "execution/20261016_seeds40_41_three_arm/completion_evidence/queue/FINAL_REPORT.md"
+    ]
+  },
+  {
+    "id": "20261017_coreset_goal_three_seed",
+    "date_label": "2026-10-18",
+    "start_time_cst": "2026-10-18T04:11:05+08:00",
+    "start_basis": "目录属10月17日；23:17:34仅等待队列，实际10月18日03:21:25导出、03:27:57 Random训练、04:11:05首Coreset训练。",
+    "method": "普通 Coreset 跨套件验证",
+    "suite_seeds": "GOAL seeds42/43/44，Random/Coreset",
+    "change": "把同一入库规则转到GOAL，各seed完整四阶段，未按OBJECT结果重调参数。",
+    "result": "六臂2400epoch/456600更新/1200正式。C−R AUC三seed均负、平均−3.020833pp；Task6最终−25/−25/−35pp，揭示几何覆盖无法保证行为保持。",
+    "status": "COMPLETED_NEGATIVE",
+    "role": "mainline",
+    "sources": [
+      "execution/20261017_coreset_goal_three_seed/START_REPORT.md",
+      "execution/20261017_coreset_goal_three_seed/FINAL_REPORT.md",
+      "execution/20261017_coreset_goal_three_seed/final_evidence/queue/commands.log",
+      "execution/20261017_coreset_goal_three_seed/final_evidence/seed42/commands.log"
+    ]
+  },
+  {
+    "id": "20261017_event_deep_audit",
+    "date_label": "2026-10-17（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "Event-Coreset 机制深审计",
+    "suite_seeds": "OBJECT首次五seed40–44",
+    "change": "核事件窗口、时序身份、覆盖代价和训练相关性，0新正式训练。",
+    "result": "事件数量增多却未增加训练相关事件区间覆盖，原C已覆盖；固定50%事件保证缺少进一步完整训练依据。覆盖损失与下降相容，但未证实单一因果。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261017_event_deep_audit/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261017_five_seed_analysis",
+    "date_label": "2026-10-17（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "五seed比较与差异来源分析",
+    "suite_seeds": "OBJECT首次seed40–44",
+    "change": "固定首次五seed、repeat43另列，统一复算所有指标和贡献。",
+    "result": "普通C−Random AUC均值+5.8125pp、5/5正；Event−C均值−4.291667pp，仅2/5正。C跨seedSD11.0222高于Random7.733，不称降低方差。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261017_five_seed_analysis/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261017_five_seed_summary",
+    "date_label": "2026-10-17（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "普通/Event Coreset 五seed汇总",
+    "suite_seeds": "OBJECT首次seed40–44",
+    "change": "归集三臂统一ep99、每组200回合，repeat43单列不进五seed均值。",
+    "result": "确认C五seed均值AUC80%、Random74.1875%、Event75.708333%；历史首次与repeat1并列保留。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261017_five_seed_summary/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261017_tcc_zero_training",
+    "date_label": "2026-10-17（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "TCC 控制统计纠偏诊断",
+    "suite_seeds": "OBJECT首次seed40–44",
+    "change": "固定窗口静态权重修复控制统计，不训练策略，未创建模型或环境。",
+    "result": "Task6/7/8预先门槛均0/5通过；归一化后纠偏作用有限，停止完整训练推进。",
+    "status": "COMPLETED_GATE_FAILED",
+    "role": "audit",
+    "sources": [
+      "execution/20261017_tcc_zero_training/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261017_update_coordination_diagnostic",
+    "date_label": "2026-10-17（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "更新协调零正式训练诊断",
+    "suite_seeds": "OBJECT首次seed40–44，15阶段边界",
+    "change": "原AdamW阶段入口反事实，比较构造batch和不同demo损失响应；非丢失历史中期状态的重放。",
+    "result": "480探针；构造批冲突1.49%，跨demo正损害减少约0.11%，约5倍构造时间；0/5门槛通过。979次功能式AdamW副本调用、960临时位移丢弃，正式step0、环境0。",
+    "status": "COMPLETED_GATE_FAILED",
+    "role": "audit",
+    "sources": [
+      "execution/20261017_update_coordination_diagnostic/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261017_zero_response_residual",
+    "date_label": "2026-10-17（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "零响应残差原型",
+    "suite_seeds": "OBJECT seed42",
+    "change": "冻结共享模型，以真实语言正交门隔离新增低秩残差；每增量任务50残差更新。",
+    "result": "200次原型更新、0正式持续训练/环境；旧指令数值零贡献、部署参数和重载验收通过，仅PASS_PROTOTYPE，不证明共享模型不遗忘或闭环提升。",
+    "status": "PASS_PROTOTYPE",
+    "role": "branch",
+    "sources": [
+      "execution/20261017_zero_response_residual/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261017_zr_coreset_seed42",
+    "date_label": "2026-10-17",
+    "start_time_cst": "2026-10-17T15:35:44+08:00",
+    "start_basis": "首次15:32:24 train因元数据问题exit1；外置修复后15:35:44成功正式train，旧失败保留。",
+    "method": "Coreset+IFA+零响应残差 ZR",
+    "suite_seeds": "OBJECT seed42",
+    "change": "将语言零响应残差接入完整持续训练；保留原C成员及BC+IFA。",
+    "result": "400epoch/105500更新/200正式；AUC68.125→79.166667%，+11.041667pp，四推进条件通过；旧通道隔离不等于共享网络不遗忘。17:45:33完成。",
+    "status": "COMPLETED_SEED_GATE_PASSED",
+    "role": "branch",
+    "sources": [
+      "execution/20261017_zr_coreset_seed42/FINAL_REPORT.md",
+      "execution/20261017_zr_coreset_seed42/launch_evidence/run/commands.log",
+      "execution/20261017_zr_coreset_seed42/final_acceptance/engineering_recovery/commands.log"
+    ]
+  },
+  {
+    "id": "20261017_zr_coreset_extension",
+    "date_label": "2026-10-17",
+    "start_time_cst": "2026-10-17T18:40:56+08:00",
+    "start_basis": "18:39:25开始admission；18:40:56 seed43正式supervise启动，非准备起点。",
+    "method": "ZR 扩展43/44",
+    "suite_seeds": "OBJECT seeds43/44，含42汇总",
+    "change": "保持零响应结构及原父缓存，新增两个完整seed。",
+    "result": "三seed主比较均值AUC+2.7431pp，但43下降−5.2083pp；43主基线事后改为repeat1，首次结果敏感性仍保留。10月17日22:33队列结束，不当预注册或同轨迹干预。",
+    "status": "COMPLETED_MIXED",
+    "role": "branch",
+    "sources": [
+      "execution/20261017_zr_coreset_extension/START_REPORT.md",
+      "execution/20261017_zr_coreset_extension/FINAL_REPORT.md",
+      "execution/20261017_zr_coreset_extension/final_evidence/queue/commands.log"
+    ]
+  },
+  {
+    "id": "20261017_zr_coreset_seeds40_41",
+    "date_label": "2026-10-17",
+    "start_time_cst": "2026-10-17T22:57:58+08:00",
+    "start_basis": "22:56:27队列admission，22:57:58 seed40正式supervise。",
+    "method": "ZR 五seed扩展",
+    "suite_seeds": "OBJECT seeds40/41，汇总40–44",
+    "change": "补齐两个完整seed，不改变失败阈值或删除负seed。",
+    "result": "40/41 ΔAUC−16.7708/−8.3333pp；五seed主口径均值−3.375pp，仅2/5正；首次43敏感性口径为−6.5208pp。10月18日03:18:27完成，首seed大增益未泛化。",
+    "status": "COMPLETED_NEGATIVE",
+    "role": "branch",
+    "sources": [
+      "execution/20261017_zr_coreset_seeds40_41/START_REPORT.md",
+      "execution/20261017_zr_coreset_seeds40_41/FINAL_REPORT.md",
+      "execution/20261017_zr_coreset_seeds40_41/final_evidence/queue/commands.log"
+    ]
+  },
+  {
+    "id": "20261018_goal_object_task6_audit",
+    "date_label": "2026-10-18（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "GOAL/OBJECT Coreset反转诊断",
+    "suite_seeds": "两套件既有Random/Coreset",
+    "change": "核Task6时序、夹爪末端命令、demo和几何覆盖；无模型前向或新环境。",
+    "result": "GOAL C优化几何覆盖同时明显改变Task6回放构成；其总AUC−3.020833pp中Task6贡献−3.4375pp。OBJECT总体增益也包含Task6负seed；这为保留随机锚点提供动机，尚非唯一因果。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261018_goal_object_task6_audit/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261018_sc_coreset_goal_seed42",
+    "date_label": "2026-10-18",
+    "start_time_cst": "2026-10-18T17:09:37+08:00",
+    "start_basis": "commands.jsonl的train时间unix1792314577.892598；17:10:46只是已15epoch观察。",
+    "method": "SC-Coreset v1",
+    "suite_seeds": "GOAL seed42",
+    "change": "任务入库时修复控制/时序统计构成，旧buffer不重选，保持模型/损失/预算。",
+    "result": "AUC73.4375%对C78.75%，−5.3125pp；Task9从90%降70%；未过门槛，不扩43/44。",
+    "status": "COMPLETED_GATE_FAILED",
+    "role": "branch",
+    "sources": [
+      "execution/20261018_sc_coreset_goal_seed42/START_REPORT.md",
+      "execution/20261018_sc_coreset_goal_seed42/FINAL_REPORT.md",
+      "execution/20261018_sc_coreset_goal_seed42/final_evidence/commands.jsonl"
+    ]
+  },
+  {
+    "id": "20261018_sc_coreset_mechanism_audit",
+    "date_label": "2026-10-18（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "SC-Coreset v1失败机制审计",
+    "suite_seeds": "GOAL seed42",
+    "change": "只读成员、配对episode和模型/RNG证据。",
+    "result": "构成修复偏向端点并丢失中段覆盖；同时存在后续模型及动作随机流差异，不能据相关性分配性能损失因果。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261018_sc_coreset_mechanism_audit/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261018_scv2_offline",
+    "date_label": "2026-10-18（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "SC-v2 离线候选修复",
+    "suite_seeds": "GOAL seed42",
+    "change": "增加最大/平均覆盖半径、独特监督、demo、端点等守卫，限制交换规模。",
+    "result": "四任务交换5/2/4/6，其中进入旧任务训练的11个；离线守卫通过，但不代表闭环收益。0正式训练。",
+    "status": "PASS_OFFLINE_ONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261018_scv2_offline/REPORT.md",
+      "execution/20261018_scv2_offline/LOCAL_ACCEPTANCE.json"
+    ]
+  },
+  {
+    "id": "20261018_scv2_goal_seed42",
+    "date_label": "2026-10-18",
+    "start_time_cst": "2026-10-18T20:19:59+08:00",
+    "start_basis": "launch约20:19:58，正式train20:19:59；20:23观察54epoch不是启动。",
+    "method": "SC-v2 完整验证",
+    "suite_seeds": "GOAL seed42",
+    "change": "在离线守卫通过后执行完整四阶段，不改BC+IFA和预算。",
+    "result": "AUC69.0625%，低于C78.75%及SC-v1 73.4375%；FWT70%、NBT0、Final65%；22:11完成，门槛失败停止。NBT0不等于无遗忘。",
+    "status": "COMPLETED_GATE_FAILED",
+    "role": "branch",
+    "sources": [
+      "execution/20261018_scv2_goal_seed42/START_REPORT.md",
+      "execution/20261018_scv2_goal_seed42/FINAL_REPORT.md",
+      "execution/20261018_scv2_goal_seed42/final_evidence/commands.jsonl"
+    ]
+  },
+  {
+    "id": "20261018_scv2_mechanism_audit",
+    "date_label": "2026-10-18（报告/目录归属日，非已核实启动时刻）",
+    "start_time_cst": null,
+    "start_basis": "仅核实本轮现有报告及结果；未将目录日期或文件修改时间认定为实际启动时刻。",
+    "method": "SC-v2 成员与样本流审计",
+    "suite_seeds": "GOAL seed42",
+    "change": "对已完成结果核实际覆盖守卫和原数据构建顺序。",
+    "result": "仅11个旧成员变化却引起810个共同旧窗口重排序，100epoch中31696/33700批不同（94.05%）；几何守卫确实满足，不能简化为覆盖指标未执行，也不能单因素归因。",
+    "status": "COMPLETED_READONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261018_scv2_mechanism_audit/REPORT.md"
+    ]
+  },
+  {
+    "id": "20261018_zrv2_seed43",
+    "date_label": "2026-10-18",
+    "start_time_cst": "2026-10-18T15:41:30+08:00",
+    "start_basis": "commands.jsonl校准开始unix1792309290.1417787；不是重新完整训练主干。",
+    "method": "ZR-v2 冻结主干校准",
+    "suite_seeds": "OBJECT seed43 repeat1父模型",
+    "change": "复用完整Coreset父CP，冻结共享模型，每阶段10epoch训练残差校准，避免ZR共享网络漂移。",
+    "result": "40epoch/10550更新/200正式；AUC78.645833→83.333333%，FWT70→77.5%，OldFinal均86.666667%；NBT−16.944444→−10.277778未达严格降低条件，停止其他seed。",
+    "status": "AUDIT_PASS_METRIC_NOT_PASSED",
+    "role": "branch",
+    "sources": [
+      "execution/20261018_zrv2_seed43/completion_20261018/FINAL_REPORT.md",
+      "execution/20261018_zrv2_seed43/launch_evidence/commands.jsonl"
+    ]
+  },
+  {
+    "id": "20261018_ra_coreset_goal_seed42",
+    "date_label": "2026-10-18",
+    "start_time_cst": "2026-10-18T23:33:13+08:00",
+    "start_basis": "LAUNCH/supervisor记录unix1792337593.0351849，即23:33:13；首次正式运行起点。",
+    "method": "RA-Coreset 首轮",
+    "suite_seeds": "GOAL seed42",
+    "change": "保留约一半随机成员为硬锚点，在剩余名额中用最小几何损害交换；同时保持随机代表性与覆盖。",
+    "result": "400epoch/76100更新/200正式；AUC82.5%对C78.75%、Random80.9375%；OldFinal75%对C68.333333%，首seed推进门槛通过。",
+    "status": "COMPLETED_SEED_GATE_PASSED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261018_ra_coreset_goal_seed42/MONITOR_HANDOFF.md",
+      "execution/20261018_ra_coreset_goal_seed42/FINAL_REPORT.md",
+      "execution/20261018_ra_coreset_goal_seed42/launch_evidence/LAUNCH.json"
+    ]
+  },
+  {
+    "id": "20261019_ra_coreset_goal_extension",
+    "date_label": "2026-10-19",
+    "start_time_cst": "2026-10-19T12:20:48+08:00",
+    "start_basis": "LAUNCH.json实际队列启动12:20:48.762270；12:24:41是已15epoch观察，未将观察当首训练step。",
+    "method": "RA-Coreset GOAL扩展",
+    "suite_seeds": "GOAL seeds43/44，连同42",
+    "change": "新增相同完整序列，原Random/C仅只读复用。",
+    "result": "RA AUC42/43/44=82.5/84.6875/71.875%；均值79.6875%，对C+3.020833pp、对Random精确持平；seed44对Random−7.1875pp。OldFinal三seed均高于C但低于Random，不称全seed稳定领先。",
+    "status": "COMPLETED_MIXED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261019_ra_coreset_goal_extension/LAUNCH.json",
+      "execution/20261019_ra_coreset_goal_extension/START_REPORT.md",
+      "execution/20261019_ra_coreset_goal_extension/progress_20261019_160822/FINAL_REPORT.md"
+    ]
+  },
+  {
+    "id": "20261019_ra_coreset_goal_seed41",
+    "date_label": "2026-10-19",
+    "start_time_cst": "2026-10-19T16:35:08+08:00",
+    "start_basis": "队列16:26:03、export16:28:21；本轮第一条正式训练Random16:35:08，C17:15:22；这里不是RA臂自身开始。",
+    "method": "RA-Coreset GOAL补充seed41",
+    "suite_seeds": "GOAL seed41，Random/Coreset/RA三臂",
+    "change": "缺少同seed原基线，故新跑三臂共同官方初始化与完整四阶段。",
+    "result": "各400epoch/76100步，共600正式；AUC Random69.0625/C71.875/RA78.75%。RA对Random+9.6875pp、对C+6.875pp；Task6保持仍退化。22:17:52服务器完成。",
+    "status": "COMPLETED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261019_ra_coreset_goal_seed41/LAUNCH.json",
+      "execution/20261019_ra_coreset_goal_seed41/START_REPORT.md",
+      "execution/20261019_ra_coreset_goal_seed41/progress_20261019_222601/REPORT.md",
+      "execution/20261019_ra_coreset_goal_seed41/progress_20261019_222601/completion_baseline/commands.log"
+    ]
+  },
+  {
+    "id": "20261019_ra_object_conditional",
+    "date_label": "2026-10-19",
+    "start_time_cst": "2026-10-19T22:44:00+08:00",
+    "start_basis": "START_REPORT记录队列22:44，分钟精度，秒00为格式占位；22:48已有首seed5epoch，未核精确首train秒。",
+    "method": "RA-Coreset OBJECT及条件ZR-v2",
+    "suite_seeds": "OBJECT seeds41/42/43",
+    "change": "先检验RA，第一关通过后追加冻结主干ZR-v2校准；若第二关未过不启动GOAL组合。",
+    "result": "RA AUC73.020833/71.5625/75.104167%，三seed均高于匹配Random，均值+4.930556pp。RA+ZR-v2平均较RA−1.180556pp，第二关失败，GOAL组合未启动。10月20日10:21:08服务器完成。",
+    "status": "COMPLETED_CONDITIONAL_EXTENSION_STOPPED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261019_ra_object_conditional/START_REPORT.md",
+      "execution/20261019_ra_object_conditional/FINAL_REPORT_20261020.md"
+    ]
+  }
+]

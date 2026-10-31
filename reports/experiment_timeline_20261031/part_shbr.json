@@ -1,0 +1,196 @@
+[
+  {
+    "id": "20261024_ccbp",
+    "date_label": "2026-10-24 20:53:02",
+    "start_time_cst": "2026-10-24T20:53:02+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。",
+    "method": "CCBP-v1：A/B/C/D共同Stage8起点分叉",
+    "suite_seeds": "GOAL seed41；仅续训Task9，非完整序列",
+    "change": "A=ALIGN；B=执行Normal固定教师蒸馏；C=持续执行分量专家成本+最低成本margin路由；D=教师成本预算+可接受集合路由。四组各100epoch/33700步，160正式回合。",
+    "result": "最终Task8/Task9：A65%/80%，B80%/80%，C80%/85%，D70%/80%；D预登记优于对照条件未通过。预算达标率高不能替代闭环收益。四CP/恢复/160回合实际验收完成，保留外置验收修复而未重训重评。",
+    "status": "COMPLETE_LOCAL_ACCEPTED_SCIENTIFIC_NOT_SUPPORTED",
+    "role": "branch",
+    "sources": [
+      "execution/20261024_ccbp/check_readonly_20261024_223909/light/STARTED.json",
+      "execution/20261024_ccbp/PROTOCOL.md",
+      "execution/20261024_ccbp/REPORT.md",
+      "execution/20261024_ccbp/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261024_ccbp_v2",
+    "date_label": "2026-10-24 23:34:26",
+    "start_time_cst": "2026-10-24T23:34:26+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。",
+    "method": "CCBP-v2旧Task9分叉：B/C/N/V",
+    "suite_seeds": "GOAL seed41；共同Stage8起点，后被完整序列请求取代",
+    "change": "B/C原对照；N改为代价差加权softplus路由、关闭教师锚；V把专家成本与一致度加权教师距离合成J并使用新路由。",
+    "result": "仅B完成9epoch/3033主更新，正式回合0；状态化梯度检查把零梯度tensor误判为应为None而exit1。随后用户改为四组各自从官方初始化跑完整序列，此旧分叉废止；不是方法的闭环负结果，不与完整v2合并计数。",
+    "status": "SUPERSEDED_BY_USER_FULL_SEQUENCE_ENGINEERING_FAILURE_PRESERVED",
+    "role": "branch",
+    "sources": [
+      "execution/20261024_ccbp_v2/check_readonly_20261024_234643/light/STARTED.json",
+      "execution/20261024_ccbp_v2/PROTOCOL.md",
+      "execution/20261024_ccbp_v2/REPORT.md",
+      "execution/20261024_ccbp_v2/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261024_ccbp_v2_full",
+    "date_label": "2026-10-24 23:59:43",
+    "start_time_cst": "2026-10-24T23:59:43+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。",
+    "method": "CCBP-v2完整四组B/C/N/V",
+    "suite_seeds": "GOAL seed41；各自官方初始化Task6→7→8→9",
+    "change": "B固定执行分布蒸馏；C持续专家监督+原margin路由；N持续专家监督+新加权softplus路由；V混合J=(c+wd)/(1+w)+新路由。共1600epoch/304400主步/800正式。首次B6结束后设备比较故障，由engineering02严格继承完整B6恢复，未重复完整epoch。",
+    "result": "最终Task6/7/8/9及AUC：B35/100/85/55、76.25%；C30/100/85/90、83.125%；N30/100/85/75、78.75%；V45/100/80/80、82.5%。V比C改善最早任务15pp，但Task8/9分别低5/10pp，主门未过。16CP与全部800回合实际验收于10-25清晨完成；这才是完整序列结果。",
+    "status": "COMPLETE_ACCEPTED_PRIMARY_CRITERION_NOT_MET",
+    "role": "branch",
+    "sources": [
+      "execution/20261024_ccbp_v2_full/check_readonly_20261025_000623/light/STARTED.json",
+      "execution/20261024_ccbp_v2_full/PROTOCOL.md",
+      "execution/20261024_ccbp_v2_full/REPORT.md",
+      "execution/20261024_ccbp_v2_full/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261025_ccbp_v3_full",
+    "date_label": "2026-10-25 13:53:59（有效执行）",
+    "start_time_cst": "2026-10-25T13:53:59+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。",
+    "method": "CCBP-v3：C/R/G方向保持检验",
+    "suite_seeds": "GOAL seed41；三组完整序列",
+    "change": "C=专家监督+原margin；R=保留v2混合J，仅回退margin路由；G=未缩放专家成本+教师到专家线段距离锚+C路由。共1200epoch/228300步/600正式。首版13:52:22因Python3.8类型别名导入失败、0更新/0环境；13:53:59为修复后工程02有效派发。",
+    "result": "最终Task6/7/8/9：C40/100/100/90，R35/100/60/80，G50/100/80/85；AUC87.5/77.8125/83.125%，OldFinal80/65/76.6667%。G虽Task6比C高10pp，但Task8低20pp、Task9低5pp；三个主要条件均未满足，方向锚未建立额外闭环价值。600回合与12CP实际最终验收。",
+    "status": "COMPLETE_ACCEPTED_SCIENTIFIC_CRITERION_NOT_MET",
+    "role": "branch",
+    "sources": [
+      "execution/20261025_ccbp_v3_full/final_readonly_20261025_181226/light/STARTED.json",
+      "execution/20261025_ccbp_v3_full/PROTOCOL.md",
+      "execution/20261025_ccbp_v3_full/REPORT.md",
+      "execution/20261025_ccbp_v3_full/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261025_ccbp_v4_full",
+    "date_label": "2026-10-25 19:15:25",
+    "start_time_cst": "2026-10-25T19:15:25+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。",
+    "method": "CCBP-v4 D/O/S；旧S后来汇报名SHBR",
+    "suite_seeds": "GOAL seed41；三组完整序列",
+    "change": "保留C专家监督+原路由，改保护输入和教师时点。D用示范历史、O用全部自身执行历史、S仅用成功轨迹历史；任务获得时固定执行高斯教师，独立有界缓存，后续执行分量W2与最近分量margin保持。每组40训练采集，合计120采集/600正式/228300主步。工程02仅修复O/S 1–7帧保持路径，D原进程自然完成并精确继承。",
+    "result": "AUC C/D/O/S=87.5/78.3333/87.5/86.875%；OldFinal80/71.6667/76.6667/81.6667%；FinalAll82.5/72.5/80/85%。S最终Task8/9=100/95%，但早期7_6=70%低于C80%，D/O/S对C总门均未通过，O-D与S-O增量门通过。O/S采集历史并非逐窗相同，不能将全部差异独立归因成功筛选。此S是无支持门控的原SHBR，不是最新支持门控S。",
+    "status": "COMPLETE_ACCEPTED_NO_AUTOMATIC_EXPANSION",
+    "role": "mainline",
+    "sources": [
+      "execution/20261025_ccbp_v4_full/check_readonly_20261025_192237/light/STARTED.json",
+      "execution/20261025_ccbp_v4_full/PROTOCOL.md",
+      "execution/20261025_ccbp_v4_full/REPORT.md",
+      "execution/20261025_ccbp_v4_full/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261026_ccbp_v4_s_goal42_43",
+    "date_label": "2026-10-26 12:49:58",
+    "start_time_cst": "2026-10-26T12:49:58+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。 该记录嵌入只读快照EVIDENCE.json的light字段。",
+    "method": "旧SHBR/S有限GOAL跨seed扩展",
+    "suite_seeds": "GOAL seed42、43；与已完成seed41合并三seed",
+    "change": "保持S41协议：成功历史筛选、固定任务获得时教师、原C主干和有界缓存不变；两seed共800epoch/152200步、80训练采集、400正式；不把旧41重新训练。",
+    "result": "seed42/43 AUC78.4375/83.0208%，FinalAll78.75/83.75%；三seedAUC82.7778±4.2240%，OldFinal80.5556%，FinalAll82.5%。相对历史RA+ALIGN三seedAUC均值+1.6667pp，但seed42下降4.2708pp；不是各seed全面提高。400回合实际验收10-26 16:43完成；历史基线不是同动作随机流或等交互预算。",
+    "status": "COMPLETE_ACCEPTED_FINITE_EXTENSION",
+    "role": "mainline",
+    "sources": [
+      "execution/20261026_ccbp_v4_s_goal42_43/check_readonly_20261026_125011/EVIDENCE.json",
+      "execution/20261026_ccbp_v4_s_goal42_43/PROTOCOL.md",
+      "execution/20261026_ccbp_v4_s_goal42_43/REPORT.md",
+      "execution/20261026_ccbp_v4_s_goal42_43/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261026_ccbp_v4_s_object41_42_43",
+    "date_label": "2026-10-26 16:57:40",
+    "start_time_cst": "2026-10-26T16:57:40+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。 该记录嵌入只读快照EVIDENCE.json的light字段。",
+    "method": "旧SHBR/S扩展到OBJECT",
+    "suite_seeds": "OBJECT seed41、42、43；完整序列",
+    "change": "将原S冻结规则用于OBJECT三seed，不改成功筛选/固定教师/保持算子；共1200epoch/316500步、120训练采集、600正式。",
+    "result": "AUC逐seed78.2292/89.8958/86.9792%，均值85.0347±6.0715%；OldFinal82.2222%、FinalAll82.5%。历史RA+ALIGN AUC80.1736%，均值增益4.8611pp，但seed41新任务55%比历史90%低35pp；seed43最早任务最终仅20%。服务器10-26 23:48:56自然结束，10-27 12:12实际最终验收；不能把验收时间当训练启动或结束。",
+    "status": "COMPLETE_ACCEPTED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261026_ccbp_v4_s_object41_42_43/check_readonly_20261026_165809/EVIDENCE.json",
+      "execution/20261026_ccbp_v4_s_object41_42_43/PROTOCOL.md",
+      "execution/20261026_ccbp_v4_s_object41_42_43/REPORT.md",
+      "execution/20261026_ccbp_v4_s_object41_42_43/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261026_shbr_novelty_review",
+    "date_label": "2026-10-26查新；10-27证据更新",
+    "start_time_cst": null,
+    "start_basis": "没有可核实的实验启动事件；此目录是本地证据汇总/素材/查新工作，日期只标识工作轮次，不代表新训练开始。",
+    "method": "SHBR方法查新与证据边界",
+    "suite_seeds": "已完成GOAL/OBJECT seed41–43；不新增实验",
+    "change": "核对成功筛选、固定任务教师、执行高斯保持、margin路由的已有文献，并与已接受结果重算结合；明确S仍包含C专家监督与路由。",
+    "result": "成功回放、固定教师与机器人持续策略蒸馏均有直接先例；可讨论的是部署规则匹配的有限成功历史+固定执行高斯保持组合，不能主张首次成功回放或新路由网络。三seed均值有价值但非等交互因果证明；建议补同预算C与近邻蒸馏/成功筛选对照。",
+    "status": "READ_ONLY_NOVELTY_AND_EVIDENCE_REVIEW",
+    "role": "audit",
+    "sources": [
+      "execution/20261026_shbr_novelty_review/REPORT.md",
+      "execution/20261026_shbr_novelty_review/LOCAL_METHOD_AUDIT.json",
+      "execution/20261026_shbr_novelty_review/LATEST_RESULTS_RECOMPUTED.json"
+    ]
+  },
+  {
+    "id": "20261026_thesis_preliminary",
+    "date_label": "2026-10-26论文前期工作素材整理",
+    "start_time_cst": null,
+    "start_basis": "没有可核实的实验启动事件；此目录是本地证据汇总/素材/查新工作，日期只标识工作轮次，不代表新训练开始。",
+    "method": "汇报名：ALIGN→TASA，S→SHBR",
+    "suite_seeds": "既有GOAL/OBJECT基线三seed及当时已验收S41",
+    "change": "把真实双相机关键帧、完整400epoch标量、指标表和方法流程整理为论文/汇报素材；名称改动用于读者表达，原代码标识保留。",
+    "result": "TASA与历史ALIGN相同、SHBR与旧S相同，不是新训练轮次或新方法变体。素材中的真实成功rollout图来自既有ALIGN诊断而非S；本轮新增模型前向、更新、环境均为0。",
+    "status": "LOCAL_THESIS_MATERIALS_ONLY",
+    "role": "audit",
+    "sources": [
+      "execution/20261026_thesis_preliminary/README.md",
+      "execution/20261026_thesis_preliminary/EVIDENCE_AUDIT.json"
+    ]
+  },
+  {
+    "id": "20261027_c_goal42_43_object41_42_43",
+    "date_label": "2026-10-27 13:31:32",
+    "start_time_cst": "2026-10-27T13:31:32+08:00",
+    "start_basis": "服务器 STARTED.json 的调度器启动时间；不是首个优化器更新时刻。",
+    "method": "补全强对照C，复核旧SHBR增量",
+    "suite_seeds": "新跑GOAL42/43、OBJECT41/42/43；GOAL41复用v3",
+    "change": "保持C原专家成本+margin，无S保持、无训练采集；五完整序列2000epoch/468700步/1000正式。完成GOAL/OBJECT各三seed C-S配对闭环与共同专家窗口诊断。",
+    "result": "三seedGOAL C/S AUC82.5/82.7778%，OldFinal同80.5556%，FinalAll80/82.5%；OBJECT C/S AUC85/85.0347%，OldFinal77.2222/82.2222%，FinalAll同82.5%。旧S额外40训练交互/seed，故本轮仍非等交互控制；其整体AUC优势很小且保持与新任务取舍存在。此是普通C补全，不能误称后续等预算C实验。10-27 22:34完成实际验收。",
+    "status": "COMPLETE_ACCEPTED",
+    "role": "mainline",
+    "sources": [
+      "execution/20261027_c_goal42_43_object41_42_43/check_readonly_20261027_221258/light/STARTED.json",
+      "execution/20261027_c_goal42_43_object41_42_43/PROTOCOL.md",
+      "execution/20261027_c_goal42_43_object41_42_43/REPORT.md",
+      "execution/20261027_c_goal42_43_object41_42_43/RUN_STATUS.json"
+    ]
+  },
+  {
+    "id": "20261027_shbr_metrics",
+    "date_label": "2026-10-27 12:27:50本地汇总观察",
+    "start_time_cst": null,
+    "start_basis": "没有可核实的实验启动事件；此目录是本地证据汇总/素材/查新工作，日期只标识工作轮次，不代表新训练开始。",
+    "method": "原MLR+IFA→RA→RA+ALIGN/TASA→旧SHBR汇总",
+    "suite_seeds": "GOAL/OBJECT seed41、42、43",
+    "change": "从已接受完整矩阵复算AUC/FWT/NBT与跨seed样本标准差；没有新训练或回合。",
+    "result": "GOAL AUC均值76.3542→81.9792→81.1111→82.7778%；OBJECT68.2986→73.2292→80.1736→85.0347%。历史基线和S动作随机流/训练交互不等；这是项目复现数据而非原论文表格，不能将阶梯式均值解释为每模块独立因果增益。",
+    "status": "PASS_LOCAL_METRIC_AGGREGATION",
+    "role": "audit",
+    "sources": [
+      "execution/20261027_shbr_metrics/REPORT.md",
+      "execution/20261027_shbr_metrics/RUN_STATUS.json",
+      "execution/20261027_shbr_metrics/METRICS.json"
+    ]
+  }
+]
