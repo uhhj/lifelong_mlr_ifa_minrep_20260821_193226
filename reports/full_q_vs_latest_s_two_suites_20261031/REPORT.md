@@ -1,21 +1,27 @@
+## 2026-10-31 10:28 实际复查
+
+check_readonly_20261031_102748实际审计PASS，095700全部epoch/方向诊断/正式前缀精确保留。GOAL41 Task6/7各100轮，Task8完整5轮，共205/400轮、24825接受与物理生产调用、62自身隔离/30准入autograd、20采集；其余五Q未开始，正式0/1200。新增Task7/8各自29/11准入通过，COPY_EQ实际0/10000/23900通过，Task6与已接受S全部tensor相等。135冻结项不变，controller80131/GPU80137正常，无生产C候选/门控、无重训或新S调用。
+
+Task8前5轮均16.7029秒，余95轮26.4463分钟纯计算；尚未实测Task9按337/185批次比外推50.7107分钟，当前整seed余纯计算参考77.1570分钟。另计旧缓存增加、准备保存、20次后续采集及资源波动，规划85–110分钟；下一90分钟在当前整seed结束附近复查，不固定高频。其余seed和正式未测，不外推全队列完成。TIMING_AUDIT绑定来源SHA和公式。此段覆盖首次30分钟间隔。健康运行无需用户操作，仍PARTIAL。
+
 # 完整Q对最新S：GOAL和OBJECT各三seed
 
-实际观察 2026-10-31T09:57:01.824460+08:00；check_readonly_20261031_095700/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-10-31T10:27:49.659740+08:00；check_readonly_20261031_102748/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
 唯一活动root `/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2`；controller 80131；合同 `562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0`；135冻结项；唯一部署证据 deploy_remote_20261031_095422。禁止重复部署或启动任何controller/prepare/train入口。
 
 |case|完整轮/400|接受=生产物理调用|采集/40|正式/200|
 |---|---:|---:|---:|---:|
-|GOAL_41|19|1900|0|0|
+|GOAL_41|205|24825|20|0|
 |GOAL_42|0|0|0|0|
 |GOAL_43|0|0|0|0|
 |OBJECT_41|0|0|0|0|
 |OBJECT_42|0|0|0|0|
 |OBJECT_43|0|0|0|0|
 
-总19/2400轮、1900/544800生产、4/546隔离、8/246准入autograd、0/240采集、0/1200正式。方向诊断最多216autograd另计。
+总205/2400轮、24825/544800生产、62/546隔离、30/246准入autograd、20/240采集、0/1200正式。方向诊断最多216autograd另计。
 
-下一30分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
+下一90分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
 
 先完整读取PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、FINAL_WRAPPER_REVIEW.json及最新实际EVIDENCE/LOCAL_AUDIT。
 
