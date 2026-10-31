@@ -1,12 +1,14 @@
-## 2026-10-31 16:59 实际复查：GOAL正式580/600
+## 2026-10-31 17:06 实际复查：GOAL600正式完成，OBJECT已自然接续
 
-check_readonly_20261031_165851实际审计PASS，160124全部epoch/方向诊断/正式outcome前缀逐字段精确保留。GOAL三个Q仍各400轮76100生产、40采集；正式GOAL41/42各200/200且evaluate.exit0，GOAL43完成180/200，共580/600。三个seed自己的评估准入实际PASS且0更新/0环境；GOAL43尚在运行，不能称整套件完成。OBJECT三个Q未开始。总1200/2400轮228300/544800生产、273/546隔离、123/246准入autograd、120/240采集、580/1200正式。135冻结项不变，controller80131/evaluate94493健康，无失败、重训或新S调用。
+check_readonly_20261031_170522实际审计PASS，165851全部epoch/方向诊断/正式outcome前缀精确保留。GOAL三Q各400轮76100生产、40采集和200正式，均train_Q.exit0/evaluate.exit0，无GOAL进程；GOAL_EVALUATION_COMPLETE实际600回合。SUITE_TRANSITION_AUDIT独立核验三个末vector均早于套件完成标记，标记早于OBJECT41 dispatch，原套件顺序实际满足。GOAL仍待最终CPU独立验收，不把执行完成称科学接受；该快照保存GOAL全部轻量证据SHA供后续核对。
 
-GOAL43完整18个vector均62.8365秒，近5个均59.9879秒；剩2vector/20回合（包含当前进行中vector）线性约2.00–2.09分钟，计保存调度及波动规划3–6分钟。下一5分钟在整套件正式结束附近复查，核GOAL600及退出后OBJECT自然接续；随后按当前完整seed吞吐调整，不固定短轮询。OBJECT未实测，不按时钟推断完成。全六Q仍PARTIAL，不能提前最终CPU验收。数据泄露与成本边界继续保留。本段覆盖旧60分钟间隔与GOAL20/600进度。
+OBJECT41 Task6完整46/100轮7222生产，自己的4隔离/8准入autograd、初始化/RNG/hardware与对应S一致、COPY_EQ起点0通过；Task6尚未完成，不能提前称最终tensor与S相等，未来阶段须自己的准入。OBJECT42/43未开始。累计1246/2400轮235522/544800生产、277/546隔离、131/246准入autograd、120/240采集、600/1200正式。135冻结项不变，controller80131/OBJECT41 launcher99578/GPU99584健康，无失败/重训/新S调用。
+
+OBJECT41 Task6近10轮均5.5536秒，余54轮约5.00分钟纯计算，保存采集另计。OBJECT保持阶段尚未有自己的实测速率，下一30分钟一次性核首个保持阶段准入与吞吐，之后按当前整seed或整套件正式余时调整，不固定30分钟；不以Task6速度冒充后续保持训练或全队列ETA。整体PARTIAL，最终CPU验收/比较解释发布仍待六Q自然结束，数据泄露与成本边界保留。本段覆盖旧GOAL580/600及5分钟间隔。
 
 # 完整Q对最新S：GOAL和OBJECT各三seed
 
-实际观察 2026-10-31T16:58:52.144451+08:00；check_readonly_20261031_165851/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-10-31T17:05:23.458710+08:00；check_readonly_20261031_170522/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
 唯一活动root `/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2`；controller 80131；合同 `562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0`；135冻结项；唯一部署证据 deploy_remote_20261031_095422。禁止重复部署或启动任何controller/prepare/train入口。
 
@@ -14,14 +16,14 @@ GOAL43完整18个vector均62.8365秒，近5个均59.9879秒；剩2vector/20回�
 |---|---:|---:|---:|---:|
 |GOAL_41|400|76100|40|200|
 |GOAL_42|400|76100|40|200|
-|GOAL_43|400|76100|40|180|
-|OBJECT_41|0|0|0|0|
+|GOAL_43|400|76100|40|200|
+|OBJECT_41|46|7222|0|0|
 |OBJECT_42|0|0|0|0|
 |OBJECT_43|0|0|0|0|
 
-总1200/2400轮、228300/544800生产、273/546隔离、123/246准入autograd、120/240采集、580/1200正式。方向诊断最多216autograd另计。
+总1246/2400轮、235522/544800生产、277/546隔离、131/246准入autograd、120/240采集、600/1200正式。方向诊断最多216autograd另计。
 
-下一5分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
+下一30分钟复查，随后按整seed或整套件正式评估实际余时调整，不固定高频。尚未开始阶段不能套准入或速度。
 
 先完整读取PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、FINAL_WRAPPER_REVIEW.json及最新实际EVIDENCE/LOCAL_AUDIT。
 
