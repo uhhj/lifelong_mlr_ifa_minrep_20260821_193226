@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_TRAINING_OR_EVALUATION",
-  "observation": "2026-10-31T14:23:28.646338+08:00",
+  "observation": "2026-10-31T16:01:25.633915+08:00",
   "counts": {
     "GOAL_41": {
       "epochs": 400,
@@ -9,7 +9,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 20,
       "current": {
         "arm": "Q",
         "stage": 9,
@@ -45,26 +45,23 @@
       "gate_Q_accepts_observed": 0
     },
     "GOAL_43": {
-      "epochs": 161,
-      "accepted_updates": 18479,
-      "physical_optimizer_calls": 18479,
-      "own_isolated_optimizer_calls": 33,
-      "own_extra_autograd_calls": 19,
-      "training_collection_completed_episodes": 10,
+      "epochs": 400,
+      "accepted_updates": 76100,
+      "physical_optimizer_calls": 76100,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
       "formal_episodes": 0,
       "current": {
         "arm": "Q",
-        "stage": 7,
-        "phase": "train",
-        "epoch_complete": 61,
-        "steps": 18479,
-        "physical_optimizer_calls": 18479,
-        "time": 1793427801.0267327,
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1793433419.9165769,
         "pid": 83056
       },
-      "current_stage_epochs": 61,
-      "recent_epoch_mean_seconds": 9.570354986190797,
-      "current_stage_compute_minutes_estimate": 6.220730741024018,
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 31.588828444480896,
+      "current_stage_compute_minutes_estimate": null,
       "gate_blocks_observed": 0,
       "gate_Q_accepts_observed": 0
     },
@@ -114,13 +111,13 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 961,
-  "accepted_updates": 170679,
-  "physical_training_optimizer_calls": 170679,
-  "own_isolated_optimizer_calls": 215,
-  "own_extra_autograd_calls": 101,
-  "training_collection_completed_episodes": 90,
-  "formal_episodes": 0,
+  "epochs": 1200,
+  "accepted_updates": 228300,
+  "physical_training_optimizer_calls": 228300,
+  "own_isolated_optimizer_calls": 273,
+  "own_extra_autograd_calls": 123,
+  "training_collection_completed_episodes": 120,
+  "formal_episodes": 20,
   "failures": {},
   "processes": [
     {
@@ -129,42 +126,37 @@
       "state": "S"
     },
     {
-      "pid": 83051,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/GOAL_43/train.py Q ",
+      "pid": 84324,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/GOAL_41/evaluate.py ",
       "state": "S"
-    },
-    {
-      "pid": 83056,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/GOAL_43/train.py Q ",
-      "state": "R"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1427943424,
+      "free": 1427914752,
       "remaining_bound": 0,
       "reserve": 1073741824,
-      "spare": 354201600
+      "spare": 354172928
     },
     "/data": {
-      "free": 30160285696,
-      "remaining_bound": 6879084544,
+      "free": 29964595200,
+      "remaining_bound": 6684319744,
       "reserve": 2147483648,
-      "spare": 21133717504
+      "spare": 21132791808
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "83056\n",
+    "stdout": "84324\n",
     "stderr": ""
   },
-  "snapshot_sha256": "9bf0482ffd2e272107da19a2370a73be95efbaf9ae497aafd6390bd5a85f4bf1",
+  "snapshot_sha256": "5c15304711e223ebe2f745be2615b211a76562b11a5d8533aacf2454f136d45d",
   "contract": "562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0",
-  "prefix_checked": "execution\\20261031_full_q_vs_latest_s_two_suites\\check_readonly_20261031_121449",
+  "prefix_checked": "execution\\20261031_full_q_vs_latest_s_two_suites\\check_readonly_20261031_142327",
   "root": "/data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2",
   "controller": 80131,
-  "latest_evidence": "check_readonly_20261031_142327",
-  "next_check_minutes": 100,
+  "latest_evidence": "check_readonly_20261031_160124",
+  "next_check_minutes": 60,
   "final_CPU_acceptance": "PENDING",
   "scientific_conclusion": "PENDING_FORMAL_CLOSED_LOOP",
   "primary_reference": "Six existing accepted latest full S; no rerun"
