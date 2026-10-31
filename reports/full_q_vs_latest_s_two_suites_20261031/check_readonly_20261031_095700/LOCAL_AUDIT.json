@@ -1,0 +1,152 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-10-31T09:57:01.824460+08:00",
+  "counts": {
+    "GOAL_41": {
+      "epochs": 19,
+      "accepted_updates": 1900,
+      "physical_optimizer_calls": 1900,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "Q",
+        "stage": 6,
+        "phase": "train",
+        "epoch_complete": 19,
+        "steps": 1900,
+        "physical_optimizer_calls": 1900,
+        "time": 1793411818.626768,
+        "pid": 80137
+      },
+      "current_stage_epochs": 19,
+      "recent_epoch_mean_seconds": 5.119548869132996,
+      "current_stage_compute_minutes_estimate": 6.911390973329544,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "GOAL_42": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "GOAL_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "OBJECT_41": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "OBJECT_42": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "OBJECT_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 19,
+  "accepted_updates": 1900,
+  "physical_training_optimizer_calls": 1900,
+  "own_isolated_optimizer_calls": 4,
+  "own_extra_autograd_calls": 8,
+  "training_collection_completed_episodes": 0,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 80131,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 80132,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/GOAL_41/train.py Q ",
+      "state": "S"
+    },
+    {
+      "pid": 80137,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2/GOAL_41/train.py Q ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1428021248,
+      "remaining_bound": 0,
+      "reserve": 1073741824,
+      "spare": 354279424
+    },
+    "/data": {
+      "free": 31527927808,
+      "remaining_bound": 8243630080,
+      "reserve": 2147483648,
+      "spare": 21136814080
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "80137\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "cbc8c013271d1e1ba5e4726395390123a45791c48bda95ebc9a6539e8f531aad",
+  "contract": "562df309c40f9e05d9c5798667b9e02436d286e2b484813cda08559604d430f0",
+  "prefix_checked": "execution\\20261031_full_q_vs_latest_s_two_suites\\check_readonly_20261031_095517"
+}

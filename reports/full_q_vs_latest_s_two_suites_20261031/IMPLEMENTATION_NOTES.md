@@ -1,0 +1,19 @@
+# 六Q实施与后续验收
+
+用户确认各任务100轮，比较支持度加权保持在有无门控下的完整训练路径。最终定义见PROTOCOL.md。已有六S与六C均已接受，本轮只新增六Q；不得重新运行S、C或旧机制。
+
+当前实际实现位于engineering_startup_v2，活动root以ACTIVE_ROOT.json为准。根目录六case代码是冻结v1历史，不可据其重新部署。v1新增检查误读不存在的a.total_steps，真实失败在setup、准入和首次更新之前；engineering_startup_v2/capacity_readonly_20261031_095052实际核合同、日志、无进程、无CP/恢复文件/轮记录/环境attempt，optimizer和环境均0。v2只将检查表达式改为原start_task实际使用的100*len(loader)，不写入或改变优化器/调度器。原v1失败及源码永久保留。
+
+六Q复用对应已接受S的数学实现、RA、初始化、数据顺序、优化器参数、100轮调度、采集和评估实现；训练入口仅关闭生产双候选门控，每batch一次Q更新。保持项仍逐任务q乘回归及route，分母4，Task6无保持。每stage实际COPY_EQ与各自4/29隔离准入验证；每epoch独立统计AdamW.step，保存恢复不能减少已耗调用。Task6最终tensor须与已接受S一致；后续不要求Q/S状态或缓存相同。
+
+GOAL三seed训练及600正式完成后才开始OBJECT三seed训练及600正式。各run400轮，GOAL76100、OBJECT105500生产调用；共2400轮544800生产，546隔离optimizer、246准入autograd、最多216方向autograd另记，240训练采集、1200正式。Q没有生产C候选或GATES文件。已有S工程诊断不计入Q。
+
+运输沿用20261027_support_gate_forks/.session_control，先读status并核PID，不重启活跃worker、不输出凭据。复制本目录check_readonly.py至运输目录，queue_remote.py check_readonly.py；读result第一行实际证据路径并完整复制回来。audit_progress.py NEW PREVIOUS审核全部原epoch、方向诊断和outcome前缀，再record_progress.py NEW INTERVAL。不能把v1失败快照作为v2前缀，v1单独保留。每次审计按根AGENTS经publish.py审查发布轻量文件，串行非force推MLR并核远端SHA/localreceipt。
+
+首次30分钟核首个保持阶段准入及实测速率，其后按当前整seed训练含采集或本套件全部正式评估余时安排。只对完成、新失败或需行动通知；健康进展静默。异常先核进程、冻结合同、原失败、完整恢复与已耗成本；禁止盲重启部分轮或环境attempt，不改科学预算，不因负结果追加实验。
+
+final_readonly.py与audit_final_local.py是外置CPU包装，当前仅STATIC_ONLY。必须自然v2 controller.exit0且无自身进程后实际运行：24CP严格加载、6完整恢复含RNG/优化器/scheduler/模式、24缓存teacher逐条重放、1200初态/noise、全部阶段接受及物理调用和固定探针核算。此检查0optimizer/0环境，不重训重评。生成器prepare_final_local.py只生成本地外置包装，不可重新运行prepare_local/deploy/controller。
+
+最终依次audit_final_local.py FINAL、compare_primary_s.py FINAL，核1200回合初态/noise/env_seed/attempt完全配对、六S接受文件SHA未变、Task6全部tensor一致。比较须验证Q/S各stage接受更新相等，Task7–9的S物理调用为Q两倍，自身准入相同；两者各240训练采集但缓存内容可能不同。
+
+最终报告FINAL_REPORT.md须解释两套件各seed、新任务对角/旧任务保持、SF/FS逐回合差异、所有S相对Q负单元、训练BC/执行误差/保持梯度方向与闭环是否一致。探针是训练数据、门控接受率不是闭环收益；不得仅自动均值推断显著性或单步机制因果。Q/S同接受更新和采集次数，不同optimizer/FLOPs/墙钟及自身缓存；三个开发seed并非独立确认集。完成实际验收、人工解释、ACCEPTANCE/RUN_STATUS与发布后，才删除新Q监控。

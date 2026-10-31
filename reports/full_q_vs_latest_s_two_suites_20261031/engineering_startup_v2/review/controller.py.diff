@@ -1,0 +1,11 @@
+--- v1/controller.py
++++ v2/controller.py
+@@ -5,7 +5,7 @@
+ def write(n,x):
+  p=R/n;q=p.with_suffix(p.suffix+'.tmp');q.write_text(json.dumps(x,indent=2));os.replace(q,p)
+ def main():
+- lock=open('/data/mlr_ifa/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v1.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
++ lock=open('/data/mlr_ifa/FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  assert not (R/'STARTED.json').exists();write('STARTED.json',dict(time=time.time(),pid=os.getpid()))
+  for suite in ['GOAL','OBJECT']:
+   if suite=='OBJECT':assert (R/'GOAL_EVALUATION_COMPLETE.json').exists()

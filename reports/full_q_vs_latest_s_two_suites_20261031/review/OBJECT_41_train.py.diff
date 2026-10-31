@@ -1,0 +1,82 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261028_support_gate_full_s_object\seed41\train.py
++++ OBJECT_41/train.py
+@@ -64,14 +64,17 @@
+             binding={str(t):dict(cache_sha256=sha(memory_path(arm,t)),source_sha256=memory[t]['source_sha256'],count=len(memory[t]['rows']),support=memory[t]['support'],support_trajectories=memory[t]['support_trajectories']) for t in memory}
+             write(R/('TRAIN_INPUT_%s_%d.json'%(arm,stage)),dict(status='PASS_FROZEN_INPUT',manifest_sha256=sha(O/('ra_coreset/dataset_manifests/task%d.json'%stage)),scale=scale.tolist(),memory=binding,sampling='cyclic task slots; stateless independent RandomState per step/slot; empty tasks contribute zero'))
+             pr=setup_probes(ds,memory) if stage>6 else None
++            set_count_mode('admission');admission_before=CALLS['admission']
+             if stage==6:
+                 admit(arm,stage,ds,a,memory,scale,info)
+             else:
+                 write(R/('PROBES_%d.json'%stage),pr['metadata'])
+                 gate_admission.STAGE=stage
+-                own=gate_admission.admission(a,ds,memory,scale,info,pr,'G')
++                own=gate_admission.admission(a,ds,memory,scale,info,pr,'Q')
+                 assert own['optimizer_calls']==29 and own['extra_autograd_calls']==11
+-                write(R/('ADMISSION_%s_%d.json'%(arm,stage)),dict(arm=arm,stage=stage,method='support_gate_full_S',contract=verify(),**own))
++                write(R/('ADMISSION_%s_%d.json'%(arm,stage)),dict(arm=arm,stage=stage,method='support_weighted_Q_no_gate',contract=verify(),**own))
++            assert CALLS['admission']-admission_before==(4 if stage==6 else 29)
++            set_count_mode('production')
+             for ep in range(100):
+                 capacity();sampler.set_epoch(ep);order=list(iter(sampler));a.policy.train();tic=time.time();lr=a.optimizer.param_groups[0]['lr'];measured=False
+                 tot={k:0. for k in ['loss','bc','ifa','expert_loss','expert_route','retain_loss','retain_route','valid','invalid','old_eligible','anchor_slots','anchor_actual','anchor_empty','anchor_forwards']}
+@@ -87,31 +90,19 @@
+                         if dg is not None:
+                             measured=True;gradients.append(dict(stage=stage,epoch=ep,batch=bi,steps=a.step,**dg));write(R/('GRADIENTS_'+arm+'.json'),gradients)
+                     if stage>6:
+-                        base=capture(a)
+-                        crows=[update(a,b,'C',memory,scale,info,stage,retain_weight=0.) for b in block]
+-                        cstate=capture(a);cv=probe(a,pr,memory)
+-                        restore(a,base)
+-                        qrows=[update(a,b,'Q',memory,scale,info,stage) for b in block]
+-                        qstate=capture(a);qv=probe(a,pr,memory)
+-                        decision,checks=choose(cv,qv);selected=cstate if decision=='C' else qstate
+-                        restore(a,selected);assert equal(selected,capture(a))
+-                        rows=crows if decision=='C' else qrows
+-                        gate=dict(stage=stage,epoch=ep,batch=bi,steps=len(block),start_step=base['step'],end_step=a.step,C=cv,Q=qv,accepted=decision,checks=checks)
+-                        gates.append(gate)
+-                        with (R/'GATES.jsonl').open('a') as f:f.write(json.dumps(gate)+'\n')
+-                        if decision=='Q':retained_steps+=len(block)
+-                        physical+=2*len(block)
+-                        del base,cstate,qstate,selected
++                        rows=[update(a,b,'Q',memory,scale,info,stage) for b in block]
++                        retained_steps+=len(block);physical+=len(block)
+                     else:
+                         rows=[update(a,block[0],arm,memory,scale,info,stage)]
+                         physical+=1
+                     for st in rows:
+                         for k in tot:tot[k]+=st[k]
+                     bi+=len(block)
+-                assert bi==len(loader)
++                assert bi==len(loader) and CALLS['production']==physical==a.step
++                assert len(gates)==0 and not (R/'GATES.jsonl').exists()
+                 assert tot['valid']==VALID[stage] and tot['invalid']==POP[stage]-VALID[stage] and tot['old_eligible']==OLD[stage]
+                 assert tot['anchor_slots']==4*retained_steps and tot['anchor_slots']==tot['anchor_actual']+tot['anchor_empty']
+-                row=dict(stage=stage,epoch=ep,steps=a.step,batches=len(loader),seconds=time.time()-tic,lr_first=lr,lr_after=a.optimizer.param_groups[0]['lr'],sampler_sha256=hashlib.sha256(np.array(order,dtype=np.int64).tobytes()).hexdigest(),totals=tot,physical_optimizer_calls=physical,gate_blocks=len(gates),gate_Q_accepts=sum(g['accepted']=='Q' for g in gates),training_probe=probe(a,pr,memory) if pr else None)
++                row=dict(stage=stage,epoch=ep,steps=a.step,batches=len(loader),seconds=time.time()-tic,lr_first=lr,lr_after=a.optimizer.param_groups[0]['lr'],sampler_sha256=hashlib.sha256(np.array(order,dtype=np.int64).tobytes()).hexdigest(),totals=tot,physical_optimizer_calls=physical,physical_calls_observed=dict(CALLS),gate_blocks=len(gates),gate_Q_accepts=sum(g['accepted']=='Q' for g in gates),training_probe=probe(a,pr,memory) if pr else None)
+                 history.append(row);state=capture(a)
+                 save(dest/'recovery.pth',dict(state=state,state_dict=state['model'],stage=stage,next_epoch=ep+1,steps=a.step,retention_sampling_cursor=a.step,contract=verify(),memory_bindings=binding,manifest_sha256=sha(O/('ra_coreset/dataset_manifests/task%d.json'%stage)),history=history,physical_optimizer_calls=physical,probe_sha256=sha(R/('PROBES_%d.json'%stage)) if pr else None,gate_blocks=len(gates)))
+                 write(R/('EPOCHS_'+arm+'.json'),history);write(R/'TRAIN_STATUS.json',dict(arm=arm,stage=stage,phase='train',epoch_complete=ep+1,steps=a.step,physical_optimizer_calls=physical,time=time.time(),pid=os.getpid()));print(json.dumps(dict(arm=arm,**row)),flush=True)
+@@ -120,7 +111,9 @@
+             else:save(target,dict(state_dict=cpu(a.policy.state_dict()),stage=stage,epoch=99,steps=a.step,contract=verify(),memory_bindings=binding))
+             if stage==6:
+                 baseline=torch.load(O/'ra_coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];actual=cpu(a.policy.state_dict())
+-                write(R/('TASK6_PARITY_'+arm+'.json'),dict(historical_ALIGN_equal=equal(actual,baseline),historical_equality_gate=False,actual_sha256=sha(target),historical_ALIGN_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),same_seed_new_arm_comparator='NOT_RUN_SINGLE_S'))
++                sr=js(R/'S_REFERENCE.json')['stage6_checkpoint'];assert sha(sr['path'])==sr['sha256']
++                assert equal(actual,torch.load(sr['path'],map_location='cpu')['state_dict']),'Task6 accepted S tensor mismatch'
++                write(R/('TASK6_PARITY_'+arm+'.json'),dict(historical_ALIGN_equal=equal(actual,baseline),historical_equality_gate=False,actual_sha256=sha(target),historical_ALIGN_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),same_seed_new_arm_comparator='ACCEPTED_S_ALL_TENSORS_EXACT',accepted_S_cp_sha256=sr['sha256']))
+             write(R/('STAGE_%s_%d.json'%(arm,stage)),dict(status='PASS_TRAINING_PENDING_FINAL',model=str(target),sha256=sha(target),steps=a.step,epochs=100,stage=stage,memory_bindings=binding))
+             before=capture(a);subenv=dict(os.environ)
+             for k in ['RANK','WORLD_SIZE','LOCAL_RANK','LOCAL_WORLD_SIZE','MASTER_ADDR','MASTER_PORT','GROUP_RANK','ROLE_RANK','ROLE_WORLD_SIZE']:subenv.pop(k,None)
+@@ -131,8 +124,9 @@
+             assert equal(before,capture(a)),'Collection changed parent training state/RNG'
+             write(R/('COLLECTION_STATE_PARITY_%s_%d.json'%(arm,stage)),dict(status='PASS',parent_all_state_exact=True,memory_sha256=sha(memory_path(arm,stage)),environments=10))
+             del before
+-        assert a.step==105500 and len(history)==400 and physical==195300 and len(gates)==9100
+-        write(R/('TRAIN_'+arm+'.json'),dict(status='PASS_EXECUTION_PENDING_FINAL',epochs=400,steps=a.step,physical_optimizer_calls=physical,gate_blocks=len(gates),Q_accepts=sum(g['accepted']=='Q' for g in gates),summed_epoch_seconds=sum(x['seconds'] for x in history),gradient_autograd_calls=sum(x['extra_autograd_calls'] for x in gradients),training_collection_episodes=40,checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))
++        assert a.step==TOTAL_UPDATES and len(history)==400 and physical==TOTAL_UPDATES and not gates
++        assert CALLS=={'production':TOTAL_UPDATES,'admission':91}
++        write(R/('TRAIN_'+arm+'.json'),dict(status='PASS_EXECUTION_PENDING_FINAL',epochs=400,steps=a.step,physical_optimizer_calls=physical,physical_calls_observed=dict(CALLS),gate_blocks=len(gates),Q_accepts=sum(g['accepted']=='Q' for g in gates),summed_epoch_seconds=sum(x['seconds'] for x in history),gradient_autograd_calls=sum(x['extra_autograd_calls'] for x in gradients),training_collection_episodes=40,checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))
+     finally:dist.destroy_process_group()
+ 
+ if __name__=='__main__':main()

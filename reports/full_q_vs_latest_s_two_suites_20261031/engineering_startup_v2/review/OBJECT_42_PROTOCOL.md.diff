@@ -1,0 +1,11 @@
+--- v1/OBJECT_42/PROTOCOL.md
++++ v2/OBJECT_42/PROTOCOL.md
+@@ -10,7 +10,7 @@
+ 
+ GOAL三seed训练→GOAL三seed正式评估→OBJECT三seed训练→OBJECT三seed正式评估。每阶段独立准入；实际初始化/RNG/hardware与对应已接受S绑定，Task6全tensor精确对比S。复用已验真的CPU复制优化，每stage实际COPY_EQ对原完整状态比较。计数器独立记录物理AdamW.step，恢复不能抹去已耗调用。
+ 
+-新独立root FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v1；不运行旧入口，不覆盖旧结果，不恢复已取消机制。逐epoch完整保存，任何失败先核进程、合同、已保存轮、完整状态及原失败成本；禁止盲重启部分轮或环境attempt。无负结果重试/选优/扩seed/扫参。容量按8GiB新输出峰值预留、root普通1GiB、data2GiB，不删除旧资产或付费。
++新独立root FULL_Q_NO_GATE_GOAL_OBJECT_20261031_v2；不运行旧入口，不覆盖旧结果，不恢复已取消机制。逐epoch完整保存，任何失败先核进程、合同、已保存轮、完整状态及原失败成本；禁止盲重启部分轮或环境attempt。无负结果重试/选优/扩seed/扫参。容量按8GiB新输出峰值预留、root普通1GiB、data2GiB，不删除旧资产或付费。
+ 
+ 最终自然controller.exit0且无自身进程后，真实CPU验收24阶段CP、6完整恢复、24成功缓存teacher重放、1200实际初态/noise、全部逐轮账目与每stage预算；再与已有S逐回合配对，解释新旧任务、SF/FS、全部负单元及成本边界。Q/S同采集次数和接受更新数，不同缓存内容、物理调用、FLOPs或墙钟；既有开发seed非独立确认集。未实际验收前均PARTIAL。
+ 

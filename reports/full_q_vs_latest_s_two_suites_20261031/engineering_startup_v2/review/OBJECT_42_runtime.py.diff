@@ -1,0 +1,15 @@
+--- v1/OBJECT_42/runtime.py
++++ v2/OBJECT_42/runtime.py
+@@ -63,9 +63,9 @@
+  sampler=torch.utils.data.DistributedSampler(ds,num_replicas=1,rank=0,shuffle=True,seed=0)
+  loader=torch.utils.data.DataLoader(ds,batch_size=10,sampler=sampler,num_workers=0,persistent_workers=False)
+  a.start_task(-1,loader);a.refs={}
+- assert a.cfg.train.n_epochs==100 and a.total_steps==100*len(loader)
+- fn=a.scheduler.lr_lambdas[0];assert fn(0)==0 and fn(500)==1 and fn(a.total_steps)==0 and fn(a.total_steps-1)>0
+- write(R/('SCHEDULE_Q_%d.json'%ds.stage),dict(status='PASS_ACTUAL_SCHEDULE',epochs=100,batches=len(loader),total_steps=a.total_steps,warmup_steps=500))
++ assert a.cfg.train.n_epochs==100 and not hasattr(a,'total_steps')
++ fn=a.scheduler.lr_lambdas[0];assert fn(0)==0 and fn(500)==1 and fn((100*len(loader)))==0 and fn((100*len(loader))-1)>0
++ write(R/('SCHEDULE_Q_%d.json'%ds.stage),dict(status='PASS_ACTUAL_SCHEDULE',epochs=100,batches=len(loader),total_steps=(100*len(loader)),warmup_steps=500))
+  for t in range(6,ds.stage+1):
+   i=next(i for i,r in enumerate(ds.rows) if r['task']==t)
+   f=ds.native[i][0]['feature'][0,:,0,:];a.refs[t]=f[0].cuda()
