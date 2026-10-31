@@ -1,0 +1,457 @@
+{
+  "status": "SOURCE_REVIEW_AND_CAUSAL_LABEL_METADATA_CHECK",
+  "sources": {
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\seed41\\train.py": {
+      "sha256": "6fbc18c17a5769bdd7a158b4c37027ee5763ad7f23302c8875b9ca94a4c33d41",
+      "relevant_lines": [
+        {
+          "line": 6,
+          "text": "from fork_tools import setup_probes,probe,choose,directional_diagnostic"
+        },
+        {
+          "line": 60,
+          "text": "for stage in range(6,10):"
+        },
+        {
+          "line": 66,
+          "text": "pr=setup_probes(ds,memory) if stage>6 else None"
+        },
+        {
+          "line": 96,
+          "text": "decision,checks=choose(cv,qv);selected=cstate if decision=='C' else qstate"
+        },
+        {
+          "line": 118,
+          "text": "target=model_path(arm,stage);assert not target.exists()"
+        },
+        {
+          "line": 127,
+          "text": "write(R/'TRAIN_STATUS.json',dict(arm=arm,stage=stage,phase='training_collection',time=time.time(),pid=os.getpid()))"
+        },
+        {
+          "line": 135,
+          "text": "write(R/('TRAIN_'+arm+'.json'),dict(status='PASS_EXECUTION_PENDING_FINAL',epochs=400,steps=a.step,physical_optimizer_calls=physical,gate_blocks=len(gates),Q_accepts=sum(g['accepted']=='Q' for g in gates),summed_epoch_seconds=sum(x['seconds'] for x in history),gradient_autograd_calls=sum(x['extra_autograd_calls'] for x in gradients),training_collection_episodes=40,checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\seed41\\collect.py": {
+      "sha256": "4224c60e2503db473ab66bcbae6c5fcff2d2ead09e04837e8c2c1fda85d77ebe",
+      "relevant_lines": [
+        {
+          "line": 12,
+          "text": "@torch.no_grad()"
+        },
+        {
+          "line": 15,
+          "text": "assert taskid in range(6,10);verify();capacity()"
+        },
+        {
+          "line": 19,
+          "text": "c.shape_meta=shape;front=complete(c,shape).eval().requires_grad_(False);policy=load(arm,taskid,c,shape)"
+        },
+        {
+          "line": 20,
+          "text": "cp=sha(model_path(arm,taskid));instr,mask=b.get_task_emb(taskid);task=b.get_task(taskid)"
+        },
+        {
+          "line": 23,
+          "text": "indices=list(range(20,30));assert all(ah(np.asarray(initials[i]))==split['training'][str(i)] for i in indices)"
+        },
+        {
+          "line": 57,
+          "text": "row=dict(feature=x[j].detach().cpu().clone(),mu=mu[j,mode[j]].detach().cpu().clone(),sd=sd[j,mode[j]].detach().cpu().clone(),task=taskid,trajectory=j,initial_index=indices[j],step=step,length=len(hist),mode=int(mode[j]),source='online')"
+        },
+        {
+          "line": 64,
+          "text": "outcomes=[dict(arm=arm,task=taskid,initial_index=i,initial_sha256=ah(np.asarray(initials[i])),initial_file_sha256=sha(path),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp,success=bool(done[j]),steps=int(end[j]),env_seed=SEED+100,attempt=1,termination='success' if done[j] else 'timeout600',purpose='training_collection_not_formal_evaluation') for j,i in enumerate(indices)]"
+        },
+        {
+          "line": 66,
+          "text": "write(R/('COLLECTION_OUTCOMES_'+key+'.json'),outcomes)"
+        },
+        {
+          "line": 78,
+          "text": "rows.append(dict(feature=feature.clone(),mu=q[0][0,k].cpu(),sd=q[1][0,k].cpu(),task=taskid,trajectory=j,demo=demo,u=ds.rows[i]['u'],source_index=i,source_sha256=ds.rows[i]['sample_sha256'],length=len(feature),mode=k,source='demonstration'))"
+        },
+        {
+          "line": 81,
+          "text": "assert len(rows)<=MEMORY_PER_TASK and sum(len(torch.load(memory_path(arm,t),map_location='cpu')['rows']) for t in range(6,taskid))+len(rows)<=512"
+        },
+        {
+          "line": 90,
+          "text": "write(R/('MEMORY_'+key+'.json'),dict(status='PASS_FROZEN_ACQUISITION_MEMORY',arm=arm,task=taskid,count=len(rows),limit=MEMORY_PER_TASK,rows=meta,scales=scales.tolist(),source_sha256=cp,cache_sha256=sha(p),collection_outcomes_sha256=sha(R/('COLLECTION_OUTCOMES_'+key+'.json')),collection_successes=int(done.sum()),training_attempts=10,online_frontend_calls=calls,online_policy_calls=parameter_calls,demonstration_policy_calls=extra_calls,parity_frontend_calls=16,parity_policy_calls=16,seconds=time.monotonic()-tic,optimizer_updates=0,terminal_task_unused_for_future_training=taskid==9))"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\seed41\\evaluate.py": {
+      "sha256": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+      "relevant_lines": [
+        {
+          "line": 12,
+          "text": "p=BriefPolicy(copy.deepcopy(c),shape).cuda().eval().requires_grad_(False)"
+        },
+        {
+          "line": 13,
+          "text": "sd=torch.load(model_path(arm,stage),map_location='cpu')['state_dict'];sd={(k[7:] if k.startswith('module.') else k):v for k,v in sd.items()}"
+        },
+        {
+          "line": 18,
+          "text": "@torch.no_grad()"
+        },
+        {
+          "line": 22,
+          "text": "front=complete(c,shape).eval().requires_grad_(False);instr,mask=b.get_task_emb(8)"
+        },
+        {
+          "line": 34,
+          "text": "for stage in range(6,10):"
+        },
+        {
+          "line": 35,
+          "text": "p=load(arm,stage,c,shape);cp_sha=sha(model_path(arm,stage))"
+        },
+        {
+          "line": 36,
+          "text": "for taskid in range(6,stage+1):"
+        },
+        {
+          "line": 58,
+          "text": "records.extend(batch);write(R/'outcomes'/(run+'.json'),batch);write(R/'OUTCOMES.json',records)"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\seed41\\runtime.py": {
+      "sha256": "13ef5269bb8012041ad9738b83ebdca25a96f9cdb4deb529163b3f23881d9580",
+      "relevant_lines": [
+        {
+          "line": 41,
+          "text": "for t in range(6,stage):"
+        },
+        {
+          "line": 66,
+          "text": "for t in range(6,ds.stage+1):"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\seed41\\support_memory.py": {
+      "sha256": "b48009354c765a30c0f3c2c4a508c6df08360607c135636d417e940a638bab16",
+      "relevant_lines": []
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261029_support_gate_full_s_goal\\seed41\\fork_tools.py": {
+      "sha256": "963ac6ba68628ca89da3735648a8515298f4f1ee3daafac16bb982494d0fa1ec",
+      "relevant_lines": [
+        {
+          "line": 17,
+          "text": "def setup_probes(ds,memory):"
+        },
+        {
+          "line": 28,
+          "text": "meta=dict(new_indices=chosen,old_indices=old,new_scale=sc.tolist(),support=weights(memory,'Q'),support_trajectories={str(t):m['support_trajectories'] for t,m in memory.items()},new_population=len(ids),source='TRAINING_ONLY_FIXED_NOT_VALIDATION')"
+        },
+        {
+          "line": 38,
+          "text": "@torch.no_grad()"
+        },
+        {
+          "line": 54,
+          "text": "def choose(c,q):"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261030_equal_optimizer_budget_cs_two_suites\\GOAL_41\\train.py": {
+      "sha256": "f8d8c6cea03046397bb703976c91f32a361a28080e914a6d313b904a3be017b6",
+      "relevant_lines": [
+        {
+          "line": 9,
+          "text": "saved=rng();modes={n:m.training for n,m in a.policy.named_modules()};tic=time.time();teacher=copy.deepcopy(a.policy.module).eval().requires_grad_(False);cache={}"
+        },
+        {
+          "line": 10,
+          "text": "source=model_path(arm,stage-1);previous=torch.load(source,map_location='cpu')['state_dict']"
+        },
+        {
+          "line": 85,
+          "text": "ref=js(R/'S_REFERENCE.json');prior=js(ref['INITIAL_S.json']['path']);assert sha(ref['INITIAL_S.json']['path'])==ref['INITIAL_S.json']['sha256']"
+        },
+        {
+          "line": 116,
+          "text": "target=model_path(arm,stage);target.parent.mkdir(parents=True,exist_ok=True);assert not target.exists()"
+        },
+        {
+          "line": 121,
+          "text": "actual=cpu(a.policy.state_dict());reference=actual if arm=='C' else torch.load(model_path('C',6),map_location='cpu')['state_dict']"
+        },
+        {
+          "line": 123,
+          "text": "sr=js(R/'S_REFERENCE.json')['stage6_checkpoint'];assert sha(sr['path'])==sr['sha256']"
+        },
+        {
+          "line": 126,
+          "text": "write(R/('TASK6_PARITY_'+arm+'.json'),dict(historical_ALIGN_equal=same,historical_equality_gate=False,historical_max_abs=max(float((actual[k].double()-baseline[k].double()).abs().max()) for k in actual),same_device_C_equal=same_device,source_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),actual_sha256=sha(target),current_C_sha256=sha(model_path('C',6))))"
+        },
+        {
+          "line": 129,
+          "text": "write(R/('TRAIN_'+arm+'.json'),dict(status='PASS',epochs=700,steps=a.step,physical_optimizer_calls=CALLS['production'],isolated_optimizer_calls=CALLS['admission'],summed_epoch_seconds=sum(r['seconds'] for r in history),gradient_autograd_calls=sum(r['extra_autograd_calls'] for r in gradients),checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261030_equal_optimizer_budget_cs_two_suites\\GOAL_41\\evaluate.py": {
+      "sha256": "6689b81f15fae45216764f22622e4b00e37ecd05addc3a5128020ae16cc1fae8",
+      "relevant_lines": [
+        {
+          "line": 12,
+          "text": "p=BriefPolicy(copy.deepcopy(c),shape).cuda().eval().requires_grad_(False)"
+        },
+        {
+          "line": 13,
+          "text": "sd=torch.load(model_path(arm,stage),map_location='cpu')['state_dict'];sd={(k[7:] if k.startswith('module.') else k):v for k,v in sd.items()}"
+        },
+        {
+          "line": 18,
+          "text": "@torch.no_grad()"
+        },
+        {
+          "line": 22,
+          "text": "front=complete(c,shape).eval().requires_grad_(False);instr,mask=b.get_task_emb(8)"
+        },
+        {
+          "line": 34,
+          "text": "for stage in range(6,10):"
+        },
+        {
+          "line": 35,
+          "text": "p=load(arm,stage,c,shape);cp_sha=sha(model_path(arm,stage))"
+        },
+        {
+          "line": 36,
+          "text": "for taskid in range(6,stage+1):"
+        },
+        {
+          "line": 58,
+          "text": "records.extend(batch);write(R/'outcomes'/(run+'.json'),batch);write(R/'OUTCOMES.json',records)"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\engineering_startup_v2\\GOAL_41\\train.py": {
+      "sha256": "a2dbb72d1aacd0249ff47838c628646120bdf4c712806e1a0c9f815076a26d02",
+      "relevant_lines": [
+        {
+          "line": 6,
+          "text": "from fork_tools import setup_probes,probe,choose,directional_diagnostic"
+        },
+        {
+          "line": 60,
+          "text": "for stage in range(6,10):"
+        },
+        {
+          "line": 66,
+          "text": "pr=setup_probes(ds,memory) if stage>6 else None"
+        },
+        {
+          "line": 109,
+          "text": "target=model_path(arm,stage);assert not target.exists()"
+        },
+        {
+          "line": 114,
+          "text": "sr=js(R/'S_REFERENCE.json')['stage6_checkpoint'];assert sha(sr['path'])==sr['sha256']"
+        },
+        {
+          "line": 120,
+          "text": "write(R/'TRAIN_STATUS.json',dict(arm=arm,stage=stage,phase='training_collection',time=time.time(),pid=os.getpid()))"
+        },
+        {
+          "line": 129,
+          "text": "write(R/('TRAIN_'+arm+'.json'),dict(status='PASS_EXECUTION_PENDING_FINAL',epochs=400,steps=a.step,physical_optimizer_calls=physical,physical_calls_observed=dict(CALLS),gate_blocks=len(gates),Q_accepts=sum(g['accepted']=='Q' for g in gates),summed_epoch_seconds=sum(x['seconds'] for x in history),gradient_autograd_calls=sum(x['extra_autograd_calls'] for x in gradients),training_collection_episodes=40,checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\engineering_startup_v2\\GOAL_41\\initialization.py": {
+      "sha256": "da297f036c3fd7fd963a026c8ee65efd89fa23ca2f719f2ab89c9fb412a16f02",
+      "relevant_lines": [
+        {
+          "line": 10,
+          "text": "ref=js(R/'S_REFERENCE.json')['INITIAL_S.json'];assert sha(ref['path'])==ref['sha256'];old=js(ref['path'])"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\engineering_startup_v2\\GOAL_41\\collect.py": {
+      "sha256": "4224c60e2503db473ab66bcbae6c5fcff2d2ead09e04837e8c2c1fda85d77ebe",
+      "relevant_lines": [
+        {
+          "line": 12,
+          "text": "@torch.no_grad()"
+        },
+        {
+          "line": 15,
+          "text": "assert taskid in range(6,10);verify();capacity()"
+        },
+        {
+          "line": 19,
+          "text": "c.shape_meta=shape;front=complete(c,shape).eval().requires_grad_(False);policy=load(arm,taskid,c,shape)"
+        },
+        {
+          "line": 20,
+          "text": "cp=sha(model_path(arm,taskid));instr,mask=b.get_task_emb(taskid);task=b.get_task(taskid)"
+        },
+        {
+          "line": 23,
+          "text": "indices=list(range(20,30));assert all(ah(np.asarray(initials[i]))==split['training'][str(i)] for i in indices)"
+        },
+        {
+          "line": 57,
+          "text": "row=dict(feature=x[j].detach().cpu().clone(),mu=mu[j,mode[j]].detach().cpu().clone(),sd=sd[j,mode[j]].detach().cpu().clone(),task=taskid,trajectory=j,initial_index=indices[j],step=step,length=len(hist),mode=int(mode[j]),source='online')"
+        },
+        {
+          "line": 64,
+          "text": "outcomes=[dict(arm=arm,task=taskid,initial_index=i,initial_sha256=ah(np.asarray(initials[i])),initial_file_sha256=sha(path),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp,success=bool(done[j]),steps=int(end[j]),env_seed=SEED+100,attempt=1,termination='success' if done[j] else 'timeout600',purpose='training_collection_not_formal_evaluation') for j,i in enumerate(indices)]"
+        },
+        {
+          "line": 66,
+          "text": "write(R/('COLLECTION_OUTCOMES_'+key+'.json'),outcomes)"
+        },
+        {
+          "line": 78,
+          "text": "rows.append(dict(feature=feature.clone(),mu=q[0][0,k].cpu(),sd=q[1][0,k].cpu(),task=taskid,trajectory=j,demo=demo,u=ds.rows[i]['u'],source_index=i,source_sha256=ds.rows[i]['sample_sha256'],length=len(feature),mode=k,source='demonstration'))"
+        },
+        {
+          "line": 81,
+          "text": "assert len(rows)<=MEMORY_PER_TASK and sum(len(torch.load(memory_path(arm,t),map_location='cpu')['rows']) for t in range(6,taskid))+len(rows)<=512"
+        },
+        {
+          "line": 90,
+          "text": "write(R/('MEMORY_'+key+'.json'),dict(status='PASS_FROZEN_ACQUISITION_MEMORY',arm=arm,task=taskid,count=len(rows),limit=MEMORY_PER_TASK,rows=meta,scales=scales.tolist(),source_sha256=cp,cache_sha256=sha(p),collection_outcomes_sha256=sha(R/('COLLECTION_OUTCOMES_'+key+'.json')),collection_successes=int(done.sum()),training_attempts=10,online_frontend_calls=calls,online_policy_calls=parameter_calls,demonstration_policy_calls=extra_calls,parity_frontend_calls=16,parity_policy_calls=16,seconds=time.monotonic()-tic,optimizer_updates=0,terminal_task_unused_for_future_training=taskid==9))"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\engineering_startup_v2\\GOAL_41\\evaluate.py": {
+      "sha256": "ad70601c61b93d5da13ec19712c0502b0b9f4596d59263ae547236a392506e7f",
+      "relevant_lines": [
+        {
+          "line": 12,
+          "text": "p=BriefPolicy(copy.deepcopy(c),shape).cuda().eval().requires_grad_(False)"
+        },
+        {
+          "line": 13,
+          "text": "sd=torch.load(model_path(arm,stage),map_location='cpu')['state_dict'];sd={(k[7:] if k.startswith('module.') else k):v for k,v in sd.items()}"
+        },
+        {
+          "line": 18,
+          "text": "@torch.no_grad()"
+        },
+        {
+          "line": 22,
+          "text": "front=complete(c,shape).eval().requires_grad_(False);instr,mask=b.get_task_emb(8)"
+        },
+        {
+          "line": 34,
+          "text": "for stage in range(6,10):"
+        },
+        {
+          "line": 35,
+          "text": "p=load(arm,stage,c,shape);cp_sha=sha(model_path(arm,stage))"
+        },
+        {
+          "line": 36,
+          "text": "for taskid in range(6,stage+1):"
+        },
+        {
+          "line": 58,
+          "text": "records.extend(batch);write(R/'outcomes'/(run+'.json'),batch);write(R/'OUTCOMES.json',records)"
+        }
+      ]
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261031_full_q_vs_latest_s_two_suites\\engineering_startup_v2\\GOAL_41\\support_memory.py": {
+      "sha256": "b48009354c765a30c0f3c2c4a508c6df08360607c135636d417e940a638bab16",
+      "relevant_lines": []
+    },
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261019_ra_object_conditional\\source\\README.md": {
+      "sha256": "626ee6df9e904ae4adad23f2c043d0f977d2fa6754173eea3089bfb7cbbf3133",
+      "pretraining_release_caveat_lines": [
+        {
+          "line": 33,
+          "text": "The multitask pretraining code and full LIBERO-50 support will be uploaded later."
+        },
+        {
+          "line": 35,
+          "text": "## Pretrained Models"
+        },
+        {
+          "line": 37,
+          "text": "The pretrained multitask checkpoints are available on Google Drive:"
+        },
+        {
+          "line": 39,
+          "text": "[Download pretrained models](https://drive.google.com/drive/folders/1NOiyhkb1Hni_ElhqcN7GkiXnfCqOKiSH)"
+        },
+        {
+          "line": 119,
+          "text": "- [ ] Upload multitask pretraining scripts."
+        }
+      ]
+    }
+  },
+  "labels": {
+    "GOAL_6": {
+      "rows": 917,
+      "valid_rows": 917,
+      "causal_order_violations": [],
+      "metadata_sha256": "a531a440d99248ac83d6b02c8d3a587c7016dee006211f9e22c4b4647d9d58b1"
+    },
+    "GOAL_7": {
+      "rows": 809,
+      "valid_rows": 809,
+      "causal_order_violations": [],
+      "metadata_sha256": "eb73f2bc7723ac44b33a9fdedfd83379820f9103f5e3231e60e3ef5b2f04e9b6"
+    },
+    "GOAL_8": {
+      "rows": 824,
+      "valid_rows": 824,
+      "causal_order_violations": [],
+      "metadata_sha256": "f177890e805f0d0da6a3e94bdd53309ee58d1b7f67dd527f9576f6fb055e2cad"
+    },
+    "GOAL_9": {
+      "rows": 1889,
+      "valid_rows": 1889,
+      "causal_order_violations": [],
+      "metadata_sha256": "2831f53e7c9e7359eea168bac71e6751f5cb8e9d07ede866eca9c19c4a20f14b"
+    },
+    "OBJECT_6": {
+      "rows": 1482,
+      "valid_rows": 1482,
+      "causal_order_violations": [],
+      "metadata_sha256": "bbc778462b7747881cf7023a3ad916cff7a77053e23399010d62e6633e09201c"
+    },
+    "OBJECT_7": {
+      "rows": 1400,
+      "valid_rows": 1400,
+      "causal_order_violations": [],
+      "metadata_sha256": "6577c0e5837eabcb101367841336c5703cb2187abd179616ff94946f84b2da1b"
+    },
+    "OBJECT_8": {
+      "rows": 1480,
+      "valid_rows": 1480,
+      "causal_order_violations": [],
+      "metadata_sha256": "a5296f5836f258d4665f9166b146707bcbb13d640118490b42417258cc159467"
+    },
+    "OBJECT_9": {
+      "rows": 1239,
+      "valid_rows": 1239,
+      "causal_order_violations": [],
+      "metadata_sha256": "44e8d5de9ec1376a311bdaccc83b7488cde2cd587cfde704ca3265e6e67bac32"
+    }
+  },
+  "findings": [
+    "Training main consumes RA current/prior task windows, and S/Q own previous-task acquisition cache",
+    "S gate probes current training valid windows and own previous-task cache; no formal outcome input to chooser",
+    "S_REFERENCE outcome SHA checked for immutability, success values not used as optimization targets",
+    "Formal evaluation no_grad, fixed final stage checkpoint, frozen policy; outcome success only termination/report",
+    "Future next_action/effect targets are supervised training labels; they are not supplied to formal policy input",
+    "Same development initial states/seeds reused across past methods; report development rather than untouched confirmation",
+    "Local official README states multitask pretraining code not released; checkpoint SHA equality is not training-set-membership proof"
+  ],
+  "limitations": [
+    "Static/source review and recorded hashes do not constitute exhaustive dynamic taint analysis",
+    "Causal checks cover bound metadata; existing CPU acceptance previously checked masks/manifests/teacher",
+    "No pretraining data manifest acquired; unknown rather than claimed clean"
+  ]
+}

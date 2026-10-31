@@ -34,3 +34,5 @@ v1在首次准入/更新/环境前检查属性错误退出，真实零成本审�
 自然v2 controller.exit0且无自身进程后，才final_readonly.py实际CPU24CP/6恢复/24缓存teacher/1200初态noise，再audit_final_local.py、compare_primary_s.py。外置包装仅静态不能套PASS。必须完成FINAL_REPORT解释新旧任务/SF/FS/全部负单元与成本边界，接受和发布后才删除新Q监控。
 
 每次审计按根AGENTS经publish.py审核code/report/hash/scalars/outcomes，串行nonforce推MLR核remoteSHA/localreceipt；禁CP/model/state/cache/RNG/凭据/未审bundle。健康静默，仅完成/新失败/需行动通知。
+
+用户2026-10-31要求的数据泄露审计见leakage_audit_20261031/REPORT.md及LEAKAGE_AUDIT.json：最新C/S2400正式及S240采集未发现直接回流；开发评估集重复使用和预训练来源不完整仍为限制，不能称全局无泄露/独立确认。Q继续原授权，最终解释必须保留这些限制，不自行追加实验。
