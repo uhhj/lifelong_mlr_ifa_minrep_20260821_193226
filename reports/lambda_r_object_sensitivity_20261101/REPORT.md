@@ -1,3 +1,15 @@
+## PARTIAL / PAUSED：用户要求先暂停训练，已于2026-11-01 23:28实际暂停
+
+本段覆盖此前所有自动继续/下一480分钟/等待自然结束后自动交接的执行安排。用户未明确要求继续前，禁止SIGCONT、启动任何训练/评估/调度器/守护进程、重部署、重跑、自动工程交接或GPU诊断负载。同一object-s-r-run监控已PAUSED，保留不删除。
+
+唯一暂停请求request_20261101_232756_f2df19cf，证据deploy_remote_20261101_232756。先核进程start身份及合同，再SIGSTOP watchdog3900、owner3899、launcher2164和训练2169；原等待调度器2163原已T，保持T。没有SIGTERM/SIGKILL/重启/恢复。暂停后五个进程均T，完整记录hash至少2秒稳定，135科学项和5工程项不变。训练内存与约2090MiB GPU显存仍保留。
+
+暂停后check_readonly_20261101_232839/LOCAL_AUDIT及PAUSE_LOCAL_AUDIT实际PASS，232210全部epoch/门控/诊断前缀保留，暂停回执记录SHA与新快照相等。L005_41 Task6/7各100轮、Task8完整60轮，共260/400轮56940接受98180生产，62隔离30准入autograd、20采集0正式；其余五run未开始。完整数值以LOCAL_AUDIT为准。当前未完成轮/块仍在活进程内存，未强制保存新checkpoint；未持久记账的部分调用不能声称为零或精确总账。
+
+恢复只在用户明确要求后：先读USER_PAUSE_STATUS.json、暂停回执和真实进程身份/退出/hash/完整恢复边界，不能从旧checkpoint重训部分轮。原2163仍是应由工程owner接管的旧等待器，不得盲SIGCONT它；必须版本化审查恢复顺序，保护watchdog/owner握手。当前未完成轮的seconds会包含暂停墙钟时间，恢复后不得用这一轮估吞吐，也不得改写原科学epoch记录。原root/controller.exit仍须不存在，工程最终CPU验收和科学协议保留，但暂停期间不执行。
+
+此前诊断和优化文件保留，7828/36独立验证成本原账不变。详细暂停状态见USER_PAUSE_STATUS.json。本次只完成暂停、只读核验及按AGENTS发布，等待用户后续指令。
+
 ## 2026-11-01 23:22 用户要求深入追查：原生热点已定位，生产未改
 
 已完成非暂停原生IP+Python栈采样以及重复CPU计数，见NATIVE_BOTTLENECK_REPORT_20261101.md和capacity_readonly_20261101_231319/231448/231842/232037的实际证据及LOCAL审计。主线程3961原生样本零丢失，核实CUDA驱动内部内存复制循环、PyTorch cpu_equal和direct_copy_kernel；599个Python墙钟栈中复制/恢复/比较合计23.54%。GPU0–9%、通常2–4%，PCIe Gen4×16，未见Xid/PCIe错误或热功率限频。不能称GPU坏，也不能把所有几倍历史慢速都归于单一热点。

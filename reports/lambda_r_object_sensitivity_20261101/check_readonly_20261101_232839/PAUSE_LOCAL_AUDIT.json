@@ -1,0 +1,46 @@
+{
+  "status": "PAUSED_BY_USER_IN_MEMORY",
+  "paused_at": "2026-11-01T23:28:02.777919+08:00",
+  "pause_evidence": "deploy_remote_20261101_232756",
+  "pause_evidence_sha256": "05b5e3b48203dfb1d8bfb6e9a77c006464febd211967e05a3d7cdead6723608b",
+  "verified_snapshot": "check_readonly_20261101_232839",
+  "verified_snapshot_sha256": "698ce621d8bbab4345b892233bd24e3e0dcc00227543fc336b28b47f6f0f1dac",
+  "processes": [
+    {
+      "pid": 2163,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/controller.py ",
+      "state": "T"
+    },
+    {
+      "pid": 2164,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
+      "state": "T"
+    },
+    {
+      "pid": 2169,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
+      "state": "T"
+    },
+    {
+      "pid": 3899,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_device_snapshot_20261101_v1/controller.py ",
+      "state": "T"
+    },
+    {
+      "pid": 3900,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_device_snapshot_20261101_v1/watchdog.py ",
+      "state": "T"
+    }
+  ],
+  "automatic_monitor_status": "PAUSED",
+  "automatic_resume_allowed": false,
+  "last_complete_epochs": 260,
+  "last_complete_stage": 8,
+  "last_complete_stage_epochs": 60,
+  "partial_epoch_in_memory": true,
+  "partial_epoch_cost": "Unrecorded portion is not inferred zero; retained in live process memory.",
+  "gpu_memory_retained_MiB": 2090,
+  "original_controller_must_remain_stopped": 2163,
+  "resume_requires_explicit_user_request": true,
+  "resume_caution": "Audit process start identities, hashes, pause receipt, failure/exit and live-state boundary first; do not restart from checkpoint or rerun completed work. Never blindly resume old coordinator2163. Incomplete epoch seconds includes paused wall time; annotate timing rather than editing science logs."
+}
