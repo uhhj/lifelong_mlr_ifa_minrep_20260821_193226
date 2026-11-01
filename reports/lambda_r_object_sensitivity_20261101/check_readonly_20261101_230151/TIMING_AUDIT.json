@@ -1,0 +1,64 @@
+{
+  "observation": "2026-11-01T23:01:50.633287+08:00",
+  "evidence_sha256": "e411b2420d6a350cdcfb8ed1807a0ccd7eb27195d891e5376e59bb88b77b0c4b",
+  "stages": {
+    "6": {
+      "epochs": 100,
+      "mean": 20.770162670612336,
+      "recent10": 25.14507999420166,
+      "min": 4.540793418884277,
+      "max": 39.04651951789856,
+      "sum_seconds": 2077.0162670612335
+    },
+    "7": {
+      "epochs": 100,
+      "mean": 114.98703095912933,
+      "recent10": 120.60704736709594,
+      "min": 37.713271379470825,
+      "max": 284.40416860580444,
+      "sum_seconds": 11498.703095912933
+    },
+    "8": {
+      "epochs": 56,
+      "mean": 213.0786716554846,
+      "recent10": 189.72700469493867,
+      "min": 55.5715765953064,
+      "max": 412.8844120502472,
+      "sum_seconds": 11932.405612707138
+    }
+  },
+  "scenarios": {
+    "recent10": {
+      "unmeasured_stage9_seconds": 222.26917702125502,
+      "current_run_remaining_pure_hours": 8.493029419084111,
+      "future_run_pure_hours": 15.215371537387092,
+      "all_remaining_pure_no_speedup_hours": 84.56988710601956,
+      "all_remaining_pure_if_future20percent_saved_hours": 69.35451556863248
+    },
+    "all56": {
+      "unmeasured_stage9_seconds": 249.62614608182986,
+      "current_run_remaining_pure_hours": 9.538354489173418,
+      "future_run_pure_hours": 16.623944760196004,
+      "all_remaining_pure_no_speedup_hours": 92.65807829015343,
+      "all_remaining_pure_if_future20percent_saved_hours": 76.03413352995743
+    }
+  },
+  "current_run_planning_hours": [
+    9,
+    12
+  ],
+  "all_remaining_training_collection_and_formal_planning_hours": [
+    90,
+    110
+  ],
+  "next_check_minutes": 480,
+  "assumptions": [
+    "Task9 not measured; scale Task8 by 362/309 batch count, ignoring potential extra old-cache overhead.",
+    "Future five runs not measured and may have different caches and contention.",
+    "All-run planning adds preparation, saving, 220 remaining collections, two 600-episode evaluations and fluctuation to 84.57–92.66 pure hours.",
+    "Formal evaluation planning 2–4 hours total is historical allowance, not current measured throughput.",
+    "20% future saving is sensitivity only, NOT measured production speedup and NOT used in main planning range.",
+    "CPU final acceptance, interpretation and publication are additional.",
+    "No reliable guaranteed finishing date; recompute after actual optimized production throughput."
+  ]
+}
