@@ -1,0 +1,2510 @@
+{
+  "status": "PASS_LOCAL_METRIC_RECOMPUTATION",
+  "observed_at": "2026-11-01T13:26:07.599358+08:00",
+  "scope": "Accepted lightweight matrices only; no new training, rollout or remote audit",
+  "source_bindings": {
+    "execution/20261017_five_seed_summary/RESULTS.json": {
+      "bytes": 47020,
+      "sha256": "6d5afea79aa62ed8da2edc342853e0d40a1a98d2e76b2368e2062432872c5d8a"
+    },
+    "execution/20261017_five_seed_summary/REPORT.md": {
+      "bytes": 2624,
+      "sha256": "9ea2bc3dff7826a4a8ca629e97902ed209a00c25cdfe25d2c040d50a628edbc3"
+    },
+    "execution/20261025_ccbp_v4_full/GOAL_THREE_SEED_BASELINES.json": {
+      "bytes": 37899,
+      "sha256": "6e134fea4c8bb0d742d2a5c49435655f93f2279288ac1ba11608a4c2cddf8405"
+    },
+    "execution/20261025_ccbp_v4_full/OBJECT_THREE_SEED_BASELINES.json": {
+      "bytes": 40875,
+      "sha256": "8d9f1a176addad74f034c25f4a468ddf5e824b47652b8bd24803fcc07f5efc6c"
+    },
+    "execution/20261024_ccbp/final_readonly_20261024_224310/FINAL_ANALYSIS.json": {
+      "bytes": 9457,
+      "sha256": "7aed73891de2f687e2d48e01814c8ddd106482709e2dcd12f3dac59b01d5f63c"
+    },
+    "execution/20261024_ccbp/final_readonly_20261024_224310/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 2789,
+      "sha256": "05c634007cbd703ad186f4d55c9de8e35a15946ac1217f8f5f9c27b64be7102d"
+    },
+    "execution/20261024_ccbp_v2_full/final_readonly_20261025_054702/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 18958,
+      "sha256": "a1625fec25a906faebeeeb9eb7e88145edecb5efb8ee470e1b1921250fa94e2d"
+    },
+    "execution/20261025_ccbp_v3_full/final_readonly_20261025_181226/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 13493,
+      "sha256": "055e4964429354cb6fc8b41e938f37a62ad048cd02a16a3f2db45d172d41b332"
+    },
+    "execution/20261025_ccbp_v4_full/final_readonly_20261026_014654/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 60079,
+      "sha256": "9233ec16b0ccb1a5fbb69afeda4c4f4204c64065f7525a0e8600673fe8f9fe9f"
+    },
+    "execution/20261029_support_gate_full_s_goal/final_readonly_20261030_111546/PRIMARY_C_COMPARISON.json": {
+      "bytes": 228179,
+      "sha256": "89bb6cf79a5e9198c9ea871ac82b4b00f7d51bad6a8ea5d79862514840ac77fe"
+    },
+    "execution/20261029_support_gate_full_s_goal/final_readonly_20261030_111546/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 95893,
+      "sha256": "5ddcc718280fd37f5dfcd68145e3168ebe1fd72375ea9b8a41aa34587a22367c"
+    },
+    "execution/20261028_support_gate_full_s_object/final_readonly_20261029_201235/PRIMARY_C_COMPARISON.json": {
+      "bytes": 228486,
+      "sha256": "3a66f164588d918945ccd9b8a12cac984d2000bae21939888118228a691a6208"
+    },
+    "execution/20261028_support_gate_full_s_object/final_readonly_20261029_201235/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 96863,
+      "sha256": "f00f4b62a00135260c292490d36cda7d75083c3adafe1c629071834884caa1d2"
+    },
+    "execution/20261030_equal_optimizer_budget_cs_two_suites/final_readonly_20261031_065009/PRIMARY_S_COMPARISON.json": {
+      "bytes": 657007,
+      "sha256": "3271b55c2df4ded778ea5bf5675dbd68b4fe9ebae33b247007a06460940842e4"
+    },
+    "execution/20261030_equal_optimizer_budget_cs_two_suites/final_readonly_20261031_065009/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 28191,
+      "sha256": "3a2d8103b7478f08552ff9c52d71dcc2f4a68e3705eb472d27e89ff3af4c9744"
+    },
+    "execution/20261031_full_q_vs_latest_s_two_suites/final_readonly_20261101_032229/PRIMARY_S_COMPARISON.json": {
+      "bytes": 656897,
+      "sha256": "7ec281d6e454bba3d170e9a94ebf497bc01abdee953fe06e2a51fde8c64bbb11"
+    },
+    "execution/20261031_full_q_vs_latest_s_two_suites/final_readonly_20261101_032229/LOCAL_FINAL_AUDIT.json": {
+      "bytes": 189794,
+      "sha256": "0bb3877637827276d7cd5080434e735d695919ae9e28e5458ba1b2179b262843"
+    }
+  },
+  "rows": [
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "random",
+      "seed": 40,
+      "matrix_percent": {
+        "6_6": 5.0,
+        "7_6": 55.0,
+        "7_7": 90.0,
+        "8_6": 40.0,
+        "8_7": 100.0,
+        "8_8": 90.0,
+        "9_6": 60.0,
+        "9_7": 95.0,
+        "9_8": 100.0,
+        "9_9": 70.0
+      },
+      "metrics_percent": {
+        "AUC": 75.0,
+        "FWT": 63.75,
+        "NBT": -21.38888888888889,
+        "OldFinal": 85.0,
+        "FinalAll": 81.25
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "coreset",
+      "seed": 40,
+      "matrix_percent": {
+        "6_6": 5.0,
+        "7_6": 50.0,
+        "7_7": 100.0,
+        "8_6": 50.0,
+        "8_7": 100.0,
+        "8_8": 100.0,
+        "9_6": 20.0,
+        "9_7": 95.0,
+        "9_8": 100.0,
+        "9_9": 95.0
+      },
+      "metrics_percent": {
+        "AUC": 81.14583333333333,
+        "FWT": 75.0,
+        "NBT": -10.833333333333334,
+        "OldFinal": 71.66666666666667,
+        "FinalAll": 77.5
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "event_coreset",
+      "seed": 40,
+      "matrix_percent": {
+        "6_6": 5.0,
+        "7_6": 50.0,
+        "7_7": 100.0,
+        "8_6": 40.0,
+        "8_7": 100.0,
+        "8_8": 100.0,
+        "9_6": 45.0,
+        "9_7": 95.0,
+        "9_8": 100.0,
+        "9_9": 80.0
+      },
+      "metrics_percent": {
+        "AUC": 78.33333333333333,
+        "FWT": 71.25,
+        "NBT": -12.5,
+        "OldFinal": 80.0,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "random",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 95.0,
+        "7_7": 35.0,
+        "8_6": 40.0,
+        "8_7": 60.0,
+        "8_8": 100.0,
+        "9_6": 15.0,
+        "9_7": 85.0,
+        "9_8": 75.0,
+        "9_9": 70.0
+      },
+      "metrics_percent": {
+        "AUC": 66.875,
+        "FWT": 63.75,
+        "NBT": -4.166666666666667,
+        "OldFinal": 58.333333333333336,
+        "FinalAll": 61.25
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "coreset",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 80.0,
+        "7_7": 80.0,
+        "8_6": 45.0,
+        "8_7": 90.0,
+        "8_8": 90.0,
+        "9_6": 30.0,
+        "9_7": 90.0,
+        "9_8": 95.0,
+        "9_9": 50.0
+      },
+      "metrics_percent": {
+        "AUC": 70.10416666666667,
+        "FWT": 67.5,
+        "NBT": -5.555555555555555,
+        "OldFinal": 71.66666666666667,
+        "FinalAll": 66.25
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "event_coreset",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 80.0,
+        "7_7": 80.0,
+        "8_6": 70.0,
+        "8_7": 85.0,
+        "8_8": 95.0,
+        "9_6": 40.0,
+        "9_7": 95.0,
+        "9_8": 90.0,
+        "9_9": 20.0
+      },
+      "metrics_percent": {
+        "AUC": 64.79166666666667,
+        "FWT": 61.25,
+        "NBT": -6.111111111111111,
+        "OldFinal": 75.0,
+        "FinalAll": 61.25
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "random",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 30.0,
+        "7_6": 45.0,
+        "7_7": 95.0,
+        "8_6": 10.0,
+        "8_7": 100.0,
+        "8_8": 95.0,
+        "9_6": 10.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 45.0
+      },
+      "metrics_percent": {
+        "AUC": 66.14583333333333,
+        "FWT": 66.25,
+        "NBT": -0.5555555555555556,
+        "OldFinal": 70.0,
+        "FinalAll": 63.75
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "coreset",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 30.0,
+        "7_6": 70.0,
+        "7_7": 85.0,
+        "8_6": 20.0,
+        "8_7": 95.0,
+        "8_8": 100.0,
+        "9_6": 30.0,
+        "9_7": 90.0,
+        "9_8": 100.0,
+        "9_9": 45.0
+      },
+      "metrics_percent": {
+        "AUC": 68.125,
+        "FWT": 65.0,
+        "NBT": -5.833333333333333,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 66.25
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "event_coreset",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 30.0,
+        "7_6": 70.0,
+        "7_7": 85.0,
+        "8_6": 40.0,
+        "8_7": 100.0,
+        "8_8": 95.0,
+        "9_6": 20.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 50.0
+      },
+      "metrics_percent": {
+        "AUC": 70.625,
+        "FWT": 65.0,
+        "NBT": -11.11111111111111,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 67.5
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "random",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 60.0,
+        "7_6": 55.0,
+        "7_7": 95.0,
+        "8_6": 40.0,
+        "8_7": 75.0,
+        "8_8": 95.0,
+        "9_6": 55.0,
+        "9_7": 85.0,
+        "9_8": 100.0,
+        "9_9": 80.0
+      },
+      "metrics_percent": {
+        "AUC": 78.75,
+        "FWT": 82.5,
+        "NBT": 6.666666666666667,
+        "OldFinal": 80.0,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "coreset",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 60.0,
+        "7_6": 95.0,
+        "7_7": 95.0,
+        "8_6": 85.0,
+        "8_7": 100.0,
+        "8_8": 100.0,
+        "9_6": 90.0,
+        "9_7": 90.0,
+        "9_8": 100.0,
+        "9_9": 100.0
+      },
+      "metrics_percent": {
+        "AUC": 94.375,
+        "FWT": 88.75,
+        "NBT": -10.0,
+        "OldFinal": 93.33333333333333,
+        "FinalAll": 95.0
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "event_coreset",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 60.0,
+        "7_6": 95.0,
+        "7_7": 95.0,
+        "8_6": 75.0,
+        "8_7": 90.0,
+        "8_8": 70.0,
+        "9_6": 55.0,
+        "9_7": 95.0,
+        "9_8": 95.0,
+        "9_9": 65.0
+      },
+      "metrics_percent": {
+        "AUC": 78.02083333333333,
+        "FWT": 72.5,
+        "NBT": -12.5,
+        "OldFinal": 81.66666666666667,
+        "FinalAll": 77.5
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "random",
+      "seed": 44,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 65.0,
+        "7_7": 95.0,
+        "8_6": 65.0,
+        "8_7": 95.0,
+        "8_8": 95.0,
+        "9_6": 50.0,
+        "9_7": 85.0,
+        "9_8": 100.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 84.16666666666667,
+        "FWT": 82.5,
+        "NBT": -3.3333333333333335,
+        "OldFinal": 78.33333333333333,
+        "FinalAll": 81.25
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "coreset",
+      "seed": 44,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 40.0,
+        "8_7": 100.0,
+        "8_8": 100.0,
+        "9_6": 40.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 95.0
+      },
+      "metrics_percent": {
+        "AUC": 86.25,
+        "FWT": 86.25,
+        "NBT": 0.0,
+        "OldFinal": 80.0,
+        "FinalAll": 83.75
+      }
+    },
+    {
+      "study": "early_selection",
+      "suite": "OBJECT",
+      "method": "event_coreset",
+      "seed": 44,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 30.0,
+        "8_7": 95.0,
+        "8_8": 100.0,
+        "9_6": 65.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 95.0
+      },
+      "metrics_percent": {
+        "AUC": 86.77083333333333,
+        "FWT": 86.25,
+        "NBT": -0.8333333333333334,
+        "OldFinal": 88.33333333333333,
+        "FinalAll": 90.0
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "MLR_IFA",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 70.0,
+        "7_6": 60.0,
+        "7_7": 100.0,
+        "8_6": 55.0,
+        "8_7": 100.0,
+        "8_8": 50.0,
+        "9_6": 40.0,
+        "9_7": 100.0,
+        "9_8": 60.0,
+        "9_9": 65.0
+      },
+      "metrics_percent": {
+        "AUC": 69.0625,
+        "FWT": 71.25,
+        "NBT": 2.7777777777777777,
+        "OldFinal": 66.66666666666667,
+        "FinalAll": 66.25
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "RA",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 70.0,
+        "7_6": 60.0,
+        "7_7": 100.0,
+        "8_6": 35.0,
+        "8_7": 100.0,
+        "8_8": 75.0,
+        "9_6": 35.0,
+        "9_7": 100.0,
+        "9_8": 85.0,
+        "9_9": 85.0
+      },
+      "metrics_percent": {
+        "AUC": 78.75,
+        "FWT": 82.5,
+        "NBT": 5.555555555555555,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 76.25
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "RA_ALIGN",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 80.0,
+        "7_6": 60.0,
+        "7_7": 100.0,
+        "8_6": 50.0,
+        "8_7": 100.0,
+        "8_8": 95.0,
+        "9_6": 55.0,
+        "9_7": 100.0,
+        "9_8": 70.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 83.4375,
+        "FWT": 91.25,
+        "NBT": 16.666666666666668,
+        "OldFinal": 75.0,
+        "FinalAll": 78.75
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "MLR_IFA",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 65.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 60.0,
+        "8_7": 100.0,
+        "8_8": 75.0,
+        "9_6": 70.0,
+        "9_7": 100.0,
+        "9_8": 60.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 80.9375,
+        "FWT": 82.5,
+        "NBT": 4.444444444444445,
+        "OldFinal": 76.66666666666667,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "RA",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 65.0,
+        "7_6": 50.0,
+        "7_7": 100.0,
+        "8_6": 70.0,
+        "8_7": 100.0,
+        "8_8": 80.0,
+        "9_6": 55.0,
+        "9_7": 100.0,
+        "9_8": 70.0,
+        "9_9": 95.0
+      },
+      "metrics_percent": {
+        "AUC": 82.5,
+        "FWT": 85.0,
+        "NBT": 5.555555555555555,
+        "OldFinal": 75.0,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "RA_ALIGN",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 70.0,
+        "7_6": 85.0,
+        "7_7": 95.0,
+        "8_6": 65.0,
+        "8_7": 100.0,
+        "8_8": 80.0,
+        "9_6": 60.0,
+        "9_7": 100.0,
+        "9_8": 55.0,
+        "9_9": 95.0
+      },
+      "metrics_percent": {
+        "AUC": 82.70833333333333,
+        "FWT": 85.0,
+        "NBT": 6.666666666666667,
+        "OldFinal": 71.66666666666667,
+        "FinalAll": 77.5
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "MLR_IFA",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 80.0,
+        "7_6": 80.0,
+        "7_7": 100.0,
+        "8_6": 80.0,
+        "8_7": 100.0,
+        "8_8": 55.0,
+        "9_6": 95.0,
+        "9_7": 100.0,
+        "9_8": 70.0,
+        "9_9": 70.0
+      },
+      "metrics_percent": {
+        "AUC": 79.0625,
+        "FWT": 76.25,
+        "NBT": -6.666666666666667,
+        "OldFinal": 88.33333333333333,
+        "FinalAll": 83.75
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "RA",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 80.0,
+        "7_6": 80.0,
+        "7_7": 100.0,
+        "8_6": 70.0,
+        "8_7": 100.0,
+        "8_8": 65.0,
+        "9_6": 75.0,
+        "9_7": 100.0,
+        "9_8": 80.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 84.6875,
+        "FWT": 83.75,
+        "NBT": -3.3333333333333335,
+        "OldFinal": 85.0,
+        "FinalAll": 86.25
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "GOAL",
+      "method": "RA_ALIGN",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 75.0,
+        "7_6": 80.0,
+        "7_7": 100.0,
+        "8_6": 65.0,
+        "8_7": 95.0,
+        "8_8": 80.0,
+        "9_6": 65.0,
+        "9_7": 90.0,
+        "9_8": 65.0,
+        "9_9": 70.0
+      },
+      "metrics_percent": {
+        "AUC": 77.1875,
+        "FWT": 81.25,
+        "NBT": 9.166666666666666,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 72.5
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "MLR_IFA",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 95.0,
+        "7_7": 35.0,
+        "8_6": 40.0,
+        "8_7": 60.0,
+        "8_8": 100.0,
+        "9_6": 15.0,
+        "9_7": 85.0,
+        "9_8": 75.0,
+        "9_9": 70.0
+      },
+      "metrics_percent": {
+        "AUC": 66.875,
+        "FWT": 63.75,
+        "NBT": -4.166666666666667,
+        "OldFinal": 58.333333333333336,
+        "FinalAll": 61.25
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "RA",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 60.0,
+        "7_6": 85.0,
+        "7_7": 95.0,
+        "8_6": 35.0,
+        "8_7": 90.0,
+        "8_8": 100.0,
+        "9_6": 45.0,
+        "9_7": 95.0,
+        "9_8": 95.0,
+        "9_9": 45.0
+      },
+      "metrics_percent": {
+        "AUC": 73.02083333333333,
+        "FWT": 75.0,
+        "NBT": 4.166666666666667,
+        "OldFinal": 78.33333333333333,
+        "FinalAll": 70.0
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "RA_ALIGN",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 35.0,
+        "7_6": 85.0,
+        "7_7": 95.0,
+        "8_6": 50.0,
+        "8_7": 85.0,
+        "8_8": 100.0,
+        "9_6": 30.0,
+        "9_7": 85.0,
+        "9_8": 95.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 81.45833333333333,
+        "FWT": 80.0,
+        "NBT": -1.6666666666666667,
+        "OldFinal": 70.0,
+        "FinalAll": 75.0
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "MLR_IFA",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 30.0,
+        "7_6": 45.0,
+        "7_7": 95.0,
+        "8_6": 10.0,
+        "8_7": 100.0,
+        "8_8": 95.0,
+        "9_6": 10.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 45.0
+      },
+      "metrics_percent": {
+        "AUC": 66.14583333333333,
+        "FWT": 66.25,
+        "NBT": -0.5555555555555556,
+        "OldFinal": 70.0,
+        "FinalAll": 63.75
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "RA",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 30.0,
+        "7_6": 80.0,
+        "7_7": 100.0,
+        "8_6": 35.0,
+        "8_7": 95.0,
+        "8_8": 90.0,
+        "9_6": 10.0,
+        "9_7": 90.0,
+        "9_8": 95.0,
+        "9_9": 60.0
+      },
+      "metrics_percent": {
+        "AUC": 71.5625,
+        "FWT": 70.0,
+        "NBT": -3.0555555555555554,
+        "OldFinal": 65.0,
+        "FinalAll": 63.75
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "RA_ALIGN",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 50.0,
+        "7_6": 65.0,
+        "7_7": 95.0,
+        "8_6": 60.0,
+        "8_7": 100.0,
+        "8_8": 90.0,
+        "9_6": 40.0,
+        "9_7": 100.0,
+        "9_8": 90.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 83.02083333333333,
+        "FWT": 81.25,
+        "NBT": -3.3333333333333335,
+        "OldFinal": 76.66666666666667,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "MLR_IFA",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 40.0,
+        "7_6": 55.0,
+        "7_7": 90.0,
+        "8_6": 40.0,
+        "8_7": 95.0,
+        "8_8": 90.0,
+        "9_6": 35.0,
+        "9_7": 100.0,
+        "9_8": 90.0,
+        "9_9": 60.0
+      },
+      "metrics_percent": {
+        "AUC": 71.875,
+        "FWT": 70.0,
+        "NBT": -3.611111111111111,
+        "OldFinal": 75.0,
+        "FinalAll": 71.25
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "RA",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 60.0,
+        "7_6": 65.0,
+        "7_7": 95.0,
+        "8_6": 40.0,
+        "8_7": 100.0,
+        "8_8": 90.0,
+        "9_6": 50.0,
+        "9_7": 95.0,
+        "9_8": 100.0,
+        "9_9": 55.0
+      },
+      "metrics_percent": {
+        "AUC": 75.10416666666667,
+        "FWT": 75.0,
+        "NBT": -1.3888888888888888,
+        "OldFinal": 81.66666666666667,
+        "FinalAll": 75.0
+      }
+    },
+    {
+      "study": "baseline",
+      "suite": "OBJECT",
+      "method": "RA_ALIGN",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 55.0,
+        "7_6": 95.0,
+        "7_7": 75.0,
+        "8_6": 55.0,
+        "8_7": 90.0,
+        "8_8": 95.0,
+        "9_6": 35.0,
+        "9_7": 95.0,
+        "9_8": 100.0,
+        "9_9": 60.0
+      },
+      "metrics_percent": {
+        "AUC": 76.04166666666667,
+        "FWT": 71.25,
+        "NBT": -9.722222222222221,
+        "OldFinal": 76.66666666666667,
+        "FinalAll": 72.5
+      }
+    },
+    {
+      "study": "v2",
+      "suite": "GOAL",
+      "method": "B",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 85.0,
+        "7_6": 75.0,
+        "7_7": 100.0,
+        "8_6": 45.0,
+        "8_7": 100.0,
+        "8_8": 95.0,
+        "9_6": 35.0,
+        "9_7": 100.0,
+        "9_8": 85.0,
+        "9_9": 55.0
+      },
+      "metrics_percent": {
+        "AUC": 76.25,
+        "FWT": 83.75,
+        "NBT": 14.444444444444445,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 68.75
+      }
+    },
+    {
+      "study": "v2",
+      "suite": "GOAL",
+      "method": "C",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 85.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 45.0,
+        "8_7": 100.0,
+        "8_8": 85.0,
+        "9_6": 30.0,
+        "9_7": 100.0,
+        "9_8": 85.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 83.125,
+        "FWT": 90.0,
+        "NBT": 12.222222222222221,
+        "OldFinal": 71.66666666666667,
+        "FinalAll": 76.25
+      }
+    },
+    {
+      "study": "v2",
+      "suite": "GOAL",
+      "method": "N",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 85.0,
+        "7_6": 55.0,
+        "7_7": 100.0,
+        "8_6": 30.0,
+        "8_7": 100.0,
+        "8_8": 95.0,
+        "9_6": 30.0,
+        "9_7": 100.0,
+        "9_8": 85.0,
+        "9_9": 75.0
+      },
+      "metrics_percent": {
+        "AUC": 78.75,
+        "FWT": 88.75,
+        "NBT": 18.88888888888889,
+        "OldFinal": 71.66666666666667,
+        "FinalAll": 72.5
+      }
+    },
+    {
+      "study": "v2",
+      "suite": "GOAL",
+      "method": "V",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 85.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 60.0,
+        "8_7": 100.0,
+        "8_8": 90.0,
+        "9_6": 45.0,
+        "9_7": 100.0,
+        "9_8": 80.0,
+        "9_9": 80.0
+      },
+      "metrics_percent": {
+        "AUC": 82.5,
+        "FWT": 88.75,
+        "NBT": 12.222222222222221,
+        "OldFinal": 75.0,
+        "FinalAll": 76.25
+      }
+    },
+    {
+      "study": "v3",
+      "suite": "GOAL",
+      "method": "C",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90.0,
+        "7_6": 80.0,
+        "7_7": 100.0,
+        "8_6": 50.0,
+        "8_7": 100.0,
+        "8_8": 90.0,
+        "9_6": 40.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 87.5,
+        "FWT": 92.5,
+        "NBT": 7.777777777777778,
+        "OldFinal": 80.0,
+        "FinalAll": 82.5
+      }
+    },
+    {
+      "study": "v3",
+      "suite": "GOAL",
+      "method": "R",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 40.0,
+        "8_7": 100.0,
+        "8_8": 85.0,
+        "9_6": 35.0,
+        "9_7": 100.0,
+        "9_8": 60.0,
+        "9_9": 80.0
+      },
+      "metrics_percent": {
+        "AUC": 77.8125,
+        "FWT": 88.75,
+        "NBT": 22.22222222222222,
+        "OldFinal": 65.0,
+        "FinalAll": 68.75
+      }
+    },
+    {
+      "study": "v3",
+      "suite": "GOAL",
+      "method": "G",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90.0,
+        "7_6": 40.0,
+        "7_7": 100.0,
+        "8_6": 50.0,
+        "8_7": 100.0,
+        "8_8": 100.0,
+        "9_6": 50.0,
+        "9_7": 100.0,
+        "9_8": 80.0,
+        "9_9": 85.0
+      },
+      "metrics_percent": {
+        "AUC": 83.125,
+        "FWT": 93.75,
+        "NBT": 21.11111111111111,
+        "OldFinal": 76.66666666666667,
+        "FinalAll": 78.75
+      }
+    },
+    {
+      "study": "DOS",
+      "suite": "GOAL",
+      "method": "C",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90.0,
+        "7_6": 80.0,
+        "7_7": 100.0,
+        "8_6": 50.0,
+        "8_7": 100.0,
+        "8_8": 90.0,
+        "9_6": 40.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 87.5,
+        "FWT": 92.5,
+        "NBT": 7.777777777777778,
+        "OldFinal": 80.0,
+        "FinalAll": 82.5
+      }
+    },
+    {
+      "study": "DOS",
+      "suite": "GOAL",
+      "method": "D",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90.0,
+        "7_6": 60.0,
+        "7_7": 100.0,
+        "8_6": 75.0,
+        "8_7": 95.0,
+        "8_8": 80.0,
+        "9_6": 55.0,
+        "9_7": 100.0,
+        "9_8": 60.0,
+        "9_9": 75.0
+      },
+      "metrics_percent": {
+        "AUC": 78.33333333333333,
+        "FWT": 86.25,
+        "NBT": 16.38888888888889,
+        "OldFinal": 71.66666666666667,
+        "FinalAll": 72.5
+      }
+    },
+    {
+      "study": "DOS",
+      "suite": "GOAL",
+      "method": "O",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 85.0,
+        "8_7": 100.0,
+        "8_8": 90.0,
+        "9_6": 45.0,
+        "9_7": 100.0,
+        "9_8": 85.0,
+        "9_9": 90.0
+      },
+      "metrics_percent": {
+        "AUC": 87.5,
+        "FWT": 92.5,
+        "NBT": 9.444444444444445,
+        "OldFinal": 76.66666666666667,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "DOS",
+      "suite": "GOAL",
+      "method": "S",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 45.0,
+        "8_7": 100.0,
+        "8_8": 80.0,
+        "9_6": 45.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 95.0
+      },
+      "metrics_percent": {
+        "AUC": 86.875,
+        "FWT": 91.25,
+        "NBT": 5.555555555555555,
+        "OldFinal": 81.66666666666667,
+        "FinalAll": 85.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "C_normal",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90,
+        "7_6": 80,
+        "7_7": 100,
+        "8_6": 50,
+        "8_7": 100,
+        "8_8": 90,
+        "9_6": 40,
+        "9_7": 100,
+        "9_8": 100,
+        "9_9": 90
+      },
+      "metrics_percent": {
+        "AUC": 87.5,
+        "FWT": 92.5,
+        "NBT": 7.777777777777778,
+        "OldFinal": 80.0,
+        "FinalAll": 82.5
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "S_latest",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90,
+        "7_6": 70,
+        "7_7": 100,
+        "8_6": 65,
+        "8_7": 100,
+        "8_8": 95,
+        "9_6": 65,
+        "9_7": 100,
+        "9_8": 85,
+        "9_9": 80
+      },
+      "metrics_percent": {
+        "AUC": 85.625,
+        "FWT": 91.25,
+        "NBT": 11.11111111111111,
+        "OldFinal": 83.33333333333333,
+        "FinalAll": 82.5
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "C_normal",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 80,
+        "7_7": 100,
+        "8_6": 85,
+        "8_7": 100,
+        "8_8": 85,
+        "9_6": 75,
+        "9_7": 100,
+        "9_8": 65,
+        "9_9": 90
+      },
+      "metrics_percent": {
+        "AUC": 85.625,
+        "FWT": 86.25,
+        "NBT": 3.3333333333333335,
+        "OldFinal": 80.0,
+        "FinalAll": 82.5
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "S_latest",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 85,
+        "7_7": 100,
+        "8_6": 85,
+        "8_7": 100,
+        "8_8": 100,
+        "9_6": 75,
+        "9_7": 100,
+        "9_8": 85,
+        "9_9": 90
+      },
+      "metrics_percent": {
+        "AUC": 90.3125,
+        "FWT": 90.0,
+        "NBT": 1.1111111111111112,
+        "OldFinal": 86.66666666666667,
+        "FinalAll": 87.5
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "C_normal",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 80,
+        "7_7": 100,
+        "8_6": 55,
+        "8_7": 100,
+        "8_8": 80,
+        "9_6": 85,
+        "9_7": 100,
+        "9_8": 60,
+        "9_9": 55
+      },
+      "metrics_percent": {
+        "AUC": 74.375,
+        "FWT": 76.25,
+        "NBT": 5.555555555555555,
+        "OldFinal": 81.66666666666667,
+        "FinalAll": 75.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "S_latest",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 75,
+        "7_6": 80,
+        "7_7": 95,
+        "8_6": 65,
+        "8_7": 90,
+        "8_8": 85,
+        "9_6": 70,
+        "9_7": 95,
+        "9_8": 80,
+        "9_9": 95
+      },
+      "metrics_percent": {
+        "AUC": 85.83333333333333,
+        "FWT": 87.5,
+        "NBT": 3.611111111111111,
+        "OldFinal": 81.66666666666667,
+        "FinalAll": 85.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "C_normal",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 45,
+        "7_6": 80,
+        "7_7": 80,
+        "8_6": 60,
+        "8_7": 95,
+        "8_8": 100,
+        "9_6": 50,
+        "9_7": 90,
+        "9_8": 100,
+        "9_9": 100
+      },
+      "metrics_percent": {
+        "AUC": 86.77083333333333,
+        "FWT": 81.25,
+        "NBT": -10.277777777777779,
+        "OldFinal": 80.0,
+        "FinalAll": 85.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "S_latest",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 35,
+        "7_6": 95,
+        "7_7": 80,
+        "8_6": 55,
+        "8_7": 90,
+        "8_8": 95,
+        "9_6": 70,
+        "9_7": 90,
+        "9_8": 95,
+        "9_9": 100
+      },
+      "metrics_percent": {
+        "AUC": 86.35416666666667,
+        "FWT": 77.5,
+        "NBT": -16.11111111111111,
+        "OldFinal": 85.0,
+        "FinalAll": 88.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "C_normal",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 40,
+        "7_6": 90,
+        "7_7": 95,
+        "8_6": 30,
+        "8_7": 100,
+        "8_8": 100,
+        "9_6": 35,
+        "9_7": 100,
+        "9_8": 100,
+        "9_9": 100
+      },
+      "metrics_percent": {
+        "AUC": 86.77083333333333,
+        "FWT": 83.75,
+        "NBT": -5.555555555555555,
+        "OldFinal": 78.33333333333333,
+        "FinalAll": 83.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "S_latest",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 45,
+        "7_6": 90,
+        "7_7": 60,
+        "8_6": 70,
+        "8_7": 95,
+        "8_8": 100,
+        "9_6": 65,
+        "9_7": 100,
+        "9_8": 90,
+        "9_9": 90
+      },
+      "metrics_percent": {
+        "AUC": 84.375,
+        "FWT": 73.75,
+        "NBT": -19.166666666666668,
+        "OldFinal": 85.0,
+        "FinalAll": 86.25
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "C_normal",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 100,
+        "7_7": 90,
+        "8_6": 50,
+        "8_7": 90,
+        "8_8": 60,
+        "9_6": 30,
+        "9_7": 100,
+        "9_8": 90,
+        "9_9": 95
+      },
+      "metrics_percent": {
+        "AUC": 81.45833333333333,
+        "FWT": 78.75,
+        "NBT": -8.333333333333334,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 78.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "S_latest",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 95,
+        "7_7": 100,
+        "8_6": 65,
+        "8_7": 100,
+        "8_8": 90,
+        "9_6": 30,
+        "9_7": 100,
+        "9_8": 90,
+        "9_9": 100
+      },
+      "metrics_percent": {
+        "AUC": 88.75,
+        "FWT": 90.0,
+        "NBT": 2.2222222222222223,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "C_equal_budget",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90,
+        "7_6": 65,
+        "7_7": 100,
+        "8_6": 65,
+        "8_7": 100,
+        "8_8": 80,
+        "9_6": 75,
+        "9_7": 100,
+        "9_8": 75,
+        "9_9": 85
+      },
+      "metrics_percent": {
+        "AUC": 84.0625,
+        "FWT": 88.75,
+        "NBT": 8.88888888888889,
+        "OldFinal": 83.33333333333333,
+        "FinalAll": 83.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "C_equal_budget",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 85,
+        "7_7": 100,
+        "8_6": 65,
+        "8_7": 100,
+        "8_8": 85,
+        "9_6": 70,
+        "9_7": 100,
+        "9_8": 65,
+        "9_9": 100
+      },
+      "metrics_percent": {
+        "AUC": 86.875,
+        "FWT": 88.75,
+        "NBT": 5.555555555555555,
+        "OldFinal": 78.33333333333333,
+        "FinalAll": 83.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "C_equal_budget",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 75,
+        "7_6": 85,
+        "7_7": 100,
+        "8_6": 80,
+        "8_7": 95,
+        "8_8": 80,
+        "9_6": 60,
+        "9_7": 85,
+        "9_8": 65,
+        "9_9": 80
+      },
+      "metrics_percent": {
+        "AUC": 80.20833333333333,
+        "FWT": 83.75,
+        "NBT": 8.333333333333334,
+        "OldFinal": 70.0,
+        "FinalAll": 72.5
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "C_equal_budget",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 35,
+        "7_6": 90,
+        "7_7": 80,
+        "8_6": 45,
+        "8_7": 95,
+        "8_8": 100,
+        "9_6": 25,
+        "9_7": 95,
+        "9_8": 90,
+        "9_9": 85
+      },
+      "metrics_percent": {
+        "AUC": 79.6875,
+        "FWT": 75.0,
+        "NBT": -7.777777777777778,
+        "OldFinal": 70.0,
+        "FinalAll": 73.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "C_equal_budget",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 45,
+        "7_6": 45,
+        "7_7": 95,
+        "8_6": 35,
+        "8_7": 100,
+        "8_8": 95,
+        "9_6": 45,
+        "9_7": 100,
+        "9_8": 100,
+        "9_9": 90
+      },
+      "metrics_percent": {
+        "AUC": 82.08333333333333,
+        "FWT": 81.25,
+        "NBT": -2.2222222222222223,
+        "OldFinal": 81.66666666666667,
+        "FinalAll": 83.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "C_equal_budget",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 90,
+        "7_7": 80,
+        "8_6": 35,
+        "8_7": 95,
+        "8_8": 80,
+        "9_6": 30,
+        "9_7": 95,
+        "9_8": 75,
+        "9_9": 100
+      },
+      "metrics_percent": {
+        "AUC": 80.9375,
+        "FWT": 82.5,
+        "NBT": 2.7777777777777777,
+        "OldFinal": 66.66666666666667,
+        "FinalAll": 75.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "Q",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 90,
+        "7_6": 70,
+        "7_7": 100,
+        "8_6": 65,
+        "8_7": 100,
+        "8_8": 85,
+        "9_6": 55,
+        "9_7": 100,
+        "9_8": 95,
+        "9_9": 80
+      },
+      "metrics_percent": {
+        "AUC": 85.0,
+        "FWT": 88.75,
+        "NBT": 5.555555555555555,
+        "OldFinal": 83.33333333333333,
+        "FinalAll": 82.5
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "Q",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 80,
+        "7_7": 100,
+        "8_6": 80,
+        "8_7": 100,
+        "8_8": 85,
+        "9_6": 75,
+        "9_7": 100,
+        "9_8": 60,
+        "9_9": 85
+      },
+      "metrics_percent": {
+        "AUC": 83.4375,
+        "FWT": 85.0,
+        "NBT": 5.555555555555555,
+        "OldFinal": 78.33333333333333,
+        "FinalAll": 80.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "GOAL",
+      "method": "Q",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 75,
+        "7_6": 85,
+        "7_7": 100,
+        "8_6": 70,
+        "8_7": 85,
+        "8_8": 65,
+        "9_6": 50,
+        "9_7": 95,
+        "9_8": 75,
+        "9_9": 95
+      },
+      "metrics_percent": {
+        "AUC": 82.08333333333333,
+        "FWT": 83.75,
+        "NBT": 2.2222222222222223,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 78.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "Q",
+      "seed": 41,
+      "matrix_percent": {
+        "6_6": 35,
+        "7_6": 95,
+        "7_7": 70,
+        "8_6": 45,
+        "8_7": 95,
+        "8_8": 100,
+        "9_6": 40,
+        "9_7": 80,
+        "9_8": 100,
+        "9_9": 95
+      },
+      "metrics_percent": {
+        "AUC": 82.60416666666667,
+        "FWT": 75.0,
+        "NBT": -14.166666666666666,
+        "OldFinal": 73.33333333333333,
+        "FinalAll": 78.75
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "Q",
+      "seed": 42,
+      "matrix_percent": {
+        "6_6": 45,
+        "7_6": 80,
+        "7_7": 80,
+        "8_6": 65,
+        "8_7": 100,
+        "8_8": 95,
+        "9_6": 75,
+        "9_7": 100,
+        "9_8": 85,
+        "9_9": 100
+      },
+      "metrics_percent": {
+        "AUC": 87.39583333333333,
+        "FWT": 80.0,
+        "NBT": -12.777777777777779,
+        "OldFinal": 86.66666666666667,
+        "FinalAll": 90.0
+      }
+    },
+    {
+      "study": "current",
+      "suite": "OBJECT",
+      "method": "Q",
+      "seed": 43,
+      "matrix_percent": {
+        "6_6": 70,
+        "7_6": 90,
+        "7_7": 90,
+        "8_6": 85,
+        "8_7": 90,
+        "8_8": 70,
+        "9_6": 50,
+        "9_7": 95,
+        "9_8": 80,
+        "9_9": 95
+      },
+      "metrics_percent": {
+        "AUC": 83.85416666666667,
+        "FWT": 81.25,
+        "NBT": -5.833333333333333,
+        "OldFinal": 75.0,
+        "FinalAll": 80.0
+      }
+    }
+  ],
+  "summary": {
+    "early_selection/OBJECT/random": {
+      "AUC": {
+        "mean": 74.1875,
+        "sample_sd": 7.733068422186776
+      },
+      "FWT": {
+        "mean": 71.75,
+        "sample_sd": 9.866293630335559
+      },
+      "NBT": {
+        "mean": -4.555555555555555,
+        "sample_sd": 10.331317007579969
+      },
+      "OldFinal": {
+        "mean": 74.33333333333333,
+        "sample_sd": 10.448285345771652
+      },
+      "FinalAll": {
+        "mean": 73.5,
+        "sample_sd": 10.093314619093174
+      }
+    },
+    "early_selection/OBJECT/coreset": {
+      "AUC": {
+        "mean": 80.0,
+        "sample_sd": 11.022241167168417
+      },
+      "FWT": {
+        "mean": 76.5,
+        "sample_sd": 10.731088015667376
+      },
+      "NBT": {
+        "mean": -6.444444444444445,
+        "sample_sd": 4.31852884186556
+      },
+      "OldFinal": {
+        "mean": 78.0,
+        "sample_sd": 9.23459678479671
+      },
+      "FinalAll": {
+        "mean": 77.75,
+        "sample_sd": 12.228297101395599
+      }
+    },
+    "early_selection/OBJECT/event_coreset": {
+      "AUC": {
+        "mean": 75.70833333333333,
+        "sample_sd": 8.36108659787842
+      },
+      "FWT": {
+        "mean": 71.25,
+        "sample_sd": 9.560661587986472
+      },
+      "NBT": {
+        "mean": -8.61111111111111,
+        "sample_sd": 5.080372543936634
+      },
+      "OldFinal": {
+        "mean": 79.66666666666667,
+        "sample_sd": 5.939509893735154
+      },
+      "FinalAll": {
+        "mean": 75.25,
+        "sample_sd": 11.194306588619055
+      }
+    },
+    "baseline/GOAL/MLR_IFA": {
+      "AUC": {
+        "mean": 76.35416666666667,
+        "sample_sd": 6.383980602518568
+      },
+      "FWT": {
+        "mean": 76.66666666666667,
+        "sample_sd": 5.636562191028617
+      },
+      "NBT": {
+        "mean": 0.18518518518518512,
+        "sample_sd": 5.992107291616088
+      },
+      "OldFinal": {
+        "mean": 77.22222222222223,
+        "sample_sd": 10.844011831079515
+      },
+      "FinalAll": {
+        "mean": 76.66666666666667,
+        "sample_sd": 9.213893494789993
+      }
+    },
+    "baseline/GOAL/RA": {
+      "AUC": {
+        "mean": 81.97916666666667,
+        "sample_sd": 3.002819855291578
+      },
+      "FWT": {
+        "mean": 83.75,
+        "sample_sd": 1.25
+      },
+      "NBT": {
+        "mean": 2.5925925925925926,
+        "sample_sd": 5.132002392796673
+      },
+      "OldFinal": {
+        "mean": 77.77777777777777,
+        "sample_sd": 6.309898162000306
+      },
+      "FinalAll": {
+        "mean": 80.83333333333333,
+        "sample_sd": 5.0518148554092255
+      }
+    },
+    "baseline/GOAL/RA_ALIGN": {
+      "AUC": {
+        "mean": 81.11111111111111,
+        "sample_sd": 3.4174499440914072
+      },
+      "FWT": {
+        "mean": 85.83333333333333,
+        "sample_sd": 5.0518148554092255
+      },
+      "NBT": {
+        "mean": 10.833333333333334,
+        "sample_sd": 5.204164998665332
+      },
+      "OldFinal": {
+        "mean": 73.33333333333333,
+        "sample_sd": 1.6666666666666643
+      },
+      "FinalAll": {
+        "mean": 76.25,
+        "sample_sd": 3.307189138830738
+      }
+    },
+    "baseline/OBJECT/MLR_IFA": {
+      "AUC": {
+        "mean": 68.29861111111111,
+        "sample_sd": 3.1186277623933223
+      },
+      "FWT": {
+        "mean": 66.66666666666667,
+        "sample_sd": 3.1457643480294792
+      },
+      "NBT": {
+        "mean": -2.7777777777777777,
+        "sample_sd": 1.9444444444444446
+      },
+      "OldFinal": {
+        "mean": 67.77777777777777,
+        "sample_sd": 8.552669065744805
+      },
+      "FinalAll": {
+        "mean": 65.41666666666667,
+        "sample_sd": 5.204164998665332
+      }
+    },
+    "baseline/OBJECT/RA": {
+      "AUC": {
+        "mean": 73.22916666666667,
+        "sample_sd": 1.7800007802744884
+      },
+      "FWT": {
+        "mean": 73.33333333333333,
+        "sample_sd": 2.8867513459481287
+      },
+      "NBT": {
+        "mean": -0.09259259259259241,
+        "sample_sd": 3.78158849197447
+      },
+      "OldFinal": {
+        "mean": 75.0,
+        "sample_sd": 8.81917103688197
+      },
+      "FinalAll": {
+        "mean": 69.58333333333333,
+        "sample_sd": 5.636562191028617
+      }
+    },
+    "baseline/OBJECT/RA_ALIGN": {
+      "AUC": {
+        "mean": 80.17361111111111,
+        "sample_sd": 3.6626595844388055
+      },
+      "FWT": {
+        "mean": 77.5,
+        "sample_sd": 5.448623679425842
+      },
+      "NBT": {
+        "mean": -4.907407407407407,
+        "sample_sd": 4.2522083345203825
+      },
+      "OldFinal": {
+        "mean": 74.44444444444444,
+        "sample_sd": 3.8490017945975077
+      },
+      "FinalAll": {
+        "mean": 75.83333333333333,
+        "sample_sd": 3.8188130791298667
+      }
+    },
+    "v2/GOAL/B": {
+      "AUC": {
+        "mean": 76.25,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 83.75,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 14.444444444444445,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 73.33333333333333,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 68.75,
+        "sample_sd": null
+      }
+    },
+    "v2/GOAL/C": {
+      "AUC": {
+        "mean": 83.125,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 90.0,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 12.222222222222221,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 71.66666666666667,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 76.25,
+        "sample_sd": null
+      }
+    },
+    "v2/GOAL/N": {
+      "AUC": {
+        "mean": 78.75,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 88.75,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 18.88888888888889,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 71.66666666666667,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 72.5,
+        "sample_sd": null
+      }
+    },
+    "v2/GOAL/V": {
+      "AUC": {
+        "mean": 82.5,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 88.75,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 12.222222222222221,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 75.0,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 76.25,
+        "sample_sd": null
+      }
+    },
+    "v3/GOAL/C": {
+      "AUC": {
+        "mean": 87.5,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 92.5,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 7.777777777777778,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 80.0,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 82.5,
+        "sample_sd": null
+      }
+    },
+    "v3/GOAL/R": {
+      "AUC": {
+        "mean": 77.8125,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 88.75,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 22.22222222222222,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 65.0,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 68.75,
+        "sample_sd": null
+      }
+    },
+    "v3/GOAL/G": {
+      "AUC": {
+        "mean": 83.125,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 93.75,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 21.11111111111111,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 76.66666666666667,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 78.75,
+        "sample_sd": null
+      }
+    },
+    "DOS/GOAL/C": {
+      "AUC": {
+        "mean": 87.5,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 92.5,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 7.777777777777778,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 80.0,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 82.5,
+        "sample_sd": null
+      }
+    },
+    "DOS/GOAL/D": {
+      "AUC": {
+        "mean": 78.33333333333333,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 86.25,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 16.38888888888889,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 71.66666666666667,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 72.5,
+        "sample_sd": null
+      }
+    },
+    "DOS/GOAL/O": {
+      "AUC": {
+        "mean": 87.5,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 92.5,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 9.444444444444445,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 76.66666666666667,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 80.0,
+        "sample_sd": null
+      }
+    },
+    "DOS/GOAL/S": {
+      "AUC": {
+        "mean": 86.875,
+        "sample_sd": null
+      },
+      "FWT": {
+        "mean": 91.25,
+        "sample_sd": null
+      },
+      "NBT": {
+        "mean": 5.555555555555555,
+        "sample_sd": null
+      },
+      "OldFinal": {
+        "mean": 81.66666666666667,
+        "sample_sd": null
+      },
+      "FinalAll": {
+        "mean": 85.0,
+        "sample_sd": null
+      }
+    },
+    "current/GOAL/C_normal": {
+      "AUC": {
+        "mean": 82.5,
+        "sample_sd": 7.098635432250342
+      },
+      "FWT": {
+        "mean": 85.0,
+        "sample_sd": 8.1967981553775
+      },
+      "NBT": {
+        "mean": 5.555555555555555,
+        "sample_sd": 2.2222222222222223
+      },
+      "OldFinal": {
+        "mean": 80.55555555555556,
+        "sample_sd": 0.962250448649379
+      },
+      "FinalAll": {
+        "mean": 80.0,
+        "sample_sd": 4.330127018922194
+      }
+    },
+    "current/GOAL/S_latest": {
+      "AUC": {
+        "mean": 87.25694444444444,
+        "sample_sd": 2.64823818967616
+      },
+      "FWT": {
+        "mean": 89.58333333333333,
+        "sample_sd": 1.9094065395649333
+      },
+      "NBT": {
+        "mean": 5.277777777777778,
+        "sample_sd": 5.204164998665331
+      },
+      "OldFinal": {
+        "mean": 83.88888888888889,
+        "sample_sd": 2.545875386086579
+      },
+      "FinalAll": {
+        "mean": 85.0,
+        "sample_sd": 2.5
+      }
+    },
+    "current/OBJECT/C_normal": {
+      "AUC": {
+        "mean": 85.0,
+        "sample_sd": 3.067173305069887
+      },
+      "FWT": {
+        "mean": 81.25,
+        "sample_sd": 2.5
+      },
+      "NBT": {
+        "mean": -8.055555555555555,
+        "sample_sd": 2.373334373699315
+      },
+      "OldFinal": {
+        "mean": 77.22222222222221,
+        "sample_sd": 3.4694433324435563
+      },
+      "FinalAll": {
+        "mean": 82.5,
+        "sample_sd": 3.307189138830738
+      }
+    },
+    "current/OBJECT/S_latest": {
+      "AUC": {
+        "mean": 86.49305555555556,
+        "sample_sd": 2.1908043825482437
+      },
+      "FWT": {
+        "mean": 80.41666666666667,
+        "sample_sd": 8.508574106942557
+      },
+      "NBT": {
+        "mean": -11.018518518518519,
+        "sample_sd": 11.56814663033389
+      },
+      "OldFinal": {
+        "mean": 81.11111111111111,
+        "sample_sd": 6.735753140545636
+      },
+      "FinalAll": {
+        "mean": 85.0,
+        "sample_sd": 4.5069390943299865
+      }
+    },
+    "current/GOAL/C_equal_budget": {
+      "AUC": {
+        "mean": 83.71527777777777,
+        "sample_sd": 3.3468692183613675
+      },
+      "FWT": {
+        "mean": 87.08333333333333,
+        "sample_sd": 2.8867513459481287
+      },
+      "NBT": {
+        "mean": 7.592592592592593,
+        "sample_sd": 1.7858612520357329
+      },
+      "OldFinal": {
+        "mean": 77.22222222222221,
+        "sample_sd": 6.735753140545631
+      },
+      "FinalAll": {
+        "mean": 80.0,
+        "sample_sd": 6.49519052838329
+      }
+    },
+    "current/OBJECT/C_equal_budget": {
+      "AUC": {
+        "mean": 80.90277777777777,
+        "sample_sd": 1.1982940226900947
+      },
+      "FWT": {
+        "mean": 79.58333333333333,
+        "sample_sd": 4.018187817080398
+      },
+      "NBT": {
+        "mean": -2.4074074074074074,
+        "sample_sd": 5.280213862734538
+      },
+      "OldFinal": {
+        "mean": 72.77777777777779,
+        "sample_sd": 7.876359377087682
+      },
+      "FinalAll": {
+        "mean": 77.5,
+        "sample_sd": 5.448623679425842
+      }
+    },
+    "current/GOAL/Q": {
+      "AUC": {
+        "mean": 83.50694444444444,
+        "sample_sd": 1.4595728859016484
+      },
+      "FWT": {
+        "mean": 85.83333333333333,
+        "sample_sd": 2.602082499332666
+      },
+      "NBT": {
+        "mean": 4.444444444444445,
+        "sample_sd": 1.9245008972987523
+      },
+      "OldFinal": {
+        "mean": 78.33333333333333,
+        "sample_sd": 5.0
+      },
+      "FinalAll": {
+        "mean": 80.41666666666667,
+        "sample_sd": 1.9094065395649333
+      }
+    },
+    "current/OBJECT/Q": {
+      "AUC": {
+        "mean": 84.61805555555556,
+        "sample_sd": 2.4854903011351723
+      },
+      "FWT": {
+        "mean": 78.75,
+        "sample_sd": 3.307189138830738
+      },
+      "NBT": {
+        "mean": -10.925925925925926,
+        "sample_sd": 4.4646531300893315
+      },
+      "OldFinal": {
+        "mean": 78.33333333333333,
+        "sample_sd": 7.264831572567793
+      },
+      "FinalAll": {
+        "mean": 82.91666666666667,
+        "sample_sd": 6.166103577895309
+      }
+    }
+  },
+  "v1_two_task_results": {
+    "A": {
+      "task8": 65,
+      "task9": 80,
+      "mean": 72.5
+    },
+    "B": {
+      "task8": 80,
+      "task9": 80,
+      "mean": 80.0
+    },
+    "C": {
+      "task8": 80,
+      "task9": 85,
+      "mean": 82.5
+    },
+    "D": {
+      "task8": 70,
+      "task9": 80,
+      "mean": 75.0
+    }
+  },
+  "latest_paired_differences": {
+    "C": {
+      "GOAL_41": {
+        "AUC": 1.5625,
+        "FWT": 2.5,
+        "NBT": 2.2222222222222223,
+        "OldFinal": 0.0,
+        "FinalAll": -1.25
+      },
+      "GOAL_42": {
+        "AUC": 3.4375,
+        "FWT": 1.25,
+        "NBT": -4.444444444444445,
+        "OldFinal": 8.333333333333334,
+        "FinalAll": 3.75
+      },
+      "GOAL_43": {
+        "AUC": 5.625,
+        "FWT": 3.75,
+        "NBT": -4.722222222222222,
+        "OldFinal": 11.666666666666666,
+        "FinalAll": 12.5
+      },
+      "OBJECT_41": {
+        "AUC": 6.666666666666667,
+        "FWT": 2.5,
+        "NBT": -8.333333333333334,
+        "OldFinal": 15.0,
+        "FinalAll": 15.0
+      },
+      "OBJECT_42": {
+        "AUC": 2.2916666666666665,
+        "FWT": -7.5,
+        "NBT": -16.944444444444443,
+        "OldFinal": 3.3333333333333335,
+        "FinalAll": 2.5
+      },
+      "OBJECT_43": {
+        "AUC": 7.8125,
+        "FWT": 7.5,
+        "NBT": -0.5555555555555556,
+        "OldFinal": 6.666666666666667,
+        "FinalAll": 5.0
+      }
+    },
+    "Q": {
+      "GOAL_41": {
+        "AUC": 0.625,
+        "FWT": 2.5,
+        "NBT": 5.555555555555555,
+        "OldFinal": 0.0,
+        "FinalAll": 0.0
+      },
+      "GOAL_42": {
+        "AUC": 6.875,
+        "FWT": 5.0,
+        "NBT": -4.444444444444445,
+        "OldFinal": 8.333333333333334,
+        "FinalAll": 7.5
+      },
+      "GOAL_43": {
+        "AUC": 3.75,
+        "FWT": 3.75,
+        "NBT": 1.3888888888888888,
+        "OldFinal": 8.333333333333334,
+        "FinalAll": 6.25
+      },
+      "OBJECT_41": {
+        "AUC": 3.75,
+        "FWT": 2.5,
+        "NBT": -1.9444444444444444,
+        "OldFinal": 11.666666666666666,
+        "FinalAll": 10.0
+      },
+      "OBJECT_42": {
+        "AUC": -3.0208333333333335,
+        "FWT": -6.25,
+        "NBT": -6.388888888888889,
+        "OldFinal": -1.6666666666666667,
+        "FinalAll": -3.75
+      },
+      "OBJECT_43": {
+        "AUC": 4.895833333333333,
+        "FWT": 8.75,
+        "NBT": 8.055555555555555,
+        "OldFinal": -1.6666666666666667,
+        "FinalAll": 0.0
+      }
+    }
+  },
+  "matrix_rows_recomputed": 68,
+  "reuse_not_unique_run_count": true,
+  "sample_sd_ddof": 1
+}
