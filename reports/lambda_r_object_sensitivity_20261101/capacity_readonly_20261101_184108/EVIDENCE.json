@@ -1,0 +1,151 @@
+{
+  "observed": 1793529670.9622529,
+  "result": {
+    "status": "PASS_COPY_RESTORE_EQUALITY_AND_MICROBENCH_ONLY",
+    "optimizer_calls": 0,
+    "environments": 0,
+    "production_code_or_state_written": false,
+    "target_signals": 0,
+    "started": 1793529491.3348289,
+    "input_sha256": "03af4f8a6b0ab129d2cd2ccc4496c748da0e5c6eed063f1920a4aa6d4bb66caf",
+    "input_bytes": 346377077,
+    "input_stage": 7,
+    "input_next_epoch": 62,
+    "rounds": [
+      {
+        "round": 0,
+        "mode": "cpu",
+        "seconds": 6.74242069399952
+      },
+      {
+        "round": 0,
+        "mode": "device",
+        "seconds": 0.6080905990002066
+      },
+      {
+        "round": 1,
+        "mode": "device",
+        "seconds": 0.47364037900115363
+      },
+      {
+        "round": 1,
+        "mode": "cpu",
+        "seconds": 6.672521461001452
+      },
+      {
+        "round": 2,
+        "mode": "cpu",
+        "seconds": 6.237321501999759
+      },
+      {
+        "round": 2,
+        "mode": "device",
+        "seconds": 0.4757475379992684
+      },
+      {
+        "round": 3,
+        "mode": "device",
+        "seconds": 0.4815348369993444
+      },
+      {
+        "round": 3,
+        "mode": "cpu",
+        "seconds": 2.8087476800010336
+      },
+      {
+        "round": 4,
+        "mode": "cpu",
+        "seconds": 1.0517533109996293
+      },
+      {
+        "round": 4,
+        "mode": "device",
+        "seconds": 0.10669539100126713
+      },
+      {
+        "round": 5,
+        "mode": "device",
+        "seconds": 0.5084748009994655
+      },
+      {
+        "round": 5,
+        "mode": "cpu",
+        "seconds": 6.851172054999552
+      },
+      {
+        "round": 6,
+        "mode": "cpu",
+        "seconds": 6.612009123000462
+      },
+      {
+        "round": 6,
+        "mode": "device",
+        "seconds": 0.7610604290002811
+      },
+      {
+        "round": 7,
+        "mode": "device",
+        "seconds": 0.47762972000055015
+      },
+      {
+        "round": 7,
+        "mode": "cpu",
+        "seconds": 6.116598807000628
+      },
+      {
+        "round": 8,
+        "mode": "cpu",
+        "seconds": 6.733575177999228
+      },
+      {
+        "round": 8,
+        "mode": "device",
+        "seconds": 0.07754328000009991
+      },
+      {
+        "round": 9,
+        "mode": "device",
+        "seconds": 0.07824866699957056
+      },
+      {
+        "round": 9,
+        "mode": "cpu",
+        "seconds": 1.1133972160005214
+      }
+    ],
+    "full_training_equivalence": "NOT_TESTED",
+    "production_activation": false,
+    "ended": 1793529606.2398891,
+    "max_memory_allocated": 1763270144
+  },
+  "result_sha256": "ce7c4474e8bc50120e757fbbab5b7d74aa1ab47064aad8be09f7c4ee98b5300b",
+  "processes": [
+    {
+      "pid": 2163,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2164,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
+      "state": "S"
+    },
+    {
+      "pid": 2169,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
+      "state": "R"
+    }
+  ],
+  "train_status": {
+    "arm": "S",
+    "stage": 7,
+    "phase": "train",
+    "epoch_complete": 65,
+    "steps": 30455,
+    "physical_optimizer_calls": 45210,
+    "time": 1793529666.0610306,
+    "pid": 2169
+  },
+  "extra_optimizer": 0,
+  "extra_environment": 0
+}

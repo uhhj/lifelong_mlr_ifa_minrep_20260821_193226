@@ -1,0 +1,105 @@
+{
+  "status": "PASS_NONBLOCKING_PROFILE_RECOMPUTATION_NOT_CAUSAL_AB_TEST",
+  "source_sha256": "acf5e8954d65979276555ea21382b9b3e8a7ae5e9ef1fcb00e79eb8b31a313bb",
+  "windows": [
+    {
+      "samples": 599,
+      "counts": {
+        "batch_load": 8,
+        "candidate_updates": 377,
+        "probe": 46,
+        "other_or_partial_stack": 36,
+        "restore": 26,
+        "snapshot_copy": 80,
+        "equality_check": 26
+      }
+    },
+    {
+      "samples": 599,
+      "counts": {
+        "candidate_updates": 356,
+        "probe": 44,
+        "restore": 45,
+        "batch_load": 7,
+        "other_or_partial_stack": 44,
+        "snapshot_copy": 73,
+        "equality_check": 30
+      }
+    },
+    {
+      "samples": 599,
+      "counts": {
+        "candidate_updates": 380,
+        "probe": 32,
+        "restore": 30,
+        "other_or_partial_stack": 29,
+        "checkpoint_save": 46,
+        "batch_load": 6,
+        "snapshot_copy": 63,
+        "equality_check": 13
+      }
+    }
+  ],
+  "total_main_thread_samples": 1797,
+  "categories": {
+    "batch_load": {
+      "samples": 21,
+      "percent": 1.1686143572621035
+    },
+    "candidate_updates": {
+      "samples": 1113,
+      "percent": 61.93656093489149
+    },
+    "probe": {
+      "samples": 122,
+      "percent": 6.789092932665554
+    },
+    "other_or_partial_stack": {
+      "samples": 109,
+      "percent": 6.065664997217585
+    },
+    "restore": {
+      "samples": 101,
+      "percent": 5.6204785754034505
+    },
+    "snapshot_copy": {
+      "samples": 216,
+      "percent": 12.020033388981636
+    },
+    "equality_check": {
+      "samples": 69,
+      "percent": 3.8397328881469117
+    },
+    "checkpoint_save": {
+      "samples": 46,
+      "percent": 2.559821925431274
+    }
+  },
+  "update_subcategories": {
+    "optimizer": {
+      "samples": 139,
+      "percent_total": 7.7351140790205895
+    },
+    "other_update": {
+      "samples": 345,
+      "percent_total": 19.198664440734557
+    },
+    "finite_check": {
+      "samples": 97,
+      "percent_total": 5.397885364496383
+    },
+    "backward": {
+      "samples": 532,
+      "percent_total": 29.604897050639956
+    }
+  },
+  "errors_reported": 0,
+  "nonblocking": true,
+  "extra_optimizer": 0,
+  "extra_environments": 0,
+  "limits": [
+    "Python stack wall sample proportions include C/CUDA execution or waits; not GPU kernel timing.",
+    "Nonblocking reads may produce incomplete stacks even with zero reported errors.",
+    "Three 60-second windows at 10Hz; not representative of every stage or resource regime."
+  ]
+}

@@ -1,11 +1,11 @@
 {
   "status": "PARTIAL_TRAINING_OR_EVALUATION",
-  "observation": "2026-11-01T18:19:33.291586+08:00",
+  "observation": "2026-11-01T18:47:41.296827+08:00",
   "counts": {
     "L005_41": {
-      "epochs": 150,
-      "accepted_updates": 27050,
-      "physical_optimizer_calls": 38400,
+      "epochs": 169,
+      "accepted_updates": 31363,
+      "physical_optimizer_calls": 47026,
       "own_isolated_optimizer_calls": 33,
       "own_extra_autograd_calls": 19,
       "training_collection_completed_episodes": 10,
@@ -14,17 +14,17 @@
         "arm": "S",
         "stage": 7,
         "phase": "train",
-        "epoch_complete": 50,
-        "steps": 27050,
-        "physical_optimizer_calls": 38400,
-        "time": 1793528354.690102,
+        "epoch_complete": 69,
+        "steps": 31363,
+        "physical_optimizer_calls": 47026,
+        "time": 1793530051.6713803,
         "pid": 2169
       },
-      "current_stage_epochs": 50,
-      "recent_epoch_mean_seconds": 177.16052911281585,
-      "current_stage_compute_minutes_estimate": 147.63377426067987,
-      "gate_blocks_observed": 1151,
-      "gate_Q_accepts_observed": 683
+      "current_stage_epochs": 69,
+      "recent_epoch_mean_seconds": 105.52711791992188,
+      "current_stage_compute_minutes_estimate": 54.522344258626305,
+      "gate_blocks_observed": 1587,
+      "gate_Q_accepts_observed": 1000
     },
     "L005_42": {
       "epochs": 0,
@@ -102,9 +102,9 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 150,
-  "accepted_updates": 27050,
-  "physical_training_optimizer_calls": 38400,
+  "epochs": 169,
+  "accepted_updates": 31363,
+  "physical_training_optimizer_calls": 47026,
   "own_isolated_optimizer_calls": 33,
   "own_extra_autograd_calls": 19,
   "training_collection_completed_episodes": 10,
@@ -124,39 +124,49 @@
     {
       "pid": 2169,
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
-      "state": "S"
+      "state": "R"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1430818816,
+      "free": 1430814720,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 222859264
+      "spare": 222855168
     },
     "/data": {
-      "free": 27619975168,
-      "remaining_bound": 12450226176,
+      "free": 27610677248,
+      "remaining_bound": 12450213888,
       "reserve": 2147483648,
-      "spare": 13022265344
+      "spare": 13012979712
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "2169\n",
+    "stdout": "2169\n3441\n",
     "stderr": ""
   },
-  "snapshot_sha256": "c55e5ffed1c73b93f5d15ba8cc793935ea9e4ed05380303f7b2c194338c64569",
+  "snapshot_sha256": "3f6617d22ddb486b0ff0c39f1662213c6fcfcc575a15521f77669e1f8a541407",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261101_162910",
+  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261101_181931",
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
   "controller": 2163,
-  "latest_evidence": "check_readonly_20261101_181931",
-  "next_check_minutes": 720,
+  "latest_evidence": "check_readonly_20261101_184739",
+  "next_check_minutes": 20,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
     0.05,
     0.2
-  ]
+  ],
+  "engineering_validation": {
+    "status": "RUNNING_NOT_ACCEPTED",
+    "latest_evidence": "capacity_readonly_20261101_185033",
+    "recorded_optimizer_completed": 1198,
+    "recorded_extra_autograd": 6,
+    "max_optimizer": 7828,
+    "max_extra_autograd": 36,
+    "environments": 0,
+    "production_activation": false
+  }
 }
