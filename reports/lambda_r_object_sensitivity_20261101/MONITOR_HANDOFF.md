@@ -1,11 +1,30 @@
-# OBJECT 最新 S 的 lambda_R 六 run
+# OBJECT 最新S固定λ_R六run：当前交接
 
-状态 PARTIAL_UNIQUE_DEPLOYMENT_PENDING，观察 2026-11-01T15:31:21.948337+08:00。
+实际观察 2026-11-01T15:32:39.005883+08:00；check_readonly_20261101_153238/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
-用户授权0.05/0.2各seed41/42/43，0.1已有S直接复用。先完整读PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、SOURCE_REVIEW.json、LOCAL_BUILD_REVIEW.json、PREFLIGHT_LOCAL_AUDIT.json。独立root S_LAMBDA_R_OBJECT41_42_43_20261101_v1。
+唯一root `/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1`，controller2163，合同`6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e`，135冻结项。唯一部署deploy_remote_20261101_152959。禁止重复compose/freeze/deploy/controller或已完成epoch。
 
-唯一部署请求 request_20261101_152959_7a614987.json 正在执行。直接读取旧机制目录.session_control/result_20261101_152959_7a614987.json，禁止重复提交deploy或任何controller。result成功后按第一行实际目录复制证据，写ACTIVE_ROOT，check→audit_progress→record_progress。现有worker28064，先读status核PID，不重启活跃worker、不输出凭据。
+|case|完整轮/400|接受更新|生产物理|采集/40|正式/200|
+|---|---:|---:|---:|---:|---:|
+|L005_41|0|0|0|0|0|
+|L005_42|0|0|0|0|0|
+|L005_43|0|0|0|0|0|
+|L020_41|0|0|0|0|0|
+|L020_42|0|0|0|0|0|
+|L020_43|0|0|0|0|0|
 
-科学协议、预算及最终CPU实际验收要求见PROTOCOL；STATIC_ONLY不等于科学接受。6run2400轮633000接受1171800生产546隔离246准入autograd240采集1200正式54600门控。先L005三seed训练及评估，再L020三seed。完成后实际CPU24CP/6恢复/24缓存teacher/1200初态noise、门控/预算复算及已有0.1配对解释发布。所有基线/旧Q/C/旧机制只读不恢复。不加GOAL或额外seed。
+累计0/2400轮、0/633000接受、0/1171800生产、0/546隔离、0/246准入autograd、0/240采集、0/1200正式。方向诊断最多216autograd另记。
 
-健康静默，完成/新失败/需行动才通知。第一次30分钟核首个保持阶段准入与吞吐，之后按整seed或整组正式实测速率安排。全部验收报告发布后关闭本轮新监控。
+下一30分钟复查，首次核自己的保持阶段准入及吞吐，此后依据整seed或整组正式实际剩余时间调整，不固定高频，不按时钟推断完成。
+
+先完整读PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、FINAL_WRAPPER_REVIEW.json及最新EVIDENCE/LOCAL_AUDIT。用户只授权OBJECT六run：0.05/0.2各41/42/43，已有0.1三个完整S只读复用。GOAL不跑，C/Q/旧机制不恢复。每阶段100轮，最新S双候选10步门控、零epsilon、自己成功缓存q和原4槽分母不变；只改变保持合成项λ_R，准入同λ均匀支持参照不是原0.1轨迹。
+
+顺序L005三seed训练→600正式→L020三seed训练→600正式。240采集20–29不补采，1200正式0–19原600步5zero配对Normal。每stage自己的GPU准入/COPY_EQ、官方初态及Task6对已有S全tensor实际通过；未来阶段不能套PASS。
+
+运输使用旧机制目录现有.session_control worker，先读status并核PID，不重启活跃worker或输出凭据。本目录check复制旧目录queue，按result真实目录复制回来，audit_progress.py NEW PREVIOUS→record_progress.py NEW INTERVAL。任何错误先保留原失败、hash、进程/退出、完整恢复和已耗成本，禁止盲恢复部分块或环境attempt，不改科学协议。
+
+只有自然本root/controller.exit0且无自身进程后，才final_readonly实际CPU24CP/6恢复/24teacher缓存/1200初态noise/54600门控及预算验收→audit_final_local→compare_primary_s。FINAL_WRAPPER_REVIEW目前仅STATIC_ONLY。包装错误保留原证据后外置版本化修复，不重训重评。
+
+随后自主完成FINAL_REPORT/ACCEPTANCE：三档全结果、新旧任务、SF/FS、全部负单元、门控接受与梯度/训练代理、成本边界。不按正式成绩选择最佳λ，不扩seed或负结果加实验。已有0.1的600回合被两次配对而非1200独立基线回合。保留开发集反复使用和预训练来源未闭合，敏感性分析不是独立确认或全局无泄露。
+
+每次检查按根AGENTS经publish.py轻量审查code/report/hash/scalars/outcomes，串行nonforce推MLR核remoteSHA/localreceipt，禁CP/model/state/RNG/cache/凭据/未审bundle。健康进展静默，只完成、新失败或需行动通知。六run全部独立验收、解释及发布后才删除本新监控，不恢复旧监控。
