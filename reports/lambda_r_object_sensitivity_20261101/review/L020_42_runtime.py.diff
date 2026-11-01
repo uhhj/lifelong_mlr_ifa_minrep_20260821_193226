@@ -1,0 +1,45 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261028_support_gate_full_s_object\seed42\runtime.py
++++ L020_42/runtime.py
+@@ -63,6 +63,9 @@
+  sampler=torch.utils.data.DistributedSampler(ds,num_replicas=1,rank=0,shuffle=True,seed=0)
+  loader=torch.utils.data.DataLoader(ds,batch_size=10,sampler=sampler,num_workers=0,persistent_workers=False)
+  a.start_task(-1,loader);a.refs={}
++ assert a.cfg.train.n_epochs==100 and not hasattr(a,'total_steps')
++ fn=a.scheduler.lr_lambdas[0];assert fn(0)==0 and fn(500)==1 and fn((100*len(loader)))==0 and fn((100*len(loader))-1)>0
++ write(R/('SCHEDULE_S_%d.json'%ds.stage),dict(status='PASS_ACTUAL_SCHEDULE',epochs=100,batches=len(loader),total_steps=(100*len(loader)),warmup_steps=500))
+  for t in range(6,ds.stage+1):
+   i=next(i for i,r in enumerate(ds.rows) if r['task']==t)
+   f=ds.native[i][0]['feature'][0,:,0,:];a.refs[t]=f[0].cuda()
+@@ -80,3 +83,32 @@
+  if isinstance(a,dict):return a.keys()==b.keys() and all(equal(a[k],b[k]) for k in a)
+  if isinstance(a,(tuple,list)):return len(a)==len(b) and all(equal(x,y) for x,y in zip(a,b))
+  return a==b
++
++# Same tested copy optimization, verified at every actual stage start.
++from candidate import cpu_snapshot
++_reference_cpu=cpu
++_reference_capture=capture
++_copy_checked={}
++cpu=cpu_snapshot
++def capture(a):
++ result=_reference_capture(a)
++ if a.scheduler.last_epoch==0 and str(a.step) not in _copy_checked:
++  global cpu
++  try:
++   cpu=_reference_cpu;oracle=_reference_capture(a)
++  finally:cpu=cpu_snapshot
++  assert equal(result,oracle)
++  _copy_checked[str(a.step)]=dict(all_state_exact=True,optimizer_calls_added=0,environments_added=0)
++  write(R/'COPY_EQ.json',dict(status='PASS_OBSERVED_STAGE_STARTS',checked=_copy_checked,candidate_sha256=sha(R/'candidate.py')))
++ return result
++import functools
++CALLS={'production':0,'admission':0}
++_count_mode='admission'
++_original_adamw_step=torch.optim.AdamW.step
++@functools.wraps(_original_adamw_step)
++def _counted_step(self,*args,**kwargs):
++ result=_original_adamw_step(self,*args,**kwargs);CALLS[_count_mode]+=1;return result
++torch.optim.AdamW.step=_counted_step
++def set_count_mode(mode):
++ global _count_mode
++ assert mode in CALLS;_count_mode=mode

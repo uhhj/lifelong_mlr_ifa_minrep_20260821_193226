@@ -1,0 +1,11 @@
+# 工程与科学边界
+
+accepted OBJECT S 为科学源。updates/legacy_updates、memory/legacy_memory/support_memory、losses/legacy_losses、collect/evaluate及synthetic_checks逐字保留。layout仅输出身份、容量上界及授权λ_R改变。gate_admission候选显式系数改为读取RETAIN_WEIGHT，fork_tools方向诊断同样读取；probe和choose保持原代码。SOURCE_REVIEW与review差异绑定来源SHA。
+
+runtime复用Q v2已运行通过的工程观测层（实际scheduler、独立物理调用计数、COPY_EQ），生产仍为S双候选。初始化和Task6与已接受S真实比对。所有其他真实阶段必须自己的准入，静态检查不替代GPU或CPU验收。
+
+容量上界：新实验/data私有资产12GiB，保留2GiB；/root新预算128MiB，保留1GiB。预检与部署再次检查空闲GPU、旧实验真实退出、父数据/官方初始化/来源hash及新root不存在。
+
+运输沿用execution/20261027_support_gate_forks中的已授权Credential Manager worker。先读status并核进程，不重启活跃worker，不打印凭据。queue后按result实际返回目录取证，不猜秒数。最终或部署请求绝不重复提交。
+
+本轮baseline的OBJECT seed41/42是在复制优化前、43是在优化后训练；优化已完整路径逐位验证，只影响复制成本。已有3914诊断调用保持历史账，不计本轮。λ变化导致缓存、模型轨迹和门控接受变化属于完整方法响应，不是共同中间state单步因果。

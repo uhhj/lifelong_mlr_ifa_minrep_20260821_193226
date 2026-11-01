@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261028_support_gate_full_s_object\seed43\fork_tools.py
++++ L020_43/fork_tools.py
+@@ -64,7 +64,7 @@
+     with auxiliary(a):
+         allx=a.map_tensor_to_device(batch[0]);x={k:(v[ids] if torch.is_tensor(v) else v) for k,v in allx.items()}
+         bc,ex=new_terms(a,x,pr['scale']);rx,rt,ct=retention(a.policy.module,memory,stage,a.step,arm if arm!='C' else 'Q')
+-        re=.1*(rx+.1*rt);pars=[p for p in a.policy.parameters() if p.requires_grad]
++        re=RETAIN_WEIGHT*(rx+.1*rt);pars=[p for p in a.policy.parameters() if p.requires_grad]
+         gs=[torch.autograd.grad(a.loss_scale*v,pars,retain_graph=True,allow_unused=True) for v in [bc,ex,re]]
+         def norm(g):return sum(float(v.double().square().sum()) for v in g if v is not None)**.5
+         def pair(g,h):
