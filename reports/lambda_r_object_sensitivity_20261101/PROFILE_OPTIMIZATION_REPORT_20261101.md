@@ -1,3 +1,26 @@
+# 最新状态：完整路径等价通过，已部署等待自然边界
+
+## 2026-11-01 19:18：完整等价验证通过，安全交接已ARMED，当前训练未切换
+
+capacity_readonly_20261101_191620实际读取VALIDATION PASS：两档λ的Task6–9共8阶段，各完整一轮157/227/309/362个batch，全部每步标量、C/Q分支完整state、探针、门控决定、所选state、保存加载下一步及方向诊断逐项相等。诊断进程3441已退出，实际7828 started==completed、36额外autograd、0环境、0生产epoch，单独记账。原135科学项及诊断使用的只读基线CP/cache SHA精确保留。覆盖完整路径，不等于验证全部400轮，也不是科学最终接受。
+
+已完整审查工程payload及check/audit/record/final的真实完成来源适配。19:17:58唯一部署engineering_device_snapshot_20261101_v1，controller3899/watchdog3900，工程合同b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c、5工程冻结项。禁止再次执行dispatch_handoff、任何原/新controller、验证dispatch或已完成轮。
+
+check_readonly_20261101_191813/LOCAL_AUDIT及ENGINEERING_HANDOFF_LOCAL_AUDIT实际PASS，184739全部epoch/门控/诊断前缀精确保留。原等待调度器2163仅被PID级SIGSTOP，当前launcher2164/训练2169未接收信号且继续运行；新owner3899与watchdog3900为S，ARMED存在、HANDOFF_COMPLETE尚不存在，无FAILURE/WATCHDOG_RELEASE。当前仍L005_41原训练代码，优化尚未用于任何生产run。
+
+新owner等待当前L005_41自然完成400轮40采集、launcher内核Z且exit_code0，并核完整记录/前缀/hash后才结束旧等待调度器、取得同一root锁、记录真实train_S.exit0并接续五个未来run。仅替换各新解释器内四次门控块快照，保持各tensor原设备独立clone，轮末CP和准入仍原CPU格式；每阶段实际BRANCH_COPY_EQ及自身GPU准入保留。原root/controller.exit必须不存在；最终唯一完成来源为engineering_device_snapshot_20261101_v1/controller.exit0且无自身进程。若WATCHDOG_RELEASE出现，应审计并通知，不能宣称交接成功或盲重复部署。
+
+本次L005_41 Task6完整100轮、Task7完整95轮，共195轮37265接受58830生产、33自身隔离19准入autograd、10采集0正式；其他五run未开始。当前Task7近10轮57.1295秒、全95轮110.8830秒，尚余5轮约4.76分钟纯计算。Task8/9未测，按批次数比例的当前整run剩余纯计算条件范围286–556分钟，保存/准备/余30采集另计，不能将近期变快归因于尚未启用的优化。全部六run目前没有可靠完成日期。下一240分钟在当前整run结束预计较早侧复查，覆盖旧20分钟验证等待间隔，不固定短轮询。详见本快照TIMING_AUDIT。
+
+运输使用旧目录.session_control现有worker28064，先读status核PID，不重启活跃worker或输出凭据。以后只用工程目录check_readonly.py复制至旧目录queue；按result实际目录复制回本目录，再工程audit_progress.py NEW PREVIOUS→工程record_progress.py NEW INTERVAL。根旧记录器/旧final包装不再适用。工程final包装仍仅静态，全部自然完成后才实际CPU24CP/6恢复/24teacher/1200noise/54600门控验收，随后根compare_primary_s和完整解释发布。7828诊断调用/36autograd必须单列，不混科学预算。原源、原证据及失败记录保留。
+
+只做OBJECT λ=.05/.2各三seed，已有.1只读；科学损失、门控阈值、批次、采样及预算不变。两成潜在整体节时仍是条件推测，不能用92.05%复制微基准节时冒充整run提速。健康静默，只实质变化/完成/新失败/需行动通知；全部六run独立验收解释发布后才删除同一object-s-r-run监控。
+
+
+---
+
+以下为18:53以前定位与验证历史，进度由上文覆盖。
+
 # 2026-11-01 状态搬运优化：定位完成，完整路径验证进行中
 
 目前已找到可优化的具体环节，但尚未将候选代码用于生产。当前 L005_41 始终由原训练进程2169运行，没有收到暂停、终止或重启信号；135科学冻结项不变，18:47:41完整审计确认全部历史epoch/门控前缀精确保留。其他五个run尚未启动。

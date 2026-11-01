@@ -1,13 +1,13 @@
 {
-  "observed": 1793530235.8916063,
-  "evidence": "capacity_readonly_20261101_185033",
+  "observed": 1793531782.7396898,
+  "evidence": "capacity_readonly_20261101_191620",
   "dispatch": "capacity_readonly_20261101_184251",
   "diagnostic": {
-    "status": "RUNNING",
+    "status": "PASS_PAIRED_FULL_EPOCH_PATH_BOTH_LAMBDAS",
     "started": 1793529788.901063,
-    "optimizer_started": 1198,
-    "optimizer_completed": 1198,
-    "extra_autograd": 6,
+    "optimizer_started": 7828,
+    "optimizer_completed": 7828,
+    "extra_autograd": 36,
     "environments": 0,
     "production_epochs": 0,
     "production_writes": false,
@@ -25,6 +25,97 @@
         "all_rows_states_probes_decisions_exact": true,
         "serialization_next_step_exact": true,
         "seconds": 183.44897556304932
+      },
+      {
+        "lambda_R": 0.05,
+        "stage": 7,
+        "batches": 227,
+        "blocks": 23,
+        "choices": {
+          "C": 20,
+          "Q": 3
+        },
+        "all_rows_states_probes_decisions_exact": true,
+        "serialization_next_step_exact": true,
+        "seconds": 239.6089632511139
+      },
+      {
+        "lambda_R": 0.05,
+        "stage": 8,
+        "batches": 309,
+        "blocks": 31,
+        "choices": {
+          "C": 29,
+          "Q": 2
+        },
+        "all_rows_states_probes_decisions_exact": true,
+        "serialization_next_step_exact": true,
+        "seconds": 238.99349689483643
+      },
+      {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37,
+        "choices": {
+          "C": 26,
+          "Q": 11
+        },
+        "all_rows_states_probes_decisions_exact": true,
+        "serialization_next_step_exact": true,
+        "seconds": 204.15219736099243
+      },
+      {
+        "lambda_R": 0.2,
+        "stage": 6,
+        "batches": 157,
+        "blocks": 157,
+        "choices": {
+          "C": 0,
+          "Q": 0
+        },
+        "all_rows_states_probes_decisions_exact": true,
+        "serialization_next_step_exact": true,
+        "seconds": 121.05328488349915
+      },
+      {
+        "lambda_R": 0.2,
+        "stage": 7,
+        "batches": 227,
+        "blocks": 23,
+        "choices": {
+          "C": 21,
+          "Q": 2
+        },
+        "all_rows_states_probes_decisions_exact": true,
+        "serialization_next_step_exact": true,
+        "seconds": 157.12589144706726
+      },
+      {
+        "lambda_R": 0.2,
+        "stage": 8,
+        "batches": 309,
+        "blocks": 31,
+        "choices": {
+          "C": 27,
+          "Q": 4
+        },
+        "all_rows_states_probes_decisions_exact": true,
+        "serialization_next_step_exact": true,
+        "seconds": 242.1056740283966
+      },
+      {
+        "lambda_R": 0.2,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37,
+        "choices": {
+          "C": 28,
+          "Q": 9
+        },
+        "all_rows_states_probes_decisions_exact": true,
+        "serialization_next_step_exact": true,
+        "seconds": 444.0353276729584
       }
     ],
     "scope": "Paired every batch of one epoch at Task6/7/8/9 for each lambda .05/.2; accepted baseline seed41 CP/caches are diagnostic inputs only, not production reuse.",
@@ -39,12 +130,22 @@
     },
     "scientific_contract_sha256": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
     "current": {
-      "lambda_R": 0.05,
-      "stage": 7,
-      "batches": 220,
-      "blocks": 22,
-      "seconds": 221.39253282546997
-    }
+      "lambda_R": 0.2,
+      "stage": 9,
+      "batches": 362,
+      "blocks": 37,
+      "seconds": 444.0292856693268
+    },
+    "ended": 1793531666.7533348,
+    "production_activation": false
   },
-  "production_activation": false
+  "diagnostic_process_exited": true,
+  "production_activation": false,
+  "engineering_dispatch_request": "request_20261101_191751_95947fe4.json",
+  "engineering_dispatch_state": "ARMED_WAIT_CURRENT_RUN_NATURAL_EXIT",
+  "engineering_dispatch_evidence": "deploy_remote_20261101_191752",
+  "engineering_controller": 3899,
+  "watchdog": 3900,
+  "engineering_contract": "b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c",
+  "latest_production_evidence": "check_readonly_20261101_191813"
 }

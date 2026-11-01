@@ -1,0 +1,34 @@
+{
+  "status": "PASS_STATIC_REVIEW_AND_ACTUAL_FULL_PATH_VALIDATION_NOT_YET_DEPLOYED",
+  "time": "2026-11-01T19:17:51.333115+08:00",
+  "validation_evidence": "capacity_readonly_20261101_191620",
+  "validation_evidence_sha256": "3a2cea2eec9a1a4089ee364155befad044f877c28528c434f7c51787ec36f0c2",
+  "validation_remote_sha256": "5cf6ab2004a0a9c43c755949b393f27df752c3e0ba188eb34ee9606c523ffdd1",
+  "diagnostic_process_exited": true,
+  "diagnostic_optimizer_started": 7828,
+  "diagnostic_optimizer_completed": 7828,
+  "diagnostic_extra_autograd": 36,
+  "diagnostic_environments": 0,
+  "scope": "Each batch of one complete epoch for all eight lambda/stage combinations; no claim of complete 400-epoch trajectory verification.",
+  "files": {
+    "audit_final_local.py": "03c4b5e1e4ad84d6d7f86b3569d34638e9f0ca43a430bde076f4a7bec17a4920",
+    "audit_progress.py": "3a5b1becc3fa498ba93f9bc38b4e38aa7d4055a11ec23478e5e8d7de15bf147c",
+    "check_readonly.py": "aac7d8e6eb6bffdb093a372d053616400340425ec099340eca5514e154857030",
+    "controller.py": "8b2429842d90be154774ff68246fc071fa71a97f61be967ffd62100895f35624",
+    "dispatch_handoff.py": "380fbb865816fecb6a5b4861628513e53d35ff0bf9e1cd8312332614ed80ae74",
+    "final_readonly.py": "bf58658886006ce0104cb8e82787639bb096587693d3739aa29ef8fc35b9b57f",
+    "record_progress.py": "6dcfc130515a5df8e621125ed7b4299a8b2bf7bda631fafe2b89ced41a004c1c",
+    "train_wrapper.py": "3d528cd052c9e3b9231fea3bcfc673308e061d5e91c7061a949de69f27bb3199",
+    "watchdog.py": "20f03c900268e2e64275550a569f286128076646d5e6171cfbd60042ee7b12b8"
+  },
+  "review": [
+    "All three remote payloads match reviewed local source; Python 3.8 AST parse",
+    "Only four branch captures replaced; all epoch/checkpoint/admission captures unchanged",
+    "Dispatcher checks validation, original science and baseline hashes, actual current PIDs and unstarted future runs",
+    "Stop only sleeping coordinator; watchdog releases it if pre-handoff owner fails; active launcher/trainer never signalled",
+    "Require current launcher natural kernel exit zero, completed 400 epochs/40 collection and exact prefix before root-lock ownership",
+    "Original root exit stays absent; engineering completion source adapted in check/progress/record/final wrappers",
+    "All five future runs retain own admission and actual branch-copy stage checks"
+  ],
+  "final_actual_CPU_acceptance": "PENDING"
+}

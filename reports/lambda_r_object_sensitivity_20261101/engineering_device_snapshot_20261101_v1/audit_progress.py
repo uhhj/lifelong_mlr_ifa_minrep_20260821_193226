@@ -95,6 +95,8 @@ for n,x in v['light'].items():
 if not v['processes'] and v['light'].get('engineering_device_snapshot_20261101_v1/controller.exit',{}).get('text','').strip()!='0':
  failures['missing_controller_without_success']='No own process and no successful controller exit'
 if any(x['spare']<0 for x in v['capacity'].values()):failures['capacity']='Reserve or remaining-budget bound violated'
+if 'engineering_device_snapshot_20261101_v1/WATCHDOG_RELEASE.json' in v['light']:failures['engineering_watchdog_released']='Owner failed before safe boundary; audit original coordinator before any further deployment'
+assert v['engineering']['contract_sha256']==json.loads(active.read_text(encoding='utf8'))['engineering_contract']
 prior=Path(sys.argv[2]) if len(sys.argv)>2 else None
 if prior:
  old=json.loads((prior/'EVIDENCE.json').read_text(encoding='utf8'))
