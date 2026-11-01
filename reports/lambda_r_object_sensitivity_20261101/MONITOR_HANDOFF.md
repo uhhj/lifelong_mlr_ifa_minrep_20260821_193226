@@ -1,51 +1,33 @@
-## 2026-11-01 23:07 用户询问λ与GPU慢速原因
+## 2026-11-01 23:22 用户要求深入追查：原生热点已定位，生产未改
 
-只读capacity_readonly_20261101_230647及LOCAL_RESOURCE_COMPARISON_AUDIT复算通过。31秒七个GPU采样均2–4%，28–29°C、31–45W，未报热/功率/硬件降速，只有训练2169。进程31.09CPU秒/31.04墙钟秒，运行队列等待0.00285秒、无可见cgroup限流/换页/主缺页，仅4096B写入。不能据此断言GPU硬件故障；更符合主机执行/CPU–GPU同步搬运效率问题，原生及服务商层原因未闭合。
+已完成非暂停原生IP+Python栈采样以及重复CPU计数，见NATIVE_BOTTLENECK_REPORT_20261101.md和capacity_readonly_20261101_231319/231448/231842/232037的实际证据及LOCAL审计。主线程3961原生样本零丢失，核实CUDA驱动内部内存复制循环、PyTorch cpu_equal和direct_copy_kernel；599个Python墙钟栈中复制/恢复/比较合计23.54%。GPU0–9%、通常2–4%，PCIe Gen4×16，未见Xid/PCIe错误或热功率限频。不能称GPU坏，也不能把所有几倍历史慢速都归于单一热点。
 
-当前Task6无保持λ，100轮非时间/新增记账字段外与原seed41逐字段相等，但仍更慢；Task8同阶段55.57–412.88秒波动，固定309接受618物理31块，探针当前9次policy调用而原seed41为10次（均80窗口），不支持λ直接造成几倍计算量。见SLOWDOWN_EXPLANATION_20261101_2307.md。工程仍等待自然边界，未激活生产优化，未改实验或加科学运行。完整进度保持23:01快照，480分钟整run复查及此前条件估时不变。所有报告保留未闭合原因与性能推断边界。
+KVM虚拟机12vCPU、标称2800MHz；三次cycles/perf-task-clock约0.33–0.34十亿/秒，参考周期ENOENT且实际cpufreq不可见。只能把宿主机/vCPU有效执行资源或计数虚拟化列为需服务器侧核查的具体嫌疑，严禁将该虚拟计数声称为物理CPU已降至330MHz。未联系服务商、未重启/迁移/改线程/改精度/改驱动。本次所有原生观察0optimizer/0环境/0生产写入/目标信号。
 
-## 2026-11-01 23:02 用户要求进度及估时
+最新check_readonly_20261101_232210/LOCAL_AUDIT实际PASS，230151全部epoch/门控/诊断前缀精确保留，135科学项和5工程项不变。L005_41 Task6/7各100轮、Task8完整59轮，共259轮56631接受97562生产，62自身隔离30准入autograd、20采集0正式；其他五run未开始。Task8近10轮235.03秒，尚无稳定恢复迹象。此前90–110小时全队列估时只是慢速持续情景，未实测优化前不能给可靠完成日期。
 
-check_readonly_20261101_230151/LOCAL_AUDIT实际PASS，191813全部epoch/门控/诊断前缀精确保留。L005_41 Task6/7各100轮、Task8完整56轮，共256/400轮55704接受95708生产、62自身隔离/30准入autograd、20采集0正式；其他五run未开始。Task8自己的29/11准入与COPY_EQ通过，未来阶段不套PASS。135科学项和5工程项不变，无失败或重训。
+工程已唯一于deploy_remote_20261101_191752部署，合同b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c。原等待调度器2163为T，当前launcher2164/训练2169继续；新owner3899/watchdog3900正常ARMED，HANDOFF_COMPLETE尚不存在，无失败或WATCHDOG_RELEASE。完整两λ八阶段一整轮逐位等价验证已实际PASS，7828 started==completed/36autograd/0环境另记，诊断3441已退出，不准重复验证dispatch。设备分支快照优化尚未用于生产；只等当前400轮40采集自然kernel exit0并核prefix/hash后，结束旧等待调度器、持原root锁接续未来五run，不信号训练、不重跑完成轮。禁止重跑任何dispatch/controller/build。
 
-工程仍ARMED等待：原等待调度器2163为T，launcher2164/训练2169继续正常，新owner3899/watchdog3900为S，HANDOFF_COMPLETE尚不存在，无WATCHDOG_RELEASE。未中断当前训练，也未启用优化生产；不能把之前或目前速度变化算成优化收益。继续等当前400轮40采集自然exit0后自动切换后续五run，不重复任何dispatch/controller/validation。
+后续只用工程目录engineering_device_snapshot_20261101_v1的check/audit_progress/record_progress/final_readonly/audit_final_local。原root/controller.exit必须不存在，真实最终完成源仅工程controller.exit0且无自身进程。各新阶段须BRANCH_COPY_EQ及原自身GPU准入，不套验证PASS。若WATCHDOG_RELEASE出现，保留错误审计，不盲重复部署。最终CPU包装仍STATIC_ONLY，全部自然完成后才实际验收、根compare_primary_s及完整解释发布。
 
-Task8全56轮均213.0787秒，近10轮189.7270秒（全阶段55.57–412.88秒），余44轮约139.13分钟纯计算；Task9未测，按362/309批次比例条件外推222–250秒/轮。当前整run余纯计算8.49–9.54小时，计保存/准备/余20采集及波动，规划再9–12小时，即11月2日08–11时附近。此日期是条件规划，不能按时钟判定结束。
-
-整批六run若当前慢速持续、不给尚未实测的优化预支收益，余纯计算84.57–92.66小时；含准备保存、剩余220采集与1200正式，暂按90–110小时（约4天）规划，CPU独立验收解释发布另计。后五run、Task9及正式均未实测，不能把范围当保证。若后五run确实节时20%，仅情景纯计算会降到69.35–76.03小时；这不是已观测提速，不用于主估时。TIMING_AUDIT保存公式、来源SHA和假设；待优化run实际运行后重估。下一480分钟在当前整run预计结束较早侧复查，覆盖旧240分钟，不固定高频。
-
-## 2026-11-01 19:18：完整等价验证通过，安全交接已ARMED，当前训练未切换
-
-capacity_readonly_20261101_191620实际读取VALIDATION PASS：两档λ的Task6–9共8阶段，各完整一轮157/227/309/362个batch，全部每步标量、C/Q分支完整state、探针、门控决定、所选state、保存加载下一步及方向诊断逐项相等。诊断进程3441已退出，实际7828 started==completed、36额外autograd、0环境、0生产epoch，单独记账。原135科学项及诊断使用的只读基线CP/cache SHA精确保留。覆盖完整路径，不等于验证全部400轮，也不是科学最终接受。
-
-已完整审查工程payload及check/audit/record/final的真实完成来源适配。19:17:58唯一部署engineering_device_snapshot_20261101_v1，controller3899/watchdog3900，工程合同b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c、5工程冻结项。禁止再次执行dispatch_handoff、任何原/新controller、验证dispatch或已完成轮。
-
-check_readonly_20261101_191813/LOCAL_AUDIT及ENGINEERING_HANDOFF_LOCAL_AUDIT实际PASS，184739全部epoch/门控/诊断前缀精确保留。原等待调度器2163仅被PID级SIGSTOP，当前launcher2164/训练2169未接收信号且继续运行；新owner3899与watchdog3900为S，ARMED存在、HANDOFF_COMPLETE尚不存在，无FAILURE/WATCHDOG_RELEASE。当前仍L005_41原训练代码，优化尚未用于任何生产run。
-
-新owner等待当前L005_41自然完成400轮40采集、launcher内核Z且exit_code0，并核完整记录/前缀/hash后才结束旧等待调度器、取得同一root锁、记录真实train_S.exit0并接续五个未来run。仅替换各新解释器内四次门控块快照，保持各tensor原设备独立clone，轮末CP和准入仍原CPU格式；每阶段实际BRANCH_COPY_EQ及自身GPU准入保留。原root/controller.exit必须不存在；最终唯一完成来源为engineering_device_snapshot_20261101_v1/controller.exit0且无自身进程。若WATCHDOG_RELEASE出现，应审计并通知，不能宣称交接成功或盲重复部署。
-
-本次L005_41 Task6完整100轮、Task7完整95轮，共195轮37265接受58830生产、33自身隔离19准入autograd、10采集0正式；其他五run未开始。当前Task7近10轮57.1295秒、全95轮110.8830秒，尚余5轮约4.76分钟纯计算。Task8/9未测，按批次数比例的当前整run剩余纯计算条件范围286–556分钟，保存/准备/余30采集另计，不能将近期变快归因于尚未启用的优化。全部六run目前没有可靠完成日期。下一240分钟在当前整run结束预计较早侧复查，覆盖旧20分钟验证等待间隔，不固定短轮询。详见本快照TIMING_AUDIT。
-
-运输使用旧目录.session_control现有worker28064，先读status核PID，不重启活跃worker或输出凭据。以后只用工程目录check_readonly.py复制至旧目录queue；按result实际目录复制回本目录，再工程audit_progress.py NEW PREVIOUS→工程record_progress.py NEW INTERVAL。根旧记录器/旧final包装不再适用。工程final包装仍仅静态，全部自然完成后才实际CPU24CP/6恢复/24teacher/1200noise/54600门控验收，随后根compare_primary_s和完整解释发布。7828诊断调用/36autograd必须单列，不混科学预算。原源、原证据及失败记录保留。
-
-只做OBJECT λ=.05/.2各三seed，已有.1只读；科学损失、门控阈值、批次、采样及预算不变。两成潜在整体节时仍是条件推测，不能用92.05%复制微基准节时冒充整run提速。健康静默，只实质变化/完成/新失败/需行动通知；全部六run独立验收解释发布后才删除同一object-s-r-run监控。
+同一object-s-r-run监控下一480分钟在当前整run结束较早侧复查；这是按当前run余时安排，不固定高频。运输worker28064先读status核PID，不重启活跃worker、不输出凭据。完整性能证据已保存；科学协议不变，仅OBJECT两档各三seed，已有.1只读。健康静默，完成/新失败/需行动通知；六run全部实际验收解释发布前不得删除监控。
 
 # OBJECT 最新S固定λ_R六run：当前交接
 
-实际观察 2026-11-01T23:01:50.633287+08:00；check_readonly_20261101_230151/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-11-01T23:22:10.062176+08:00；check_readonly_20261101_232210/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
 唯一root `/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1`，controller3899，合同`6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e`，135冻结项。唯一部署deploy_remote_20261101_152959。禁止重复compose/freeze/deploy/controller或已完成epoch。
 
 |case|完整轮/400|接受更新|生产物理|采集/40|正式/200|
 |---|---:|---:|---:|---:|---:|
-|L005_41|256|55704|95708|20|0|
+|L005_41|259|56631|97562|20|0|
 |L005_42|0|0|0|0|0|
 |L005_43|0|0|0|0|0|
 |L020_41|0|0|0|0|0|
 |L020_42|0|0|0|0|0|
 |L020_43|0|0|0|0|0|
 
-累计256/2400轮、55704/633000接受、95708/1171800生产、62/546隔离、30/246准入autograd、20/240采集、0/1200正式。方向诊断最多216autograd另记。
+累计259/2400轮、56631/633000接受、97562/1171800生产、62/546隔离、30/246准入autograd、20/240采集、0/1200正式。方向诊断最多216autograd另记。
 
 下一480分钟复查，首次核自己的保持阶段准入及吞吐，此后依据整seed或整组正式实际剩余时间调整，不固定高频，不按时钟推断完成。
 

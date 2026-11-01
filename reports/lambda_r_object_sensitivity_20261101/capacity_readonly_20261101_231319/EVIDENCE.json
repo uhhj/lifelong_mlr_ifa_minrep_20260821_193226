@@ -1,0 +1,39 @@
+{
+  "observed": 1793545997.9849358,
+  "machine": "x86_64",
+  "kernel": "5.15.0-139-generic",
+  "tools": {
+    "readelf": "/usr/bin/readelf",
+    "nm": "/usr/bin/nm",
+    "objdump": "/usr/bin/objdump",
+    "addr2line": "/usr/bin/addr2line",
+    "perf": null
+  },
+  "training_cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
+  "perf_header_relevant": "\tPERF_TYPE_SOFTWARE\t\t\t= 1,\n\tPERF_COUNT_SW_CPU_CLOCK\t\t\t= 0,\n\tPERF_SAMPLE_IP\t\t\t\t= 1U << 0,\n\tPERF_SAMPLE_TID\t\t\t\t= 1U << 1,\n\tPERF_SAMPLE_TIME\t\t\t= 1U << 2,\n#define PERF_ATTR_SIZE_VER0\t64\t/* sizeof first published struct */\n#define PERF_EVENT_IOC_ENABLE\t\t\t_IO ('$', 0)\n#define PERF_EVENT_IOC_DISABLE\t\t\t_IO ('$', 1)\n#define PERF_EVENT_IOC_RESET\t\t\t_IO ('$', 3)\n *   PERF_RECORD_MISC_EXACT_IP           - PERF_RECORD_SAMPLE of precise events\n *   Indicates that the content of PERF_SAMPLE_IP points to\n\t * IDENTIFIER) described in PERF_RECORD_SAMPLE below, it will be stashed\n\t * \t{ u32\t\t\tpid, tid; } && PERF_SAMPLE_TID\n\t * \t{ u64\t\t\ttime;     } && PERF_SAMPLE_TIME\n\tPERF_RECORD_LOST\t\t\t= 2,\n\t *\t{ u64\t\t\tip;\t  } && PERF_SAMPLE_IP\n\t *\t{ u32\t\t\tpid, tid; } && PERF_SAMPLE_TID\n\t *\t{ u64\t\t\ttime;     } && PERF_SAMPLE_TIME\n\tPERF_RECORD_SAMPLE\t\t\t= 9,\n\tPERF_RECORD_LOST_SAMPLES\t\t= 13,",
+  "perf_probe": {
+    "fd_valid": true,
+    "errno": 0,
+    "enabled": false,
+    "signals": 0
+  },
+  "nvidia_kernel_errors": {
+    "exit": 0,
+    "lines": [
+      "[   16.317340] nvidia: loading out-of-tree module taints kernel.",
+      "[   16.317438] nvidia: module license 'NVIDIA' taints kernel.",
+      "[   16.666715] NVRM: loading NVIDIA UNIX x86_64 Kernel Module  535.230.02  Fri Dec 20 21:42:05 UTC 2024",
+      "[   16.825224] nvidia_uvm: module uses symbols from proprietary module nvidia, inheriting taint."
+    ],
+    "stderr": ""
+  },
+  "pcie": {
+    "exit": 0,
+    "stdout": "4, 4, 16, 16\n",
+    "stderr": ""
+  },
+  "extra_optimizer_calls": 0,
+  "environments": 0,
+  "production_writes": 0,
+  "signals": 0
+}

@@ -1,0 +1,79 @@
+{
+  "status": "PASS_NATIVE_AND_PYTHON_PROFILE_RECOMPUTED_NOT_TOTAL_SLOWDOWN_CAUSAL_PROOF",
+  "evidence_sha256": "180b424dbdffc65fc862c419db4384b3656551cb2b3b49d959bb4549118932ee",
+  "symbol_followup_sha256": "6355191de66526a2191da91820adc3c60872dc62cf27c704f9f3d560eac447dc",
+  "wall_seconds": 61.630988121032715,
+  "native_active_main_thread_samples": 3961,
+  "lost": 0,
+  "user_cpu_seconds": 56.41,
+  "system_cpu_seconds": 5.35,
+  "module_sample_percent": {
+    "libtorch_cpu.so": 26.15501136076748,
+    "libcuda.so.535.230.02": 22.79727341580409,
+    "python3.8": 19.363797020954305,
+    "libc-2.31.so": 5.705629891441555,
+    "libtorch_python.so": 4.746276192880586,
+    "libc10_cuda.so": 3.6101994445847008,
+    "libc10.so": 3.2819994950770006,
+    "libtorch_cuda_cu.so": 3.25675334511487,
+    "libpthread-2.31.so": 3.155768745266347,
+    "libcublasLt.so.11": 2.2973996465539006,
+    "libcudart-45da57e3.so.11.0": 1.8177227972734158,
+    "libstdc++.so.6.0.28": 1.338045947992931,
+    "ld-2.31.so": 0.782630648826054,
+    "libtorch_cuda_cpp.so": 0.6059075990911386,
+    "[unknown]": 0.4291845493562232,
+    "_multiarray_umath.cpython-38-x86_64-linux-gnu.so": 0.25246149962130776,
+    "bit_generator.cpython-38-x86_64-linux-gnu.so": 0.12623074981065388,
+    "libcublas.so.11": 0.12623074981065388,
+    "libm-2.31.so": 0.12623074981065388,
+    "_pickle.cpython-38-x86_64-linux-gnu.so": 0.025246149962130773
+  },
+  "python_main_thread_samples": 599,
+  "python_wall_sample_percent": {
+    "candidate_update": 65.27545909849749,
+    "probe": 6.176961602671119,
+    "full_state_restore": 9.68280467445743,
+    "full_state_capture": 10.35058430717863,
+    "other_or_partial": 5.008347245409015,
+    "full_state_equality": 3.5058430717863107
+  },
+  "python_leaf_counts": {
+    "backward (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/autograd/__init__.py:197)": 156,
+    "cpu_snapshot (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/candidate.py:8)": 58,
+    "clone (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/storage.py:111)": 34,
+    "<genexpr> (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/updates.py:36)": 31,
+    "forward (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/pytorch_utils.py:115)": 29,
+    "equal (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/runtime.py:81)": 21,
+    "forward (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/activations.py:35)": 16,
+    "cast (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/optim/optimizer.py:218)": 12,
+    "_attn (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/models/gpt2/modeling_gpt2.py:216)": 11,
+    "update (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/updates.py:36)": 9,
+    "_call_impl (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/nn/modules/module.py:1190)": 8,
+    "_single_tensor_adamw (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/optim/adamw.py:274)": 8,
+    "layer_norm (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/nn/functional.py:2515)": 7,
+    "__init__ (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/serialization.py:282)": 7,
+    "_single_tensor_adamw (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/optim/adamw.py:267)": 7
+  },
+  "native_conservative_lower_bounds": {
+    "driver_internal_vector_copy_loop": 355,
+    "pytorch_cpu_equal": 186,
+    "pytorch_direct_copy_kernel": 65
+  },
+  "native_lower_bound_percent": {
+    "driver_copy": 8.962383236556425,
+    "cpu_equal": 4.6957838929563245,
+    "cpu_direct_copy": 1.6409997475385003
+  },
+  "limits": [
+    "CPU-active native IP shares cannot be interpreted as GPU or wall-clock fractions.",
+    "Driver internal copy loop identified by instructions; nearby exported cuMemGetAttribute label is not its actual function name.",
+    "Only top100 distinct native addresses saved; named-loop counts are conservative lower bounds.",
+    "Short simultaneous Python and IP sampling adds some diagnostic CPU work; does not quantify all historical slowdown.",
+    "No inference of failed GPU or physical CPU frequency from these counters."
+  ],
+  "extra_optimizer_calls": 0,
+  "environments": 0,
+  "production_writes": 0,
+  "target_signals": 0
+}

@@ -1,0 +1,36 @@
+{
+  "status": "PASS_RECOMPUTATION_VIRTUAL_COUNTER_DISCREPANCY_NOT_PHYSICAL_FREQUENCY_DIAGNOSIS",
+  "evidence_sha256": "c1b8476320a2a0754ab23a59964dedbe8a44129c52e044dfbcdbe03aae99280e",
+  "windows": [
+    {
+      "wall_seconds": 10.010969638824463,
+      "cycles_per_perf_task_second": 331417508.31223875,
+      "instructions_per_cycle": 1.2150406213791558,
+      "reference_cycles_errno": 2,
+      "counter_multiplexed": false
+    },
+    {
+      "wall_seconds": 10.011169910430908,
+      "cycles_per_perf_task_second": 329880332.9248235,
+      "instructions_per_cycle": 1.1810337505786614,
+      "reference_cycles_errno": 2,
+      "counter_multiplexed": false
+    },
+    {
+      "wall_seconds": 10.01107144355774,
+      "cycles_per_perf_task_second": 338866837.63170177,
+      "instructions_per_cycle": 1.1575280286180993,
+      "reference_cycles_errno": 2,
+      "counter_multiplexed": false
+    }
+  ],
+  "virtualization": "KVM",
+  "cpu_frequency_sysfs_available": false,
+  "reported_nominal_cpu_MHz": 2800,
+  "limits": [
+    "cycles/task_clock roughly 0.33 billion/s is a virtualized observation, NOT calibrated physical CPU frequency.",
+    "Reference cycles unavailable errno ENOENT and physical cpufreq sysfs absent; provider host-level confirmation needed.",
+    "Main-thread user-only event definitions and virtualization timing affect interpretation.",
+    "No benchmark workload, signals, optimizer updates or environment calls."
+  ]
+}
