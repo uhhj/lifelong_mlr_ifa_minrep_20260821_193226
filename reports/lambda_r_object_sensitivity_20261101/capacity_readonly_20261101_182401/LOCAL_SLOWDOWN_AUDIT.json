@@ -1,0 +1,151 @@
+{
+  "status": "PASS_READONLY_RESOURCE_RECOMPUTATION_NOT_ROOT_CAUSE_PROOF",
+  "evidence_sha256": "856ef99e2a69f04e78535e8a334ad274663920c8aece57046e1464fb67b35c3a",
+  "observed": 1793528675.2821686,
+  "window_seconds": 31.24643611907959,
+  "process_cpu_seconds": 27.19,
+  "main_thread_runqueue_wait_seconds": 0.00192332,
+  "visible_cpu_quota": "unlimited",
+  "visible_cpu_throttled_periods": 0,
+  "affinity_cpu_count": 12,
+  "host_cpu_tick_deltas": {
+    "user": 2630,
+    "nice": 0,
+    "system": 417,
+    "idle": 32552,
+    "iowait": 1719,
+    "irq": 0,
+    "softirq": 4,
+    "steal": 1,
+    "guest": 0,
+    "guest_nice": 0
+  },
+  "process_io_byte_deltas": {
+    "read_bytes": 0,
+    "write_bytes": 346546176,
+    "rchar": 204579891,
+    "wchar": 346533889
+  },
+  "vm_deltas": {
+    "pgmajfault": 0,
+    "pswpin": 0,
+    "pswpout": 0
+  },
+  "io_full_pressure_seconds": 6.34438,
+  "gpu_samples": [
+    "46 %, 5 %, 48.43 W, 35, 2715 MHz",
+    "0 %, 0 %, 35.78 W, 34, 2550 MHz",
+    "8 %, 2 %, 44.55 W, 35, 2550 MHz",
+    "52 %, 1 %, 41.14 W, 34, 2715 MHz",
+    "25 %, 8 %, 69.56 W, 37, 2715 MHz",
+    "34 %, 3 %, 64.95 W, 38, 2715 MHz",
+    "27 %, 9 %, 72.83 W, 37, 2715 MHz"
+  ],
+  "stage_workload_and_timing": {
+    "6": {
+      "epochs": 100,
+      "ten_epoch_groups": [
+        {
+          "start": 1,
+          "count": 10,
+          "mean_seconds": 23.27044529914856
+        },
+        {
+          "start": 11,
+          "count": 10,
+          "mean_seconds": 19.142934560775757
+        },
+        {
+          "start": 21,
+          "count": 10,
+          "mean_seconds": 25.441632318496705
+        },
+        {
+          "start": 31,
+          "count": 10,
+          "mean_seconds": 32.42715656757355
+        },
+        {
+          "start": 41,
+          "count": 10,
+          "mean_seconds": 31.894074273109435
+        },
+        {
+          "start": 51,
+          "count": 10,
+          "mean_seconds": 7.325121879577637
+        },
+        {
+          "start": 61,
+          "count": 10,
+          "mean_seconds": 17.73786985874176
+        },
+        {
+          "start": 71,
+          "count": 10,
+          "mean_seconds": 20.08649835586548
+        },
+        {
+          "start": 81,
+          "count": 10,
+          "mean_seconds": 5.230813598632812
+        },
+        {
+          "start": 91,
+          "count": 10,
+          "mean_seconds": 25.14507999420166
+        }
+      ],
+      "fixed_batch_count": 157,
+      "fixed_physical_per_epoch": 157
+    },
+    "7": {
+      "epochs": 54,
+      "ten_epoch_groups": [
+        {
+          "start": 1,
+          "count": 10,
+          "mean_seconds": 76.50959839820862
+        },
+        {
+          "start": 11,
+          "count": 10,
+          "mean_seconds": 154.26172416210176
+        },
+        {
+          "start": 21,
+          "count": 10,
+          "mean_seconds": 213.18865437507628
+        },
+        {
+          "start": 31,
+          "count": 10,
+          "mean_seconds": 89.74461231231689
+        },
+        {
+          "start": 41,
+          "count": 10,
+          "mean_seconds": 177.16052911281585
+        },
+        {
+          "start": 51,
+          "count": 4,
+          "mean_seconds": 71.91221195459366
+        }
+      ],
+      "fixed_batch_count": 227,
+      "fixed_physical_per_epoch": 454
+    }
+  },
+  "limits": [
+    "31-second sampling spans checkpoint activity; not a representative long-duration profile.",
+    "No visible guest CPU quota/throttling or significant main-thread runqueue wait; hypervisor/provider constraints not completely observable.",
+    "Host I/O stalls and checkpoint-sized process writes observed, but epoch seconds exclude subsequent checkpoint saves and the epoch-end probe; I/O alone does not explain intra-epoch slowdown.",
+    "Low GPU utilization plus CPU activity is compatible with host-side computation/copy/synchronization; exact per-function cost not measured.",
+    "Last four Task7 epochs are faster; cannot infer a stable recovery or a fixed completion date."
+  ],
+  "extra_optimizer_calls": 0,
+  "extra_environments": 0,
+  "production_modified": false,
+  "progress_status": "PARTIAL; latest full progress audit remains check_readonly_20261101_181931"
+}
