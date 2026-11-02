@@ -1,0 +1,211 @@
+{
+  "status": "PARTIAL_TRAINING_OR_EVALUATION",
+  "observation": "2026-11-02T16:48:00.640074+08:00",
+  "counts": {
+    "L005_41": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1793603986.8905516,
+        "pid": 2566
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 66.06561579704285,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4120
+    },
+    "L005_42": {
+      "epochs": 222,
+      "accepted_updates": 45198,
+      "physical_optimizer_calls": 74696,
+      "own_isolated_optimizer_calls": 62,
+      "own_extra_autograd_calls": 30,
+      "training_collection_completed_episodes": 20,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 8,
+        "phase": "train",
+        "epoch_complete": 22,
+        "steps": 45198,
+        "physical_optimizer_calls": 74696,
+        "time": 1793609265.3573291,
+        "pid": 4694
+      },
+      "current_stage_epochs": 22,
+      "recent_epoch_mean_seconds": 52.18157956600189,
+      "current_stage_compute_minutes_estimate": 67.83605343580247,
+      "gate_blocks_observed": 2992,
+      "gate_Q_accepts_observed": 1346
+    },
+    "L005_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_41": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_42": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 622,
+  "accepted_updates": 150698,
+  "physical_training_optimizer_calls": 269996,
+  "own_isolated_optimizer_calls": 153,
+  "own_extra_autograd_calls": 71,
+  "training_collection_completed_episodes": 60,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 4347,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/controller.py ",
+      "state": "T"
+    },
+    {
+      "pid": 4689,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/train_wrapper.py L005_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 4694,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/train_wrapper.py L005_42 ",
+      "state": "R"
+    },
+    {
+      "pid": 8608,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_parallel_3090_20261102_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 8609,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_parallel_3090_20261102_v1/watchdog.py ",
+      "state": "S"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1422000128,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 214040576
+    },
+    "/data": {
+      "free": 24081424384,
+      "remaining_bound": 11725576501,
+      "reserve": 2147483648,
+      "spare": 10208364235
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "4694\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "d97999a188f65efbda0fc6a61dbb37e34b0da89445e6e19fa97359eede3136f9",
+  "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
+  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_153532",
+  "hardware_migration": "USER_AUTHORIZED_RTX3090",
+  "abandoned_partial_recorded_optimizer_calls": 140,
+  "abandoned_partial_unrecorded_cost": "UNKNOWN",
+  "engineering": {
+    "contract_sha256": "00d50232d42461c1d78afaff694f53b575ca562bc752211e9085907633cbaca6",
+    "frozen_files": 29,
+    "completion_source": "engineering_parallel_3090_20261102_v1/controller.exit",
+    "diagnostic_optimizer_calls": 34549,
+    "diagnostic_extra_autograd": 83,
+    "prior_diagnostic_optimizer_calls": 7828,
+    "recovery_diagnostic_optimizer_calls": 309,
+    "abandoned_partial_recorded_optimizer_calls": 140,
+    "abandoned_partial_unrecorded_cost": "UNKNOWN",
+    "hardware_migration": "USER_AUTHORIZED_RTX3090",
+    "diagnostic_environments": 0,
+    "prior_resume_contract_sha256": "46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3",
+    "checks_diagnostic_optimizer_calls": 7828,
+    "checks_diagnostic_extra_autograd": 36,
+    "prior_checks_contract_sha256": "143bab881835c8f91a3c04129e1fbdf88da6ac7d55b10524eaa591417ff2b254",
+    "parallel_diagnostic_optimizer_calls": 18584,
+    "parallel_diagnostic_extra_autograd": 0,
+    "max_training_concurrency": 2,
+    "collection_serialized": true
+  },
+  "engineering_diagnostic_optimizer_calls": 34549,
+  "engineering_diagnostic_extra_autograd": 83,
+  "parallel_collection_lock_audit": {
+    "acquisitions": 0,
+    "releases": 0,
+    "active": null,
+    "nonoverlap": true
+  },
+  "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
+  "controller": 8608,
+  "latest_evidence": "check_readonly_20261102_164759",
+  "next_check_minutes": 150,
+  "final_CPU_acceptance": "PENDING",
+  "baseline_lambda": 0.1,
+  "new_lambdas": [
+    0.05,
+    0.2
+  ],
+  "completion_source": "engineering_parallel_3090_20261102_v1/controller.exit"
+}
