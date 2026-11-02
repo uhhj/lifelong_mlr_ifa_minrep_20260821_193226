@@ -1,0 +1,33 @@
+--- prior_resume
++++ epoch289_resume
+@@ -56,8 +56,8 @@
+     verify();capacity();dest=OUTPUT[arm];dest.mkdir(parents=True,exist_ok=True);assert sha(dest/'recovery.pth')==CHECKPOINT_SHA, 'Interrupted checkpoint changed'
+     dist.init_process_group('nccl');torch.cuda.set_device(0)
+     try:
+-        a=make(arm);cp=torch.load(dest/'recovery.pth',map_location='cpu');assert cp['history']==js(R/'EPOCHS_S.json') and len(cp['history'])==260
+-        history=cp['history'];gradients=js(R/'GRADIENTS_S.json');interrupted_gates=[json.loads(line) for line in (R/'GATES.jsonl').read_text().splitlines()];assert len(interrupted_gates)==4167;gates=interrupted_gates[:4160]
++        a=make(arm);cp=torch.load(dest/'recovery.pth',map_location='cpu');assert cp['history']==js(R/'EPOCHS_S.json') and len(cp['history'])==289
++        history=cp['history'];gradients=js(R/'GRADIENTS_S.json');interrupted_gates=[json.loads(line) for line in (R/'GATES.jsonl').read_text().splitlines()];assert len(interrupted_gates)==5079;gates=interrupted_gates[:5059]
+         physical=cp['physical_optimizer_calls'];CALLS.update(production=physical,admission=62)
+         for stage in range(8,10):
+             write(R/'TRAIN_STATUS.json',dict(arm=arm,stage=stage,phase='prepare',time=time.time(),pid=os.getpid()))
+@@ -90,7 +90,7 @@
+                     write(R/('ADMISSION_%s_%d.json'%(arm,stage)),dict(arm=arm,stage=stage,method='support_gate_full_S',lambda_R=RETAIN_WEIGHT,uniform_reference='same_lambda_uniform_support',contract=verify(),**own))
+                 assert CALLS['admission']-admission_before==(4 if stage==6 else 29)
+             set_count_mode('production')
+-            for ep in range(60 if stage==8 else 0,100):
++            for ep in range(89 if stage==8 else 0,100):
+                 capacity();sampler.set_epoch(ep);order=list(iter(sampler));a.policy.train();tic=time.time();lr=a.optimizer.param_groups[0]['lr'];measured=False
+                 tot={k:0. for k in ['loss','bc','ifa','expert_loss','expert_route','retain_loss','retain_route','valid','invalid','old_eligible','anchor_slots','anchor_actual','anchor_empty','anchor_forwards']}
+                 iterator=iter(loader);bi=0;retained_steps=0
+@@ -116,8 +116,8 @@
+                         rows=crows if decision=='C' else qrows
+                         gate=dict(stage=stage,epoch=ep,batch=bi,steps=len(block),start_step=base['step'],end_step=a.step,C=cv,Q=qv,accepted=decision,checks=checks)
+                         gates.append(gate)
+-                        if stage==8 and ep==60 and bi<70:
+-                            assert gate==interrupted_gates[4160+bi//10],'Reconstructed prefix must remain exact'
++                        if stage==8 and ep==89 and bi<200:
++                            assert gate==interrupted_gates[5059+bi//10],'Reconstructed prefix must remain exact'
+                         else:
+                             with (R/'GATES.jsonl').open('a') as f:f.write(json.dumps(gate)+'\n')
+                         if decision=='Q':retained_steps+=len(block)

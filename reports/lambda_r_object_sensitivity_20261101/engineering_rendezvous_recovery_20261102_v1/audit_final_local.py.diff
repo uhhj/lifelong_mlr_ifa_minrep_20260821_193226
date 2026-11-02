@@ -1,0 +1,32 @@
+--- engineering_live_parallel_3090_20261102_v1/audit_final_local.py
++++ engineering_rendezvous_recovery_20261102_v1/audit_final_local.py
+@@ -7,7 +7,7 @@
+ v=js(D/'EVIDENCE.json');assert v['status']=='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT'
+ subprocess.run([sys.executable,'-X','utf8',str(E/'audit_progress.py'),str(D)],check=True)
+ a=js(D/'LOCAL_AUDIT.json');assert a['status']=='PASS_PROGRESS_NOT_FINAL' and a['epochs']==2400 and a['accepted_updates']==633000 and a['own_isolated_optimizer_calls']==546 and a['own_extra_autograd_calls']==246 and a['physical_training_optimizer_calls']==1171800 and a['training_collection_completed_episodes']==240 and a['formal_episodes']==1200
+-assert v['light']['engineering_live_parallel_3090_20261102_v1/controller.exit']['text']=='0' and not v['processes']
++assert v['light']['engineering_rendezvous_recovery_20261102_v1/controller.exit']['text']=='0' and not v['processes']
+ results={}
+ for key in ['L005_41', 'L005_42', 'L005_43', 'L020_41', 'L020_42', 'L020_43']:
+  seed=int(key.split('_')[1]);r=dict(v['cases'][key],light={n[len(key+'/'):]:x for n,x in v['light'].items() if n.startswith(key+'/')});p=js(R/key/'PARENT_BINDING.json');progress=a['counts'][key]
+@@ -21,7 +21,9 @@
+  assert r['no_residual'] and r['initial_state_bytes_verified'] and r['single_S_only'] and r['environment_calls']==r['optimizer_updates']==0
+  assert r['contract_sha256']==v['children'][key] and ev['episodes']==200 and ev['completed_vectors']==20 and ev['closed_cells']==10 and not ev['ongoing'] and not ev['record_event_advance']
+  L={n:json.loads(x['text']) if n.endswith('.json') else x['text'] for n,x in r['light'].items()}
+- assert L['train_S.exit']==L['evaluate.exit']=='0' and L['TRAIN_S.json']['gradient_autograd_calls']==36
++ assert L['evaluate.exit']=='0' and L['TRAIN_S.json']['gradient_autograd_calls']==36
++ if key=='L005_43':assert L['train_S.exit']=='1' and v['light']['engineering_rendezvous_recovery_20261102_v1/L005_43_resume.exit']['text']=='0'
++ else:assert L['train_S.exit']=='0'
+  events=[json.loads(x) for x in L['COLLECTION_EVENTS.jsonl'].splitlines()];starts={};ends={}
+  for x in events:
+   assert x['kind'] in ['start','complete'];target=starts if x['kind']=='start' else ends;k=(x['arm'],x['task']);assert k not in target;target[k]=x
+@@ -71,6 +73,8 @@
+  results[key]=dict(gate_audit=r['gate_audit'],matrix=matrix,metrics={k:dict(fraction=str(x),percent=float(x*100)) for k,x in metrics.items()},offline=summaries,epoch_seconds=L['TRAIN_S.json']['summed_epoch_seconds'],collection_cost={str(t):{k:L[f'MEMORY_S_{t}.json'][k] for k in ['count','collection_successes','training_attempts','online_frontend_calls','online_policy_calls','seconds','terminal_task_unused_for_future_training']} for t in range(6,10)},final_CPU=dict(checkpoints=4,recoveries=1,caches=4,calls=r['diagnostic_calls'],windows=r['diagnostic_windows'],seconds=r['diagnostic_seconds']),gradient_records=gg)
+ out=dict(status='PASS_COMPLETE_LOCAL_ACCEPTANCE',cases=results,epochs=2400,main_updates=633000,physical_training_optimizer_calls=1171800,isolated_optimizer_updates=546,formal_extra_autograd=216,admission_extra_autograd=246,training_collection_episodes=240,formal_episodes=1200,vectors=120,cells=60,contract=v['contract_sha256'],evidence_sha256=sha(D/'EVIDENCE.json'),limits=['Only fixed lambda_R 0.05/0.2 OBJECT S41/42/43; accepted 0.1 read-only. No outcome-based selection.','No retries, refills, outcome filtering of runs, or automatic further seeds.','Historical methods are read-only references; extra acquisition and double candidates prohibit equal-interaction or equal-compute causal claims.','Success filtering does not prove every retained action optimal; cached-feature replay is not raw-camera or physical replay.','Development states and previous method selection remain limitations.'])
+ out['limits'].append('User-authorized RTX4080SUPER to RTX3090 migration after host reboot; 260 original epochs retained, interrupted partial replay archived, 140 recorded abandoned candidate calls plus UNKNOWN unlogged cost; no cross-hardware bitwise or hardware-controlled lambda-only causal claim.')
+-out.update(hardware_migration='USER_AUTHORIZED_RTX3090',abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',engineering=a['engineering'],engineering_diagnostic_optimizer_calls=34549,engineering_diagnostic_extra_autograd=a['engineering_diagnostic_extra_autograd'])
++out.update(hardware_migration='USER_AUTHORIZED_RTX3090',abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',engineering=a['engineering'],engineering_diagnostic_optimizer_calls=35418,engineering_diagnostic_extra_autograd=a['engineering_diagnostic_extra_autograd'])
++out.update(rendezvous_partial_recorded_optimizer_calls=400,total_recorded_abandoned_partial_optimizer_calls=540,rendezvous_partial_unrecorded_cost='UNKNOWN',mitigated_failures_preserved=a['mitigated_failures_preserved'])
++out['limits'].append('Rendezvous interruption at L00543 epoch289: 400 recorded abandoned candidate calls plus UNKNOWN unlogged cost; 869 isolated optimizer/11 autograd exact recovery diagnostics are separate. Original failed exits remain preserved.')
+ out['limits'].append('L00542/43 and future L020 training use at most two independent processes; collection and evaluation remain serial. Isolated two-seed full-epoch serial/concurrent equality was verified for eight stage/lambda combinations, not every future trajectory.')
+ (D/'LOCAL_FINAL_AUDIT.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf8');print(json.dumps(dict(status=out['status'],metrics={k:x['metrics'] for k,x in results.items()}),indent=2))

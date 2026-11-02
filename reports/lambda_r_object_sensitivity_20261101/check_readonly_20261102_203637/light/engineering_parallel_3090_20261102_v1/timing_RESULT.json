@@ -1,0 +1,32 @@
+{
+  "status": "PASS_STAGE9_PARALLEL_THROUGHPUT_EXACT_ENDSTATE",
+  "optimizer_started": 2896,
+  "optimizer_completed": 2896,
+  "extra_autograd": 0,
+  "environments": 0,
+  "production_epochs": 0,
+  "production_writes": false,
+  "production_signals": 0,
+  "ended": 1793606754.999676,
+  "reports": [
+    {
+      "lambda_R": 0.05,
+      "stage": 9,
+      "per_step_scalars_probes_decisions_initial_final_state_exact": true,
+      "serial_two_worker_seconds": 139.4629716873169,
+      "parallel_two_worker_seconds": 85.27615571022034,
+      "aggregate_throughput_ratio": 1.6354275181122204,
+      "wall_reduction_fraction": 0.3885390890607592,
+      "serial_compute_spans": [
+        69.19980581400159,
+        68.50198714799808
+      ],
+      "parallel_compute_spans": [
+        81.38542677299483,
+        84.38844792099917
+      ],
+      "limitation": "No per-block state hashes or serialization in timing; production remains as background. Pure epoch path, excludes production checkpoint/collection/preparation."
+    }
+  ],
+  "admission": "Not sufficient for production deployment: remaining stages/lambda and scheduler/environment isolation must be reviewed"
+}

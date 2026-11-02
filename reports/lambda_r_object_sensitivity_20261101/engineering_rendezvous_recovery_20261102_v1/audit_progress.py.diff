@@ -1,0 +1,78 @@
+--- engineering_live_parallel_3090_20261102_v1/audit_progress.py
++++ engineering_rendezvous_recovery_20261102_v1/audit_progress.py
+@@ -57,7 +57,7 @@
+    if case=='L005_41':assert comparison=='ACCEPTED_S_ALL_TENSORS_EXACT'
+    else:
+     assert comparison=='AUTHORIZED_CROSS_GPU_COMPARISON_RECORDED'
+-    assert js('engineering_resume_3090_20261102_v1/'+case+'_TASK6_GPU_COMPARISON.json')['status']=='RECORDED_AUTHORIZED_CROSS_GPU_COMPARISON'
++    assert js('engineering_rendezvous_recovery_20261102_v1/'+case+'_TASK6_GPU_COMPARISON.json',js('engineering_resume_3090_20261102_v1/'+case+'_TASK6_GPU_COMPARISON.json'))['status']=='RECORDED_AUTHORIZED_CROSS_GPU_COMPARISON'
+  copycheck=js(prefix+'COPY_EQ.json',{})
+  if h:
+   for st in range(6,h[-1]['stage']+1):
+@@ -95,10 +95,14 @@
+  recent=current[-10:];mean=sum(x['seconds'] for x in recent)/len(recent) if recent else None
+  counts[case]=dict(epochs=len(h),accepted_updates=acc,physical_optimizer_calls=phys,own_isolated_optimizer_calls=own,own_extra_autograd_calls=ownauto,training_collection_completed_episodes=collected,formal_episodes=len(out),current=status,current_stage_epochs=len(current),recent_epoch_mean_seconds=mean,current_stage_compute_minutes_estimate=(100-len(current))*mean/60 if mean is not None and status.get('phase')=='train' else None,gate_blocks_observed=len(gates),gate_Q_accepts_observed=sum(g['accepted']=='Q' for g in gates))
+  epochs+=len(h);accepted+=acc;physical+=phys;admission_calls+=own;admission_autograd+=ownauto;formal+=len(out);collection+=collected
++mitigated=js('engineering_rendezvous_recovery_20261102_v1/MITIGATED_FAILURES.json')
++assert set(mitigated)=={'L005_43/train_S.exit','engineering_live_parallel_3090_20261102_v1/controller.exit','engineering_live_parallel_3090_20261102_v1/FAILURE.json'}
++for n,h in mitigated.items():assert v['light'][n]['sha256']==h
+ for n,x in v['light'].items():
++ if n in mitigated:continue
+  if n.endswith('.exit') and x['text'].strip()!='0':failures[n]=x['text']
+  if n.endswith('FAILURE.json'):failures[n]=js(n)
+-if not v['processes'] and v['light'].get('engineering_live_parallel_3090_20261102_v1/controller.exit',{}).get('text','').strip()!='0':
++if not v['processes'] and v['light'].get('engineering_rendezvous_recovery_20261102_v1/controller.exit',{}).get('text','').strip()!='0':
+  failures['missing_controller_without_success']='No own process and no successful controller exit'
+ if any(x['spare']<0 for x in v['capacity'].values()):failures['capacity']='Reserve or remaining-budget bound violated'
+ if 'engineering_live_parallel_3090_20261102_v1/WATCHDOG_RELEASE.json' in v['light']:failures['engineering_watchdog_released']='Owner failed before safe boundary; audit original coordinator before any further deployment'
+@@ -115,24 +119,24 @@
+    assert v['light'][n]['text'].startswith(x['text'])
+ out=dict(status='ENGINEERING_FAILURE_REQUIRES_REVIEW' if failures else 'PASS_PROGRESS_NOT_FINAL',observation=datetime.datetime.fromtimestamp(v['observed'],datetime.timezone(datetime.timedelta(hours=8))).isoformat(),counts=counts,epochs=epochs,accepted_updates=accepted,physical_training_optimizer_calls=physical,own_isolated_optimizer_calls=admission_calls,own_extra_autograd_calls=admission_autograd,training_collection_completed_episodes=collection,formal_episodes=formal,failures=failures,processes=v['processes'],capacity=v['capacity'],gpu=v['gpu_diagnostic'],snapshot_sha256=sha(D/'EVIDENCE.json'),contract=v['contract_sha256'],prefix_checked=str(prior) if prior else None)
+ 
+-eng=v['engineering'];assert eng['diagnostic_optimizer_calls']==34549 and eng['diagnostic_environments']==0
++eng=v['engineering'];assert eng['diagnostic_optimizer_calls']==35418 and eng['diagnostic_environments']==0
+ assert 'controller.exit' not in v['light']
+ for case,cc in counts.items():
+  if case=='L005_41' or cc['epochs']<=100:continue
+- actual=js('engineering_resume_3090_20261102_v1/'+case+'_BRANCH_COPY_EQ.json');assert actual['status']=='PASS_OBSERVED_STAGE_STARTS'
++ actual=js('engineering_rendezvous_recovery_20261102_v1/'+case+'_BRANCH_COPY_EQ.json',js('engineering_resume_3090_20261102_v1/'+case+'_BRANCH_COPY_EQ.json'));assert actual['status']=='PASS_OBSERVED_STAGE_STARTS'
+  for stage,start in [(7,15700),(8,38400),(9,69300)]:
+   if cc['epochs']>(stage-6)*100:assert actual['checked'][str(start)]['full_state_values_exact']
+ assert 'engineering_resume_3090_20261102_v1/controller.exit' not in v['light']
+-assert eng['checks_diagnostic_optimizer_calls']==7828 and eng['checks_diagnostic_extra_autograd']==36 and eng['diagnostic_extra_autograd']==83
++assert eng['checks_diagnostic_optimizer_calls']==7828 and eng['checks_diagnostic_extra_autograd']==36 and eng['diagnostic_extra_autograd']==94
+ for case,cc in counts.items():
+  if case=='L005_41' or not cc['epochs']:continue
+- eq=js('engineering_checks_3090_20261102_v1/'+case+'_CHECK_EQ.json');assert eq['status']=='PASS_OBSERVED_CHECKS' and eq['optimizer_calls_added']==eq['environments_added']==0
++ eq=js('engineering_rendezvous_recovery_20261102_v1/'+case+'_CHECK_EQ.json',js('engineering_checks_3090_20261102_v1/'+case+'_CHECK_EQ.json'));assert eq['status']=='PASS_OBSERVED_CHECKS' and eq['optimizer_calls_added']==eq['environments_added']==0
+  for stage,start in [(6,0),(7,15700),(8,38400),(9,69300)]:
+   if cc['epochs']>(stage-6)*100:
+    assert eq['finite_stage_starts'][str(start)]['exact']
+    if stage>6:assert eq['device_stage_starts'][str(start+10)]['exact']
+ assert eng['abandoned_partial_recorded_optimizer_calls']==140 and eng['abandoned_partial_unrecorded_cost']=='UNKNOWN'
+-out.update(hardware_migration='USER_AUTHORIZED_RTX3090',abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',engineering=eng,engineering_diagnostic_optimizer_calls=34549,engineering_diagnostic_extra_autograd=eng['diagnostic_extra_autograd'])
++out.update(hardware_migration='USER_AUTHORIZED_RTX3090',abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',engineering=eng,engineering_diagnostic_optimizer_calls=35418,engineering_diagnostic_extra_autograd=eng['diagnostic_extra_autograd'])
+ 
+ 
+ assert 'engineering_checks_3090_20261102_v1/controller.exit' not in v['light']
+@@ -173,5 +177,20 @@
+  assert js('engineering_live_parallel_3090_20261102_v1/LIVE_COMMITTED.json')['training_signals']==0
+ out['parallel_collection_lock_audit']['expected_total']=len(expected)
+ 
++
++assert eng['rendezvous_recovery_optimizer_calls']==869 and eng['rendezvous_recovery_extra_autograd']==11 and eng['rendezvous_partial_recorded_optimizer_calls']==400 and eng['total_recorded_abandoned_partial_optimizer_calls']==540
++assert eng['rendezvous_partial_unrecorded_cost']=='UNKNOWN' and eng['independent_rendezvous_verified']
++out.update(mitigated_failures_preserved=mitigated,rendezvous_partial_recorded_optimizer_calls=400,total_recorded_abandoned_partial_optimizer_calls=540,rendezvous_partial_unrecorded_cost='UNKNOWN')
++launches=[json.loads(x) for x in v['light'].get('engineering_rendezvous_recovery_20261102_v1/LAUNCHES.jsonl',{}).get('text','').splitlines()]
++for x in launches:
++ if x['phase']=='train':
++  assert '--standalone' not in x['argv'] and '--rdzv_endpoint=localhost:0' in x['argv'] and '--rdzv_backend=c10d' in x['argv'] and '--rdzv_id='+x['rdzv_id'] in x['argv']
++running=js('STATUS.json',{}).get('active',{})
++actual=[js('engineering_rendezvous_recovery_20261102_v1/'+case+'_RENDEZVOUS.json') for case,x in running.items() if x['phase']=='train']
++actual=[x for x in actual if x is not None]
++assert all(x['world_size']==1 for x in actual)
++assert len({x['master_port'] for x in actual})==len(actual)
++out['rendezvous_audit']=dict(launches=len(launches),observed_training_endpoints=actual,independent_endpoint_arguments=True)
++
+ (D/'LOCAL_AUDIT.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf8')
+ print(json.dumps(out,indent=2))
