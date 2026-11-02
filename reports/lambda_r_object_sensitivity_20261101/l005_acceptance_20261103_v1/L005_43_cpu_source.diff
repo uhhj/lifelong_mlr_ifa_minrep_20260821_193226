@@ -1,0 +1,36 @@
+--- cross/L005_43
++++ L005_only/L005_43
+@@ -17,13 +17,14 @@
+ js=lambda p:json.loads(Path(p).read_text())
+ def verify():
+  c=js(Q/'CONTRACT.json');assert all(sha(p)==h for p,h in c['files'].items());assert all(sha(S/n)==h for n,h in c['parent_source'].items())
+-verify();assert (Q.parent/'engineering_cross_lambda_20261102_v1'/'controller.exit').read_text()=='0'
++verify();os.nice(10)
++assert all(js(Q.parent/'engineering_cross_lambda_20261102_v1'/(c+'_evaluate_EXIT.json'))['returncode']==0 for c in ('L005_41','L005_42','L005_43'))
+ assert RETAIN_WEIGHT==js(Q/'PARENT_BINDING.json')['lambda_R']
+ assert js(Q/'CONTRACT.json')['lambda_R']==RETAIN_WEIGHT
+ for p in Path('/proc').glob('[0-9]*'):
+  try:
+   cmd=(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
+-  assert int(p.name)==os.getpid() or str(Q.parent) not in cmd,('Residual',p.name)
++  assert int(p.name)==os.getpid() or not any(c in cmd for c in ('L005_41','L005_42','L005_43')),('Residual L005',p.name)
+  except OSError:pass
+ def exact_class(name,path):
+  n=next(x for x in ast.parse((S/path).read_text()).body if isinstance(x,ast.ClassDef) and x.name==name);exec(compile(ast.Module(body=[n],type_ignores=[]),str(S/path),'exec'),globals())
+@@ -219,6 +220,10 @@
+ for arm in ARMS:
+  path_ad=js(Q/('SHORT_HISTORY_ADMISSION_'+arm+'.json'));assert path_ad['status']=='PASS' and path_ad['eight_frame_legacy_exact'] and path_ad['all_state_restored'] and [x['length'] for x in path_ad['lengths']]==list(range(1,9))
+ assert len(task6)==1 and len(collections)==40
++sref=js(Q/'S_REFERENCE.json');assert all(sha(x['path'])==x['sha256'] for x in sref.values())
++ss=torch.load(sref['stage6_checkpoint']['path'],map_location='cpu')['state_dict'];ss={(k[7:] if k.startswith('module.') else k):ah(v.numpy()) for k,v in ss.items()}
++task6_baseline_exact=ss==task6['S']
++pb=js(Q/'PARENT_BINDING.json');assert all(sha(p)==h for p,h in pb['files'].items())
+ records=js(Q/'OUTCOMES.json');assert len(records)==200;seen=set()
+ for r in records:
+  key=(r['arm'],r['stage'],r['task'],r['initial_index']);assert key not in seen;seen.add(key)
+@@ -231,4 +236,4 @@
+ verify();light={}
+ for fp in Q.rglob('*'):
+  if fp.is_file() and fp.suffix in ['.json','.jsonl','.exit'] and fp.name not in ['CONTRACT.json','PARENT_BINDING.json'] and fp.stat().st_size<8*1024**2:light[str(fp.relative_to(Q))]=dict(text=fp.read_text(),sha256=sha(fp))
+-print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,gate_audit=gate_audit,memory_audits=memory_audit,contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diagnostics,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,task6_current_arms_exact=False,single_S_only=True,initial_state_bytes_verified=True,reference_C_pairing_exact=False,light=light,episodes=200,training_collection_episodes=40,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time(),limitation='Online retained-feature hashes and teacher CPU replay verified; no raw camera or full physics replay is claimed.')))
++print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,gate_audit=gate_audit,memory_audits=memory_audit,contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diagnostics,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,task6_current_arms_exact=False,single_S_only=True,task6_baseline_all_tensors_exact=task6_baseline_exact,initial_state_bytes_verified=True,reference_C_pairing_exact=False,light=light,episodes=200,training_collection_episodes=40,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time(),limitation='Online retained-feature hashes and teacher CPU replay verified; no raw camera or full physics replay is claimed.')))

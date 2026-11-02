@@ -1,0 +1,55 @@
+{
+  "status": "STATIC_ONLY_PENDING_ACTUAL_CPU",
+  "scope": "L005 only; L020 continues",
+  "original_failure": "l005_acceptance_20261103_v1\\final_readonly_20261103_003553\\ATTEMPT.json",
+  "scale_diagnostic_sha256": "617212bd1c991f53cfdab27e1a4ee12d96c251e1c22eecf205f368ec19ec9b07",
+  "exact_exception": {
+    "stage": 6,
+    "count": 1482,
+    "stored": [
+      0.450316458940506,
+      0.10000000149011612,
+      1.0
+    ],
+    "current": [
+      0.4503164291381836,
+      0.10000000149011612,
+      1.0
+    ],
+    "reference_float64": [
+      0.45031642519301257,
+      0.1,
+      1.0
+    ],
+    "ulp_difference": [
+      1,
+      0,
+      0
+    ],
+    "stored_reference_abs": [
+      3.374749341089611e-08,
+      1.4901161138336505e-09,
+      0.0
+    ],
+    "current_reference_abs": [
+      3.9451710232008e-09,
+      1.4901161138336505e-09,
+      0.0
+    ],
+    "cache_sha256": "df8ac9e8d62549c54b05b755bce5196afd101c4f5f70ebbc52e06a2bbb702b15",
+    "cache_metadata_exact": true,
+    "source_float32_values_sha256": "b8a92dc60bf644ea6e1c43e7dc464e1f8d036f6ba277f8f0aac5a6b15e15eceb"
+  },
+  "explanation": "Only legacy L00541 Task6 differs by one float32 ULP on migrated host. Cache bytes and metadata must remain exact, input SHA and both vectors bind measured diagnostic, float64 reference independently verifies within two float32 spacings. All other scale checks remain exact; no training/probe/gate/loss threshold changes.",
+  "scientific_updates": 0,
+  "environments": 0,
+  "files": {
+    "audit_final_local.py": "d76fa15b30042ad3c08b77cfbaf2886317e2491f206298effe6b83025d6e13dd",
+    "build_wrappers.py": "47f4a78cc4c8c21b999d86a52c5c2766f8eea8770f60e9c61364fa2237bcd059",
+    "compare_primary_s.py": "0bc174b2aa755e73351e4bacaaea00cdf966209a7672d2294679a32a42dc097e",
+    "final_readonly.py": "12e9040ea6293ffad79d4422fb0bc96b1e51d73a9268d9b52dacdd95267bca44",
+    "L005_41_cpu_source.py": "41ed37a6d116b3b6ebe2aab827f8f24870c9bba3c5d5a0d3f4a03b7b14730d6b",
+    "L005_42_cpu_source.py": "87b6912179a244a4fac4df647bb6285b79f75415b2228bd0c5625ad35728909c",
+    "L005_43_cpu_source.py": "25336533810c8c4be866ea353e5349500682fa24b24520c708193d0745d5ee8b"
+  }
+}
