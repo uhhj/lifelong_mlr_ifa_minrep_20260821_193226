@@ -1,55 +1,49 @@
-## PARTIAL / PAUSED：用户要求先暂停训练，已于2026-11-01 23:28实际暂停
+## 最新2026-11-02：用户授权3090核验后已实际续训
 
-本段覆盖此前所有自动继续/下一480分钟/等待自然结束后自动交接的执行安排。用户未明确要求继续前，禁止SIGCONT、启动任何训练/评估/调度器/守护进程、重部署、重跑、自动工程交接或GPU诊断负载。同一object-s-r-run监控已PAUSED，保留不删除。
+用户先要求继续训练，发现主机在暂停后重启、GPU由RTX4080SUPER改成RTX3090后，明确授权“允许在3090核验后续训”。原进程全部消失，暂停内存不可恢复。首次SIGCONT包装在任何信号前因旧PID不存在而退出，没有重启或重复生产。CPU检查确认原260轮、checkpoint完整state/优化器/scheduler/grads/modes/requires及全部RNG、历史、probe SHA一致。
 
-唯一暂停请求request_20261101_232756_f2df19cf，证据deploy_remote_20261101_232756。先核进程start身份及合同，再SIGSTOP watchdog3900、owner3899、launcher2164和训练2169；原等待调度器2163原已T，保持T。没有SIGTERM/SIGKILL/重启/恢复。暂停后五个进程均T，完整记录hash至少2秒稳定，135科学项和5工程项不变。训练内存与约2090MiB GPU显存仍保留。
+独立GPU验证v1因probe scale重算差一个float32 ULP（约2.98e-8）在0optimizer/0autograd/0环境前停止，错误保留。v2精确使用原冻结Task8归一化常数（不是调参或放宽门控），核完整GPU恢复、29调用原准入、7块两条CPU/device快照路径。实际309 started==completed、11额外autograd、0环境、0生产轮；每步标量、两分支恢复、所选完整state/探针/决策精确。7块与旧GPU原记录全部逐字段相等。该观察只覆盖验证路径，不能宣称全run跨GPU逐位等价。
 
-暂停后check_readonly_20261101_232839/LOCAL_AUDIT及PAUSE_LOCAL_AUDIT实际PASS，232210全部epoch/门控/诊断前缀保留，暂停回执记录SHA与新快照相等。L005_41 Task6/7各100轮、Task8完整60轮，共260/400轮56940接受98180生产，62隔离30准入autograd、20采集0正式；其余五run未开始。完整数值以LOCAL_AUDIT为准。当前未完成轮/块仍在活进程内存，未强制保存新checkpoint；未持久记账的部分调用不能声称为零或精确总账。
+唯一新工程 `engineering_resume_3090_20261102_v1`，12:48:22启动controller2560、训练2566，合同 `46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3`，8冻结项；135科学及5旧工程冻结项保持。原root和旧工程controller.exit均不存在，最终实际成功来源只使用新工程controller.exit0且无自身进程。禁止重跑旧/新任何dispatch/controller/build/已完成轮。
 
-恢复只在用户明确要求后：先读USER_PAUSE_STATUS.json、暂停回执和真实进程身份/退出/hash/完整恢复边界，不能从旧checkpoint重训部分轮。原2163仍是应由工程owner接管的旧等待器，不得盲SIGCONT它；必须版本化审查恢复顺序，保护watchdog/owner握手。当前未完成轮的seconds会包含暂停墙钟时间，恢复后不得用这一轮估吞吐，也不得改写原科学epoch记录。原root/controller.exit仍须不存在，工程最终CPU验收和科学协议保留，但暂停期间不执行。
+原checkpoint另存私有interrupted_epoch260.pth，原4167条门控完整归档且原文件全部保留。第261轮前7块重建须逐字段等于已有记录，不重复追加门控行；前260轮不重训。中断部分已记录140候选调用与未记账部分UNKNOWN单列，不能把它说成零；309恢复诊断与此前7828诊断分开，合计8137optimizer/47autograd，不混入1171800生产预算。
 
-此前诊断和优化文件保留，7828/36独立验证成本原账不变。详细暂停状态见USER_PAUSE_STATUS.json。本次只完成暂停、只读核验及按AGENTS发布，等待用户后续指令。
+实际 2026-11-02T12:49:55.526698+08:00，check_readonly_20261102_124955 / LOCAL_AUDIT / RECOVERY_LOCAL_AUDIT通过。当前261轮，接受57249、已完成轮生产物理98798，自身62隔离/30autograd、20采集、正式0。原260轮与全部门控前缀精确保留，controller2560/GPU2566健康；其余五run未启动。恢复后完整轮秒数 [48.368486642837524]，样本不足以推算全队列；旧慢速ETA失效。
 
-## 2026-11-01 23:22 用户要求深入追查：原生热点已定位，生产未改
+后续顺序及loss/λ/阈值/采集/正式预算不变。每阶段自己的GPU准入和设备快照一致性核验继续。新run仍要求官方初始化tensor/RNG相等；用户已授权硬件变化，Task6跨GPU结果实际记录全部差异，不再伪称硬件相同或tensor必相等。L005_41前260轮在旧硬件、后续在3090，其余新run在3090，旧0.1基线不重跑。因此最终报告必须披露硬件混杂，不能称λ单因素硬件完全受控对照。
 
-已完成非暂停原生IP+Python栈采样以及重复CPU计数，见NATIVE_BOTTLENECK_REPORT_20261101.md和capacity_readonly_20261101_231319/231448/231842/232037的实际证据及LOCAL审计。主线程3961原生样本零丢失，核实CUDA驱动内部内存复制循环、PyTorch cpu_equal和direct_copy_kernel；599个Python墙钟栈中复制/恢复/比较合计23.54%。GPU0–9%、通常2–4%，PCIe Gen4×16，未见Xid/PCIe错误或热功率限频。不能称GPU坏，也不能把所有几倍历史慢速都归于单一热点。
+新工程check/audit_progress/record_progress/final_readonly/audit_final_local已外置适配；最终CPU仍STATIC_ONLY，待全部自然结束才真实24CP/6恢复/24teacher/1200初态noise/54600门控与恢复成本验收。之后根compare_primary_s、三档全结果/新旧任务/SF/FS/负单元/成本/开发集及预训练来源边界解释，发布后关闭监控。
 
-KVM虚拟机12vCPU、标称2800MHz；三次cycles/perf-task-clock约0.33–0.34十亿/秒，参考周期ENOENT且实际cpufreq不可见。只能把宿主机/vCPU有效执行资源或计数虚拟化列为需服务器侧核查的具体嫌疑，严禁将该虚拟计数声称为物理CPU已降至330MHz。未联系服务商、未重启/迁移/改线程/改精度/改驱动。本次所有原生观察0optimizer/0环境/0生产写入/目标信号。
+同一object-s-r-run已ACTIVE，下一30分钟一次性核恢复吞吐，再依据当前完整run/整组评估剩余时间调整。现有运输worker3700，先核status/PID，不重启活跃worker或输出凭据。健康静默，只实质变化/完成/新失败/需行动通知。
 
-最新check_readonly_20261101_232210/LOCAL_AUDIT实际PASS，230151全部epoch/门控/诊断前缀精确保留，135科学项和5工程项不变。L005_41 Task6/7各100轮、Task8完整59轮，共259轮56631接受97562生产，62自身隔离30准入autograd、20采集0正式；其他五run未开始。Task8近10轮235.03秒，尚无稳定恢复迹象。此前90–110小时全队列估时只是慢速持续情景，未实测优化前不能给可靠完成日期。
-
-工程已唯一于deploy_remote_20261101_191752部署，合同b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c。原等待调度器2163为T，当前launcher2164/训练2169继续；新owner3899/watchdog3900正常ARMED，HANDOFF_COMPLETE尚不存在，无失败或WATCHDOG_RELEASE。完整两λ八阶段一整轮逐位等价验证已实际PASS，7828 started==completed/36autograd/0环境另记，诊断3441已退出，不准重复验证dispatch。设备分支快照优化尚未用于生产；只等当前400轮40采集自然kernel exit0并核prefix/hash后，结束旧等待调度器、持原root锁接续未来五run，不信号训练、不重跑完成轮。禁止重跑任何dispatch/controller/build。
-
-后续只用工程目录engineering_device_snapshot_20261101_v1的check/audit_progress/record_progress/final_readonly/audit_final_local。原root/controller.exit必须不存在，真实最终完成源仅工程controller.exit0且无自身进程。各新阶段须BRANCH_COPY_EQ及原自身GPU准入，不套验证PASS。若WATCHDOG_RELEASE出现，保留错误审计，不盲重复部署。最终CPU包装仍STATIC_ONLY，全部自然完成后才实际验收、根compare_primary_s及完整解释发布。
-
-同一object-s-r-run监控下一480分钟在当前整run结束较早侧复查；这是按当前run余时安排，不固定高频。运输worker28064先读status核PID，不重启活跃worker、不输出凭据。完整性能证据已保存；科学协议不变，仅OBJECT两档各三seed，已有.1只读。健康静默，完成/新失败/需行动通知；六run全部实际验收解释发布前不得删除监控。
+本段覆盖此前PAUSED与旧调度器安排，历史暂停/失败证据永久保留。
 
 # OBJECT 最新S固定λ_R六run：当前交接
 
-实际观察 2026-11-01T23:22:10.062176+08:00；check_readonly_20261101_232210/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
+实际观察 2026-11-02T12:49:55.526698+08:00；check_readonly_20261102_124955/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
 
-唯一root `/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1`，controller3899，合同`6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e`，135冻结项。唯一部署deploy_remote_20261101_152959。禁止重复compose/freeze/deploy/controller或已完成epoch。
+唯一root `/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1`，controller2560，合同`6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e`，135冻结项。唯一部署deploy_remote_20261101_152959。禁止重复compose/freeze/deploy/controller或已完成epoch。
 
 |case|完整轮/400|接受更新|生产物理|采集/40|正式/200|
 |---|---:|---:|---:|---:|---:|
-|L005_41|259|56631|97562|20|0|
+|L005_41|261|57249|98798|20|0|
 |L005_42|0|0|0|0|0|
 |L005_43|0|0|0|0|0|
 |L020_41|0|0|0|0|0|
 |L020_42|0|0|0|0|0|
 |L020_43|0|0|0|0|0|
 
-累计259/2400轮、56631/633000接受、97562/1171800生产、62/546隔离、30/246准入autograd、20/240采集、0/1200正式。方向诊断最多216autograd另记。
+累计261/2400轮、57249/633000接受、98798/1171800生产、62/546隔离、30/246准入autograd、20/240采集、0/1200正式。方向诊断最多216autograd另记。
 
-下一480分钟复查，首次核自己的保持阶段准入及吞吐，此后依据整seed或整组正式实际剩余时间调整，不固定高频，不按时钟推断完成。
+下一30分钟复查，首次核自己的保持阶段准入及吞吐，此后依据整seed或整组正式实际剩余时间调整，不固定高频，不按时钟推断完成。
 
 先完整读PROTOCOL.md、IMPLEMENTATION_NOTES.md、RUN_STATUS.json、ACTIVE_ROOT.json、FINAL_WRAPPER_REVIEW.json及最新EVIDENCE/LOCAL_AUDIT。用户只授权OBJECT六run：0.05/0.2各41/42/43，已有0.1三个完整S只读复用。GOAL不跑，C/Q/旧机制不恢复。每阶段100轮，最新S双候选10步门控、零epsilon、自己成功缓存q和原4槽分母不变；只改变保持合成项λ_R，准入同λ均匀支持参照不是原0.1轨迹。
 
 顺序L005三seed训练→600正式→L020三seed训练→600正式。240采集20–29不补采，1200正式0–19原600步5zero配对Normal。每stage自己的GPU准入/COPY_EQ、官方初态及Task6对已有S全tensor实际通过；未来阶段不能套PASS。
 
-运输使用旧机制目录现有.session_control worker，先读status并核PID，不重启活跃worker或输出凭据。本工程engineering_device_snapshot_20261101_v1/check复制旧目录queue，按result真实目录复制回来，audit_progress.py NEW PREVIOUS→record_progress.py NEW INTERVAL。任何错误先保留原失败、hash、进程/退出、完整恢复和已耗成本，禁止盲恢复部分块或环境attempt，不改科学协议。
+运输使用旧机制目录现有.session_control worker，先读status并核PID，不重启活跃worker或输出凭据。本工程engineering_resume_3090_20261102_v1/check复制旧目录queue，按result真实目录复制回来，audit_progress.py NEW PREVIOUS→record_progress.py NEW INTERVAL。任何错误先保留原失败、hash、进程/退出、完整恢复和已耗成本，禁止盲恢复部分块或环境attempt，不改科学协议。
 
-只有自然engineering_device_snapshot_20261101_v1/controller.exit0且无自身进程后，才final_readonly实际CPU24CP/6恢复/24teacher缓存/1200初态noise/54600门控及预算验收→audit_final_local→compare_primary_s。FINAL_WRAPPER_REVIEW目前仅STATIC_ONLY。包装错误保留原证据后外置版本化修复，不重训重评。
+只有自然engineering_resume_3090_20261102_v1/controller.exit0且无自身进程后，才final_readonly实际CPU24CP/6恢复/24teacher缓存/1200初态noise/54600门控及预算验收→audit_final_local→compare_primary_s。FINAL_WRAPPER_REVIEW目前仅STATIC_ONLY。包装错误保留原证据后外置版本化修复，不重训重评。
 
 随后自主完成FINAL_REPORT/ACCEPTANCE：三档全结果、新旧任务、SF/FS、全部负单元、门控接受与梯度/训练代理、成本边界。不按正式成绩选择最佳λ，不扩seed或负结果加实验。已有0.1的600回合被两次配对而非1200独立基线回合。保留开发集反复使用和预训练来源未闭合，敏感性分析不是独立确认或全局无泄露。
 

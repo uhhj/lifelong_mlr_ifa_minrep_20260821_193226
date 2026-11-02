@@ -1,0 +1,829 @@
+{
+  "observed": 1793594794.7056687,
+  "root": "/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2",
+  "files": {
+    "DISPATCH.json": {
+      "status": "DIAGNOSTIC_STARTED_NOT_PASS",
+      "pid": 2332,
+      "time": 1793594691.0194867,
+      "source_sha256": "52a310267a3ed2d534d85421d6f15d4a675e25559be428f81b558b15aeb7b0b5",
+      "optimizer_planned": 309,
+      "extra_autograd_planned": 11,
+      "environments": 0
+    },
+    "LEDGER.json": {
+      "status": "PASS_GPU_RECOVERY_AND_PAIRED_BRANCH_REPLAY",
+      "started": 309,
+      "completed": 309,
+      "extra_autograd": 11,
+      "environments": 0,
+      "production_epochs": 0,
+      "time": 1793594743.2583477
+    },
+    "VALIDATION.json": {
+      "status": "PASS_GPU_RECOVERY_AND_PAIRED_BRANCH_REPLAY",
+      "started": 309,
+      "completed": 309,
+      "extra_autograd": 11,
+      "environments": 0,
+      "production_epochs": 0,
+      "checkpoint_sha256": "65b8d3b4c9f589fb543ba5b7a41991a8c1dbc50daae309c21c386471178b4070",
+      "history_epochs": 260,
+      "full_state_restore_exact": true,
+      "paired_CPU_device_rows_states_probes_decisions_exact": true,
+      "restored_after_diagnostics": true,
+      "production_metadata_unchanged": true,
+      "hardware": "NVIDIA GeForce RTX 3090",
+      "old_GPU_comparisons": [
+        {
+          "block": 0,
+          "all_gate_fields_exact": true,
+          "decision_equal": true,
+          "old": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 0,
+            "steps": 10,
+            "start_step": 56940,
+            "end_step": 56950,
+            "C": {
+              "bc_new": -27.997192919254303,
+              "exec_new": 0.016355000028852373,
+              "retain_support": 0.012854789849370718,
+              "retain_by_task": {
+                "6": 0.0059453570283949375,
+                "7": 0.0069094328209757805
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -27.99721759557724,
+              "exec_new": 0.016354825362213887,
+              "retain_support": 0.012853214982897043,
+              "retain_by_task": {
+                "6": 0.0059442720375955105,
+                "7": 0.006908942945301533
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "Q",
+            "checks": {
+              "bc_new": true,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          },
+          "new": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 0,
+            "steps": 10,
+            "start_step": 56940,
+            "end_step": 56950,
+            "C": {
+              "bc_new": -27.997192919254303,
+              "exec_new": 0.016355000028852373,
+              "retain_support": 0.012854789849370718,
+              "retain_by_task": {
+                "6": 0.0059453570283949375,
+                "7": 0.0069094328209757805
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -27.99721759557724,
+              "exec_new": 0.016354825362213887,
+              "retain_support": 0.012853214982897043,
+              "retain_by_task": {
+                "6": 0.0059442720375955105,
+                "7": 0.006908942945301533
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "Q",
+            "checks": {
+              "bc_new": true,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          }
+        },
+        {
+          "block": 1,
+          "all_gate_fields_exact": true,
+          "decision_equal": true,
+          "old": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 10,
+            "steps": 10,
+            "start_step": 56950,
+            "end_step": 56960,
+            "C": {
+              "bc_new": -27.642514944076538,
+              "exec_new": 0.02513037045719102,
+              "retain_support": 0.011706645600497723,
+              "retain_by_task": {
+                "6": 0.0016839280724525452,
+                "7": 0.010022717528045177
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -27.642500042915344,
+              "exec_new": 0.025130141541012563,
+              "retain_support": 0.011706048273481429,
+              "retain_by_task": {
+                "6": 0.001683856942690909,
+                "7": 0.01002219133079052
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          },
+          "new": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 10,
+            "steps": 10,
+            "start_step": 56950,
+            "end_step": 56960,
+            "C": {
+              "bc_new": -27.642514944076538,
+              "exec_new": 0.02513037045719102,
+              "retain_support": 0.011706645600497723,
+              "retain_by_task": {
+                "6": 0.0016839280724525452,
+                "7": 0.010022717528045177
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -27.642500042915344,
+              "exec_new": 0.025130141541012563,
+              "retain_support": 0.011706048273481429,
+              "retain_by_task": {
+                "6": 0.001683856942690909,
+                "7": 0.01002219133079052
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          }
+        },
+        {
+          "block": 2,
+          "all_gate_fields_exact": true,
+          "decision_equal": true,
+          "old": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 20,
+            "steps": 10,
+            "start_step": 56960,
+            "end_step": 56970,
+            "C": {
+              "bc_new": -28.367585837841034,
+              "exec_new": 0.01680578087689355,
+              "retain_support": 0.013855002005584538,
+              "retain_by_task": {
+                "6": 0.0014014189364388585,
+                "7": 0.01245358306914568
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.367625951766968,
+              "exec_new": 0.01680558387306519,
+              "retain_support": 0.013852977310307324,
+              "retain_by_task": {
+                "6": 0.0014013267355039716,
+                "7": 0.012451650574803352
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "Q",
+            "checks": {
+              "bc_new": true,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          },
+          "new": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 20,
+            "steps": 10,
+            "start_step": 56960,
+            "end_step": 56970,
+            "C": {
+              "bc_new": -28.367585837841034,
+              "exec_new": 0.01680578087689355,
+              "retain_support": 0.013855002005584538,
+              "retain_by_task": {
+                "6": 0.0014014189364388585,
+                "7": 0.01245358306914568
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.367625951766968,
+              "exec_new": 0.01680558387306519,
+              "retain_support": 0.013852977310307324,
+              "retain_by_task": {
+                "6": 0.0014013267355039716,
+                "7": 0.012451650574803352
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "Q",
+            "checks": {
+              "bc_new": true,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          }
+        },
+        {
+          "block": 3,
+          "all_gate_fields_exact": true,
+          "decision_equal": true,
+          "old": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 30,
+            "steps": 10,
+            "start_step": 56970,
+            "end_step": 56980,
+            "C": {
+              "bc_new": -28.061571300029755,
+              "exec_new": 0.021421004203148186,
+              "retain_support": 0.015302370302379131,
+              "retain_by_task": {
+                "6": 0.004929680377244949,
+                "7": 0.010372689925134182
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.061577558517456,
+              "exec_new": 0.021420960925752297,
+              "retain_support": 0.015300669707357883,
+              "retain_by_task": {
+                "6": 0.00492963008582592,
+                "7": 0.010371039621531963
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "Q",
+            "checks": {
+              "bc_new": true,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          },
+          "new": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 30,
+            "steps": 10,
+            "start_step": 56970,
+            "end_step": 56980,
+            "C": {
+              "bc_new": -28.061571300029755,
+              "exec_new": 0.021421004203148186,
+              "retain_support": 0.015302370302379131,
+              "retain_by_task": {
+                "6": 0.004929680377244949,
+                "7": 0.010372689925134182
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.061577558517456,
+              "exec_new": 0.021420960925752297,
+              "retain_support": 0.015300669707357883,
+              "retain_by_task": {
+                "6": 0.00492963008582592,
+                "7": 0.010371039621531963
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "Q",
+            "checks": {
+              "bc_new": true,
+              "exec_new": true,
+              "retain_improved": true
+            }
+          }
+        },
+        {
+          "block": 4,
+          "all_gate_fields_exact": true,
+          "decision_equal": true,
+          "old": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 40,
+            "steps": 10,
+            "start_step": 56980,
+            "end_step": 56990,
+            "C": {
+              "bc_new": -28.06190025806427,
+              "exec_new": 0.032686192978871986,
+              "retain_support": 0.013976340182125568,
+              "retain_by_task": {
+                "6": 0.005090051330626011,
+                "7": 0.008886288851499557
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.06187504529953,
+              "exec_new": 0.03268632135586813,
+              "retain_support": 0.013973778579384089,
+              "retain_by_task": {
+                "6": 0.005089829210191965,
+                "7": 0.008883949369192123
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": false,
+              "retain_improved": true
+            }
+          },
+          "new": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 40,
+            "steps": 10,
+            "start_step": 56980,
+            "end_step": 56990,
+            "C": {
+              "bc_new": -28.06190025806427,
+              "exec_new": 0.032686192978871986,
+              "retain_support": 0.013976340182125568,
+              "retain_by_task": {
+                "6": 0.005090051330626011,
+                "7": 0.008886288851499557
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.06187504529953,
+              "exec_new": 0.03268632135586813,
+              "retain_support": 0.013973778579384089,
+              "retain_by_task": {
+                "6": 0.005089829210191965,
+                "7": 0.008883949369192123
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": false,
+              "retain_improved": true
+            }
+          }
+        },
+        {
+          "block": 5,
+          "all_gate_fields_exact": true,
+          "decision_equal": true,
+          "old": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 50,
+            "steps": 10,
+            "start_step": 56990,
+            "end_step": 57000,
+            "C": {
+              "bc_new": -28.208044409751892,
+              "exec_new": 0.03178808020311408,
+              "retain_support": 0.015136940870434046,
+              "retain_by_task": {
+                "6": 0.005941531155258417,
+                "7": 0.009195409715175629
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.20802801847458,
+              "exec_new": 0.031788181309821084,
+              "retain_support": 0.015132706612348557,
+              "retain_by_task": {
+                "6": 0.00594124011695385,
+                "7": 0.009191466495394707
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": false,
+              "retain_improved": true
+            }
+          },
+          "new": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 50,
+            "steps": 10,
+            "start_step": 56990,
+            "end_step": 57000,
+            "C": {
+              "bc_new": -28.208044409751892,
+              "exec_new": 0.03178808020311408,
+              "retain_support": 0.015136940870434046,
+              "retain_by_task": {
+                "6": 0.005941531155258417,
+                "7": 0.009195409715175629
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.20802801847458,
+              "exec_new": 0.031788181309821084,
+              "retain_support": 0.015132706612348557,
+              "retain_by_task": {
+                "6": 0.00594124011695385,
+                "7": 0.009191466495394707
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": false,
+              "retain_improved": true
+            }
+          }
+        },
+        {
+          "block": 6,
+          "all_gate_fields_exact": true,
+          "decision_equal": true,
+          "old": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 60,
+            "steps": 10,
+            "start_step": 57000,
+            "end_step": 57010,
+            "C": {
+              "bc_new": -28.57812738418579,
+              "exec_new": 0.021536491651204415,
+              "retain_support": 0.017503642477095127,
+              "retain_by_task": {
+                "6": 0.006230832077562809,
+                "7": 0.011272810399532318
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.57809352874756,
+              "exec_new": 0.02153668946994003,
+              "retain_support": 0.017496622633188963,
+              "retain_by_task": {
+                "6": 0.006230007391422987,
+                "7": 0.011266615241765976
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": false,
+              "retain_improved": true
+            }
+          },
+          "new": {
+            "stage": 8,
+            "epoch": 60,
+            "batch": 60,
+            "steps": 10,
+            "start_step": 57000,
+            "end_step": 57010,
+            "C": {
+              "bc_new": -28.57812738418579,
+              "exec_new": 0.021536491651204415,
+              "retain_support": 0.017503642477095127,
+              "retain_by_task": {
+                "6": 0.006230832077562809,
+                "7": 0.011272810399532318
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "Q": {
+              "bc_new": -28.57809352874756,
+              "exec_new": 0.02153668946994003,
+              "retain_support": 0.017496622633188963,
+              "retain_by_task": {
+                "6": 0.006230007391422987,
+                "7": 0.011266615241765976
+              },
+              "probe_windows": 80,
+              "policy_calls": 9
+            },
+            "accepted": "C",
+            "checks": {
+              "bc_new": false,
+              "exec_new": false,
+              "retain_improved": true
+            }
+          }
+        }
+      ],
+      "cross_hardware_bitwise_claim": true,
+      "old_partial_recorded_optimizer_calls": 140,
+      "old_partial_unrecorded_cost": "UNKNOWN",
+      "time": 1793594743.5913079
+    },
+    "PROBE_REBUILD_COMPARISON.json": {
+      "saved": {
+        "new_indices": [
+          3,
+          60,
+          106,
+          121,
+          181,
+          192,
+          262,
+          331,
+          429,
+          446,
+          453,
+          474,
+          566,
+          630,
+          635,
+          652,
+          923,
+          962,
+          1004,
+          1012,
+          1106,
+          1417,
+          1452,
+          1558,
+          1601,
+          1624,
+          1656,
+          1688,
+          1721,
+          1772,
+          1774,
+          1824,
+          1883,
+          1954,
+          2008,
+          2100,
+          2190,
+          2209,
+          2266,
+          2281,
+          2322,
+          2334,
+          2351,
+          2361,
+          2424,
+          2429,
+          2431,
+          2436,
+          2472,
+          2473,
+          2490,
+          2509,
+          2523,
+          2541,
+          2658,
+          2672,
+          2727,
+          2816,
+          2833,
+          2851,
+          2861,
+          2891,
+          2952,
+          3018
+        ],
+        "old_indices": {
+          "6": [
+            4,
+            7,
+            8,
+            19,
+            21,
+            23,
+            24,
+            25
+          ],
+          "7": [
+            36,
+            42,
+            44,
+            50,
+            74,
+            102,
+            118,
+            126
+          ]
+        },
+        "new_scale": [
+          0.4241475760936737,
+          0.10000000149011612,
+          1.0
+        ],
+        "support": {
+          "6": 0.2,
+          "7": 1.0
+        },
+        "support_trajectories": {
+          "6": [
+            0,
+            7
+          ],
+          "7": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        },
+        "new_population": 1480,
+        "source": "TRAINING_ONLY_FIXED_NOT_VALIDATION"
+      },
+      "generated": {
+        "new_indices": [
+          3,
+          60,
+          106,
+          121,
+          181,
+          192,
+          262,
+          331,
+          429,
+          446,
+          453,
+          474,
+          566,
+          630,
+          635,
+          652,
+          923,
+          962,
+          1004,
+          1012,
+          1106,
+          1417,
+          1452,
+          1558,
+          1601,
+          1624,
+          1656,
+          1688,
+          1721,
+          1772,
+          1774,
+          1824,
+          1883,
+          1954,
+          2008,
+          2100,
+          2190,
+          2209,
+          2266,
+          2281,
+          2322,
+          2334,
+          2351,
+          2361,
+          2424,
+          2429,
+          2431,
+          2436,
+          2472,
+          2473,
+          2490,
+          2509,
+          2523,
+          2541,
+          2658,
+          2672,
+          2727,
+          2816,
+          2833,
+          2851,
+          2861,
+          2891,
+          2952,
+          3018
+        ],
+        "old_indices": {
+          "6": [
+            4,
+            7,
+            8,
+            19,
+            21,
+            23,
+            24,
+            25
+          ],
+          "7": [
+            36,
+            42,
+            44,
+            50,
+            74,
+            102,
+            118,
+            126
+          ]
+        },
+        "new_scale": [
+          0.4241475462913513,
+          0.10000000149011612,
+          1.0
+        ],
+        "support": {
+          "6": 0.2,
+          "7": 1.0
+        },
+        "support_trajectories": {
+          "6": [
+            0,
+            7
+          ],
+          "7": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        },
+        "new_population": 1480,
+        "source": "TRAINING_ONLY_FIXED_NOT_VALIDATION"
+      },
+      "differing_keys": [
+        "new_scale"
+      ]
+    }
+  },
+  "log_tail": "[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\nGym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.\nPlease upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.\nSee the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.\n[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.\n  warnings.warn(\ntemporal_transformer.decoder.wte.weight\ntemporal_transformer.decoder.wpe.weight\ntemporal_transformer.decoder.h.0.ln_1.weight\ntemporal_transformer.decoder.h.0.ln_1.bias\ntemporal_transformer.decoder.h.0.attn.c_attn.weight\ntemporal_transformer.decoder.h.0.attn.c_attn.bias\ntemporal_transformer.decoder.h.0.attn.c_proj.weight\ntemporal_transformer.decoder.h.0.attn.c_proj.bias\ntemporal_transformer.decoder.h.0.ln_2.weight\ntemporal_transformer.decoder.h.0.ln_2.bias\ntemporal_transformer.decoder.h.0.mlp.c_fc.weight\ntemporal_transformer.decoder.h.0.mlp.c_fc.bias\ntemporal_transformer.decoder.h.0.mlp.c_proj.weight\ntemporal_transformer.decoder.h.0.mlp.c_proj.bias\ntemporal_transformer.decoder.h.1.ln_1.weight\ntemporal_transformer.decoder.h.1.ln_1.bias\ntemporal_transformer.decoder.h.1.attn.c_attn.weight\ntemporal_transformer.decoder.h.1.attn.c_attn.bias\ntemporal_transformer.decoder.h.1.attn.c_proj.weight\ntemporal_transformer.decoder.h.1.attn.c_proj.bias\ntemporal_transformer.decoder.h.1.ln_2.weight\ntemporal_transformer.decoder.h.1.ln_2.bias\ntemporal_transformer.decoder.h.1.mlp.c_fc.weight\ntemporal_transformer.decoder.h.1.mlp.c_fc.bias\ntemporal_transformer.decoder.h.1.mlp.c_proj.weight\ntemporal_transformer.decoder.h.1.mlp.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_1.weight\ntemporal_transformer.decoder.h.2.ln_1.bias\ntemporal_transformer.decoder.h.2.attn.c_attn.weight\ntemporal_transformer.decoder.h.2.attn.c_attn.bias\ntemporal_transformer.decoder.h.2.attn.c_proj.weight\ntemporal_transformer.decoder.h.2.attn.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_2.weight\ntemporal_transformer.decoder.h.2.ln_2.bias\ntemporal_transformer.decoder.h.2.mlp.c_fc.weight\ntemporal_transformer.decoder.h.2.mlp.c_fc.bias\ntemporal_transformer.decoder.h.2.mlp.c_proj.weight\ntemporal_transformer.decoder.h.2.mlp.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_1.weight\ntemporal_transformer.decoder.h.3.ln_1.bias\ntemporal_transformer.decoder.h.3.attn.c_attn.weight\ntemporal_transformer.decoder.h.3.attn.c_attn.bias\ntemporal_transformer.decoder.h.3.attn.c_proj.weight\ntemporal_transformer.decoder.h.3.attn.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_2.weight\ntemporal_transformer.decoder.h.3.ln_2.bias\ntemporal_transformer.decoder.h.3.mlp.c_fc.weight\ntemporal_transformer.decoder.h.3.mlp.c_fc.bias\ntemporal_transformer.decoder.h.3.mlp.c_proj.weight\ntemporal_transformer.decoder.h.3.mlp.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_1.weight\ntemporal_transformer.decoder.h.4.ln_1.bias\ntemporal_transformer.decoder.h.4.attn.c_attn.weight\ntemporal_transformer.decoder.h.4.attn.c_attn.bias\ntemporal_transformer.decoder.h.4.attn.c_proj.weight\ntemporal_transformer.decoder.h.4.attn.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_2.weight\ntemporal_transformer.decoder.h.4.ln_2.bias\ntemporal_transformer.decoder.h.4.mlp.c_fc.weight\ntemporal_transformer.decoder.h.4.mlp.c_fc.bias\ntemporal_transformer.decoder.h.4.mlp.c_proj.weight\ntemporal_transformer.decoder.h.4.mlp.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_1.weight\ntemporal_transformer.decoder.h.5.ln_1.bias\ntemporal_transformer.decoder.h.5.attn.c_attn.weight\ntemporal_transformer.decoder.h.5.attn.c_attn.bias\ntemporal_transformer.decoder.h.5.attn.c_proj.weight\ntemporal_transformer.decoder.h.5.attn.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_2.weight\ntemporal_transformer.decoder.h.5.ln_2.bias\ntemporal_transformer.decoder.h.5.mlp.c_fc.weight\ntemporal_transformer.decoder.h.5.mlp.c_fc.bias\ntemporal_transformer.decoder.h.5.mlp.c_proj.weight\ntemporal_transformer.decoder.h.5.mlp.c_proj.bias\ntemporal_transformer.decoder.ln_f.weight\ntemporal_transformer.decoder.ln_f.bias\npolicy_head.share.0.weight\npolicy_head.share.0.bias\npolicy_head.share.2.weight\npolicy_head.share.2.bias\npolicy_head.share.4.weight\npolicy_head.share.4.bias\npolicy_head.mean_layer.weight\npolicy_head.mean_layer.bias\npolicy_head.logstd_layer.weight\npolicy_head.logstd_layer.bias\npolicy_head.logits_layer.weight\npolicy_head.logits_layer.bias\n",
+  "launcher_state": null
+}

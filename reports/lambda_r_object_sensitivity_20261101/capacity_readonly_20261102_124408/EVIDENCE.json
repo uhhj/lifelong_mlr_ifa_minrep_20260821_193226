@@ -1,0 +1,37 @@
+{
+  "observed": 1793594648.78083,
+  "root": "/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v1",
+  "files": {
+    "DISPATCH.json": {
+      "status": "DIAGNOSTIC_STARTED_NOT_PASS",
+      "pid": 2167,
+      "time": 1793594535.5312822,
+      "source_sha256": "aa0c3d820160b561c10128d82e4d7a491691fc27631fbb4ec41d386c31deb09d",
+      "optimizer_planned": 309,
+      "extra_autograd_planned": 11,
+      "environments": 0
+    },
+    "LEDGER.json": {
+      "status": "FAILED_REQUIRES_REVIEW",
+      "started": 0,
+      "completed": 0,
+      "extra_autograd": 0,
+      "environments": 0,
+      "production_epochs": 0,
+      "time": 1793594559.7281208
+    },
+    "FAILURE.json": {
+      "error": "Traceback (most recent call last):\n  File \"/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v1/validate.py\", line 74, in <module>\n    try:main()\n  File \"/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v1/validate.py\", line 44, in main\n    assert json.loads(json.dumps(pr['metadata']))==rt.js(R/'PROBES_8.json')\nAssertionError\n",
+      "ledger": {
+        "status": "FAILED_REQUIRES_REVIEW",
+        "started": 0,
+        "completed": 0,
+        "extra_autograd": 0,
+        "environments": 0,
+        "production_epochs": 0
+      }
+    }
+  },
+  "log_tail": "as\ntemporal_transformer.decoder.h.2.ln_1.weight\ntemporal_transformer.decoder.h.2.ln_1.bias\ntemporal_transformer.decoder.h.2.attn.c_attn.weight\ntemporal_transformer.decoder.h.2.attn.c_attn.bias\ntemporal_transformer.decoder.h.2.attn.c_proj.weight\ntemporal_transformer.decoder.h.2.attn.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_2.weight\ntemporal_transformer.decoder.h.2.ln_2.bias\ntemporal_transformer.decoder.h.2.mlp.c_fc.weight\ntemporal_transformer.decoder.h.2.mlp.c_fc.bias\ntemporal_transformer.decoder.h.2.mlp.c_proj.weight\ntemporal_transformer.decoder.h.2.mlp.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_1.weight\ntemporal_transformer.decoder.h.3.ln_1.bias\ntemporal_transformer.decoder.h.3.attn.c_attn.weight\ntemporal_transformer.decoder.h.3.attn.c_attn.bias\ntemporal_transformer.decoder.h.3.attn.c_proj.weight\ntemporal_transformer.decoder.h.3.attn.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_2.weight\ntemporal_transformer.decoder.h.3.ln_2.bias\ntemporal_transformer.decoder.h.3.mlp.c_fc.weight\ntemporal_transformer.decoder.h.3.mlp.c_fc.bias\ntemporal_transformer.decoder.h.3.mlp.c_proj.weight\ntemporal_transformer.decoder.h.3.mlp.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_1.weight\ntemporal_transformer.decoder.h.4.ln_1.bias\ntemporal_transformer.decoder.h.4.attn.c_attn.weight\ntemporal_transformer.decoder.h.4.attn.c_attn.bias\ntemporal_transformer.decoder.h.4.attn.c_proj.weight\ntemporal_transformer.decoder.h.4.attn.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_2.weight\ntemporal_transformer.decoder.h.4.ln_2.bias\ntemporal_transformer.decoder.h.4.mlp.c_fc.weight\ntemporal_transformer.decoder.h.4.mlp.c_fc.bias\ntemporal_transformer.decoder.h.4.mlp.c_proj.weight\ntemporal_transformer.decoder.h.4.mlp.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_1.weight\ntemporal_transformer.decoder.h.5.ln_1.bias\ntemporal_transformer.decoder.h.5.attn.c_attn.weight\ntemporal_transformer.decoder.h.5.attn.c_attn.bias\ntemporal_transformer.decoder.h.5.attn.c_proj.weight\ntemporal_transformer.decoder.h.5.attn.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_2.weight\ntemporal_transformer.decoder.h.5.ln_2.bias\ntemporal_transformer.decoder.h.5.mlp.c_fc.weight\ntemporal_transformer.decoder.h.5.mlp.c_fc.bias\ntemporal_transformer.decoder.h.5.mlp.c_proj.weight\ntemporal_transformer.decoder.h.5.mlp.c_proj.bias\ntemporal_transformer.decoder.ln_f.weight\ntemporal_transformer.decoder.ln_f.bias\npolicy_head.share.0.weight\npolicy_head.share.0.bias\npolicy_head.share.2.weight\npolicy_head.share.2.bias\npolicy_head.share.4.weight\npolicy_head.share.4.bias\npolicy_head.mean_layer.weight\npolicy_head.mean_layer.bias\npolicy_head.logstd_layer.weight\npolicy_head.logstd_layer.bias\npolicy_head.logits_layer.weight\npolicy_head.logits_layer.bias\nTraceback (most recent call last):\n  File \"/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v1/validate.py\", line 74, in <module>\n    try:main()\n  File \"/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v1/validate.py\", line 44, in main\n    assert json.loads(json.dumps(pr['metadata']))==rt.js(R/'PROBES_8.json')\nAssertionError\nERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 2172) of binary: /data/mlr_ifa/env/bin/python\nTraceback (most recent call last):\n  File \"/data/mlr_ifa/env/lib/python3.8/runpy.py\", line 194, in _run_module_as_main\n    return _run_code(code, main_globals, None,\n  File \"/data/mlr_ifa/env/lib/python3.8/runpy.py\", line 87, in _run_code\n    exec(code, run_globals)\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/run.py\", line 766, in <module>\n    main()\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py\", line 346, in wrapper\n    return f(*args, **kwargs)\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/run.py\", line 762, in main\n    run(args)\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/run.py\", line 753, in run\n    elastic_launch(\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/launcher/api.py\", line 132, in __call__\n    return launch_agent(self._config, self._entrypoint, list(args))\n  File \"/data/mlr_ifa/env/lib/python3.8/site-packages/torch/distributed/launcher/api.py\", line 246, in launch_agent\n    raise ChildFailedError(\ntorch.distributed.elastic.multiprocessing.errors.ChildFailedError: \n============================================================\n/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v1/validate.py FAILED\n------------------------------------------------------------\nFailures:\n  <NO_OTHER_FAILURES>\n------------------------------------------------------------\nRoot Cause (first observed failure):\n[0]:\n  time      : 2026-11-02_12:42:41\n  host      : gpu-kvm\n  rank      : 0 (local_rank: 0)\n  exitcode  : 1 (pid: 2172)\n  error_file: <N/A>\n  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html\n============================================================\n",
+  "launcher_state": null
+}

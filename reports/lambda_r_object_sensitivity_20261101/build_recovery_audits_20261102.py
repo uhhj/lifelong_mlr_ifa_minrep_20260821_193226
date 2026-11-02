@@ -1,0 +1,35 @@
+from pathlib import Path
+import ast,json,hashlib
+R=Path(__file__).resolve().parent;OLD=R/'engineering_device_snapshot_20261101_v1';E=R/'engineering_resume_3090_20261102_v1'
+def put(n,s):ast.parse(s);(E/n).write_text(s,encoding='utf8')
+# Preserve the recorded normalization constants for the interrupted stage.
+p=E/'resume_current.py';s=p.read_text(encoding='utf8');s=s.replace("                assert json.loads(json.dumps(pr['metadata']))==js(R/'PROBES_8.json')", "                generated=json.loads(json.dumps(pr['metadata']));saved=js(R/'PROBES_8.json')\n                assert all(generated[k]==saved[k] for k in saved if k!='new_scale')\n                assert torch.allclose(torch.tensor(generated['new_scale']),torch.tensor(saved['new_scale']),rtol=1e-6,atol=1e-7)\n                pr['scale']=torch.tensor(saved['new_scale'],device='cuda');pr['metadata']=saved\n                scale=torch.tensor(js(ENG/'FROZEN_TRAIN_INPUT_8.json')['scale'],device='cuda')")
+put('resume_current.py',s)
+s=(E/'train_wrapper.py').read_text(encoding='utf8').replace('tr.branch_capture=branch_capture;tr.task6_compare=task6_compare','tr.branch_capture=branch_capture;tr.task6_compare=task6_compare\ntr.equal=lambda x,y:rt.equal(rt.cpu(x),rt.cpu(y))')
+put('train_wrapper.py',s)
+s=(OLD/'check_readonly.py').read_text(encoding='utf8').replace('engineering_device_snapshot_20261101_v1','engineering_resume_3090_20261102_v1')
+s=s.replace("ev['status']=='PASS_PAIRED_FULL_EPOCH_PATH_BOTH_LAMBDAS' and ev['optimizer_completed']==ev['optimizer_started']==7828", "ev['status']=='PASS_GPU_RECOVERY_AND_PAIRED_BRANCH_REPLAY' and ev['completed']==ev['started']==309")
+s=s.replace('diagnostic_optimizer_calls=7828,diagnostic_extra_autograd=ev[\'extra_autograd\']',"diagnostic_optimizer_calls=8137,diagnostic_extra_autograd=47,prior_diagnostic_optimizer_calls=7828,recovery_diagnostic_optimizer_calls=309,abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',hardware_migration='USER_AUTHORIZED_RTX3090'")
+s=s.replace("ec=json.loads", "oldc=Q/'engineering_device_snapshot_20261101_v1/CONTRACT.json'\nassert all(sha(p)==h for p,h in json.loads(oldc.read_text())['files'].items())\nassert not (Q/'engineering_device_snapshot_20261101_v1/controller.exit').exists()\nec=json.loads",1)
+s=s.replace("12*1024**3,2*1024**3", "12*1024**3+346429749,2*1024**3")
+put('check_readonly.py',s)
+s=(OLD/'audit_progress.py').read_text(encoding='utf8').replace('engineering_device_snapshot_20261101_v1','engineering_resume_3090_20261102_v1')
+s=s.replace("assert all(init[k]==si[k] for k in ['tensors','rng','hardware'])", "assert all(init[k]==si[k] for k in ['tensors','rng'])\n  if init['hardware']!=si['hardware']:\n   migration=js(prefix+'HARDWARE_MIGRATION.json');assert migration['status']=='USER_AUTHORIZED_RTX3090' and migration['prior']==si['hardware'] and migration['current']==init['hardware'] and migration['initial_tensor_rng_exact']")
+s=s.replace("assert js(prefix+'TASK6_PARITY_S.json')['same_seed_new_arm_comparator']=='ACCEPTED_S_ALL_TENSORS_EXACT'", "comparison=js(prefix+'TASK6_PARITY_S.json')['same_seed_new_arm_comparator']\n   if case=='L005_41':assert comparison=='ACCEPTED_S_ALL_TENSORS_EXACT'\n   else:\n    assert comparison=='AUTHORIZED_CROSS_GPU_COMPARISON_RECORDED'\n    assert js('engineering_resume_3090_20261102_v1/'+case+'_TASK6_GPU_COMPARISON.json')['status']=='RECORDED_AUTHORIZED_CROSS_GPU_COMPARISON'")
+s=s.replace("assert v['light'][n]['text'].startswith(x['text'])", "before_text=x['text']\n   if n=='L005_41/GATES_stage8.jsonl' and 'engineering_resume_3090_20261102_v1/INTERRUPTION.json' not in old['light']:\n    interruption=js('engineering_resume_3090_20261102_v1/INTERRUPTION.json');archive=v['light']['engineering_resume_3090_20261102_v1/INTERRUPTED_GATES.jsonl']['text']\n    assert ''.join(line+'\\n' for line in archive.splitlines() if json.loads(line)['stage']==8).startswith(before_text)\n    before_text=''.join(line+'\\n' for line in before_text.splitlines() if json.loads(line)['epoch']<60)\n   assert v['light'][n]['text'].startswith(before_text)")
+s=s.replace("eng['diagnostic_optimizer_calls']==7828","eng['diagnostic_optimizer_calls']==8137").replace('engineering_diagnostic_optimizer_calls=7828','engineering_diagnostic_optimizer_calls=8137')
+s=s.replace("out.update(engineering=eng,", "assert eng['abandoned_partial_recorded_optimizer_calls']==140 and eng['abandoned_partial_unrecorded_cost']=='UNKNOWN'\nout.update(hardware_migration='USER_AUTHORIZED_RTX3090',abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',engineering=eng,")
+put('audit_progress.py',s)
+s=(OLD/'record_progress.py').read_text(encoding='utf8').replace('engineering_device_snapshot_20261101_v1','engineering_resume_3090_20261102_v1')
+s=s.replace("status.update(completion_source=", "status.update(hardware_migration='USER_AUTHORIZED_RTX3090',abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',completion_source=")
+put('record_progress.py',s)
+# Rebind the existing full CPU audit to the actual new completion source.
+tree=ast.parse((OLD/'final_readonly.py').read_text(encoding='utf8'));scripts=ast.literal_eval(tree.body[1].value)
+scripts={k:v.replace('engineering_device_snapshot_20261101_v1','engineering_resume_3090_20261102_v1') for k,v in scripts.items()}
+tail='\n'.join((OLD/'final_readonly.py').read_text(encoding='utf8').splitlines()[2:]).replace('engineering_device_snapshot_20261101_v1','engineering_resume_3090_20261102_v1')
+put('final_readonly.py','CHECK_SCRIPT='+repr((E/'check_readonly.py').read_text(encoding='utf8'))+'\nSCRIPTS='+repr(scripts)+'\n'+tail+'\n')
+s=(OLD/'audit_final_local.py').read_text(encoding='utf8').replace('engineering_device_snapshot_20261101_v1','engineering_resume_3090_20261102_v1').replace('engineering_diagnostic_optimizer_calls=7828','engineering_diagnostic_optimizer_calls=8137')
+s=s.replace("out.update(engineering=", "out['limits'].append('User-authorized RTX4080SUPER to RTX3090 migration after host reboot; 260 original epochs retained, interrupted partial replay archived, 140 recorded abandoned candidate calls plus UNKNOWN unlogged cost; no cross-hardware bitwise or hardware-controlled lambda-only causal claim.')\nout.update(hardware_migration='USER_AUTHORIZED_RTX3090',abandoned_partial_recorded_optimizer_calls=140,abandoned_partial_unrecorded_cost='UNKNOWN',engineering=")
+put('audit_final_local.py',s)
+(E/'STATIC_REVIEW.json').write_text(json.dumps(dict(status='STATIC_ONLY_NOT_DEPLOYED_NOT_SCIENTIFIC_ACCEPTANCE',files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in E.glob('*.py')},resume_epochs='8:60..99,9:0..99; 260 completed epochs preserved',interrupted_partial='Archive 7 gates/140 calls and UNKNOWN unlogged remainder; rebuild only unfinished epoch',hardware='Authorized3090, initialization tensor/RNG equality still required; record Task6 tensor comparison without claiming cross-GPU equality',optimizer_diagnostics=309,extra_autograd=11,final_actual_required=True),indent=2),encoding='utf8')
+print(str(E/'STATIC_REVIEW.json'))

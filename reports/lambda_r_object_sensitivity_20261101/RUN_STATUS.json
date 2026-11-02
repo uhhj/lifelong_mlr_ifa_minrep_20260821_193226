@@ -1,11 +1,11 @@
 {
-  "status": "PAUSED_BY_USER_IN_MEMORY",
-  "observation": "2026-11-01T23:28:38.786721+08:00",
+  "status": "PARTIAL_RESUMED_TRAINING_RTX3090",
+  "observation": "2026-11-02T12:49:55.526698+08:00",
   "counts": {
     "L005_41": {
-      "epochs": 260,
-      "accepted_updates": 56940,
-      "physical_optimizer_calls": 98180,
+      "epochs": 261,
+      "accepted_updates": 57249,
+      "physical_optimizer_calls": 98798,
       "own_isolated_optimizer_calls": 62,
       "own_extra_autograd_calls": 30,
       "training_collection_completed_episodes": 20,
@@ -14,17 +14,18 @@
         "arm": "S",
         "stage": 8,
         "phase": "train",
-        "epoch_complete": 60,
-        "steps": 56940,
-        "physical_optimizer_calls": 98180,
-        "time": 1793546785.2983983,
-        "pid": 2169
+        "epoch_complete": 61,
+        "steps": 57249,
+        "physical_optimizer_calls": 98798,
+        "time": 1793594957.9833388,
+        "pid": 2566
       },
-      "current_stage_epochs": 60,
-      "recent_epoch_mean_seconds": 268.5262176513672,
+      "current_stage_epochs": 61,
+      "recent_epoch_mean_seconds": 48.368486642837524,
       "current_stage_compute_minutes_estimate": null,
-      "gate_blocks_observed": 4167,
-      "gate_Q_accepts_observed": 2366
+      "gate_blocks_observed": 4213,
+      "gate_Q_accepts_observed": 2378,
+      "timing_note": "Only post-recovery completed epochs; small sample, not stable throughput. Recovered epoch uses a fresh timer, no paused wall time."
     },
     "L005_42": {
       "epochs": 0,
@@ -102,9 +103,9 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 260,
-  "accepted_updates": 56940,
-  "physical_training_optimizer_calls": 98180,
+  "epochs": 261,
+  "accepted_updates": 57249,
+  "physical_training_optimizer_calls": 98798,
   "own_isolated_optimizer_calls": 62,
   "own_extra_autograd_calls": 30,
   "training_collection_completed_episodes": 20,
@@ -112,133 +113,77 @@
   "failures": {},
   "processes": [
     {
-      "pid": 2163,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/controller.py ",
-      "state": "T"
+      "pid": 2560,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/controller.py ",
+      "state": "S"
     },
     {
-      "pid": 2164,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
-      "state": "T"
+      "pid": 2561,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/train_wrapper.py L005_41 ",
+      "state": "S"
     },
     {
-      "pid": 2169,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
-      "state": "T"
-    },
-    {
-      "pid": 3899,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_device_snapshot_20261101_v1/controller.py ",
-      "state": "T"
-    },
-    {
-      "pid": 3900,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_device_snapshot_20261101_v1/watchdog.py ",
-      "state": "T"
+      "pid": 2566,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/train_wrapper.py L005_41 ",
+      "state": "R"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1430790144,
+      "free": 1422123008,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 222830592
+      "spare": 214163456
     },
     "/data": {
-      "free": 27511472128,
-      "remaining_bound": 12355284992,
+      "free": 24737763328,
+      "remaining_bound": 12355275061,
       "reserve": 2147483648,
-      "spare": 13008703488
+      "spare": 10235004619
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "2169\n",
+    "stdout": "2566\n",
     "stderr": ""
   },
-  "snapshot_sha256": "698ce621d8bbab4345b892233bd24e3e0dcc00227543fc336b28b47f6f0f1dac",
+  "snapshot_sha256": "0e1f81df7d8a0bff25eda4afe5fa07ae1d3f8977c31f3aab87145141f492a887",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261101_232210",
+  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_124854",
+  "hardware_migration": "USER_AUTHORIZED_RTX3090",
+  "abandoned_partial_recorded_optimizer_calls": 140,
+  "abandoned_partial_unrecorded_cost": "UNKNOWN",
   "engineering": {
-    "contract_sha256": "b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c",
-    "frozen_files": 5,
-    "completion_source": "engineering_device_snapshot_20261101_v1/controller.exit",
-    "diagnostic_optimizer_calls": 7828,
-    "diagnostic_extra_autograd": 36,
+    "contract_sha256": "46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3",
+    "frozen_files": 8,
+    "completion_source": "engineering_resume_3090_20261102_v1/controller.exit",
+    "diagnostic_optimizer_calls": 8137,
+    "diagnostic_extra_autograd": 47,
+    "prior_diagnostic_optimizer_calls": 7828,
+    "recovery_diagnostic_optimizer_calls": 309,
+    "abandoned_partial_recorded_optimizer_calls": 140,
+    "abandoned_partial_unrecorded_cost": "UNKNOWN",
+    "hardware_migration": "USER_AUTHORIZED_RTX3090",
     "diagnostic_environments": 0
   },
-  "engineering_diagnostic_optimizer_calls": 7828,
-  "engineering_diagnostic_extra_autograd": 36,
+  "engineering_diagnostic_optimizer_calls": 8137,
+  "engineering_diagnostic_extra_autograd": 47,
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
-  "controller": 3899,
-  "latest_evidence": "check_readonly_20261101_232839",
-  "next_check_minutes": null,
+  "controller": 2560,
+  "latest_evidence": "check_readonly_20261102_124955",
+  "next_check_minutes": 30,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
     0.05,
     0.2
   ],
-  "completion_source": "engineering_device_snapshot_20261101_v1/controller.exit",
-  "engineering_state": "PAUSED_BY_USER_BEFORE_HANDOFF",
-  "engineering_validation": {
-    "status": "PASS_PAIRED_FULL_EPOCH_PATH_BOTH_LAMBDAS",
-    "evidence": "capacity_readonly_20261101_191620",
-    "optimizer_started": 7828,
-    "optimizer_completed": 7828,
-    "extra_autograd": 36,
-    "environments": 0,
-    "production_activation": false,
-    "diagnostic_process_exited": true
-  },
-  "latest_native_profile_report": "NATIVE_BOTTLENECK_REPORT_20261101.md",
-  "automatic_monitor_status": "PAUSED",
-  "user_pause": {
-    "status": "PAUSED_BY_USER_IN_MEMORY",
-    "paused_at": "2026-11-01T23:28:02.777919+08:00",
-    "pause_evidence": "deploy_remote_20261101_232756",
-    "pause_evidence_sha256": "05b5e3b48203dfb1d8bfb6e9a77c006464febd211967e05a3d7cdead6723608b",
-    "verified_snapshot": "check_readonly_20261101_232839",
-    "verified_snapshot_sha256": "698ce621d8bbab4345b892233bd24e3e0dcc00227543fc336b28b47f6f0f1dac",
-    "processes": [
-      {
-        "pid": 2163,
-        "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/controller.py ",
-        "state": "T"
-      },
-      {
-        "pid": 2164,
-        "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
-        "state": "T"
-      },
-      {
-        "pid": 2169,
-        "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/train.py S ",
-        "state": "T"
-      },
-      {
-        "pid": 3899,
-        "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_device_snapshot_20261101_v1/controller.py ",
-        "state": "T"
-      },
-      {
-        "pid": 3900,
-        "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_device_snapshot_20261101_v1/watchdog.py ",
-        "state": "T"
-      }
-    ],
-    "automatic_monitor_status": "PAUSED",
-    "automatic_resume_allowed": false,
-    "last_complete_epochs": 260,
-    "last_complete_stage": 8,
-    "last_complete_stage_epochs": 60,
-    "partial_epoch_in_memory": true,
-    "partial_epoch_cost": "Unrecorded portion is not inferred zero; retained in live process memory.",
-    "gpu_memory_retained_MiB": 2090,
-    "original_controller_must_remain_stopped": 2163,
-    "resume_requires_explicit_user_request": true,
-    "resume_caution": "Audit process start identities, hashes, pause receipt, failure/exit and live-state boundary first; do not restart from checkpoint or rerun completed work. Never blindly resume old coordinator2163. Incomplete epoch seconds includes paused wall time; annotate timing rather than editing science logs."
-  },
+  "completion_source": "engineering_resume_3090_20261102_v1/controller.exit",
   "scientific_completion": "PARTIAL_NOT_ACCEPTED",
-  "remaining_time_estimate": "SUSPENDED_WHILE_USER_PAUSED"
+  "automatic_monitor_status": "ACTIVE",
+  "engineering_state": "POST_REBOOT_RECOVERY_RUNNING",
+  "current_training_pid": 2566,
+  "remaining_time_estimate": "Pending stable post-recovery throughput; old slow-host ETA invalid",
+  "resume_report": "RECOVERY_REPORT_20261102.md",
+  "prior_completed_epochs_preserved": 260
 }
