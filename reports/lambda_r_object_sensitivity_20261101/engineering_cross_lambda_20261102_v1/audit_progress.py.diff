@@ -1,0 +1,58 @@
+--- engineering_rendezvous_recovery_20261102_v1/audit_progress.py
++++ engineering_cross_lambda_20261102_v1/audit_progress.py
+@@ -102,7 +102,7 @@
+  if n in mitigated:continue
+  if n.endswith('.exit') and x['text'].strip()!='0':failures[n]=x['text']
+  if n.endswith('FAILURE.json'):failures[n]=js(n)
+-if not v['processes'] and v['light'].get('engineering_rendezvous_recovery_20261102_v1/controller.exit',{}).get('text','').strip()!='0':
++if not v['processes'] and v['light'].get('engineering_cross_lambda_20261102_v1/controller.exit',{}).get('text','').strip()!='0':
+  failures['missing_controller_without_success']='No own process and no successful controller exit'
+ if any(x['spare']<0 for x in v['capacity'].values()):failures['capacity']='Reserve or remaining-budget bound violated'
+ if 'engineering_live_parallel_3090_20261102_v1/WATCHDOG_RELEASE.json' in v['light']:failures['engineering_watchdog_released']='Owner failed before safe boundary; audit original coordinator before any further deployment'
+@@ -163,8 +163,11 @@
+ root_status=js('STATUS.json',{})
+ if root_status.get('controller')==json.loads(active.read_text(encoding='utf8'))['controller']:
+  running=root_status.get('active',{});assert len(running)<=2
+- if len(running)>1:assert all(x['phase']=='train' for x in running.values()) and (set(running)=={'L005_42','L005_43'} or all(k.startswith('L020_') for k in running))
+-if any(cc['epochs'] for case,cc in counts.items() if case.startswith('L020_')):
++ if len(running)>1:
++  trains={k for k,x in running.items() if x['phase']=='train'};evals={k for k,x in running.items() if x['phase']=='evaluate'}
++  assert len(trains)<=2 and len(evals)<=1
++  assert (trains=={'L005_43','L020_41'} and not evals) or (all(k.startswith('L020_') for k in trains) and (not evals or trains<={'L020_41'} and all(k.startswith('L005_') for k in evals)))
++if any(counts[case]['epochs'] for case in ['L020_42','L020_43']):
+  assert sum(counts['L005_'+str(seed)]['formal_episodes'] for seed in [41,42,43])==600
+  assert js('L005_EVALUATION_COMPLETE.json')['episodes']==600
+ out['parallel_collection_lock_audit']=dict(acquisitions=len(acquired),releases=len(released),active=active_collection,nonoverlap=True)
+@@ -192,5 +195,32 @@
+ assert len({x['master_port'] for x in actual})==len(actual)
+ out['rendezvous_audit']=dict(launches=len(launches),observed_training_endpoints=actual,independent_endpoint_arguments=True)
+ 
++
++assert eng['cross_lambda_authorized'] and eng['early_L020_case']=='L020_41' and eng['evaluation_collection_mutex']
++assert eng['cross_lambda_additional_optimizer_calls']==eng['cross_lambda_additional_environments']==0
++assert 'engineering_rendezvous_recovery_20261102_v1/controller.exit' not in v['light']
++if 'engineering_cross_lambda_20261102_v1/OWNER_LOST_AFTER_LIVE_COMMIT.json' in v['light']:
++ out['status']='ENGINEERING_FAILURE_REQUIRES_REVIEW';out['failures']['cross_lambda_owner_lost']='Keep prior coordinator frozen; audit live L02041 before intervention'
++if 'engineering_cross_lambda_20261102_v1/WATCHDOG_RELEASE.json' in v['light']:
++ out['status']='ENGINEERING_FAILURE_REQUIRES_REVIEW';out['failures']['cross_lambda_watchdog_released']='No live commitment; prior coordinator released; audit before retry'
++cross_launches=[json.loads(x) for x in v['light'].get('engineering_cross_lambda_20261102_v1/LAUNCHES.jsonl',{}).get('text','').splitlines()]
++for x in cross_launches:
++ if x['phase']=='train':assert '--standalone' not in x['argv'] and '--rdzv_endpoint=localhost:0' in x['argv'] and '--rdzv_id='+x['rdzv_id'] in x['argv']
++eval_acquired={};eval_released={};environment_events=list(events)
++for case in counts:
++ for line in v['light'].get('engineering_cross_lambda_20261102_v1/'+case+'_EVALUATION_LOCK.jsonl',{}).get('text','').splitlines():
++  x=json.loads(line);key=('evaluate',case);target=eval_acquired if x['event']=='acquired' else eval_released
++  assert x['event'] in ['acquired','released'] and key not in target and x['source']=='parent_lock_unchanged_evaluator';target[key]=x
++  environment_events.append((x['time'],x['event'],key))
++active_env=None
++for when,event,key in sorted(environment_events):
++ if event=='acquired':assert active_env is None;active_env=key
++ else:assert active_env==key;active_env=None
++assert set(eval_released)<=set(eval_acquired)
++if formal==1200:assert len(eval_acquired)==len(eval_released)==6 and active_env is None
++out['environment_mutex_audit']=dict(nonoverlap=True,collection_acquisitions=len(acquired),collection_releases=len(released),evaluation_acquisitions=len(eval_acquired),evaluation_releases=len(eval_released),active=active_env)
++out['rendezvous_audit']['cross_lambda_launches']=len(cross_launches)
++out['cross_lambda_authorized']=True
++
+ (D/'LOCAL_AUDIT.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf8')
+ print(json.dumps(out,indent=2))

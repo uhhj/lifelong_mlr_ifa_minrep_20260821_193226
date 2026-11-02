@@ -1,0 +1,72 @@
+{
+  "status": "PASS_ACTUAL_CROSS_LAMBDA_TRAINING_NOT_FINAL",
+  "observation": "2026-11-02T20:53:50.581722+08:00",
+  "snapshot": "check_readonly_20261102_205347",
+  "snapshot_sha256": "8cd84b3b867b5aa0ddf314b5ee5f396bb63baeca6885d06c810b0837a3f7df4b",
+  "contract": "ee7929e8ae178125508a0feead81c0fa153f7a725f62f46bdf99fe88c9fbcead",
+  "controller": 11852,
+  "watchdog": 11854,
+  "original_coordinator_frozen": 11239,
+  "unchanged_launcher": 11241,
+  "unchanged_training_pid": 11246,
+  "new_launcher": 11855,
+  "new_training_pid": 11860,
+  "actual_distinct_ports": [
+    {
+      "time": 1793623997.0265503,
+      "pid": 11860,
+      "case": "L020_41",
+      "master_addr": "gpu-kvm",
+      "master_port": "42689",
+      "world_size": 1
+    },
+    {
+      "time": 1793622980.5579545,
+      "pid": 11246,
+      "case": "L005_43",
+      "master_addr": "gpu-kvm",
+      "master_port": "42941",
+      "world_size": 1
+    }
+  ],
+  "production_signals": 0,
+  "own_admission_L02041": {
+    "optimizer_calls": 4,
+    "extra_autograd": 8,
+    "status": "PASS_TASK6_ONLY"
+  },
+  "root_lock_handoff": "PENDING_CURRENT_L00543_NATURAL_EXIT",
+  "zero_environment_lock_validation": {
+    "status": "PASS_ZERO_ENVIRONMENT_EVALUATION_COLLECTION_MUTEX",
+    "intervals": [
+      [
+        1793623989.6471817,
+        1793623990.1477232
+      ],
+      [
+        1793623990.1483161,
+        1793623990.6492844
+      ]
+    ],
+    "source_sha256": "1a6691a12107a81decb151678e11d506242f59b24f48d18bc37710149d8b8150",
+    "original_evaluator_argv_cwd": {
+      "argv": [
+        "/data/mlr_ifa/env/bin/python",
+        "-B",
+        "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/evaluate.py"
+      ],
+      "cwd": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41",
+      "environment_passed": true,
+      "optimizer_calls": 0,
+      "environments": 0
+    },
+    "optimizer_calls": 0,
+    "environments": 0,
+    "production_signals": 0,
+    "scope": "Actual wrapper with evaluator call mocked; diagnostic lock location only; no scientific rollout"
+  },
+  "scientific_frozen_files": 135,
+  "engineering_frozen_files": 5,
+  "additional_optimizer_calls": 0,
+  "additional_environments": 0
+}

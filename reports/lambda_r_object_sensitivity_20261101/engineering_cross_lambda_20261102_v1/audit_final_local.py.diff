@@ -1,0 +1,18 @@
+--- engineering_rendezvous_recovery_20261102_v1/audit_final_local.py
++++ engineering_cross_lambda_20261102_v1/audit_final_local.py
+@@ -7,7 +7,7 @@
+ v=js(D/'EVIDENCE.json');assert v['status']=='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT'
+ subprocess.run([sys.executable,'-X','utf8',str(E/'audit_progress.py'),str(D)],check=True)
+ a=js(D/'LOCAL_AUDIT.json');assert a['status']=='PASS_PROGRESS_NOT_FINAL' and a['epochs']==2400 and a['accepted_updates']==633000 and a['own_isolated_optimizer_calls']==546 and a['own_extra_autograd_calls']==246 and a['physical_training_optimizer_calls']==1171800 and a['training_collection_completed_episodes']==240 and a['formal_episodes']==1200
+-assert v['light']['engineering_rendezvous_recovery_20261102_v1/controller.exit']['text']=='0' and not v['processes']
++assert v['light']['engineering_cross_lambda_20261102_v1/controller.exit']['text']=='0' and not v['processes']
+ results={}
+ for key in ['L005_41', 'L005_42', 'L005_43', 'L020_41', 'L020_42', 'L020_43']:
+  seed=int(key.split('_')[1]);r=dict(v['cases'][key],light={n[len(key+'/'):]:x for n,x in v['light'].items() if n.startswith(key+'/')});p=js(R/key/'PARENT_BINDING.json');progress=a['counts'][key]
+@@ -77,4 +77,6 @@
+ out.update(rendezvous_partial_recorded_optimizer_calls=400,total_recorded_abandoned_partial_optimizer_calls=540,rendezvous_partial_unrecorded_cost='UNKNOWN',mitigated_failures_preserved=a['mitigated_failures_preserved'])
+ out['limits'].append('Rendezvous interruption at L00543 epoch289: 400 recorded abandoned candidate calls plus UNKNOWN unlogged cost; 869 isolated optimizer/11 autograd exact recovery diagnostics are separate. Original failed exits remain preserved.')
+ out['limits'].append('L00542/43 and future L020 training use at most two independent processes; collection and evaluation remain serial. Isolated two-seed full-epoch serial/concurrent equality was verified for eight stage/lambda combinations, not every future trajectory.')
++out.update(cross_lambda_authorized=True,environment_mutex_audit=a['environment_mutex_audit'])
++out['limits'].append('User-authorized overlap of L00543 and L02041, followed by priority L005 evaluation during L02041 training; all collection/evaluation environments serialized. Scientific per-run budgets and task order unchanged.')
+ (D/'LOCAL_FINAL_AUDIT.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf8');print(json.dumps(dict(status=out['status'],metrics={k:x['metrics'] for k,x in results.items()}),indent=2))

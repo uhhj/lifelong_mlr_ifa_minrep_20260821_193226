@@ -1,0 +1,16 @@
+--- engineering_rendezvous_recovery_20261102_v1/check_readonly.py
++++ engineering_cross_lambda_20261102_v1/check_readonly.py
+@@ -49,6 +49,13 @@
+ assert (Q/'L005_43/GATES.jsonl').read_bytes().startswith((K/'INTERRUPTED_GATES.jsonl').read_bytes())
+ engineering.update(prior_live_contract_sha256=engineering['contract_sha256'],contract_sha256=sha(K/'CONTRACT.json'),frozen_files=len(kc['files']),completion_source='engineering_rendezvous_recovery_20261102_v1/controller.exit',diagnostic_optimizer_calls=35418,diagnostic_extra_autograd=94,rendezvous_recovery_optimizer_calls=869,rendezvous_recovery_extra_autograd=11,rendezvous_partial_recorded_optimizer_calls=400,total_recorded_abandoned_partial_optimizer_calls=540,rendezvous_partial_unrecorded_cost='UNKNOWN',mitigated_failure_hashes=mitigated,independent_rendezvous_verified=True)
+ 
++
++X=Q/'engineering_cross_lambda_20261102_v1'
++xc=json.loads((X/'CONTRACT.json').read_text());assert all(sha(p)==h for p,h in xc['files'].items())
++xv=json.loads((X/'ENVIRONMENT_LOCK_VALIDATION.json').read_text());assert xv['status']=='PASS_ZERO_ENVIRONMENT_EVALUATION_COLLECTION_MUTEX' and xv['optimizer_calls']==xv['environments']==0
++assert not (K/'controller.exit').exists(),'Original recovery coordinator must not claim completion after adoption'
++engineering.update(prior_recovery_contract_sha256=engineering['contract_sha256'],contract_sha256=sha(X/'CONTRACT.json'),frozen_files=len(xc['files']),completion_source='engineering_cross_lambda_20261102_v1/controller.exit',cross_lambda_authorized=True,early_L020_case='L020_41',evaluation_collection_mutex=True,cross_lambda_additional_optimizer_calls=0,cross_lambda_additional_environments=0)
++
+ c=json.loads((Q/'CONTRACT.json').read_text());assert all(sha(p)==h for p,h in c['files'].items())
+ for case in [s+'_'+str(k) for s in ['L005','L020'] for k in [41,42,43]]:
+  q=Q/case;cc=json.loads((q/'CONTRACT.json').read_text());assert sha(q/'CONTRACT.json')==c['children'][case]
