@@ -1,0 +1,57 @@
+{
+  "status": "PASS_L005_600_COMPLETE_BEFORE_L02042_LAUNCH",
+  "snapshot_sha256": "38e2bbbd8d47df29f48d3e634f3b666734d26526197ca29f8307b720896d101f",
+  "evaluation_exits": {
+    "L005_41": {
+      "pid": 12855,
+      "returncode": 0,
+      "time": 1793632168.0578122
+    },
+    "L005_42": {
+      "pid": 17983,
+      "returncode": 0,
+      "time": 1793633473.750991
+    },
+    "L005_43": {
+      "pid": 23014,
+      "returncode": 0,
+      "time": 1793634787.5618813
+    }
+  },
+  "next_training_launch": {
+    "time": 1793634787.5930443,
+    "case": "L020_42",
+    "phase": "train",
+    "pid": 28050,
+    "argv": [
+      "/data/mlr_ifa/env/bin/python",
+      "-B",
+      "-m",
+      "torch.distributed.run",
+      "--nnodes=1",
+      "--nproc_per_node=1",
+      "--rdzv_backend=c10d",
+      "--rdzv_endpoint=localhost:0",
+      "--rdzv_id=23915a11-aa12-47dc-b439-13250a889588",
+      "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_rendezvous_recovery_20261102_v1/train_wrapper.py",
+      "L020_42"
+    ],
+    "rdzv_id": "23915a11-aa12-47dc-b439-13250a889588"
+  },
+  "environment_mutex": {
+    "nonoverlap": true,
+    "collection_acquisitions": 10,
+    "collection_releases": 10,
+    "evaluation_acquisitions": 3,
+    "evaluation_releases": 3,
+    "active": null
+  },
+  "L02042_task6_gpu_comparison": {
+    "status": "RECORDED_AUTHORIZED_CROSS_GPU_COMPARISON",
+    "all_tensors_exact": true,
+    "differing_tensors": [],
+    "hardware": "NVIDIA GeForce RTX 3090",
+    "not_a_scientific_acceptance": true
+  },
+  "scientific_acceptance": "PENDING_FULL_SIX_RUN_CPU_ACCEPTANCE"
+}

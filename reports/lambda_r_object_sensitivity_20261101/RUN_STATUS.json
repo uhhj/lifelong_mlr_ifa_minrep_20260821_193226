@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL_L005_EVALUATION_L020_TRAINING",
-  "observation": "2026-11-02T23:07:24.614482+08:00",
+  "status": "PARTIAL_L005_EVALUATION_COMPLETE_L020_TRAINING",
+  "observation": "2026-11-03T00:12:44.462014+08:00",
   "counts": {
     "L005_41": {
       "epochs": 400,
@@ -9,7 +9,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 180,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -30,7 +30,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -51,7 +51,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -66,43 +66,52 @@
       "gate_Q_accepts_observed": 4245
     },
     "L020_41": {
-      "epochs": 265,
-      "accepted_updates": 58485,
-      "physical_optimizer_calls": 101270,
-      "own_isolated_optimizer_calls": 62,
-      "own_extra_autograd_calls": 30,
-      "training_collection_completed_episodes": 20,
+      "epochs": 316,
+      "accepted_updates": 75092,
+      "physical_optimizer_calls": 134484,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 30,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
-        "stage": 8,
+        "stage": 9,
         "phase": "train",
-        "epoch_complete": 65,
-        "steps": 58485,
-        "physical_optimizer_calls": 101270,
-        "time": 1793632009.9365323,
+        "epoch_complete": 16,
+        "steps": 75092,
+        "physical_optimizer_calls": 134484,
+        "time": 1793635963.6184673,
         "pid": 11860
       },
-      "current_stage_epochs": 65,
-      "recent_epoch_mean_seconds": 69.62620930671692,
-      "current_stage_compute_minutes_estimate": 40.61528876225154,
-      "gate_blocks_observed": 4331,
-      "gate_Q_accepts_observed": 2104
+      "current_stage_epochs": 16,
+      "recent_epoch_mean_seconds": 68.5263079881668,
+      "current_stage_compute_minutes_estimate": 95.93683118343353,
+      "gate_blocks_observed": 5992,
+      "gate_Q_accepts_observed": 2639
     },
     "L020_42": {
-      "epochs": 0,
-      "accepted_updates": 0,
-      "physical_optimizer_calls": 0,
-      "own_isolated_optimizer_calls": 0,
-      "own_extra_autograd_calls": 0,
-      "training_collection_completed_episodes": 0,
+      "epochs": 112,
+      "accepted_updates": 18424,
+      "physical_optimizer_calls": 21148,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
       "formal_episodes": 0,
-      "current": {},
-      "current_stage_epochs": 0,
-      "recent_epoch_mean_seconds": null,
-      "current_stage_compute_minutes_estimate": null,
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 12,
+        "steps": 18424,
+        "physical_optimizer_calls": 21148,
+        "time": 1793635952.4459896,
+        "pid": 28055
+      },
+      "current_stage_epochs": 12,
+      "recent_epoch_mean_seconds": 34.1320214509964,
+      "current_stage_compute_minutes_estimate": 50.060298128128046,
+      "gate_blocks_observed": 283,
+      "gate_Q_accepts_observed": 170
     },
     "L020_43": {
       "epochs": 0,
@@ -120,13 +129,13 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 1465,
-  "accepted_updates": 374985,
-  "physical_training_optimizer_calls": 687170,
-  "own_isolated_optimizer_calls": 335,
-  "own_extra_autograd_calls": 153,
-  "training_collection_completed_episodes": 140,
-  "formal_episodes": 180,
+  "epochs": 1628,
+  "accepted_updates": 410016,
+  "physical_training_optimizer_calls": 741532,
+  "own_isolated_optimizer_calls": 397,
+  "own_extra_autograd_calls": 183,
+  "training_collection_completed_episodes": 160,
+  "formal_episodes": 600,
   "failures": {},
   "processes": [
     {
@@ -145,38 +154,38 @@
       "state": "R"
     },
     {
-      "pid": 12855,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_cross_lambda_20261102_v1/evaluate_locked.py L005_41 ",
+      "pid": 28050,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=23915a11-aa12-47dc-b439-13250a889588 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_rendezvous_recovery_20261102_v1/train_wrapper.py L020_42 ",
       "state": "S"
     },
     {
-      "pid": 12856,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/evaluate.py ",
+      "pid": 28055,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_rendezvous_recovery_20261102_v1/train_wrapper.py L020_42 ",
       "state": "S"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1421750272,
+      "free": 1422004224,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 213790720
+      "spare": 214044672
     },
     "/data": {
-      "free": 22454177792,
-      "remaining_bound": 10464624746,
+      "free": 21922488320,
+      "remaining_bound": 9935781994,
       "reserve": 2147483648,
-      "spare": 9842069398
+      "spare": 9839222678
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "11860\n12856\n",
+    "stdout": "11860\n28055\n",
     "stderr": ""
   },
-  "snapshot_sha256": "329d8ebd8c661e5231c71c6133827cbdc160fe4f83d76045007244708fe9c8cc",
+  "snapshot_sha256": "38e2bbbd8d47df29f48d3e634f3b666734d26526197ca29f8307b720896d101f",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_211342",
+  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_230720",
   "hardware_migration": "USER_AUTHORIZED_RTX3090",
   "abandoned_partial_recorded_optimizer_calls": 140,
   "abandoned_partial_unrecorded_cost": "UNKNOWN",
@@ -227,8 +236,8 @@
   "engineering_diagnostic_optimizer_calls": 35418,
   "engineering_diagnostic_extra_autograd": 94,
   "parallel_collection_lock_audit": {
-    "acquisitions": 8,
-    "releases": 8,
+    "acquisitions": 10,
+    "releases": 10,
     "active": null,
     "nonoverlap": true,
     "expected_total": 18
@@ -251,27 +260,32 @@
         "master_addr": "gpu-kvm",
         "master_port": "42689",
         "world_size": 1
+      },
+      {
+        "time": 1793634788.745227,
+        "pid": 28055,
+        "case": "L020_42",
+        "master_addr": "gpu-kvm",
+        "master_port": "44167",
+        "world_size": 1
       }
     ],
     "independent_endpoint_arguments": true,
-    "cross_lambda_launches": 2
+    "cross_lambda_launches": 5
   },
   "environment_mutex_audit": {
     "nonoverlap": true,
-    "collection_acquisitions": 8,
-    "collection_releases": 8,
-    "evaluation_acquisitions": 1,
-    "evaluation_releases": 0,
-    "active": [
-      "evaluate",
-      "L005_41"
-    ]
+    "collection_acquisitions": 10,
+    "collection_releases": 10,
+    "evaluation_acquisitions": 3,
+    "evaluation_releases": 3,
+    "active": null
   },
   "cross_lambda_authorized": true,
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
   "controller": 11852,
-  "latest_evidence": "check_readonly_20261102_230720",
-  "next_check_minutes": 65,
+  "latest_evidence": "check_readonly_20261103_001226",
+  "next_check_minutes": 105,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
@@ -279,6 +293,6 @@
     0.2
   ],
   "completion_source": "engineering_cross_lambda_20261102_v1/controller.exit",
-  "timing_audit": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_230720\\TIMING_AUDIT.json",
-  "transition_audit": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_230720\\TRANSITION_AUDIT.json"
+  "timing_audit": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261103_001226\\TIMING_AUDIT.json",
+  "transition_audit": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261103_001226\\TRANSITION_AUDIT.json"
 }
