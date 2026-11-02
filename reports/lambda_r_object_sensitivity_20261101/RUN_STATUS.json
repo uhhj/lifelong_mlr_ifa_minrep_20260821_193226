@@ -1,27 +1,30 @@
 {
-  "status": "PARTIAL_RESUMED_TRAINING_RTX3090",
-  "observation": "2026-11-02T13:25:38.910742+08:00",
+  "status": "PARTIAL_TRAINING_OR_EVALUATION",
+  "observation": "2026-11-02T14:08:53.496116+08:00",
   "counts": {
     "L005_41": {
-      "epochs": 300,
-      "accepted_updates": 69300,
-      "physical_optimizer_calls": 122900,
-      "own_isolated_optimizer_calls": 62,
-      "own_extra_autograd_calls": 30,
+      "epochs": 339,
+      "accepted_updates": 83418,
+      "physical_optimizer_calls": 151136,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 30,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
-        "stage": 8,
-        "phase": "training_collection",
-        "time": 1793597087.7513223,
+        "stage": 9,
+        "phase": "train",
+        "epoch_complete": 39,
+        "steps": 83418,
+        "physical_optimizer_calls": 151136,
+        "time": 1793599723.631643,
         "pid": 2566
       },
-      "current_stage_epochs": 100,
-      "recent_epoch_mean_seconds": 55.370251059532166,
-      "current_stage_compute_minutes_estimate": null,
-      "gate_blocks_observed": 5400,
-      "gate_Q_accepts_observed": 2632
+      "current_stage_epochs": 39,
+      "recent_epoch_mean_seconds": 65.52076580524445,
+      "current_stage_compute_minutes_estimate": 66.61277856866519,
+      "gate_blocks_observed": 6848,
+      "gate_Q_accepts_observed": 3399
     },
     "L005_42": {
       "epochs": 0,
@@ -99,11 +102,11 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 300,
-  "accepted_updates": 69300,
-  "physical_training_optimizer_calls": 122900,
-  "own_isolated_optimizer_calls": 62,
-  "own_extra_autograd_calls": 30,
+  "epochs": 339,
+  "accepted_updates": 83418,
+  "physical_training_optimizer_calls": 151136,
+  "own_isolated_optimizer_calls": 91,
+  "own_extra_autograd_calls": 41,
   "training_collection_completed_episodes": 30,
   "formal_episodes": 0,
   "failures": {},
@@ -121,31 +124,31 @@
     {
       "pid": 2566,
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/train_wrapper.py L005_41 ",
-      "state": "S"
+      "state": "R"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1422118912,
+      "free": 1422090240,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 214159360
+      "spare": 214130688
     },
     "/data": {
-      "free": 24641810432,
-      "remaining_bound": 12260256053,
+      "free": 24640675840,
+      "remaining_bound": 12260231477,
       "reserve": 2147483648,
-      "spare": 10234070731
+      "spare": 10232960715
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "2566\n2796\n",
+    "stdout": "2566\n",
     "stderr": ""
   },
-  "snapshot_sha256": "453ef8dae3c0141ddd220062e92c33c5c65cef92de63c895ee913e5c2a0dc1ee",
+  "snapshot_sha256": "742211cd330ccd1d263ddbcb5c037b50ac160cc386fd21c0937d2b645fa9eec4",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_132027",
+  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_132538",
   "hardware_migration": "USER_AUTHORIZED_RTX3090",
   "abandoned_partial_recorded_optimizer_calls": 140,
   "abandoned_partial_unrecorded_cost": "UNKNOWN",
@@ -166,8 +169,8 @@
   "engineering_diagnostic_extra_autograd": 47,
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
   "controller": 2560,
-  "latest_evidence": "check_readonly_20261102_132538",
-  "next_check_minutes": 120,
+  "latest_evidence": "check_readonly_20261102_140853",
+  "next_check_minutes": 75,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
@@ -175,15 +178,11 @@
     0.2
   ],
   "completion_source": "engineering_resume_3090_20261102_v1/controller.exit",
-  "automatic_monitor_status": "ACTIVE",
-  "scientific_completion": "PARTIAL_NOT_ACCEPTED",
-  "engineering_state": "POST_REBOOT_RECOVERY_RUNNING",
-  "current_training_pid": 2566,
-  "prior_completed_epochs_preserved": 260,
-  "resume_report": "RECOVERY_REPORT_20261102.md",
-  "timing_audit": "check_readonly_20261102_132538/TIMING_AUDIT.json",
-  "current_run_planning_minutes": [
-    120,
-    160
-  ]
+  "latest_resource_evidence": "capacity_readonly_20261102_140929",
+  "timing_audit": "check_readonly_20261102_140853/TIMING_AUDIT.json",
+  "remaining_training_and_formal_planning_hours": [
+    29,
+    37
+  ],
+  "planning_excludes_final_cpu_report_publication": true
 }

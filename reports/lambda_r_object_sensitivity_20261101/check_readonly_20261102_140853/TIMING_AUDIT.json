@@ -1,0 +1,80 @@
+{
+  "status": "PASS_CONDITIONAL_PLANNING_NOT_COMPLETION",
+  "observation": "2026-11-02T14:08:53.496116+08:00",
+  "snapshot_sha256": "742211cd330ccd1d263ddbcb5c037b50ac160cc386fd21c0937d2b645fa9eec4",
+  "epochs_sha256": "918ef7c4e9b752320a2f266c0b56dce8502d6050b0bc0bebee28075c3536bb42",
+  "current_run": "L005_41",
+  "audited_epochs": 339,
+  "resource_window_status_epochs": 340,
+  "other_full_runs_remaining": 5,
+  "formal_remaining": 1200,
+  "stage8_post_recovery": {
+    "n": 40,
+    "mean_seconds": 53.714225995540616,
+    "recent10_seconds": 55.370251059532166
+  },
+  "stage9": {
+    "n": 39,
+    "mean_seconds": 65.2104103687482,
+    "recent10_seconds": 65.52076580524445,
+    "recent10_min": 60.22045850753784,
+    "recent10_max": 69.13156175613403
+  },
+  "unmeasured_future_stage6_seconds": 13.645847057119543,
+  "unmeasured_future_stage7_seconds": 39.45996537536479,
+  "extrapolation_formula": "Task6=t8*157/(2*309); Task7=t8*227/309; future run=100*(t6+t7+t8+t9). No GPU-utilization multiplier.",
+  "current_run_pure_hours": 1.11021297614442,
+  "future_run_pure_hours": 4.787244562035261,
+  "all_remaining_pure_training_hours": 25.04643578632073,
+  "current_run_training_and_collection_plan_minutes": [
+    75,
+    95
+  ],
+  "training_including_preparation_saving_210_remaining_collection_plan_hours": [
+    27,
+    33
+  ],
+  "historical_evaluation_sources": [
+    {
+      "seed": 41,
+      "source": "D:\\论文课题研究\\MLR+IFA\\execution\\20261028_support_gate_full_s_object\\final_readonly_20261029_201235\\light\\seed41\\EVAL_EVENTS.jsonl",
+      "sha256": "97037aa62940d2008aa08e32ede67a12324565b29887550ddf7022a1f5dfc3b3",
+      "vector_seconds": 1162.7009602850158
+    },
+    {
+      "seed": 42,
+      "source": "D:\\论文课题研究\\MLR+IFA\\execution\\20261028_support_gate_full_s_object\\final_readonly_20261029_201235\\light\\seed42\\EVAL_EVENTS.jsonl",
+      "sha256": "c7db25c35c3c5759cb2eec2a84a56ffc3e596d8e033322f9d7738634af0e2ab6",
+      "vector_seconds": 1194.6825217279838
+    },
+    {
+      "seed": 43,
+      "source": "D:\\论文课题研究\\MLR+IFA\\execution\\20261028_support_gate_full_s_object\\final_readonly_20261029_201235\\light\\seed43\\EVAL_EVENTS.jsonl",
+      "sha256": "1a74da78adeabcb947faf1975d77110d3c95b40753f2f535dce624a50ad81137",
+      "vector_seconds": 1038.6271676610195
+    }
+  ],
+  "historical_600_vector_minutes": 56.600177494566985,
+  "historical_1200_vector_hours": 1.8866725831522329,
+  "new_hardware_1200_formal_plan_hours": [
+    2,
+    4
+  ],
+  "total_training_and_formal_plan_hours": [
+    29,
+    37
+  ],
+  "planned_completion_window": [
+    "2026-11-03T19:08:53.496116+08:00",
+    "2026-11-04T03:08:53.496116+08:00"
+  ],
+  "next_check_minutes": 75,
+  "assumptions": [
+    "Future five runs have not started; Task6/7 on 3090 are unmeasured. Batch-count extrapolation ignores changing old-cache/probe costs.",
+    "27–33h training allowance rounds the conditional pure-training estimate upward for preparation/saving/210 remaining collection episodes and roughly 25% resource/cache variation; this is a planning interval, not a confidence interval.",
+    "The .2 group has not been measured; its own successful caches may differ. Fixed dual-candidate structure does not make all stage runtimes equal.",
+    "Formal evaluation on current 3090 is not measured. Historical 600 episodes reused only as timing reference; 1200 formal need 2–4h provisionally.",
+    "The 29–37h window assumes current throughput persists without further interruption. CPU acceptance/report/publication additional.",
+    "Recovery changed host/GPU and snapshot path together; no causal GPU-only speedup claim; original partial cost 140 recorded plus UNKNOWN remains."
+  ]
+}

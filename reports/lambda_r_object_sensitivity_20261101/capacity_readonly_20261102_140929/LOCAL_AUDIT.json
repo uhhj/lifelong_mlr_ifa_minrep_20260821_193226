@@ -1,0 +1,93 @@
+{
+  "status": "PASS_READONLY_GPU_WINDOW_NOT_HARDWARE_CERTIFICATION",
+  "evidence_sha256": "03272fe8dec081fe454c4b703a349816bcfd760e8f7f67749df32554e5e2d27c",
+  "sample_count": 30,
+  "window_seconds": 29.531805515289307,
+  "stats": {
+    "utilization.gpu": {
+      "mean": 31.7,
+      "median": 33.0,
+      "minimum": 0.0,
+      "maximum": 43.0
+    },
+    "utilization.memory": {
+      "mean": 9.4,
+      "median": 9.5,
+      "minimum": 0.0,
+      "maximum": 15.0
+    },
+    "memory.used": {
+      "mean": 2872.0,
+      "median": 2872.0,
+      "minimum": 2872.0,
+      "maximum": 2872.0
+    },
+    "memory.total": {
+      "mean": 24576.0,
+      "median": 24576.0,
+      "minimum": 24576.0,
+      "maximum": 24576.0
+    },
+    "temperature.gpu": {
+      "mean": 59.266666666666666,
+      "median": 58.5,
+      "minimum": 56.0,
+      "maximum": 62.0
+    },
+    "power.draw": {
+      "mean": 177.81733333333332,
+      "median": 173.45,
+      "minimum": 141.87,
+      "maximum": 216.95
+    },
+    "power.limit": {
+      "mean": 350.0,
+      "median": 350.0,
+      "minimum": 350.0,
+      "maximum": 350.0
+    },
+    "clocks.current.sm": {
+      "mean": 1836.0,
+      "median": 1950.0,
+      "minimum": 1695.0,
+      "maximum": 1950.0
+    },
+    "clocks.current.memory": {
+      "mean": 9501.0,
+      "median": 9501.0,
+      "minimum": 9501.0,
+      "maximum": 9501.0
+    }
+  },
+  "training_cpu_percent_one_core": 99.51982104441298,
+  "phase_before": {
+    "L005_41": {
+      "arm": "S",
+      "stage": 9,
+      "phase": "train",
+      "epoch_complete": 39,
+      "steps": 83418,
+      "physical_optimizer_calls": 151136,
+      "time": 1793599723.631643,
+      "pid": 2566
+    }
+  },
+  "phase_after": {
+    "L005_41": {
+      "arm": "S",
+      "stage": 9,
+      "phase": "train",
+      "epoch_complete": 40,
+      "steps": 83780,
+      "physical_optimizer_calls": 151860,
+      "time": 1793599788.8804708,
+      "pid": 2566
+    }
+  },
+  "limitations": [
+    "30 one-second samples, not an all-run average.",
+    "End-of-window nvidia-smi reports no active thermal/power/hardware slowdown; does not prove absence of all hardware faults.",
+    "About one CPU core occupied plus low GPU utilization is consistent with serial host work/synchronization/small kernels, not causal localization.",
+    "No training changes, benchmarks, optimizer calls, environments, or signals."
+  ]
+}
