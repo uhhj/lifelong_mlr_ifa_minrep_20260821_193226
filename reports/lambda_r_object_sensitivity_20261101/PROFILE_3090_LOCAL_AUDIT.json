@@ -1,0 +1,228 @@
+{
+  "status": "PASS_PROFILE_AND_MICROBENCH_RECOMPUTED_NOT_FULL_TRAINING_EQUIVALENCE",
+  "sources": {
+    "capacity_readonly_20261102_142850\\EVIDENCE.json": "b2986e1b03c88b7fa76abc0165fde2c9b28dc9b22d7a9196ad55b1ee2167fe9d",
+    "capacity_readonly_20261102_143018\\EVIDENCE.json": "6555bc6b2947267adf35d6ee0e8add9036c3673ac568201cc2df4f0f0e125539",
+    "capacity_readonly_20261102_144037\\EVIDENCE.json": "3ba6a518e17f5fc8c071b350493de6fbb37dfd1781b86dda9d262bdb8cf48afd",
+    "capacity_readonly_20261102_143242\\EVIDENCE.json": "85805683854bb033a2aac67090c174c6d79f221b91aa33565a74b37f528ffd8e"
+  },
+  "python_main_samples": 1797,
+  "windows": [
+    {
+      "samples": 599,
+      "counts": {
+        "capture": 23,
+        "probe": 51,
+        "candidate_update": 399,
+        "loader": 6,
+        "restore": 11,
+        "other_or_partial": 25,
+        "save": 6,
+        "equality": 78
+      }
+    },
+    {
+      "samples": 599,
+      "counts": {
+        "candidate_update": 413,
+        "restore": 4,
+        "probe": 38,
+        "other_or_partial": 37,
+        "save": 14,
+        "capture": 21,
+        "equality": 67,
+        "loader": 5
+      }
+    },
+    {
+      "samples": 599,
+      "counts": {
+        "other_or_partial": 21,
+        "probe": 51,
+        "candidate_update": 433,
+        "capture": 22,
+        "loader": 8,
+        "equality": 63,
+        "restore": 1
+      }
+    }
+  ],
+  "categories": {
+    "capture": {
+      "samples": 66,
+      "percent": 3.672787979966611
+    },
+    "probe": {
+      "samples": 140,
+      "percent": 7.790762381747356
+    },
+    "candidate_update": {
+      "samples": 1245,
+      "percent": 69.2821368948247
+    },
+    "loader": {
+      "samples": 19,
+      "percent": 1.05731775180857
+    },
+    "restore": {
+      "samples": 16,
+      "percent": 0.8903728436282693
+    },
+    "other_or_partial": {
+      "samples": 83,
+      "percent": 4.618809126321647
+    },
+    "save": {
+      "samples": 20,
+      "percent": 1.1129660545353366
+    },
+    "equality": {
+      "samples": 208,
+      "percent": 11.5748469671675
+    }
+  },
+  "update_subcategories": {
+    "other_update": {
+      "samples": 519,
+      "percent_of_all": 28.881469115191987
+    },
+    "finite_check": {
+      "samples": 107,
+      "percent_of_all": 5.954368391764051
+    },
+    "backward": {
+      "samples": 477,
+      "percent_of_all": 26.54424040066778
+    },
+    "optimizer": {
+      "samples": 142,
+      "percent_of_all": 7.90205898720089
+    }
+  },
+  "top_python_leaves": [
+    [
+      "backward (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/autograd/__init__.py:197)",
+      476
+    ],
+    [
+      "cpu_snapshot (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/candidate.py:8)",
+      160
+    ],
+    [
+      "equal (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/runtime.py:81)",
+      75
+    ],
+    [
+      "<genexpr> (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/updates.py:36)",
+      67
+    ],
+    [
+      "forward (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/pytorch_utils.py:115)",
+      67
+    ],
+    [
+      "forward (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/activations.py:35)",
+      60
+    ],
+    [
+      "_single_tensor_adamw (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/optim/adamw.py:316)",
+      35
+    ],
+    [
+      "_attn (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/models/gpt2/modeling_gpt2.py:181)",
+      33
+    ],
+    [
+      "update (/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L005_41/updates.py:36)",
+      30
+    ],
+    [
+      "_single_tensor_adamw (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/optim/adamw.py:274)",
+      30
+    ],
+    [
+      "layer_norm (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/nn/functional.py:2515)",
+      27
+    ],
+    [
+      "_attn (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/models/gpt2/modeling_gpt2.py:216)",
+      27
+    ],
+    [
+      "_single_tensor_adamw (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/optim/adamw.py:273)",
+      20
+    ],
+    [
+      "_attn (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/models/gpt2/modeling_gpt2.py:184)",
+      18
+    ],
+    [
+      "norm (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/functional.py:1485)",
+      17
+    ],
+    [
+      "_call_impl (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/nn/modules/module.py:1190)",
+      16
+    ],
+    [
+      "save (/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/ALIGN/source/coreset_exp/common.py:21)",
+      16
+    ],
+    [
+      "_single_tensor_adamw (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/optim/adamw.py:270)",
+      15
+    ],
+    [
+      "forward (/data/mlr_ifa/env/lib/python3.8/site-packages/torch/nn/modules/linear.py:114)",
+      14
+    ],
+    [
+      "_attn (/data/mlr_ifa/env/lib/python3.8/site-packages/transformers/models/gpt2/modeling_gpt2.py:200)",
+      14
+    ]
+  ],
+  "native_active_main_thread_samples": 4338,
+  "native_lost": 0,
+  "native_lower_bounds": {
+    "cpu_equal": {
+      "samples": 311,
+      "percent_active_main_thread": 7.169202397418165
+    },
+    "direct_copy_kernel": {
+      "samples": 240,
+      "percent_active_main_thread": 5.532503457814661
+    }
+  },
+  "whitelisted_initial_environment": {
+    "OMP_NUM_THREADS": "1"
+  },
+  "microbenchmark": {
+    "state_check_rounds": {
+      "reference_mean": 0.7531087165833318,
+      "candidate_mean": 0.057590145083319534,
+      "reference_median": 0.7866480855004738,
+      "candidate_median": 0.05950933099984468,
+      "pairs": 12,
+      "faster_pairs": 12,
+      "fraction_saved": 0.92353010419984
+    },
+    "finite_check_rounds": {
+      "reference_mean": 0.012868740229161327,
+      "candidate_mean": 0.0033099879833268157,
+      "reference_median": 0.01473783909998474,
+      "candidate_median": 0.0033246122499804185,
+      "pairs": 12,
+      "faster_pairs": 12,
+      "fraction_saved": 0.7427884995435539
+    }
+  },
+  "illustrative_total_time_saving_fraction": 0.1511255598913339,
+  "zero_optimizer_environments_signals_production_writes": true,
+  "caveats": [
+    "Three 60s 10Hz nonblocking Python windows; incomplete stack reads remain possible even without errors.",
+    "CPU IP observations are active main-thread instruction shares, not GPU kernel timing or wall-time fractions.",
+    "Named native loops are lower bounds among top100 saved addresses; unresolved CUDA driver addresses are not mislabeled.",
+    "Microbenchmark shared GPU with production; fractional gains are only local check costs, not production speedup.",
+    "Full paired training-path diagnostic is separate and must pass before any future production switch."
+  ]
+}

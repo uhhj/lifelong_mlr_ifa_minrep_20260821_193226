@@ -1,11 +1,11 @@
 {
   "status": "PARTIAL_TRAINING_OR_EVALUATION",
-  "observation": "2026-11-02T14:08:53.496116+08:00",
+  "observation": "2026-11-02T15:02:24.734395+08:00",
   "counts": {
     "L005_41": {
-      "epochs": 339,
-      "accepted_updates": 83418,
-      "physical_optimizer_calls": 151136,
+      "epochs": 384,
+      "accepted_updates": 99708,
+      "physical_optimizer_calls": 183716,
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 30,
@@ -14,17 +14,17 @@
         "arm": "S",
         "stage": 9,
         "phase": "train",
-        "epoch_complete": 39,
-        "steps": 83418,
-        "physical_optimizer_calls": 151136,
-        "time": 1793599723.631643,
+        "epoch_complete": 84,
+        "steps": 99708,
+        "physical_optimizer_calls": 183716,
+        "time": 1793602931.1257617,
         "pid": 2566
       },
-      "current_stage_epochs": 39,
-      "recent_epoch_mean_seconds": 65.52076580524445,
-      "current_stage_compute_minutes_estimate": 66.61277856866519,
-      "gate_blocks_observed": 6848,
-      "gate_Q_accepts_observed": 3399
+      "current_stage_epochs": 84,
+      "recent_epoch_mean_seconds": 72.10082457065582,
+      "current_stage_compute_minutes_estimate": 19.226886552174886,
+      "gate_blocks_observed": 8515,
+      "gate_Q_accepts_observed": 3965
     },
     "L005_42": {
       "epochs": 0,
@@ -102,9 +102,9 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 339,
-  "accepted_updates": 83418,
-  "physical_training_optimizer_calls": 151136,
+  "epochs": 384,
+  "accepted_updates": 99708,
+  "physical_training_optimizer_calls": 183716,
   "own_isolated_optimizer_calls": 91,
   "own_extra_autograd_calls": 41,
   "training_collection_completed_episodes": 30,
@@ -114,7 +114,7 @@
     {
       "pid": 2560,
       "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/controller.py ",
-      "state": "S"
+      "state": "T"
     },
     {
       "pid": 2561,
@@ -125,20 +125,30 @@
       "pid": 2566,
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/train_wrapper.py L005_41 ",
       "state": "R"
+    },
+    {
+      "pid": 4347,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 4348,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/watchdog.py ",
+      "state": "S"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1422090240,
+      "free": 1422077952,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 214130688
+      "spare": 214118400
     },
     "/data": {
-      "free": 24640675840,
-      "remaining_bound": 12260231477,
+      "free": 24631341056,
+      "remaining_bound": 12260206901,
       "reserve": 2147483648,
-      "spare": 10232960715
+      "spare": 10223650507
     }
   },
   "gpu": {
@@ -146,43 +156,39 @@
     "stdout": "2566\n",
     "stderr": ""
   },
-  "snapshot_sha256": "742211cd330ccd1d263ddbcb5c037b50ac160cc386fd21c0937d2b645fa9eec4",
+  "snapshot_sha256": "876ebfdd5e09c22c825c03039bd5ef3239f5d9acbac4a904d1585a85054e7edf",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_132538",
+  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_142811",
   "hardware_migration": "USER_AUTHORIZED_RTX3090",
   "abandoned_partial_recorded_optimizer_calls": 140,
   "abandoned_partial_unrecorded_cost": "UNKNOWN",
   "engineering": {
-    "contract_sha256": "46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3",
-    "frozen_files": 8,
-    "completion_source": "engineering_resume_3090_20261102_v1/controller.exit",
-    "diagnostic_optimizer_calls": 8137,
-    "diagnostic_extra_autograd": 47,
+    "contract_sha256": "143bab881835c8f91a3c04129e1fbdf88da6ac7d55b10524eaa591417ff2b254",
+    "frozen_files": 6,
+    "completion_source": "engineering_checks_3090_20261102_v1/controller.exit",
+    "diagnostic_optimizer_calls": 15965,
+    "diagnostic_extra_autograd": 83,
     "prior_diagnostic_optimizer_calls": 7828,
     "recovery_diagnostic_optimizer_calls": 309,
     "abandoned_partial_recorded_optimizer_calls": 140,
     "abandoned_partial_unrecorded_cost": "UNKNOWN",
     "hardware_migration": "USER_AUTHORIZED_RTX3090",
-    "diagnostic_environments": 0
+    "diagnostic_environments": 0,
+    "prior_resume_contract_sha256": "46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3",
+    "checks_diagnostic_optimizer_calls": 7828,
+    "checks_diagnostic_extra_autograd": 36
   },
-  "engineering_diagnostic_optimizer_calls": 8137,
-  "engineering_diagnostic_extra_autograd": 47,
+  "engineering_diagnostic_optimizer_calls": 15965,
+  "engineering_diagnostic_extra_autograd": 83,
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
-  "controller": 2560,
-  "latest_evidence": "check_readonly_20261102_140853",
-  "next_check_minutes": 75,
+  "controller": 4347,
+  "latest_evidence": "check_readonly_20261102_150223",
+  "next_check_minutes": 30,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
     0.05,
     0.2
   ],
-  "completion_source": "engineering_resume_3090_20261102_v1/controller.exit",
-  "latest_resource_evidence": "capacity_readonly_20261102_140929",
-  "timing_audit": "check_readonly_20261102_140853/TIMING_AUDIT.json",
-  "remaining_training_and_formal_planning_hours": [
-    29,
-    37
-  ],
-  "planning_excludes_final_cpu_report_publication": true
+  "completion_source": "engineering_checks_3090_20261102_v1/controller.exit"
 }
