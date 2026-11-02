@@ -1,11 +1,11 @@
 {
   "status": "PARTIAL_RESUMED_TRAINING_RTX3090",
-  "observation": "2026-11-02T12:49:55.526698+08:00",
+  "observation": "2026-11-02T13:20:27.701056+08:00",
   "counts": {
     "L005_41": {
-      "epochs": 261,
-      "accepted_updates": 57249,
-      "physical_optimizer_calls": 98798,
+      "epochs": 295,
+      "accepted_updates": 67755,
+      "physical_optimizer_calls": 119810,
       "own_isolated_optimizer_calls": 62,
       "own_extra_autograd_calls": 30,
       "training_collection_completed_episodes": 20,
@@ -14,18 +14,17 @@
         "arm": "S",
         "stage": 8,
         "phase": "train",
-        "epoch_complete": 61,
-        "steps": 57249,
-        "physical_optimizer_calls": 98798,
-        "time": 1793594957.9833388,
+        "epoch_complete": 95,
+        "steps": 67755,
+        "physical_optimizer_calls": 119810,
+        "time": 1793596809.0252106,
         "pid": 2566
       },
-      "current_stage_epochs": 61,
-      "recent_epoch_mean_seconds": 48.368486642837524,
-      "current_stage_compute_minutes_estimate": null,
-      "gate_blocks_observed": 4213,
-      "gate_Q_accepts_observed": 2378,
-      "timing_note": "Only post-recovery completed epochs; small sample, not stable throughput. Recovered epoch uses a fresh timer, no paused wall time."
+      "current_stage_epochs": 95,
+      "recent_epoch_mean_seconds": 54.946636295318605,
+      "current_stage_compute_minutes_estimate": 4.578886357943217,
+      "gate_blocks_observed": 5255,
+      "gate_Q_accepts_observed": 2616
     },
     "L005_42": {
       "epochs": 0,
@@ -103,9 +102,9 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 261,
-  "accepted_updates": 57249,
-  "physical_training_optimizer_calls": 98798,
+  "epochs": 295,
+  "accepted_updates": 67755,
+  "physical_training_optimizer_calls": 119810,
   "own_isolated_optimizer_calls": 62,
   "own_extra_autograd_calls": 30,
   "training_collection_completed_episodes": 20,
@@ -136,10 +135,10 @@
       "spare": 214163456
     },
     "/data": {
-      "free": 24737763328,
-      "remaining_bound": 12355275061,
+      "free": 24737005568,
+      "remaining_bound": 12355254581,
       "reserve": 2147483648,
-      "spare": 10235004619
+      "spare": 10234267339
     }
   },
   "gpu": {
@@ -147,9 +146,9 @@
     "stdout": "2566\n",
     "stderr": ""
   },
-  "snapshot_sha256": "0e1f81df7d8a0bff25eda4afe5fa07ae1d3f8977c31f3aab87145141f492a887",
+  "snapshot_sha256": "862a4eb6ad00d986b62dc17836cde64b2908868fb40ad41b77ca7a8724fb12a8",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_124854",
+  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_124955",
   "hardware_migration": "USER_AUTHORIZED_RTX3090",
   "abandoned_partial_recorded_optimizer_calls": 140,
   "abandoned_partial_unrecorded_cost": "UNKNOWN",
@@ -170,8 +169,8 @@
   "engineering_diagnostic_extra_autograd": 47,
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
   "controller": 2560,
-  "latest_evidence": "check_readonly_20261102_124955",
-  "next_check_minutes": 30,
+  "latest_evidence": "check_readonly_20261102_132027",
+  "next_check_minutes": 125,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
@@ -183,7 +182,12 @@
   "automatic_monitor_status": "ACTIVE",
   "engineering_state": "POST_REBOOT_RECOVERY_RUNNING",
   "current_training_pid": 2566,
-  "remaining_time_estimate": "Pending stable post-recovery throughput; old slow-host ETA invalid",
   "resume_report": "RECOVERY_REPORT_20261102.md",
-  "prior_completed_epochs_preserved": 260
+  "prior_completed_epochs_preserved": 260,
+  "timing_audit": "check_readonly_20261102_132027/TIMING_AUDIT.json",
+  "current_run_planning_minutes": [
+    125,
+    165
+  ],
+  "remaining_time_estimate": "Current L005_41 only125–165min; entire queue unmeasured"
 }
