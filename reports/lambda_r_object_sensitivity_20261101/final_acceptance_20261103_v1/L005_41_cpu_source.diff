@@ -1,0 +1,67 @@
+--- cross/L005_41
++++ final_acceptance/L005_41
+@@ -1,3 +1,5 @@
++SCALE_EXCEPTION={'stage': 6, 'count': 1482, 'stored': [0.450316458940506, 0.10000000149011612, 1.0], 'current': [0.4503164291381836, 0.10000000149011612, 1.0], 'reference_float64': [0.45031642519301257, 0.1, 1.0], 'ulp_difference': [1, 0, 0], 'stored_reference_abs': [3.374749341089611e-08, 1.4901161138336505e-09, 0.0], 'current_reference_abs': [3.9451710232008e-09, 1.4901161138336505e-09, 0.0], 'cache_sha256': 'df8ac9e8d62549c54b05b755bce5196afd101c4f5f70ebbc52e06a2bbb702b15', 'cache_metadata_exact': True, 'source_float32_values_sha256': 'b8a92dc60bf644ea6e1c43e7dc464e1f8d036f6ba277f8f0aac5a6b15e15eceb'}
++SCALING_DIAGNOSTIC_SHA256='617212bd1c991f53cfdab27e1a4ee12d96c251e1c22eecf205f368ec19ec9b07'
+ """External CPU-only final audit and fixed expert-cost diagnostic. No server writes."""
+ import os,sys,ast,json,hashlib,time,contextlib,math
+ from pathlib import Path
+@@ -17,7 +19,7 @@
+ js=lambda p:json.loads(Path(p).read_text())
+ def verify():
+  c=js(Q/'CONTRACT.json');assert all(sha(p)==h for p,h in c['files'].items());assert all(sha(S/n)==h for n,h in c['parent_source'].items())
+-verify();assert (Q.parent/'engineering_cross_lambda_20261102_v1'/'controller.exit').read_text()=='0'
++verify();os.nice(10);assert (Q.parent/'engineering_cross_lambda_20261102_v1'/'controller.exit').read_text()=='0'
+ assert RETAIN_WEIGHT==js(Q/'PARENT_BINDING.json')['lambda_R']
+ assert js(Q/'CONTRACT.json')['lambda_R']==RETAIN_WEIGHT
+ for p in Path('/proc').glob('[0-9]*'):
+@@ -88,7 +90,22 @@
+   current=[i for i,r in enumerate(manifests[stage]) if r['task']==stage and r['bc_valid']]
+   yy=torch.stack([torch.as_tensor(labels[stage][i]['next_action']) for i in current]).float()
+   scale=torch.stack([yy[:,a:b].square().mean().sqrt().clamp_min(.1) for a,b in [(0,3),(3,6),(6,7)]])
+-  assert torch.equal(scale,cache['scales']) and np.allclose(scale.numpy(),m['scales'],atol=1e-8,rtol=1e-8)
++  assert torch.equal(cache['scales'],torch.as_tensor(m['scales'],dtype=torch.float32))
++  scale_recomputation_exact=torch.equal(scale,cache['scales'])
++  scale_exception=None
++  if not scale_recomputation_exact:
++   assert Q.name=='L005_41' and stage==6
++   ex=SCALE_EXCEPTION
++   assert sha(mp)==ex['cache_sha256'] and ah(yy.numpy())==ex['source_float32_values_sha256']
++   assert cache['scales'].tolist()==ex['stored'] and scale.tolist()==ex['current']
++   y64=yy.numpy().astype(np.float64)
++   ref=np.array([max(.1,np.sqrt(np.mean(y64[:,lo:hi]**2,dtype=np.float64))) for lo,hi in [(0,3),(3,6),(6,7)]])
++   assert np.array_equal(ref,np.asarray(ex['reference_float64']))
++   ulp=np.abs(cache['scales'].numpy().view(np.int32).astype(np.int64)-scale.numpy().view(np.int32).astype(np.int64))
++   assert ulp.tolist()==[1,0,0]
++   assert np.all(np.abs(cache['scales'].numpy()-ref)<=2*np.spacing(ref.astype(np.float32)))
++   scale_exception=dict(case=Q.name,stage=stage,ulp_difference=ulp.tolist(),max_absolute_difference=float((scale-cache['scales']).abs().max()),bound_source=SCALING_DIAGNOSTIC_SHA256)
++
+   rr=js(Q/('COLLECTION_OUTCOMES_'+key+'.json'));assert len(rr)==10 and sha(Q/('COLLECTION_OUTCOMES_'+key+'.json'))==m['collection_outcomes_sha256']
+   assert (Q/('collect_'+key+'.exit')).read_text()=='0' and js(Q/('COLLECTION_STATE_PARITY_'+key+'.json'))['parent_all_state_exact']
+   chosen={};quotas=[13]*8+[12]*2
+@@ -123,7 +140,7 @@
+    mu,sd,z=policy(row['feature'][None]);calls+=1;windows+=1;k=int(z[0].argmax());assert k==row['mode']
+    for x,y in [(mu[0,k],row['mu']),(sd[0,k],row['sd'])]:
+     maxdiff=max(maxdiff,float((x-y).abs().max()));assert torch.allclose(x,y,atol=2e-4,rtol=2e-4)
+-  cached[stage]=cache;memory_audit[key]=dict(count=m['count'],cache_sha256=sha(mp),source_sha256=cp_sha,CPU_teacher_max_abs=maxdiff,sampling_exact=True,scale_exact=True,successes=sum(r['success'] for r in rr),no_raw_image_replay=True)
++  cached[stage]=cache;memory_audit[key]=dict(count=m['count'],cache_sha256=sha(mp),source_sha256=cp_sha,CPU_teacher_max_abs=maxdiff,sampling_exact=True,scale_binding_exact=True,scale_recomputation_exact=scale_recomputation_exact,scale_exception=scale_exception,successes=sum(r['success'] for r in rr),no_raw_image_replay=True)
+   if stage>6:
+    inp=js(Q/('TRAIN_INPUT_'+key+'.json'));ids=[i for i,r in enumerate(manifests[stage]) if r['bc_valid'] and r['task']<stage]
+    yy=torch.stack([torch.as_tensor(labels[stage][i]['next_action']) for i in ids]).float();sc=torch.stack([yy[:,a:b].square().mean().sqrt().clamp_min(.1) for a,b in [(0,3),(3,6),(6,7)]]).double()
+@@ -218,6 +235,10 @@
+ for arm in ARMS:
+  path_ad=js(Q/('SHORT_HISTORY_ADMISSION_'+arm+'.json'));assert path_ad['status']=='PASS' and path_ad['eight_frame_legacy_exact'] and path_ad['all_state_restored'] and [x['length'] for x in path_ad['lengths']]==list(range(1,9))
+ assert len(task6)==1 and len(collections)==40
++sref=js(Q/'S_REFERENCE.json');assert all(sha(x['path'])==x['sha256'] for x in sref.values())
++ss=torch.load(sref['stage6_checkpoint']['path'],map_location='cpu')['state_dict'];ss={(k[7:] if k.startswith('module.') else k):ah(v.numpy()) for k,v in ss.items()}
++task6_baseline_exact=ss==task6['S']
++pb=js(Q/'PARENT_BINDING.json');assert all(sha(p)==h for p,h in pb['files'].items())
+ records=js(Q/'OUTCOMES.json');assert len(records)==200;seen=set()
+ for r in records:
+  key=(r['arm'],r['stage'],r['task'],r['initial_index']);assert key not in seen;seen.add(key)
+@@ -230,4 +251,4 @@
+ verify();light={}
+ for fp in Q.rglob('*'):
+  if fp.is_file() and fp.suffix in ['.json','.jsonl','.exit'] and fp.name not in ['CONTRACT.json','PARENT_BINDING.json'] and fp.stat().st_size<8*1024**2:light[str(fp.relative_to(Q))]=dict(text=fp.read_text(),sha256=sha(fp))
+-print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,gate_audit=gate_audit,memory_audits=memory_audit,contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diagnostics,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,task6_current_arms_exact=False,single_S_only=True,initial_state_bytes_verified=True,reference_C_pairing_exact=False,light=light,episodes=200,training_collection_episodes=40,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time(),limitation='Online retained-feature hashes and teacher CPU replay verified; no raw camera or full physics replay is claimed.')))
++print(json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',strict=strict,gate_audit=gate_audit,memory_audits=memory_audit,contract_sha256=sha(Q/'CONTRACT.json'),diagnostics=diagnostics,diagnostic_calls=calls,diagnostic_windows=windows,diagnostic_seconds=time.time()-tic,task6_current_arms_exact=False,single_S_only=True,task6_baseline_all_tensors_exact=task6_baseline_exact,initial_state_bytes_verified=True,reference_C_pairing_exact=False,light=light,episodes=200,training_collection_episodes=40,environment_calls=0,optimizer_updates=0,no_residual=True,processes=[],observed=time.time(),limitation='Online retained-feature hashes and teacher CPU replay verified; no raw camera or full physics replay is claimed.')))
