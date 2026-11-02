@@ -1,0 +1,98 @@
+{
+  "status": "READONLY_PARALLEL_CAPACITY_NOT_BENCHMARK",
+  "observed": 1793605432.8875446,
+  "cpu_count": 12,
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "load": "1.00 1.12 1.30 1/511 5257\n",
+  "memory": "MemTotal:       32860668 kB\nMemFree:        20714060 kB\nMemAvailable:   26653548 kB\nBuffers:           70832 kB\nCached:          6234364 kB\nSwapCached:          340 kB\nActive:          4983952 kB\nInactive:        6571504 kB\nActive(anon):       2960 kB\nInactive(anon):  5313236 kB\nActive(file):    4980992 kB\nInactive(file):  1258268 kB\nUnevictable:        6160 kB\nMlocked:               0 kB\nSwapTotal:       2097148 kB\nSwapFree:        2088384 kB\nDirty:             19100 kB\nWriteback:         49388 kB\nAnonPages:       5255924 kB\nMapped:           990600 kB\nShmem:             66164 kB\nKReclaimable:     138772 kB\nSlab:             250516 kB\nSReclaimable:     138772 kB\nSUnreclaim:       111744 kB\nKernelStack:        8456 kB\nPageTables:        26620 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    18527480 kB\nCommitted_AS:    8998264 kB\nVmallocTotal:   13743895347199 kB\nVmallocUsed:      104740 kB\nVmallocChunk:          0 kB\nPercpu:            13312 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:     2916208 kB\nDirectMap2M:    27492352 kB\nDirectMap1G:     5242880 kB\n",
+  "cgroup": "13:pids:/user.slice/user-0.slice/session-48.scope\n12:hugetlb:/\n11:perf_event:/\n10:blkio:/\n9:freezer:/\n8:memory:/user.slice/user-0.slice/session-48.scope\n7:devices:/user.slice\n6:cpuset:/\n5:cpu,cpuacct:/\n4:misc:/\n3:rdma:/\n2:net_cls,net_prio:/\n1:name=systemd:/user.slice/user-0.slice/session-48.scope\n0::/user.slice/user-0.slice/session-48.scope\n",
+  "limits": {
+    "/sys/fs/cgroup/cpu.max": null,
+    "/sys/fs/cgroup/cpu.stat": null,
+    "/sys/fs/cgroup/cpuset.cpus.effective": null,
+    "/sys/fs/cgroup/memory.max": null,
+    "/sys/fs/cgroup/memory.current": null,
+    "/sys/fs/cgroup/cpu/cpu.cfs_quota_us": "-1\n",
+    "/sys/fs/cgroup/cpu/cpu.cfs_period_us": "100000\n",
+    "/sys/fs/cgroup/memory/memory.limit_in_bytes": "9223372036854771712\n"
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "NVIDIA GeForce RTX 3090, Default, 3032 MiB, 24576 MiB, 0 %\n",
+    "stderr": ""
+  },
+  "gpu_processes": {
+    "exit": 0,
+    "stdout": "4694, 3016 MiB\n",
+    "stderr": ""
+  },
+  "processes": [
+    {
+      "pid": 4347,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/controller.py ",
+      "status": [
+        "State:\tS (sleeping)",
+        "VmHWM:\t   72608 kB",
+        "VmRSS:\t   31184 kB",
+        "Threads:\t1",
+        "Cpus_allowed_list:\t0-11",
+        "Mems_allowed_list:\t0"
+      ],
+      "cgroup": "13:pids:/user.slice/user-0.slice/session-42.scope\n12:hugetlb:/\n11:perf_event:/\n10:blkio:/\n9:freezer:/\n8:memory:/user.slice/user-0.slice/session-42.scope\n7:devices:/user.slice\n6:cpuset:/\n5:cpu,cpuacct:/\n4:misc:/\n3:rdma:/\n2:net_cls,net_prio:/\n1:name=systemd:/user.slice/user-0.slice/session-42.scope\n0::/user.slice/user-0.slice/session-42.scope\n"
+    },
+    {
+      "pid": 4689,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --standalone --nproc_per_node=1 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/train_wrapper.py L005_42 ",
+      "status": [
+        "State:\tS (sleeping)",
+        "VmHWM:\t  253820 kB",
+        "VmRSS:\t  253820 kB",
+        "Threads:\t4",
+        "Cpus_allowed_list:\t0-11",
+        "Mems_allowed_list:\t0"
+      ],
+      "cgroup": "13:pids:/user.slice/user-0.slice/session-42.scope\n12:hugetlb:/\n11:perf_event:/\n10:blkio:/\n9:freezer:/\n8:memory:/user.slice/user-0.slice/session-42.scope\n7:devices:/user.slice\n6:cpuset:/\n5:cpu,cpuacct:/\n4:misc:/\n3:rdma:/\n2:net_cls,net_prio:/\n1:name=systemd:/user.slice/user-0.slice/session-42.scope\n0::/user.slice/user-0.slice/session-42.scope\n"
+    },
+    {
+      "pid": 4694,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/train_wrapper.py L005_42 ",
+      "status": [
+        "State:\tD (disk sleep)",
+        "VmHWM:\t 6907796 kB",
+        "VmRSS:\t 5433496 kB",
+        "Threads:\t11",
+        "Cpus_allowed_list:\t0-11",
+        "Mems_allowed_list:\t0"
+      ],
+      "cgroup": "13:pids:/user.slice/user-0.slice/session-42.scope\n12:hugetlb:/\n11:perf_event:/\n10:blkio:/\n9:freezer:/\n8:memory:/user.slice/user-0.slice/session-42.scope\n7:devices:/user.slice\n6:cpuset:/\n5:cpu,cpuacct:/\n4:misc:/\n3:rdma:/\n2:net_cls,net_prio:/\n1:name=systemd:/user.slice/user-0.slice/session-42.scope\n0::/user.slice/user-0.slice/session-42.scope\n"
+    }
+  ],
+  "queue": {
+    "phase": "train",
+    "suite": "L005",
+    "seed": 42,
+    "pid": 4689,
+    "time": 1793604088.160012,
+    "controller": 4347,
+    "engineering_contract": "143bab881835c8f91a3c04129e1fbdf88da6ac7d55b10524eaa591417ff2b254",
+    "completion_source": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_checks_3090_20261102_v1/controller.exit",
+    "hardware": "RTX3090"
+  },
+  "optimizer_calls": 0,
+  "environments": 0,
+  "signals": 0,
+  "production_writes": 0
+}
