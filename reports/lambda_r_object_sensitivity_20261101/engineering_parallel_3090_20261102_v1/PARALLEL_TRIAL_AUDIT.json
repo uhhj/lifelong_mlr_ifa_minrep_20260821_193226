@@ -1,0 +1,285 @@
+{
+  "status": "PASS_LOCAL_PARALLEL_DIAGNOSTICS",
+  "observed": 1793609135.2890832,
+  "cases": {
+    "probe": {
+      "status": "PASS_STAGE9_PARALLEL_EXACT_FEASIBILITY",
+      "optimizer_calls": 2904,
+      "environments": 0,
+      "extra_autograd": 0,
+      "source": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\capacity_readonly_20261102_160106",
+      "evidence_sha256": "aa5432aeabcec105a0f9bb48056b28ee399b388c2381220d543c7afa63b73fd9",
+      "reports": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 230.4491708278656,
+          "parallel_two_worker_seconds": 128.70575094223022,
+          "aggregate_throughput_ratio": 1.7905118391430936,
+          "wall_reduction_fraction": 0.4415004815167367,
+          "serial_compute_spans": [
+            67.49990767898817,
+            66.13672377300463
+          ],
+          "parallel_compute_spans": [
+            77.11678702899371,
+            78.85397174900208
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        }
+      ],
+      "all_diagnostic_processes_exited": true,
+      "source_rehashed_in_status_snapshot": false,
+      "all_remote_source_hashes_must_be_rechecked_by_production_dispatch": true
+    },
+    "timing": {
+      "status": "PASS_STAGE9_PARALLEL_THROUGHPUT_EXACT_ENDSTATE",
+      "optimizer_calls": 2896,
+      "environments": 0,
+      "extra_autograd": 0,
+      "source": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\capacity_readonly_20261102_160738",
+      "evidence_sha256": "f46c8ac343ce7092c8b1faf84a799eb6baca53f38bc7706dd6c396f9b35716d9",
+      "reports": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "per_step_scalars_probes_decisions_initial_final_state_exact": true,
+          "serial_two_worker_seconds": 139.4629716873169,
+          "parallel_two_worker_seconds": 85.27615571022034,
+          "aggregate_throughput_ratio": 1.6354275181122204,
+          "wall_reduction_fraction": 0.3885390890607592,
+          "serial_compute_spans": [
+            69.19980581400159,
+            68.50198714799808
+          ],
+          "parallel_compute_spans": [
+            81.38542677299483,
+            84.38844792099917
+          ],
+          "limitation": "No per-block state hashes or serialization in timing; production remains as background. Pure epoch path, excludes production checkpoint/collection/preparation."
+        }
+      ],
+      "all_diagnostic_processes_exited": true,
+      "source_rehashed_in_status_snapshot": true,
+      "all_remote_source_hashes_must_be_rechecked_by_production_dispatch": true,
+      "gpu_windows": {
+        "serial42": {
+          "samples": 35,
+          "gpu_mean": 84.88571428571429,
+          "gpu_min": 21.0,
+          "gpu_max": 96.0,
+          "memory_peak_MiB": 6051.0,
+          "temperature_peak_C": 66.0,
+          "power_mean_W": 254.60142857142858
+        },
+        "serial43": {
+          "samples": 35,
+          "gpu_mean": 84.77142857142857,
+          "gpu_min": 0.0,
+          "gpu_max": 96.0,
+          "memory_peak_MiB": 6031.0,
+          "temperature_peak_C": 68.0,
+          "power_mean_W": 257.4982857142857
+        },
+        "parallel": {
+          "samples": 42,
+          "gpu_mean": 97.76190476190476,
+          "gpu_min": 83.0,
+          "gpu_max": 99.0,
+          "memory_peak_MiB": 9050.0,
+          "temperature_peak_C": 70.0,
+          "power_mean_W": 281.52214285714285
+        }
+      }
+    },
+    "full": {
+      "status": "PASS_REMAINING_SEVEN_STAGE_PARALLEL_EXACT",
+      "optimizer_calls": 12784,
+      "environments": 0,
+      "extra_autograd": 0,
+      "source": "execution\\20261101_lambda_r_object_sensitivity\\capacity_readonly_20261102_164534",
+      "evidence_sha256": "6ea3ccb5bb10c20e82356d2380cd32a406fb2a844cd22fb82c0babaa224fecf8",
+      "reports": [
+        {
+          "lambda_R": 0.05,
+          "stage": 6,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 149.37959456443787,
+          "parallel_two_worker_seconds": 77.12961339950562,
+          "aggregate_throughput_ratio": 1.936734646791259,
+          "wall_reduction_fraction": 0.4836670053603993,
+          "serial_compute_spans": [
+            7.566616693007745,
+            7.412272157000189
+          ],
+          "parallel_compute_spans": [
+            8.093856383993625,
+            8.463336836020972
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        },
+        {
+          "lambda_R": 0.05,
+          "stage": 7,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 123.40911340713501,
+          "parallel_two_worker_seconds": 73.19594097137451,
+          "aggregate_throughput_ratio": 1.6860103411389695,
+          "wall_reduction_fraction": 0.4068838276967751,
+          "serial_compute_spans": [
+            31.594461856995622,
+            33.28847972800031
+          ],
+          "parallel_compute_spans": [
+            42.1240383020031,
+            42.082540308991156
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        },
+        {
+          "lambda_R": 0.05,
+          "stage": 8,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 183.66307711601257,
+          "parallel_two_worker_seconds": 105.73081517219543,
+          "aggregate_throughput_ratio": 1.7370818225216085,
+          "wall_reduction_fraction": 0.42432187877692185,
+          "serial_compute_spans": [
+            51.271731262002504,
+            52.67418587500106
+          ],
+          "parallel_compute_spans": [
+            63.661007220011015,
+            63.720190460000595
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        },
+        {
+          "lambda_R": 0.2,
+          "stage": 6,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 146.443909406662,
+          "parallel_two_worker_seconds": 73.05463886260986,
+          "aggregate_throughput_ratio": 2.0045805671844,
+          "wall_reduction_fraction": 0.5011425250896335,
+          "serial_compute_spans": [
+            6.485941522994835,
+            6.71177999399697
+          ],
+          "parallel_compute_spans": [
+            6.978736166993258,
+            6.736674785004652
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        },
+        {
+          "lambda_R": 0.2,
+          "stage": 7,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 129.8291621208191,
+          "parallel_two_worker_seconds": 75.43018126487732,
+          "aggregate_throughput_ratio": 1.721183217960417,
+          "wall_reduction_fraction": 0.4190043282056928,
+          "serial_compute_spans": [
+            33.61111247699591,
+            35.17424416700305
+          ],
+          "parallel_compute_spans": [
+            43.49561704900043,
+            42.94168040900695
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        },
+        {
+          "lambda_R": 0.2,
+          "stage": 8,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 179.36367225646973,
+          "parallel_two_worker_seconds": 107.93989491462708,
+          "aggregate_throughput_ratio": 1.6616995263737646,
+          "wall_reduction_fraction": 0.3982064843081198,
+          "serial_compute_spans": [
+            50.218216345001565,
+            51.58114772499539
+          ],
+          "parallel_compute_spans": [
+            65.45502754499648,
+            65.31528388900006
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        },
+        {
+          "lambda_R": 0.2,
+          "stage": 9,
+          "all_per_step_scalars_branch_state_digests_probes_decisions_and_next_step_exact": true,
+          "serial_two_worker_seconds": 230.53437280654907,
+          "parallel_two_worker_seconds": 133.5256781578064,
+          "aggregate_throughput_ratio": 1.7265171462682527,
+          "wall_reduction_fraction": 0.4207992650629444,
+          "serial_compute_spans": [
+            64.21572356999604,
+            72.41811453199625
+          ],
+          "parallel_compute_spans": [
+            82.08978187100365,
+            82.94900364200294
+          ],
+          "limitation": "Includes diagnostic full-state digest overhead; current production remained as background. Not a pure one-versus-two production A/B."
+        }
+      ],
+      "all_diagnostic_processes_exited": true,
+      "source_rehashed_in_status_snapshot": true,
+      "all_remote_source_hashes_must_be_rechecked_by_production_dispatch": true
+    }
+  },
+  "covered_combinations": [
+    [
+      0.05,
+      6
+    ],
+    [
+      0.05,
+      7
+    ],
+    [
+      0.05,
+      8
+    ],
+    [
+      0.05,
+      9
+    ],
+    [
+      0.2,
+      6
+    ],
+    [
+      0.2,
+      7
+    ],
+    [
+      0.2,
+      8
+    ],
+    [
+      0.2,
+      9
+    ]
+  ],
+  "parallel_diagnostic_optimizer_calls": 18584,
+  "parallel_diagnostic_extra_autograd": 0,
+  "prior_engineering_optimizer_calls": 15965,
+  "total_engineering_optimizer_calls": 34549,
+  "total_engineering_extra_autograd": 83,
+  "environments": 0,
+  "production_epochs_added": 0,
+  "abandoned_partial_recorded_optimizer_calls": 140,
+  "abandoned_partial_unrecorded_cost": "UNKNOWN",
+  "limits": [
+    "Diagnostic paths use immutable accepted-S checkpoints/cache as test fixtures, not replacement production trajectories or caches.",
+    "Timing is full Task9 epoch compute for two workers under continuing production background; excludes checkpoint/collection/preparation; not whole-run acceleration.",
+    "Only exact equality at exercised full epochs and state paths; all future stages still require their own admissions.",
+    "No MPS or GPU configuration changes; no production training signals."
+  ]
+}

@@ -1,0 +1,736 @@
+{
+  "status": "READ_EXISTING_PARALLEL_DIAGNOSTIC",
+  "observed": 1793606149.0846148,
+  "files": {
+    "SOURCE_MANIFEST.json": {
+      "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/worker.py": "63beae8a7a4b63c265beb0293c4f06998864491dc568f52056174704c0000ed3",
+      "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/driver.py": "5deaa4a3c7820789ea85f87df3c973f7b8753207dacf6dd90a449ba593226002"
+    },
+    "serial42_0.05_9_GO.json": {
+      "time": 1793605988.0895565
+    },
+    "STARTED.json": {
+      "pid": 5337,
+      "time": 1793605977.9708078,
+      "scope": "Stage9 .05 two independent seed paths; current production continues, so background contention is present"
+    },
+    "serial43_0.05_9_GO.json": {
+      "time": 1793606118.746095
+    },
+    "EVENTS.json": [
+      {
+        "event": "launch",
+        "seed": 42,
+        "mode": "serial42",
+        "pid": 5339,
+        "time": 1793605977.9895115,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 39,
+            "steps": 24553,
+            "physical_optimizer_calls": 33406,
+            "time": 1793605969.7645893,
+            "pid": 4694
+          }
+        }
+      },
+      {
+        "event": "phase_complete",
+        "mode": "serial42",
+        "time": 1793606106.608868,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 43,
+            "steps": 25461,
+            "physical_optimizer_calls": 35222,
+            "time": 1793606105.6847532,
+            "pid": 4694
+          }
+        }
+      },
+      {
+        "event": "launch",
+        "seed": 43,
+        "mode": "serial43",
+        "pid": 5485,
+        "time": 1793606106.6258457,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 43,
+            "steps": 25461,
+            "physical_optimizer_calls": 35222,
+            "time": 1793606105.6847532,
+            "pid": 4694
+          }
+        }
+      }
+    ],
+    "DISPATCH.json": {
+      "status": "ISOLATED_PARALLEL_FEASIBILITY_DISPATCHED",
+      "pid": 5337,
+      "time": 1793605977.942253,
+      "directory": "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1",
+      "files": {
+        "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/worker.py": "63beae8a7a4b63c265beb0293c4f06998864491dc568f52056174704c0000ed3",
+        "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/driver.py": "5deaa4a3c7820789ea85f87df3c973f7b8753207dacf6dd90a449ba593226002"
+      },
+      "contracts": {
+        "CONTRACT.json": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
+        "engineering_device_snapshot_20261101_v1/CONTRACT.json": "b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c",
+        "engineering_resume_3090_20261102_v1/CONTRACT.json": "46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3",
+        "engineering_checks_3090_20261102_v1/CONTRACT.json": "143bab881835c8f91a3c04129e1fbdf88da6ac7d55b10524eaa591417ff2b254"
+      },
+      "memory_hierarchy": {
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice/session-49.scope": {
+          "limit": 9223372036854771712,
+          "usage": 23318528
+        },
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice": {
+          "limit": 9223372036854771712,
+          "usage": 9158713344
+        },
+        "/sys/fs/cgroup/memory/user.slice": {
+          "limit": 9223372036854771712,
+          "usage": 11193819136
+        },
+        "/sys/fs/cgroup/memory": {
+          "limit": 9223372036854771712,
+          "usage": 11549126656
+        },
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice/session-42.scope": {
+          "limit": 9223372036854771712,
+          "usage": 6414110720
+        }
+      },
+      "max_optimizer_calls": 2904,
+      "max_extra_autograd": 0,
+      "environments": 0,
+      "production_signals": 0,
+      "production_changed": false
+    },
+    "METRICS.json": [
+      {
+        "time": 1793605978.0071118,
+        "gpu": "33, 3032, 56, 147.63",
+        "exit": 0
+      },
+      {
+        "time": 1793605980.0288303,
+        "gpu": "28, 3032, 56, 149.15",
+        "exit": 0
+      },
+      {
+        "time": 1793605982.0474818,
+        "gpu": "31, 3032, 55, 148.44",
+        "exit": 0
+      },
+      {
+        "time": 1793605984.0675063,
+        "gpu": "72, 3553, 58, 174.92",
+        "exit": 0
+      },
+      {
+        "time": 1793605986.0869017,
+        "gpu": "30, 4047, 59, 202.35",
+        "exit": 0
+      },
+      {
+        "time": 1793605988.1069205,
+        "gpu": "25, 4133, 57, 150.77",
+        "exit": 0
+      },
+      {
+        "time": 1793605990.1241481,
+        "gpu": "91, 5295, 61, 246.83",
+        "exit": 0
+      },
+      {
+        "time": 1793605992.14423,
+        "gpu": "31, 5777, 60, 215.01",
+        "exit": 0
+      },
+      {
+        "time": 1793605994.1618154,
+        "gpu": "42, 5777, 58, 157.57",
+        "exit": 0
+      },
+      {
+        "time": 1793605996.180462,
+        "gpu": "87, 5777, 62, 239.85",
+        "exit": 0
+      },
+      {
+        "time": 1793605998.199373,
+        "gpu": "26, 6039, 60, 219.36",
+        "exit": 0
+      },
+      {
+        "time": 1793606000.2185621,
+        "gpu": "94, 6039, 63, 255.90",
+        "exit": 0
+      },
+      {
+        "time": 1793606002.238597,
+        "gpu": "89, 6039, 63, 221.46",
+        "exit": 0
+      },
+      {
+        "time": 1793606004.2586768,
+        "gpu": "34, 6051, 61, 231.57",
+        "exit": 0
+      },
+      {
+        "time": 1793606006.2795088,
+        "gpu": "93, 6051, 64, 262.24",
+        "exit": 0
+      },
+      {
+        "time": 1793606008.299425,
+        "gpu": "30, 6051, 64, 209.10",
+        "exit": 0
+      },
+      {
+        "time": 1793606010.320679,
+        "gpu": "31, 6051, 62, 242.03",
+        "exit": 0
+      },
+      {
+        "time": 1793606012.3417838,
+        "gpu": "92, 6051, 64, 265.20",
+        "exit": 0
+      },
+      {
+        "time": 1793606014.3621612,
+        "gpu": "59, 6051, 64, 211.92",
+        "exit": 0
+      },
+      {
+        "time": 1793606016.3826435,
+        "gpu": "36, 6051, 62, 246.12",
+        "exit": 0
+      },
+      {
+        "time": 1793606018.4024758,
+        "gpu": "93, 6051, 65, 264.36",
+        "exit": 0
+      },
+      {
+        "time": 1793606020.4225602,
+        "gpu": "62, 6051, 65, 216.40",
+        "exit": 0
+      },
+      {
+        "time": 1793606022.444411,
+        "gpu": "32, 6051, 62, 238.29",
+        "exit": 0
+      },
+      {
+        "time": 1793606024.464891,
+        "gpu": "95, 6051, 65, 264.71",
+        "exit": 0
+      },
+      {
+        "time": 1793606026.4850142,
+        "gpu": "34, 6051, 64, 209.63",
+        "exit": 0
+      },
+      {
+        "time": 1793606028.5050688,
+        "gpu": "30, 6051, 63, 240.82",
+        "exit": 0
+      },
+      {
+        "time": 1793606030.5249958,
+        "gpu": "88, 6051, 65, 257.36",
+        "exit": 0
+      },
+      {
+        "time": 1793606032.54581,
+        "gpu": "33, 6051, 63, 208.87",
+        "exit": 0
+      },
+      {
+        "time": 1793606034.5671248,
+        "gpu": "63, 6051, 63, 248.13",
+        "exit": 0
+      },
+      {
+        "time": 1793606036.587649,
+        "gpu": "81, 6051, 65, 240.91",
+        "exit": 0
+      },
+      {
+        "time": 1793606038.6082377,
+        "gpu": "32, 6051, 62, 187.62",
+        "exit": 0
+      },
+      {
+        "time": 1793606040.6275394,
+        "gpu": "93, 6051, 65, 258.63",
+        "exit": 0
+      },
+      {
+        "time": 1793606042.6472034,
+        "gpu": "87, 6051, 65, 230.83",
+        "exit": 0
+      },
+      {
+        "time": 1793606044.6663868,
+        "gpu": "35, 6051, 63, 234.50",
+        "exit": 0
+      },
+      {
+        "time": 1793606046.6859126,
+        "gpu": "93, 6051, 66, 266.83",
+        "exit": 0
+      },
+      {
+        "time": 1793606048.7053602,
+        "gpu": "95, 6051, 66, 227.62",
+        "exit": 0
+      },
+      {
+        "time": 1793606050.7249312,
+        "gpu": "35, 6051, 63, 227.83",
+        "exit": 0
+      },
+      {
+        "time": 1793606052.7434645,
+        "gpu": "87, 6051, 65, 265.83",
+        "exit": 0
+      },
+      {
+        "time": 1793606054.762995,
+        "gpu": "78, 6051, 65, 219.67",
+        "exit": 0
+      },
+      {
+        "time": 1793606056.7827544,
+        "gpu": "35, 6051, 64, 245.68",
+        "exit": 0
+      },
+      {
+        "time": 1793606058.8020012,
+        "gpu": "94, 6051, 66, 264.32",
+        "exit": 0
+      },
+      {
+        "time": 1793606060.8213022,
+        "gpu": "57, 6051, 66, 222.23",
+        "exit": 0
+      },
+      {
+        "time": 1793606062.8419223,
+        "gpu": "28, 6051, 64, 243.07",
+        "exit": 0
+      },
+      {
+        "time": 1793606064.8612502,
+        "gpu": "88, 6051, 66, 267.21",
+        "exit": 0
+      },
+      {
+        "time": 1793606066.8807092,
+        "gpu": "34, 6051, 65, 217.90",
+        "exit": 0
+      },
+      {
+        "time": 1793606068.899935,
+        "gpu": "35, 6051, 64, 242.15",
+        "exit": 0
+      },
+      {
+        "time": 1793606070.9193795,
+        "gpu": "85, 6051, 65, 265.40",
+        "exit": 0
+      },
+      {
+        "time": 1793606072.9387982,
+        "gpu": "90, 6051, 65, 234.96",
+        "exit": 0
+      },
+      {
+        "time": 1793606074.9589407,
+        "gpu": "38, 6051, 64, 235.08",
+        "exit": 0
+      },
+      {
+        "time": 1793606076.9786055,
+        "gpu": "94, 6051, 67, 268.89",
+        "exit": 0
+      },
+      {
+        "time": 1793606078.9985678,
+        "gpu": "89, 6051, 66, 241.20",
+        "exit": 0
+      },
+      {
+        "time": 1793606081.0183454,
+        "gpu": "33, 6051, 64, 226.58",
+        "exit": 0
+      },
+      {
+        "time": 1793606083.039526,
+        "gpu": "93, 6051, 66, 264.24",
+        "exit": 0
+      },
+      {
+        "time": 1793606085.0609128,
+        "gpu": "92, 6051, 67, 246.06",
+        "exit": 0
+      },
+      {
+        "time": 1793606087.0809014,
+        "gpu": "36, 6051, 64, 214.55",
+        "exit": 0
+      },
+      {
+        "time": 1793606089.0991209,
+        "gpu": "50, 6051, 64, 255.79",
+        "exit": 0
+      },
+      {
+        "time": 1793606091.1200182,
+        "gpu": "91, 6051, 67, 250.92",
+        "exit": 0
+      },
+      {
+        "time": 1793606093.1388817,
+        "gpu": "33, 6051, 64, 212.78",
+        "exit": 0
+      },
+      {
+        "time": 1793606095.1589026,
+        "gpu": "82, 6051, 65, 261.26",
+        "exit": 0
+      },
+      {
+        "time": 1793606097.1794424,
+        "gpu": "89, 6051, 66, 246.66",
+        "exit": 0
+      },
+      {
+        "time": 1793606099.199305,
+        "gpu": "35, 6051, 64, 221.97",
+        "exit": 0
+      },
+      {
+        "time": 1793606101.2190535,
+        "gpu": "82, 6051, 66, 257.74",
+        "exit": 0
+      },
+      {
+        "time": 1793606103.239072,
+        "gpu": "85, 6051, 66, 229.16",
+        "exit": 0
+      },
+      {
+        "time": 1793606106.6423852,
+        "gpu": "26, 3032, 63, 197.62",
+        "exit": 0
+      },
+      {
+        "time": 1793606108.6612859,
+        "gpu": "24, 3032, 61, 207.41",
+        "exit": 0
+      },
+      {
+        "time": 1793606110.6807141,
+        "gpu": "35, 3032, 60, 155.68",
+        "exit": 0
+      },
+      {
+        "time": 1793606112.7003586,
+        "gpu": "61, 3621, 62, 187.33",
+        "exit": 0
+      },
+      {
+        "time": 1793606114.7229042,
+        "gpu": "29, 4047, 62, 208.48",
+        "exit": 0
+      },
+      {
+        "time": 1793606116.7430844,
+        "gpu": "26, 4047, 59, 150.91",
+        "exit": 0
+      },
+      {
+        "time": 1793606118.7637017,
+        "gpu": "32, 4133, 59, 153.95",
+        "exit": 0
+      },
+      {
+        "time": 1793606120.7843297,
+        "gpu": "88, 5257, 64, 250.52",
+        "exit": 0
+      },
+      {
+        "time": 1793606122.8049517,
+        "gpu": "28, 5777, 62, 215.28",
+        "exit": 0
+      },
+      {
+        "time": 1793606124.824945,
+        "gpu": "34, 5777, 61, 177.41",
+        "exit": 0
+      },
+      {
+        "time": 1793606126.8468297,
+        "gpu": "90, 5791, 63, 267.08",
+        "exit": 0
+      },
+      {
+        "time": 1793606128.8680272,
+        "gpu": "71, 6051, 64, 217.96",
+        "exit": 0
+      },
+      {
+        "time": 1793606130.8875215,
+        "gpu": "35, 6051, 63, 243.99",
+        "exit": 0
+      },
+      {
+        "time": 1793606132.907501,
+        "gpu": "93, 6051, 65, 262.32",
+        "exit": 0
+      },
+      {
+        "time": 1793606134.9286337,
+        "gpu": "34, 6051, 62, 208.03",
+        "exit": 0
+      },
+      {
+        "time": 1793606136.9477437,
+        "gpu": "75, 6051, 63, 256.92",
+        "exit": 0
+      },
+      {
+        "time": 1793606138.9713013,
+        "gpu": "80, 6051, 63, 204.73",
+        "exit": 0
+      },
+      {
+        "time": 1793606140.9920447,
+        "gpu": "30, 6051, 62, 200.57",
+        "exit": 0
+      },
+      {
+        "time": 1793606143.0117486,
+        "gpu": "92, 6051, 65, 260.59",
+        "exit": 0
+      },
+      {
+        "time": 1793606145.0315838,
+        "gpu": "84, 6051, 65, 242.96",
+        "exit": 0
+      },
+      {
+        "time": 1793606147.050151,
+        "gpu": "35, 6051, 63, 213.68",
+        "exit": 0
+      },
+      {
+        "time": 1793606149.0700254,
+        "gpu": "36, 6051, 63, 248.45",
+        "exit": 0
+      }
+    ],
+    "serial43_43/SCHEDULE_S_9.json": {
+      "status": "PASS_ACTUAL_SCHEDULE",
+      "epochs": 100,
+      "batches": 362,
+      "total_steps": 36200,
+      "warmup_steps": 500
+    },
+    "serial43_43/PROGRESS.json": {
+      "status": "RUNNING",
+      "seed": 43,
+      "mode": "serial43",
+      "started": 1793606108.6143248,
+      "optimizer_started": 162,
+      "optimizer_completed": 162,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage6.pth": "c07c193f464b4b2b11b86abb102278b8d6406dbbbf5005b2628c8bdff172cd5b",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage7.pth": "9d85e382b5a128718b2c541b5acab71eccb72d46d6e745971992b479e79ba853",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage8.pth": "5fd40d9f808562a64402138cfcb5b3a573045f81616699e0c364b6dabbbec097",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage9.pth": "675ba4ba297a072bfed4aa26a140fb00ade3951204879a92c6cfbfeaa5591dc0",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task6.pth": "c56f6fd3446af27f82f18d416a7f7d0341dd259ad05d176d4be156866c19d923",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task7.pth": "4d16748efa97fd59bbc74d7d3b380936acf7e68ab4170857854c31f1bd9e51a7",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task8.pth": "5c0ce43104d4c5ec3a7fbd52efa6dcc1e6b6f310b384f618d9f2a210d9e5c15d"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 80,
+        "blocks": 8
+      }
+    },
+    "serial43_43/0.05_9_READY.json": {
+      "time": 1793606117.9428523,
+      "initial": "bd00b242f5d8541c419efb402f15d9bb37d975a5d2f7e090fe0891a04ec6bec8"
+    },
+    "serial42_42/SCHEDULE_S_9.json": {
+      "status": "PASS_ACTUAL_SCHEDULE",
+      "epochs": 100,
+      "batches": 362,
+      "total_steps": 36200,
+      "warmup_steps": 500
+    },
+    "serial42_42/PROGRESS.json": {
+      "status": "PASS_WORKER_EXECUTION_PENDING_PAIR_COMPARISON",
+      "seed": 42,
+      "mode": "serial42",
+      "started": 1793605980.4268336,
+      "optimizer_started": 726,
+      "optimizer_completed": 726,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "batches": 362,
+          "trace_sha256": "8e7f195a9770526b6f19bf4296dba28d4946f61986bb30a94ced2775093b90b1",
+          "started": 1793605988.1216354,
+          "ended": 1793606104.589611,
+          "elapsed_seconds": 116.46797561645508,
+          "compute_span_seconds": 67.49990767898817,
+          "extra_state_digest_overhead_in_elapsed": true
+        }
+      ],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage6.pth": "369d3bd2873c3eec8fd36629c132353751105f6a9e525bec22e9412e71c32f3d",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage7.pth": "8a8178621e92176652e36717bd2ed91f5d2a21905ae50e02cdccfd03f5a3534c",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage8.pth": "70723d33f4e03f3347257d243f4c3a137069e0fcdb59b146cb85850645cf8f4f",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage9.pth": "7c4b8645404a07d0c331e9e64edc9dab027ed7cc11088c847f6cfa04111255cb",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task6.pth": "16d9375d6369f5f118e565c484b8e663e3073d8dc7e777d3bf8aa3ab4117c2aa",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task7.pth": "30a17589e9df7f28e02339d651fa2f32b2f0d242c154399a0ba319a6e281fa30",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task8.pth": "5f82f72a3f637baee20a8bce33b0a1920b8eb31520a303bd0d82247a32bcb223"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37
+      },
+      "ended": 1793606105.7956655
+    },
+    "serial42_42/0.05_9_READY.json": {
+      "time": 1793605988.0195549,
+      "initial": "99caf18aaa6a87dfc02fc65f55df407e3d96f144ec448bd32c7edb5c18cdaf81"
+    },
+    "serial42_42/0.05_9_DONE.json": {
+      "lambda_R": 0.05,
+      "stage": 9,
+      "batches": 362,
+      "trace_sha256": "8e7f195a9770526b6f19bf4296dba28d4946f61986bb30a94ced2775093b90b1",
+      "started": 1793605988.1216354,
+      "ended": 1793606104.589611,
+      "elapsed_seconds": 116.46797561645508,
+      "compute_span_seconds": 67.49990767898817,
+      "extra_state_digest_overhead_in_elapsed": true
+    },
+    "serial42_42/RESULT.json": {
+      "status": "PASS_WORKER_EXECUTION_PENDING_PAIR_COMPARISON",
+      "seed": 42,
+      "mode": "serial42",
+      "started": 1793605980.4268336,
+      "optimizer_started": 726,
+      "optimizer_completed": 726,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "batches": 362,
+          "trace_sha256": "8e7f195a9770526b6f19bf4296dba28d4946f61986bb30a94ced2775093b90b1",
+          "started": 1793605988.1216354,
+          "ended": 1793606104.589611,
+          "elapsed_seconds": 116.46797561645508,
+          "compute_span_seconds": 67.49990767898817,
+          "extra_state_digest_overhead_in_elapsed": true
+        }
+      ],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage6.pth": "369d3bd2873c3eec8fd36629c132353751105f6a9e525bec22e9412e71c32f3d",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage7.pth": "8a8178621e92176652e36717bd2ed91f5d2a21905ae50e02cdccfd03f5a3534c",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage8.pth": "70723d33f4e03f3347257d243f4c3a137069e0fcdb59b146cb85850645cf8f4f",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage9.pth": "7c4b8645404a07d0c331e9e64edc9dab027ed7cc11088c847f6cfa04111255cb",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task6.pth": "16d9375d6369f5f118e565c484b8e663e3073d8dc7e777d3bf8aa3ab4117c2aa",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task7.pth": "30a17589e9df7f28e02339d651fa2f32b2f0d242c154399a0ba319a6e281fa30",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task8.pth": "5f82f72a3f637baee20a8bce33b0a1920b8eb31520a303bd0d82247a32bcb223"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37
+      },
+      "ended": 1793606105.7956655
+    }
+  },
+  "driver": {
+    "pid": 5337,
+    "state": "S",
+    "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/driver.py "
+  },
+  "workers": [
+    null,
+    {
+      "pid": 5485,
+      "state": "R",
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/worker.py /data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/serial43_43 43 serial43 9 0.05 "
+    }
+  ],
+  "logs": {
+    "driver.log": "",
+    "serial43_43/worker.log": "[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\n",
+    "serial42_42/worker.log": "[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\nGym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.\nPlease upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.\nSee the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.\n/data/mlr_ifa/env/lib/python3.8/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.\n  warnings.warn(\n[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\ntemporal_transformer.decoder.wte.weight\ntemporal_transformer.decoder.wpe.weight\ntemporal_transformer.decoder.h.0.ln_1.weight\ntemporal_transformer.decoder.h.0.ln_1.bias\ntemporal_transformer.decoder.h.0.attn.c_attn.weight\ntemporal_transformer.decoder.h.0.attn.c_attn.bias\ntemporal_transformer.decoder.h.0.attn.c_proj.weight\ntemporal_transformer.decoder.h.0.attn.c_proj.bias\ntemporal_transformer.decoder.h.0.ln_2.weight\ntemporal_transformer.decoder.h.0.ln_2.bias\ntemporal_transformer.decoder.h.0.mlp.c_fc.weight\ntemporal_transformer.decoder.h.0.mlp.c_fc.bias\ntemporal_transformer.decoder.h.0.mlp.c_proj.weight\ntemporal_transformer.decoder.h.0.mlp.c_proj.bias\ntemporal_transformer.decoder.h.1.ln_1.weight\ntemporal_transformer.decoder.h.1.ln_1.bias\ntemporal_transformer.decoder.h.1.attn.c_attn.weight\ntemporal_transformer.decoder.h.1.attn.c_attn.bias\ntemporal_transformer.decoder.h.1.attn.c_proj.weight\ntemporal_transformer.decoder.h.1.attn.c_proj.bias\ntemporal_transformer.decoder.h.1.ln_2.weight\ntemporal_transformer.decoder.h.1.ln_2.bias\ntemporal_transformer.decoder.h.1.mlp.c_fc.weight\ntemporal_transformer.decoder.h.1.mlp.c_fc.bias\ntemporal_transformer.decoder.h.1.mlp.c_proj.weight\ntemporal_transformer.decoder.h.1.mlp.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_1.weight\ntemporal_transformer.decoder.h.2.ln_1.bias\ntemporal_transformer.decoder.h.2.attn.c_attn.weight\ntemporal_transformer.decoder.h.2.attn.c_attn.bias\ntemporal_transformer.decoder.h.2.attn.c_proj.weight\ntemporal_transformer.decoder.h.2.attn.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_2.weight\ntemporal_transformer.decoder.h.2.ln_2.bias\ntemporal_transformer.decoder.h.2.mlp.c_fc.weight\ntemporal_transformer.decoder.h.2.mlp.c_fc.bias\ntemporal_transformer.decoder.h.2.mlp.c_proj.weight\ntemporal_transformer.decoder.h.2.mlp.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_1.weight\ntemporal_transformer.decoder.h.3.ln_1.bias\ntemporal_transformer.decoder.h.3.attn.c_attn.weight\ntemporal_transformer.decoder.h.3.attn.c_attn.bias\ntemporal_transformer.decoder.h.3.attn.c_proj.weight\ntemporal_transformer.decoder.h.3.attn.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_2.weight\ntemporal_transformer.decoder.h.3.ln_2.bias\ntemporal_transformer.decoder.h.3.mlp.c_fc.weight\ntemporal_transformer.decoder.h.3.mlp.c_fc.bias\ntemporal_transformer.decoder.h.3.mlp.c_proj.weight\ntemporal_transformer.decoder.h.3.mlp.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_1.weight\ntemporal_transformer.decoder.h.4.ln_1.bias\ntemporal_transformer.decoder.h.4.attn.c_attn.weight\ntemporal_transformer.decoder.h.4.attn.c_attn.bias\ntemporal_transformer.decoder.h.4.attn.c_proj.weight\ntemporal_transformer.decoder.h.4.attn.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_2.weight\ntemporal_transformer.decoder.h.4.ln_2.bias\ntemporal_transformer.decoder.h.4.mlp.c_fc.weight\ntemporal_transformer.decoder.h.4.mlp.c_fc.bias\ntemporal_transformer.decoder.h.4.mlp.c_proj.weight\ntemporal_transformer.decoder.h.4.mlp.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_1.weight\ntemporal_transformer.decoder.h.5.ln_1.bias\ntemporal_transformer.decoder.h.5.attn.c_attn.weight\ntemporal_transformer.decoder.h.5.attn.c_attn.bias\ntemporal_transformer.decoder.h.5.attn.c_proj.weight\ntemporal_transformer.decoder.h.5.attn.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_2.weight\ntemporal_transformer.decoder.h.5.ln_2.bias\ntemporal_transformer.decoder.h.5.mlp.c_fc.weight\ntemporal_transformer.decoder.h.5.mlp.c_fc.bias\ntemporal_transformer.decoder.h.5.mlp.c_proj.weight\ntemporal_transformer.decoder.h.5.mlp.c_proj.bias\ntemporal_transformer.decoder.ln_f.weight\ntemporal_transformer.decoder.ln_f.bias\npolicy_head.share.0.weight\npolicy_head.share.0.bias\npolicy_head.share.2.weight\npolicy_head.share.2.bias\npolicy_head.share.4.weight\npolicy_head.share.4.bias\npolicy_head.mean_layer.weight\npolicy_head.mean_layer.bias\npolicy_head.logstd_layer.weight\npolicy_head.logstd_layer.bias\npolicy_head.logits_layer.weight\npolicy_head.logits_layer.bias\n"
+  },
+  "optimizer_calls": 0,
+  "environments": 0,
+  "production_writes": false
+}

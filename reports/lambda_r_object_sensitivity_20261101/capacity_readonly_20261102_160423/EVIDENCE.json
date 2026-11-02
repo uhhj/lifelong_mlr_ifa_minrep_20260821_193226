@@ -1,0 +1,916 @@
+{
+  "status": "READ_EXISTING_PARALLEL_TIMING",
+  "observed": 1793606663.9394855,
+  "files": {
+    "SOURCE_MANIFEST.json": {
+      "/data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/worker.py": "6056a1ea498d777928a7e06e258d0a7d24d0eb027306f7f8ee7bb18c6b35e673",
+      "/data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/driver.py": "b2aba95a62459aa9000a2485f992642cec284999dfa488b67364256727c82346"
+    },
+    "serial42_0.05_9_GO.json": {
+      "time": 1793606508.3468423
+    },
+    "STARTED.json": {
+      "pid": 5978,
+      "time": 1793606500.2401936,
+      "scope": "Stage9 .05 two independent seed paths; current production continues, so background contention is present"
+    },
+    "serial43_0.05_9_GO.json": {
+      "time": 1793606588.4243052
+    },
+    "EVENTS.json": [
+      {
+        "event": "launch",
+        "seed": 42,
+        "mode": "serial42",
+        "pid": 5980,
+        "time": 1793606500.2593863,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 54,
+            "steps": 27958,
+            "physical_optimizer_calls": 40216,
+            "time": 1793606483.7875848,
+            "pid": 4694
+          }
+        }
+      },
+      {
+        "event": "phase_complete",
+        "mode": "serial42",
+        "time": 1793606580.3255897,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 56,
+            "steps": 28412,
+            "physical_optimizer_calls": 41124,
+            "time": 1793606552.7984269,
+            "pid": 4694
+          }
+        }
+      },
+      {
+        "event": "launch",
+        "seed": 43,
+        "mode": "serial43",
+        "pid": 6042,
+        "time": 1793606580.343277,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 56,
+            "steps": 28412,
+            "physical_optimizer_calls": 41124,
+            "time": 1793606552.7984269,
+            "pid": 4694
+          }
+        }
+      },
+      {
+        "event": "phase_complete",
+        "mode": "serial43",
+        "time": 1793606659.5116193,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 58,
+            "steps": 28866,
+            "physical_optimizer_calls": 42032,
+            "time": 1793606625.0580869,
+            "pid": 4694
+          }
+        }
+      },
+      {
+        "event": "launch",
+        "seed": 42,
+        "mode": "parallel",
+        "pid": 6104,
+        "time": 1793606659.5332446,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 58,
+            "steps": 28866,
+            "physical_optimizer_calls": 42032,
+            "time": 1793606625.0580869,
+            "pid": 4694
+          }
+        }
+      },
+      {
+        "event": "launch",
+        "seed": 43,
+        "mode": "parallel",
+        "pid": 6105,
+        "time": 1793606659.5350895,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 58,
+            "steps": 28866,
+            "physical_optimizer_calls": 42032,
+            "time": 1793606625.0580869,
+            "pid": 4694
+          }
+        }
+      }
+    ],
+    "DISPATCH.json": {
+      "status": "ISOLATED_PARALLEL_FEASIBILITY_DISPATCHED",
+      "pid": 5978,
+      "time": 1793606500.2098958,
+      "directory": "/data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1",
+      "files": {
+        "/data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/worker.py": "6056a1ea498d777928a7e06e258d0a7d24d0eb027306f7f8ee7bb18c6b35e673",
+        "/data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/driver.py": "b2aba95a62459aa9000a2485f992642cec284999dfa488b67364256727c82346"
+      },
+      "contracts": {
+        "CONTRACT.json": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
+        "engineering_device_snapshot_20261101_v1/CONTRACT.json": "b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c",
+        "engineering_resume_3090_20261102_v1/CONTRACT.json": "46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3",
+        "engineering_checks_3090_20261102_v1/CONTRACT.json": "143bab881835c8f91a3c04129e1fbdf88da6ac7d55b10524eaa591417ff2b254"
+      },
+      "memory_hierarchy": {
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice/session-55.scope": {
+          "limit": 9223372036854771712,
+          "usage": 23351296
+        },
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice": {
+          "limit": 9223372036854771712,
+          "usage": 10836463616
+        },
+        "/sys/fs/cgroup/memory/user.slice": {
+          "limit": 9223372036854771712,
+          "usage": 12871569408
+        },
+        "/sys/fs/cgroup/memory": {
+          "limit": 9223372036854771712,
+          "usage": 13215477760
+        },
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice/session-42.scope": {
+          "limit": 9223372036854771712,
+          "usage": 6422978560
+        }
+      },
+      "max_optimizer_calls": 2896,
+      "max_extra_autograd": 0,
+      "environments": 0,
+      "production_signals": 0,
+      "production_changed": false
+    },
+    "METRICS.json": [
+      {
+        "time": 1793606500.280262,
+        "gpu": "26, 3032, 53, 145.61",
+        "exit": 0
+      },
+      {
+        "time": 1793606502.3030245,
+        "gpu": "32, 3032, 53, 148.84",
+        "exit": 0
+      },
+      {
+        "time": 1793606504.3246202,
+        "gpu": "33, 3032, 53, 147.73",
+        "exit": 0
+      },
+      {
+        "time": 1793606506.3442059,
+        "gpu": "36, 3887, 56, 209.13",
+        "exit": 0
+      },
+      {
+        "time": 1793606508.3629334,
+        "gpu": "36, 4133, 54, 176.64",
+        "exit": 0
+      },
+      {
+        "time": 1793606510.3817284,
+        "gpu": "94, 5417, 59, 260.11",
+        "exit": 0
+      },
+      {
+        "time": 1793606512.400702,
+        "gpu": "89, 5779, 60, 261.93",
+        "exit": 0
+      },
+      {
+        "time": 1793606514.419134,
+        "gpu": "91, 6039, 60, 258.96",
+        "exit": 0
+      },
+      {
+        "time": 1793606516.438175,
+        "gpu": "78, 6051, 59, 251.38",
+        "exit": 0
+      },
+      {
+        "time": 1793606518.4567893,
+        "gpu": "84, 6051, 59, 250.04",
+        "exit": 0
+      },
+      {
+        "time": 1793606520.4763825,
+        "gpu": "87, 6051, 62, 254.92",
+        "exit": 0
+      },
+      {
+        "time": 1793606522.4971437,
+        "gpu": "85, 6051, 62, 253.85",
+        "exit": 0
+      },
+      {
+        "time": 1793606524.5197294,
+        "gpu": "83, 6051, 62, 257.37",
+        "exit": 0
+      },
+      {
+        "time": 1793606526.5429306,
+        "gpu": "96, 6051, 63, 259.27",
+        "exit": 0
+      },
+      {
+        "time": 1793606528.564512,
+        "gpu": "95, 6051, 64, 259.50",
+        "exit": 0
+      },
+      {
+        "time": 1793606530.5869396,
+        "gpu": "95, 6051, 64, 263.34",
+        "exit": 0
+      },
+      {
+        "time": 1793606532.6064117,
+        "gpu": "90, 6051, 63, 258.17",
+        "exit": 0
+      },
+      {
+        "time": 1793606534.626307,
+        "gpu": "87, 6051, 64, 260.39",
+        "exit": 0
+      },
+      {
+        "time": 1793606536.6454613,
+        "gpu": "93, 6051, 64, 265.72",
+        "exit": 0
+      },
+      {
+        "time": 1793606538.6651607,
+        "gpu": "82, 6051, 64, 261.97",
+        "exit": 0
+      },
+      {
+        "time": 1793606540.6867807,
+        "gpu": "94, 6051, 64, 265.17",
+        "exit": 0
+      },
+      {
+        "time": 1793606542.7085235,
+        "gpu": "94, 6051, 64, 264.45",
+        "exit": 0
+      },
+      {
+        "time": 1793606544.7290697,
+        "gpu": "89, 6051, 64, 260.20",
+        "exit": 0
+      },
+      {
+        "time": 1793606546.748127,
+        "gpu": "90, 6051, 65, 255.99",
+        "exit": 0
+      },
+      {
+        "time": 1793606548.769148,
+        "gpu": "86, 6051, 65, 254.21",
+        "exit": 0
+      },
+      {
+        "time": 1793606550.7891085,
+        "gpu": "85, 6051, 64, 255.30",
+        "exit": 0
+      },
+      {
+        "time": 1793606552.8106754,
+        "gpu": "21, 6051, 63, 217.74",
+        "exit": 0
+      },
+      {
+        "time": 1793606554.8313477,
+        "gpu": "86, 6051, 65, 249.63",
+        "exit": 0
+      },
+      {
+        "time": 1793606556.8517325,
+        "gpu": "81, 6051, 65, 247.12",
+        "exit": 0
+      },
+      {
+        "time": 1793606558.872507,
+        "gpu": "84, 6051, 65, 252.30",
+        "exit": 0
+      },
+      {
+        "time": 1793606560.8928757,
+        "gpu": "83, 6051, 65, 253.97",
+        "exit": 0
+      },
+      {
+        "time": 1793606562.9139488,
+        "gpu": "81, 6051, 66, 256.37",
+        "exit": 0
+      },
+      {
+        "time": 1793606564.9324036,
+        "gpu": "91, 6051, 66, 257.71",
+        "exit": 0
+      },
+      {
+        "time": 1793606566.9538536,
+        "gpu": "94, 6051, 66, 256.41",
+        "exit": 0
+      },
+      {
+        "time": 1793606568.9730804,
+        "gpu": "91, 6051, 66, 263.76",
+        "exit": 0
+      },
+      {
+        "time": 1793606570.9943702,
+        "gpu": "88, 6051, 66, 259.68",
+        "exit": 0
+      },
+      {
+        "time": 1793606573.01706,
+        "gpu": "88, 6051, 66, 259.57",
+        "exit": 0
+      },
+      {
+        "time": 1793606575.0370412,
+        "gpu": "94, 6051, 66, 265.84",
+        "exit": 0
+      },
+      {
+        "time": 1793606577.056736,
+        "gpu": "86, 6051, 65, 262.07",
+        "exit": 0
+      },
+      {
+        "time": 1793606580.359145,
+        "gpu": "36, 3032, 64, 208.38",
+        "exit": 0
+      },
+      {
+        "time": 1793606582.3802803,
+        "gpu": "33, 3032, 60, 158.06",
+        "exit": 0
+      },
+      {
+        "time": 1793606584.4015992,
+        "gpu": "55, 3399, 61, 155.12",
+        "exit": 0
+      },
+      {
+        "time": 1793606586.4212856,
+        "gpu": "38, 4047, 62, 209.45",
+        "exit": 0
+      },
+      {
+        "time": 1793606588.4419165,
+        "gpu": "0, 4133, 58, 147.40",
+        "exit": 0
+      },
+      {
+        "time": 1793606590.4684565,
+        "gpu": "80, 5357, 64, 247.11",
+        "exit": 0
+      },
+      {
+        "time": 1793606592.492625,
+        "gpu": "91, 5777, 64, 257.88",
+        "exit": 0
+      },
+      {
+        "time": 1793606594.5126095,
+        "gpu": "91, 6031, 65, 257.01",
+        "exit": 0
+      },
+      {
+        "time": 1793606596.5321724,
+        "gpu": "92, 6031, 65, 266.48",
+        "exit": 0
+      },
+      {
+        "time": 1793606598.5526464,
+        "gpu": "83, 6031, 65, 260.46",
+        "exit": 0
+      },
+      {
+        "time": 1793606600.5729647,
+        "gpu": "92, 6031, 65, 260.23",
+        "exit": 0
+      },
+      {
+        "time": 1793606602.5925837,
+        "gpu": "92, 6031, 65, 263.40",
+        "exit": 0
+      },
+      {
+        "time": 1793606604.6126711,
+        "gpu": "92, 6031, 66, 260.08",
+        "exit": 0
+      },
+      {
+        "time": 1793606606.6321511,
+        "gpu": "59, 6031, 66, 254.17",
+        "exit": 0
+      },
+      {
+        "time": 1793606608.651394,
+        "gpu": "92, 6031, 66, 260.66",
+        "exit": 0
+      },
+      {
+        "time": 1793606610.6705422,
+        "gpu": "86, 6031, 66, 263.42",
+        "exit": 0
+      },
+      {
+        "time": 1793606612.689835,
+        "gpu": "96, 6031, 67, 265.58",
+        "exit": 0
+      },
+      {
+        "time": 1793606614.7092535,
+        "gpu": "90, 6031, 66, 260.40",
+        "exit": 0
+      },
+      {
+        "time": 1793606616.7283921,
+        "gpu": "89, 6031, 67, 267.29",
+        "exit": 0
+      },
+      {
+        "time": 1793606618.7481334,
+        "gpu": "94, 6031, 67, 265.37",
+        "exit": 0
+      },
+      {
+        "time": 1793606620.8774838,
+        "gpu": "93, 6031, 67, 266.31",
+        "exit": 0
+      },
+      {
+        "time": 1793606622.8973584,
+        "gpu": "92, 6031, 66, 265.69",
+        "exit": 0
+      },
+      {
+        "time": 1793606624.9181597,
+        "gpu": "26, 6031, 64, 221.05",
+        "exit": 0
+      },
+      {
+        "time": 1793606626.9377728,
+        "gpu": "94, 6031, 66, 256.46",
+        "exit": 0
+      },
+      {
+        "time": 1793606628.9604707,
+        "gpu": "88, 6031, 67, 258.95",
+        "exit": 0
+      },
+      {
+        "time": 1793606630.9791143,
+        "gpu": "91, 6031, 67, 267.93",
+        "exit": 0
+      },
+      {
+        "time": 1793606632.9981246,
+        "gpu": "85, 6031, 67, 262.65",
+        "exit": 0
+      },
+      {
+        "time": 1793606635.0170538,
+        "gpu": "92, 6031, 68, 263.44",
+        "exit": 0
+      },
+      {
+        "time": 1793606637.035842,
+        "gpu": "95, 6031, 67, 270.90",
+        "exit": 0
+      },
+      {
+        "time": 1793606639.0549235,
+        "gpu": "82, 6031, 67, 261.98",
+        "exit": 0
+      },
+      {
+        "time": 1793606641.0738497,
+        "gpu": "90, 6031, 67, 270.02",
+        "exit": 0
+      },
+      {
+        "time": 1793606643.0953321,
+        "gpu": "93, 6031, 66, 268.35",
+        "exit": 0
+      },
+      {
+        "time": 1793606645.1163497,
+        "gpu": "93, 6031, 67, 261.86",
+        "exit": 0
+      },
+      {
+        "time": 1793606647.1360357,
+        "gpu": "91, 6031, 68, 266.98",
+        "exit": 0
+      },
+      {
+        "time": 1793606649.1605148,
+        "gpu": "92, 6031, 67, 265.46",
+        "exit": 0
+      },
+      {
+        "time": 1793606651.1814978,
+        "gpu": "86, 6031, 67, 258.99",
+        "exit": 0
+      },
+      {
+        "time": 1793606653.2015219,
+        "gpu": "91, 6031, 67, 257.37",
+        "exit": 0
+      },
+      {
+        "time": 1793606655.2234554,
+        "gpu": "89, 6031, 66, 252.85",
+        "exit": 0
+      },
+      {
+        "time": 1793606657.2441685,
+        "gpu": "85, 6031, 67, 258.26",
+        "exit": 0
+      },
+      {
+        "time": 1793606659.553084,
+        "gpu": "38, 3032, 64, 202.52",
+        "exit": 0
+      },
+      {
+        "time": 1793606661.5724213,
+        "gpu": "33, 3032, 61, 151.54",
+        "exit": 0
+      },
+      {
+        "time": 1793606663.592864,
+        "gpu": "59, 3848, 63, 165.05",
+        "exit": 0
+      }
+    ],
+    "parallel_42/PROGRESS.json": {
+      "status": "RUNNING",
+      "seed": 42,
+      "mode": "parallel",
+      "started": 1793606661.5672846,
+      "optimizer_started": 0,
+      "optimizer_completed": 0,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage6.pth": "369d3bd2873c3eec8fd36629c132353751105f6a9e525bec22e9412e71c32f3d",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage7.pth": "8a8178621e92176652e36717bd2ed91f5d2a21905ae50e02cdccfd03f5a3534c",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage8.pth": "70723d33f4e03f3347257d243f4c3a137069e0fcdb59b146cb85850645cf8f4f",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage9.pth": "7c4b8645404a07d0c331e9e64edc9dab027ed7cc11088c847f6cfa04111255cb",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task6.pth": "16d9375d6369f5f118e565c484b8e663e3073d8dc7e777d3bf8aa3ab4117c2aa",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task7.pth": "30a17589e9df7f28e02339d651fa2f32b2f0d242c154399a0ba319a6e281fa30",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task8.pth": "5f82f72a3f637baee20a8bce33b0a1920b8eb31520a303bd0d82247a32bcb223"
+      }
+    },
+    "serial43_43/SCHEDULE_S_9.json": {
+      "status": "PASS_ACTUAL_SCHEDULE",
+      "epochs": 100,
+      "batches": 362,
+      "total_steps": 36200,
+      "warmup_steps": 500
+    },
+    "serial43_43/PROGRESS.json": {
+      "status": "PASS_WORKER_EXECUTION_PENDING_PAIR_COMPARISON",
+      "seed": 43,
+      "mode": "serial43",
+      "started": 1793606582.6065843,
+      "optimizer_started": 724,
+      "optimizer_completed": 724,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "batches": 362,
+          "trace_sha256": "0193249366bb842a668cb1eb3f471946bfbf9e3734428436aa5be5c2f7b5e383",
+          "started": 1793606588.4293048,
+          "ended": 1793606657.7986884,
+          "elapsed_seconds": 69.3693835735321,
+          "compute_span_seconds": 68.50198714799808,
+          "extra_state_digest_overhead_in_elapsed": false
+        }
+      ],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage6.pth": "c07c193f464b4b2b11b86abb102278b8d6406dbbbf5005b2628c8bdff172cd5b",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage7.pth": "9d85e382b5a128718b2c541b5acab71eccb72d46d6e745971992b479e79ba853",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage8.pth": "5fd40d9f808562a64402138cfcb5b3a573045f81616699e0c364b6dabbbec097",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage9.pth": "675ba4ba297a072bfed4aa26a140fb00ade3951204879a92c6cfbfeaa5591dc0",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task6.pth": "c56f6fd3446af27f82f18d416a7f7d0341dd259ad05d176d4be156866c19d923",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task7.pth": "4d16748efa97fd59bbc74d7d3b380936acf7e68ab4170857854c31f1bd9e51a7",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task8.pth": "5c0ce43104d4c5ec3a7fbd52efa6dcc1e6b6f310b384f618d9f2a210d9e5c15d"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37
+      },
+      "ended": 1793606658.910249
+    },
+    "serial43_43/0.05_9_READY.json": {
+      "time": 1793606587.4251528,
+      "initial": "bd00b242f5d8541c419efb402f15d9bb37d975a5d2f7e090fe0891a04ec6bec8"
+    },
+    "serial43_43/0.05_9_DONE.json": {
+      "lambda_R": 0.05,
+      "stage": 9,
+      "batches": 362,
+      "trace_sha256": "0193249366bb842a668cb1eb3f471946bfbf9e3734428436aa5be5c2f7b5e383",
+      "started": 1793606588.4293048,
+      "ended": 1793606657.7986884,
+      "elapsed_seconds": 69.3693835735321,
+      "compute_span_seconds": 68.50198714799808,
+      "extra_state_digest_overhead_in_elapsed": false
+    },
+    "serial43_43/RESULT.json": {
+      "status": "PASS_WORKER_EXECUTION_PENDING_PAIR_COMPARISON",
+      "seed": 43,
+      "mode": "serial43",
+      "started": 1793606582.6065843,
+      "optimizer_started": 724,
+      "optimizer_completed": 724,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "batches": 362,
+          "trace_sha256": "0193249366bb842a668cb1eb3f471946bfbf9e3734428436aa5be5c2f7b5e383",
+          "started": 1793606588.4293048,
+          "ended": 1793606657.7986884,
+          "elapsed_seconds": 69.3693835735321,
+          "compute_span_seconds": 68.50198714799808,
+          "extra_state_digest_overhead_in_elapsed": false
+        }
+      ],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage6.pth": "c07c193f464b4b2b11b86abb102278b8d6406dbbbf5005b2628c8bdff172cd5b",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage7.pth": "9d85e382b5a128718b2c541b5acab71eccb72d46d6e745971992b479e79ba853",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage8.pth": "5fd40d9f808562a64402138cfcb5b3a573045f81616699e0c364b6dabbbec097",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage9.pth": "675ba4ba297a072bfed4aa26a140fb00ade3951204879a92c6cfbfeaa5591dc0",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task6.pth": "c56f6fd3446af27f82f18d416a7f7d0341dd259ad05d176d4be156866c19d923",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task7.pth": "4d16748efa97fd59bbc74d7d3b380936acf7e68ab4170857854c31f1bd9e51a7",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task8.pth": "5c0ce43104d4c5ec3a7fbd52efa6dcc1e6b6f310b384f618d9f2a210d9e5c15d"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37
+      },
+      "ended": 1793606658.910249
+    },
+    "parallel_43/PROGRESS.json": {
+      "status": "RUNNING",
+      "seed": 43,
+      "mode": "parallel",
+      "started": 1793606661.794315,
+      "optimizer_started": 0,
+      "optimizer_completed": 0,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage6.pth": "c07c193f464b4b2b11b86abb102278b8d6406dbbbf5005b2628c8bdff172cd5b",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage7.pth": "9d85e382b5a128718b2c541b5acab71eccb72d46d6e745971992b479e79ba853",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage8.pth": "5fd40d9f808562a64402138cfcb5b3a573045f81616699e0c364b6dabbbec097",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/stage9.pth": "675ba4ba297a072bfed4aa26a140fb00ade3951204879a92c6cfbfeaa5591dc0",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task6.pth": "c56f6fd3446af27f82f18d416a7f7d0341dd259ad05d176d4be156866c19d923",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task7.pth": "4d16748efa97fd59bbc74d7d3b380936acf7e68ab4170857854c31f1bd9e51a7",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/S/memory/task8.pth": "5c0ce43104d4c5ec3a7fbd52efa6dcc1e6b6f310b384f618d9f2a210d9e5c15d"
+      }
+    },
+    "serial42_42/SCHEDULE_S_9.json": {
+      "status": "PASS_ACTUAL_SCHEDULE",
+      "epochs": 100,
+      "batches": 362,
+      "total_steps": 36200,
+      "warmup_steps": 500
+    },
+    "serial42_42/PROGRESS.json": {
+      "status": "PASS_WORKER_EXECUTION_PENDING_PAIR_COMPARISON",
+      "seed": 42,
+      "mode": "serial42",
+      "started": 1793606502.7317748,
+      "optimizer_started": 724,
+      "optimizer_completed": 724,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "batches": 362,
+          "trace_sha256": "79e8199083f62aa85e3b0249e560db47c08e1caea7dbe00bc2d00aeb69e2af54",
+          "started": 1793606508.3622038,
+          "ended": 1793606578.455792,
+          "elapsed_seconds": 70.09358811378479,
+          "compute_span_seconds": 69.19980581400159,
+          "extra_state_digest_overhead_in_elapsed": false
+        }
+      ],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage6.pth": "369d3bd2873c3eec8fd36629c132353751105f6a9e525bec22e9412e71c32f3d",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage7.pth": "8a8178621e92176652e36717bd2ed91f5d2a21905ae50e02cdccfd03f5a3534c",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage8.pth": "70723d33f4e03f3347257d243f4c3a137069e0fcdb59b146cb85850645cf8f4f",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage9.pth": "7c4b8645404a07d0c331e9e64edc9dab027ed7cc11088c847f6cfa04111255cb",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task6.pth": "16d9375d6369f5f118e565c484b8e663e3073d8dc7e777d3bf8aa3ab4117c2aa",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task7.pth": "30a17589e9df7f28e02339d651fa2f32b2f0d242c154399a0ba319a6e281fa30",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task8.pth": "5f82f72a3f637baee20a8bce33b0a1920b8eb31520a303bd0d82247a32bcb223"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37
+      },
+      "ended": 1793606579.621425
+    },
+    "serial42_42/0.05_9_READY.json": {
+      "time": 1793606507.5102763,
+      "initial": "99caf18aaa6a87dfc02fc65f55df407e3d96f144ec448bd32c7edb5c18cdaf81"
+    },
+    "serial42_42/0.05_9_DONE.json": {
+      "lambda_R": 0.05,
+      "stage": 9,
+      "batches": 362,
+      "trace_sha256": "79e8199083f62aa85e3b0249e560db47c08e1caea7dbe00bc2d00aeb69e2af54",
+      "started": 1793606508.3622038,
+      "ended": 1793606578.455792,
+      "elapsed_seconds": 70.09358811378479,
+      "compute_span_seconds": 69.19980581400159,
+      "extra_state_digest_overhead_in_elapsed": false
+    },
+    "serial42_42/RESULT.json": {
+      "status": "PASS_WORKER_EXECUTION_PENDING_PAIR_COMPARISON",
+      "seed": 42,
+      "mode": "serial42",
+      "started": 1793606502.7317748,
+      "optimizer_started": 724,
+      "optimizer_completed": 724,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [
+        {
+          "lambda_R": 0.05,
+          "stage": 9,
+          "batches": 362,
+          "trace_sha256": "79e8199083f62aa85e3b0249e560db47c08e1caea7dbe00bc2d00aeb69e2af54",
+          "started": 1793606508.3622038,
+          "ended": 1793606578.455792,
+          "elapsed_seconds": 70.09358811378479,
+          "compute_span_seconds": 69.19980581400159,
+          "extra_state_digest_overhead_in_elapsed": false
+        }
+      ],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage6.pth": "369d3bd2873c3eec8fd36629c132353751105f6a9e525bec22e9412e71c32f3d",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage7.pth": "8a8178621e92176652e36717bd2ed91f5d2a21905ae50e02cdccfd03f5a3534c",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage8.pth": "70723d33f4e03f3347257d243f4c3a137069e0fcdb59b146cb85850645cf8f4f",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage9.pth": "7c4b8645404a07d0c331e9e64edc9dab027ed7cc11088c847f6cfa04111255cb",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task6.pth": "16d9375d6369f5f118e565c484b8e663e3073d8dc7e777d3bf8aa3ab4117c2aa",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task7.pth": "30a17589e9df7f28e02339d651fa2f32b2f0d242c154399a0ba319a6e281fa30",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task8.pth": "5f82f72a3f637baee20a8bce33b0a1920b8eb31520a303bd0d82247a32bcb223"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 362,
+        "blocks": 37
+      },
+      "ended": 1793606579.621425
+    }
+  },
+  "source_hashes": {
+    "/data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/worker.py": "6056a1ea498d777928a7e06e258d0a7d24d0eb027306f7f8ee7bb18c6b35e673",
+    "/data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/driver.py": "b2aba95a62459aa9000a2485f992642cec284999dfa488b67364256727c82346"
+  },
+  "driver": {
+    "pid": 5978,
+    "state": "S",
+    "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/driver.py "
+  },
+  "workers": [
+    null,
+    null,
+    {
+      "pid": 6104,
+      "state": "R",
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/worker.py /data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/parallel_42 42 parallel 9 0.05 "
+    },
+    {
+      "pid": 6105,
+      "state": "R",
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/worker.py /data/mlr_ifa/diagnostics/lambda_parallel_timing_20261102_v1/parallel_43 43 parallel 9 0.05 "
+    }
+  ],
+  "logs": {
+    "driver.log": "",
+    "parallel_42/worker.log": "[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\n",
+    "serial43_43/worker.log": "al_transformer.decoder.h.1.ln_2.weight\ntemporal_transformer.decoder.h.1.ln_2.bias\ntemporal_transformer.decoder.h.1.mlp.c_fc.weight\ntemporal_transformer.decoder.h.1.mlp.c_fc.bias\ntemporal_transformer.decoder.h.1.mlp.c_proj.weight\ntemporal_transformer.decoder.h.1.mlp.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_1.weight\ntemporal_transformer.decoder.h.2.ln_1.bias\ntemporal_transformer.decoder.h.2.attn.c_attn.weight\ntemporal_transformer.decoder.h.2.attn.c_attn.bias\ntemporal_transformer.decoder.h.2.attn.c_proj.weight\ntemporal_transformer.decoder.h.2.attn.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_2.weight\ntemporal_transformer.decoder.h.2.ln_2.bias\ntemporal_transformer.decoder.h.2.mlp.c_fc.weight\ntemporal_transformer.decoder.h.2.mlp.c_fc.bias\ntemporal_transformer.decoder.h.2.mlp.c_proj.weight\ntemporal_transformer.decoder.h.2.mlp.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_1.weight\ntemporal_transformer.decoder.h.3.ln_1.bias\ntemporal_transformer.decoder.h.3.attn.c_attn.weight\ntemporal_transformer.decoder.h.3.attn.c_attn.bias\ntemporal_transformer.decoder.h.3.attn.c_proj.weight\ntemporal_transformer.decoder.h.3.attn.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_2.weight\ntemporal_transformer.decoder.h.3.ln_2.bias\ntemporal_transformer.decoder.h.3.mlp.c_fc.weight\ntemporal_transformer.decoder.h.3.mlp.c_fc.bias\ntemporal_transformer.decoder.h.3.mlp.c_proj.weight\ntemporal_transformer.decoder.h.3.mlp.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_1.weight\ntemporal_transformer.decoder.h.4.ln_1.bias\ntemporal_transformer.decoder.h.4.attn.c_attn.weight\ntemporal_transformer.decoder.h.4.attn.c_attn.bias\ntemporal_transformer.decoder.h.4.attn.c_proj.weight\ntemporal_transformer.decoder.h.4.attn.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_2.weight\ntemporal_transformer.decoder.h.4.ln_2.bias\ntemporal_transformer.decoder.h.4.mlp.c_fc.weight\ntemporal_transformer.decoder.h.4.mlp.c_fc.bias\ntemporal_transformer.decoder.h.4.mlp.c_proj.weight\ntemporal_transformer.decoder.h.4.mlp.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_1.weight\ntemporal_transformer.decoder.h.5.ln_1.bias\ntemporal_transformer.decoder.h.5.attn.c_attn.weight\ntemporal_transformer.decoder.h.5.attn.c_attn.bias\ntemporal_transformer.decoder.h.5.attn.c_proj.weight\ntemporal_transformer.decoder.h.5.attn.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_2.weight\ntemporal_transformer.decoder.h.5.ln_2.bias\ntemporal_transformer.decoder.h.5.mlp.c_fc.weight\ntemporal_transformer.decoder.h.5.mlp.c_fc.bias\ntemporal_transformer.decoder.h.5.mlp.c_proj.weight\ntemporal_transformer.decoder.h.5.mlp.c_proj.bias\ntemporal_transformer.decoder.ln_f.weight\ntemporal_transformer.decoder.ln_f.bias\npolicy_head.share.0.weight\npolicy_head.share.0.bias\npolicy_head.share.2.weight\npolicy_head.share.2.bias\npolicy_head.share.4.weight\npolicy_head.share.4.bias\npolicy_head.mean_layer.weight\npolicy_head.mean_layer.bias\npolicy_head.logstd_layer.weight\npolicy_head.logstd_layer.bias\npolicy_head.logits_layer.weight\npolicy_head.logits_layer.bias\n",
+    "parallel_43/worker.log": "[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\n",
+    "serial42_42/worker.log": "al_transformer.decoder.h.1.ln_2.weight\ntemporal_transformer.decoder.h.1.ln_2.bias\ntemporal_transformer.decoder.h.1.mlp.c_fc.weight\ntemporal_transformer.decoder.h.1.mlp.c_fc.bias\ntemporal_transformer.decoder.h.1.mlp.c_proj.weight\ntemporal_transformer.decoder.h.1.mlp.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_1.weight\ntemporal_transformer.decoder.h.2.ln_1.bias\ntemporal_transformer.decoder.h.2.attn.c_attn.weight\ntemporal_transformer.decoder.h.2.attn.c_attn.bias\ntemporal_transformer.decoder.h.2.attn.c_proj.weight\ntemporal_transformer.decoder.h.2.attn.c_proj.bias\ntemporal_transformer.decoder.h.2.ln_2.weight\ntemporal_transformer.decoder.h.2.ln_2.bias\ntemporal_transformer.decoder.h.2.mlp.c_fc.weight\ntemporal_transformer.decoder.h.2.mlp.c_fc.bias\ntemporal_transformer.decoder.h.2.mlp.c_proj.weight\ntemporal_transformer.decoder.h.2.mlp.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_1.weight\ntemporal_transformer.decoder.h.3.ln_1.bias\ntemporal_transformer.decoder.h.3.attn.c_attn.weight\ntemporal_transformer.decoder.h.3.attn.c_attn.bias\ntemporal_transformer.decoder.h.3.attn.c_proj.weight\ntemporal_transformer.decoder.h.3.attn.c_proj.bias\ntemporal_transformer.decoder.h.3.ln_2.weight\ntemporal_transformer.decoder.h.3.ln_2.bias\ntemporal_transformer.decoder.h.3.mlp.c_fc.weight\ntemporal_transformer.decoder.h.3.mlp.c_fc.bias\ntemporal_transformer.decoder.h.3.mlp.c_proj.weight\ntemporal_transformer.decoder.h.3.mlp.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_1.weight\ntemporal_transformer.decoder.h.4.ln_1.bias\ntemporal_transformer.decoder.h.4.attn.c_attn.weight\ntemporal_transformer.decoder.h.4.attn.c_attn.bias\ntemporal_transformer.decoder.h.4.attn.c_proj.weight\ntemporal_transformer.decoder.h.4.attn.c_proj.bias\ntemporal_transformer.decoder.h.4.ln_2.weight\ntemporal_transformer.decoder.h.4.ln_2.bias\ntemporal_transformer.decoder.h.4.mlp.c_fc.weight\ntemporal_transformer.decoder.h.4.mlp.c_fc.bias\ntemporal_transformer.decoder.h.4.mlp.c_proj.weight\ntemporal_transformer.decoder.h.4.mlp.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_1.weight\ntemporal_transformer.decoder.h.5.ln_1.bias\ntemporal_transformer.decoder.h.5.attn.c_attn.weight\ntemporal_transformer.decoder.h.5.attn.c_attn.bias\ntemporal_transformer.decoder.h.5.attn.c_proj.weight\ntemporal_transformer.decoder.h.5.attn.c_proj.bias\ntemporal_transformer.decoder.h.5.ln_2.weight\ntemporal_transformer.decoder.h.5.ln_2.bias\ntemporal_transformer.decoder.h.5.mlp.c_fc.weight\ntemporal_transformer.decoder.h.5.mlp.c_fc.bias\ntemporal_transformer.decoder.h.5.mlp.c_proj.weight\ntemporal_transformer.decoder.h.5.mlp.c_proj.bias\ntemporal_transformer.decoder.ln_f.weight\ntemporal_transformer.decoder.ln_f.bias\npolicy_head.share.0.weight\npolicy_head.share.0.bias\npolicy_head.share.2.weight\npolicy_head.share.2.bias\npolicy_head.share.4.weight\npolicy_head.share.4.bias\npolicy_head.mean_layer.weight\npolicy_head.mean_layer.bias\npolicy_head.logstd_layer.weight\npolicy_head.logstd_layer.bias\npolicy_head.logits_layer.weight\npolicy_head.logits_layer.bias\n"
+  },
+  "optimizer_calls": 0,
+  "environments": 0,
+  "production_writes": false
+}

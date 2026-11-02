@@ -1,0 +1,64 @@
+{
+  "status": "PASS_LOCAL_SCHEDULER_CONTROL_FLOW_AND_WRAPPER_BINDING",
+  "scenarios": [
+    {
+      "failure_case": null,
+      "events": [
+        [
+          "launch",
+          "L020_41"
+        ],
+        [
+          "launch",
+          "L020_42"
+        ],
+        [
+          "finish",
+          "L020_41"
+        ],
+        [
+          "launch",
+          "L020_43"
+        ],
+        [
+          "finish",
+          "L020_42"
+        ],
+        [
+          "finish",
+          "L020_43"
+        ]
+      ],
+      "max_active": 2,
+      "remaining_active": 0
+    },
+    {
+      "failure_case": "L020_41",
+      "events": [
+        [
+          "launch",
+          "L020_41"
+        ],
+        [
+          "launch",
+          "L020_42"
+        ],
+        [
+          "finish",
+          "L020_41"
+        ],
+        [
+          "finish",
+          "L020_42"
+        ]
+      ],
+      "max_active": 2,
+      "remaining_active": 0
+    }
+  ],
+  "training_calls": 0,
+  "environment_calls": 0,
+  "source_embedding_exact": true,
+  "final_CPU_completion_sources": 6,
+  "scope": "Local control-flow checks only; production handoff and full GPU diagnostics require actual evidence"
+}

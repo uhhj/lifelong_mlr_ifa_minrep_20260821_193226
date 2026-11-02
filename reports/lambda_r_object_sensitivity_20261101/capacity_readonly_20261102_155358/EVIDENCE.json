@@ -1,0 +1,305 @@
+{
+  "status": "READ_EXISTING_PARALLEL_DIAGNOSTIC",
+  "observed": 1793606039.657318,
+  "files": {
+    "SOURCE_MANIFEST.json": {
+      "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/worker.py": "63beae8a7a4b63c265beb0293c4f06998864491dc568f52056174704c0000ed3",
+      "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/driver.py": "5deaa4a3c7820789ea85f87df3c973f7b8753207dacf6dd90a449ba593226002"
+    },
+    "serial42_0.05_9_GO.json": {
+      "time": 1793605988.0895565
+    },
+    "STARTED.json": {
+      "pid": 5337,
+      "time": 1793605977.9708078,
+      "scope": "Stage9 .05 two independent seed paths; current production continues, so background contention is present"
+    },
+    "EVENTS.json": [
+      {
+        "event": "launch",
+        "seed": 42,
+        "mode": "serial42",
+        "pid": 5339,
+        "time": 1793605977.9895115,
+        "production": {
+          "L005_41": {
+            "arm": "S",
+            "stage": 9,
+            "phase": "training_collection",
+            "time": 1793603986.8905516,
+            "pid": 2566
+          },
+          "L005_42": {
+            "arm": "S",
+            "stage": 7,
+            "phase": "train",
+            "epoch_complete": 39,
+            "steps": 24553,
+            "physical_optimizer_calls": 33406,
+            "time": 1793605969.7645893,
+            "pid": 4694
+          }
+        }
+      }
+    ],
+    "DISPATCH.json": {
+      "status": "ISOLATED_PARALLEL_FEASIBILITY_DISPATCHED",
+      "pid": 5337,
+      "time": 1793605977.942253,
+      "directory": "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1",
+      "files": {
+        "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/worker.py": "63beae8a7a4b63c265beb0293c4f06998864491dc568f52056174704c0000ed3",
+        "/data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/driver.py": "5deaa4a3c7820789ea85f87df3c973f7b8753207dacf6dd90a449ba593226002"
+      },
+      "contracts": {
+        "CONTRACT.json": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
+        "engineering_device_snapshot_20261101_v1/CONTRACT.json": "b9ebd306e7ac3ce1fba2ce107ba5b2fa6b4fd20f62164790bf7ced4897b6086c",
+        "engineering_resume_3090_20261102_v1/CONTRACT.json": "46bf5fe3bf0acfe9f23441a6c64c35d29438e8abdaef27262ffa5a809e6741e3",
+        "engineering_checks_3090_20261102_v1/CONTRACT.json": "143bab881835c8f91a3c04129e1fbdf88da6ac7d55b10524eaa591417ff2b254"
+      },
+      "memory_hierarchy": {
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice/session-49.scope": {
+          "limit": 9223372036854771712,
+          "usage": 23318528
+        },
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice": {
+          "limit": 9223372036854771712,
+          "usage": 9158713344
+        },
+        "/sys/fs/cgroup/memory/user.slice": {
+          "limit": 9223372036854771712,
+          "usage": 11193819136
+        },
+        "/sys/fs/cgroup/memory": {
+          "limit": 9223372036854771712,
+          "usage": 11549126656
+        },
+        "/sys/fs/cgroup/memory/user.slice/user-0.slice/session-42.scope": {
+          "limit": 9223372036854771712,
+          "usage": 6414110720
+        }
+      },
+      "max_optimizer_calls": 2904,
+      "max_extra_autograd": 0,
+      "environments": 0,
+      "production_signals": 0,
+      "production_changed": false
+    },
+    "METRICS.json": [
+      {
+        "time": 1793605978.0071118,
+        "gpu": "33, 3032, 56, 147.63",
+        "exit": 0
+      },
+      {
+        "time": 1793605980.0288303,
+        "gpu": "28, 3032, 56, 149.15",
+        "exit": 0
+      },
+      {
+        "time": 1793605982.0474818,
+        "gpu": "31, 3032, 55, 148.44",
+        "exit": 0
+      },
+      {
+        "time": 1793605984.0675063,
+        "gpu": "72, 3553, 58, 174.92",
+        "exit": 0
+      },
+      {
+        "time": 1793605986.0869017,
+        "gpu": "30, 4047, 59, 202.35",
+        "exit": 0
+      },
+      {
+        "time": 1793605988.1069205,
+        "gpu": "25, 4133, 57, 150.77",
+        "exit": 0
+      },
+      {
+        "time": 1793605990.1241481,
+        "gpu": "91, 5295, 61, 246.83",
+        "exit": 0
+      },
+      {
+        "time": 1793605992.14423,
+        "gpu": "31, 5777, 60, 215.01",
+        "exit": 0
+      },
+      {
+        "time": 1793605994.1618154,
+        "gpu": "42, 5777, 58, 157.57",
+        "exit": 0
+      },
+      {
+        "time": 1793605996.180462,
+        "gpu": "87, 5777, 62, 239.85",
+        "exit": 0
+      },
+      {
+        "time": 1793605998.199373,
+        "gpu": "26, 6039, 60, 219.36",
+        "exit": 0
+      },
+      {
+        "time": 1793606000.2185621,
+        "gpu": "94, 6039, 63, 255.90",
+        "exit": 0
+      },
+      {
+        "time": 1793606002.238597,
+        "gpu": "89, 6039, 63, 221.46",
+        "exit": 0
+      },
+      {
+        "time": 1793606004.2586768,
+        "gpu": "34, 6051, 61, 231.57",
+        "exit": 0
+      },
+      {
+        "time": 1793606006.2795088,
+        "gpu": "93, 6051, 64, 262.24",
+        "exit": 0
+      },
+      {
+        "time": 1793606008.299425,
+        "gpu": "30, 6051, 64, 209.10",
+        "exit": 0
+      },
+      {
+        "time": 1793606010.320679,
+        "gpu": "31, 6051, 62, 242.03",
+        "exit": 0
+      },
+      {
+        "time": 1793606012.3417838,
+        "gpu": "92, 6051, 64, 265.20",
+        "exit": 0
+      },
+      {
+        "time": 1793606014.3621612,
+        "gpu": "59, 6051, 64, 211.92",
+        "exit": 0
+      },
+      {
+        "time": 1793606016.3826435,
+        "gpu": "36, 6051, 62, 246.12",
+        "exit": 0
+      },
+      {
+        "time": 1793606018.4024758,
+        "gpu": "93, 6051, 65, 264.36",
+        "exit": 0
+      },
+      {
+        "time": 1793606020.4225602,
+        "gpu": "62, 6051, 65, 216.40",
+        "exit": 0
+      },
+      {
+        "time": 1793606022.444411,
+        "gpu": "32, 6051, 62, 238.29",
+        "exit": 0
+      },
+      {
+        "time": 1793606024.464891,
+        "gpu": "95, 6051, 65, 264.71",
+        "exit": 0
+      },
+      {
+        "time": 1793606026.4850142,
+        "gpu": "34, 6051, 64, 209.63",
+        "exit": 0
+      },
+      {
+        "time": 1793606028.5050688,
+        "gpu": "30, 6051, 63, 240.82",
+        "exit": 0
+      },
+      {
+        "time": 1793606030.5249958,
+        "gpu": "88, 6051, 65, 257.36",
+        "exit": 0
+      },
+      {
+        "time": 1793606032.54581,
+        "gpu": "33, 6051, 63, 208.87",
+        "exit": 0
+      },
+      {
+        "time": 1793606034.5671248,
+        "gpu": "63, 6051, 63, 248.13",
+        "exit": 0
+      },
+      {
+        "time": 1793606036.587649,
+        "gpu": "81, 6051, 65, 240.91",
+        "exit": 0
+      },
+      {
+        "time": 1793606038.6082377,
+        "gpu": "32, 6051, 62, 187.62",
+        "exit": 0
+      }
+    ],
+    "serial42_42/SCHEDULE_S_9.json": {
+      "status": "PASS_ACTUAL_SCHEDULE",
+      "epochs": 100,
+      "batches": 362,
+      "total_steps": 36200,
+      "warmup_steps": 500
+    },
+    "serial42_42/PROGRESS.json": {
+      "status": "RUNNING",
+      "seed": 42,
+      "mode": "serial42",
+      "started": 1793605980.4268336,
+      "optimizer_started": 302,
+      "optimizer_completed": 302,
+      "environments": 0,
+      "extra_autograd": 0,
+      "production_writes": false,
+      "production_epochs": 0,
+      "target_signals": 0,
+      "stages": [],
+      "baseline_hashes": {
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage6.pth": "369d3bd2873c3eec8fd36629c132353751105f6a9e525bec22e9412e71c32f3d",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage7.pth": "8a8178621e92176652e36717bd2ed91f5d2a21905ae50e02cdccfd03f5a3534c",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage8.pth": "70723d33f4e03f3347257d243f4c3a137069e0fcdb59b146cb85850645cf8f4f",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/stage9.pth": "7c4b8645404a07d0c331e9e64edc9dab027ed7cc11088c847f6cfa04111255cb",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task6.pth": "16d9375d6369f5f118e565c484b8e663e3073d8dc7e777d3bf8aa3ab4117c2aa",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task7.pth": "30a17589e9df7f28e02339d651fa2f32b2f0d242c154399a0ba319a6e281fa30",
+        "/data/mlr_ifa/experiments/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/S/memory/task8.pth": "5f82f72a3f637baee20a8bce33b0a1920b8eb31520a303bd0d82247a32bcb223"
+      },
+      "current": {
+        "lambda_R": 0.05,
+        "stage": 9,
+        "batches": 150,
+        "blocks": 15
+      }
+    },
+    "serial42_42/0.05_9_READY.json": {
+      "time": 1793605988.0195549,
+      "initial": "99caf18aaa6a87dfc02fc65f55df407e3d96f144ec448bd32c7edb5c18cdaf81"
+    }
+  },
+  "driver": {
+    "pid": 5337,
+    "state": "S",
+    "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/driver.py "
+  },
+  "workers": [
+    {
+      "pid": 5339,
+      "state": "R",
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/worker.py /data/mlr_ifa/diagnostics/lambda_parallel_stage9_20261102_v1/serial42_42 42 serial42 9 0.05 "
+    }
+  ],
+  "logs": {
+    "driver.log": "",
+    "serial42_42/worker.log": "[robosuite WARNING] No private macro file found! (__init__.py:7)\n[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)\n[robosuite WARNING] To setup, run: python /data/mlr_ifa/env/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)\n"
+  },
+  "optimizer_calls": 0,
+  "environments": 0,
+  "production_writes": false
+}
