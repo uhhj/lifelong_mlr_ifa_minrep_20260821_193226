@@ -1,0 +1,18 @@
+{
+  "time": 1793608100.1912038,
+  "error": "Traceback (most recent call last):\n  File \"/data/mlr_ifa/diagnostics/lambda_parallel_full_20261102_v1/driver.py\", line 56, in <module>\n    try:main()\n  File \"/data/mlr_ifa/diagnostics/lambda_parallel_full_20261102_v1/driver.py\", line 42, in main\n    guard_capacity();phase([launch(42,'parallel'),launch(43,'parallel')],'parallel')\n  File \"/data/mlr_ifa/diagnostics/lambda_parallel_full_20261102_v1/driver.py\", line 17, in guard_capacity\n    assert mem['MemAvailable']>=12*1024**2 and float(p.stdout.strip())>=10000,'Insufficient diagnostic headroom'\nAssertionError: Insufficient diagnostic headroom\n",
+  "production_signals": 0,
+  "diagnostic_children": [
+    {
+      "pid": 6376,
+      "path": "/data/mlr_ifa/diagnostics/lambda_parallel_full_20261102_v1/serial42_42",
+      "returncode": 0
+    },
+    {
+      "pid": 6749,
+      "path": "/data/mlr_ifa/diagnostics/lambda_parallel_full_20261102_v1/serial43_43",
+      "returncode": 0
+    }
+  ],
+  "unpersisted_partial_diagnostic_cost": "UNKNOWN_IF_WORKER_FAILED_IN_BLOCK"
+}
