@@ -1,8 +1,8 @@
 {
   "status": "PASS_ACTUAL_LIVE_PARALLEL_PRODUCTION_PARTIAL",
-  "observed": "2026-11-02T17:21:41.767756+08:00",
-  "snapshot": "check_readonly_20261102_172140",
-  "snapshot_sha256": "74962a4024fd634048727d3a71eee2d1e4dbb831984fae898658a71dbd29c2cc",
+  "observed": "2026-11-02T18:35:15.532514+08:00",
+  "snapshot": "check_readonly_20261102_183513",
+  "snapshot_sha256": "694ee78cb67dba6e086b1fa8093c770794b9c1d74bf93cb4bb71bad34bbdc829",
   "controller": 8994,
   "watchdog": 8995,
   "existing_seed42_launcher": 4689,
@@ -23,7 +23,7 @@
     8609
   ],
   "expected_future_collection_locks": 18,
-  "production_collection_locks_observed": 0,
+  "production_collection_locks_observed": 3,
   "startup_validation": "PASS_ZERO_UPDATE_EXACT_STARTUP_LOCK",
   "local_control_flow": "PASS_ACTUAL_MAIN_SIMULATED_ORDER_AND_FAILURES",
   "new_startup_validation_optimizer_calls": 0,
@@ -33,15 +33,15 @@
   "abandoned_partial_recorded_optimizer_calls": 140,
   "abandoned_partial_unrecorded_cost": "UNKNOWN",
   "GPU_window": {
-    "source": "capacity_readonly_20261102_172100",
-    "evidence_sha256": "c7d5a00aa826b1dedacc1ec6027c1ee04add79805b68488904e8f77f20ac9732",
+    "source": "capacity_readonly_20261102_183609",
     "samples": 30,
-    "mean_utilization": 77.13333333333334,
-    "min_utilization": 27.0,
-    "max_utilization": 93.0,
-    "peak_used_MiB": 4885.0,
-    "scope": "Actual concurrent Task8/Task6, not an equal-work speed comparison"
+    "mean_utilization": 88.76666666666667,
+    "min_utilization": 80.0,
+    "max_utilization": 94.0,
+    "peak_used_MiB": 6051.0,
+    "scope": "Actual Task9/Task8 production; not controlled A/B"
   },
-  "next_check_minutes": 150,
-  "completion_source": "engineering_live_parallel_3090_20261102_v1/controller.exit"
+  "next_check_minutes": 90,
+  "completion_source": "engineering_live_parallel_3090_20261102_v1/controller.exit",
+  "latest_timing_audit": "check_readonly_20261102_183513\\TIMING_AUDIT.json"
 }

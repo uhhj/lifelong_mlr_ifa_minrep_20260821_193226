@@ -1,0 +1,106 @@
+{
+  "status": "PROVISIONAL_PRODUCTION_COMPARISON_NOT_CONTROLLED_AB",
+  "observation": "2026-11-02T18:35:15.532514+08:00",
+  "sources": {
+    "check_readonly_20261102_183513\\EVIDENCE.json": "694ee78cb67dba6e086b1fa8093c770794b9c1d74bf93cb4bb71bad34bbdc829",
+    "check_readonly_20261102_172140\\EVIDENCE.json": "74962a4024fd634048727d3a71eee2d1e4dbb831984fae898658a71dbd29c2cc",
+    "capacity_readonly_20261102_183609\\EVIDENCE.json": "d7f726470cfd5fcf4df186f39b3e6bd270dc5c916eaf4cfd6e4f3f6d3d7ef080",
+    "GPU_TIMING_REPORT_20261102_1409.md": "559027aaffc151abf0030da01d0526597f64a1ad2e2b8847ef9730c6450b5f48"
+  },
+  "same_seed_same_stage": {
+    "case": "L005_42",
+    "stage": 8,
+    "pre_epochs_one_based": [
+      44,
+      63
+    ],
+    "pre_count": 20,
+    "pre_seconds_mean": 45.8506496667862,
+    "post_epochs_one_based": [
+      66,
+      100
+    ],
+    "post_count": 35,
+    "post_seconds_mean": 53.85024751935686,
+    "per_epoch_slowdown_fraction": 0.17447076346151547
+  },
+  "production_interval": {
+    "wall_minutes": 73.5627459804217,
+    "complete_epochs_by_stage": {
+      "6": 82,
+      "7": 100,
+      "8": 36,
+      "9": 34
+    },
+    "reference_stage_seconds": {
+      "6": 4.810549252033233,
+      "7": 31.91556786775589,
+      "8": 45.8506496667862,
+      "9": 67.55154742956161
+    },
+    "reference_serial_compute_minutes": 125.55663043419521,
+    "reference_work_per_wall_ratio": 1.7067964057188862,
+    "implied_time_reduction_fraction": 0.41410703898288936,
+    "meaning": "Approximate stage-weighted observed throughput, not controlled serial/concurrent causal speedup"
+  },
+  "current_stage_seconds": {
+    "6": 5.604739747047424,
+    "7": 35.18818405628204,
+    "8": 53.85024751935686,
+    "9": 71.34150660037994
+  },
+  "remaining_compute_minutes": {
+    "L00542": 78.47565726041793,
+    "L00543": 207.75541940757205
+  },
+  "future_full_run_compute_minutes": {
+    "two_active_each": 276.6411298717771,
+    "last_solo": 250.21385702689486,
+    "three_run_two_slot_makespan_hours": 8.7809164483112
+  },
+  "planning_hours": {
+    "remaining_L005_training_collection": [
+      3,
+      4
+    ],
+    "L020_three_run_training_collection_two_slots": [
+      9,
+      11
+    ],
+    "both_groups_1200_formal": [
+      2,
+      4
+    ],
+    "total_training_collection_formal": [
+      14,
+      19
+    ]
+  },
+  "planning_completion_range": [
+    "2026-11-03T08:35:15.532514+08:00",
+    "2026-11-03T13:35:15.532514+08:00"
+  ],
+  "CPU_acceptance_report_publication": "ADDITIONAL",
+  "next_check_minutes": 90,
+  "limits": [
+    "Task7 reference includes earlier isolated validation contention; Task9 reference is another seed with older checks wrapper/different cache. Ratio1.71 is a rough normalization, not exact counterfactual.",
+    "Completed-epoch boundaries omit current partial work in both snapshots; preparation and three collections occur within the observed wall interval.",
+    "Current Task8/9 pairing differs from earlier Task8/Task6 and Task8/Task7. No uniform 1.71x multiplier is applied to all future work.",
+    "L020 has not started; own caches and trajectories may change phase costs. Third run runs after one of first pair completes, leaving a single-job tail.",
+    "Formal evaluation on this3090 and these lambdas has not started. Historical OBJECT600 vector compute56.60min is only a reference; total2–4hours is a planning allowance.",
+    "This is a planning range, not a statistical confidence interval."
+  ],
+  "gpu_window": {
+    "mean_gpu_utilization": 88.76666666666667,
+    "min_gpu_utilization": 80.0,
+    "max_gpu_utilization": 94.0,
+    "peak_used_MiB": 6051.0
+  },
+  "production_collection_mutex": {
+    "acquisitions": 3,
+    "releases": 3,
+    "active": null,
+    "nonoverlap": true,
+    "expected_total": 18
+  }
+}
