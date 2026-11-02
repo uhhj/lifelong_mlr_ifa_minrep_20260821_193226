@@ -1,30 +1,27 @@
 {
   "status": "PARTIAL_RESUMED_TRAINING_RTX3090",
-  "observation": "2026-11-02T13:20:27.701056+08:00",
+  "observation": "2026-11-02T13:25:38.910742+08:00",
   "counts": {
     "L005_41": {
-      "epochs": 295,
-      "accepted_updates": 67755,
-      "physical_optimizer_calls": 119810,
+      "epochs": 300,
+      "accepted_updates": 69300,
+      "physical_optimizer_calls": 122900,
       "own_isolated_optimizer_calls": 62,
       "own_extra_autograd_calls": 30,
-      "training_collection_completed_episodes": 20,
+      "training_collection_completed_episodes": 30,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
         "stage": 8,
-        "phase": "train",
-        "epoch_complete": 95,
-        "steps": 67755,
-        "physical_optimizer_calls": 119810,
-        "time": 1793596809.0252106,
+        "phase": "training_collection",
+        "time": 1793597087.7513223,
         "pid": 2566
       },
-      "current_stage_epochs": 95,
-      "recent_epoch_mean_seconds": 54.946636295318605,
-      "current_stage_compute_minutes_estimate": 4.578886357943217,
-      "gate_blocks_observed": 5255,
-      "gate_Q_accepts_observed": 2616
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 55.370251059532166,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 5400,
+      "gate_Q_accepts_observed": 2632
     },
     "L005_42": {
       "epochs": 0,
@@ -102,12 +99,12 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 295,
-  "accepted_updates": 67755,
-  "physical_training_optimizer_calls": 119810,
+  "epochs": 300,
+  "accepted_updates": 69300,
+  "physical_training_optimizer_calls": 122900,
   "own_isolated_optimizer_calls": 62,
   "own_extra_autograd_calls": 30,
-  "training_collection_completed_episodes": 20,
+  "training_collection_completed_episodes": 30,
   "formal_episodes": 0,
   "failures": {},
   "processes": [
@@ -124,31 +121,31 @@
     {
       "pid": 2566,
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/train_wrapper.py L005_41 ",
-      "state": "R"
+      "state": "S"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1422123008,
+      "free": 1422118912,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 214163456
+      "spare": 214159360
     },
     "/data": {
-      "free": 24737005568,
-      "remaining_bound": 12355254581,
+      "free": 24641810432,
+      "remaining_bound": 12260256053,
       "reserve": 2147483648,
-      "spare": 10234267339
+      "spare": 10234070731
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "2566\n",
+    "stdout": "2566\n2796\n",
     "stderr": ""
   },
-  "snapshot_sha256": "862a4eb6ad00d986b62dc17836cde64b2908868fb40ad41b77ca7a8724fb12a8",
+  "snapshot_sha256": "453ef8dae3c0141ddd220062e92c33c5c65cef92de63c895ee913e5c2a0dc1ee",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_124955",
+  "prefix_checked": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261102_132027",
   "hardware_migration": "USER_AUTHORIZED_RTX3090",
   "abandoned_partial_recorded_optimizer_calls": 140,
   "abandoned_partial_unrecorded_cost": "UNKNOWN",
@@ -169,8 +166,8 @@
   "engineering_diagnostic_extra_autograd": 47,
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
   "controller": 2560,
-  "latest_evidence": "check_readonly_20261102_132027",
-  "next_check_minutes": 125,
+  "latest_evidence": "check_readonly_20261102_132538",
+  "next_check_minutes": 120,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
@@ -178,16 +175,15 @@
     0.2
   ],
   "completion_source": "engineering_resume_3090_20261102_v1/controller.exit",
-  "scientific_completion": "PARTIAL_NOT_ACCEPTED",
   "automatic_monitor_status": "ACTIVE",
+  "scientific_completion": "PARTIAL_NOT_ACCEPTED",
   "engineering_state": "POST_REBOOT_RECOVERY_RUNNING",
   "current_training_pid": 2566,
-  "resume_report": "RECOVERY_REPORT_20261102.md",
   "prior_completed_epochs_preserved": 260,
-  "timing_audit": "check_readonly_20261102_132027/TIMING_AUDIT.json",
+  "resume_report": "RECOVERY_REPORT_20261102.md",
+  "timing_audit": "check_readonly_20261102_132538/TIMING_AUDIT.json",
   "current_run_planning_minutes": [
-    125,
-    165
-  ],
-  "remaining_time_estimate": "Current L005_41 only125–165min; entire queue unmeasured"
+    120,
+    160
+  ]
 }
