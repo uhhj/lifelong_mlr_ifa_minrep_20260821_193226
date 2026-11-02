@@ -1,3 +1,15 @@
+## 最新2026-11-02 15:35：自然边界交接完成，优化已在L005_42实际运行
+
+check_readonly_20261102_153532及新工程audit_progress、HANDOFF_LOCAL_AUDIT实际PASS，150223全部epoch/门控前缀精确保留。L005_41自然完成400轮105500接受195300完整轮物理、40采集，launcher2561内核Z/exit_code0。新owner随后结束旧等待调度器并取得同一根锁，HANDOFF_COMPLETE真实存在，无WATCHDOG_RELEASE或FAILURE。当前训练未收信号，没有重跑完成轮。原根、旧设备及恢复工程controller.exit仍不存在；最终只认新工程controller.exit0及无自身进程。
+
+L005_42已实际使用优化wrapper：Task6完整100轮及10采集、Task7完整5轮，共105轮16835接受17970生产；自身Task6/7共33隔离19准入autograd通过，CHECK_EQ实际首更新0/15700和首门控15710双路径一致，BRANCH_COPY_EQ起点15700通过，Task6对旧S全部tensor本次实际相等（不能套给未来run或消除硬件限制）。累计505/2400轮122335接受213270生产124隔离60准入autograd50采集，正式0/1200；其他四run尚未开始。135科学+5旧设备+8恢复+6检查工程冻结项保持。controller4347/GPU4694正常，旧2560/2561/2566及watchdog4348已退出。
+
+Task6百轮均4.8105秒，Task7前5轮均28.8482秒；当前阶段余95轮约45.68分钟纯计算。Task8/9未测，按批次比例条件外推当前整run余187.80分钟纯计算，计保存准备30采集、额外缓存探针与波动规划210–270分钟。下一210分钟在当前整run预计结束较早侧复查，不固定高频、不按时钟断言完成。仅5轮样本，不将跨seed/阶段/硬件差异当成优化因果提速；15.1%仍条件潜力，旧全队列29–37小时仅历史规划，不虚报已实现整体提速。
+
+先读PROFILE_3090_OPTIMIZATION_REPORT_20261102、ENGINEERING_CHECKS_STATUS、新工程STATIC_REVIEW/VALIDATION_RESULT/DEPLOYMENT_AUDIT及本次HANDOFF_LOCAL_AUDIT/TIMING_AUDIT。工程合同143bab881835c8f91a3c04129e1fbdf88da6ac7d55b10524eaa591417ff2b254；8阶段逐位验证7828/36已经完成不可重复，累计15965optimizer/83autograd工程诊断另记，旧中断140已记录候选+UNKNOWN始终保留。禁止重复任何controller/dispatch/build/validation或完成轮。
+
+以后只用engineering_checks_3090_20261102_v1/check/audit_progress/record_progress/final_readonly/audit_final_local；所有未来stage自己的GPU准入/BRANCH_COPY_EQ/CHECK_EQ仍须实际通过。最终包装STATIC_ONLY，全部科学运行自然结束后才实际CPU验收。用户3090迁移授权、官方初态tensor/RNG同一、Task6跨GPU如实比较与硬件混杂限制保持，原260轮4167门控保留。运输worker3700先核status/PID，不重启活跃worker、不输出凭据。科学范围/顺序/预算及发布要求如下。
+
 # 最新执行状态
 
 ## 最新2026-11-02 15:02：3090代码瓶颈已定位，完整等价验证通过，安全交接已ARMED

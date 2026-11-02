@@ -1,0 +1,56 @@
+{
+  "status": "PASS_NATURAL_BOUNDARY_HANDOFF_AND_FIRST_OPTIMIZED_STAGES",
+  "observation": "2026-11-02T15:35:34.345182+08:00",
+  "source_sha256": "508d61cf24769c1c3bef30dd09344b7be3d73c5808b61f7ebb48a283917ed684",
+  "natural_exit": {
+    "time": 1793604088.022224,
+    "kernel_exit": {
+      "pid": 2561,
+      "state": "Z",
+      "start": "74468",
+      "exit_code": 0,
+      "cmd": ""
+    },
+    "train_sha256": "025f205542c5d2f8736e6a968aa35f748312bc0ea1a771976098ceab2caad2b0",
+    "epochs_sha256": "c767bdf0eac48c6f6825d1030d61cb9c3814e8f25578f87526d9e2095cfe9cb4",
+    "training_signals": 0
+  },
+  "handoff": {
+    "time": 1793604088.1251254,
+    "source": "natural launcher exit zero",
+    "root_lock": true,
+    "original_controller_success": false
+  },
+  "actual_checks": {
+    "status": "PASS_OBSERVED_CHECKS",
+    "finite_stage_starts": {
+      "0": {
+        "exact": true,
+        "time": 1793604102.2436223
+      },
+      "15700": {
+        "exact": true,
+        "time": 1793604761.9901502
+      }
+    },
+    "device_stage_starts": {
+      "15710": {
+        "exact": true,
+        "time": 1793604763.507901
+      }
+    },
+    "optimizer_calls_added": 0,
+    "environments_added": 0
+  },
+  "task6_cross_gpu": {
+    "status": "RECORDED_AUTHORIZED_CROSS_GPU_COMPARISON",
+    "all_tensors_exact": true,
+    "differing_tensors": [],
+    "hardware": "NVIDIA GeForce RTX 3090",
+    "not_a_scientific_acceptance": true
+  },
+  "completed_epochs_repeated": 0,
+  "training_signals": 0,
+  "production_optimization_active": true,
+  "final_acceptance": false
+}
