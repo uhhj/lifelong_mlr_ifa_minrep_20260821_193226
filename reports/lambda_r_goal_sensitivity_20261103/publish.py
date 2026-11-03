@@ -47,7 +47,7 @@ def main():
             continue
         raw = p.read_bytes()
         if p.name=='EVIDENCE.json' and p.parent.name.startswith('preflight_readonly_'):
-            assert json.loads((R/'PREFLIGHT_LOCAL_AUDIT.json').read_text(encoding='utf8'))['sha256']==hashlib.sha256(raw).hexdigest()
+            assert json.loads((p.parent/'LOCAL_AUDIT.json').read_text(encoding='utf8'))['sha256']==hashlib.sha256(raw).hexdigest()
             continue
         if p.name == 'EVIDENCE.json' and len(raw) >= 8*1024**2:
             audit = json.loads((p.parent/'LOCAL_AUDIT.json').read_text(encoding='utf8'))

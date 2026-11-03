@@ -1,43 +1,191 @@
 {
-  "status": "GOAL_ENGINEERING_VALIDATION_RUNNING_NOT_PRODUCTION",
-  "suite": "GOAL",
-  "new_lambdas": [
-    0.05,
-    0.2
-  ],
-  "seeds": [
-    41,
-    42,
-    43
-  ],
-  "epochs": 0,
-  "formal_episodes": 0,
-  "production_optimizer_calls": 0,
-  "engineering_optimizer_calls": 0,
-  "preflight_request": "request_20261103_124408_b672ec1e.json",
-  "waits_for_OBJECT_acceptance_publication_cleanup": true,
-  "production_launched": false,
-  "engineering_validation": {
-    "status": "GOAL_DIAGNOSTIC_ONLY_DISPATCHED",
-    "directory": "/data/mlr_ifa/diagnostics/lambda_r_goal_engineering_20261103_v1",
-    "pid": 47683,
-    "observed": 1793682715.373666,
-    "validation_source_sha256": "60a54ef7de805bd03a45f95c1648fd064a81e2550c4312bb7a37dcdac267c4fa",
-    "runner_sha256": "c099e9b58398d525b512a00a63d07d96f471d2671366863cff62edacc30b73db",
-    "source_contract_sha256": "152a738ce7bd58aa100435ed80283529946dad73b4432059ca8f3e63a04af466",
-    "max_optimizer_calls": 5704,
-    "max_extra_autograd": 36,
-    "environments": 0,
-    "production_epochs": 0,
-    "production_root_created": false
+  "status": "PARTIAL_GOAL_TRAINING_OR_EVALUATION",
+  "observation": "2026-11-03T13:41:40.968838+08:00",
+  "counts": {
+    "L005_41": {
+      "epochs": 6,
+      "accepted_updates": 600,
+      "physical_optimizer_calls": 600,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 6,
+        "phase": "train",
+        "epoch_complete": 6,
+        "steps": 600,
+        "physical_optimizer_calls": 600,
+        "time": 1793684500.8484993,
+        "pid": 48174
+      },
+      "current_stage_epochs": 6,
+      "recent_epoch_mean_seconds": 3.408374269803365,
+      "current_stage_compute_minutes_estimate": 5.3397863560252725,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L005_42": {
+      "epochs": 6,
+      "accepted_updates": 600,
+      "physical_optimizer_calls": 600,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 6,
+        "phase": "train",
+        "epoch_complete": 6,
+        "steps": 600,
+        "physical_optimizer_calls": 600,
+        "time": 1793684499.8497753,
+        "pid": 48177
+      },
+      "current_stage_epochs": 6,
+      "recent_epoch_mean_seconds": 3.559467355410258,
+      "current_stage_compute_minutes_estimate": 5.576498856809404,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L005_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_41": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_42": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
   },
-  "prewrite_failures_optimizer_calls": 0,
-  "prewrite_failures_environments": 0,
+  "epochs": 12,
+  "accepted_updates": 1200,
+  "physical_training_optimizer_calls": 1200,
+  "own_isolated_optimizer_calls": 8,
+  "own_extra_autograd_calls": 16,
+  "training_collection_completed_episodes": 0,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 48163,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 48165,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=ef3f4963-6a83-470e-8421-3afb81f8dc79 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 48166,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d68a3a7e-9c2d-4df7-93e2-5ab273beb15e /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 48174,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_41 ",
+      "state": "R"
+    },
+    {
+      "pid": 48177,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_42 ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1421631488,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 213671936
+    },
+    "/data": {
+      "free": 20362399744,
+      "remaining_bound": 12192292864,
+      "reserve": 2147483648,
+      "spare": 6022623232
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "48177\n48174\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "f1d4e774f2852c84e6ecd63b1c7e6134cf18c79097e461ed410ac86cd05fbeea",
+  "contract": "9791d13ff55a0f766ce5bf1e4abb96a175c51fad3dfa7ed0455319b9daddb31a",
+  "prefix_checked": null,
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 0,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 0,
+      "evaluate": 0
+    },
+    "active": null
+  },
+  "latest_evidence": "check_readonly_20261103_134140",
+  "production_launched": true,
   "object_closed": true,
-  "latest_engineering_evidence": "engineering_validation_20261103_v1\\capacity_readonly_20261103_131304",
-  "engineering_optimizer_calls_recorded": 202,
-  "engineering_extra_autograd_recorded": 0,
-  "engineering_completed_stage_pairs": 1,
-  "lock_validation": "PASS_ZERO_ENV_EXACT_SUBPROCESS_MUTEX",
-  "next_check_minutes": 20
+  "next_check_minutes": 30,
+  "engineering_optimizer_calls": 5704,
+  "engineering_extra_autograd_calls": 36,
+  "engineering_environment_calls": 0,
+  "final_acceptance": "NOT_EXECUTED"
 }

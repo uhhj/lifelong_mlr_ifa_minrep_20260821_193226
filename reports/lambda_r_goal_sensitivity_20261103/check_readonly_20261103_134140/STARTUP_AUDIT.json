@@ -1,0 +1,172 @@
+{
+  "status": "PASS_ACTUAL_GOAL_STARTUP_NOT_FINAL",
+  "observed": "2026-11-03T13:41:40.968838+08:00",
+  "contract": "9791d13ff55a0f766ce5bf1e4abb96a175c51fad3dfa7ed0455319b9daddb31a",
+  "frozen_files": 139,
+  "controller": 48163,
+  "training_gpu_pids": [
+    48174,
+    48177
+  ],
+  "rendezvous_ports": {
+    "L005_41": "47643",
+    "L005_42": "57297"
+  },
+  "stage6_actual": {
+    "L005_41": {
+      "HARDWARE_MIGRATION": {
+        "status": "USER_AUTHORIZED_RTX3090",
+        "actual": {
+          "device": "NVIDIA GeForce RTX 3090",
+          "capability": [
+            8,
+            6
+          ],
+          "total_memory": 25438126080,
+          "torch_version": "1.13.0+cu116",
+          "cuda_version": "11.6",
+          "cudnn_version": 8302,
+          "matmul_tf32": false,
+          "cudnn_tf32": true
+        },
+        "baseline": {
+          "device": "NVIDIA GeForce RTX 4080 SUPER",
+          "capability": [
+            8,
+            9
+          ],
+          "total_memory": 33937293312,
+          "torch_version": "1.13.0+cu116",
+          "cuda_version": "11.6",
+          "cudnn_version": 8302,
+          "matmul_tf32": false,
+          "cudnn_tf32": true
+        },
+        "hardware_equal": false,
+        "initial_tensors_rng_exact": true,
+        "lambda_only_hardware_controlled": false
+      },
+      "COPY_EQ": {
+        "status": "PASS_OBSERVED_STAGE_STARTS",
+        "checked": {
+          "0": {
+            "all_state_exact": true,
+            "optimizer_calls_added": 0,
+            "environments_added": 0
+          }
+        },
+        "candidate_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24"
+      },
+      "BRANCH_COPY_EQ": {
+        "status": "PASS_OBSERVED_STAGE_STARTS",
+        "checked": {
+          "0": {
+            "all_state_exact": true,
+            "optimizer_calls_added": 0,
+            "environments_added": 0
+          }
+        }
+      },
+      "CHECK_EQ": {
+        "status": "PASS_OBSERVED_CHECKS",
+        "finite_stage_starts": {
+          "0": {
+            "exact": true
+          }
+        },
+        "device_stage_starts": {},
+        "optimizer_calls_added": 0,
+        "environments_added": 0
+      },
+      "SCHEDULE_S_6": {
+        "status": "PASS_ACTUAL_SCHEDULE",
+        "epochs": 100,
+        "batches": 100,
+        "total_steps": 10000,
+        "warmup_steps": 500
+      }
+    },
+    "L005_42": {
+      "HARDWARE_MIGRATION": {
+        "status": "USER_AUTHORIZED_RTX3090",
+        "actual": {
+          "device": "NVIDIA GeForce RTX 3090",
+          "capability": [
+            8,
+            6
+          ],
+          "total_memory": 25438126080,
+          "torch_version": "1.13.0+cu116",
+          "cuda_version": "11.6",
+          "cudnn_version": 8302,
+          "matmul_tf32": false,
+          "cudnn_tf32": true
+        },
+        "baseline": {
+          "device": "NVIDIA GeForce RTX 4080 SUPER",
+          "capability": [
+            8,
+            9
+          ],
+          "total_memory": 33937293312,
+          "torch_version": "1.13.0+cu116",
+          "cuda_version": "11.6",
+          "cudnn_version": 8302,
+          "matmul_tf32": false,
+          "cudnn_tf32": true
+        },
+        "hardware_equal": false,
+        "initial_tensors_rng_exact": true,
+        "lambda_only_hardware_controlled": false
+      },
+      "COPY_EQ": {
+        "status": "PASS_OBSERVED_STAGE_STARTS",
+        "checked": {
+          "0": {
+            "all_state_exact": true,
+            "optimizer_calls_added": 0,
+            "environments_added": 0
+          }
+        },
+        "candidate_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24"
+      },
+      "BRANCH_COPY_EQ": {
+        "status": "PASS_OBSERVED_STAGE_STARTS",
+        "checked": {
+          "0": {
+            "all_state_exact": true,
+            "optimizer_calls_added": 0,
+            "environments_added": 0
+          }
+        }
+      },
+      "CHECK_EQ": {
+        "status": "PASS_OBSERVED_CHECKS",
+        "finite_stage_starts": {
+          "0": {
+            "exact": true
+          }
+        },
+        "device_stage_starts": {},
+        "optimizer_calls_added": 0,
+        "environments_added": 0
+      },
+      "SCHEDULE_S_6": {
+        "status": "PASS_ACTUAL_SCHEDULE",
+        "epochs": 100,
+        "batches": 100,
+        "total_steps": 10000,
+        "warmup_steps": 500
+      }
+    }
+  },
+  "epochs": 12,
+  "production_calls": 1200,
+  "own_isolated_calls": 8,
+  "own_admission_autograd": 16,
+  "engineering_separate_optimizer": 5704,
+  "engineering_separate_autograd": 36,
+  "environment_lock_actual_events": 0,
+  "future_stages": "NOT_YET_ADMITTED",
+  "snapshot_sha256": "f1d4e774f2852c84e6ecd63b1c7e6134cf18c79097e461ed410ac86cd05fbeea"
+}
