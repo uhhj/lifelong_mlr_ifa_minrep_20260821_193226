@@ -1,0 +1,100 @@
+{
+  "status": "CONDITIONAL_PLANNING_NOT_COMPLETION",
+  "observation": "2026-11-03T15:52:11.507704+08:00",
+  "snapshot_sha256": "d515483a0c45539c761b551bf1658e70198a4c2f578c5152c6584901d9951b70",
+  "cases": {
+    "L005_41": {
+      "stage_times": {
+        "6": {
+          "complete_epochs": 100,
+          "mean_seconds": 3.5184758591651915,
+          "recent10_seconds": 3.5256792068481446
+        },
+        "7": {
+          "complete_epochs": 100,
+          "mean_seconds": 22.320461180210113,
+          "recent10_seconds": 23.851347589492796
+        },
+        "8": {
+          "complete_epochs": 100,
+          "mean_seconds": 32.9754727935791,
+          "recent10_seconds": 32.355968832969666
+        },
+        "9": {
+          "complete_epochs": 20,
+          "mean_seconds": 64.97264281511306,
+          "recent10_seconds": 65.77990601062774
+        }
+      },
+      "current_run_remaining_compute_minutes": 87.70654134750366,
+      "full_run_conditional_epoch_minutes": 206.31175441344578
+    },
+    "L005_42": {
+      "stage_times": {
+        "6": {
+          "complete_epochs": 100,
+          "mean_seconds": 3.4478066873550417,
+          "recent10_seconds": 3.564274859428406
+        },
+        "7": {
+          "complete_epochs": 100,
+          "mean_seconds": 21.84624022960663,
+          "recent10_seconds": 22.42727072238922
+        },
+        "8": {
+          "complete_epochs": 100,
+          "mean_seconds": 33.52475069761276,
+          "recent10_seconds": 33.42390625476837
+        },
+        "9": {
+          "complete_epochs": 21,
+          "mean_seconds": 63.9876480783735,
+          "recent10_seconds": 63.618228030204776
+        }
+      },
+      "current_run_remaining_compute_minutes": 83.76400023976962,
+      "full_run_conditional_epoch_minutes": 204.67740948824655
+    }
+  },
+  "unstarted_runs": 4,
+  "formal_completed": 0,
+  "formal_remaining": 1200,
+  "baseline_formal_evidence_sha256": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78",
+  "historical_S_formal_minutes_by_seed": {
+    "41": 19.74905886252721,
+    "42": 25.299442342917125,
+    "43": 31.511146847407023
+  },
+  "historical_S_600_formal_minutes": 76.55964805285136,
+  "planning": {
+    "current_parallel_pair_remaining_minutes": [
+      90,
+      120
+    ],
+    "subsequent_two_training_waves_each_minutes": [
+      240,
+      300
+    ],
+    "two_groups_formal_total_minutes": [
+      120,
+      240
+    ],
+    "whole_queue_remaining_minutes": [
+      690,
+      960
+    ],
+    "L005_training_and_formal_remaining_minutes": [
+      390,
+      540
+    ]
+  },
+  "formula": "Remaining current pair + 2 waves x full run budget + two serial formal groups; L02041 overlaps L00543, and may continue during L005 formal. Formula conservatively does not deduct that overlap.",
+  "next_check_minutes": 90,
+  "limits": [
+    "Future four runs and all new formal evaluations unmeasured; own cache differences and extra probes can change runtime.",
+    "Stage9 mean only20/21 epochs; first3 stages complete. Full-run pure epoch projection204.68–206.31min does not include preparation/save/collection/lock wait.",
+    "Historical formal on previous hardware, not current3090 measured throughput.",
+    "Final CPU acceptance, comparison interpretation and publication are additional.",
+    "No completion inferred from clock; no loss/budget/sample changes."
+  ]
+}
