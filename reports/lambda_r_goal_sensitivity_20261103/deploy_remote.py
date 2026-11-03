@@ -1,4 +1,4 @@
-"""One new six-Q deployment. BUNDLE contains reviewed source/metadata only."""
+"""One new six-S GOAL lambda-grid deployment. BUNDLE contains reviewed source/metadata only."""
 import os,json,hashlib,subprocess,time
 from pathlib import Path
 NAME='S_LAMBDA_R_GOAL41_42_43_20261103_v1'

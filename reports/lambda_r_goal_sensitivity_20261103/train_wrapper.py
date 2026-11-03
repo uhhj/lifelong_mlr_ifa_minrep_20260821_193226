@@ -39,6 +39,7 @@ def combined_finite(a,loss):
  pars=list(a.policy.parameters())
  result=bool(torch.stack([torch.isfinite(loss).all()]+[torch.isfinite(p.grad).all() for p in pars if p.grad is not None]).all())
  if a.scheduler.last_epoch==0 and str(a.step) not in finite_starts:
+  branch_capture(a)
   oracle=bool(torch.isfinite(loss)) and all(p.grad is None or bool(torch.isfinite(p.grad).all()) for p in pars)
   assert result==oracle
   finite_starts[str(a.step)]=dict(exact=True);checks_write()

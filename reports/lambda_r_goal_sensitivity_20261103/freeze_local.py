@@ -6,7 +6,7 @@ js=lambda p:json.loads(p.read_text(encoding='utf8'));sha=lambda p:hashlib.sha256
 def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
 assert not (R/'DEPLOY_TEXT_BUNDLE.json').exists()
 validation=js(R/'ENGINEERING_VALIDATION.json');assert validation['status']=='PASS_GOAL_FULL_PATH_BOTH_LAMBDAS' and validation['optimizer_started']==validation['optimizer_completed']==5704 and len(validation['stages'])==8 and validation['environments']==0
-assert all(sha(R/n)==h for n,h in validation['reviewed_production_source_sha256'].items())
+assert all(hashlib.sha256((R/n).read_text(encoding='utf8').encode()).hexdigest()==h for n,h in validation['reviewed_production_source_sha256'].items())
 assert js(R/'OBJECT_COMPLETION_BINDING.json')['status']=='OBJECT_ACCEPTED_PUBLISHED_HOOK_CLEANED'
 pre=js(D/'EVIDENCE.json');assert pre['status']=='PASS_PREDEPLOY_READONLY' and pre['optimizer_calls']==pre['environments']==0
 assert not pre['processes'] and not pre['gpu'] and all(x['headroom']>=0 for x in pre['capacity'].values())

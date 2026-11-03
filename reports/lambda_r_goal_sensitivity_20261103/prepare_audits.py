@@ -47,6 +47,7 @@ a=a.replace("assert v['light']['controller.exit']['text']=='0' and not v['proces
 a=a.replace("(D/'LOCAL_FINAL_AUDIT.json').write_text","out['environment_mutex_audit']=a['environment_mutex_audit']\nout['limits'].append('Fresh GOAL3090 runs reuse historical0.1; initial tensor/RNG and paired episodes exact, actual Task6 tensor parity recorded, not hardware-controlled single-factor causality. GOAL engineering validation costs separate from production.')\n(D/'LOCAL_FINAL_AUDIT.json').write_text")
 put('audit_final_local.py',a)
 c=amounts(read(B/'final_acceptance_20261103_v1/compare_primary_s.py')).replace('parent.parent;D=','parent;D=').replace("binding['sources']['OBJECT']","binding['sources']['GOAL']").replace('OBJECT两个新系数','GOAL两个新系数')
+c=c.replace('User-authorized hardware migration and Task6 closed-loop differences despite equal model tensors: no fully hardware-controlled lambda-only causal interpretation','User-authorized hardware migration: record actual Task6 tensor and closed-loop comparison; no fully hardware-controlled lambda-only causal interpretation')
 put('compare_primary_s.py',c)
 review=dict(status='STATIC_ONLY_NOT_ACTUAL_ACCEPTANCE',required_actual=dict(checkpoints=24,recoveries=6,teacher_caches=24,initial_noise_episodes=1200,gate_blocks=40200,production_calls=853200),scale_exceptions='NONE; no OBJECT exception inherited',files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in R.glob('*.py')})
 (R/'FINAL_WRAPPER_REVIEW.json').write_text(json.dumps(review,indent=2)+'\n',encoding='utf8')

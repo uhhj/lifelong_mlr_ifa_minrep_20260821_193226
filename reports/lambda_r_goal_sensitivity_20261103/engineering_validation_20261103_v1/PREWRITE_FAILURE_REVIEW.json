@@ -1,0 +1,28 @@
+{
+  "status": "PREWRITE_FAILURE_ZERO_GPU_ZERO_ENV_CONFIRMED",
+  "cause": "Windows CRLF raw-file SHA was compared to normalized text transported as UTF8 LF; assertion fired before D.mkdir or any process launch",
+  "original_dispatch_sha256": "bc3cd8be1ceac8358f44d0e5ac99c80c70ddeb4ab31cfe69e7a69e2f45d3c55a",
+  "readonly_evidence_sha256": "79589f24ff1b9cff7cd8b73136eae495248e96255c3fc08aac15b2659aadf709",
+  "fix": "Versioned v2 compares exactly the UTF8 LF text digest used by source transport and frozen bundle; no scientific/validation math change",
+  "optimizer_calls": 0,
+  "extra_autograd": 0,
+  "environments": 0,
+  "production_epochs": 0,
+  "original_evidence_preserved": true,
+  "second_prewrite_failure": "v2 scoped text-hash fix accidentally replaced remote raw-file sha helper, undefined read; failed before D.mkdir. v3 preserves raw remote source SHA and normalizes only local transported text.",
+  "second_inspection_sha256": "419f2dc419b8d2fa369efac794a731d722e2db54e47c2bcf198cdc1f41b5478e",
+  "successful_unique_diagnostic_dispatch": {
+    "status": "GOAL_DIAGNOSTIC_ONLY_DISPATCHED",
+    "directory": "/data/mlr_ifa/diagnostics/lambda_r_goal_engineering_20261103_v1",
+    "pid": 47683,
+    "observed": 1793682715.373666,
+    "validation_source_sha256": "60a54ef7de805bd03a45f95c1648fd064a81e2550c4312bb7a37dcdac267c4fa",
+    "runner_sha256": "c099e9b58398d525b512a00a63d07d96f471d2671366863cff62edacc30b73db",
+    "source_contract_sha256": "152a738ce7bd58aa100435ed80283529946dad73b4432059ca8f3e63a04af466",
+    "max_optimizer_calls": 5704,
+    "max_extra_autograd": 36,
+    "environments": 0,
+    "production_epochs": 0,
+    "production_root_created": false
+  }
+}
