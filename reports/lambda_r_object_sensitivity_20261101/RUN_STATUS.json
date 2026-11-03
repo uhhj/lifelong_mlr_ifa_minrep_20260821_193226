@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL_TRAINING_OR_EVALUATION",
-  "observation": "2026-11-03T02:02:05.841445+08:00",
+  "status": "PARTIAL_FINAL_CPU_ACCEPTANCE_IN_PROGRESS",
+  "observation": "2026-11-03T12:38:55.326426+08:00",
   "counts": {
     "L005_41": {
       "epochs": 400,
@@ -72,7 +72,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -87,113 +87,79 @@
       "gate_Q_accepts_observed": 4436
     },
     "L020_42": {
-      "epochs": 265,
-      "accepted_updates": 58485,
-      "physical_optimizer_calls": 101270,
-      "own_isolated_optimizer_calls": 62,
-      "own_extra_autograd_calls": 30,
-      "training_collection_completed_episodes": 20,
-      "formal_episodes": 0,
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
-        "stage": 8,
-        "phase": "train",
-        "epoch_complete": 65,
-        "steps": 58485,
-        "physical_optimizer_calls": 101270,
-        "time": 1793642490.028809,
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1793651260.3308256,
         "pid": 28055
       },
-      "current_stage_epochs": 65,
-      "recent_epoch_mean_seconds": 52.57896373271942,
-      "current_stage_compute_minutes_estimate": 30.671062177419664,
-      "gate_blocks_observed": 4333,
-      "gate_Q_accepts_observed": 2280
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 66.43632824420929,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4520
     },
     "L020_43": {
-      "epochs": 100,
-      "accepted_updates": 15700,
-      "physical_optimizer_calls": 15700,
-      "own_isolated_optimizer_calls": 4,
-      "own_extra_autograd_calls": 8,
-      "training_collection_completed_episodes": 0,
-      "formal_episodes": 0,
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
-        "stage": 6,
+        "stage": 9,
         "phase": "training_collection",
-        "time": 1793642494.679383,
+        "time": 1793656918.9113421,
         "pid": 29668
       },
       "current_stage_epochs": 100,
-      "recent_epoch_mean_seconds": 5.701095008850098,
+      "recent_epoch_mean_seconds": 56.70311613082886,
       "current_stage_compute_minutes_estimate": null,
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4856
     }
   },
-  "epochs": 1965,
-  "accepted_updates": 496185,
-  "physical_training_optimizer_calls": 898170,
-  "own_isolated_optimizer_calls": 430,
-  "own_extra_autograd_calls": 202,
-  "training_collection_completed_episodes": 180,
-  "formal_episodes": 600,
+  "epochs": 2400,
+  "accepted_updates": 633000,
+  "physical_training_optimizer_calls": 1171800,
+  "own_isolated_optimizer_calls": 546,
+  "own_extra_autograd_calls": 246,
+  "training_collection_completed_episodes": 240,
+  "formal_episodes": 1200,
   "failures": {},
-  "processes": [
-    {
-      "pid": 11852,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_cross_lambda_20261102_v1/controller.py ",
-      "state": "S"
-    },
-    {
-      "pid": 28050,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=23915a11-aa12-47dc-b439-13250a889588 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_rendezvous_recovery_20261102_v1/train_wrapper.py L020_42 ",
-      "state": "S"
-    },
-    {
-      "pid": 28055,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_rendezvous_recovery_20261102_v1/train_wrapper.py L020_42 ",
-      "state": "S"
-    },
-    {
-      "pid": 29663,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=17077ba5-0d9b-4426-a880-e540eb90b41f /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_rendezvous_recovery_20261102_v1/train_wrapper.py L020_43 ",
-      "state": "S"
-    },
-    {
-      "pid": 29668,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_rendezvous_recovery_20261102_v1/train_wrapper.py L020_43 ",
-      "state": "S"
-    },
-    {
-      "pid": 29694,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/L020_43/collect.py S 6 ",
-      "state": "S"
-    }
-  ],
+  "processes": [],
   "capacity": {
     "/root": {
-      "free": 1421975552,
+      "free": 1421725696,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 214016000
+      "spare": 213766144
     },
     "/data": {
-      "free": 21383991296,
-      "remaining_bound": 9402892394,
+      "free": 21069312000,
+      "remaining_bound": 9100275818,
       "reserve": 2147483648,
-      "spare": 9833615254
+      "spare": 9821552534
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "28055\n29668\n29694\n",
+    "stdout": "",
     "stderr": ""
   },
-  "snapshot_sha256": "89a72be0f221125e6c1161ac282705dd65c92f7f6aea9a17f5c19e5955ffe964",
+  "snapshot_sha256": "fcd038ebe68ce1e2ee6c948c5d781fa747518c9419b368b2d3dd99aab56b81b4",
   "contract": "6fde2ecbc3953f0af0709e70bbc3aaed3df9be57bf9e6bf59476985caafb135e",
-  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261103_004935",
+  "prefix_checked": "execution\\20261101_lambda_r_object_sensitivity\\check_readonly_20261103_020151",
   "hardware_migration": "USER_AUTHORIZED_RTX3090",
   "abandoned_partial_recorded_optimizer_calls": 140,
   "abandoned_partial_unrecorded_cost": "UNKNOWN",
@@ -244,12 +210,9 @@
   "engineering_diagnostic_optimizer_calls": 35418,
   "engineering_diagnostic_extra_autograd": 94,
   "parallel_collection_lock_audit": {
-    "acquisitions": 13,
-    "releases": 12,
-    "active": [
-      "L020_43",
-      6
-    ],
+    "acquisitions": 18,
+    "releases": 18,
+    "active": null,
     "nonoverlap": true,
     "expected_total": 18
   },
@@ -263,43 +226,23 @@
   "rendezvous_partial_unrecorded_cost": "UNKNOWN",
   "rendezvous_audit": {
     "launches": 1,
-    "observed_training_endpoints": [
-      {
-        "time": 1793634788.745227,
-        "pid": 28055,
-        "case": "L020_42",
-        "master_addr": "gpu-kvm",
-        "master_port": "44167",
-        "world_size": 1
-      },
-      {
-        "time": 1793641857.81861,
-        "pid": 29668,
-        "case": "L020_43",
-        "master_addr": "gpu-kvm",
-        "master_port": "42707",
-        "world_size": 1
-      }
-    ],
+    "observed_training_endpoints": [],
     "independent_endpoint_arguments": true,
-    "cross_lambda_launches": 6
+    "cross_lambda_launches": 9
   },
   "environment_mutex_audit": {
     "nonoverlap": true,
-    "collection_acquisitions": 13,
-    "collection_releases": 12,
-    "evaluation_acquisitions": 3,
-    "evaluation_releases": 3,
-    "active": [
-      "L020_43",
-      6
-    ]
+    "collection_acquisitions": 18,
+    "collection_releases": 18,
+    "evaluation_acquisitions": 6,
+    "evaluation_releases": 6,
+    "active": null
   },
   "cross_lambda_authorized": true,
   "root": "/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_OBJECT41_42_43_20261101_v1",
   "controller": 11852,
-  "latest_evidence": "check_readonly_20261103_020151",
-  "next_check_minutes": 160,
+  "latest_evidence": "check_readonly_20261103_123847",
+  "next_check_minutes": 30,
   "final_CPU_acceptance": "PENDING",
   "baseline_lambda": 0.1,
   "new_lambdas": [
@@ -650,5 +593,8 @@
     "monitor": "object-s-r-run",
     "close_monitor_only_after": "GOAL six runs independently accepted, interpreted, published and owned hook cleanup; OBJECT completion is not final user objective"
   },
-  "completion_source": "engineering_cross_lambda_20261102_v1/controller.exit"
+  "completion_source": "engineering_cross_lambda_20261102_v1/controller.exit",
+  "active_training_pids": [],
+  "controller_process_alive": false,
+  "final_CPU_request": "request_20261103_124305_174cc6b8.json"
 }
