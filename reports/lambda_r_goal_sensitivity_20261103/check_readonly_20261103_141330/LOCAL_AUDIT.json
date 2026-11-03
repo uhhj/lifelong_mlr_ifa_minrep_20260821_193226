@@ -1,0 +1,183 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-11-03T14:13:31.657183+08:00",
+  "counts": {
+    "L005_41": {
+      "epochs": 158,
+      "accepted_updates": 18062,
+      "physical_optimizer_calls": 26124,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 58,
+        "steps": 18062,
+        "physical_optimizer_calls": 26124,
+        "time": 1793686392.479406,
+        "pid": 48174
+      },
+      "current_stage_epochs": 58,
+      "recent_epoch_mean_seconds": 22.277693915367127,
+      "current_stage_compute_minutes_estimate": 15.594385740756989,
+      "gate_blocks_observed": 823,
+      "gate_Q_accepts_observed": 446
+    },
+    "L005_42": {
+      "epochs": 162,
+      "accepted_updates": 18618,
+      "physical_optimizer_calls": 27236,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 62,
+        "steps": 18618,
+        "physical_optimizer_calls": 27236,
+        "time": 1793686398.552203,
+        "pid": 48177
+      },
+      "current_stage_epochs": 62,
+      "recent_epoch_mean_seconds": 21.315832018852234,
+      "current_stage_compute_minutes_estimate": 13.500026945273081,
+      "gate_blocks_observed": 876,
+      "gate_Q_accepts_observed": 454
+    },
+    "L005_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_41": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_42": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "L020_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 320,
+  "accepted_updates": 36680,
+  "physical_training_optimizer_calls": 53360,
+  "own_isolated_optimizer_calls": 66,
+  "own_extra_autograd_calls": 38,
+  "training_collection_completed_episodes": 20,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 48163,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 48165,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=ef3f4963-6a83-470e-8421-3afb81f8dc79 /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 48166,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d68a3a7e-9c2d-4df7-93e2-5ab273beb15e /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 48174,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_41 ",
+      "state": "R"
+    },
+    {
+      "pid": 48177,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1/train_wrapper.py L005_42 ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1421623296,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 213663744
+    },
+    "/data": {
+      "free": 20171862016,
+      "remaining_bound": 12003573760,
+      "reserve": 2147483648,
+      "spare": 6020804608
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "48177\n48174\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "742ff3ee03339e09478bfeda552ef0794014a6493a894378929b07d5379f2f1e",
+  "contract": "9791d13ff55a0f766ce5bf1e4abb96a175c51fad3dfa7ed0455319b9daddb31a",
+  "prefix_checked": "execution\\20261103_lambda_r_goal_sensitivity\\check_readonly_20261103_134140",
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 2,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 2,
+      "evaluate": 0
+    },
+    "active": null
+  }
+}
