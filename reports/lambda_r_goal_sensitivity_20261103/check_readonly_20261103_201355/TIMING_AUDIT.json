@@ -1,0 +1,48 @@
+{
+  "status": "CONDITIONAL_PLANNING_NOT_COMPLETION",
+  "observation": "2026-11-03T20:13:52.106107+08:00",
+  "snapshot_sha256": "e9316c668d2ee661424d1713c570d857a1826af4042c745e6a7e641583881005",
+  "completed_pair_timing_source": "execution\\20261103_lambda_r_goal_sensitivity\\check_readonly_20261103_172328\\TIMING_AUDIT.json",
+  "completed_pair_timing_sha256": "5569e66bacc59415d5a92b2082ada0e1e74a86dcc35bd05753fcea258591144c",
+  "current_stage_remaining_compute_minutes": {
+    "L005_43": 34.80849746227264,
+    "L020_41": 35.634026244481404
+  },
+  "formula": "remaining_epochs * recent_10_mean_seconds / 60; current pair runs concurrently",
+  "current_pair_including_save_collection_planning_minutes": [
+    40,
+    60
+  ],
+  "L005_600_formal_planning_minutes": [
+    60,
+    120
+  ],
+  "remaining_L020_42_43_parallel_training_collection_planning_minutes": [
+    230,
+    280
+  ],
+  "L020_600_formal_planning_minutes": [
+    60,
+    120
+  ],
+  "remaining_queue_planning_minutes": [
+    390,
+    580
+  ],
+  "rounded_user_planning_hours": [
+    7,
+    10
+  ],
+  "L005_training_and_formal_planning_minutes": [
+    100,
+    180
+  ],
+  "next_check_minutes": 45,
+  "limits": [
+    "First complete pair wall 216.75/218.56 minutes; last pair own cache and lambda may change throughput.",
+    "Formal throughput not measured in this run; old GOAL S600 76.56 minutes is hardware-different historical reference only.",
+    "Collection and evaluation share one lock; any remaining L02041 collection can wait during L005 formal.",
+    "Current pair and final pair each use maximum of concurrent run durations, not sum.",
+    "CPU acceptance, interpretation and publication additional; no completion inferred by time."
+  ]
+}
