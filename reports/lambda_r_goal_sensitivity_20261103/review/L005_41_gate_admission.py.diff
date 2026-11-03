@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261029_support_gate_full_s_goal\seed41\gate_admission.py
++++ L005_41/gate_admission.py
+@@ -12,7 +12,7 @@
+     return torch.stack([y[:,lo:hi].square().mean().sqrt().clamp_min(.1) for lo,hi in [(0,3),(3,6),(6,7)]]).cuda()
+ 
+ def step(a,b,arm,m,scale,info):
+-    return update(a,b,arm,m,scale,info,STAGE,retain_weight=0. if arm=='C' else .1)
++    return update(a,b,arm,m,scale,info,STAGE,retain_weight=0. if arm=='C' else RETAIN_WEIGHT)
+ 
+ def admission(a,ds,m,scale,info,pr,arm):
+     ids=ds.ids[:6]+[i for i,r in enumerate(ds.rows) if r['task']==STAGE][:4]
