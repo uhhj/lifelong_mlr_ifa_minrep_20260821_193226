@@ -17,3 +17,8 @@ GOAL生产root尚不存在，无controller/合同，0生产epoch/0采集/0正式
 现有preflight_readonly_20261103_125257实际PASS：root新峰128MiB及1GiB保留后余213757952B；data新峰12GiB及2GiB保留后余6036926464B。是快照，不保证未来容量；不足不删旧模型或付费。全部审核、实际检查和启动证据按publish.py轻量审核串行nonforce推MLR核remoteSHA/receipt，不发CP/state/RNG/cache/凭据。
 
 最终包装仅STATIC_ONLY，必须六run真实controller.exit0及无自身进程后CPU24CP/6恢复/24teacher/1200noise/40200gate真实验收，再与既有GOAL0.1逐项配对解释三档/新旧任务/SF/FS/全部负单元/训练代理/成本、硬件和开发集/预训练来源限制。不套OBJECT的scale例外，不按成绩选λ或加seed。沿用object-s-r-run同一监控至GOAL也接受解释发布完成。运输worker3700先核status/PID，活跃不重启不输出凭据。健康无实质变化静默，仅完成/新失败/需行动通知。
+
+
+# 2026-11-04 最终本地验收完成
+
+六run实际PASS_COMPLETE_LOCAL_ACCEPTANCE，三档对比详见FINAL_REPORT.md及最终目录PRIMARY_S_COMPARISON.md。0.1平均AUC87.2569，0.05为83.0208，0.2为83.2292；保留0.2旧任务保持更好的取舍与全部负单元。无重训重评，待本轮发布闭合。
