@@ -1,0 +1,22 @@
+\section{Related work}
+\subsection{Continual robot imitation learning}
+LIBERO evaluates knowledge transfer and retention across manipulation
+tasks \citep{liu2023libero}. Our experiments follow the pretrained
+initialization and subsequent continual-learning setting of MLR+IFA
+\citep{yu2026mlr}.
+\draftnote{Add verified references on rehearsal, skill reuse, and parameter
+isolation. Distinguish task access and pretrained initialization.}
+\subsection{Replay memory selection}
+RA-Coreset concerns which historical demonstration windows occupy a fixed
+quota. It combines representative selection with protected random anchors.
+\draftnote{Add primary references for random replay and geometric coresets.
+Distinguish anchor repair from the established idea of coreset replay.}
+\subsection{Distillation and successful execution histories}
+M2Distill distills multimodal representations and the complete GMM policy
+on memory exemplars using consecutive-stage teachers \citep{roy2025m2distill}.
+SHBR uses separate successful autonomous histories, acquisition-time
+references, and a retention objective focused on the deployed execution
+component and its selection. Candidate updates are assessed before adoption.
+\draftnote{Add verified self-imitation and execution-replay references.
+Successful replay or distillation alone is not the novelty claim.
+Paper-reported M2Distill numbers must be separated from reproduced baselines.}

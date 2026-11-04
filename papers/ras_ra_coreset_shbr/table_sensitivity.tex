@@ -1,0 +1,15 @@
+\begin{table}[tb]
+\centering\small
+\caption{GOAL retention-weight sensitivity: three-seed means in percent. The primary 0.10 setting reuses accepted historical runs; additional settings use the same scientific budgets, with hardware differences recorded.}\label{tab:lambda}
+\begin{tabular}{rrrrrr}
+\toprule
+$\lambda_R$ & AUC & FWT & NBT $\downarrow$ & OldFinal & FinalAll \\
+\midrule
+0.05 & 83.02 & 85.42 & 4.63 & 79.44 & 81.67 \\
+0.10 & 87.26 & 89.58 & 5.28 & 83.89 & 85.00 \\
+0.20 & 83.23 & 82.92 & -0.93 & 85.00 & 82.92 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The primary weight 0.1 achieves the highest mean AUC and FinalAll. A weight of 0.2 increases OldFinal but reduces FWT, revealing a retention--acquisition trade-off. These results do not establish invariance to the retention weight.

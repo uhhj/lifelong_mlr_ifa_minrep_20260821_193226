@@ -1,0 +1,18 @@
+\section{Problem setting}
+Tasks arrive sequentially with demonstration set $\mathcal D_t$ for task
+$t$. A shared policy $\pi_\theta(a\mid h,\ell)$ conditions on observation
+history $h$ and language instruction $\ell$. Historical demonstrations
+are retained in $\mathcal M^{\mathrm{demo}}$; a separate memory
+$\mathcal M^{\mathrm{succ}}$ stores successful autonomous histories.
+Its storage and interaction costs are reported separately.
+The policy predicts $K=5$ Gaussian components
+$\{(\mu_m,\sigma_m,z_m)\}_{m=1}^K$. Deployment selects
+\begin{equation}
+k=\arg\max_m z_m,\qquad
+a\sim\mathcal N(\mu_k,\operatorname{diag}(\sigma_k^2)).
+\end{equation}
+The mixture-based behavior-cloning loss and deployed component selection
+are distinguished explicitly.
+We retain the MLR+IFA backbone, temporal processing, and valid
+observation--next-action alignment (ALIGN/TASA in experiment records).
+\draftnote{Complete architecture, alignment, and notation from frozen code.}

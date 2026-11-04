@@ -1,0 +1,86 @@
+\section{Method}
+\subsection{Overview}
+The two memories connect policy learning and autonomous execution
+(Fig.~\ref{fig:overview}). SHBR does not replace RA-selected demonstration members.
+\begin{figure}[tb]\centering
+\begin{tabular}{c}
+\fbox{\parbox{0.84\linewidth}{\centering
+Expert demonstrations $\rightarrow$ RA-Coreset\\Fixed-quota demonstration replay}}\\[5pt]
+$\downarrow$\\[5pt]
+\fbox{\parbox{0.84\linewidth}{\centering
+Shared policy learning\\Demonstration learning + controlled retention}}\\[5pt]
+$\downarrow$\\[5pt]
+\fbox{\parbox{0.84\linewidth}{\centering
+Autonomous execution $\rightarrow$ successful histories\\
+Fixed behavior references $\rightarrow$ SHBR in later learning}}
+\end{tabular}
+\caption{Framework schematic. Acquired success histories feed subsequent
+policy learning. This conceptual diagram is not a rollout visualization.}
+\label{fig:overview}\end{figure}
+\subsection{Random-anchored coreset replay}
+Let $U$ be candidate demonstration windows, $b=\lceil|U|/2\rceil$ the quota,
+and $S_0$ the original size-$b$ greedy $k$-center set. Reproduce the same-seed
+ordered random sample of size $b$ and protect its first $\lfloor b/2\rfloor$
+members as anchors $A$. Starting from $S_0$, insert missing anchors in
+their random order. After each insertion remove a non-anchor to minimize
+\begin{equation}r(S)=\max_{u\in U}\min_{v\in S}d(u,v).\end{equation}
+Ties use mean nearest distance, then deterministic identity order.
+Exactly $|A\setminus S_0|$ exchanges preserve $|S|=b$ and ensure $A\subseteq S$.
+Window payloads and calibrated distance are retained; old sets are not reselected.
+\draftnote{Add the distance definition, tolerance, and selection illustration.
+Quota and anchor inclusion are invariants; no global optimality is claimed.}
+\subsection{Demonstration-learning objective}
+The strong control $C$ includes continuous expert supervision.
+For expert action $y_i$, define
+\begin{align}
+c_{im}&=\sum_g\frac{\|\mu_{im,g}-y_{i,g}\|^2+\|\sigma_{im,g}\|^2}{|g|s_g^2},\\
+r(z,j)&=\left[\delta+\max_{m\ne j}z_m-z_j\right]_+ .
+\end{align}
+Groups $g$ are translation, rotation, and gripper coordinates;
+$s_g$ is frozen training-action RMS with floor $0.1$.
+With $j_i^E=\arg\min_m c_{im}$, the objective is
+\begin{equation}\label{eq:control}
+L_C=L_{\mathrm{BC}}+0.1L_{\mathrm{IFA}}+
+0.1\E_{i\in\mathrm{old,valid}}[c_{i,k_i}+0.1r(z_i,j_i^E)].
+\end{equation}
+Expert auxiliary terms apply to valid old-task windows and are retained in both branches.
+\subsection{Success histories and fixed references}
+After task acquisition, ten training rollouts use initial states separate
+from formal evaluation. Fixed trajectory quotas and reservoir sampling retain
+up to 128 histories per task from successful trajectories. Unused quotas are
+not filled by extra rollouts or redistribution. Each record contains latent
+history and the acquisition policy's executed Gaussian $(\mu_i^T,\sigma_i^T)$.
+This distribution reference is fixed in subsequent stages. For $n_t^+$
+distinct represented successful trajectories, define
+\begin{equation}q_t=n_t^+/10.\end{equation}
+This is trajectory support, not a calibrated action-correctness probability.
+\subsection{Execution retention and routing}
+Define the grouped diagonal-Gaussian Wasserstein distance
+\begin{equation}
+d_{im}=\sum_g\frac{\|\mu_{im,g}-\mu_{i,g}^T\|^2+
+\|\sigma_{im,g}-\sigma_{i,g}^T\|^2}{|g|s_g^2}.
+\end{equation}
+The executed component receives regression; the route target
+$j_i^T=\arg\min_m d_{im}$ favors the closest component without tying
+component indices across stages. Four task-balanced rotating slots give
+\begin{align}
+L_{\mathrm{ret}}&=\frac14\sum_{(t,i)\in\mathcal B_{\mathrm{succ}}}
+q_t[d_{i,k_i}+0.1r(z_i,j_i^T)],\\
+L_Q&=L_C+\lambda_RL_{\mathrm{ret}} .
+\end{align}
+Empty slots contribute zero; the denominator remains four.
+The primary setting uses $\lambda_R=0.1$ and $\delta=0.1$.
+\subsection{Controlled update selection}
+Each block of ten updates (or shorter epoch tail) produces candidates $C$
+and $Q$ from the same full training state and mini-batches. Fixed training
+probes measure current BC $B$, execution cost $E$, and support-weighted
+old-behavior retention $D$. Select $Q$ exactly when
+\begin{equation}
+B(Q)\le B(C),\qquad E(Q)\le E(C),\qquad D(Q)<D(C);
+\end{equation}
+otherwise select $C$. Restore the chosen model, optimizer, scheduler,
+gradients, modes, RNG, and cursor together. Probes contain up to 64 current
+valid windows and eight histories per old task. The old-task criterion
+is aggregated, not a guarantee for every task or formal rollout.
+Deployment keeps the original architecture and action sampler.
+\draftnote{Insert pseudocode for memory creation and complete-state branching.}

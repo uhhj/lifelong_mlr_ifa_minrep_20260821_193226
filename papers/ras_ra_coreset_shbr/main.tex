@@ -1,0 +1,56 @@
+% Official Elsevier elsarticle; working framework, not submission-ready.
+\documentclass[review,12pt]{elsarticle}
+\usepackage{amsmath,amssymb,booktabs,xcolor}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\biboptions{sort&compress}
+\journal{Robotics and Autonomous Systems}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\draftnote}[1]{\par\smallskip\noindent{\color{blue!65!black}\small
+\textbf{Draft task:} #1}\par\smallskip}
+\begin{document}
+\begin{frontmatter}
+\title{Continual Robot Imitation Learning with Random-Anchored Replay
+and Success-History Behavior Retention}
+\author{Author names to be supplied}
+\affiliation{organization={Affiliation to be supplied}}
+\begin{abstract}
+Continual robot imitation learning requires a shared policy to acquire new
+skills while retaining previously acquired behavior. Limited replay memory
+restricts the demonstration experience available during later learning,
+while autonomous execution provides additional histories on which the robot
+has already completed a task. We combine two complementary mechanisms.
+Random-Anchored Coreset replay (RA-Coreset) incorporates protected random
+anchors into representative demonstration selection at a fixed replay quota.
+Success-History Behavior Retention (SHBR) stores successful autonomous
+histories with fixed execution-distribution references. It weights retention
+by trajectory support and selects between matched candidate updates using
+training-only criteria for current-task learning and old-behavior retention.
+The framework builds on multimodal latent replay and incremental feature
+adjustment without changing the deployed policy architecture. Across three
+seeds on LIBERO-GOAL and LIBERO-OBJECT, the complete method achieves mean
+AUCs of 87.26\% and 86.49\%, respectively. Comparisons with an
+optimizer-call-matched control and an ungated retention variant examine
+the value and computational cost of the design.
+\end{abstract}
+\begin{keyword}
+Continual robot learning \sep Imitation learning \sep Experience replay
+\sep Coreset selection \sep Behavior retention
+\end{keyword}
+\end{frontmatter}
+\noindent\textbf{Working framework -- 4 November 2026.}
+Author information, additional related work, final figures, and declarations
+remain to be completed.
+\input{sec01_introduction}
+\input{sec02_related_work}
+\input{sec03_problem}
+\input{sec04_method}
+\input{sec05_experiments}
+\input{sec06_discussion}
+\input{sec07_conclusion}
+\input{declarations}
+\appendix
+\input{appendix_reproducibility}
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+\end{document}

@@ -1,0 +1,51 @@
+\section{Experiments}
+\subsection{Protocol}
+LIBERO-GOAL and LIBERO-OBJECT \citep{liu2023libero} use official suite-specific
+six-task pretrained initializations, followed by four continual tasks trained
+for 100 epochs each. Seeds are 41, 42, and 43. All seen continual tasks are
+evaluated after each stage on 20 initial states per task, yielding 200 formal
+episodes per run. SHBR collects 40 additional training episodes per run.
+Evaluation uses a 600-step horizon, five initial zero actions, and maximum-logit
+component selection followed by Normal sampling. Latest $C/Q/S$ comparisons
+use paired noise as bound in their evidence. Historical baselines do not
+assert identical trajectory-level action noise.
+\subsection{Metrics}
+Let $p_{s,t}$ denote success on task $t$ after stage $s$, relabeling the four
+continual tasks as $1,\ldots,T$. We use
+\begin{align}
+\mathrm{AUC}&=\frac1T\sum_{t=1}^T\frac1{T-t+1}\sum_{s=t}^T p_{s,t},\\
+\mathrm{NBT}&=\frac1{T-1}\sum_{t=1}^{T-1}\frac1{T-t}
+\sum_{s=t+1}^T(p_{t,t}-p_{s,t}).
+\end{align}
+FWT is mean diagonal success, not gain over a zero-shot baseline.
+OldFinal averages final old-task success; FinalAll averages all final tasks.
+NBT is lower-better and can be negative.
+\subsection{Overall comparison}
+\input{table_main}
+The complete method improves mean AUC over reproduced MLR+IFA by 10.90
+points on GOAL and 18.19 on OBJECT. These complete-method comparisons
+are complemented by the controls below.
+\draftnote{Complete the baseline protocol table; separate paper-reported
+external results from reproduced results.}
+\subsection{Retention and update controls}
+\input{table_controls}
+Against optimizer-call-matched $C$, the complete method improves mean AUC
+by 3.54 and 5.59 points on GOAL and OBJECT. Increasing $C$ updates alone
+therefore does not explain the full advantage. Against ungated $Q$, mean
+AUC increases by 3.75 and 1.88 points; their physical optimizer budgets differ.
+\subsection{Sensitivity, behavior, and resources}
+\input{table_sensitivity}
+\begin{figure}[tb]\centering
+\fbox{\parbox[c][25mm][c]{0.88\linewidth}{\centering
+Figure slot: stage-wise success curves from accepted matrices\\
+Show both suites and seed variability}}
+\caption{Planned learning-curve figure. No synthetic experimental curve
+is included in this framework.}\end{figure}
+\draftnote{Add paired SF/FS, task matrices, component diagnostics, and the
+relationship between offline and closed-loop results.}
+Across both suites and three seeds, the complete method uses 544800 accepted
+updates and 1012500 production optimizer calls. Matched $C$ uses 1012500
+calls; $Q$ uses 544800. Both $Q$ and the complete method use 240 training
+collection episodes across six runs; this $C$ control uses none.
+Budget matching concerns optimizer calls, not identical interaction or wall time.
+\draftnote{Add storage, probe-forward, candidate-update, and wall-clock costs.}
