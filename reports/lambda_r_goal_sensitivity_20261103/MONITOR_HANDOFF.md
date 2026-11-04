@@ -1,59 +1,11 @@
-## 2026-11-04 12:25 实际复查：六run自然完成，唯一最终CPU验收已提交
+# OBJECT→GOAL λ_R 六run接续：GOAL已完整接受，待出版核验关闭监控
 
-check_readonly_20261104_122528实际审计PASS，231310全部epoch/门控/诊断/正式前缀精确保留。六run各400轮76100接受142200生产40采集200正式，全部train/evaluate.exit0；真实root/controller.exit0，无自身进程。全部训练及闭环实际于11月4日02:20:17自然完成，不是依据时钟推断。累计2400轮456600接受853200生产546隔离246准入autograd240采集1200正式，40200门控；139冻结项不变，24采集和6正式锁完整acquired/released合并互斥。工程5704/36继续单列。
+2026-11-04最终请求request_20261104_122612_3faaf4bd.json实际成功，证据final_readonly_20261104_122613：远端CPU完成于12:33:36，本地audit_final_local与compare_primary_s通过，describe_final完成三档解释。实际24CP/6恢复/24teacher缓存/1200初态noise/40200门控/完整预算与24采集6评估互斥通过；无scale例外。最终验收前后轻量科学SHA相同。六run自然完成于02:20:17，root/controller.exit0，无自身进程。不要重复任何final、check、训练评估、controller、部署或诊断。
 
-12:26:12唯一提交final_readonly请求request_20261104_122612_3faaf4bd.json，见FINAL_PENDING_REQUEST.json。当前worker17764实际RUNNING_REQUEST。下一30分钟直接读取旧运输目录.session_control/result_20261104_122612_3faaf4bd.json，禁止重复提交final、任何训练评估/部署/验证。按result.output第一行实际目录复制回本目录，audit_final_local.py FINAL→compare_primary_s.py FINAL，再自主完成FINAL_REPORT/ACCEPTANCE的三档/新旧任务/SF/FS/全部负单元/门控与梯度代理/成本和硬件泄露边界解释发布。当前PARTIAL_FINAL_CPU_ACCEPTANCE_IN_PROGRESS，不能套STATIC_ONLY或轻量结果声称最终接受。若包装错误保留原证据后版本化修复，不重训重评。
+ACCEPTANCE.json、FINAL_REPORT.md及INTERPRETATION_AUDIT.json已完成；GOAL三档0.05/0.1/0.2最终均值81.6667/85/82.9167，0.2旧任务85高于基线83.8889而新任务76.6667低于88.3333，seed41最终Task9仅40%，其他两seed最终总分高于基线。0.05最终seed41平、42/43各低5pp。全部60单元和SF/FS均保留，不按结果挑λ或追加实验。
 
-本地旧worker3700状态残留READY但实际PID不存在且无其他credential_session；核无未完成请求/STOP后，用既有授权Credential Manager隐藏启动新worker17764，仅运输更新，无服务器训练重启，无凭据输出；见LOCAL_TRANSPORT_RENEWAL_20261104。当前nvidia-smi返回9（无法连接驱动），发生时观察到全部科学进程已结束、所有真实退出0及前缀完整；CPU最终验收不需要GPU，暂不改驱动/重启，不因此重评。不得宣称已定位驱动异常原因或发生时间。
+六run官方初态/RNG、Task6对基线全部tensor精确，但Task6闭环85/70/70对基线90/70/75，保留硬件推理/环境执行差异，不称硬件受控λ单因素因果；开发集复用及预训练来源未闭合限制保留。生产853200物理/456600接受，546隔离246准入216方向autograd，工程5704/36另计。OBJECT35418/94与540+UNKNOWN仍原账。12:25观察GPU驱动不可访问，全部科学先前已自然结束，实际CPU验收通过；未改驱动或重启，原因/开始时间未知。
 
-# GOAL 固定 λ_R 六run：当前交接
+当前活动目录D:/论文课题研究/MLR+IFA/execution/20261103_lambda_r_goal_sensitivity；root S_LAMBDA_R_GOAL41_42_43_20261103_v1，合同9791d13ff55a0f766ce5bf1e4abb96a175c51fad3dfa7ed0455319b9daddb31a/139项。OBJECT已接受发布并清理自有pth/HOOK_ENABLED，绑定SHA本轮重核；GOAL从未安装site hook，无需远程删除。旧C/Q/S与旧机制不恢复。
 
-
-
-实际观察 2026-11-04T12:25:30.277430+08:00，check_readonly_20261104_122528/LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL。
-
-
-
-唯一root `/data/mlr_ifa/experiment_workspaces/S_LAMBDA_R_GOAL41_42_43_20261103_v1`；controller 48163；合同 `9791d13ff55a0f766ce5bf1e4abb96a175c51fad3dfa7ed0455319b9daddb31a`。禁止重复compose/freeze/deploy/controller/工程验证或已完成轮。
-
-
-
-|case|完整轮/400|接受更新|生产物理|采集/40|正式/200|
-
-|---|---:|---:|---:|---:|---:|
-
-|L005_41|400|76100|142200|40|200|
-
-|L005_42|400|76100|142200|40|200|
-
-|L005_43|400|76100|142200|40|200|
-
-|L020_41|400|76100|142200|40|200|
-
-|L020_42|400|76100|142200|40|200|
-
-|L020_43|400|76100|142200|40|200|
-
-
-
-累计2400/2400轮、456600/456600接受、853200/853200生产、546/546自身隔离、246/246准入autograd、240/240采集、1200/1200正式。方向最多216autograd另记。
-
-
-
-下一30分钟复查，初期一次性核首个保持阶段自身准入及吞吐，后续按整run或整组正式实测剩余时间调整，不固定高频、不按时钟推断完成。
-
-
-
-先完整读PROTOCOL、IMPLEMENTATION_NOTES、RUN_STATUS、ACTIVE_ROOT、SOURCE_REVIEW、FINAL_WRAPPER_REVIEW、OBJECT_COMPLETION_BINDING、ENGINEERING_ACCEPTANCE和最新实际EVIDENCE/LOCAL_AUDIT。只新增GOAL .05/.2各41/42/43；旧GOAL .1的600正式只读两次配对，不是1200独立基线。每任务100轮、原10步双候选零epsilon、自己成功缓存q与4槽分母、原RA/损失其余项/采样预算保持；同λ准入。禁止扩seed、扫参、补采重评或按成绩选λ。
-
-最多两训练，显式c10d localhost:0独立UUID，不用--standalone。L005优先训练、空槽可L02041；L005训练齐全优先600串行正式，已启动L02041可继续；之后L02042/43最多两训练，最后L020600正式。全部24采集和6评估共享environment_locked全局flock，生产事件须逐项审计互斥，无site-packages hook。每阶段自己的GPU准入/COPY_EQ/BRANCH_COPY_EQ/CHECK_EQ必须实际通过，不套未来PASS。官方初态tensor/RNG同一；跨GPU Task6记录实际比较，不预称相等或λ单因素硬件完全受控。
-
-GOAL工程独立验证实际PASS_GOAL_FULL_PATH_BOTH_LAMBDAS，两λ八阶段全batch逐位相等，5704隔离optimizer/36autograd/0环境，退出0无诊断进程，环境锁零环境模拟PASS。证据engineering_validation_20261103_v1/capacity_readonly_20261103_133804，ENGINEERING_ACCEPTANCE绑定123项生产源码UTF8 LF文本SHA。此前两个部署前包装零成本失败保留，不重复任何验证入口。工程5704/36不混生产或OBJECT历史35418/94及540+UNKNOWN。
-
-OBJECT已全接受/报告发布/按SHA清理自有pth与HOOK_ENABLED，OBJECT_COMPLETION_BINDING及原OBJECT_CLOSURE为闭环；不再跑依赖已清理pth的旧cross检查，不重训重评。C/Q/旧机制永久停止，已有S只读。
-
-最终仅GOAL本root/controller.exit0且无自身进程后，才运行final_readonly→audit_final_local→compare_primary_s，实际CPU24CP/6恢复/24teacher/1200初态noise/40200门控及完整预算/环境互斥验收。FINAL_WRAPPER_REVIEW仅STATIC_ONLY，不套OBJECT的scale例外。包装失败保留证据外置版本化修复，不重训重评。随后解释三档、新旧任务、SF/FS、全部负单元、训练代理与成本、硬件迁移、开发集反复使用和预训练来源未闭合限制；不称独立确认或全局无泄露。
-
-运输旧机制目录.session_control现worker17764，先读status并核PID，活跃不重启不输出凭据；本目录check_readonly复制旧目录queue，按result.output第一行真实目录取证，audit_progress.py NEW PREVIOUS→record_progress.py NEW INTERVAL。任何异常先核hash、进程/退出、完整恢复及实际已耗成本，禁止盲恢复部分块/环境attempt。
-
-每次检查按AGENTS经本目录publish.py审核轻量code/report/hash/scalars/outcomes，串行nonforce推MLR核remoteSHA/receipt；禁CP/model/state/RNG/cache/凭据/未审bundle。不足容量不删旧模型或付费。健康静默，仅实质变化/完成/新失败/需行动通知。沿用object-s-r-run同一监控，GOAL也全部独立接受、解释发布后才关闭。
+只剩按publish.py受审轻量文件串行nonforce推MLR，核remoteSHA/localreceipt，写本地闭环记录后删除同一object-s-r-run监控。不要重复科学工作。若发布失败保留已接受科学结果，修运输/发布后继续闭环；禁CP/model/state/RNG/cache/凭据。运输worker17764，当前唯一final请求已完成，不可重提。
