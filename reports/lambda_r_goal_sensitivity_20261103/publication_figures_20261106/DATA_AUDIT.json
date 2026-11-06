@@ -1,0 +1,59 @@
+{
+  "status": "PASS_RECOMPUTED_AND_RENDERED_PENDING_VISUAL_REVIEW",
+  "comparison_cases": 24,
+  "method_episode_rows": 3600,
+  "seed_count": 3,
+  "episodes_per_stage_task_seed": 20,
+  "gate_blocks": {
+    "OBJECT": 27300,
+    "GOAL": 20100
+  },
+  "gate_decisions_all_recomputed": true,
+  "baseline_outcomes_and_hashes_identical_across_comparisons": true,
+  "method_and_lambda_metrics_recomputed_from_paired_booleans": true,
+  "all_negative_cells_preserved": true,
+  "new_optimizer_calls": 0,
+  "new_environment_episodes": 0,
+  "scatter_sampling": "NONE: every gate block rendered; scatter layer rasterized at 600dpi",
+  "relative_delta": "200*(Q-C)/(abs(Q)+abs(C)); zero if both zero; percent, bounded [-200,200]",
+  "gate_rule": "Q.BC<=C.BC and Q.Exec<=C.Exec and Q.Retain<C.Retain; exact original scalar comparisons",
+  "success_ribbons": "Sample SD across three seeds; untruncated mean +/- SD, y axis 0..105",
+  "lambda_points": "All seeds; small fixed horizontal offsets for visibility; mean line unjittered",
+  "layout": [
+    {
+      "figure": "fig01_success_curves",
+      "text_outside_canvas": []
+    },
+    {
+      "figure": "fig02_task_heatmaps",
+      "text_outside_canvas": []
+    },
+    {
+      "figure": "fig03_gate_tradeoffs",
+      "text_outside_canvas": []
+    },
+    {
+      "figure": "fig04_lambda_sensitivity",
+      "text_outside_canvas": []
+    },
+    {
+      "figure": "figS01_task_differences",
+      "text_outside_canvas": []
+    },
+    {
+      "figure": "figS02_lambda_fwt_nbt",
+      "text_outside_canvas": []
+    }
+  ],
+  "versions": {
+    "python": "3.13.15",
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.4"
+  },
+  "limitations": [
+    "C matched optimizer budget differs from Q/S in accepted updates and collection",
+    "Gate diagnostics use training probes, not an independent outcome test",
+    "Historical lambda=0.1 baseline crosses hardware with new sensitivities",
+    "Repeated development evaluations; three seeds; no independent-test or significance claim"
+  ]
+}
