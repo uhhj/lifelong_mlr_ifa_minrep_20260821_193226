@@ -1,0 +1,1120 @@
+{
+  "status": "PASS_READONLY_RECORDS_AND_PROVENANCE_AUDIT_CAUSAL_ATTRIBUTION_PARTIAL",
+  "observed": "2026-11-07T19:06:15.477591+08:00",
+  "scope": "Six manuscript MLR+IFA baseline runs; original OBJECT43 auxiliary; historical checkpoint sensitivity",
+  "scientific_operations": {
+    "new_training": 0,
+    "new_evaluation": 0,
+    "new_forward": 0,
+    "checkpoint_loaded": 0,
+    "changed_results": 0
+  },
+  "main_records": 1200,
+  "auxiliary_first43_records": 200,
+  "main_epochs": 2400,
+  "main_optimizer_updates": 544800,
+  "results": {
+    "OBJECT_41": {
+      "root": "20261016_seeds40_41_three_arm/completion_evidence/seed41/rc",
+      "records": 200,
+      "attempts": 20,
+      "epochs": 400,
+      "updates": 105500,
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "torch": "1.13.0+cu116",
+      "source_binding": {
+        "train.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/train.py",
+        "model.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/model.py",
+        "evaluate.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/evaluate.py",
+        "eval_metric.py": "execution/20261013_coreset_object/source/coreset_exp/eval_metric.py"
+      },
+      "checkpoint_origin": "object_multitask_model_ep99.pth",
+      "pretrain_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+      "pretrain_use_state": "METADATA_NOT_IN_COPY",
+      "config_summary": {
+        "use_state": true,
+        "gamma": 0.3,
+        "batch": 10,
+        "epochs_per_stage": 100,
+        "lr": 0.0001,
+        "warmup": 500,
+        "checkpoint": 99
+      },
+      "features": null,
+      "baseline_bound_episode_files": 10,
+      "stages": {
+        "6": {
+          "epochs": 100,
+          "batches": 157,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -16.454863463237785,
+          "last_epoch_loss": -32.03954169400938,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        },
+        "7": {
+          "epochs": 100,
+          "batches": 227,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -6.432939939824495,
+          "last_epoch_loss": -32.91081710849039,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        },
+        "8": {
+          "epochs": 100,
+          "batches": 309,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -14.840942063884249,
+          "last_epoch_loss": -33.98580903605736,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        },
+        "9": {
+          "epochs": 100,
+          "batches": 362,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -17.225802977306984,
+          "last_epoch_loss": -34.662075906827305,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "51/80",
+          "percent": 63.75
+        },
+        "NBT": {
+          "fraction": "-1/24",
+          "percent": -4.166666666666667
+        },
+        "AUC": {
+          "fraction": "107/160",
+          "percent": 66.875
+        },
+        "OldFinal": {
+          "fraction": "7/12",
+          "percent": 58.333333333333336
+        },
+        "FinalAll": {
+          "fraction": "49/80",
+          "percent": 61.25
+        }
+      },
+      "matrix": {
+        "6_6": 50.0,
+        "7_6": 95.0,
+        "7_7": 35.0,
+        "8_6": 40.0,
+        "8_7": 60.0,
+        "8_8": 100.0,
+        "9_6": 15.0,
+        "9_7": 85.0,
+        "9_8": 75.0,
+        "9_9": 70.0
+      }
+    },
+    "OBJECT_42": {
+      "root": "20261013_coreset_extension/final_evidence/remote/seed42",
+      "records": 200,
+      "attempts": 20,
+      "epochs": 400,
+      "updates": 105500,
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "torch": "1.13.0+cu116",
+      "source_binding": {
+        "train.py": "execution/20261013_coreset_object/source/coreset_exp/train.py",
+        "model.py": "execution/20261013_coreset_object/source/coreset_exp/model.py",
+        "evaluate.py": "execution/20261013_coreset_object/source/coreset_exp/evaluate.py",
+        "eval_metric.py": "execution/20261013_coreset_object/source/coreset_exp/eval_metric.py"
+      },
+      "checkpoint_origin": "object_multitask_model_ep99.pth",
+      "pretrain_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+      "pretrain_use_state": "unknown",
+      "config_summary": {
+        "use_state": true,
+        "gamma": 0.3,
+        "batch": 10,
+        "epochs_per_stage": 100,
+        "lr": 0.0001,
+        "warmup": 500,
+        "checkpoint": 99
+      },
+      "features": {
+        "counts": {
+          "6": 1562,
+          "7": 1480,
+          "8": 1560,
+          "9": 1319
+        },
+        "demonstrations": {
+          "6": 10,
+          "7": 10,
+          "8": 10,
+          "9": 10
+        }
+      },
+      "baseline_bound_episode_files": 10,
+      "stages": {
+        "6": {
+          "epochs": 100,
+          "batches": 157,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -16.43058269646517,
+          "last_epoch_loss": -31.924616212298158,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        },
+        "7": {
+          "epochs": 100,
+          "batches": 227,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -9.719968291401601,
+          "last_epoch_loss": -32.82698478362634,
+          "selected_pairs": [
+            [
+              6,
+              7
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "8": {
+          "epochs": 100,
+          "batches": 309,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -16.13196297141823,
+          "last_epoch_loss": -34.01434715048781,
+          "selected_pairs": [
+            [
+              7,
+              8
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "9": {
+          "epochs": 100,
+          "batches": 362,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -19.45236879401938,
+          "last_epoch_loss": -34.60870829208121,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "53/80",
+          "percent": 66.25
+        },
+        "NBT": {
+          "fraction": "-1/180",
+          "percent": -0.5555555555555556
+        },
+        "AUC": {
+          "fraction": "127/192",
+          "percent": 66.14583333333333
+        },
+        "OldFinal": {
+          "fraction": "7/10",
+          "percent": 70.0
+        },
+        "FinalAll": {
+          "fraction": "51/80",
+          "percent": 63.75
+        }
+      },
+      "matrix": {
+        "6_6": 30.0,
+        "7_6": 45.0,
+        "7_7": 95.0,
+        "8_6": 10.0,
+        "8_7": 100.0,
+        "8_8": 95.0,
+        "9_6": 10.0,
+        "9_7": 100.0,
+        "9_8": 100.0,
+        "9_9": 45.0
+      }
+    },
+    "OBJECT_43": {
+      "root": "20261016_seed43_three_arm_repeat_v1/completion_evidence/RC",
+      "records": 200,
+      "attempts": 20,
+      "epochs": 400,
+      "updates": 105500,
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "torch": "1.13.0+cu116",
+      "source_binding": {
+        "train.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/train.py",
+        "model.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/model.py",
+        "evaluate.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/evaluate.py",
+        "eval_metric.py": "execution/20261013_coreset_object/source/coreset_exp/eval_metric.py"
+      },
+      "checkpoint_origin": "object_multitask_model_ep99.pth",
+      "pretrain_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+      "pretrain_use_state": "METADATA_NOT_IN_COPY",
+      "config_summary": {
+        "use_state": true,
+        "gamma": 0.3,
+        "batch": 10,
+        "epochs_per_stage": 100,
+        "lr": 0.0001,
+        "warmup": 500,
+        "checkpoint": 99
+      },
+      "features": null,
+      "baseline_bound_episode_files": 10,
+      "stages": {
+        "6": {
+          "epochs": 100,
+          "batches": 157,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -16.275853728033177,
+          "last_epoch_loss": -32.08074206455498,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        },
+        "7": {
+          "epochs": 100,
+          "batches": 227,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -7.973794667468722,
+          "last_epoch_loss": -32.926574606202244,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        },
+        "8": {
+          "epochs": 100,
+          "batches": 309,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -16.077421111256655,
+          "last_epoch_loss": -33.89097883477566,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        },
+        "9": {
+          "epochs": 100,
+          "batches": 362,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -19.213010551459387,
+          "last_epoch_loss": -34.63555352332184,
+          "selected_pairs": null,
+          "ifa_evidence": "NOT_IN_LOCAL_LIGHTWEIGHT_COPY"
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "7/10",
+          "percent": 70.0
+        },
+        "NBT": {
+          "fraction": "-13/360",
+          "percent": -3.611111111111111
+        },
+        "AUC": {
+          "fraction": "23/32",
+          "percent": 71.875
+        },
+        "OldFinal": {
+          "fraction": "3/4",
+          "percent": 75.0
+        },
+        "FinalAll": {
+          "fraction": "57/80",
+          "percent": 71.25
+        }
+      },
+      "matrix": {
+        "6_6": 40.0,
+        "7_6": 55.0,
+        "7_7": 90.0,
+        "8_6": 40.0,
+        "8_7": 95.0,
+        "8_8": 90.0,
+        "9_6": 35.0,
+        "9_7": 100.0,
+        "9_8": 90.0,
+        "9_9": 60.0
+      }
+    },
+    "GOAL_41": {
+      "root": "20261019_ra_coreset_goal_seed41/progress_20261019_222601/completion_baseline",
+      "records": 200,
+      "attempts": 20,
+      "epochs": 400,
+      "updates": 76100,
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "torch": "1.13.0+cu116",
+      "source_binding": {
+        "train.py": "execution/20261017_coreset_goal_three_seed/seed43/source/coreset_exp/train.py",
+        "model.py": "execution/20261017_coreset_goal_three_seed/seed43/source/coreset_exp/model.py",
+        "evaluate.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/evaluate.py",
+        "eval_metric.py": "execution/20261013_coreset_object/source/coreset_exp/eval_metric.py"
+      },
+      "checkpoint_origin": "goal_multitask_model_ep96.pth",
+      "pretrain_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+      "pretrain_use_state": "unknown",
+      "config_summary": {
+        "use_state": true,
+        "gamma": 0.7,
+        "batch": 10,
+        "epochs_per_stage": 100,
+        "lr": 0.0001,
+        "warmup": 500,
+        "checkpoint": 99
+      },
+      "features": {
+        "counts": {
+          "6": 997,
+          "7": 889,
+          "8": 904,
+          "9": 1969
+        },
+        "demonstrations": {
+          "6": 10,
+          "7": 10,
+          "8": 10,
+          "9": 10
+        }
+      },
+      "baseline_bound_episode_files": 10,
+      "stages": {
+        "6": {
+          "epochs": 100,
+          "batches": 100,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -11.656017971038818,
+          "last_epoch_loss": -31.143512134552,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        },
+        "7": {
+          "epochs": 100,
+          "batches": 139,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": 11.26456731429203,
+          "last_epoch_loss": -32.06932220184546,
+          "selected_pairs": [
+            [
+              6,
+              7
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "8": {
+          "epochs": 100,
+          "batches": 185,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -3.141186603178849,
+          "last_epoch_loss": -32.43686430647566,
+          "selected_pairs": [
+            [
+              6,
+              8
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "9": {
+          "epochs": 100,
+          "batches": 337,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": 9.877990731057498,
+          "last_epoch_loss": -30.61074840421139,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "57/80",
+          "percent": 71.25
+        },
+        "NBT": {
+          "fraction": "1/36",
+          "percent": 2.7777777777777777
+        },
+        "AUC": {
+          "fraction": "221/320",
+          "percent": 69.0625
+        },
+        "OldFinal": {
+          "fraction": "2/3",
+          "percent": 66.66666666666667
+        },
+        "FinalAll": {
+          "fraction": "53/80",
+          "percent": 66.25
+        }
+      },
+      "matrix": {
+        "6_6": 70.0,
+        "7_6": 60.0,
+        "7_7": 100.0,
+        "8_6": 55.0,
+        "8_7": 100.0,
+        "8_8": 50.0,
+        "9_6": 40.0,
+        "9_7": 100.0,
+        "9_8": 60.0,
+        "9_9": 65.0
+      }
+    },
+    "GOAL_42": {
+      "root": "20261017_coreset_goal_three_seed/final_evidence/seed42",
+      "records": 200,
+      "attempts": 20,
+      "epochs": 400,
+      "updates": 76100,
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "torch": "1.13.0+cu116",
+      "source_binding": {
+        "train.py": "execution/20261017_coreset_goal_three_seed/seed43/source/coreset_exp/train.py",
+        "model.py": "execution/20261017_coreset_goal_three_seed/seed43/source/coreset_exp/model.py",
+        "evaluate.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/evaluate.py",
+        "eval_metric.py": "execution/20261013_coreset_object/source/coreset_exp/eval_metric.py"
+      },
+      "checkpoint_origin": "goal_multitask_model_ep96.pth",
+      "pretrain_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+      "pretrain_use_state": "unknown",
+      "config_summary": {
+        "use_state": true,
+        "gamma": 0.7,
+        "batch": 10,
+        "epochs_per_stage": 100,
+        "lr": 0.0001,
+        "warmup": 500,
+        "checkpoint": 99
+      },
+      "features": {
+        "counts": {
+          "6": 997,
+          "7": 889,
+          "8": 904,
+          "9": 1969
+        },
+        "demonstrations": {
+          "6": 10,
+          "7": 10,
+          "8": 10,
+          "9": 10
+        }
+      },
+      "baseline_bound_episode_files": 10,
+      "stages": {
+        "6": {
+          "epochs": 100,
+          "batches": 100,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -11.728103594779968,
+          "last_epoch_loss": -31.18234287261963,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        },
+        "7": {
+          "epochs": 100,
+          "batches": 139,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": 2.2211045070196227,
+          "last_epoch_loss": -31.978673619332074,
+          "selected_pairs": [
+            [
+              6,
+              7
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "8": {
+          "epochs": 100,
+          "batches": 185,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -4.7698673127470785,
+          "last_epoch_loss": -32.55083334639266,
+          "selected_pairs": [
+            [
+              6,
+              8
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "9": {
+          "epochs": 100,
+          "batches": 337,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": 8.795386231393838,
+          "last_epoch_loss": -30.83298229251488,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "33/40",
+          "percent": 82.5
+        },
+        "NBT": {
+          "fraction": "2/45",
+          "percent": 4.444444444444445
+        },
+        "AUC": {
+          "fraction": "259/320",
+          "percent": 80.9375
+        },
+        "OldFinal": {
+          "fraction": "23/30",
+          "percent": 76.66666666666667
+        },
+        "FinalAll": {
+          "fraction": "4/5",
+          "percent": 80.0
+        }
+      },
+      "matrix": {
+        "6_6": 65.0,
+        "7_6": 70.0,
+        "7_7": 100.0,
+        "8_6": 60.0,
+        "8_7": 100.0,
+        "8_8": 75.0,
+        "9_6": 70.0,
+        "9_7": 100.0,
+        "9_8": 60.0,
+        "9_9": 90.0
+      }
+    },
+    "GOAL_43": {
+      "root": "20261017_coreset_goal_three_seed/final_evidence/seed43",
+      "records": 200,
+      "attempts": 20,
+      "epochs": 400,
+      "updates": 76100,
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "torch": "1.13.0+cu116",
+      "source_binding": {
+        "train.py": "execution/20261017_coreset_goal_three_seed/seed43/source/coreset_exp/train.py",
+        "model.py": "execution/20261017_coreset_goal_three_seed/seed43/source/coreset_exp/model.py",
+        "evaluate.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/evaluate.py",
+        "eval_metric.py": "execution/20261013_coreset_object/source/coreset_exp/eval_metric.py"
+      },
+      "checkpoint_origin": "goal_multitask_model_ep96.pth",
+      "pretrain_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+      "pretrain_use_state": "unknown",
+      "config_summary": {
+        "use_state": true,
+        "gamma": 0.7,
+        "batch": 10,
+        "epochs_per_stage": 100,
+        "lr": 0.0001,
+        "warmup": 500,
+        "checkpoint": 99
+      },
+      "features": {
+        "counts": {
+          "6": 997,
+          "7": 889,
+          "8": 904,
+          "9": 1969
+        },
+        "demonstrations": {
+          "6": 10,
+          "7": 10,
+          "8": 10,
+          "9": 10
+        }
+      },
+      "baseline_bound_episode_files": 10,
+      "stages": {
+        "6": {
+          "epochs": 100,
+          "batches": 100,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -11.617255437374116,
+          "last_epoch_loss": -31.023067016601562,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        },
+        "7": {
+          "epochs": 100,
+          "batches": 139,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": 55.13388347376486,
+          "last_epoch_loss": -31.929349117141832,
+          "selected_pairs": [
+            [
+              6,
+              7
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "8": {
+          "epochs": 100,
+          "batches": 185,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": 0.7509012866664577,
+          "last_epoch_loss": -32.49752502441406,
+          "selected_pairs": [
+            [
+              6,
+              8
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "9": {
+          "epochs": 100,
+          "batches": 337,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": 13.38745547048416,
+          "last_epoch_loss": -30.85960964916014,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "61/80",
+          "percent": 76.25
+        },
+        "NBT": {
+          "fraction": "-1/15",
+          "percent": -6.666666666666667
+        },
+        "AUC": {
+          "fraction": "253/320",
+          "percent": 79.0625
+        },
+        "OldFinal": {
+          "fraction": "53/60",
+          "percent": 88.33333333333333
+        },
+        "FinalAll": {
+          "fraction": "67/80",
+          "percent": 83.75
+        }
+      },
+      "matrix": {
+        "6_6": 80.0,
+        "7_6": 80.0,
+        "7_7": 100.0,
+        "8_6": 80.0,
+        "8_7": 100.0,
+        "8_8": 55.0,
+        "9_6": 95.0,
+        "9_7": 100.0,
+        "9_8": 70.0,
+        "9_9": 70.0
+      }
+    },
+    "OBJECT_43_FIRST": {
+      "root": "20261013_coreset_extension/final_evidence/remote/seed43",
+      "records": 200,
+      "attempts": 20,
+      "epochs": 400,
+      "updates": 105500,
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "torch": "1.13.0+cu116",
+      "source_binding": {
+        "train.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/train.py",
+        "model.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/model.py",
+        "evaluate.py": "execution/20261013_coreset_extension/seed43/source/coreset_exp/evaluate.py",
+        "eval_metric.py": "execution/20261013_coreset_object/source/coreset_exp/eval_metric.py"
+      },
+      "checkpoint_origin": "object_multitask_model_ep99.pth",
+      "pretrain_sha256": "159351b1df166dd5391c6b1e1317c0ab299fc8b1447fe466acef14ed7896bb7b",
+      "pretrain_use_state": "unknown",
+      "config_summary": {
+        "use_state": true,
+        "gamma": 0.3,
+        "batch": 10,
+        "epochs_per_stage": 100,
+        "lr": 0.0001,
+        "warmup": 500,
+        "checkpoint": 99
+      },
+      "features": {
+        "counts": {
+          "6": 1562,
+          "7": 1480,
+          "8": 1560,
+          "9": 1319
+        },
+        "demonstrations": {
+          "6": 10,
+          "7": 10,
+          "8": 10,
+          "9": 10
+        }
+      },
+      "baseline_bound_episode_files": 0,
+      "stages": {
+        "6": {
+          "epochs": 100,
+          "batches": 157,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -16.27585361869472,
+          "last_epoch_loss": -32.11675415525011,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        },
+        "7": {
+          "epochs": 100,
+          "batches": 227,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -9.721998089998303,
+          "last_epoch_loss": -32.94648764522065,
+          "selected_pairs": [
+            [
+              6,
+              7
+            ]
+          ],
+          "ifa_evidence": "PRESENT"
+        },
+        "8": {
+          "epochs": 100,
+          "batches": 309,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -17.02937182489011,
+          "last_epoch_loss": -34.00387230042887,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        },
+        "9": {
+          "epochs": 100,
+          "batches": 362,
+          "lr_first": 0.0,
+          "lr_final": 0.0,
+          "first_epoch_loss": -19.234447474884725,
+          "last_epoch_loss": -34.65700756515587,
+          "selected_pairs": [],
+          "ifa_evidence": "PRESENT"
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "33/40",
+          "percent": 82.5
+        },
+        "NBT": {
+          "fraction": "1/15",
+          "percent": 6.666666666666667
+        },
+        "AUC": {
+          "fraction": "63/80",
+          "percent": 78.75
+        },
+        "OldFinal": {
+          "fraction": "4/5",
+          "percent": 80.0
+        },
+        "FinalAll": {
+          "fraction": "4/5",
+          "percent": 80.0
+        }
+      },
+      "matrix": {
+        "6_6": 60.0,
+        "7_6": 55.0,
+        "7_7": 95.0,
+        "8_6": 40.0,
+        "8_7": 75.0,
+        "8_8": 95.0,
+        "9_6": 55.0,
+        "9_7": 85.0,
+        "9_8": 100.0,
+        "9_9": 80.0
+      }
+    }
+  },
+  "summary": {
+    "OBJECT": {
+      "FWT": {
+        "mean_percent": 66.66666666666667,
+        "sample_sd_percent": 3.1457643480294792
+      },
+      "NBT": {
+        "mean_percent": -2.7777777777777777,
+        "sample_sd_percent": 1.9444444444444446
+      },
+      "AUC": {
+        "mean_percent": 68.29861111111111,
+        "sample_sd_percent": 3.1186277623933223
+      },
+      "OldFinal": {
+        "mean_percent": 67.77777777777777,
+        "sample_sd_percent": 8.552669065744805
+      },
+      "FinalAll": {
+        "mean_percent": 65.41666666666667,
+        "sample_sd_percent": 5.204164998665332
+      }
+    },
+    "GOAL": {
+      "FWT": {
+        "mean_percent": 76.66666666666667,
+        "sample_sd_percent": 5.636562191028617
+      },
+      "NBT": {
+        "mean_percent": 0.18518518518518517,
+        "sample_sd_percent": 5.992107291616088
+      },
+      "AUC": {
+        "mean_percent": 76.35416666666667,
+        "sample_sd_percent": 6.383980602518568
+      },
+      "OldFinal": {
+        "mean_percent": 77.22222222222223,
+        "sample_sd_percent": 10.844011831079515
+      },
+      "FinalAll": {
+        "mean_percent": 76.66666666666667,
+        "sample_sd_percent": 9.213893494789993
+      }
+    }
+  },
+  "per_task": {
+    "OBJECT": {
+      "6": {
+        "first_learned_mean": 40.0,
+        "final_mean": 20.0,
+        "across_observed_stages_mean": 38.75
+      },
+      "7": {
+        "first_learned_mean": 73.33333333333333,
+        "final_mean": 95.0,
+        "across_observed_stages_mean": 84.44444444444444
+      },
+      "8": {
+        "first_learned_mean": 95.0,
+        "final_mean": 88.33333333333333,
+        "across_observed_stages_mean": 91.66666666666667
+      },
+      "9": {
+        "first_learned_mean": 58.333333333333336,
+        "final_mean": 58.333333333333336,
+        "across_observed_stages_mean": 58.333333333333336
+      }
+    },
+    "GOAL": {
+      "6": {
+        "first_learned_mean": 71.66666666666667,
+        "final_mean": 68.33333333333333,
+        "across_observed_stages_mean": 68.75
+      },
+      "7": {
+        "first_learned_mean": 100.0,
+        "final_mean": 100.0,
+        "across_observed_stages_mean": 100.0
+      },
+      "8": {
+        "first_learned_mean": 60.0,
+        "final_mean": 63.333333333333336,
+        "across_observed_stages_mean": 61.666666666666664
+      },
+      "9": {
+        "first_learned_mean": 75.0,
+        "final_mean": 75.0,
+        "across_observed_stages_mean": 75.0
+      }
+    }
+  },
+  "repeat43_minus_first43": {
+    "FWT": -12.5,
+    "NBT": -10.277777777777779,
+    "AUC": -6.875,
+    "OldFinal": -5.0,
+    "FinalAll": -8.75
+  },
+  "object_sensitivity_using_first43": {
+    "FWT": {
+      "mean_percent": 70.83333333333333,
+      "sample_sd_percent": 10.180659769058847
+    },
+    "NBT": {
+      "mean_percent": 0.6481481481481481,
+      "sample_sd_percent": 5.516063336520919
+    },
+    "AUC": {
+      "mean_percent": 70.59027777777777,
+      "sample_sd_percent": 7.075925456420159
+    },
+    "OldFinal": {
+      "mean_percent": 69.44444444444444,
+      "sample_sd_percent": 10.844011831079518
+    },
+    "FinalAll": {
+      "mean_percent": 68.33333333333333,
+      "sample_sd_percent": 10.180659769058847
+    }
+  },
+  "historical_checkpoint_sensitivity": {
+    "primary_ep99": {
+      "summary": {
+        "FWT": {
+          "mean_percent": 76.66666666666667,
+          "sample_sd_percent": 6.2915286960589585
+        },
+        "NBT": {
+          "mean_percent": 5.185185185185185,
+          "sample_sd_percent": 6.783315891626802
+        },
+        "AUC": {
+          "mean_percent": 74.02777777777777,
+          "sample_sd_percent": 9.214678557927341
+        },
+        "OldFinal": {
+          "mean_percent": 72.22222222222223,
+          "sample_sd_percent": 3.4694433324435563
+        },
+        "FinalAll": {
+          "mean_percent": 68.75,
+          "sample_sd_percent": 9.762812094883317
+        }
+      },
+      "selected_epochs": {
+        "42": {
+          "6": 99,
+          "7": 99,
+          "8": 99,
+          "9": 99
+        },
+        "43": {
+          "6": 99,
+          "7": 99,
+          "8": 99,
+          "9": 99
+        },
+        "44": {
+          "6": 99,
+          "7": 99,
+          "8": 99,
+          "9": 99
+        }
+      },
+      "evidence_level": "EXISTING_MATRIX_RECOMPUTATION_NOT_FRESH_EPISODE_OR_CHECKPOINT_AUDIT"
+    },
+    "secondary_selected": {
+      "summary": {
+        "FWT": {
+          "mean_percent": 86.66666666666667,
+          "sample_sd_percent": 1.9094065395649333
+        },
+        "NBT": {
+          "mean_percent": 13.24074074074074,
+          "sample_sd_percent": 9.954887957113487
+        },
+        "AUC": {
+          "mean_percent": 79.96527777777777,
+          "sample_sd_percent": 6.510486110740742
+        },
+        "OldFinal": {
+          "mean_percent": 70.55555555555556,
+          "sample_sd_percent": 5.357583756107199
+        },
+        "FinalAll": {
+          "mean_percent": 72.5,
+          "sample_sd_percent": 7.5
+        }
+      },
+      "selected_epochs": {
+        "42": {
+          "6": 85,
+          "7": 99,
+          "8": 95,
+          "9": 70
+        },
+        "43": {
+          "6": 80,
+          "7": 99,
+          "8": 80,
+          "9": 75
+        },
+        "44": {
+          "6": 90,
+          "7": 99,
+          "8": 99,
+          "9": 80
+        }
+      },
+      "evidence_level": "EXISTING_MATRIX_RECOMPUTATION_NOT_FRESH_EPISODE_OR_CHECKPOINT_AUDIT"
+    },
+    "secondary_minus_primary": {
+      "FWT": 10.0,
+      "NBT": 8.055555555555555,
+      "AUC": 5.9375
+    }
+  },
+  "release_blob_verification": {
+    "README.md": {
+      "git_blob": "23cdc4ba1d5135449df0f2fb779152e24bcbf5aa",
+      "sha256": "626ee6df9e904ae4adad23f2c043d0f977d2fa6754173eea3089bfb7cbbf3133"
+    },
+    "libero/configs/policy/complete_policy.yaml": {
+      "git_blob": "38005e86e96632e4a51dc1f1a5c8d55016ba7394",
+      "sha256": "e2f852be64b2a4066cd31bc871704a4e211d942e1c0d81796107a59bcc9178cb"
+    },
+    "libero/lifelong/algos/base.py": {
+      "git_blob": "e30561880003de834aafa347f81b7b4aa9836933",
+      "sha256": "496d2ee0ed0741e7447fbe724526ebe7cdca4e7febc91c9600f52e88f320d1ef"
+    },
+    "libero/lifelong/algos/mlr.py": {
+      "git_blob": "2798b08459dd54c85a3dfbbdc12b7525ea573839",
+      "sha256": "887009eae2c466d9fab4c63ed43745a41810d6a6b1ac8a36371daeb8e788cd54"
+    },
+    "libero/lifelong/test.py": {
+      "git_blob": "81f576e58b80c29993c8a5d7ce88b8aea416a9f5",
+      "sha256": "e9ebd350152d937b2adcc98327c2145241a4dbe0d891800412915c85f0f97aa8"
+    },
+    "libero/lifelong/models/complete_policy.py": {
+      "git_blob": "4860243896b875987e4fcb7ec4227dadd84dcd6e",
+      "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191"
+    }
+  },
+  "source_file_count": 246,
+  "sources_unchanged": true,
+  "paper": {
+    "title": "Yu 等 - Lifelong imitation learning with multimodal latent replay and incremental adjustment.pdf",
+    "sha256": "bfde3b58ce663a786854b7cb7959f7f38e7fcbd1ae61bdae770839a05ce37164",
+    "inspected_print_pages": [
+      6743,
+      6744,
+      6745
+    ],
+    "formula_and_table_visually_checked": true
+  },
+  "pinned_release_commit": "a721807f2f7fa7f9833dcc85c592d78e9accd00b"
+}
