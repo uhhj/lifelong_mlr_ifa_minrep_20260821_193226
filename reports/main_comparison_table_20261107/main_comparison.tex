@@ -1,0 +1,94 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=17mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{caption}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=black,urlcolor=blue]{hyperref}
+\captionsetup{font=small,labelfont=bf,singlelinecheck=false}
+\definecolor{oursblue}{RGB}{211,235,241}
+\newcommand{\result}[2]{\ensuremath{#1\!\pm\!#2}}
+\newcommand{\bestresult}[2]{\ensuremath{\mathbf{#1\!\pm\!#2}}}
+\pagestyle{empty}
+\begin{document}
+
+\begin{table*}[t]
+  \centering
+  \caption{Comparison on LIBERO-OBJECT and LIBERO-GOAL (mean $\pm$ standard deviation). Higher FWT and AUC and lower NBT are better. The best mean in each column is shown in bold.}
+  \label{tab:main-comparison}
+  \begingroup
+  \setlength{\tabcolsep}{7pt}
+  \renewcommand{\arraystretch}{1.16}
+  \small
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}l*{6}{c}@{}}
+    \toprule
+    \multirow{2}{*}{Method} & \multicolumn{3}{c}{LIBERO-OBJECT} & \multicolumn{3}{c}{LIBERO-GOAL} \\
+    \cmidrule(lr){2-4}\cmidrule(l){5-7}
+    & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ \\
+    \midrule
+    Sequential~\cite{liu2023libero} & \result{62.0}{1.0} & \result{63.0}{2.0} & \result{30.0}{1.0} & \result{55.0}{1.0} & \result{70.0}{1.0} & \result{23.0}{1.0} \\
+    ER~\cite{chaudhry2019tiny,liu2023libero} & \result{56.0}{1.0} & \result{24.0}{1.0} & \result{49.0}{1.0} & \result{53.0}{1.0} & \result{36.0}{1.0} & \result{47.0}{2.0} \\
+    BUDS~\cite{wan2024lotus,zhu2022buds} & \result{52.0}{2.0} & \result{21.0}{1.0} & \result{47.0}{1.0} & \result{50.0}{1.0} & \result{39.0}{1.0} & \result{42.0}{1.0} \\
+    LOTUS~\cite{wan2024lotus} & \result{74.0}{3.0} & \result{11.0}{1.0} & \result{65.0}{3.0} & \result{61.0}{3.0} & \result{30.0}{1.0} & \result{56.0}{1.0} \\
+    ISCIL~\cite{lee2024iscil} & \result{71.7}{1.9} & \result{11.9}{5.1} & \result{66.3}{3.7} & \result{70.4}{3.6} & \result{19.4}{4.1} & \result{60.5}{2.5} \\
+    M2Distill~\cite{roy2025m2distill} & \result{75.0}{3.0} & \result{8.0}{5.0} & \result{69.0}{4.0} & \result{71.0}{1.0} & \result{20.0}{3.0} & \result{57.0}{2.0} \\
+    TAIL~\cite{liu2023tail} & \result{41.5}{2.9} & \result{22.5}{2.1} & \result{38.2}{2.5} & \result{41.0}{1.2} & \result{22.7}{1.1} & \result{37.4}{1.3} \\
+    MLR~\cite{yu2026lifelong} & \result{83.3}{2.6} & \result{12.3}{2.4} & \result{77.6}{3.0} & \result{78.8}{2.2} & \result{10.0}{7.5} & \result{74.6}{2.7} \\
+    MLR + IFA~\cite{yu2026lifelong} & \bestresult{84.6}{1.9} & \result{11.4}{5.6} & \result{79.4}{1.5} & \result{80.0}{2.5} & \result{6.9}{0.9} & \result{77.2}{1.8} \\
+    \rowcolor{oursblue}
+    \textbf{Ours} & \result{80.4}{8.5} & \bestresult{-11.0}{11.6} & \bestresult{86.5}{2.2} & \bestresult{89.6}{1.9} & \bestresult{5.3}{5.2} & \bestresult{87.3}{2.6} \\
+    \bottomrule
+  \end{tabular}%
+  }
+  \endgroup
+\end{table*}
+
+\clearpage
+\begin{thebibliography}{9}
+\small
+\bibitem{liu2023libero}
+B. Liu, Y. Zhu, C. Gao, Y. Feng, Q. Liu, Y. Zhu, and P. Stone.
+LIBERO: Benchmarking knowledge transfer for lifelong robot learning.
+In \emph{Advances in Neural Information Processing Systems}, vol.~36, pp.~44776--44791, 2023.
+
+\bibitem{chaudhry2019tiny}
+A. Chaudhry, M. Rohrbach, M. Elhoseiny, T. Ajanthan, P. K. Dokania, P. H. S. Torr, and M. Ranzato.
+On tiny episodic memories in continual learning.
+\emph{arXiv:1902.10486}, 2019.
+
+\bibitem{wan2024lotus}
+W. Wan, Y. Zhu, R. Shah, and Y. Zhu.
+LOTUS: Continual imitation learning for robot manipulation through unsupervised skill discovery.
+In \emph{IEEE International Conference on Robotics and Automation}, pp.~537--544, 2024.
+
+\bibitem{zhu2022buds}
+Y. Zhu, P. Stone, and Y. Zhu.
+Bottom-up skill discovery from unsegmented demonstrations for long-horizon robot manipulation.
+\emph{IEEE Robotics and Automation Letters}, 7(2):4126--4133, 2022.
+
+\bibitem{lee2024iscil}
+D. Lee, M. Yoo, W. K. Kim, W. Choi, and H. Woo.
+Incremental learning of retrievable skills for efficient continual task adaptation.
+In \emph{Advances in Neural Information Processing Systems}, vol.~37, pp.~17286--17312, 2024.
+
+\bibitem{roy2025m2distill}
+K. Roy, A. Dissanayake, B. Tidd, and P. Moghadam.
+M2Distill: Multi-modal distillation for lifelong imitation learning.
+In \emph{IEEE International Conference on Robotics and Automation}, pp.~1429--1435, 2025.
+
+\bibitem{liu2023tail}
+Z. Liu, J. Zhang, K. Asadi, Y. Liu, D. Zhao, S. Sabach, and R. Fakoor.
+TAIL: Task-specific adapters for imitation learning with large pretrained models.
+\emph{arXiv:2310.05905}, 2023.
+
+\bibitem{yu2026lifelong}
+F. Yu, M. Tiezzi, T. Apicella, C. Beyan, and V. Murino.
+Lifelong imitation learning with multimodal latent replay and incremental adjustment.
+In \emph{IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pp.~6740--6749, 2026.
+\end{thebibliography}
+\end{document}
