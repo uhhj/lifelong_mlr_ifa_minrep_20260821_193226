@@ -1,0 +1,11 @@
+# Reconnected-server continuation: original-distance distributions
+
+The server connection and existing feature / binding inventory were successfully checked on 2026-11-07 after the initial connection failure. The earlier trajectory-coordinate figure and its historical audit remain valid.
+
+Read all 24 existing suite/seed/task cases on CPU only. Verify actual feature SHA against FEATURES and window-binding records; verify original last-step actions and raw demonstration hash. Instantiate the frozen Distance implementation with the original selector seed, raw action population and unchanged calibration settings. Verify action scales, the exact calibration pair identities, and both calibration distance scales. Compute one original-distance matrix per case, then use the existing full-quota Random, K-Center and RA lists without rerunning a selector. Recomputed K-Center / RA mean and maximum nearest-center distances must match their archived values within absolute 1e-10. Recheck every input hash after analysis.
+
+Each method queries the same entire candidate population, including its selected windows with zero self-distance. Do not compare different method-specific unselected populations as if paired. Plot ECDFs including the approximately 50% zero atom, and report mean, p95 and maximum using the original metric. All 24 cases must be retained; no selection by favorable outcomes. Task 9 remains post-final-training storage.
+
+Illustrative projection stays fixed to seed41 / Task6 in both suites. Fit one t-SNE per complete candidate population using its precomputed original-distance matrix (perplexity 30, random state 0, random initialization, learning rate 200, 1,000 iterations); all three subset views use identical coordinates. This is a display aid, never the source of quantitative coverage distances. No search for a visually favorable seed, task or projection. Original latent / action tensors remain on the server. Projection coordinates stay private locally; published artifacts comprise rendered figures and scalar distance summaries / ECDFs.
+
+No policy training, optimizer call, model forward, environment rollout, production reselection, or modification of scientific artifacts is permitted or needed. This continuation may write analysis files locally only; remote execution reads inputs and returns JSON.
