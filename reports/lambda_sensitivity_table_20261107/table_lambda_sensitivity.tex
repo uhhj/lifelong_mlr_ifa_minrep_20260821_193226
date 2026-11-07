@@ -1,0 +1,23 @@
+% Requires booktabs, multirow and result/bestresult macros; see standalone source.
+\begin{table}[t]
+  \centering
+  \caption{Sensitivity to the retention-loss coefficient $\lambda_R$ on LIBERO-OBJECT and LIBERO-GOAL. Results are mean $\pm$ sample standard deviation over three seeds. The best mean for each metric within each suite is shown in bold.}
+  \label{tab:lambda-sensitivity}
+  \begingroup
+  \setlength{\tabcolsep}{10pt}
+  \renewcommand{\arraystretch}{1.18}
+  \begin{tabular}{@{}lcccc@{}}
+    \toprule
+    & $\lambda_R$ & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ \\
+    \midrule
+    \multirow{3}{*}{LIBERO-OBJECT} & 0.05 & \result{79.6}{1.9} & \result{-7.6}{6.8} & \result{83.2}{2.8} \\
+     & 0.1 & \bestresult{80.4}{8.5} & \bestresult{-11.0}{11.6} & \bestresult{86.5}{2.2} \\
+     & 0.2 & \result{78.8}{9.0} & \result{-8.3}{9.3} & \result{82.9}{6.3} \\
+    \midrule
+    \multirow{3}{*}{LIBERO-GOAL} & 0.05 & \result{85.4}{5.9} & \result{4.6}{5.0} & \result{83.0}{3.6} \\
+     & 0.1 & \bestresult{89.6}{1.9} & \result{5.3}{5.2} & \bestresult{87.3}{2.6} \\
+     & 0.2 & \result{82.9}{4.7} & \bestresult{-0.9}{6.7} & \result{83.2}{8.3} \\
+    \bottomrule
+  \end{tabular}
+  \endgroup
+\end{table}
