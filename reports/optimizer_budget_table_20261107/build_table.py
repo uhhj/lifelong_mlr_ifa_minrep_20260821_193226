@@ -17,8 +17,8 @@ a=json.loads(lineage.read_text(encoding='utf8'))
 assert d['status']=='PASS_LOCAL_METRIC_RECOMPUTATION'
 assert a['status']=='PASS_LOCAL_LINEAGE_AND_PROTOCOL_AUDIT'
 assert a['source_bindings']['execution/20261101_ablation_summary/DATA.json']['sha256']==sha(source)
-spec=[('current','C_normal','Execution Supervision'),
-      ('current','C_equal_budget','+ Matched Optimizer Budget'),('current','S_latest','Ours')]
+spec=[('current','C_normal','+Execution Supervision(Standard Budget)'),
+      ('current','C_equal_budget','+Execution Supervision(Matched Budget)'),('current','S_latest','Ours')]
 budget_root=E/'20261030_equal_optimizer_budget_cs_two_suites'
 acceptance=budget_root/'ACCEPTANCE.json'
 comparison=budget_root/'final_readonly_20261031_065009/PRIMARY_S_COMPARISON.json'

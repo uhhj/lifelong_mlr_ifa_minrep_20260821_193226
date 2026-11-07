@@ -19,8 +19,8 @@ Execution Supervision is RA-Coreset + ALIGN with execution supervision (the ordi
 
 | Configuration | Epochs per stage (Tasks 6/7/8/9) | OBJECT optimizer calls/run | GOAL optimizer calls/run |
 |---|---|---:|---:|
-| Execution Supervision | 100/100/100/100 | 105500 | 76100 |
-| + Matched Optimizer Budget | 100/200/200/200 | 195300 | 142200 |
+| +Execution Supervision(Standard Budget) | 100/100/100/100 | 105500 | 76100 |
+| +Execution Supervision(Matched Budget) | 100/200/200/200 | 195300 | 142200 |
 | Ours | 100/100/100/100 | 195300 | 142200 |
 
 Counts are physical production optimizer calls, including discarded candidates, excluding separately accounted admission diagnostics. Stage-wise equality for matched baseline versus Ours is checked for all six suite/seed pairs against accepted comparison evidence. The baseline learning-rate schedule is extended to its actual update horizon with the same warmup. Ordinary-budget counts follow the accepted 100-epoch stage budgets. This matches optimizer calls, not FLOPs, wall-clock time or training interactions: Ours has 40 historical training collection episodes per run and the execution-supervision baselines have none.

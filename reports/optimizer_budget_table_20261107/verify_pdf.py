@@ -20,8 +20,8 @@ source=(ROOT/'optimizer_budget.tex').read_text(encoding='utf8')
 assert r'\cite{' not in source and r'\begin{thebibliography}' not in source
 assert not re.search(r'^\s*(C|Q|S)\s*&', source, re.M)
 assert source.count('\\rowcolor{oursblue}')==1
-assert len(re.findall(r'^\s*(?:Execution Supervision|\+ Matched|\\textbf\{Ours\})',source,re.M))==3
-for method in ['Execution Supervision', 'Matched Optimizer Budget', 'Ours', '105,500', '195,300', '76,100', '142,200']:
+assert len(re.findall(r'^\s*(?:\+Execution Supervision\(|\\textbf\{Ours\})',source,re.M))==3
+for method in ['+Execution Supervision(Standard Budget)', '+Execution Supervision(Matched Budget)', 'Ours', '105,500', '195,300', '76,100', '142,200']:
     assert method in text, method
 log = (ROOT / 'optimizer_budget.log').read_text(encoding='utf8', errors='replace')
 assert not re.search(r'Overfull \\[hv]box|undefined references|Citation .* undefined|^!', log, re.M)
