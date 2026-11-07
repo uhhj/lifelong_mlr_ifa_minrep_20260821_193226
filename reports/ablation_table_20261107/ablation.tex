@@ -1,0 +1,46 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=17mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{caption}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=black,urlcolor=blue]{hyperref}
+\captionsetup{font=small,labelfont=bf,singlelinecheck=false}
+\definecolor{oursblue}{RGB}{211,235,241}
+\newcommand{\result}[2]{\ensuremath{#1\!\pm\!#2}}
+\newcommand{\bestresult}[2]{\ensuremath{\mathbf{#1\!\pm\!#2}}}
+\pagestyle{empty}
+\begin{document}
+
+\begin{table*}[t]
+  \centering
+  \caption{Component ablation on LIBERO-OBJECT and LIBERO-GOAL (mean $\pm$ sample standard deviation over three seeds). Rows cumulatively add ALIGN, execution supervision, support-weighted retention, and candidate gating to RA-Coreset; Ours includes all components. Higher FWT and AUC and lower NBT are better. The best mean in each column is shown in bold.}
+  \label{tab:component-ablation}
+  \begingroup
+  \setlength{\tabcolsep}{7pt}
+  \renewcommand{\arraystretch}{1.16}
+  \small
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}l*{6}{c}@{}}
+    \toprule
+    \multirow{2}{*}{Configuration} & \multicolumn{3}{c}{LIBERO-OBJECT} & \multicolumn{3}{c}{LIBERO-GOAL} \\
+    \cmidrule(lr){2-4}\cmidrule(l){5-7}
+    & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ \\
+    \midrule
+    RA-Coreset & \result{73.3}{2.9} & \result{-0.1}{3.8} & \result{73.2}{1.8} & \result{83.8}{1.2} & \bestresult{2.6}{5.1} & \result{82.0}{3.0} \\
+    RA-Coreset + ALIGN & \result{77.5}{5.4} & \result{-4.9}{4.3} & \result{80.2}{3.7} & \result{85.8}{5.1} & \result{10.8}{5.2} & \result{81.1}{3.4} \\
+    + Execution Supervision & \bestresult{81.2}{2.5} & \result{-8.1}{2.4} & \result{85.0}{3.1} & \result{85.0}{8.2} & \result{5.6}{2.2} & \result{82.5}{7.1} \\
+    + Support-Weighted Retention & \result{78.8}{3.3} & \result{-10.9}{4.5} & \result{84.6}{2.5} & \result{85.8}{2.6} & \result{4.4}{1.9} & \result{83.5}{1.5} \\
+    \rowcolor{oursblue}
+    \textbf{Ours} & \result{80.4}{8.5} & \bestresult{-11.0}{11.6} & \bestresult{86.5}{2.2} & \bestresult{89.6}{1.9} & \result{5.3}{5.2} & \bestresult{87.3}{2.6} \\
+    \bottomrule
+  \end{tabular}%
+  }
+  \endgroup
+\end{table*}
+
+\end{document}
