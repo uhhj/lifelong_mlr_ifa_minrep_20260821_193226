@@ -1,0 +1,186 @@
+{
+  "status": "PASS_OPTIMIZER_BUDGET_MATRIX_RECOMPUTATION",
+  "seed_runs": 18,
+  "matrix_cells": 180,
+  "table_cells": 18,
+  "budgets": {
+    "OBJECT": {
+      "C_normal": 105500,
+      "C_equal_budget": 195300,
+      "S_latest": 195300
+    },
+    "GOAL": {
+      "C_normal": 76100,
+      "C_equal_budget": 142200,
+      "S_latest": 142200
+    }
+  },
+  "seeds": [
+    41,
+    42,
+    43
+  ],
+  "std": "sample standard deviation, ddof=1",
+  "precision": "one decimal, matching main table",
+  "rows": [
+    {
+      "configuration": "Execution Supervision",
+      "source_study": "current",
+      "source_method": "C_normal",
+      "values": [
+        {
+          "suite": "OBJECT",
+          "metric": "FWT",
+          "mean": 81.25,
+          "sd": 2.5,
+          "best_mean": true
+        },
+        {
+          "suite": "OBJECT",
+          "metric": "NBT",
+          "mean": -8.055555555555555,
+          "sd": 2.373334373699315,
+          "best_mean": false
+        },
+        {
+          "suite": "OBJECT",
+          "metric": "AUC",
+          "mean": 85.0,
+          "sd": 3.067173305069887,
+          "best_mean": false
+        },
+        {
+          "suite": "GOAL",
+          "metric": "FWT",
+          "mean": 85.0,
+          "sd": 8.1967981553775,
+          "best_mean": false
+        },
+        {
+          "suite": "GOAL",
+          "metric": "NBT",
+          "mean": 5.555555555555555,
+          "sd": 2.2222222222222223,
+          "best_mean": false
+        },
+        {
+          "suite": "GOAL",
+          "metric": "AUC",
+          "mean": 82.5,
+          "sd": 7.098635432250342,
+          "best_mean": false
+        }
+      ]
+    },
+    {
+      "configuration": "+ Matched Optimizer Budget",
+      "source_study": "current",
+      "source_method": "C_equal_budget",
+      "values": [
+        {
+          "suite": "OBJECT",
+          "metric": "FWT",
+          "mean": 79.58333333333333,
+          "sd": 4.018187817080398,
+          "best_mean": false
+        },
+        {
+          "suite": "OBJECT",
+          "metric": "NBT",
+          "mean": -2.4074074074074074,
+          "sd": 5.280213862734538,
+          "best_mean": false
+        },
+        {
+          "suite": "OBJECT",
+          "metric": "AUC",
+          "mean": 80.90277777777777,
+          "sd": 1.1982940226900947,
+          "best_mean": false
+        },
+        {
+          "suite": "GOAL",
+          "metric": "FWT",
+          "mean": 87.08333333333333,
+          "sd": 2.8867513459481287,
+          "best_mean": false
+        },
+        {
+          "suite": "GOAL",
+          "metric": "NBT",
+          "mean": 7.592592592592593,
+          "sd": 1.7858612520357329,
+          "best_mean": false
+        },
+        {
+          "suite": "GOAL",
+          "metric": "AUC",
+          "mean": 83.71527777777777,
+          "sd": 3.3468692183613675,
+          "best_mean": false
+        }
+      ]
+    },
+    {
+      "configuration": "Ours",
+      "source_study": "current",
+      "source_method": "S_latest",
+      "values": [
+        {
+          "suite": "OBJECT",
+          "metric": "FWT",
+          "mean": 80.41666666666667,
+          "sd": 8.508574106942557,
+          "best_mean": false
+        },
+        {
+          "suite": "OBJECT",
+          "metric": "NBT",
+          "mean": -11.018518518518519,
+          "sd": 11.56814663033389,
+          "best_mean": true
+        },
+        {
+          "suite": "OBJECT",
+          "metric": "AUC",
+          "mean": 86.49305555555556,
+          "sd": 2.1908043825482437,
+          "best_mean": true
+        },
+        {
+          "suite": "GOAL",
+          "metric": "FWT",
+          "mean": 89.58333333333333,
+          "sd": 1.9094065395649333,
+          "best_mean": true
+        },
+        {
+          "suite": "GOAL",
+          "metric": "NBT",
+          "mean": 5.277777777777778,
+          "sd": 5.204164998665331,
+          "best_mean": true
+        },
+        {
+          "suite": "GOAL",
+          "metric": "AUC",
+          "mean": 87.25694444444444,
+          "sd": 2.64823818967616,
+          "best_mean": true
+        }
+      ]
+    }
+  ],
+  "source_bindings": {
+    "execution\\20261101_ablation_summary\\DATA.json": "e8ad33c41e7493b7621d40c393a6c0d34b68b79ad02777e51bb047b840498520",
+    "execution\\20261107_align_cqs_audit\\AUDIT.json": "58084b26de5998bf785eb8c6b3d27440a7ea83b0720952e29a8faf9948fd5faf",
+    "execution\\20261107_main_comparison_table\\main_comparison.tex": "cea83c1fa9b3fcb5ad3f8851bcd9680503337d9c791213dd883eeabd6277b853",
+    "execution\\20261030_equal_optimizer_budget_cs_two_suites\\ACCEPTANCE.json": "428f07b4ec7504fa778ae45134e741b0d9ccd4a4927a92827ade00d0b3322441",
+    "execution\\20261030_equal_optimizer_budget_cs_two_suites\\final_readonly_20261031_065009\\PRIMARY_S_COMPARISON.json": "3271b55c2df4ded778ea5bf5675dbd68b4fe9ebae33b247007a06460940842e4",
+    "execution\\20261030_equal_optimizer_budget_cs_two_suites\\final_readonly_20261031_065009\\LOCAL_FINAL_AUDIT.json": "3a2d8103b7478f08552ff9c52d71dcc2f4a68e3705eb472d27e89ff3af4c9744",
+    "execution\\20261030_equal_optimizer_budget_cs_two_suites\\PROTOCOL.md": "3b8a4763aed1572b09f2b8eee7a544a6b44f9859962d918fff27e50ba4d91917"
+  },
+  "new_training": 0,
+  "new_evaluation": 0,
+  "interpretation": "Matched physical production optimizer calls, not matched FLOPs, wall-clock time or environment interactions. Standard and matched baselines share the execution-supervision mechanism; only training budget and schedule horizon change."
+}

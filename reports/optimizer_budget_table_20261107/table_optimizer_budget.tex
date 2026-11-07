@@ -1,0 +1,25 @@
+% Optimizer-budget comparison; packages/macros documented in README.
+\begin{table*}[t]
+  \centering
+  \caption{Optimizer-budget comparison on LIBERO-OBJECT and LIBERO-GOAL (mean $\pm$ sample standard deviation over three seeds). Execution Supervision denotes RA-Coreset + ALIGN with execution supervision; the second row extends its training to match the optimizer budget of Ours. Opt. steps counts physical production optimizer calls per run, including discarded candidates. Best means are bold.}
+  \label{tab:optimizer-budget}
+  \begingroup
+  \setlength{\tabcolsep}{7pt}
+  \renewcommand{\arraystretch}{1.16}
+  \small
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}l*{8}{c}@{}}
+    \toprule
+    \multirow{2}{*}{Configuration} & \multicolumn{4}{c}{LIBERO-OBJECT} & \multicolumn{4}{c}{LIBERO-GOAL} \\
+    \cmidrule(lr){2-5}\cmidrule(l){6-9}
+    & Opt. steps & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ & Opt. steps & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ \\
+    \midrule
+    Execution Supervision & 105,500 & \bestresult{81.2}{2.5} & \result{-8.1}{2.4} & \result{85.0}{3.1} & 76,100 & \result{85.0}{8.2} & \result{5.6}{2.2} & \result{82.5}{7.1} \\
+    + Matched Optimizer Budget & 195,300 & \result{79.6}{4.0} & \result{-2.4}{5.3} & \result{80.9}{1.2} & 142,200 & \result{87.1}{2.9} & \result{7.6}{1.8} & \result{83.7}{3.3} \\
+    \rowcolor{oursblue}
+    \textbf{Ours} & 195,300 & \result{80.4}{8.5} & \bestresult{-11.0}{11.6} & \bestresult{86.5}{2.2} & 142,200 & \bestresult{89.6}{1.9} & \bestresult{5.3}{5.2} & \bestresult{87.3}{2.6} \\
+    \bottomrule
+  \end{tabular}%
+  }
+  \endgroup
+\end{table*}
