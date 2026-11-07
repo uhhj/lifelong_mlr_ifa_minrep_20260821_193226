@@ -180,6 +180,13 @@ paper=Path('C:/Users/Lenovo/Zotero/storage/8WVD3WFZ/Yu 等 - Lifelong imitation 
 out['paper']=dict(title=paper.name,sha256=hashlib.sha256(paper.read_bytes()).hexdigest(),
     inspected_print_pages=[6743,6744,6745],formula_and_table_visually_checked=True)
 out['pinned_release_commit']='a721807f2f7fa7f9833dcc85c592d78e9accd00b'
+out['interpretation_correction']=dict(
+    authority='Paper text and equations; repository only supplies non-conflicting supplementary evidence',
+    release_differences_are_not_paper_protocol_violations=True,
+    confirmed_paper_aligned_items=['state modality enabled','current-task own language reference','IFA average over selected task pairs'],
+    unspecified_implementation_choices=['warmup and scheduler stepping/reset details','checkpoint selection'],
+    unresolved=['released pretraining compatibility with paper state branch','causal attribution of performance gap'],
+    prior_overemphasis_on_release_identity_withdrawn=True)
 HERE.mkdir(exist_ok=True,parents=True)
 (HERE/'AUDIT.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
 (HERE/'SOURCE_HASHES.json').write_text(json.dumps(sources,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
