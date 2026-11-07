@@ -4,8 +4,8 @@
     "OBJECT",
     "GOAL"
   ],
-  "methods": 10,
-  "numeric_cells": 60,
+  "methods": 9,
+  "numeric_cells": 54,
   "baseline_source": {
     "filename": "Yu 等 - Lifelong imitation learning with multimodal latent replay and incremental adjustment.pdf",
     "pdf_page": 6,
@@ -27,6 +27,20 @@
     "std": "Sample standard deviation across seeds, ddof=1",
     "new_training": 0,
     "new_evaluation": 0
+  },
+  "mlr_ifa_source": {
+    "path": "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_ablation_summary\\DATA.json",
+    "sha256": "e8ad33c41e7493b7621d40c393a6c0d34b68b79ad02777e51bb047b840498520",
+    "review_sha256": "0713f0abb7bf182ba2344c86e1437823f4e7b9206204adf0d62ce43e3952fac2",
+    "study": "baseline",
+    "method": "MLR_IFA",
+    "seeds": [
+      41,
+      42,
+      43
+    ],
+    "recomputed_from": "six task-stage matrices",
+    "std": "sample, ddof=1"
   },
   "rows": [
     {
@@ -282,73 +296,37 @@
       ]
     },
     {
-      "method": "MLR",
-      "citation": "\\cite{yu2026lifelong}",
-      "values": [
-        {
-          "mean": 83.3,
-          "sd": 2.6,
-          "best_mean": false
-        },
-        {
-          "mean": 12.3,
-          "sd": 2.4,
-          "best_mean": false
-        },
-        {
-          "mean": 77.6,
-          "sd": 3.0,
-          "best_mean": false
-        },
-        {
-          "mean": 78.8,
-          "sd": 2.2,
-          "best_mean": false
-        },
-        {
-          "mean": 10.0,
-          "sd": 7.5,
-          "best_mean": false
-        },
-        {
-          "mean": 74.6,
-          "sd": 2.7,
-          "best_mean": false
-        }
-      ]
-    },
-    {
       "method": "MLR + IFA",
-      "citation": "\\cite{yu2026lifelong}",
+      "citation": "",
       "values": [
         {
-          "mean": 84.6,
-          "sd": 1.9,
+          "mean": 66.66666666666667,
+          "sd": 3.1457643480294792,
+          "best_mean": false
+        },
+        {
+          "mean": -2.7777777777777777,
+          "sd": 1.9444444444444446,
+          "best_mean": false
+        },
+        {
+          "mean": 68.29861111111111,
+          "sd": 3.1186277623933223,
+          "best_mean": false
+        },
+        {
+          "mean": 76.66666666666667,
+          "sd": 5.636562191028617,
+          "best_mean": false
+        },
+        {
+          "mean": 0.18518518518518498,
+          "sd": 5.992107291616088,
           "best_mean": true
         },
         {
-          "mean": 11.4,
-          "sd": 5.6,
-          "best_mean": false
-        },
-        {
-          "mean": 79.4,
-          "sd": 1.5,
-          "best_mean": false
-        },
-        {
-          "mean": 80.0,
-          "sd": 2.5,
-          "best_mean": false
-        },
-        {
-          "mean": 6.9,
-          "sd": 0.9,
-          "best_mean": false
-        },
-        {
-          "mean": 77.2,
-          "sd": 1.8,
+          "mean": 76.35416666666667,
+          "sd": 6.383980602518568,
           "best_mean": false
         }
       ]
@@ -360,7 +338,7 @@
         {
           "mean": 80.41666666666667,
           "sd": 8.508574106942557,
-          "best_mean": false
+          "best_mean": true
         },
         {
           "mean": -11.018518518518519,
@@ -380,7 +358,7 @@
         {
           "mean": 5.277777777777778,
           "sd": 5.204164998665331,
-          "best_mean": true
+          "best_mean": false
         },
         {
           "mean": 87.25694444444444,
@@ -391,14 +369,14 @@
     }
   ],
   "best_means": [
-    84.6,
+    80.41666666666667,
     -11.018518518518519,
     86.49305555555556,
     89.58333333333333,
-    5.277777777777778,
+    0.18518518518518498,
     87.25694444444444
   ],
-  "formatting": "All methods in one unified table; no provenance grouping or source tags; ordinary literature citations retained. No LIBERO-50 columns.",
+  "formatting": "Nine methods in one unified table; MLR removed; MLR+IFA uses project reproduction; no citation labels or bibliography. No LIBERO-50 columns.",
   "citation_metadata_url": "https://github.com/yfqi/lifelong_mlr_ifa#citation",
   "limits": "Table is not a claim that all baselines were rerun under an identical hardware/evaluation pipeline; source provenance is retained in this audit."
 }

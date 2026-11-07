@@ -27,8 +27,6 @@ spec=[
     ('ISCIL','ISCIL',r'\cite{lee2024iscil}'),
     ('M2Distill','M2Distill',r'\cite{roy2025m2distill}'),
     ('TAIL','TAIL',r'\cite{liu2023tail}'),
-    ('MLR (Ours)','MLR',r'\cite{yu2026lifelong}'),
-    ('MLR + IFA (Ours)','MLR + IFA',r'\cite{yu2026lifelong}'),
 ]
 rows=[]
 for source_name,name,cite in spec:
@@ -36,6 +34,27 @@ for source_name,name,cite in spec:
     numbers=re.findall(r'(\d+(?:\.\d)?)\s*±\s*(\d+\.\d)',line)
     assert len(numbers)>=6,(name,line,numbers)
     rows.append(dict(method=name,citation=cite,values=[dict(mean=float(a),sd=float(b)) for a,b in numbers[:6]]))
+# Recompute the project's reproduced MLR+IFA from its six fixed matrices.
+REPRO=EXEC/'20261101_ablation_summary/DATA.json'
+REPRO_REVIEW=EXEC/'20261105_final_vs_mlr_nbt/EVIDENCE_REVIEW.json'
+binding=json.loads(REPRO_REVIEW.read_text(encoding='utf8'))
+assert binding['source_bindings']['execution/20261101_ablation_summary/DATA.json']['sha256']==sha(REPRO)
+reproduction=json.loads(REPRO.read_text(encoding='utf8'))
+repro_seed=[];repro_values=[]
+for suite in ['OBJECT','GOAL']:
+    subset=[r for r in reproduction['rows'] if r['study']=='baseline' and r['method']=='MLR_IFA' and r['suite']==suite]
+    assert sorted(r['seed'] for r in subset)==[41,42,43]
+    for r in subset:
+        mat={tuple(map(int,k.split('_'))):v for k,v in r['matrix_percent'].items()}
+        vals=dict(FWT=statistics.mean(mat[t,t] for t in range(6,10)),
+            NBT=statistics.mean(statistics.mean(mat[t,t]-mat[s,t] for s in range(t+1,10)) for t in range(6,9)),
+            AUC=statistics.mean(statistics.mean(mat[s,t] for s in range(t,10)) for t in range(6,10)))
+        assert all(abs(vals[k]-r['metrics_percent'][k])<1e-10 for k in vals)
+        repro_seed.append(dict(suite=suite,seed=r['seed'],**vals))
+    for metric in ['FWT','NBT','AUC']:
+        v=[r[metric] for r in repro_seed if r['suite']==suite]
+        repro_values.append(dict(mean=statistics.mean(v),sd=statistics.stdev(v)))
+rows.append(dict(method='MLR + IFA',citation='',values=repro_values))
 per_seed=[];ours=[]
 previous=list(csv.DictReader(PREVIOUS.open(encoding='utf8')))
 for suite in ['OBJECT','GOAL']:
@@ -69,7 +88,7 @@ body=[r'\begin{table*}[t]',r'  \centering',r'  \caption{'+caption+'}',r'  \label
       r'    & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ & FWT$\uparrow$ & NBT$\downarrow$ & AUC$\uparrow$ \\',r'    \midrule']
 for row in rows:
     if row['method']=='Ours':body.append(r'    \rowcolor{oursblue}')
-    label=(r'\textbf{Ours}' if row['method']=='Ours' else row['method']+'~'+row['citation'])
+    label=(r'\textbf{Ours}' if row['method']=='Ours' else row['method'])
     cells=[]
     for val in row['values']:
         macro=r'\bestresult' if val['best_mean'] else r'\result'
@@ -95,54 +114,8 @@ preamble=r'''\documentclass[10pt,a4paper]{article}
 \pagestyle{empty}
 \begin{document}
 '''
-bibliography=r'''
-\clearpage
-\begin{thebibliography}{9}
-\small
-\bibitem{liu2023libero}
-B. Liu, Y. Zhu, C. Gao, Y. Feng, Q. Liu, Y. Zhu, and P. Stone.
-LIBERO: Benchmarking knowledge transfer for lifelong robot learning.
-In \emph{Advances in Neural Information Processing Systems}, vol.~36, pp.~44776--44791, 2023.
-
-\bibitem{chaudhry2019tiny}
-A. Chaudhry, M. Rohrbach, M. Elhoseiny, T. Ajanthan, P. K. Dokania, P. H. S. Torr, and M. Ranzato.
-On tiny episodic memories in continual learning.
-\emph{arXiv:1902.10486}, 2019.
-
-\bibitem{wan2024lotus}
-W. Wan, Y. Zhu, R. Shah, and Y. Zhu.
-LOTUS: Continual imitation learning for robot manipulation through unsupervised skill discovery.
-In \emph{IEEE International Conference on Robotics and Automation}, pp.~537--544, 2024.
-
-\bibitem{zhu2022buds}
-Y. Zhu, P. Stone, and Y. Zhu.
-Bottom-up skill discovery from unsegmented demonstrations for long-horizon robot manipulation.
-\emph{IEEE Robotics and Automation Letters}, 7(2):4126--4133, 2022.
-
-\bibitem{lee2024iscil}
-D. Lee, M. Yoo, W. K. Kim, W. Choi, and H. Woo.
-Incremental learning of retrievable skills for efficient continual task adaptation.
-In \emph{Advances in Neural Information Processing Systems}, vol.~37, pp.~17286--17312, 2024.
-
-\bibitem{roy2025m2distill}
-K. Roy, A. Dissanayake, B. Tidd, and P. Moghadam.
-M2Distill: Multi-modal distillation for lifelong imitation learning.
-In \emph{IEEE International Conference on Robotics and Automation}, pp.~1429--1435, 2025.
-
-\bibitem{liu2023tail}
-Z. Liu, J. Zhang, K. Asadi, Y. Liu, D. Zhao, S. Sabach, and R. Fakoor.
-TAIL: Task-specific adapters for imitation learning with large pretrained models.
-\emph{arXiv:2310.05905}, 2023.
-
-\bibitem{yu2026lifelong}
-F. Yu, M. Tiezzi, T. Apicella, C. Beyan, and V. Murino.
-Lifelong imitation learning with multimodal latent replay and incremental adjustment.
-In \emph{IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pp.~6740--6749, 2026.
-\end{thebibliography}
-\end{document}
-'''
 # Keep the requested main .tex self-contained; no external files or BibTeX needed.
-(ROOT/'main_comparison.tex').write_text(preamble+'\n'+table+bibliography,encoding='utf8')
+(ROOT/'main_comparison.tex').write_text(preamble+'\n'+table+'\n'+r'\end{document}'+'\n',encoding='utf8')
 (ROOT/'table_comparison.tex').write_text('% Table fragment; add packages/macros from README to the manuscript preamble.\n'+table,encoding='utf8')
 with (ROOT/'table_values.csv').open('w',encoding='utf8',newline='') as f:
     w=csv.DictWriter(f,fieldnames=['method','suite','metric','mean','sd','best_mean']);w.writeheader()
@@ -150,11 +123,14 @@ with (ROOT/'table_values.csv').open('w',encoding='utf8',newline='') as f:
         for j,val in enumerate(row['values']):w.writerow(dict(method=row['method'],suite=['OBJECT','GOAL'][j//3],metric=['FWT','NBT','AUC'][j%3],**val))
 with (ROOT/'ours_per_seed.csv').open('w',encoding='utf8',newline='') as f:
     w=csv.DictWriter(f,fieldnames=['suite','seed','FWT','NBT','AUC']);w.writeheader();w.writerows(per_seed)
-audit=dict(status='PASS_BASELINE_TRANSCRIPTION_AND_OURS_RECOMPUTATION',suites=['OBJECT','GOAL'],methods=len(rows),numeric_cells=60,
+with (ROOT/'mlr_ifa_per_seed.csv').open('w',encoding='utf8',newline='') as f:
+    w=csv.DictWriter(f,fieldnames=['suite','seed','FWT','NBT','AUC']);w.writeheader();w.writerows(repro_seed)
+audit=dict(status='PASS_BASELINE_TRANSCRIPTION_AND_OURS_RECOMPUTATION',suites=['OBJECT','GOAL'],methods=len(rows),numeric_cells=6*len(rows),
     baseline_source=dict(filename=PDF.name,pdf_page=6,table=1,sha256=sha(PDF),provenance='Baseline values reproduced from supplied paper table, not new reruns'),
     ours_source=dict(path=str(COMP),sha256=sha(COMP),acceptance_sha256=sha(ACC),previous_plotted_values_sha256=sha(PREVIOUS),method='Latest complete S; lambda_R=0.1',seeds=[41,42,43],std='Sample standard deviation across seeds, ddof=1',new_training=0,new_evaluation=0),
+    mlr_ifa_source=dict(path=str(REPRO),sha256=sha(REPRO),review_sha256=sha(REPRO_REVIEW),study='baseline',method='MLR_IFA',seeds=[41,42,43],recomputed_from='six task-stage matrices',std='sample, ddof=1'),
     rows=rows,best_means=best,
-    formatting='All methods in one unified table; no provenance grouping or source tags; ordinary literature citations retained. No LIBERO-50 columns.',
+    formatting='Nine methods in one unified table; MLR removed; MLR+IFA uses project reproduction; no citation labels or bibliography. No LIBERO-50 columns.',
     citation_metadata_url='https://github.com/yfqi/lifelong_mlr_ifa#citation',
     limits='Table is not a claim that all baselines were rerun under an identical hardware/evaluation pipeline; source provenance is retained in this audit.')
 (ROOT/'TABLE_AUDIT.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n',encoding='utf8')

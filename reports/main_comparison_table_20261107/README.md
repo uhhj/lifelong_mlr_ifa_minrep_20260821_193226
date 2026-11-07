@@ -1,15 +1,17 @@
 # 完整方法对比主表（OBJECT / GOAL）
 
-- `main_comparison.tex`：自包含文档，包含主表、所需宏包和参考文献，无需额外 `.bib` 或 BibTeX。
-- `main_comparison.pdf`：实际编译预览；第一页为主表，第二页为参考文献。
+- `main_comparison.tex`：自包含文档，包含主表和所需宏包，无需额外 `.bib` 或 BibTeX。
+- `main_comparison.pdf`：实际编译预览；单页主表。
 - `table_comparison.tex`：用于论文 `\input{table_comparison.tex}` 的表格片段。
 - `main_comparison_preview.png`：主表高清预览。
-- `table_values.csv`、`ours_per_seed.csv`：完整表格数值和 Ours 逐seed指标。
+- `table_values.csv`、`ours_per_seed.csv`：完整表格数值和 Ours 逐seed指标；`mlr_ifa_per_seed.csv` 保存MLR+IFA复现逐seed指标。
 - `TABLE_AUDIT.json`：原表提取、Ours 复算和最佳均值标记记录。
 
-仅包含 LIBERO-OBJECT / LIBERO-GOAL，各按 FWT↑、NBT↓、AUC↑ 排列。所有方法统一排版；不在主表中设置来源分组或来源标签。Ours 为既定 λ_R=0.1 的最新完整 S，使用seed41/42/43计算均值与样本标准差，保留1位小数。MLR与MLR+IFA不再带原论文的“Ours”后缀。按每列最佳均值重新加粗，不直接照搬截图中的粗体。Ours 行浅蓝色强调。
+仅包含 LIBERO-OBJECT / LIBERO-GOAL，各按 FWT↑、NBT↓、AUC↑ 排列。所有方法统一排版；不在主表中设置来源分组或来源标签。Ours 为既定 λ_R=0.1 的最新完整 S，使用seed41/42/43计算均值与样本标准差，保留1位小数。删除MLR行；MLR+IFA使用本项目seed41/42/43复现指标。按每列最佳均值重新加粗，不直接照搬截图中的粗体。Ours 行浅蓝色强调。
 
-方法旁保留正常文献引用，编号由当前文档自动生成。基线数值从所附 Yu 等论文 Table 1 直接提取，未重跑；Ours从已验收配对outcomes重新计算，并与上一轮绘图CSV逐项核对。来源与协议记录保留在审计文件中，不把排版统一解释为所有实验均由本项目重跑。
+表格含9个方法，不显示引用编号、不附参考文献页。七个外部方法数值来自所附Yu等论文Table 1；MLR+IFA从 `20261101_ablation_summary/DATA.json` 的baseline/MLR_IFA六个任务矩阵重新计算；Ours从已验收配对outcomes重新计算。两种本项目方法均采用跨seed样本标准差（ddof=1）。来源SHA与复算记录保留在TABLE_AUDIT.json中。
+
+MLR+IFA（FWT、NBT、AUC）：OBJECT为66.7±3.1、−2.8±1.9、68.3±3.1；GOAL为76.7±5.6、0.2±6.0、76.4±6.4。GOAL的NBT最优均值属于MLR+IFA，其余五列最优均值属于Ours。
 
 ## 编译
 
@@ -22,7 +24,7 @@ pdflatex -interaction=nonstopmode -halt-on-error main_comparison.tex
 
 ## 放入论文
 
-使用 `table_comparison.tex` 时，将以下设置并入论文导言区，并在论文自己的参考文献中加入表格的引用key（完整条目可从自包含文件复制）：
+使用 `table_comparison.tex` 时，将以下设置并入论文导言区：
 
 ```latex
 \usepackage{amsmath,booktabs,multirow,graphicx}
