@@ -1,0 +1,163 @@
+{
+  "status": "CONDITIONAL_PLANNING_NOT_COMPLETION_GUARANTEE",
+  "observed": "2026-11-08T13:24:55.114168+08:00",
+  "actual": {
+    "Q1_41": {
+      "timing": {
+        "6": {
+          "completed_epochs": 100,
+          "mean_seconds": 5.4975908708572385,
+          "recent10_mean_seconds": 5.430789446830749
+        },
+        "7": {
+          "completed_epochs": 1,
+          "mean_seconds": 33.83510375022888,
+          "recent10_mean_seconds": 33.83510375022888
+        }
+      },
+      "admissions": {
+        "7": {
+          "status": "PASS_OWN_GPU_ADMISSION",
+          "optimizer_calls": 29,
+          "autograd_calls": 11,
+          "actual_memory_uniform_update_exact": true,
+          "short_history_fixed_one_exact": true,
+          "effective_support": {
+            "6": 1.0
+          },
+          "empirical_support": {
+            "6": 0.1
+          },
+          "all_replay_state_checks": true
+        }
+      },
+      "task6_comparison": {
+        "all_tensors_exact": true,
+        "baseline_cp_sha256": "12af997649fac1cc543d690ccc0ff02f925606fc7c5004e44e64435c4b9fda2f",
+        "actual_cp_sha256": "d6d0b6949102766a0ec23c42cdd3f8d844f25bfe176982742d63baf7ae13a151",
+        "different_tensors": {}
+      }
+    },
+    "Q1_42": {
+      "timing": {
+        "6": {
+          "completed_epochs": 100,
+          "mean_seconds": 5.442423083782196,
+          "recent10_mean_seconds": 5.478778004646301
+        },
+        "7": {
+          "completed_epochs": 3,
+          "mean_seconds": 41.07577037811279,
+          "recent10_mean_seconds": 41.07577037811279
+        }
+      },
+      "admissions": {
+        "7": {
+          "status": "PASS_OWN_GPU_ADMISSION",
+          "optimizer_calls": 29,
+          "autograd_calls": 11,
+          "actual_memory_uniform_update_exact": true,
+          "short_history_fixed_one_exact": true,
+          "effective_support": {
+            "6": 1.0
+          },
+          "empirical_support": {
+            "6": 0.1
+          },
+          "all_replay_state_checks": true
+        }
+      },
+      "task6_comparison": {
+        "all_tensors_exact": true,
+        "baseline_cp_sha256": "369d3bd2873c3eec8fd36629c132353751105f6a9e525bec22e9412e71c32f3d",
+        "actual_cp_sha256": "f70c2e3773a5b27b0eff1d82d149829fcb51eb76928dd4702402b7099e8e545c",
+        "different_tensors": {}
+      }
+    },
+    "Q1_43": {
+      "timing": {},
+      "admissions": {},
+      "task6_comparison": null
+    }
+  },
+  "historical_stage_means_seconds": {
+    "L005_42": {
+      "6": 4.810549252033233,
+      "7": 31.91556786775589,
+      "8": 49.70648317575455,
+      "9": 69.6311486363411
+    },
+    "L020_42": {
+      "6": 5.31201110124588,
+      "7": 32.94504458189011,
+      "8": 52.431857829093936,
+      "9": 66.80864706277848
+    },
+    "L020_43": {
+      "6": 5.4832743191719056,
+      "7": 34.765706696510314,
+      "8": 50.93035719871521,
+      "9": 53.30972438335419
+    }
+  },
+  "reference_stage_medians_seconds": {
+    "6": 5.31201110124588,
+    "7": 32.94504458189011,
+    "8": 50.93035719871521,
+    "9": 66.80864706277848
+  },
+  "current_pair_conditional_compute": {
+    "Q1_41": {
+      "current_task7_remaining_minutes": 55.82792118787766,
+      "historical_unscaled_stage8_9_minutes": 196.23167376915615,
+      "early_task7_speed_ratio": 1.027016480919502,
+      "conditional_remaining_compute_minutes": 257.36108422722015
+    },
+    "Q1_42": {
+      "current_task7_remaining_minutes": 66.40582877794901,
+      "historical_unscaled_stage8_9_minutes": 196.23167376915615,
+      "early_task7_speed_ratio": 1.2467966244820972,
+      "conditional_remaining_compute_minutes": 311.066817249805
+    }
+  },
+  "historical_full_run_epoch_minutes": 259.99343324104944,
+  "historical_group600_evaluation_minutes": {
+    "L005": 68.05966356992721,
+    "L020": 59.444387924671176
+  },
+  "planning_minutes": {
+    "current_pair_training_and_collection": [
+      240,
+      330
+    ],
+    "third_seed_training_and_collection": [
+      240,
+      330
+    ],
+    "formal600": [
+      60,
+      120
+    ],
+    "total": [
+      540,
+      780
+    ]
+  },
+  "planning_completion": [
+    "2026-11-08T22:24:55.114168+08:00",
+    "2026-11-09T02:24:55.114168+08:00"
+  ],
+  "next_check_minutes": 60,
+  "sources": {
+    "execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_132454\\EVIDENCE.json": "a7ca66010e5ac8430fafafecefd0efb062f1b2f9787c2b09fb4893bd75071827",
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261101_lambda_r_object_sensitivity\\final_acceptance_20261103_v1\\final_readonly_20261103_124306\\EVIDENCE.json": "40ec9129b4eb9f479c27ae55d5d1d81c6b543063dd19a1a9fea41d7bb73411fe"
+  },
+  "limits": [
+    "Current retaining-stage timings only 1 and 3 complete epochs; startup/collection contention and diagnostics influence these samples.",
+    "Task8/9 and seed43 not measured in this q1 experiment. Historical same-device S lambda runs are conditional references, not matched-workload controls.",
+    "Two initial trainers run in parallel; seed43 begins in a freed slot. Sum of two wave allowances is conservative; do not sum both initial trainers serially.",
+    "No guaranteed single-trainer speedup assumed for seed43. Cache contents, gate decisions and GPU resource availability can change times.",
+    "Formal evaluation not started; historical 600-episode times are references only.",
+    "Final independent CPU acceptance, interpretation and publication are additional."
+  ]
+}

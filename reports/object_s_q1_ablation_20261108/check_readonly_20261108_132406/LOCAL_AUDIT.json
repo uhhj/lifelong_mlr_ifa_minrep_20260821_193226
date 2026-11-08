@@ -1,0 +1,135 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-11-08T13:24:07.706131+08:00",
+  "counts": {
+    "Q1_41": {
+      "epochs": 100,
+      "accepted_updates": 15700,
+      "physical_optimizer_calls": 15700,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "prepare",
+        "time": 1794115432.4662383,
+        "pid": 2218
+      },
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "Q1_42": {
+      "epochs": 102,
+      "accepted_updates": 16154,
+      "physical_optimizer_calls": 16608,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 2,
+        "steps": 16154,
+        "physical_optimizer_calls": 16608,
+        "time": 1794115434.8278062,
+        "pid": 2221
+      },
+      "current_stage_epochs": 2,
+      "recent_epoch_mean_seconds": 47.69079399108887,
+      "current_stage_compute_minutes_estimate": 77.89496351877848,
+      "gate_blocks_observed": 57,
+      "gate_Q_accepts_observed": 26
+    },
+    "Q1_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 202,
+  "accepted_updates": 31854,
+  "physical_training_optimizer_calls": 32308,
+  "own_isolated_optimizer_calls": 37,
+  "own_extra_autograd_calls": 27,
+  "training_collection_completed_episodes": 20,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 2207,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2209,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=e8e54326-95c1-4d10-8302-7db3e23828b9 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2210,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=2041a173-4387-4059-915e-aba792694906 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2218,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_41 ",
+      "state": "R"
+    },
+    {
+      "pid": 2221,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_42 ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1414791168,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 206831616
+    },
+    "/data": {
+      "free": 16324620288,
+      "remaining_bound": 3427401728,
+      "reserve": 2147483648,
+      "spare": 10749734912
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "2218\n2221\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "eb17bad15242cebbab4aa857a6a81060a085be05c9bf770bfcd1944094d64d74",
+  "contract": "6854004daec87e0f4418c213a06bb8b63285bb8e01fc78d29f936c18f112e92d",
+  "prefix_checked": "execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_131035",
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 2,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 2,
+      "evaluate": 0
+    },
+    "active": null
+  }
+}
