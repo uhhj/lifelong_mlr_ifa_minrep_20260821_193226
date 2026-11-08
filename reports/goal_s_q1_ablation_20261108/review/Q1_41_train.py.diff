@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261103_lambda_r_goal_sensitivity\L005_41\train.py
++++ Q1_41/train.py
+@@ -61,7 +61,7 @@
+             write(R/'TRAIN_STATUS.json',dict(arm=arm,stage=stage,phase='prepare',time=time.time(),pid=os.getpid()))
+             ds=Dataset(stage);loader,sampler=setup(a,ds);info=js(O/('ra_coreset/ifa_task%d.json'%stage))['info'];a.policy.train()
+             memory=load_memory(arm,stage);scale=scale_for(ds)
+-            binding={str(t):dict(cache_sha256=sha(memory_path(arm,t)),source_sha256=memory[t]['source_sha256'],count=len(memory[t]['rows']),support=memory[t]['support'],support_trajectories=memory[t]['support_trajectories']) for t in memory}
++            binding={str(t):dict(cache_sha256=sha(memory_path(arm,t)),source_sha256=memory[t]['source_sha256'],count=len(memory[t]['rows']),support=memory[t]['support'],effective_support=(1. if memory[t]['rows'] else 0.),support_trajectories=memory[t]['support_trajectories']) for t in memory}
+             write(R/('TRAIN_INPUT_%s_%d.json'%(arm,stage)),dict(status='PASS_FROZEN_INPUT',lambda_R=RETAIN_WEIGHT,manifest_sha256=sha(O/('ra_coreset/dataset_manifests/task%d.json'%stage)),scale=scale.tolist(),memory=binding,sampling='cyclic task slots; stateless independent RandomState per step/slot; empty tasks contribute zero'))
+             pr=setup_probes(ds,memory) if stage>6 else None
+             set_count_mode('admission');admission_before=CALLS['admission']

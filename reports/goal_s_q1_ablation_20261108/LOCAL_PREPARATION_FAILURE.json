@@ -1,0 +1,8 @@
+{
+  "stage": "local static source byte comparison before freeze",
+  "cause": "Prior source CRLF versus reviewed deployment UTF8 LF; decoded source and AST equal. Freeze stopped before bundle creation due absent review.",
+  "optimizer_calls": 0,
+  "environments": 0,
+  "remote_deployment_attempts": 0,
+  "resolution": "Compare normalized source text and AST; retain original source byte SHA and deployed UTF8 LF SHA in SOURCE_REVIEW."
+}

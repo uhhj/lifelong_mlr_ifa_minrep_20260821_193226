@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261103_lambda_r_goal_sensitivity\L005_43\support_memory.py
++++ Q1_43/support_memory.py
+@@ -18,7 +18,7 @@
+     q={t:m['support'] for t,m in memory.items()}
+     if arm=='S':return {t:1. for t in q}
+     if arm=='U':return {t:sum(q.values())/len(q) for t in q}
+-    if arm in ['Q','G']:return q
++    if arm in ['Q','G']:return {t:(1. if memory[t]['rows'] else 0.) for t in q}
+     assert arm=='C';return {t:0. for t in q}
+ 
+ def from_selection(policy,memory,selection,ww,denominator):

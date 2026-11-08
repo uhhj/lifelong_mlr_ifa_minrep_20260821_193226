@@ -1,0 +1,9 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261103_lambda_r_goal_sensitivity\L005_41\initialization.py
++++ Q1_41/initialization.py
+@@ -11,5 +11,5 @@
+  assert tensor==old['tensors'] and digest==old['rng'],'Accepted S initialization/RNG mismatch'
+  assert hardware['device']=='NVIDIA GeForce RTX 3090'
+  for key in ['torch_version','cuda_version','cudnn_version','matmul_tf32','cudnn_tf32']:assert hardware[key]==old['hardware'][key],key
+- write(R/'HARDWARE_MIGRATION.json',dict(status='USER_AUTHORIZED_RTX3090',actual=hardware,baseline=old['hardware'],hardware_equal=hardware==old['hardware'],initial_tensors_rng_exact=True,lambda_only_hardware_controlled=False))
++ write(R/'HARDWARE_MIGRATION.json',dict(status='USER_AUTHORIZED_RTX3090',actual=hardware,baseline=old['hardware'],hardware_equal=hardware==old['hardware'],initial_tensors_rng_exact=True,q_only_hardware_controlled=False))
+  write(R/('INITIAL_'+arm+'.json'),dict(status='PASS_OFFICIAL_INITIALIZATION',tensors=tensor,rng=digest,hardware=hardware,historical_cuda_rng_equal=digest['cuda']==expected['rng']['cuda'],historical_cuda_rng_gate=False,official_cp_sha256=sha(a.cfg.pretrain),parent_initial_sha256=sha(O/'ra_coreset/INITIAL_STATE.json')))
