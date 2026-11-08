@@ -1,6 +1,30 @@
 {
-  "status": "PARTIAL",
-  "observation": "2026-11-08T22:24:14.699691+08:00",
+  "status": "PASS_COMPLETE_OBJECT_Q1_ACCEPTANCE",
+  "observed": "2026-11-08T22:39:09.729686+08:00",
+  "final_directory": "final_readonly_20261108_223300",
+  "contract": "6854004daec87e0f4418c213a06bb8b63285bb8e01fc78d29f936c18f112e92d",
+  "accepted_seeds": [
+    41,
+    42,
+    43
+  ],
+  "checkpoints": 12,
+  "recoveries": 3,
+  "caches": 12,
+  "formal_episodes": 600,
+  "training_collection_episodes": 120,
+  "gate_blocks": 27300,
+  "optimizer_updates_in_final_audit": 0,
+  "environment_calls_in_final_audit": 0,
+  "sources": {
+    "EVIDENCE.json": "20057e6cca0b37f80fe9ff9033446accd13436582c558c868a4b1a4b6ece700b",
+    "LOCAL_FINAL_AUDIT.json": "a6669c98d0dcae4fa878cc3e4554565c63d8e6ee7a0302ccd7f51bb9aef142e2",
+    "PRIMARY_S_COMPARISON.json": "3df1e9ab8804e3e340a320bd66ce7c55de5f9ba42442dd298a2271ffa790aaf7",
+    "INTERPRETATION_AUDIT.json": "b707938935e46b93af6b0ceac8daee8894a38c9e7bb373ca29adfa455c44e468"
+  },
+  "report_sha256": "5eb75558941a62817225eb56e95e39354f21f3cbf39ae1cbf954ef3b103678e4",
+  "conclusion": "No average closed-loop benefit of support calibration demonstrated in this three-seed OBJECT comparison; NBT alone favors full S. Hardware/development-set boundaries retained.",
+  "latest_evidence": "final_readonly_20261108_223300",
   "counts": {
     "Q1_41": {
       "epochs": 400,
@@ -51,7 +75,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 100,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -72,47 +96,7 @@
   "own_isolated_optimizer_calls": 273,
   "own_extra_autograd_calls": 123,
   "training_collection_completed_episodes": 120,
-  "formal_episodes": 500,
-  "failures": {},
-  "processes": [
-    {
-      "pid": 2207,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/controller_parallel.py ",
-      "state": "S"
-    },
-    {
-      "pid": 17083,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/environment_locked.py Q1_43 evaluate ",
-      "state": "S"
-    },
-    {
-      "pid": 17085,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/Q1_43/evaluate.py ",
-      "state": "R"
-    }
-  ],
-  "capacity": {
-    "/root": {
-      "free": 1380425728,
-      "remaining_bound": 134217728,
-      "reserve": 1073741824,
-      "spare": 172466176
-    },
-    "/data": {
-      "free": 15278018560,
-      "remaining_bound": 2403581952,
-      "reserve": 2147483648,
-      "spare": 10726952960
-    }
-  },
-  "gpu": {
-    "exit": 0,
-    "stdout": "17085\n",
-    "stderr": ""
-  },
-  "snapshot_sha256": "dcc09572fcc18126fd4a3dd884316f6a5860748bbf318d953eefae031f4dd800",
-  "contract": "6854004daec87e0f4418c213a06bb8b63285bb8e01fc78d29f936c18f112e92d",
-  "prefix_checked": "execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_200952",
+  "processes": [],
   "environment_mutex_audit": {
     "nonoverlap": true,
     "acquired": {
@@ -121,19 +105,9 @@
     },
     "released": {
       "collect": 12,
-      "evaluate": 2
+      "evaluate": 3
     },
-    "active": {
-      "event_id": "e82facb3-063a-4911-aa1d-4f82fb2f3597",
-      "phase": "acquired",
-      "case": "Q1_43",
-      "kind": "evaluate",
-      "args": [],
-      "pid": 17083,
-      "time": 1794147157.8379366
-    }
+    "active": null
   },
-  "latest_evidence": "check_readonly_20261108_222413",
-  "scope": "OBJECT full S effective q=1 only, seeds41/42/43; accepted calibrated S read-only",
-  "next_check_minutes": 12
+  "next_check_minutes": null
 }
