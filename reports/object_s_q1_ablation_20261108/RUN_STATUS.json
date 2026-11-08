@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL",
-  "observation": "2026-11-08T20:09:53.805205+08:00",
+  "observation": "2026-11-08T22:24:14.699691+08:00",
   "counts": {
     "Q1_41": {
       "epochs": 400,
@@ -9,7 +9,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -30,7 +30,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -45,37 +45,34 @@
       "gate_Q_accepts_observed": 4129
     },
     "Q1_43": {
-      "epochs": 308,
-      "accepted_updates": 72196,
-      "physical_optimizer_calls": 128692,
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
-      "training_collection_completed_episodes": 30,
-      "formal_episodes": 0,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 100,
       "current": {
         "arm": "S",
         "stage": 9,
-        "phase": "train",
-        "epoch_complete": 8,
-        "steps": 72196,
-        "physical_optimizer_calls": 128692,
-        "time": 1794139752.584982,
+        "phase": "training_collection",
+        "time": 1794144908.690883,
         "pid": 4716
       },
-      "current_stage_epochs": 8,
-      "recent_epoch_mean_seconds": 54.755906850099564,
-      "current_stage_compute_minutes_estimate": 83.95905717015266,
-      "gate_blocks_observed": 5725,
-      "gate_Q_accepts_observed": 3138
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 54.95291473865509,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4672
     }
   },
-  "epochs": 1108,
-  "accepted_updates": 283196,
-  "physical_training_optimizer_calls": 519292,
+  "epochs": 1200,
+  "accepted_updates": 316500,
+  "physical_training_optimizer_calls": 585900,
   "own_isolated_optimizer_calls": 273,
   "own_extra_autograd_calls": 123,
-  "training_collection_completed_episodes": 110,
-  "formal_episodes": 0,
+  "training_collection_completed_episodes": 120,
+  "formal_episodes": 500,
   "failures": {},
   "processes": [
     {
@@ -84,51 +81,59 @@
       "state": "S"
     },
     {
-      "pid": 4711,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=90e1e5db-078a-4025-a913-813821b5e829 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_43 ",
+      "pid": 17083,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/environment_locked.py Q1_43 evaluate ",
       "state": "S"
     },
     {
-      "pid": 4716,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_43 ",
+      "pid": 17085,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/Q1_43/evaluate.py ",
       "state": "R"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1380614144,
+      "free": 1380425728,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 172654592
+      "spare": 172466176
     },
     "/data": {
-      "free": 15289389056,
-      "remaining_bound": 2411159552,
+      "free": 15278018560,
+      "remaining_bound": 2403581952,
       "reserve": 2147483648,
-      "spare": 10730745856
+      "spare": 10726952960
     }
   },
   "gpu": {
     "exit": 0,
-    "stdout": "4716\n",
+    "stdout": "17085\n",
     "stderr": ""
   },
-  "snapshot_sha256": "ee35bb94f4fcc55ceebb9ccf6c36653c5d0e13e4f85a71538bd06ca9f6c7aa49",
+  "snapshot_sha256": "dcc09572fcc18126fd4a3dd884316f6a5860748bbf318d953eefae031f4dd800",
   "contract": "6854004daec87e0f4418c213a06bb8b63285bb8e01fc78d29f936c18f112e92d",
-  "prefix_checked": "execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_182643",
+  "prefix_checked": "execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_200952",
   "environment_mutex_audit": {
     "nonoverlap": true,
     "acquired": {
-      "collect": 11,
-      "evaluate": 0
+      "collect": 12,
+      "evaluate": 3
     },
     "released": {
-      "collect": 11,
-      "evaluate": 0
+      "collect": 12,
+      "evaluate": 2
     },
-    "active": null
+    "active": {
+      "event_id": "e82facb3-063a-4911-aa1d-4f82fb2f3597",
+      "phase": "acquired",
+      "case": "Q1_43",
+      "kind": "evaluate",
+      "args": [],
+      "pid": 17083,
+      "time": 1794147157.8379366
+    }
   },
-  "latest_evidence": "check_readonly_20261108_200952",
+  "latest_evidence": "check_readonly_20261108_222413",
   "scope": "OBJECT full S effective q=1 only, seeds41/42/43; accepted calibrated S read-only",
-  "next_check_minutes": 85
+  "next_check_minutes": 12
 }
