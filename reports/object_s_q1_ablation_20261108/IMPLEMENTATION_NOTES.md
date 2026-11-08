@@ -1,0 +1,13 @@
+# Q1工程说明
+
+科学源来自已接受OBJECT S及OBJECT固定lambda实验的逐seed冻结源；采用后者修正后的真实100轮scheduler、计数器和官方初始化检查。layout恢复lambda=.1。support_memory.weights的Q/G分支仅将有效权重从经验q改成非空1/空0；原始support和成功轨迹IDs仍不变。候选loss、旧探针、方向诊断全部通过该同一函数。其他loss/teacher/slots/采集与评估算法未改变。
+
+train.py使用已运行的最终GOAL版本作为纯控制模板，OBJECT参数来自自己的layout/runtime/parent，预算105500/195300/9100，Task6硬件比较如实记录。增加effective_support元数据。每个保持阶段已有29次隔离调用不变，额外断言实际Q1更新等于原均匀保持结果，raw q=.1的短历史保持与uniform逐位相等；这与生产结果优劣无关。
+
+train_wrapper仅复用已审计同设备clone和精确布尔检查的通用实现；没有声称本新变体执行了旧7828/5704工程诊断。每个新stage仍实测全state拷贝、首更新finite谓词、首门控恢复检查的双路径相等。三个run自己的273隔离optimizer与123准入autograd单列，最多108方向autograd另列；部署import与权重函数检查0optimizer/0环境。
+
+controller只调度本轮三个case，没有冻结旧进程、信号、恢复或跨组交接路径。两个独立torchrun端口/UUID，第二波剩一seed，环境通过新root独立flock串行。复用已验证environment wrapper，仅修改case集合与锁路径；实际所有区间持续核验。没有site-packages hook。
+
+初始8GiB粗预估略超现有磁盘，本轮按已有九个OBJECT run的实际文件大小和成功缓存最大配额核算：三个run最终文件加两atomic recovery临时副本、1GiB工作区/增长裕量共3936354304B，小于4GiB部署上界；data另外保留2GiB，root保留1GiB。没有删除旧结果或付费扩容。
+
+最终CPU包装基于已有完整审核逻辑适配三个OBJECT case、固定有效q及原始经验q双重核对。保留12checkpoint/3完整恢复/12teacher/600noise/27300门控和全部预算、采集评估互斥；任何未实际执行的最终检查均标STATIC_ONLY。既有OBJECT的单case scale舍入例外不直接继承。

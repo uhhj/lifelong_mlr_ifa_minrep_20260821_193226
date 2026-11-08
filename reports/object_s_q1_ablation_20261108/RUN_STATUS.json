@@ -1,0 +1,141 @@
+{
+  "status": "PARTIAL",
+  "observation": "2026-11-08T13:10:36.603540+08:00",
+  "counts": {
+    "Q1_41": {
+      "epochs": 3,
+      "accepted_updates": 471,
+      "physical_optimizer_calls": 471,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 6,
+        "phase": "train",
+        "epoch_complete": 3,
+        "steps": 471,
+        "physical_optimizer_calls": 471,
+        "time": 1794114632.3086414,
+        "pid": 2218
+      },
+      "current_stage_epochs": 3,
+      "recent_epoch_mean_seconds": 5.654930353164673,
+      "current_stage_compute_minutes_estimate": 9.142137404282888,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "Q1_42": {
+      "epochs": 3,
+      "accepted_updates": 471,
+      "physical_optimizer_calls": 471,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 6,
+        "phase": "train",
+        "epoch_complete": 3,
+        "steps": 471,
+        "physical_optimizer_calls": 471,
+        "time": 1794114632.3215656,
+        "pid": 2221
+      },
+      "current_stage_epochs": 3,
+      "recent_epoch_mean_seconds": 5.666371027628581,
+      "current_stage_compute_minutes_estimate": 9.160633161332873,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "Q1_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 6,
+  "accepted_updates": 942,
+  "physical_training_optimizer_calls": 942,
+  "own_isolated_optimizer_calls": 8,
+  "own_extra_autograd_calls": 16,
+  "training_collection_completed_episodes": 0,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 2207,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2209,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=e8e54326-95c1-4d10-8302-7db3e23828b9 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2210,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=2041a173-4387-4059-915e-aba792694906 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2218,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_41 ",
+      "state": "R"
+    },
+    {
+      "pid": 2221,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_42 ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1414799360,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 206839808
+    },
+    "/data": {
+      "free": 16500113408,
+      "remaining_bound": 3602366464,
+      "reserve": 2147483648,
+      "spare": 10750263296
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "2218\n2221\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "faed0ca35883053783d5327efa67a9e742003b8df2f1ea0c27413b93750a8cde",
+  "contract": "6854004daec87e0f4418c213a06bb8b63285bb8e01fc78d29f936c18f112e92d",
+  "prefix_checked": null,
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 0,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 0,
+      "evaluate": 0
+    },
+    "active": null
+  },
+  "latest_evidence": "check_readonly_20261108_131035",
+  "scope": "OBJECT full S effective q=1 only, seeds41/42/43; accepted calibrated S read-only",
+  "next_check_minutes": 30
+}
