@@ -14,11 +14,20 @@ binding=json.loads((R/'S_ACCEPTANCE.json').read_text(encoding='utf8'))['sources'
 for name,key in [('EVIDENCE.json','evidence_sha256'),('LOCAL_FINAL_AUDIT.json','audit_sha256')]:assert hashlib.sha256((Path(binding['final_path'])/name).read_bytes()).hexdigest()==binding[key]
 secret=re.compile(r'BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{30,}')
 manifest={}
+size_review_path=R/'PUBLICATION_SIZE_REVIEW.json'
+size_exceptions={}
+if size_review_path.exists():
+ size_review=json.loads(size_review_path.read_text(encoding='utf8'))
+ assert size_review['status']=='REVIEWED_SCALAR_EVIDENCE_SIZE_EXCEPTION'
+ size_exceptions=size_review['files']
 for p in sorted(R.rglob('*')):
  if not p.is_file() or p.suffix not in ['.py','.json','.md','.csv','.diff']:continue
  if p.name in ['DEPLOY_TEXT_BUNDLE.json','PUBLICATION_MANIFEST.json'] or p.name.startswith('PUBLICATION_RECEIPT'):continue
  if 'light' in p.relative_to(R).parts:continue
- raw=p.read_bytes();assert len(raw)<16*1024**2
+ raw=p.read_bytes()
+ if len(raw)>=16*1024**2:
+  exact=size_exceptions.get(p.relative_to(R).as_posix())
+  assert exact and len(raw)==exact['bytes'] and hashlib.sha256(raw).hexdigest()==exact['sha256']
  txt=raw.decode('utf-8-sig');assert not secret.search(txt),p
  if p.suffix=='.json':json.loads(txt)
  rel=p.relative_to(R).as_posix();dest=D/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
