@@ -1,0 +1,131 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-11-08T18:26:45.359449+08:00",
+  "counts": {
+    "Q1_41": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1794131135.8603742,
+        "pid": 2218
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 70.32548713684082,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 5068
+    },
+    "Q1_42": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1794130688.5770688,
+        "pid": 2221
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 65.29652512073517,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4129
+    },
+    "Q1_43": {
+      "epochs": 166,
+      "accepted_updates": 30682,
+      "physical_optimizer_calls": 45664,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 66,
+        "steps": 30682,
+        "physical_optimizer_calls": 45664,
+        "time": 1794133593.4440815,
+        "pid": 4716
+      },
+      "current_stage_epochs": 66,
+      "recent_epoch_mean_seconds": 29.85199031829834,
+      "current_stage_compute_minutes_estimate": 16.916127847035728,
+      "gate_blocks_observed": 1526,
+      "gate_Q_accepts_observed": 891
+    }
+  },
+  "epochs": 966,
+  "accepted_updates": 241682,
+  "physical_training_optimizer_calls": 436264,
+  "own_isolated_optimizer_calls": 215,
+  "own_extra_autograd_calls": 101,
+  "training_collection_completed_episodes": 90,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 2207,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 4711,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=90e1e5db-078a-4025-a913-813821b5e829 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_43 ",
+      "state": "S"
+    },
+    {
+      "pid": 4716,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261108_v1/train_wrapper.py Q1_43 ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1414795264,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 206835712
+    },
+    "/data": {
+      "free": 15480799232,
+      "remaining_bound": 2599415808,
+      "reserve": 2147483648,
+      "spare": 10733899776
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "4716\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "e8c8f176afd287287e772cd35996de4222604bd8d87643e0b21b42f0d538770a",
+  "contract": "6854004daec87e0f4418c213a06bb8b63285bb8e01fc78d29f936c18f112e92d",
+  "prefix_checked": "execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_140413",
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 9,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 9,
+      "evaluate": 0
+    },
+    "active": null
+  }
+}
