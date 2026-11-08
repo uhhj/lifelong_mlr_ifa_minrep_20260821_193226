@@ -1,0 +1,85 @@
+{
+  "status": "CONDITIONAL_TIMING_NOT_COMPLETION_GUARANTEE",
+  "observed": "2026-11-08T23:18:52.168500+08:00",
+  "actual": {
+    "Q1_41": {
+      "stage7_completed": 56,
+      "all_mean_seconds": 21.20552350793566,
+      "recent10_seconds": 21.47333221435547,
+      "previous10_seconds": 21.717448568344118,
+      "own_admission": "PASS_OWN_GPU_ADMISSION",
+      "raw_support": {
+        "6": 1.0
+      },
+      "effective_support": {
+        "6": 1.0
+      },
+      "Task6_baseline_tensor_exact": true
+    },
+    "Q1_42": {
+      "stage7_completed": 61,
+      "all_mean_seconds": 20.468767940020953,
+      "recent10_seconds": 20.810322833061218,
+      "previous10_seconds": 18.749894070625306,
+      "own_admission": "PASS_OWN_GPU_ADMISSION",
+      "raw_support": {
+        "6": 0.9
+      },
+      "effective_support": {
+        "6": 1.0
+      },
+      "Task6_baseline_tensor_exact": true
+    }
+  },
+  "historical_source": "execution\\20261103_lambda_r_goal_sensitivity\\final_readonly_20261104_122613",
+  "historical_sha256": "2c1dbdcaf51eb632692a4ca3acc1ce0f939f10bb533502cd2065eb42d009dbce",
+  "historical_seconds": {
+    "L005_41": {
+      "6": 3.5184758591651915,
+      "7": 22.320461180210113,
+      "8": 32.9754727935791,
+      "9": 63.65366056442261
+    },
+    "L005_42": {
+      "6": 3.4478066873550417,
+      "7": 21.84624022960663,
+      "8": 33.52475069761276,
+      "9": 64.5738602089882
+    },
+    "L005_43": {
+      "6": 3.6656862258911134,
+      "7": 21.135521421432497,
+      "8": 31.476391525268554,
+      "9": 63.87272578001022
+    }
+  },
+  "current_pair_remaining_compute_minutes": {
+    "Q1_41": 176.79566588719683,
+    "Q1_42": 177.02439468582472
+  },
+  "formula": "remaining Task7 * own recent10 + 100 * historical same seed Task8 + 100 * historical same seed Task9; pair concurrent max; queued seed43 full run after first free slot",
+  "planning_minutes": {
+    "current_pair_training_collection": [
+      180,
+      220
+    ],
+    "queued43_training_collection": [
+      200,
+      260
+    ],
+    "formal600": [
+      60,
+      120
+    ],
+    "total": [
+      440,
+      600
+    ]
+  },
+  "limits": [
+    "Task8/9 and seed43 not measured in this experiment",
+    "Historical GOAL same RTX3090 and engineering, different lambda and cache contents; conditional reference only",
+    "Serial environment locks, checkpoint writes, admission and resource variation included only via planning margin",
+    "Final CPU acceptance/comparison/publication excluded; no automatic wake-up scheduled"
+  ]
+}

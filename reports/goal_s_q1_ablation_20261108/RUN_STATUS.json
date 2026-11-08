@@ -1,54 +1,54 @@
 {
   "status": "PARTIAL",
-  "observation": "2026-11-08T22:48:46.617205+08:00",
+  "observation": "2026-11-08T23:18:52.168500+08:00",
   "counts": {
     "Q1_41": {
-      "epochs": 2,
-      "accepted_updates": 200,
-      "physical_optimizer_calls": 200,
-      "own_isolated_optimizer_calls": 4,
-      "own_extra_autograd_calls": 8,
-      "training_collection_completed_episodes": 0,
+      "epochs": 156,
+      "accepted_updates": 17784,
+      "physical_optimizer_calls": 25568,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
-        "stage": 6,
+        "stage": 7,
         "phase": "train",
-        "epoch_complete": 2,
-        "steps": 200,
-        "physical_optimizer_calls": 200,
-        "time": 1794149326.4988303,
+        "epoch_complete": 56,
+        "steps": 17784,
+        "physical_optimizer_calls": 25568,
+        "time": 1794151113.4764614,
         "pid": 22662
       },
-      "current_stage_epochs": 2,
-      "recent_epoch_mean_seconds": 3.266331434249878,
-      "current_stage_compute_minutes_estimate": 5.335008009274801,
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0
+      "current_stage_epochs": 56,
+      "recent_epoch_mean_seconds": 21.47333221435547,
+      "current_stage_compute_minutes_estimate": 15.747110290527344,
+      "gate_blocks_observed": 796,
+      "gate_Q_accepts_observed": 428
     },
     "Q1_42": {
-      "epochs": 1,
-      "accepted_updates": 100,
-      "physical_optimizer_calls": 100,
-      "own_isolated_optimizer_calls": 4,
-      "own_extra_autograd_calls": 8,
-      "training_collection_completed_episodes": 0,
+      "epochs": 161,
+      "accepted_updates": 18479,
+      "physical_optimizer_calls": 26958,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
-        "stage": 6,
+        "stage": 7,
         "phase": "train",
-        "epoch_complete": 1,
-        "steps": 100,
-        "physical_optimizer_calls": 100,
-        "time": 1794149323.5131838,
+        "epoch_complete": 61,
+        "steps": 18479,
+        "physical_optimizer_calls": 26958,
+        "time": 1794151128.2227445,
         "pid": 22660
       },
-      "current_stage_epochs": 1,
-      "recent_epoch_mean_seconds": 3.481308937072754,
-      "current_stage_compute_minutes_estimate": 5.744159746170044,
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0
+      "current_stage_epochs": 61,
+      "recent_epoch_mean_seconds": 20.810322833061218,
+      "current_stage_compute_minutes_estimate": 13.526709841489792,
+      "gate_blocks_observed": 856,
+      "gate_Q_accepts_observed": 401
     },
     "Q1_43": {
       "epochs": 0,
@@ -66,12 +66,12 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "epochs": 3,
-  "accepted_updates": 300,
-  "physical_training_optimizer_calls": 300,
-  "own_isolated_optimizer_calls": 8,
-  "own_extra_autograd_calls": 16,
-  "training_collection_completed_episodes": 0,
+  "epochs": 317,
+  "accepted_updates": 36263,
+  "physical_training_optimizer_calls": 52526,
+  "own_isolated_optimizer_calls": 66,
+  "own_extra_autograd_calls": 38,
+  "training_collection_completed_episodes": 20,
   "formal_episodes": 0,
   "failures": {},
   "processes": [
@@ -98,21 +98,21 @@
     {
       "pid": 22662,
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_GOAL41_42_43_20261108_v1/train_wrapper.py Q1_41 ",
-      "state": "R"
+      "state": "S"
     }
   ],
   "capacity": {
     "/root": {
-      "free": 1380331520,
+      "free": 1380306944,
       "remaining_bound": 134217728,
       "reserve": 1073741824,
-      "spare": 172371968
+      "spare": 172347392
     },
     "/data": {
-      "free": 14578483200,
-      "remaining_bound": 3602374656,
+      "free": 14387957760,
+      "remaining_bound": 3413655552,
       "reserve": 2147483648,
-      "spare": 8828624896
+      "spare": 8826818560
     }
   },
   "gpu": {
@@ -120,22 +120,22 @@
     "stdout": "22662\n22660\n",
     "stderr": ""
   },
-  "snapshot_sha256": "60db710fcd30a2953aef6b9bed7f718a2f1b2f8f57fe2c80c519a4f9cb42400f",
+  "snapshot_sha256": "f511191ac412b6ad0a7f758fc843f2eb69fec35b061e9e8048701bbc75be805c",
   "contract": "1eadee5c7dfa2d0d33b5c1c8e12560f22325ed6d7c9b43103e1460a5795763da",
-  "prefix_checked": null,
+  "prefix_checked": "execution\\20261108_goal_s_q1_ablation\\check_readonly_20261108_224845",
   "environment_mutex_audit": {
     "nonoverlap": true,
     "acquired": {
-      "collect": 0,
+      "collect": 2,
       "evaluate": 0
     },
     "released": {
-      "collect": 0,
+      "collect": 2,
       "evaluate": 0
     },
     "active": null
   },
-  "latest_evidence": "check_readonly_20261108_224845",
+  "latest_evidence": "check_readonly_20261108_231851",
   "scope": "GOAL full S effective q=1 only, seeds41/42/43; accepted calibrated S read-only",
-  "next_check_minutes": 25
+  "next_check_minutes": 170
 }
