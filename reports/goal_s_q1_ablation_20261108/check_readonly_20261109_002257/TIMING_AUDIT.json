@@ -1,0 +1,90 @@
+{
+  "status": "CONDITIONAL_TIMING_NOT_COMPLETION_GUARANTEE",
+  "observation": "2026-11-09T00:22:58.528599+08:00",
+  "source_snapshot_sha256": "1403cc30bf46754443c242e2936bff5e30f838114d299f0613636dd1242efb7e",
+  "actual": {
+    "Q1_41": {
+      "stage8_epochs": 89,
+      "all_mean_seconds": 31.109736439887058,
+      "last10_seconds": 31.085756134986877,
+      "previous10_seconds": 31.374399018287658,
+      "raw_support": {
+        "6": 1.0,
+        "7": 1.0
+      },
+      "effective_support": {
+        "6": 1.0,
+        "7": 1.0
+      },
+      "own_stage8_admission": "PASS_OWN_GPU_ADMISSION",
+      "Task9_admission": "NOT_YET_REACHED"
+    },
+    "Q1_42": {
+      "stage8_epochs": 91,
+      "all_mean_seconds": 31.492314267944504,
+      "last10_seconds": 31.453289675712586,
+      "previous10_seconds": 31.63644943237305,
+      "raw_support": {
+        "6": 0.9,
+        "7": 1.0
+      },
+      "effective_support": {
+        "6": 1.0,
+        "7": 1.0
+      },
+      "own_stage8_admission": "PASS_OWN_GPU_ADMISSION",
+      "Task9_admission": "NOT_YET_REACHED"
+    }
+  },
+  "historical_source": "execution\\20261103_lambda_r_goal_sensitivity\\final_readonly_20261104_122613",
+  "historical_sha256": "2c1dbdcaf51eb632692a4ca3acc1ce0f939f10bb533502cd2065eb42d009dbce",
+  "historical_seconds": {
+    "L005_41": {
+      "6": 3.5184758591651915,
+      "7": 22.320461180210113,
+      "8": 32.9754727935791,
+      "9": 63.65366056442261
+    },
+    "L005_42": {
+      "6": 3.4478066873550417,
+      "7": 21.84624022960663,
+      "8": 33.52475069761276,
+      "9": 64.5738602089882
+    },
+    "L005_43": {
+      "6": 3.6656862258911134,
+      "7": 21.135521421432497,
+      "8": 31.476391525268554,
+      "9": 63.87272578001022
+    }
+  },
+  "current_pair_remaining_compute_minutes": {
+    "Q1_41": 111.78848956545194,
+    "Q1_42": 112.34109379967055
+  },
+  "formula": "remaining Task8 * own recent10 + 100 * historical same-seed GOAL3090 Task9; queued43 starts at first free slot; evaluation after all training",
+  "planning_minutes": {
+    "current_pair_training_collection": [
+      120,
+      145
+    ],
+    "queued43_training_collection": [
+      200,
+      260
+    ],
+    "formal600": [
+      60,
+      120
+    ],
+    "total": [
+      380,
+      525
+    ]
+  },
+  "limits": [
+    "Task9 and seed43 unmeasured in current q1 experiment; historical lambda/cache differences",
+    "Seed43 mostly runs alone; do not assume strict parallel-speed scaling",
+    "Checkpoint, admission, collection and lock/resource variations included as planning margin",
+    "Final CPU acceptance, comparison and publication excluded"
+  ]
+}
