@@ -1,0 +1,146 @@
+{
+  "status": "CONDITIONAL_PLANNING_NOT_FINAL_ACCEPTANCE",
+  "observed": "2026-11-08T14:04:13.691037+08:00",
+  "actual": {
+    "Q1_41": {
+      "task7_epochs": 68,
+      "mean_seconds": 33.9950863368371,
+      "recent10_seconds": 34.392733979225156,
+      "recent20_seconds": 34.59780422449112,
+      "previous20_seconds": 34.06673336029053,
+      "recent20_change_percent": 1.5589133791725107,
+      "recent20_cv_percent": 2.1457276299521317,
+      "recent20_range_seconds": [
+        33.39401364326477,
+        36.617188930511475
+      ],
+      "nonoverlapping10_means": [
+        32.92508292198181,
+        33.74165642261505,
+        34.034005236625674,
+        33.69040601253509,
+        34.44060695171356,
+        35.004689645767215
+      ],
+      "task7_remaining_compute_minutes": 18.452162253061932,
+      "stage8_9_conditional_minutes": 206.0760614493595,
+      "run_remaining_conditional_compute_minutes": 224.52822370242146,
+      "admission": {
+        "status": "PASS_OWN_GPU_ADMISSION",
+        "checks": {
+          "roundtrip_next_step_exact": true,
+          "q_one_original_S_exact": true,
+          "lambda_zero_original_C_exact": true,
+          "ten_step_C_replay_exact": true,
+          "accepted_and_rejected_full_state_restore": true,
+          "measurement_state_exact": true,
+          "probe_all_state_exact": true,
+          "q1_actual_memory_uniform_exact": true,
+          "q1_short_history_exact": true,
+          "synthetic_gate_accept_reject": true
+        },
+        "optimizer_calls": 29,
+        "autograd_calls": 11,
+        "empirical_support": {
+          "6": 0.1
+        },
+        "effective_support": {
+          "6": 1.0
+        }
+      }
+    },
+    "Q1_42": {
+      "task7_epochs": 73,
+      "mean_seconds": 33.343236701129236,
+      "recent10_seconds": 32.93821678161621,
+      "recent20_seconds": 32.816698825359346,
+      "previous20_seconds": 32.4603771686554,
+      "recent20_change_percent": 1.0977126200739873,
+      "recent20_cv_percent": 2.292530988183571,
+      "recent20_range_seconds": [
+        31.699894189834595,
+        34.5100474357605
+      ],
+      "nonoverlapping10_means": [
+        35.39024302959442,
+        33.37506892681122,
+        34.00984036922455,
+        32.4347624540329,
+        32.621264815330505,
+        32.63682780265808,
+        33.30738906860351
+      ],
+      "task7_remaining_compute_minutes": 14.767514471411706,
+      "stage8_9_conditional_minutes": 195.46720363579215,
+      "run_remaining_conditional_compute_minutes": 210.23471810720386,
+      "admission": {
+        "status": "PASS_OWN_GPU_ADMISSION",
+        "checks": {
+          "roundtrip_next_step_exact": true,
+          "q_one_original_S_exact": true,
+          "lambda_zero_original_C_exact": true,
+          "ten_step_C_replay_exact": true,
+          "accepted_and_rejected_full_state_restore": true,
+          "measurement_state_exact": true,
+          "probe_all_state_exact": true,
+          "q1_actual_memory_uniform_exact": true,
+          "q1_short_history_exact": true,
+          "synthetic_gate_accept_reject": true
+        },
+        "optimizer_calls": 29,
+        "autograd_calls": 11,
+        "empirical_support": {
+          "6": 0.1
+        },
+        "effective_support": {
+          "6": 1.0
+        }
+      }
+    }
+  },
+  "reference_stage_seconds": {
+    "6": 5.31201110124588,
+    "7": 32.94504458189011,
+    "8": 50.93035719871521,
+    "9": 66.80864706277848
+  },
+  "historical_formal600_minutes": {
+    "L005": 68.05966356992721,
+    "L020": 59.444387924671176
+  },
+  "planning_minutes": {
+    "current_parallel_pair_training_collection": [
+      230,
+      280
+    ],
+    "queued_seed43_training_collection": [
+      250,
+      320
+    ],
+    "formal600": [
+      60,
+      120
+    ],
+    "total": [
+      540,
+      720
+    ]
+  },
+  "planning_completion": [
+    "2026-11-08T23:04:13.691037+08:00",
+    "2026-11-09T02:04:13.691037+08:00"
+  ],
+  "next_check_minutes": 180,
+  "sources": {
+    "execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_140413\\EVIDENCE.json": "6b9c0c2358cda4a88ab013a7bb9f7a909edede04809ca06ca44a19cdc28aa4dd",
+    "D:\\论文课题研究\\MLR+IFA\\execution\\20261108_object_s_q1_ablation\\check_readonly_20261108_132454\\TIMING_AUDIT.json": "4fdfeeab6b9642529f9d30fd0aa2e70931f99f9c017bfb5ff53b362968dda6dc"
+  },
+  "limits": [
+    "Stable refers only to current Task7, with two active trainers. Task8/9 are not measured here.",
+    "Future-stage estimates scale historical same-3090 stage means by current recent20 Task7 speed; cache and concurrency may differ.",
+    "Current-pair allowance adds preparation, saving, collection, lock waits and variability to conditional pure computation.",
+    "Seed43 can start in the first free slot. Two-wave sum is conservative; no assumed single-trainer speedup.",
+    "Formal600 has not started. Historical times are references, not current throughput.",
+    "CPU acceptance, interpretation and publication are additional; completion is checked by actual exits."
+  ]
+}
