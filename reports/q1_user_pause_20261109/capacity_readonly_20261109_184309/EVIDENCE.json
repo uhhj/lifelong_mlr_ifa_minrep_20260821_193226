@@ -1,0 +1,54 @@
+{
+  "observed": 1794220990.292712,
+  "processes": [
+    {
+      "pid": 2638,
+      "ppid": 1,
+      "state": "S",
+      "start": "172343",
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/controller.py "
+    },
+    {
+      "pid": 2639,
+      "ppid": 2638,
+      "state": "S",
+      "start": "172348",
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/controller_parallel.py "
+    },
+    {
+      "pid": 2641,
+      "ppid": 2639,
+      "state": "S",
+      "start": "172352",
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=24b65a68-96d4-4e44-869f-e01741b5d221 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 "
+    },
+    {
+      "pid": 2642,
+      "ppid": 2639,
+      "state": "S",
+      "start": "172353",
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=72131415-16cc-40eb-9c65-faba2a45634b /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 "
+    },
+    {
+      "pid": 2650,
+      "ppid": 2642,
+      "state": "R",
+      "start": "172477",
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 "
+    },
+    {
+      "pid": 2652,
+      "ppid": 2641,
+      "state": "R",
+      "start": "172478",
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 "
+    }
+  ],
+  "roots": {
+    "/data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1": {
+      "STATUS.json": "{\n  \"status\": \"RUNNING\",\n  \"suite\": \"OBJECT\",\n  \"suite_controller\": 2639,\n  \"controller\": 2638,\n  \"observed\": 1794209944.8411467\n}"
+    },
+    "/data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1": {},
+    "/data/mlr_ifa/experiment_workspaces/S_Q1_GOAL41_42_43_20261109_rerun_v1": {}
+  }
+}

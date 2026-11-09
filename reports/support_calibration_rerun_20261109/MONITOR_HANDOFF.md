@@ -1,3 +1,7 @@
+## 2026-11-09T18:43:51.840233+08:00 用户要求暂停扩容（覆盖此前继续安排）
+
+当前两个调度器及两组 launcher/train 共六进程均 SIGSTOP/T，身份已核。证据 execution/20261109_q1_user_pause/LOCAL_AUDIT.json 和 REPORT.md。148 冻结项不变；当前实验 PARTIAL_PAUSED_BY_USER_IN_MEMORY。不得自动恢复或启动后续 ALIGN。仅用户明确继续后先核 boot、进程 start、hash、挂载容量和恢复边界；若重启，内存中部分轮丢失，不得盲恢复/重跑。未强制 checkpoint，暂停时间不计正常吞吐。
+
 ## 2026-11-09 17:08 MLR+IFA+ALIGN已提前准备，当前q1不受中断
 
 用户明确要求现在完成代码适配与部署准备。新目录`execution/20261109_mlr_ifa_align_baseline`已准备六run（OBJECT/GOAL各41/42/43），合同`6a6298283056986941016d1f487f8169fcbfe760679088e675f51ceaa015f7d7`。实际CPU六case原Random成员/顺序/特征和ALIGN原始下一动作/mask核验PASS；静态源对照、完整文本hash闭合与零科学队列正常/失败模拟PASS。没有新GPU调用/optimizer/环境，也未部署或装后台等待器。
