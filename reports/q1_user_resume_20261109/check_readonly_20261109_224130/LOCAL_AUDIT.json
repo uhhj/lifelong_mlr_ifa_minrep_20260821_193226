@@ -1,0 +1,136 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-11-09T22:41:31.150910+08:00",
+  "counts": {
+    "Q1_41": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1794224990.4657514,
+        "pid": 2430
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 64.0501341342926,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 5514
+    },
+    "Q1_42": {
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1794225458.5221257,
+        "pid": 2428
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 63.30391223430634,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4437
+    },
+    "Q1_43": {
+      "epochs": 338,
+      "accepted_updates": 83056,
+      "physical_optimizer_calls": 150412,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 30,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "train",
+        "epoch_complete": 38,
+        "steps": 83056,
+        "physical_optimizer_calls": 150412,
+        "time": 1794235276.5112996,
+        "pid": 3049
+      },
+      "current_stage_epochs": 38,
+      "recent_epoch_mean_seconds": 56.81892642974854,
+      "current_stage_compute_minutes_estimate": 58.71289064407349,
+      "gate_blocks_observed": 6814,
+      "gate_Q_accepts_observed": 3054
+    }
+  },
+  "epochs": 1138,
+  "accepted_updates": 294056,
+  "physical_training_optimizer_calls": 541012,
+  "own_isolated_optimizer_calls": 273,
+  "own_extra_autograd_calls": 123,
+  "training_collection_completed_episodes": 110,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 3044,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=abcd462d-548b-45b8-98e1-e69717db60d3 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_43 ",
+      "state": "S"
+    },
+    {
+      "pid": 3049,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_43 ",
+      "state": "R"
+    },
+    {
+      "pid": 2416,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2417,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/object_controller.py ",
+      "state": "S"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1412804608,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 204845056
+    },
+    "/data": {
+      "free": 55519166464,
+      "remaining_bound": 3858792448,
+      "reserve": 2147483648,
+      "spare": 49512890368
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "3049\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "ce32ea5c3b23b6d6c94cf463f42b220b4fa0cbdccef44b9d5df40ab35dddd2ce",
+  "contract": "8cea823de478edd2aaebdfaec55421e6c54f7584b34d21495a6af85a4a84b7f5",
+  "prefix_checked": "execution\\20261109_q1_user_resume\\check_readonly_20261109_215139",
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 11,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 11,
+      "evaluate": 0
+    },
+    "active": null
+  }
+}

@@ -1,3 +1,9 @@
+## 2026-11-09T22:41:31.150910+08:00 最新只读检查
+
+check_readonly_20261109_224130及进度审计PASS，215139全部前缀保持。OBJECT41/42完整400轮40采集退出0；43已338轮(Task9 38)，30采集，Task9自己的固定q1准入29/11、恢复重放和四阶段COPY_EQ/BRANCH_COPY_EQ/CHECK_EQ实际通过。总1138轮541012生产110采集0正式，GOAL未开始；148科学+7工程冻结项不变，controller2416/2417/GPU3049正常，11采集互斥完整。
+
+43近10轮56.8189秒，余62轮纯58.71min，训练保存最后10采集规划65–85min；OBJECT600正式60–90min，OBJECT整体125–175min/11月10日00:45–01:40；六run总525–685min/07:30–10:10，CPU验收解释发布另计。GOAL及正式未实测，不按时间断言完成；新resume目录本快照TIMING_AUDIT/PROGRESS_REPORT为证。严格OBJECT闭环完成才GOAL，未改队列。
+
 ## 2026-11-09T21:51:40.308442+08:00 实际进度与估时
 
 check_readonly_20261109_215139与audit_progress PASS，190024全部前缀保持。OBJECT41/42各400轮40采集且新工程Q1_41_train.exit/Q1_42_train.exit真实0；43自然接续282轮(Task8 82)、20采集，自己的Task7/8固定q1准入与COPY_EQ/BRANCH_COPY_EQ/CHECK_EQ通过，Task9未来不套PASS。总1082轮502376生产100采集0正式，GOAL未启动；科学148+工程7项不变，controller2416/2417、GPU3049正常，10采集锁全部互斥退出。
