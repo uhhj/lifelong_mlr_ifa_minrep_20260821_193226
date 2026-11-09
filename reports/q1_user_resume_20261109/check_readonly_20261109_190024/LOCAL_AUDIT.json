@@ -1,0 +1,143 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-11-09T19:00:25.279185+08:00",
+  "counts": {
+    "Q1_41": {
+      "epochs": 353,
+      "accepted_updates": 88486,
+      "physical_optimizer_calls": 161272,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 30,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "train",
+        "epoch_complete": 53,
+        "steps": 88486,
+        "physical_optimizer_calls": 161272,
+        "time": 1794222006.9184384,
+        "pid": 2430
+      },
+      "current_stage_epochs": 53,
+      "recent_epoch_mean_seconds": 61.3866048336029,
+      "current_stage_compute_minutes_estimate": 48.08617378632228,
+      "gate_blocks_observed": 7371,
+      "gate_Q_accepts_observed": 4652
+    },
+    "Q1_42": {
+      "epochs": 346,
+      "accepted_updates": 85952,
+      "physical_optimizer_calls": 156204,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 30,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "train",
+        "epoch_complete": 46,
+        "steps": 85952,
+        "physical_optimizer_calls": 156204,
+        "time": 1794222013.806718,
+        "pid": 2428
+      },
+      "current_stage_epochs": 46,
+      "recent_epoch_mean_seconds": 62.7902339220047,
+      "current_stage_compute_minutes_estimate": 56.51121052980423,
+      "gate_blocks_observed": 7108,
+      "gate_Q_accepts_observed": 3779
+    },
+    "Q1_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 699,
+  "accepted_updates": 174438,
+  "physical_training_optimizer_calls": 317476,
+  "own_isolated_optimizer_calls": 182,
+  "own_extra_autograd_calls": 82,
+  "training_collection_completed_episodes": 60,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 2416,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2417,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/object_controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2419,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=933ee55a-22cd-48eb-a964-c22398d3cc2f /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/resume_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2420,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=7fc50d04-c818-4f3a-a475-9098ad80c97b /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/resume_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2428,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/resume_wrapper.py Q1_42 ",
+      "state": "R"
+    },
+    {
+      "pid": 2430,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1/resume_wrapper.py Q1_41 ",
+      "state": "S"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1412866048,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 204906496
+    },
+    "/data": {
+      "free": 56170635264,
+      "remaining_bound": 4501778432,
+      "reserve": 2147483648,
+      "spare": 49521373184
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "2430\n2428\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "082523b625564660d92402eb9aeae5ee5bd8eb643b96f71e2a5890a4ddc404d4",
+  "contract": "8cea823de478edd2aaebdfaec55421e6c54f7584b34d21495a6af85a4a84b7f5",
+  "prefix_checked": "execution\\20261109_q1_user_resume\\check_readonly_20261109_185519",
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 6,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 6,
+      "evaluate": 0
+    },
+    "active": null
+  }
+}

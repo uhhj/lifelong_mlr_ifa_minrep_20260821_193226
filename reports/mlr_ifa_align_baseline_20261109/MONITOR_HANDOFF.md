@@ -1,3 +1,9 @@
+## 2026-11-09T19:00:25.279185+08:00 恢复后速度/GPU与用户指定套件顺序
+
+check_readonly_20261109_190024与audit_progress PASS，上一185519全部前缀保留；OBJECT41/42完整353/346轮、Task9 53/46，43及GOAL未开始；60采集0正式。GPU30样本均90.33%、76–96%，5994MiB，40–43°C、2670MHz；恢复后剔除重建首轮各5轮均62.1723/63.5158秒，较暂停前慢3.50%/4.30%，暂未见异常级减速，样本少不称长期稳定。详情新resume目录本快照TIMING_AUDIT/SPEED_ETA_REPORT/QUEUE_ORDER_AUDIT。
+
+用户明确OBJECT训练后先闭环再下一个套件；实际冻结controller已严格OBJECT三train→600正式且全部exit0→GOAL，同序满足，无调度修改。当前两run规划55–80min、OBJECT43 220–270min、OBJECT正式60–90min，OBJECT全组余335–440min（11月10日00:35–02:20）；再GOAL训练340–420min及正式60–90min，六run总余735–950min，约12–16小时/11月10日07–11时，CPU独立验收解释发布另计，不含后续ALIGN。不创建定时监控、不按时钟推断完成。
+
 ## 2026-11-09T18:55:20.027568+08:00 用户扩容完成后已核验续训（覆盖旧暂停）
 
 主机实际重启，原进程消失；数据可用44.83GiB/root1.32GiB。读取 execution/20261109_q1_user_resume/REPORT.md、USER_RESUME_STATUS、SOURCE_REVIEW、FINAL_WRAPPER_REVIEW。实际完整GPU恢复及原10/17门控块精确PASS，隔离540optimizer/0环境；原中断已记540+UNKNOWN单列。原347/340完整epoch和7149/6897门控行保留；唯一dispatch_resume_once_v2于18:53启动新controller2416/OBJECT2417/GPU2430/2428，18:55实际348/341轮、进度审计PASS。科学148项不变；新工程7项合同9c5b7e0b23e1beabb4bf28216f6a75f372d6d2f68b3f6515c27debdd8eda34bb。

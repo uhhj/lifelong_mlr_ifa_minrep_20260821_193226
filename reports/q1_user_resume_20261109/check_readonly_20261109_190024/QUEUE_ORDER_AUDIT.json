@@ -1,0 +1,20 @@
+{
+  "status": "PASS_DEPLOYED_QUEUE_ORDER_READONLY",
+  "observation": "2026-11-09T19:00:25.279185+08:00",
+  "source_hashes": {
+    "controller.py": "7afa4a2e73ee13aee29976e40db85ca7a455c676c48c320653c83dd4be8280e1",
+    "object_controller.py": "e45b15525e1f9ba08499f8417b3da5549ecfe18cc6db842b6c5012f222f5cf62"
+  },
+  "frozen_contract": "9c5b7e0b23e1beabb4bf28216f6a75f372d6d2f68b3f6515c27debdd8eda34bb",
+  "actual_suite_launches": [
+    "OBJECT"
+  ],
+  "required_order": [
+    "OBJECT three training runs, at most two concurrent",
+    "OBJECT seed41/42/43 evaluations, 200 each",
+    "Verify all train/evaluate exits0 and 600 outcomes and suite completion marker",
+    "Only then launch GOAL suite controller",
+    "GOAL three training runs then 600 formal episodes"
+  ],
+  "production_changes": 0
+}
