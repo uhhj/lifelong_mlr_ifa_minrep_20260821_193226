@@ -1,3 +1,11 @@
+## 2026-11-09T18:55:20.027568+08:00 用户扩容完成后已核验续训（覆盖旧暂停）
+
+主机实际重启，原进程消失；数据可用44.83GiB/root1.32GiB。读取 execution/20261109_q1_user_resume/REPORT.md、USER_RESUME_STATUS、SOURCE_REVIEW、FINAL_WRAPPER_REVIEW。实际完整GPU恢复及原10/17门控块精确PASS，隔离540optimizer/0环境；原中断已记540+UNKNOWN单列。原347/340完整epoch和7149/6897门控行保留；唯一dispatch_resume_once_v2于18:53启动新controller2416/OBJECT2417/GPU2430/2428，18:55实际348/341轮、进度审计PASS。科学148项不变；新工程7项合同9c5b7e0b23e1beabb4bf28216f6a75f372d6d2f68b3f6515c27debdd8eda34bb。
+
+严禁再调用任何dispatch/validate/build/旧controller；只用新resume目录check_readonly、audit_progress；OBJECT最终用其final_readonly→audit_final_local→compare_primary_s（STATIC_ONLY）。真实全局成功源engineering_reboot_resume_20261109_v1/controller.exit0，OBJECT为OBJECT_controller.exit0，恢复41/42为Q1_41_train.exit/Q1_42_train.exit；原全局和OBJECT出口保持不存在。GOAL原controller尚未启动，仍用其实际自然完成和原最终包装。旧暂停记录永久保留但已被本次明确继续授权覆盖。
+
+后续ALIGN仍未启动，其既有launch_after_q1/deploy门槛目前引用旧全局出口，实际运行前须外置版本化适配此真实成功源并核当前两套件独立接受和发布，禁止造旧exit。空间已足，仍需部署前新鲜预检。
+
 ## 2026-11-09T18:43:51.840233+08:00 用户要求暂停扩容（覆盖此前继续安排）
 
 当前两个调度器及两组 launcher/train 共六进程均 SIGSTOP/T，身份已核。证据 execution/20261109_q1_user_pause/LOCAL_AUDIT.json 和 REPORT.md。148 冻结项不变；当前实验 PARTIAL_PAUSED_BY_USER_IN_MEMORY。不得自动恢复或启动后续 ALIGN。仅用户明确继续后先核 boot、进程 start、hash、挂载容量和恢复边界；若重启，内存中部分轮丢失，不得盲恢复/重跑。未强制 checkpoint，暂停时间不计正常吞吐。

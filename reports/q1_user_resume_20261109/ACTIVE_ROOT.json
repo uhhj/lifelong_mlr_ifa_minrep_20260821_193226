@@ -1,0 +1,110 @@
+{
+  "status": "PARTIAL_RESUMED_AFTER_EXPANSION_REBOOT",
+  "observed": "2026-11-09T18:55:20.027568+08:00",
+  "engineering_root": "/data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1",
+  "controller": 2416,
+  "object_controller": 2417,
+  "training_pids": {
+    "Q1_41": 2430,
+    "Q1_42": 2428
+  },
+  "engineering_contract": "9c5b7e0b23e1beabb4bf28216f6a75f372d6d2f68b3f6515c27debdd8eda34bb",
+  "scientific_contract": "fbbce2917380d1cde1025f0006b6fdd6bc7959f92226bb5588cc431ee0c8d96c",
+  "snapshot": "execution\\20261109_q1_user_resume\\check_readonly_20261109_185519",
+  "audit_sha256": "f930c8b201a76f94c1afaa0332f333101ea15f5aab3b709a7d594af1898e08e8",
+  "capacity": {
+    "/": {
+      "total": 62559989760,
+      "available": 1412878336,
+      "free_including_reserved": 4516405248
+    },
+    "/data": {
+      "total": 200478982144,
+      "available": 48138301440,
+      "free_including_reserved": 56873713664
+    }
+  },
+  "validation_optimizer_calls": 540,
+  "discarded_recorded_partial_optimizer_calls": 540,
+  "discarded_unrecorded_partial_calls": "UNKNOWN",
+  "full_complete_epoch_prefix_preserved": [
+    347,
+    340
+  ],
+  "original_partial_gate_prefix_exact": [
+    10,
+    17
+  ],
+  "counts": {
+    "Q1_41": {
+      "epochs": 348,
+      "accepted_updates": 86676,
+      "physical_optimizer_calls": 157652,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 30,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "train",
+        "epoch_complete": 48,
+        "steps": 86676,
+        "physical_optimizer_calls": 157652,
+        "time": 1794221691.483887,
+        "pid": 2430
+      },
+      "current_stage_epochs": 48,
+      "recent_epoch_mean_seconds": 60.633554577827454,
+      "current_stage_compute_minutes_estimate": 52.549080634117125,
+      "gate_blocks_observed": 7191,
+      "gate_Q_accepts_observed": 4556
+    },
+    "Q1_42": {
+      "epochs": 341,
+      "accepted_updates": 84142,
+      "physical_optimizer_calls": 152584,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 30,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "train",
+        "epoch_complete": 41,
+        "steps": 84142,
+        "physical_optimizer_calls": 152584,
+        "time": 1794221691.5137603,
+        "pid": 2428
+      },
+      "current_stage_epochs": 41,
+      "recent_epoch_mean_seconds": 61.25709371566772,
+      "current_stage_compute_minutes_estimate": 60.23614215373993,
+      "gate_blocks_observed": 6932,
+      "gate_Q_accepts_observed": 3703
+    },
+    "Q1_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "new_complete_epochs_observed": [
+    348,
+    341
+  ],
+  "original_global_and_OBJECT_controller_exits": "ABSENT; never fabricate",
+  "future_completion": "engineering controller.exit0 + no own process; OBJECT engineering OBJECT_controller.exit0; resumed train exits Q1_41_train.exit/Q1_42_train.exit; GOAL original controller.exit0",
+  "followup": "MLR+IFA+ALIGN remains prepared, not started; adapt versioned completion gate before launch after q1 independent acceptance/publication"
+}
