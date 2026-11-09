@@ -1,0 +1,216 @@
+{
+  "status": "READONLY_TEMP_INVENTORY_NO_DELETION",
+  "observed": 1794220319.150042,
+  "roots": {
+    "/data/mlr_ifa/diagnostics": {
+      "exists": true,
+      "regular_files": 481,
+      "allocated": 40697856,
+      "groups": [
+        [
+          "support_gate_performance_20261029_v1",
+          10543104
+        ],
+        [
+          "lambda_r_profile_20261101_v1",
+          9580544
+        ],
+        [
+          "lambda_parallel_full_20261102_v1",
+          8114176
+        ],
+        [
+          "lambda_r_goal_engineering_20261103_v1",
+          6918144
+        ],
+        [
+          "lambda_parallel_stage9_20261102_v1",
+          1847296
+        ],
+        [
+          "lambda_parallel_timing_20261102_v1",
+          1814528
+        ],
+        [
+          "lambda_3090_native_readonly_20261102_142850",
+          753664
+        ],
+        [
+          "lambda_native_readonly_20261101_231447",
+          614400
+        ],
+        [
+          "rendezvous_recovery_20261102_v1",
+          118784
+        ],
+        [
+          "lambda_r_branch_training_20261101_v1",
+          77824
+        ],
+        [
+          "lambda_3090_checks_training_20261102_v1",
+          77824
+        ],
+        [
+          "lambda_recovery_3090_20261102_v2",
+          53248
+        ],
+        [
+          "live_parallel_lock_20261102_v2",
+          36864
+        ],
+        [
+          "lambda_recovery_3090_20261102_v1",
+          32768
+        ],
+        [
+          "live_parallel_lock_20261102_v3",
+          32768
+        ],
+        [
+          "live_parallel_lock_20261102_v1",
+          24576
+        ],
+        [
+          "cross_lambda_environment_lock_20261102_v1",
+          20480
+        ],
+        [
+          "lambda_3090_checks_20261102_v1",
+          16384
+        ],
+        [
+          "live_parallel_startup_20261102_v1",
+          12288
+        ],
+        [
+          "lambda_r_branch_copy_benchmark_20261101_v1",
+          8192
+        ]
+      ],
+      "large_files": []
+    },
+    "/data/mlr_ifa/tmp": {
+      "exists": true,
+      "regular_files": 2,
+      "allocated": 98304,
+      "groups": [
+        [
+          "autonomous_reviewed_code_20261019.zip",
+          94208
+        ],
+        [
+          "install_autonomous_20261019.py",
+          4096
+        ]
+      ],
+      "large_files": []
+    },
+    "/data/tmp": {
+      "exists": false,
+      "regular_files": 0,
+      "allocated": 0,
+      "groups": [],
+      "large_files": []
+    },
+    "/tmp": {
+      "exists": true,
+      "regular_files": 2,
+      "allocated": 32768,
+      "groups": [
+        [
+          "robosuite.log",
+          32768
+        ],
+        [
+          "ToDesk_Service_HUIfj32hjjgq.lock",
+          0
+        ]
+      ],
+      "large_files": []
+    },
+    "/var/tmp": {
+      "exists": true,
+      "regular_files": 0,
+      "allocated": 0,
+      "groups": [],
+      "large_files": []
+    },
+    "/root/.cache/pip": {
+      "exists": false,
+      "regular_files": 0,
+      "allocated": 0,
+      "groups": [],
+      "large_files": []
+    },
+    "/data/mlr_ifa/.cache": {
+      "exists": false,
+      "regular_files": 0,
+      "allocated": 0,
+      "groups": [],
+      "large_files": []
+    },
+    "/data/.cache": {
+      "exists": false,
+      "regular_files": 0,
+      "allocated": 0,
+      "groups": [],
+      "large_files": []
+    }
+  },
+  "processes": [
+    {
+      "pid": 2638,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2639,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2641,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=24b65a68-96d4-4e44-869f-e01741b5d221 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2642,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=72131415-16cc-40eb-9c65-faba2a45634b /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2650,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2652,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    }
+  ],
+  "free": {
+    "/": {
+      "available": 1421672448,
+      "free": 4525199360,
+      "device": 64517
+    },
+    "/data": {
+      "available": 7480619008,
+      "free": 14498086912,
+      "device": 64528
+    },
+    "/tmp": {
+      "available": 1421672448,
+      "free": 4525199360,
+      "device": 64517
+    },
+    "/root/.cache": {
+      "available": 1421672448,
+      "free": 4525199360,
+      "device": 64517
+    }
+  },
+  "deleted": 0
+}

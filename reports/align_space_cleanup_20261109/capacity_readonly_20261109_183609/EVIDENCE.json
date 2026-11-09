@@ -1,0 +1,183 @@
+{
+  "status": "PASS_POST_CLEANUP_READONLY_VERIFICATION",
+  "observed": 1794220570.2421489,
+  "receipt": {
+    "status": "PASS_SINGLE_VERIFIED_INCOMPLETE_TEMP_REMOVED",
+    "observed": 1794220523.7617176,
+    "removed": {
+      "path": "/data/mlr_ifa/experiments/TACRST_OBJECT_seed41_20261023/ra_coreset/recovery/latest.pth.tmp",
+      "bytes": 37055104,
+      "allocated": 37060608,
+      "sha256": "e9f27d5f53066c6f33681672ed6e41d0dfdea85d3ea57c76548d5e0f2e2959ef"
+    },
+    "deleted_count": 1,
+    "deleted_allocated_bytes": 37060608,
+    "data_available_before": 7480418304,
+    "data_available_after": 7517450240,
+    "observed_free_change": 37031936,
+    "current_q1_frozen_files_unchanged": 148,
+    "preserved_files_verified": 159,
+    "old_model_or_committed_recovery_or_result_deletions": 0,
+    "training_signals": 0,
+    "local_payload_downloads": 0,
+    "q1_private_allocated": 1247707136,
+    "q1_remaining_six_gib_bound": 5194743808,
+    "new_align_required_fresh_capacity": 8589934592
+  },
+  "preserved_file_hashes_verified": 159,
+  "current_q1_frozen_files_exact": 148,
+  "current_q1_processes": [
+    {
+      "pid": 2638,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2639,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2641,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=24b65a68-96d4-4e44-869f-e01741b5d221 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2642,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=72131415-16cc-40eb-9c65-faba2a45634b /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2650,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "R"
+    },
+    {
+      "pid": 2652,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "R"
+    }
+  ],
+  "data_available": 7517409280,
+  "cache_large_files_preserved": [
+    {
+      "path": "/data/mlr_ifa/cache/huggingface/hub/models--openai--clip-vit-base-patch16/blobs/ec89c7b09c749a60aae3c9cd910516f24b58214a7df060b48962d14c469cfbf0",
+      "bytes": 598641023
+    },
+    {
+      "path": "/data/mlr_ifa/cache/huggingface/hub/models--openai--clip-vit-base-patch16/blobs/580c79c6862f31d1f9bd08dd1a415ba0d0502cd9",
+      "bytes": 2224003
+    },
+    {
+      "path": "/data/mlr_ifa/cache/pip/http-v2/4/f/e/9/d/4fe9d0086740554a497df51356ff4d8a09caa2e8e7a175704c85bcef.body",
+      "bytes": 4280144
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/tk-8.6.13-noxft_h1df4ec4_4.conda",
+      "bytes": 3566806
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/pip-24.3.1-pyh8b19718_0.conda",
+      "bytes": 1243168
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/libgcc-16.2.0-ha9f2e26_7.conda",
+      "bytes": 1058444
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/python-3.8.20-h4a871b0_2_cpython.conda",
+      "bytes": 22176012
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/libstdcxx-16.2.0-h934c35e_7.conda",
+      "bytes": 6615436
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/icu-78.3-py310h44b86e0_2.conda",
+      "bytes": 14459115
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/openssl-3.6.4-h781a0a9_0.conda",
+      "bytes": 3202955
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/libsqlite-3.53.4-h13e7031_1/lib/libsqlite3.so.3.53.4",
+      "bytes": 1780496
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/libgomp-16.2.0-he0feb66_7/lib/libgomp.so.1.0.0",
+      "bytes": 1674616
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/openssl-3.6.4-h781a0a9_0/bin/openssl",
+      "bytes": 1309928
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/openssl-3.6.4-h781a0a9_0/lib/libcrypto.so.3",
+      "bytes": 7252520
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/openssl-3.6.4-h781a0a9_0/lib/libssl.so.3",
+      "bytes": 1219104
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/ld_impl_linux-64-2.46.1-default_hbd61a6d_102/bin/x86_64-conda-linux-gnu-ld",
+      "bytes": 2966864
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/python-3.8.20-h4a871b0_2_cpython/bin/python3.8",
+      "bytes": 14704080
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/python-3.8.20-h4a871b0_2_cpython/lib/libpython3.8.so.1.0",
+      "bytes": 13608944
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/python-3.8.20-h4a871b0_2_cpython/lib/python3.8/ensurepip/_bundled/pip-23.0.1-py3-none-any.whl",
+      "bytes": 2055563
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/python-3.8.20-h4a871b0_2_cpython/lib/python3.8/lib-dynload/_decimal.cpython-38-x86_64-linux-gnu.so",
+      "bytes": 1490216
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/python-3.8.20-h4a871b0_2_cpython/lib/python3.8/lib-dynload/unicodedata.cpython-38-x86_64-linux-gnu.so",
+      "bytes": 1166328
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/tk-8.6.13-noxft_h1df4ec4_4/lib/libtk8.6.so",
+      "bytes": 1636392
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/tk-8.6.13-noxft_h1df4ec4_4/lib/libtcl8.6.so",
+      "bytes": 1990448
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/tk-8.6.13-noxft_h1df4ec4_4/lib/sqlite3.40.0/libsqlite3.40.0.so",
+      "bytes": 1581720
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/libstdcxx-16.2.0-h934c35e_7/lib/libstdc++.so.6.0.36",
+      "bytes": 23874544
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/zstd-1.5.7-hb78ec9c_7/lib/libzstd.so.1.5.7",
+      "bytes": 1198840
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/icu-78.3-py310h44b86e0_2/lib/libicudata.so.78.3",
+      "bytes": 33113032
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/icu-78.3-py310h44b86e0_2/lib/libicuuc.so.78.3",
+      "bytes": 2706448
+    },
+    {
+      "path": "/data/mlr_ifa/cache/conda/icu-78.3-py310h44b86e0_2/lib/libicui18n.so.78.3",
+      "bytes": 4949616
+    }
+  ],
+  "new_deletions": 0,
+  "new_optimizer": 0,
+  "new_environments": 0
+}
