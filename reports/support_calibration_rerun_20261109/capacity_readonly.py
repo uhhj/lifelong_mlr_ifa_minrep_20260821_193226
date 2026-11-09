@@ -1,17 +1,18 @@
-EXPECTED={'status': 'PASS_AUTHORIZED_OBSOLETE_DIAGNOSTIC_TEMP_CLEANUP', 'observed': 1794209316.6927114, 'removed': {'state_0.pth': {'path': '/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2/state_0.pth', 'bytes': 346301237, 'allocated': 346308608, 'sha256': 'b9b01917b392243b5424f6386b0602f232635a234a3818b7300617155b7ebb29'}, 'state_10.pth': {'path': '/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2/state_10.pth', 'bytes': 346302205, 'allocated': 346308608, 'sha256': '3cee3733c0eabad3bc0d7d98bdc698640f9939ed146fe0a5c7df4aa68c7bf11f'}, 'state_20.pth': {'path': '/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2/state_20.pth', 'bytes': 346302205, 'allocated': 346308608, 'sha256': '11bef6450e909cff1749eaa72764d965f3df81fbbe38683d19eebd8d40540053'}, 'state_30.pth': {'path': '/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2/state_30.pth', 'bytes': 346302205, 'allocated': 346308608, 'sha256': 'cbabe6b337ca7f6ad8e7f61ed49bd1a8c153694b0bc04b535e42f6afcf5ffb8f'}, 'state_40.pth': {'path': '/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2/state_40.pth', 'bytes': 346302205, 'allocated': 346308608, 'sha256': 'd9a6b7d6e9b2b05ea4c7df21ae5e952661f5a0c7bfbd01ab6f7dbde094e6ca12'}, 'state_50.pth': {'path': '/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2/state_50.pth', 'bytes': 346302205, 'allocated': 346304512, 'sha256': '7b5ba86a755a22f6ae1db59e22e750f49d84df158bfb18f9e1ffe52af93179cf'}, 'state_60.pth': {'path': '/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2/state_60.pth', 'bytes': 346302205, 'allocated': 346304512, 'sha256': '2c24205a84b2adaaa847732473b00ea30cb4131a2b6c8931d9096803821ab7d7'}}, 'preserved_metadata': {'VALIDATION.json': 'ebd511055a6c1d9f9d81199994d82345446d66cf37017ed9bb6d891d5ee71511', 'LEDGER.json': '99beed248938adb8df4e2e38308835a4c7b7d1bf28a10d4181e3f6a8d5e8bede', 'validate.py': '52a310267a3ed2d534d85421d6f15d4a675e25559be428f81b558b15aeb7b0b5', 'DISPATCH.json': 'f04719af729989ef8d396ba597ed86dc0515d9b2235bc376d6407cf93eed0221', 'validation.log': 'b7fcea45503005223123d051b650faf5e352fd4dbcfce9ca6bbac48bb9e4315f', 'PROBE_REBUILD_COMPARISON.json': '454de9c08eeb4ed6def10bb4dc81927f0436a2661f5daf28e8dc6902718015d7'}, 'original_recovery_preserved': {'path': '/data/mlr_ifa/experiments/S_LAMBDA_R_OBJECT41_42_43_20261101_v1/engineering_resume_3090_20261102_v1/interrupted_epoch260.pth', 'sha256': '65b8d3b4c9f589fb543ba5b7a41991a8c1dbc50daae309c21c386471178b4070', 'bytes': 346429749}, 'frozen_contracts_unchanged': 132, 'freed_bytes': 2424152064, 'available_bytes': 8753704960, 'local_payload_archive': False, 'production_files_deleted': 0, 'optimizer_calls': 0, 'environments': 0}
+"""Twenty one-second nvidia-smi samples; no training mutation."""
+import subprocess,time,json,datetime
 from pathlib import Path
-import hashlib,json,os,time
-D=Path('/data/mlr_ifa/diagnostics/lambda_recovery_3090_20261102_v2')
-def sha(p):
- h=hashlib.sha256()
- with Path(p).open('rb') as f:
-  for b in iter(lambda:f.read(8*1024**2),b''):h.update(b)
- return h.hexdigest()
-assert all(not Path(v['path']).exists() for v in EXPECTED['removed'].values())
-assert all(sha(D/n)==h for n,h in EXPECTED['preserved_metadata'].items())
-b=EXPECTED['original_recovery_preserved'];assert sha(b['path'])==b['sha256']
-assert json.loads((D/'TEMP_CLEANUP_20261109.json').read_text())==EXPECTED
-roots=['S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1','S_Q1_OBJECT41_42_43_20261109_rerun_v1','S_Q1_GOAL41_42_43_20261109_rerun_v1']
-root_exists={n:(Path('/data/mlr_ifa/experiment_workspaces')/n).exists() for n in roots}
-free={p:os.statvfs(p).f_bavail*os.statvfs(p).f_frsize for p in ['/','/data']}
-print(json.dumps(dict(status='PASS_POST_CLEANUP_READONLY',observed=time.time(),removed_files_absent=7,metadata_sha_unchanged=True,original_recovery_sha_unchanged=True,remote_receipt_exact=True,free_bytes=free,planned_roots_exist=root_exists,optimizer_calls=0,environments=0,files_deleted_this_check=0)))
+rows=[]
+query=['nvidia-smi','--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,power.draw,power.limit,temperature.gpu','--format=csv,noheader,nounits']
+for i in range(20):
+ p=subprocess.run(query,capture_output=True,text=True)
+ assert p.returncode==0,p.stderr
+ cols=[v.strip() for v in p.stdout.strip().split(',')]
+ rows.append(dict(time=time.time(),name=cols[0],gpu_percent=int(cols[1]),memory_controller_percent=int(cols[2]),memory_used_MiB=int(cols[3]),memory_total_MiB=int(cols[4]),power_W=float(cols[5]),power_limit_W=float(cols[6]),temperature_C=int(cols[7])))
+ if i<19:time.sleep(1)
+p=subprocess.run(['nvidia-smi','--query-compute-apps=pid,used_gpu_memory','--format=csv,noheader,nounits'],capture_output=True,text=True)
+root=Path('/data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1')
+status={}
+for seed in [41,42,43]:
+ f=root/('Q1_'+str(seed))/'TRAIN_STATUS.json'
+ if f.exists():status[str(seed)]=json.loads(f.read_text())
+print(json.dumps(dict(status='READ_ONLY_GPU_WINDOW_NOT_FINAL_ACCEPTANCE',observed=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat(),samples=rows,summary=dict(samples=len(rows),mean_gpu_percent=sum(r['gpu_percent'] for r in rows)/len(rows),min_gpu_percent=min(r['gpu_percent'] for r in rows),max_gpu_percent=max(r['gpu_percent'] for r in rows),last=rows[-1]),compute_processes=dict(exit=p.returncode,stdout=p.stdout,stderr=p.stderr),training_status=status,optimizer_calls=0,environments=0)))
