@@ -1,0 +1,1294 @@
+{
+  "status": "PASS_READONLY_DIVERGENCE_LOCAL_RECOMPUTATION",
+  "scope": "GOAL seed41 accepted S versus fixed-effective-q1 S",
+  "sources": {
+    "20261108_goal_s_q1_ablation\\final_readonly_20261109_120106\\EVIDENCE.json": "cab6e265ece1d0b20ad4aae0fc092ae6e18dd98de0552f4ca37a539749d969a7",
+    "20261029_support_gate_full_s_goal\\final_readonly_20261030_111546\\EVIDENCE.json": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78",
+    "20261108_goal_s_q1_ablation\\seed41_divergence_audit_20261109\\capacity_readonly_20261109_121742\\EVIDENCE.json": "f13108b5e536bfa36d05ab5634e76010b59c372f764c32901b11776deaf6285b"
+  },
+  "optimizer_calls": 0,
+  "environment_calls": 0,
+  "model_forward_calls": 0,
+  "parent_binding": {
+    "output": {
+      "equal": true,
+      "entries": null
+    },
+    "source": {
+      "equal": true,
+      "entries": null
+    },
+    "parent_contract_sha256": {
+      "equal": true,
+      "entries": null
+    },
+    "source_sha256": {
+      "equal": true,
+      "entries": 236
+    },
+    "files": {
+      "equal": true,
+      "entries": 6193
+    },
+    "stages": {
+      "equal": true,
+      "entries": 4
+    },
+    "initial_split": {
+      "equal": true,
+      "entries": 4
+    },
+    "official_initialization": {
+      "equal": true,
+      "entries": 2
+    }
+  },
+  "hardware": {
+    "q1": {
+      "device": "NVIDIA GeForce RTX 3090",
+      "capability": [
+        8,
+        6
+      ],
+      "total_memory": 25438126080,
+      "torch_version": "1.13.0+cu116",
+      "cuda_version": "11.6",
+      "cudnn_version": 8302,
+      "matmul_tf32": false,
+      "cudnn_tf32": true
+    },
+    "s": {
+      "device": "NVIDIA GeForce RTX 4080 SUPER",
+      "capability": [
+        8,
+        9
+      ],
+      "total_memory": 33937293312,
+      "torch_version": "1.13.0+cu116",
+      "cuda_version": "11.6",
+      "cudnn_version": 8302,
+      "matmul_tf32": false,
+      "cudnn_tf32": true
+    }
+  },
+  "initial_model_rng_exact": true,
+  "code": {
+    "candidate.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "20d0a11047b1eeabc2c6963d0e86c289b64691ee9e8326ccc33dbcccef6f145d",
+      "q1_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24"
+    },
+    "collect.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "4224c60e2503db473ab66bcbae6c5fcff2d2ead09e04837e8c2c1fda85d77ebe",
+      "q1_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29"
+    },
+    "evaluate.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+      "q1_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45"
+    },
+    "fork_tools.py": {
+      "normalized_text_equal": false,
+      "ast_equal": false,
+      "s_sha256": "963ac6ba68628ca89da3735648a8515298f4f1ee3daafac16bb982494d0fa1ec",
+      "q1_sha256": "2317a469708a5acdbfa749047bd1ab8f7e61d520f2e2db3e49b23111b816773f"
+    },
+    "gate_admission.py": {
+      "normalized_text_equal": false,
+      "ast_equal": false,
+      "s_sha256": "a56ab84ce1aa87bdaa32e365a3c08201e05b2d788264b57433e8676f5eb1c5fa",
+      "q1_sha256": "8f23e49baa9a03fc8dd3c1536ee5453b8925254b063a4df963c0a2dfd91253f7"
+    },
+    "initialization.py": {
+      "normalized_text_equal": false,
+      "ast_equal": false,
+      "s_sha256": "d2410bc5b89355aec3e87405dde606aa55d9563f6095e17da4450c2d15a2729d",
+      "q1_sha256": "d9401bac8e5d26060ffa3ed4d6e545a72a027b605807b7a6fd5c005fddbae50d"
+    },
+    "layout.py": {
+      "normalized_text_equal": false,
+      "ast_equal": false,
+      "s_sha256": "07a01fa633e50f664211e0a2c3a537747785bfd11a838e76e1a89deed2b9aa58",
+      "q1_sha256": "551e81d670d3f279bdc3d555eb8b555bdfaa87806b77f5066b02027291608862"
+    },
+    "legacy_losses.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "eb539028b9b244c7ae9e5c4399e930d2e59e89efc2194c3a5c273a261e8f0504",
+      "q1_sha256": "5d510f3f4b9737f88a4e90227794ccd7e25a9732205746743c1bd5e0ddc3f5f9"
+    },
+    "legacy_memory.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "94f7f45c0994a9b5370917cfef4a7228b1038e8d96f74be6b4945d5b8424f4fe",
+      "q1_sha256": "211785c75d25d7e6dacee83bb88afe4bbd95163952de23ae9c6ec2fe36b099b6"
+    },
+    "legacy_updates.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "cae803b9169e03a93698f1d3d776b044d1edde0c85b77fe3fbd341f8185d3e31",
+      "q1_sha256": "2220fed595880d0197ff5a4a8c70bdb47ee976d21b19194ba6338e599427a41d"
+    },
+    "losses.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "28df46f59d010a158ff2a394a52430a896d414b399645959d8d9d0c3fb180099",
+      "q1_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34"
+    },
+    "memory.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "94f7f45c0994a9b5370917cfef4a7228b1038e8d96f74be6b4945d5b8424f4fe",
+      "q1_sha256": "211785c75d25d7e6dacee83bb88afe4bbd95163952de23ae9c6ec2fe36b099b6"
+    },
+    "runtime.py": {
+      "normalized_text_equal": false,
+      "ast_equal": false,
+      "s_sha256": "13ef5269bb8012041ad9738b83ebdca25a96f9cdb4deb529163b3f23881d9580",
+      "q1_sha256": "b69d074ebdeed786d7bcd6cf864e3ccb1fe30b319b58349bea141aa44c9e1f24"
+    },
+    "support_memory.py": {
+      "normalized_text_equal": false,
+      "ast_equal": false,
+      "s_sha256": "b48009354c765a30c0f3c2c4a508c6df08360607c135636d417e940a638bab16",
+      "q1_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a"
+    },
+    "synthetic_checks.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "6dad9f606f3839929a2975583c3a846f02f0a7ab7c52dba7e2955634846a182b",
+      "q1_sha256": "760ec1cb4076b6672ddbbd33ebddfc93eb64a20c9351591eac6ac179f7de8e33"
+    },
+    "train.py": {
+      "normalized_text_equal": false,
+      "ast_equal": false,
+      "s_sha256": "6fbc18c17a5769bdd7a158b4c37027ee5763ad7f23302c8875b9ca94a4c33d41",
+      "q1_sha256": "f0077d08fe5163198c3a03cc6aad7e96a4b9b375df4e41dbce4da674d699ae7c"
+    },
+    "updates.py": {
+      "normalized_text_equal": true,
+      "ast_equal": true,
+      "s_sha256": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+      "q1_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b"
+    }
+  },
+  "wrapper_sources": {
+    "train_wrapper.py": "675d63a9b12502b00582cac96885b647ea71fec015e81d47af09c162d2293416",
+    "environment_locked.py": "04ea1ac4d974be1e72d911271bfa6268e46fe7057d13a45758cc99f390c974dd"
+  },
+  "shared_source_inspection": {
+    "libero/lifelong/models/brief.py": {
+      "local": "D:\\论文课题研究\\MLR+IFA\\execution\\20261024_ccbp\\reference_source\\libero\\lifelong\\models\\brief.py",
+      "local_sha256": "6351c6ec3ed3c56c4a314b14f7dded38e105332478cfdc6e241f003520939937",
+      "bound_sha256": "406c851ac4886f5e70c2357603fd6ce09e39df033ef7fb057592604d10a06267",
+      "text_matches_bound_with_line_ending_normalization": true
+    },
+    "libero/lifelong/models/policy_head.py": {
+      "local": "D:\\论文课题研究\\MLR+IFA\\execution\\20261024_ccbp\\reference_source\\libero\\lifelong\\models\\policy_head.py",
+      "local_sha256": "160aea5a8a8626281e8ef6cc664719b3231133af7e3c0fba8f5ade755424a928",
+      "bound_sha256": "8c74c06a64c7be8c98fe0d317c83721b8f10d3ad7148253d23e2178cea4a209b",
+      "text_matches_bound_with_line_ending_normalization": true
+    },
+    "coreset_exp/model.py": {
+      "local": "D:\\论文课题研究\\MLR+IFA\\execution\\20261022_align_object_extension_goal_conditional\\additions\\coreset_exp\\model.py",
+      "local_sha256": "4d5e174c9976bb0baf763f71d9cda49084a576a1dab8df43e1e671d90d10579a",
+      "bound_sha256": "e96cca5b95aab584c04bd9dd2929ca7674bda3641af669238e4aea99744645cc",
+      "text_matches_bound_with_line_ending_normalization": true
+    }
+  },
+  "stages": {
+    "6": {
+      "first_epoch_difference_zero_based": {
+        "sampler_sha256": null,
+        "lr_first": null,
+        "lr_after": null,
+        "steps": null,
+        "batches": null,
+        "totals": null,
+        "training_probe": null,
+        "gate_Q_accepts": null
+      },
+      "checkpoint_different_tensors": 0,
+      "checkpoint_max_abs": 0.0,
+      "collection_successes": {
+        "q1": 10,
+        "s": 10
+      },
+      "action_streams_different": 10,
+      "collection_steps": [
+        {
+          "index": 20,
+          "q1": 85,
+          "s": 85
+        },
+        {
+          "index": 21,
+          "q1": 79,
+          "s": 80
+        },
+        {
+          "index": 22,
+          "q1": 80,
+          "s": 88
+        },
+        {
+          "index": 23,
+          "q1": 91,
+          "s": 91
+        },
+        {
+          "index": 24,
+          "q1": 88,
+          "s": 87
+        },
+        {
+          "index": 25,
+          "q1": 87,
+          "s": 87
+        },
+        {
+          "index": 26,
+          "q1": 89,
+          "s": 88
+        },
+        {
+          "index": 27,
+          "q1": 87,
+          "s": 85
+        },
+        {
+          "index": 28,
+          "q1": 88,
+          "s": 88
+        },
+        {
+          "index": 29,
+          "q1": 88,
+          "s": 89
+        }
+      ],
+      "memory_counts": {
+        "Q1": 128,
+        "S": 128
+      },
+      "memory_common": 124,
+      "memory_common_exact": {
+        "feature": 15,
+        "mu": 16,
+        "sd": 16
+      },
+      "normalization": {
+        "comparable": true,
+        "exact": false,
+        "elements": 3,
+        "different": 1,
+        "max_abs": 2.9802322387695312e-08,
+        "l2": 2.9802322387695312e-08,
+        "q1": [
+          0.43576449155807495,
+          0.10000000149011612,
+          1.0
+        ],
+        "s": [
+          0.43576446175575256,
+          0.10000000149011612,
+          1.0
+        ]
+      },
+      "formal_cells": [
+        {
+          "task": 6,
+          "q1": 85.0,
+          "s": 90.0
+        }
+      ]
+    },
+    "7": {
+      "first_epoch_difference_zero_based": {
+        "sampler_sha256": null,
+        "lr_first": null,
+        "lr_after": null,
+        "steps": null,
+        "batches": null,
+        "totals": 0,
+        "training_probe": 0,
+        "gate_Q_accepts": 0
+      },
+      "checkpoint_different_tensors": 88,
+      "checkpoint_max_abs": 0.0795416384935379,
+      "collection_successes": {
+        "q1": 10,
+        "s": 10
+      },
+      "action_streams_different": 10,
+      "collection_steps": [
+        {
+          "index": 20,
+          "q1": 69,
+          "s": 72
+        },
+        {
+          "index": 21,
+          "q1": 76,
+          "s": 69
+        },
+        {
+          "index": 22,
+          "q1": 79,
+          "s": 66
+        },
+        {
+          "index": 23,
+          "q1": 70,
+          "s": 70
+        },
+        {
+          "index": 24,
+          "q1": 72,
+          "s": 72
+        },
+        {
+          "index": 25,
+          "q1": 70,
+          "s": 71
+        },
+        {
+          "index": 26,
+          "q1": 71,
+          "s": 72
+        },
+        {
+          "index": 27,
+          "q1": 68,
+          "s": 74
+        },
+        {
+          "index": 28,
+          "q1": 70,
+          "s": 69
+        },
+        {
+          "index": 29,
+          "q1": 71,
+          "s": 73
+        }
+      ],
+      "memory_counts": {
+        "Q1": 128,
+        "S": 128
+      },
+      "memory_common": 119,
+      "memory_common_exact": {
+        "feature": 4,
+        "mu": 0,
+        "sd": 0
+      },
+      "normalization": {
+        "comparable": true,
+        "exact": true,
+        "elements": 3,
+        "different": 0,
+        "max_abs": 0.0,
+        "l2": 0.0,
+        "q1": [
+          0.3683730661869049,
+          0.13393259048461914,
+          1.0
+        ],
+        "s": [
+          0.3683730661869049,
+          0.13393259048461914,
+          1.0
+        ]
+      },
+      "formal_cells": [
+        {
+          "task": 6,
+          "q1": 70.0,
+          "s": 70.0
+        },
+        {
+          "task": 7,
+          "q1": 100.0,
+          "s": 100.0
+        }
+      ]
+    },
+    "8": {
+      "first_epoch_difference_zero_based": {
+        "sampler_sha256": null,
+        "lr_first": null,
+        "lr_after": null,
+        "steps": null,
+        "batches": null,
+        "totals": 0,
+        "training_probe": 0,
+        "gate_Q_accepts": 0
+      },
+      "checkpoint_different_tensors": 88,
+      "checkpoint_max_abs": 0.27874405682086945,
+      "collection_successes": {
+        "q1": 9,
+        "s": 10
+      },
+      "action_streams_different": 10,
+      "collection_steps": [
+        {
+          "index": 20,
+          "q1": 600,
+          "s": 84
+        },
+        {
+          "index": 21,
+          "q1": 77,
+          "s": 72
+        },
+        {
+          "index": 22,
+          "q1": 72,
+          "s": 73
+        },
+        {
+          "index": 23,
+          "q1": 76,
+          "s": 73
+        },
+        {
+          "index": 24,
+          "q1": 71,
+          "s": 70
+        },
+        {
+          "index": 25,
+          "q1": 74,
+          "s": 74
+        },
+        {
+          "index": 26,
+          "q1": 75,
+          "s": 80
+        },
+        {
+          "index": 27,
+          "q1": 78,
+          "s": 83
+        },
+        {
+          "index": 28,
+          "q1": 73,
+          "s": 70
+        },
+        {
+          "index": 29,
+          "q1": 77,
+          "s": 76
+        }
+      ],
+      "memory_counts": {
+        "Q1": 115,
+        "S": 128
+      },
+      "memory_common": 111,
+      "memory_common_exact": {
+        "feature": 2,
+        "mu": 0,
+        "sd": 0
+      },
+      "normalization": {
+        "comparable": true,
+        "exact": false,
+        "elements": 3,
+        "different": 1,
+        "max_abs": 2.9802322387695312e-08,
+        "l2": 2.9802322387695312e-08,
+        "q1": [
+          0.4682031273841858,
+          0.10000000149011612,
+          1.0
+        ],
+        "s": [
+          0.4682030975818634,
+          0.10000000149011612,
+          1.0
+        ]
+      },
+      "formal_cells": [
+        {
+          "task": 6,
+          "q1": 60.0,
+          "s": 65.0
+        },
+        {
+          "task": 7,
+          "q1": 100.0,
+          "s": 100.0
+        },
+        {
+          "task": 8,
+          "q1": 80.0,
+          "s": 95.0
+        }
+      ]
+    },
+    "9": {
+      "first_epoch_difference_zero_based": {
+        "sampler_sha256": null,
+        "lr_first": null,
+        "lr_after": null,
+        "steps": null,
+        "batches": null,
+        "totals": 0,
+        "training_probe": 0,
+        "gate_Q_accepts": 0
+      },
+      "checkpoint_different_tensors": 88,
+      "checkpoint_max_abs": 0.4386281222105026,
+      "collection_successes": {
+        "q1": 7,
+        "s": 8
+      },
+      "action_streams_different": 10,
+      "collection_steps": [
+        {
+          "index": 20,
+          "q1": 600,
+          "s": 151
+        },
+        {
+          "index": 21,
+          "q1": 600,
+          "s": 600
+        },
+        {
+          "index": 22,
+          "q1": 180,
+          "s": 142
+        },
+        {
+          "index": 23,
+          "q1": 132,
+          "s": 136
+        },
+        {
+          "index": 24,
+          "q1": 600,
+          "s": 600
+        },
+        {
+          "index": 25,
+          "q1": 136,
+          "s": 146
+        },
+        {
+          "index": 26,
+          "q1": 150,
+          "s": 141
+        },
+        {
+          "index": 27,
+          "q1": 266,
+          "s": 480
+        },
+        {
+          "index": 28,
+          "q1": 131,
+          "s": 144
+        },
+        {
+          "index": 29,
+          "q1": 394,
+          "s": 138
+        }
+      ],
+      "memory_counts": {
+        "Q1": 89,
+        "S": 102
+      },
+      "memory_common": 69,
+      "memory_common_exact": {
+        "feature": 0,
+        "mu": 0,
+        "sd": 0
+      },
+      "normalization": {
+        "comparable": true,
+        "exact": true,
+        "elements": 3,
+        "different": 0,
+        "max_abs": 0.0,
+        "l2": 0.0,
+        "q1": [
+          0.2886231243610382,
+          0.12825341522693634,
+          1.0
+        ],
+        "s": [
+          0.2886231243610382,
+          0.12825341522693634,
+          1.0
+        ]
+      },
+      "formal_cells": [
+        {
+          "task": 6,
+          "q1": 30.0,
+          "s": 65.0
+        },
+        {
+          "task": 7,
+          "q1": 100.0,
+          "s": 100.0
+        },
+        {
+          "task": 8,
+          "q1": 85.0,
+          "s": 85.0
+        },
+        {
+          "task": 9,
+          "q1": 45.0,
+          "s": 80.0
+        }
+      ]
+    }
+  },
+  "gates": {
+    "7": {
+      "total": 1400,
+      "different_decisions": 584,
+      "first_different_decision_zero_based": 7,
+      "first_C_new_score_difference_zero_based": 8,
+      "first_different_decision": {
+        "q1": {
+          "stage": 7,
+          "epoch": 0,
+          "batch": 70,
+          "steps": 10,
+          "start_step": 10070,
+          "end_step": 10080,
+          "C": {
+            "bc_new": -6.725905403494835,
+            "exec_new": 2.6515038460493088,
+            "retain_support": 0.06901584565639496,
+            "retain_by_task": {
+              "6": 0.06901584565639496
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "Q": {
+            "bc_new": -6.72590684145689,
+            "exec_new": 2.651503808796406,
+            "retain_support": 0.06897955387830734,
+            "retain_by_task": {
+              "6": 0.06897955387830734
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "accepted": "Q",
+          "checks": {
+            "bc_new": true,
+            "exec_new": true,
+            "retain_improved": true
+          }
+        },
+        "s": {
+          "stage": 7,
+          "epoch": 0,
+          "batch": 70,
+          "steps": 10,
+          "start_step": 10070,
+          "end_step": 10080,
+          "C": {
+            "bc_new": -6.725905403494835,
+            "exec_new": 2.6515038460493088,
+            "retain_support": 0.06930264830589294,
+            "retain_by_task": {
+              "6": 0.06930264830589294
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "Q": {
+            "bc_new": -6.72587900608778,
+            "exec_new": 2.6515098810195923,
+            "retain_support": 0.06926204264163971,
+            "retain_by_task": {
+              "6": 0.06926204264163971
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": false,
+            "retain_improved": true
+          }
+        }
+      },
+      "initial_block": {
+        "q1": {
+          "stage": 7,
+          "epoch": 0,
+          "batch": 0,
+          "steps": 10,
+          "start_step": 10000,
+          "end_step": 10010,
+          "C": {
+            "bc_new": 375.8901972770691,
+            "exec_new": 4.500717498362064,
+            "retain_support": 3.070360253332183e-05,
+            "retain_by_task": {
+              "6": 3.070360253332183e-05
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "Q": {
+            "bc_new": 375.8902778625488,
+            "exec_new": 4.500717476010323,
+            "retain_support": 2.9820083000231534e-05,
+            "retain_by_task": {
+              "6": 2.9820083000231534e-05
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": true,
+            "retain_improved": true
+          }
+        },
+        "s": {
+          "stage": 7,
+          "epoch": 0,
+          "batch": 0,
+          "steps": 10,
+          "start_step": 10000,
+          "end_step": 10010,
+          "C": {
+            "bc_new": 375.8901972770691,
+            "exec_new": 4.500717498362064,
+            "retain_support": 3.3559499570401385e-05,
+            "retain_by_task": {
+              "6": 3.3559499570401385e-05
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "Q": {
+            "bc_new": 375.89045000076294,
+            "exec_new": 4.500717453658581,
+            "retain_support": 3.271157038398087e-05,
+            "retain_by_task": {
+              "6": 3.271157038398087e-05
+            },
+            "probe_windows": 72,
+            "policy_calls": 9
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": true,
+            "retain_improved": true
+          }
+        }
+      },
+      "first_eight_choices_q1": [
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "Q"
+      ],
+      "first_eight_choices_s": [
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C"
+      ],
+      "effective_q": {
+        "6": 1.0
+      },
+      "q1_empirical_support": {
+        "6": 1.0
+      },
+      "probe_new_indices_equal": true,
+      "probe_old_indices_equal": true
+    },
+    "8": {
+      "total": 1900,
+      "different_decisions": 857,
+      "first_different_decision_zero_based": 1,
+      "first_C_new_score_difference_zero_based": 0,
+      "first_different_decision": {
+        "q1": {
+          "stage": 8,
+          "epoch": 0,
+          "batch": 10,
+          "steps": 10,
+          "start_step": 23910,
+          "end_step": 23920,
+          "C": {
+            "bc_new": 192.83004879951477,
+            "exec_new": 2.1896915286779404,
+            "retain_support": 0.005317550727340858,
+            "retain_by_task": {
+              "6": 0.005265581887215376,
+              "7": 5.196884012548253e-05
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "Q": {
+            "bc_new": 192.82991242408752,
+            "exec_new": 2.1896895803511143,
+            "retain_support": 0.005319354313542135,
+            "retain_by_task": {
+              "6": 0.0052674682810902596,
+              "7": 5.188603245187551e-05
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": true,
+            "exec_new": true,
+            "retain_improved": false
+          }
+        },
+        "s": {
+          "stage": 8,
+          "epoch": 0,
+          "batch": 10,
+          "steps": 10,
+          "start_step": 23910,
+          "end_step": 23920,
+          "C": {
+            "bc_new": 202.1925950050354,
+            "exec_new": 2.06818525493145,
+            "retain_support": 0.03000448050443083,
+            "retain_by_task": {
+              "6": 0.029933031648397446,
+              "7": 7.14488560333848e-05
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "Q": {
+            "bc_new": 202.19175386428833,
+            "exec_new": 2.0681848414242268,
+            "retain_support": 0.02999960444867611,
+            "retain_by_task": {
+              "6": 0.029928557574748993,
+              "7": 7.10468739271164e-05
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "accepted": "Q",
+          "checks": {
+            "bc_new": true,
+            "exec_new": true,
+            "retain_improved": true
+          }
+        }
+      },
+      "initial_block": {
+        "q1": {
+          "stage": 8,
+          "epoch": 0,
+          "batch": 0,
+          "steps": 10,
+          "start_step": 23900,
+          "end_step": 23910,
+          "C": {
+            "bc_new": 241.09426975250244,
+            "exec_new": 2.2021098285913467,
+            "retain_support": 0.005363430493162014,
+            "retain_by_task": {
+              "6": 0.005355007015168667,
+              "7": 8.42347799334675e-06
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "Q": {
+            "bc_new": 241.0951337814331,
+            "exec_new": 2.2021099776029587,
+            "retain_support": 0.005355761484679533,
+            "retain_by_task": {
+              "6": 0.00534737017005682,
+              "7": 8.391314622713253e-06
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": false,
+            "retain_improved": true
+          }
+        },
+        "s": {
+          "stage": 8,
+          "epoch": 0,
+          "batch": 0,
+          "steps": 10,
+          "start_step": 23900,
+          "end_step": 23910,
+          "C": {
+            "bc_new": 252.83013725280762,
+            "exec_new": 2.0801864974200726,
+            "retain_support": 0.030273330653926678,
+            "retain_by_task": {
+              "6": 0.03026754781603813,
+              "7": 5.782837888546055e-06
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "Q": {
+            "bc_new": 252.8314723968506,
+            "exec_new": 2.080185953527689,
+            "retain_support": 0.030268118467574823,
+            "retain_by_task": {
+              "6": 0.03026236593723297,
+              "7": 5.752530341851525e-06
+            },
+            "probe_windows": 80,
+            "policy_calls": 10
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": true,
+            "retain_improved": true
+          }
+        }
+      },
+      "first_eight_choices_q1": [
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C"
+      ],
+      "first_eight_choices_s": [
+        "C",
+        "Q",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C"
+      ],
+      "effective_q": {
+        "6": 1.0,
+        "7": 1.0
+      },
+      "q1_empirical_support": {
+        "6": 1.0,
+        "7": 1.0
+      },
+      "probe_new_indices_equal": true,
+      "probe_old_indices_equal": true
+    },
+    "9": {
+      "total": 3400,
+      "different_decisions": 1491,
+      "first_different_decision_zero_based": 4,
+      "first_C_new_score_difference_zero_based": 0,
+      "first_different_decision": {
+        "q1": {
+          "stage": 9,
+          "epoch": 0,
+          "batch": 40,
+          "steps": 10,
+          "start_step": 42440,
+          "end_step": 42450,
+          "C": {
+            "bc_new": 32.88655489683151,
+            "exec_new": 4.571395546197891,
+            "retain_support": 0.01202485361136496,
+            "retain_by_task": {
+              "6": 0.00636355159804225,
+              "7": 0.005346387624740601,
+              "8": 0.0003149143885821104
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "Q": {
+            "bc_new": 32.88666990399361,
+            "exec_new": 4.571395829319954,
+            "retain_support": 0.012002752191619948,
+            "retain_by_task": {
+              "6": 0.006342203821986914,
+              "7": 0.005345660261809826,
+              "8": 0.000314888107823208
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": false,
+            "retain_improved": true
+          }
+        },
+        "s": {
+          "stage": 9,
+          "epoch": 0,
+          "batch": 40,
+          "steps": 10,
+          "start_step": 42440,
+          "end_step": 42450,
+          "C": {
+            "bc_new": 32.01197957992554,
+            "exec_new": 4.6363555788993835,
+            "retain_support": 0.009946361824404448,
+            "retain_by_task": {
+              "6": 0.005940098315477371,
+              "7": 0.0033168396912515163,
+              "8": 0.0006894238176755607
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "Q": {
+            "bc_new": 32.01185858249664,
+            "exec_new": 4.636355400085449,
+            "retain_support": 0.009936959482729435,
+            "retain_by_task": {
+              "6": 0.005932807456701994,
+              "7": 0.003316181479021907,
+              "8": 0.0006879705470055342
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "accepted": "Q",
+          "checks": {
+            "bc_new": true,
+            "exec_new": true,
+            "retain_improved": true
+          }
+        }
+      },
+      "initial_block": {
+        "q1": {
+          "stage": 9,
+          "epoch": 0,
+          "batch": 0,
+          "steps": 10,
+          "start_step": 42400,
+          "end_step": 42410,
+          "C": {
+            "bc_new": 287.35227823257446,
+            "exec_new": 4.459453910589218,
+            "retain_support": 0.010412665541252863,
+            "retain_by_task": {
+              "6": 0.006102662067860365,
+              "7": 0.0043063536286354065,
+              "8": 3.649844757092069e-06
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "Q": {
+            "bc_new": 287.35590648651123,
+            "exec_new": 4.459462225437164,
+            "retain_support": 0.010404165218233175,
+            "retain_by_task": {
+              "6": 0.006097214762121439,
+              "7": 0.004303411580622196,
+              "8": 3.5388754895393504e-06
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": false,
+            "retain_improved": true
+          }
+        },
+        "s": {
+          "stage": 9,
+          "epoch": 0,
+          "batch": 0,
+          "steps": 10,
+          "start_step": 42400,
+          "end_step": 42410,
+          "C": {
+            "bc_new": 329.4770333766937,
+            "exec_new": 4.59879495203495,
+            "retain_support": 0.046789828384817156,
+            "retain_by_task": {
+              "6": 0.044358573853969574,
+              "7": 0.0024279700592160225,
+              "8": 3.284471631559427e-06
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "Q": {
+            "bc_new": 329.47912788391113,
+            "exec_new": 4.598801344633102,
+            "retain_support": 0.04677628248145993,
+            "retain_by_task": {
+              "6": 0.04434768110513687,
+              "7": 0.002425404032692313,
+              "8": 3.1973436307453085e-06
+            },
+            "probe_windows": 88,
+            "policy_calls": 11
+          },
+          "accepted": "C",
+          "checks": {
+            "bc_new": false,
+            "exec_new": false,
+            "retain_improved": true
+          }
+        }
+      },
+      "first_eight_choices_q1": [
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "Q"
+      ],
+      "first_eight_choices_s": [
+        "C",
+        "C",
+        "C",
+        "C",
+        "Q",
+        "C",
+        "C",
+        "Q"
+      ],
+      "effective_q": {
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0
+      },
+      "q1_empirical_support": {
+        "6": 1.0,
+        "7": 1.0,
+        "8": 0.9
+      },
+      "probe_new_indices_equal": true,
+      "probe_old_indices_equal": false
+    }
+  },
+  "online_first_saved_witnesses": [
+    {
+      "trajectory": 1,
+      "step": 6,
+      "initial_index": 21,
+      "length_q1": 7,
+      "length_s": 7,
+      "mode_equal": true,
+      "feature": {
+        "comparable": true,
+        "exact": true,
+        "elements": 14336,
+        "different": 0,
+        "max_abs": 0.0,
+        "l2": 0.0
+      },
+      "mu": {
+        "comparable": true,
+        "exact": false,
+        "elements": 7,
+        "different": 5,
+        "max_abs": 1.1920928955078125e-07,
+        "l2": 1.2002504366276812e-07
+      },
+      "sd": {
+        "comparable": true,
+        "exact": false,
+        "elements": 7,
+        "different": 2,
+        "max_abs": 6.51925802230835e-09,
+        "l2": 6.622384606547603e-09
+      }
+    },
+    {
+      "trajectory": 3,
+      "step": 6,
+      "initial_index": 23,
+      "length_q1": 7,
+      "length_s": 7,
+      "mode_equal": true,
+      "feature": {
+        "comparable": true,
+        "exact": true,
+        "elements": 14336,
+        "different": 0,
+        "max_abs": 0.0,
+        "l2": 0.0
+      },
+      "mu": {
+        "comparable": true,
+        "exact": false,
+        "elements": 7,
+        "different": 5,
+        "max_abs": 1.1920928955078125e-07,
+        "l2": 1.2596632738458263e-07
+      },
+      "sd": {
+        "comparable": true,
+        "exact": false,
+        "elements": 7,
+        "different": 2,
+        "max_abs": 6.51925802230835e-09,
+        "l2": 6.569992312939122e-09
+      }
+    }
+  ],
+  "earliest_different_saved_feature": {
+    "trajectory": 4,
+    "absolute_step": 7,
+    "comparable": true,
+    "exact": false,
+    "elements": 2048,
+    "different": 512,
+    "max_abs": 0.0005013551563024521,
+    "l2": 0.002815884919864188
+  },
+  "saved_frame_count": 622,
+  "all_available_frames_through_step5_exact": true,
+  "sampling_limit": "Reservoir windows are incomplete; first saved witness is not proven first arithmetic/action mismatch across all trajectories.",
+  "total_different_gate_decisions": 2932,
+  "driver_claim": "No contemporaneous per-kernel/driver trace; numerical backend/hardware cause strongly supported but exact CUDA operator/driver failure not identified."
+}
