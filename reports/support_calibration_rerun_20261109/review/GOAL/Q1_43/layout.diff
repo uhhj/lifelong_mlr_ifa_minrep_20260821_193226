@@ -1,0 +1,22 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261108_goal_s_q1_ablation\Q1_43\layout.py
++++ D:\论文课题研究\MLR+IFA\execution\20261109_support_calibration_rerun\GOAL\Q1_43\layout.py
+@@ -1,11 +1,11 @@
+ from pathlib import Path
+ ARMS='S'
+ SEED=43
+-NAME='S_Q1_GOAL41_42_43_20261108_v1'
++NAME='S_Q1_GOAL41_42_43_20261109_rerun_v1'
+ ROOT_PRIVATE=Path('/root/mlr_ifa/experiments')/NAME
+ DATA_PRIVATE=Path('/data/mlr_ifa/experiments')/NAME
+ OUTPUT={a:DATA_PRIVATE/'Q1_43'/a for a in ARMS}
+-VOLUME_BOUND={'/root':128*1024**2,'/data':4*1024**3}
++VOLUME_BOUND={'/root':128*1024**2,'/data':6*1024**3}
+ POP={6: 997, 7: 1388, 8: 1848, 9: 3365}
+ VALID={6: 917, 7: 1285, 8: 1713, 9: 3204}
+ OLD={6: 0, 7: 476, 8: 889, 9: 1315}
+@@ -18,3 +18,5 @@
+ SUITE="GOAL"
+ LAMBDA_GROUP='Q1'
+ SUPPORT_CALIBRATION='DISABLED_FIXED_ONE'
++
++CAPACITY_OUTPUT_ROOTS=['/data/mlr_ifa/experiments/S_Q1_OBJECT41_42_43_20261109_rerun_v1', '/data/mlr_ifa/experiments/S_Q1_GOAL41_42_43_20261109_rerun_v1']

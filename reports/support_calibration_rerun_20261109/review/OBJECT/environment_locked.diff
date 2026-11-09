@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261108_object_s_q1_ablation\environment_locked.py
++++ D:\论文课题研究\MLR+IFA\execution\20261109_support_calibration_rerun\OBJECT\environment_locked.py
+@@ -7,7 +7,7 @@
+ assert kind in ['collect','evaluate']
+ extra=sys.argv[3:]
+ assert (kind=='collect' and len(extra)==2 and extra[0]=='S' and extra[1] in ['6','7','8','9']) or (kind=='evaluate' and not extra)
+-event_id=str(uuid.uuid4()); lock_path=Path('/data/mlr_ifa/S_Q1_OBJECT41_42_43_20261108_v1_environment.lock')
++event_id=str(uuid.uuid4()); lock_path=Path('/data/mlr_ifa/S_Q1_OBJECT41_42_43_20261109_rerun_v1_environment.lock')
+ def event(phase,**kw):
+  with (Q/'ENVIRONMENT_LOCK_EVENTS.jsonl').open('a') as f:
+   f.write(json.dumps(dict(event_id=event_id,phase=phase,case=case,kind=kind,args=extra,pid=os.getpid(),time=time.time(),**kw))+'\n');f.flush();os.fsync(f.fileno())

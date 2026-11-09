@@ -1,0 +1,138 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-11-09T15:40:10.837728+08:00",
+  "counts": {
+    "Q1_41": {
+      "epochs": 10,
+      "accepted_updates": 1570,
+      "physical_optimizer_calls": 1570,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 6,
+        "phase": "train",
+        "epoch_complete": 10,
+        "steps": 1570,
+        "physical_optimizer_calls": 1570,
+        "time": 1794210009.2500603,
+        "pid": 2652
+      },
+      "current_stage_epochs": 10,
+      "recent_epoch_mean_seconds": 4.644595193862915,
+      "current_stage_compute_minutes_estimate": 6.966892790794373,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "Q1_42": {
+      "epochs": 9,
+      "accepted_updates": 1413,
+      "physical_optimizer_calls": 1413,
+      "own_isolated_optimizer_calls": 4,
+      "own_extra_autograd_calls": 8,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 6,
+        "phase": "train",
+        "epoch_complete": 9,
+        "steps": 1413,
+        "physical_optimizer_calls": 1413,
+        "time": 1794210006.839848,
+        "pid": 2650
+      },
+      "current_stage_epochs": 9,
+      "recent_epoch_mean_seconds": 4.927063730027941,
+      "current_stage_compute_minutes_estimate": 7.47271332387571,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    },
+    "Q1_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 19,
+  "accepted_updates": 2983,
+  "physical_training_optimizer_calls": 2983,
+  "own_isolated_optimizer_calls": 8,
+  "own_extra_autograd_calls": 16,
+  "training_collection_completed_episodes": 0,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 2639,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2641,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=24b65a68-96d4-4e44-869f-e01741b5d221 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2642,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=72131415-16cc-40eb-9c65-faba2a45634b /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2650,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "R"
+    },
+    {
+      "pid": 2652,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1421721600,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 213762048
+    },
+    "/data": {
+      "free": 15063351296,
+      "remaining_bound": 5749841920,
+      "reserve": 2147483648,
+      "spare": 7166025728
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "2652\n2650\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "7eee128ba4dfcba49abf9e06b13bb04874d617cb764c6da62bfe9287410dbcf5",
+  "contract": "8cea823de478edd2aaebdfaec55421e6c54f7584b34d21495a6af85a4a84b7f5",
+  "prefix_checked": null,
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 0,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 0,
+      "evaluate": 0
+    },
+    "active": null
+  }
+}

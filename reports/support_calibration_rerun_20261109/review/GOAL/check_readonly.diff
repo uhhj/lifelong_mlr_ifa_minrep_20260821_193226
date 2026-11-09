@@ -1,0 +1,25 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261108_goal_s_q1_ablation\check_readonly.py
++++ D:\论文课题研究\MLR+IFA\execution\20261109_support_calibration_rerun\GOAL\check_readonly.py
+@@ -1,7 +1,7 @@
+ """Read-only observation of the new full-S root, including split gate records."""
+ import json,os,hashlib,time,subprocess
+ from pathlib import Path
+-Q=Path('/data/mlr_ifa/experiment_workspaces/S_Q1_GOAL41_42_43_20261108_v1')
++Q=Path('/data/mlr_ifa/experiment_workspaces/S_Q1_GOAL41_42_43_20261109_rerun_v1')
+ PRIVATE=Path('/data/mlr_ifa/experiments')/Q.name
+ OLD=Path('/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FORKS_20261027_v1')
+ sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+@@ -34,11 +34,11 @@
+   assert p.stat().st_size<8*1024**2,str(p)
+   add(str(p.relative_to(Q)),p.read_bytes())
+ capacity={};allocated=0;seen=set()
+-for p in PRIVATE.rglob('*') if PRIVATE.exists() else []:
++for p in (p for b in map(Path,['/data/mlr_ifa/experiments/S_Q1_OBJECT41_42_43_20261109_rerun_v1', '/data/mlr_ifa/experiments/S_Q1_GOAL41_42_43_20261109_rerun_v1']) for p in (b.rglob('*') if b.exists() else [])):
+  if not p.is_file() or p.is_symlink():continue
+  st=p.stat();key=(st.st_dev,st.st_ino)
+  if key not in seen:seen.add(key);allocated+=st.st_blocks*512
+-for mount,bound,reserve,usefree in [('/root',128*1024**2,1024**3,False),('/data',4*1024**3,2*1024**3,True)]:
++for mount,bound,reserve,usefree in [('/root',128*1024**2,1024**3,False),('/data',6*1024**3,2*1024**3,True)]:
+  v=os.statvfs(mount);free=(v.f_bfree if usefree else v.f_bavail)*v.f_frsize;remaining=max(0,bound-allocated) if mount=='/data' else bound
+  capacity[mount]=dict(free=free,remaining_bound=remaining,reserve=reserve,spare=free-remaining-reserve)
+ gpu=subprocess.run(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],capture_output=True,text=True)

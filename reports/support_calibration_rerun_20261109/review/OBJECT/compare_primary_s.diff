@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261108_object_s_q1_ablation\compare_primary_s.py
++++ D:\论文课题研究\MLR+IFA\execution\20261109_support_calibration_rerun\OBJECT\compare_primary_s.py
+@@ -28,7 +28,7 @@
+   ci=json.loads(cl[cp+'INITIAL_S.json']['text']);si=json.loads(sl[sp+'INITIAL_S.json']['text'])
+   for k in ['tensors','rng','official_cp_sha256','parent_initial_sha256']:assert ci[k]==si[k],(case,k)
+   task6_exact=a['cases'][case]['task6_baseline_all_tensors_exact'];assert isinstance(task6_exact,bool)
+-  hardware=dict(Variant=ci['hardware'],baseline=si['hardware'],initial_hardware_equal=ci['hardware']==si['hardware'],task6_all_tensors_exact=task6_exact,migration='USER_AUTHORIZED_RTX3090')
++  hardware=dict(Variant=ci['hardware'],baseline=si['hardware'],initial_hardware_equal=ci['hardware']==si['hardware'],task6_all_tensors_exact=task6_exact,migration='USER_AUTHORIZED_Q1_RERUN_OBSERVED_RTX4080_SUPER')
+   ch=json.loads(cl[cp+'EPOCHS_S.json']['text']);sh=json.loads(sl[sp+'EPOCHS_S.json']['text'])
+   budgets={}
+   for stage in range(6,10):

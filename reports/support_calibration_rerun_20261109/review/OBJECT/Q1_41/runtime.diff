@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261108_object_s_q1_ablation\Q1_41\runtime.py
++++ D:\论文课题研究\MLR+IFA\execution\20261109_support_calibration_rerun\OBJECT\Q1_41\runtime.py
+@@ -26,7 +26,7 @@
+  out={}
+  for mount,base,reserve,root_free in [('/root',ROOT_PRIVATE,1024**3,False),('/data',DATA_PRIVATE,2*1024**3,True)]:
+   seen=set();allocated=0
+-  for p in base.rglob('*') if base.exists() else []:
++  for p in (p for b in ([Path(x) for x in CAPACITY_OUTPUT_ROOTS] if mount=='/data' else [base]) for p in (b.rglob('*') if b.exists() else [])):
+    if not p.is_file() or p.is_symlink():continue
+    st=p.stat();key=(st.st_dev,st.st_ino)
+    if key not in seen:seen.add(key);allocated+=st.st_blocks*512
