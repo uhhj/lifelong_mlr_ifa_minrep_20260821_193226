@@ -1,6 +1,6 @@
 {
   "status": "PARTIAL_RUNNING",
-  "observation": "2026-11-09T15:40:10.837728+08:00",
+  "observation": "2026-11-09T16:02:52.960809+08:00",
   "active_suite": "OBJECT",
   "coordinator": 2638,
   "coordinator_contract": "fbbce2917380d1cde1025f0006b6fdd6bc7959f92226bb5588cc431ee0c8d96c",
@@ -28,52 +28,52 @@
   },
   "counts": {
     "Q1_41": {
-      "epochs": 10,
-      "accepted_updates": 1570,
-      "physical_optimizer_calls": 1570,
-      "own_isolated_optimizer_calls": 4,
-      "own_extra_autograd_calls": 8,
-      "training_collection_completed_episodes": 0,
+      "epochs": 123,
+      "accepted_updates": 20921,
+      "physical_optimizer_calls": 26142,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
-        "stage": 6,
+        "stage": 7,
         "phase": "train",
-        "epoch_complete": 10,
-        "steps": 1570,
-        "physical_optimizer_calls": 1570,
-        "time": 1794210009.2500603,
+        "epoch_complete": 23,
+        "steps": 20921,
+        "physical_optimizer_calls": 26142,
+        "time": 1794211359.7089667,
         "pid": 2652
       },
-      "current_stage_epochs": 10,
-      "recent_epoch_mean_seconds": 4.644595193862915,
-      "current_stage_compute_minutes_estimate": 6.966892790794373,
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0
+      "current_stage_epochs": 23,
+      "recent_epoch_mean_seconds": 28.809424328804017,
+      "current_stage_compute_minutes_estimate": 36.97209455529848,
+      "gate_blocks_observed": 539,
+      "gate_Q_accepts_observed": 329
     },
     "Q1_42": {
-      "epochs": 9,
-      "accepted_updates": 1413,
-      "physical_optimizer_calls": 1413,
-      "own_isolated_optimizer_calls": 4,
-      "own_extra_autograd_calls": 8,
-      "training_collection_completed_episodes": 0,
+      "epochs": 124,
+      "accepted_updates": 21148,
+      "physical_optimizer_calls": 26596,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
-        "stage": 6,
+        "stage": 7,
         "phase": "train",
-        "epoch_complete": 9,
-        "steps": 1413,
-        "physical_optimizer_calls": 1413,
-        "time": 1794210006.839848,
+        "epoch_complete": 24,
+        "steps": 21148,
+        "physical_optimizer_calls": 26596,
+        "time": 1794211354.3568487,
         "pid": 2650
       },
-      "current_stage_epochs": 9,
-      "recent_epoch_mean_seconds": 4.927063730027941,
-      "current_stage_compute_minutes_estimate": 7.47271332387571,
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0
+      "current_stage_epochs": 24,
+      "recent_epoch_mean_seconds": 31.016760373115538,
+      "current_stage_compute_minutes_estimate": 39.28789647261302,
+      "gate_blocks_observed": 565,
+      "gate_Q_accepts_observed": 393
     },
     "Q1_43": {
       "epochs": 0,
@@ -91,15 +91,15 @@
       "gate_Q_accepts_observed": 0
     }
   },
-  "new_total_epochs": 19,
-  "new_total_physical_optimizer_calls": 2983,
-  "new_total_isolated_optimizer_calls": 8,
-  "new_total_admission_autograd": 16,
-  "new_total_collection": 0,
+  "new_total_epochs": 247,
+  "new_total_physical_optimizer_calls": 52738,
+  "new_total_isolated_optimizer_calls": 66,
+  "new_total_admission_autograd": 38,
+  "new_total_collection": 20,
   "new_total_formal": 0,
   "goal_status": "DEPLOYED_QUEUED_NOT_STARTED",
   "failures": {},
-  "evidence": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261109_support_calibration_rerun\\check_readonly_20261109_154009",
+  "evidence": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261109_support_calibration_rerun\\check_readonly_20261109_160252",
   "local_payload_archive": false,
   "old_S_retrained": false,
   "old_S_reevaluated": false,
@@ -114,5 +114,51 @@
     "direction_autograd_max": 216,
     "collection": 240,
     "formal": 1200
+  },
+  "eta": [
+    15,
+    19
+  ],
+  "task7_q1_admission": {
+    "Q1_41": {
+      "stage": 7,
+      "status": "PASS_OWN_GPU_ADMISSION",
+      "checks": {
+        "roundtrip_next_step_exact": true,
+        "q_one_original_S_exact": true,
+        "lambda_zero_original_C_exact": true,
+        "ten_step_C_replay_exact": true,
+        "accepted_and_rejected_full_state_restore": true,
+        "measurement_state_exact": true,
+        "probe_all_state_exact": true,
+        "q1_actual_memory_uniform_exact": true,
+        "q1_short_history_exact": true,
+        "synthetic_gate_accept_reject": true
+      },
+      "raw_q_point_one_ignored_lengths_1_to_8": true,
+      "optimizer_calls": 29,
+      "autograd": 11,
+      "source_sha256": "ffb530e5a64f224b67ec9a3db2a0f7cc4f9dcf2efb421589118eadd0429ee809"
+    },
+    "Q1_42": {
+      "stage": 7,
+      "status": "PASS_OWN_GPU_ADMISSION",
+      "checks": {
+        "roundtrip_next_step_exact": true,
+        "q_one_original_S_exact": true,
+        "lambda_zero_original_C_exact": true,
+        "ten_step_C_replay_exact": true,
+        "accepted_and_rejected_full_state_restore": true,
+        "measurement_state_exact": true,
+        "probe_all_state_exact": true,
+        "q1_actual_memory_uniform_exact": true,
+        "q1_short_history_exact": true,
+        "synthetic_gate_accept_reject": true
+      },
+      "raw_q_point_one_ignored_lengths_1_to_8": true,
+      "optimizer_calls": 29,
+      "autograd": 11,
+      "source_sha256": "f8f5708cfe9840685815e3333f5d45ec9debc13ad7466ea88373aba90c1d0170"
+    }
   }
 }

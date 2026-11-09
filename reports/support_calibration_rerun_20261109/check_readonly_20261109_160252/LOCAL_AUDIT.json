@@ -1,0 +1,138 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observation": "2026-11-09T16:02:52.960809+08:00",
+  "counts": {
+    "Q1_41": {
+      "epochs": 123,
+      "accepted_updates": 20921,
+      "physical_optimizer_calls": 26142,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 23,
+        "steps": 20921,
+        "physical_optimizer_calls": 26142,
+        "time": 1794211359.7089667,
+        "pid": 2652
+      },
+      "current_stage_epochs": 23,
+      "recent_epoch_mean_seconds": 28.809424328804017,
+      "current_stage_compute_minutes_estimate": 36.97209455529848,
+      "gate_blocks_observed": 539,
+      "gate_Q_accepts_observed": 329
+    },
+    "Q1_42": {
+      "epochs": 124,
+      "accepted_updates": 21148,
+      "physical_optimizer_calls": 26596,
+      "own_isolated_optimizer_calls": 33,
+      "own_extra_autograd_calls": 19,
+      "training_collection_completed_episodes": 10,
+      "formal_episodes": 0,
+      "current": {
+        "arm": "S",
+        "stage": 7,
+        "phase": "train",
+        "epoch_complete": 24,
+        "steps": 21148,
+        "physical_optimizer_calls": 26596,
+        "time": 1794211354.3568487,
+        "pid": 2650
+      },
+      "current_stage_epochs": 24,
+      "recent_epoch_mean_seconds": 31.016760373115538,
+      "current_stage_compute_minutes_estimate": 39.28789647261302,
+      "gate_blocks_observed": 565,
+      "gate_Q_accepts_observed": 393
+    },
+    "Q1_43": {
+      "epochs": 0,
+      "accepted_updates": 0,
+      "physical_optimizer_calls": 0,
+      "own_isolated_optimizer_calls": 0,
+      "own_extra_autograd_calls": 0,
+      "training_collection_completed_episodes": 0,
+      "formal_episodes": 0,
+      "current": {},
+      "current_stage_epochs": 0,
+      "recent_epoch_mean_seconds": null,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0
+    }
+  },
+  "epochs": 247,
+  "accepted_updates": 42069,
+  "physical_training_optimizer_calls": 52738,
+  "own_isolated_optimizer_calls": 66,
+  "own_extra_autograd_calls": 38,
+  "training_collection_completed_episodes": 20,
+  "formal_episodes": 0,
+  "failures": {},
+  "processes": [
+    {
+      "pid": 2639,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2641,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=24b65a68-96d4-4e44-869f-e01741b5d221 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2642,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=72131415-16cc-40eb-9c65-faba2a45634b /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2650,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2652,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "R"
+    }
+  ],
+  "capacity": {
+    "/root": {
+      "free": 1421701120,
+      "remaining_bound": 134217728,
+      "reserve": 1073741824,
+      "spare": 213741568
+    },
+    "/data": {
+      "free": 14885449728,
+      "remaining_bound": 5573173248,
+      "reserve": 2147483648,
+      "spare": 7164792832
+    }
+  },
+  "gpu": {
+    "exit": 0,
+    "stdout": "2652\n2650\n",
+    "stderr": ""
+  },
+  "snapshot_sha256": "db5ec34e9a1d0088069883a7e82b34fec839c83ca5e860114e9bf1e61f26988a",
+  "contract": "8cea823de478edd2aaebdfaec55421e6c54f7584b34d21495a6af85a4a84b7f5",
+  "prefix_checked": "execution\\20261109_support_calibration_rerun\\check_readonly_20261109_154009",
+  "environment_mutex_audit": {
+    "nonoverlap": true,
+    "acquired": {
+      "collect": 2,
+      "evaluate": 0
+    },
+    "released": {
+      "collect": 2,
+      "evaluate": 0
+    },
+    "active": null
+  }
+}
