@@ -1,0 +1,382 @@
+{
+  "status": "PASS_EDITED_AND_VISUALLY_VERIFIED",
+  "source": "C:\\Users\\Lenovo\\Desktop\\论文\\论文写作\\Coverage-Aware Replay with Support-Calibrated Execution Retention for Lifelong Robot Imitation Learning20261107 - RA选样消融修订.docx",
+  "source_sha256": "e85d776bb85d1eb57cd9c96e2341c534bd4374539f6fbad363edb5b185a2e4e7",
+  "output": "C:\\Users\\Lenovo\\Desktop\\论文\\论文写作\\DEBR - A Dual-Experience Behavioral Retention Framework for Lifelong Robot Imitation Learning - 审稿修订20261109.docx",
+  "output_sha256": "fd03714028ce9df0872606be794194eb6e838be794149b96596d72b3806069ed",
+  "data_source": "D:\\论文课题研究\\MLR+IFA\\execution\\20261109_random_kcenter_ra_tables\\RESULTS.json",
+  "data_sha256": "1d2ff02977029f58bc6f4537aef4abe38605a805a507b9eb1eb44b5ed6f5ec66",
+  "tables": 5,
+  "media_preserved": 2,
+  "native_math_before": 132,
+  "native_math_after": 138,
+  "changes": [
+    {
+      "kind": "replace",
+      "old": "ISCIL",
+      "new": "IsCiL"
+    },
+    {
+      "kind": "replace",
+      "old": "ISCIL",
+      "new": "IsCiL"
+    },
+    {
+      "kind": "replace",
+      "old": "第3.4.1—3.4.3节",
+      "new": "第3.4.1—3.4.2节"
+    },
+    {
+      "kind": "replace",
+      "old": "第3.4.4节",
+      "new": "第3.4.3节"
+    },
+    {
+      "kind": "replace",
+      "old": "第3.4.4节",
+      "new": "第3.4.3节"
+    },
+    {
+      "kind": "replace",
+      "old": "SBHR",
+      "new": "SHBR"
+    },
+    {
+      "kind": "replace",
+      "old": "双经验行为回放框架",
+      "new": "双经验行为保持框架"
+    },
+    {
+      "kind": "replace",
+      "old": "为该组动作维数。",
+      "new": "为该组动作维数，平移、旋转与夹爪分别为3、3和1。"
+    },
+    {
+      "kind": "paragraph",
+      "old": "其中，d(x,s) 为预先标定的视觉—动作联合距离。当前实现沿用核心集选择器的距离定义，以窗口内两路视觉潜在特征和窗口末端原始动作构造样本距离；用于选择的动作信息与后续行为克隆的监督标签分别按各自数据定义处理。",
+      "new": "其中，d(x,s)为在当前任务候选集上标定的视觉—动作联合距离。记窗口x在时间位置t、视角v的单位归一化视觉潜在特征为f̂ₓₜᵥ，窗口末端原始动作的第h维为aₓₕ。两路视觉特征与七维动作分别定义距离："
+    },
+    {
+      "kind": "insert",
+      "new": ""
+    },
+    {
+      "kind": "insert",
+      "new": ""
+    },
+    {
+      "kind": "insert",
+      "new": "动作尺度ρₕ由当前任务全部原始示范动作计算，优先取1.4826×MAD；若不大于10⁻¹²，则依次回退为IQR/1.349、极差和1。mᵥ与mₐ分别为固定随机种子42抽取的至多4,096对候选窗口中、对应距离大于10⁻¹²的中位数；无此类距离时取1。两项权重均为0.5，全部距离在原始潜在特征及动作空间中以双精度计算。选样使用窗口末端原始动作，监督标签的时间对齐则按第3.3.3节单独处理。"
+    },
+    {
+      "kind": "insert",
+      "new": "该配额沿用MLR＋IFA采用的50%名义示范存储比例[7]，其预算依据是LOTUS的每任务5条示范存储设置[12]。MLR＋IFA已比较10%、20%和50%的特征保留比例；本文固定50%以比较选样策略，并在窗口数为奇数时向上取整。锚点数量取该固定配额的一半并向下取整。"
+    },
+    {
+      "kind": "paragraph",
+      "old": "当前示范与历史示范记忆共同构成训练批次。根据实际数据导出的观测—动作时间关系，采用ALIGN生成监督目标 yi 与有效性标记 vi。在本文采用的数据协议下，窗口末端索引为 u 时，以合法的下一动作 au+1 作为监督；填充、身份不明确或不存在下一动作的窗口不参与行为克隆。",
+      "new": "当前示范与历史示范记忆共同构成训练批次。本文将观测—动作时间对齐（observation–action temporal alignment）记为ALIGN。对于末端索引为u的历史窗口，监督目标为同一轨迹内的下一动作aᵤ₊₁。记Iᵢ表示窗口轨迹身份唯一可确定，pᵣ表示位置r为填充或不存在，ν(r)表示该位置所属轨迹，则有效性标记为："
+    },
+    {
+      "kind": "insert",
+      "new": ""
+    },
+    {
+      "kind": "insert",
+      "new": "因此，窗口内所有历史帧及下一动作均须有效，尤其要求末端u与u+1非填充且属于同一轨迹；身份不明确、含填充帧或不存在下一动作的窗口不参与行为克隆。该规则对应本文数据导出的时间关系，不改变成功历史中同一在线输入与教师输出的配对。"
+    },
+    {
+      "kind": "insert",
+      "new": "在固定当前任务探针上，行为克隆指标按式（5）计算，执行误差指标取式（6）的实际执行分量误差均值；两者均不加入路由项。旧历史探针采用式（11）—（13）的支持度加权单窗保持损失，对每个旧任务的固定探针窗口先取均值，再对全部旧任务等权平均，空缓存任务贡献为零。训练时式（13）的4槽采样是该任务均衡保持目标的采样实现，门控评价则使用阶段内固定的探针集合。"
+    },
+    {
+      "kind": "replace",
+      "old": "模仿学习通过",
+      "new": "模仿学习[1]通过"
+    },
+    {
+      "kind": "replace",
+      "old": "经验回放是",
+      "new": "经验回放[2]是"
+    },
+    {
+      "kind": "replace",
+      "old": "M2Distill通过",
+      "new": "M2Distill[3]通过"
+    },
+    {
+      "kind": "replace",
+      "old": "HReDiff则",
+      "new": "HReDiff[4]则"
+    },
+    {
+      "kind": "replace",
+      "old": "LIBERO-GOAL和LIBERO-OBJECT两个数据集",
+      "new": "LIBERO-GOAL和LIBERO-OBJECT两个任务套件[5]"
+    },
+    {
+      "kind": "replace",
+      "old": "CRIL引入",
+      "new": "CRIL[6]引入"
+    },
+    {
+      "kind": "replace",
+      "old": "MLR则",
+      "new": "MLR＋IFA[7]则"
+    },
+    {
+      "kind": "replace",
+      "old": "PolyTask与M2Distill",
+      "new": "PolyTask[8]与M2Distill[3]"
+    },
+    {
+      "kind": "replace",
+      "old": "HReDiff进一步",
+      "new": "HReDiff[4]进一步"
+    },
+    {
+      "kind": "replace",
+      "old": "BUDS采用",
+      "new": "BUDS[9]采用"
+    },
+    {
+      "kind": "replace",
+      "old": "TAIL则",
+      "new": "TAIL[10]则"
+    },
+    {
+      "kind": "replace",
+      "old": "IsCiL进一步",
+      "new": "IsCiL[11]进一步"
+    },
+    {
+      "kind": "replace",
+      "old": "同时在测试时依赖明确的阶段或任务标识，在未知任务上的泛化表现存在短板。",
+      "new": "不同方案分别通过任务条件或状态原型检索调用技能，其额外模块和路由方式也决定了知识共享的形式。"
+    },
+    {
+      "kind": "replace",
+      "old": "MLR＋IFA的",
+      "new": "MLR＋IFA[7]的"
+    },
+    {
+      "kind": "replace",
+      "old": "基础框架的增量特征调整约束",
+      "new": "MLR＋IFA[7]的增量特征调整约束"
+    },
+    {
+      "kind": "replace",
+      "old": "沿用MLR＋IFA的",
+      "new": "沿用MLR＋IFA[7]的"
+    },
+    {
+      "kind": "insert",
+      "new": "为在冻结前端的条件下统一预训练起点，本文采用MLR＋IFA公开发布的OBJECT与GOAL套件权重，避免另行预训练引入额外表征差异。LIBERO-OBJECT侧重相同任务模板下的物体变化，LIBERO-GOAL侧重相同物体与场景布局下的目标变化[5]，两者分别考察物体迁移与目标迁移。"
+    },
+    {
+      "kind": "replace",
+      "old": "AdamW优化器",
+      "new": "AdamW优化器[13]"
+    },
+    {
+      "kind": "insert",
+      "new": "其余参数固定为历史窗口长度L=8、混合分量数M=5、路由间隔δ=0.1、执行误差权重λE=0.1、执行路由权重βE=0.1及保持路由权重βR=0.1；除保持系数敏感性实验外，各配置均使用上述设置。"
+    },
+    {
+      "kind": "replace",
+      "old": "所有实验使用三个随机种子。",
+      "new": "本地运行统一使用三个随机种子（41、42、43）。"
+    },
+    {
+      "kind": "replace",
+      "old": "均值与标准差",
+      "new": "均值与样本标准差"
+    },
+    {
+      "kind": "replace",
+      "old": "遵循参考论文[1]",
+      "new": "遵循MLR＋IFA[7]所述的持续学习评价协议"
+    },
+    {
+      "kind": "replace",
+      "old": "Sequential、ER、BUDS、LOTUS、IsCiL、M2Distill、TAIL、MLR＋IFA及DEBR",
+      "new": "Sequential[5]、ER[2,5]、BUDS[9]、LOTUS[12]、IsCiL[11]、M2Distill[3]、TAIL[10]、MLR＋IFA[7]及DEBR"
+    },
+    {
+      "kind": "insert",
+      "new": "外部对比方法采用文献[7]汇总的报告结果；本文实验包括按论文所述协议进行的MLR＋IFA复现、DEBR及其消融配置。MLR＋IFA复现对应选样消融中的Random配置。SHBR另使用每任务10次、初态与正式评估分离的成功历史采集；不使用该模块的配置不进行这部分交互。"
+    },
+    {
+      "kind": "replace",
+      "old": "取得最高",
+      "new": "在表1所列配置中取得最高"
+    },
+    {
+      "kind": "replace",
+      "old": "在LIBERO-OBJECT上在表1所列配置中",
+      "new": "在表1所列配置中，在LIBERO-OBJECT上"
+    },
+    {
+      "kind": "insert",
+      "new": "以MLR＋IFA原论文的报告值作为补充参照，其OBJECT与GOAL的AUC分别为79.4%和77.2%[7]，DEBR的对应均值为86.5%和87.3%。由此，DEBR相对本地复现及原论文报告值均具有更高的AUC；前者为本文统一评估协议下的比较，后者为跨研究的数值参照。"
+    },
+    {
+      "kind": "replace",
+      "old": "RA-Coreset（表中记为RA）",
+      "new": "RA-Coreset"
+    },
+    {
+      "kind": "replace",
+      "old": "；RA在此基础上",
+      "new": "；RA-Coreset在此基础上"
+    },
+    {
+      "kind": "replace",
+      "old": "seed41、42、43的",
+      "new": "三个种子的"
+    },
+    {
+      "kind": "replace",
+      "old": "RA在",
+      "new": "RA-Coreset在"
+    },
+    {
+      "kind": "replace",
+      "old": "OBJECT",
+      "new": "LIBERO-OBJECT"
+    },
+    {
+      "kind": "replace",
+      "old": "GOAL",
+      "new": "LIBERO-GOAL"
+    },
+    {
+      "kind": "replace",
+      "old": "4.93",
+      "new": "4.9"
+    },
+    {
+      "kind": "replace",
+      "old": "5.63",
+      "new": "5.6"
+    },
+    {
+      "kind": "replace",
+      "old": "6.67",
+      "new": "6.7"
+    },
+    {
+      "kind": "replace",
+      "old": "7.08",
+      "new": "7.1"
+    },
+    {
+      "kind": "replace",
+      "old": "RA在",
+      "new": "RA-Coreset在"
+    },
+    {
+      "kind": "replace",
+      "old": "，RA的",
+      "new": "，RA-Coreset的"
+    },
+    {
+      "kind": "replace",
+      "old": "OBJECT",
+      "new": "LIBERO-OBJECT"
+    },
+    {
+      "kind": "replace",
+      "old": "GOAL",
+      "new": "LIBERO-GOAL"
+    },
+    {
+      "kind": "replace",
+      "old": "81.25",
+      "new": "81.3"
+    },
+    {
+      "kind": "replace",
+      "old": "83.75",
+      "new": "83.8"
+    },
+    {
+      "kind": "replace",
+      "old": "76.35",
+      "new": "76.4"
+    },
+    {
+      "kind": "replace",
+      "old": "81.98",
+      "new": "82.0"
+    },
+    {
+      "kind": "replace",
+      "old": "9.81",
+      "new": "9.8"
+    },
+    {
+      "kind": "replace",
+      "old": "2.59",
+      "new": "2.6"
+    },
+    {
+      "kind": "replace",
+      "old": "5.83",
+      "new": "5.8"
+    },
+    {
+      "kind": "replace",
+      "old": "0.94",
+      "new": "0.9"
+    },
+    {
+      "kind": "replace",
+      "old": "，RA在两个",
+      "new": "，RA-Coreset在两个"
+    },
+    {
+      "kind": "replace",
+      "old": "在GOAL上更为一致",
+      "new": "在LIBERO-GOAL上更为一致"
+    },
+    {
+      "kind": "replace",
+      "old": "在RA示范记忆",
+      "new": "在RA-Coreset示范记忆"
+    },
+    {
+      "kind": "insert",
+      "new": "在LIBERO-OBJECT上，DEBR的FWT与NBT标准差分别为8.5和11.6个百分点，而AUC为86.5±2.2%。这说明三个种子的获得阶段成绩及后续变化幅度存在差异，但全过程综合指标更为集中。不同种子的门控选择与学习轨迹同时变化，当前结果不能将上述离散程度单独归因于门控接受比例。"
+    },
+    {
+      "kind": "insert",
+      "new": "本研究复用公开预训练权重与既有基线结果，部分运行涉及不同GPU硬件，参数敏感性结果因此反映当前实验条件下的经验变化，不作为完全硬件受控的单因素因果估计。评估套件在方法开发中被重复使用，公开预训练权重的完整数据来源尚未独立闭合核验；这些结果属于开发阶段证据，而非独立留出集上的最终确认。"
+    },
+    {
+      "kind": "insert",
+      "new": "摘要"
+    },
+    {
+      "kind": "insert",
+      "new": "终身机器人模仿学习需要在有限记忆下持续获得新技能并保留旧技能。仅回放专家示范，难以直接约束策略在自主成功执行状态上的行为变化。本文提出双经验行为保持框架DEBR，协同利用专家示范与策略自主成功经验。随机锚定核心集RA-Coreset在覆盖导向选择中引入受保护的随机锚点，通过固定配额下的覆盖感知交换组织示范记忆；成功历史行为保持SHBR缓存成功执行时的潜在历史及固定高斯行为参考，并依据成功轨迹支持度调节保持强度。为协调保持与新任务学习，候选更新门控从相同训练状态比较基础学习与保持增强两类更新，仅在当前任务拟合不劣且旧历史保持更优时接受增强候选。在LIBERO-OBJECT与LIBERO-GOAL上的三个随机种子实验中，DEBR的AUC分别达到86.5%和87.3%，相对本地MLR＋IFA复现提高18.2和10.9个百分点。选样与组件消融、优化器预算匹配及保持系数分析共同支持双经验利用与更新选择的价值。新增记忆与候选比较均用于训练，部署时保持原策略推理结构不变。"
+    },
+    {
+      "kind": "insert",
+      "new": "关键词：终身模仿学习；机器人操作；经验回放；核心集选择；行为保持"
+    },
+    {
+      "kind": "insert",
+      "new": "Abstract"
+    },
+    {
+      "kind": "insert",
+      "new": "Lifelong robot imitation learning requires acquiring new skills while retaining previous ones under a limited memory budget. Replaying expert demonstrations alone does not directly constrain behavioral changes on states encountered during successful autonomous execution. We propose DEBR, a dual-experience behavioral retention framework that combines expert demonstrations with the policy’s own successful experience. Random-anchored coreset selection (RA-Coreset) organizes demonstration memory by incorporating protected random anchors into a coverage-oriented subset through fixed-budget, coverage-aware exchanges. Successful Historical Behavior Retention (SHBR) stores latent histories and fixed Gaussian behavior references from successful execution, and calibrates retention strength using trajectory-level support. To coordinate retention with new-task learning, a candidate-update gate compares base and retention-augmented updates from the same training state. It accepts the augmented candidate only when current-task fitting is no worse and historical retention is better on fixed training probes. Across three seeds on LIBERO-OBJECT and LIBERO-GOAL, DEBR achieves AUC scores of 86.5% and 87.3%, improving over our local MLR+IFA reproduction by 18.2 and 10.9 percentage points, respectively. Selection and component ablations, optimizer-budget matching, and retention-weight sensitivity analysis support the value of combining dual experience with update selection. The added memory and candidate comparison are confined to training, leaving the policy inference architecture unchanged."
+    },
+    {
+      "kind": "insert",
+      "new": "Keywords: Lifelong imitation learning; Robot manipulation; Experience replay; Coreset selection; Behavioral retention"
+    }
+  ],
+  "qa": "QA.json"
+}
