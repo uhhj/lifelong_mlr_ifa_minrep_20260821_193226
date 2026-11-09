@@ -1,17 +1,16 @@
 {
   "status": "PARTIAL_RESUMED_AFTER_EXPANSION_REBOOT",
-  "observed": "2026-11-09T19:00:25.279185+08:00",
+  "observed": "2026-11-09T21:51:40.308442+08:00",
   "engineering_root": "/data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1",
   "controller": 2416,
   "object_controller": 2417,
   "training_pids": {
-    "Q1_41": 2430,
-    "Q1_42": 2428
+    "Q1_43": 3049
   },
   "engineering_contract": "9c5b7e0b23e1beabb4bf28216f6a75f372d6d2f68b3f6515c27debdd8eda34bb",
   "scientific_contract": "fbbce2917380d1cde1025f0006b6fdd6bc7959f92226bb5588cc431ee0c8d96c",
-  "snapshot": "execution\\20261109_q1_user_resume\\check_readonly_20261109_190024",
-  "audit_sha256": "bed83a38b5c2557ae1b85755ab6b44877b3352f651e1638b98667b7a6780b375",
+  "snapshot": "execution\\20261109_q1_user_resume\\check_readonly_20261109_215139",
+  "audit_sha256": "4d3629d95ad1305145bec0f80f53cd244afbb4dcfcc43a54b2aad36a51e657fe",
   "capacity": {
     "/": {
       "total": 62559989760,
@@ -37,67 +36,70 @@
   ],
   "counts": {
     "Q1_41": {
-      "epochs": 353,
-      "accepted_updates": 88486,
-      "physical_optimizer_calls": 161272,
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
-      "training_collection_completed_episodes": 30,
+      "training_collection_completed_episodes": 40,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
         "stage": 9,
-        "phase": "train",
-        "epoch_complete": 53,
-        "steps": 88486,
-        "physical_optimizer_calls": 161272,
-        "time": 1794222006.9184384,
+        "phase": "training_collection",
+        "time": 1794224990.4657514,
         "pid": 2430
       },
-      "current_stage_epochs": 53,
-      "recent_epoch_mean_seconds": 61.3866048336029,
-      "current_stage_compute_minutes_estimate": 48.08617378632228,
-      "gate_blocks_observed": 7371,
-      "gate_Q_accepts_observed": 4652
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 64.0501341342926,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 5514
     },
     "Q1_42": {
-      "epochs": 346,
-      "accepted_updates": 85952,
-      "physical_optimizer_calls": 156204,
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
-      "training_collection_completed_episodes": 30,
+      "training_collection_completed_episodes": 40,
       "formal_episodes": 0,
       "current": {
         "arm": "S",
         "stage": 9,
-        "phase": "train",
-        "epoch_complete": 46,
-        "steps": 85952,
-        "physical_optimizer_calls": 156204,
-        "time": 1794222013.806718,
+        "phase": "training_collection",
+        "time": 1794225458.5221257,
         "pid": 2428
       },
-      "current_stage_epochs": 46,
-      "recent_epoch_mean_seconds": 62.7902339220047,
-      "current_stage_compute_minutes_estimate": 56.51121052980423,
-      "gate_blocks_observed": 7108,
-      "gate_Q_accepts_observed": 3779
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 63.30391223430634,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 4437
     },
     "Q1_43": {
-      "epochs": 0,
-      "accepted_updates": 0,
-      "physical_optimizer_calls": 0,
-      "own_isolated_optimizer_calls": 0,
-      "own_extra_autograd_calls": 0,
-      "training_collection_completed_episodes": 0,
+      "epochs": 282,
+      "accepted_updates": 63738,
+      "physical_optimizer_calls": 111776,
+      "own_isolated_optimizer_calls": 62,
+      "own_extra_autograd_calls": 30,
+      "training_collection_completed_episodes": 20,
       "formal_episodes": 0,
-      "current": {},
-      "current_stage_epochs": 0,
-      "recent_epoch_mean_seconds": null,
-      "current_stage_compute_minutes_estimate": null,
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0
+      "current": {
+        "arm": "S",
+        "stage": 8,
+        "phase": "train",
+        "epoch_complete": 82,
+        "steps": 63738,
+        "physical_optimizer_calls": 111776,
+        "time": 1794232278.5293138,
+        "pid": 3049
+      },
+      "current_stage_epochs": 82,
+      "recent_epoch_mean_seconds": 41.69749257564545,
+      "current_stage_compute_minutes_estimate": 12.509247772693636,
+      "gate_blocks_observed": 4857,
+      "gate_Q_accepts_observed": 2220
     }
   },
   "new_complete_epochs_observed": [
@@ -107,6 +109,6 @@
   "original_global_and_OBJECT_controller_exits": "ABSENT; never fabricate",
   "future_completion": "engineering controller.exit0 + no own process; OBJECT engineering OBJECT_controller.exit0; resumed train exits Q1_41_train.exit/Q1_42_train.exit; GOAL original controller.exit0",
   "followup": "MLR+IFA+ALIGN remains prepared, not started; adapt versioned completion gate before launch after q1 independent acceptance/publication",
-  "timing_audit": "execution\\20261109_q1_user_resume\\check_readonly_20261109_190024\\TIMING_AUDIT.json",
+  "timing_audit": "execution\\20261109_q1_user_resume\\check_readonly_20261109_215139\\TIMING_AUDIT.json",
   "queue_order_audit": "execution\\20261109_q1_user_resume\\check_readonly_20261109_190024\\QUEUE_ORDER_AUDIT.json"
 }
