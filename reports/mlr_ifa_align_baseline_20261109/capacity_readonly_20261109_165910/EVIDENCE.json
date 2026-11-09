@@ -1,0 +1,91 @@
+{
+  "status": "READONLY_PREPARATION_RESOURCE_SNAPSHOT",
+  "observed": 1794214751.273628,
+  "current_q1_frozen_files_exact": 148,
+  "current_q1_contract": "fbbce2917380d1cde1025f0006b6fdd6bc7959f92226bb5588cc431ee0c8d96c",
+  "current_q1_processes": [
+    {
+      "pid": 2638,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2639,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/controller_parallel.py ",
+      "state": "S"
+    },
+    {
+      "pid": 2641,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=24b65a68-96d4-4e44-869f-e01741b5d221 /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "S"
+    },
+    {
+      "pid": 2642,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=72131415-16cc-40eb-9c65-faba2a45634b /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2650,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_42 ",
+      "state": "S"
+    },
+    {
+      "pid": 2652,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT41_42_43_20261109_rerun_v1/train_wrapper.py Q1_41 ",
+      "state": "R"
+    }
+  ],
+  "new_root_exists": false,
+  "new_private_root_exists": false,
+  "historical_private_sizes": {
+    "OBJECT_41": {
+      "models/mlrifa_6_model_ep99.pth": 86579769,
+      "models/mlrifa_7_model_ep99.pth": 86579769,
+      "models/mlrifa_8_model_ep99.pth": 86579769,
+      "models/mlrifa_9_model_ep99.pth": 86579769,
+      "recovery/latest.pth": 346567933
+    },
+    "OBJECT_42": {
+      "models/mlrifa_6_model_ep99.pth": 86579705,
+      "models/mlrifa_7_model_ep99.pth": 86579705,
+      "models/mlrifa_8_model_ep99.pth": 86579705,
+      "models/mlrifa_9_model_ep99.pth": 86579705,
+      "recovery/latest.pth": 346567869
+    },
+    "OBJECT_43": {
+      "models/mlrifa_6_model_ep99.pth": 86579769,
+      "models/mlrifa_7_model_ep99.pth": 86579769,
+      "models/mlrifa_8_model_ep99.pth": 86579769,
+      "models/mlrifa_9_model_ep99.pth": 86579769,
+      "recovery/latest.pth": 346567933
+    },
+    "GOAL_41": {
+      "models/mlrifa_6_model_ep99.pth": 86579705,
+      "models/mlrifa_7_model_ep99.pth": 86579705,
+      "models/mlrifa_8_model_ep99.pth": 86579705,
+      "models/mlrifa_9_model_ep99.pth": 86579705,
+      "recovery/latest.pth": 346512893
+    },
+    "GOAL_42": {
+      "models/mlrifa_6_model_ep99.pth": 86579705,
+      "models/mlrifa_7_model_ep99.pth": 86579705,
+      "models/mlrifa_8_model_ep99.pth": 86579705,
+      "models/mlrifa_9_model_ep99.pth": 86579705,
+      "recovery/latest.pth": 346512893
+    },
+    "GOAL_43": {
+      "models/mlrifa_6_model_ep99.pth": 86579705,
+      "models/mlrifa_7_model_ep99.pth": 86579705,
+      "models/mlrifa_8_model_ep99.pth": 86579705,
+      "models/mlrifa_9_model_ep99.pth": 86579705,
+      "recovery/latest.pth": 346512893
+    }
+  },
+  "free_bytes": {
+    "/": 1421684736,
+    "/data": 7676162048
+  },
+  "new_optimizer": 0,
+  "new_environments": 0,
+  "new_gpu_calls": 0
+}

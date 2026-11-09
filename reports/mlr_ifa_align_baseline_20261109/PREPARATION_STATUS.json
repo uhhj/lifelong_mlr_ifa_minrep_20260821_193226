@@ -1,0 +1,49 @@
+{
+  "status": "PREPARATION_COMPLETE_NOT_DEPLOYED",
+  "observed": "2026-11-09T17:09:18.970265+08:00",
+  "contract_sha256": "6a6298283056986941016d1f487f8169fcbfe760679088e675f51ceaa015f7d7",
+  "remote_root": "/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261109_v1",
+  "runs": 6,
+  "suites": [
+    "OBJECT",
+    "GOAL"
+  ],
+  "seeds": [
+    41,
+    42,
+    43
+  ],
+  "method": "Original_Random_MLR_IFA_plus_ALIGN_only",
+  "code_adapted": true,
+  "random_members_order_features_and_next_labels_cpu_audit": "PASS_ACTUAL_SIX_CASES",
+  "static_source_and_zero_science_queue_checks": "PASS",
+  "new_gpu_admission": "NOT_RUN_DEFERRED_UNTIL_CURRENT_Q1_ACCEPTED",
+  "new_training": 0,
+  "new_rollouts": 0,
+  "current_q1_controller_unmodified": true,
+  "current_q1_contract_verified": "fbbce2917380d1cde1025f0006b6fdd6bc7959f92226bb5588cc431ee0c8d96c",
+  "current_q1_frozen_files_verified": 148,
+  "production_epochs": 2400,
+  "production_optimizer": 544800,
+  "isolated_admission_optimizer_planned": 120,
+  "training_collection": 0,
+  "formal_episodes": 1200,
+  "prepared_text_files": 944,
+  "prepared_text_bytes": 31786169,
+  "deployment_blockers": [
+    "Current q1 six runs must naturally finish and be independently accepted, compared and published",
+    "Fresh data capacity >=6 GiB new-output peak plus2 GiB reserve; current snapshot7.15 GiB is insufficient and q1 still grows",
+    "GPU idle/available after q1 boundary; own stage admission is enforced before production updates"
+  ],
+  "capacity": {
+    "observed": 1794214751.273628,
+    "data_free_bytes": 7676162048,
+    "required_fresh_data_bytes": 8589934592,
+    "deficit_at_snapshot_bytes": 913772544,
+    "historical_six_final_checkpoint_recovery_bytes": 4157155846,
+    "no_old_models_deleted": true,
+    "no_payload_downloads": true
+  },
+  "entrypoint": "python launch_after_q1.py OBJECT_FINAL_DIR GOAL_FINAL_DIR",
+  "automatic_waiter_installed": false
+}

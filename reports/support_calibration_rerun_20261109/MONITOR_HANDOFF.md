@@ -1,3 +1,9 @@
+## 2026-11-09 17:08 MLR+IFA+ALIGN已提前准备，当前q1不受中断
+
+用户明确要求现在完成代码适配与部署准备。新目录`execution/20261109_mlr_ifa_align_baseline`已准备六run（OBJECT/GOAL各41/42/43），合同`6a6298283056986941016d1f487f8169fcbfe760679088e675f51ceaa015f7d7`。实际CPU六case原Random成员/顺序/特征和ALIGN原始下一动作/mask核验PASS；静态源对照、完整文本hash闭合与零科学队列正常/失败模拟PASS。没有新GPU调用/optimizer/环境，也未部署或装后台等待器。
+
+当前q1 16:59只读核实148冻结项和原controller/launcher/GPU进程保持，不改当前队列。q1两套件自然完成并实际独立接受、比较、FINAL_REPORT发布后，用新目录launch_after_q1.py带两个实际final目录唯一启动。新容量门槛6GiB输出+2GiB保留；当前data7.15GiB且q1会增长，须先新鲜预检，不能删除旧模型或付费。自身每stage5调用GPU准入/最终CPU尚未执行，不套PASS。详见PREPARED_ALIGN_FOLLOWUP.json和新目录MONITOR_HANDOFF；不能再把后续描述为尚未实施的协议空壳。
+
 ## 最新后续授权：q1结束后新增MLR+IFA+ALIGN六run
 
 用户已确认OBJECT、GOAL各seed41/42/43，共6个run；Random选样，只加ALIGN，已有MLR+IFA只读复用。先读AUTHORIZED_MLR_IFA_ALIGN_FOLLOWUP.json、followup_mlr_ifa_align/PROTOCOL.md和BASELINE_BINDING.json。六个父基线的1200正式、接受/初始化/配置/训练源码与ALIGN源码已绑定112源文件SHA，新增训练/前向/环境为0。
