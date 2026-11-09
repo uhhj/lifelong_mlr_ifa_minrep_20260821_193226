@@ -1,3 +1,11 @@
+## 最新后续授权：q1结束后新增MLR+IFA+ALIGN六run
+
+用户已确认OBJECT、GOAL各seed41/42/43，共6个run；Random选样，只加ALIGN，已有MLR+IFA只读复用。先读AUTHORIZED_MLR_IFA_ALIGN_FOLLOWUP.json、followup_mlr_ifa_align/PROTOCOL.md和BASELINE_BINDING.json。六个父基线的1200正式、接受/初始化/配置/训练源码与ALIGN源码已绑定112源文件SHA，新增训练/前向/环境为0。
+
+状态AUTHORIZED_FOLLOWUP_PENDING_IMPLEMENTATION_AND_FRESH_CAPACITY。这是持久后续授权，不是已经部署或远端自动队列已扩展：当前2638仍只运行q1六run，未修改冻结controller。当前q1全部结束、独立验收比较发布后，继续新Random+ALIGN适配、自己的标签/准入审查、新鲜容量与唯一部署；不得把q1完成当作整个授权工作已结束。新配置不能从C/Q/S损失复制，否则会夹带E；必须保留Random原成员和原评估global RNG口径，核真实身份后加历史ALIGN目标/完整mask。
+
+旧8.15GiB空闲已为q1输出做预留，不可再次当新ALIGN容量；不新增本地大备份、不删旧模型、不付费，容量不足据实际证据通知。具体预算与两套件顺序见新协议。无需重问已确认的六run范围；不按OBJECT分数门控GOAL。未创建定时任务，后续待部署状态不可说成已启动。
+
 ## 2026-11-09 16:02 实际进度与条件估时
 
 check_readonly_20261109_160252与本地进度审计PASS，154009全部epoch/门控/诊断/正式前缀保留，总协调器148冻结文件和两个套件合同保持。OBJECT41 Task6完整100轮、Task7完整23轮；42 Task6完整100轮、Task7完整24轮。各10采集、33隔离/19准入autograd，正式0；43及GOAL未开始。累计247/2400轮、52738/1012500生产、66隔离/38准入autograd、20/240采集、0/1200正式，无失败。两次采集锁完整互斥。
