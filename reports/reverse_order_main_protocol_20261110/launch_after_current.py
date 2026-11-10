@@ -16,8 +16,8 @@ manifest=J(old/'PUBLICATION_REVIEW.json')
 name=str((final/'LOCAL_FINAL_AUDIT.json').relative_to(old)).replace('\\','/')
 assert manifest['files_sha256'][name]['sha256']==sha(final/'LOCAL_FINAL_AUDIT.json')
 assert J(R/'PREPARATION_LOCAL_AUDIT.json')['status']=='PASS_PREPARED_NOT_LAUNCHED'
-cpu_text=json.dumps(dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',cases=e['cpu'],new_optimizer=0,new_environments=0),indent=2)+'\n'
-auth=dict(predecessor_actual_final_status=a['status'],predecessor_final_audit_sha256=sha(final/'LOCAL_FINAL_AUDIT.json'),predecessor_publication_status=receipt['status'],predecessor_publication_commit=receipt['commit'],predecessor_remote_cpu_results=e['remote_cpu_directory']+'/CPU_RESULTS.json',predecessor_remote_cpu_results_sha256=hashlib.sha256(cpu_text.encode()).hexdigest(),prepared_contract=sha(R/'CONTRACT.json'))
+assert len(e['cpu_results_sha256'])==64
+auth=dict(predecessor_actual_final_status=a['status'],predecessor_final_audit_sha256=sha(final/'LOCAL_FINAL_AUDIT.json'),predecessor_publication_status=receipt['status'],predecessor_publication_commit=receipt['commit'],predecessor_remote_cpu_results=e['remote_cpu_directory']+'/CPU_RESULTS.json',predecessor_remote_cpu_results_sha256=e['cpu_results_sha256'],prepared_contract=sha(R/'CONTRACT.json'))
 assert not (R/'LAUNCH_AUTHORIZATION.json').exists(),'Do not blindly duplicate launch'
 (R/'LAUNCH_AUTHORIZATION.json').write_text(json.dumps(auth,indent=2)+'\n')
 (R/'launch_remote.py').write_text('AUTHORIZATION='+ascii(auth)+'\n'+(R/'launch_remote_template.py').read_text(),encoding='utf-8')
