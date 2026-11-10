@@ -1,18 +1,11 @@
-# ALIGN最新进度与估时
+# ALIGN进度：OBJECT训练完成，评估工程故障
 
-观察2026-11-10T13:55:49.031630+08:00，PARTIAL。实际check与audit_progress PASS，124649全部完整epoch/诊断前缀保持，冻结合同verify通过。controller39717和OBJECT43训练39906健康，无新失败或重启。
+实际观察2026-11-10T15:11:31.619770+08:00。状态PARTIAL_STOPPED_EVALUATION_ASSET_FAILURE，不能将LOCAL_AUDIT中的预算/前缀PASS_PROGRESS_NOT_FINAL当成运行健康或最终接受。
 
-|case|完整轮/400|当前阶段|Task8准入|Task9准入|正式/200|
-|---|---:|---|---|---|---:|
-|OBJECT41|400|train.exit0|PASS|PASS|0|
-|OBJECT42|400|train.exit0|PASS|PASS|0|
-|OBJECT43|219|Task8 19/100|PASS|尚未进入|0|
-|GOAL41/42/43|各0|未开始|未执行|未执行|各0|
+OBJECT41/42/43均400完整轮、105500生产更新、四阶段各5次隔离ALIGN准入通过，自己的train.exit均0。43于2026-11-10T14:25:47.379322+08:00自然退出。累计1200/2400轮、316500/544800生产、60/120隔离、0训练采集、0/1200完成正式。GOAL三个seed未启动。135548所有已记录epoch/准入前缀保留，冻结合同verify通过。
 
-41/42自己的四阶段五调用ALIGN准入全部通过；43初始化tensor/RNG及Task6/7/8准入通过，每次均核禁用原更新等价、有效mask、空mask可微零、保存恢复下一步精确及恢复初态，不能套未来PASS。合计1019/2400轮、255271/544800生产更新、55/120隔离、0训练采集、0/1200正式。43真实13:32:13启动；41/42完整训练dispatch至exit分别60.16/59.99分钟，含准备保存准入。
+调度器随即启动OBJECT41评估，于2026-11-10T14:26:04.991228+08:00失败并退出1。实际日志FileNotFoundError指向新部署source/libero/libero/assets/scenes/libero_floor_base_style.xml；环境子进程加载场景失败，主进程记录ConnectionResetError。错误属于新目录资产部署遗漏，先前只导入预检未覆盖真实资产加载，不是已定位的GPU故障。当前nvidia-smi正常，4080SUPER利用率0%、显存10MiB，无本轮进程。
 
-41/42 Task8均9.2932/9.3721秒、Task9均10.6758/10.7058秒；43当前单训练Task8近10轮8.0465秒，余81轮约10.86分钟纯计算。Task9尚未实测，参考同套件已完成run及43当前速度缩放，43整run剩纯epoch约26.23–28.68分钟，计保存准备准入规划35–45分钟。
+原attempt有environment_construct_start/complete、vector_attempt_start（Task6/task6、初态0–9）和technical_exception，0完成回合。异步构造complete日志不代表所有子进程成功；不能将该attempt抹去或声称环境成本为零。原controller.exit1/evaluate.exit1、日志SHA、失败记录、已完成训练和模型全部保留。本轮检查只读，没有重启、重训、重复评估或修改资产。
 
-OBJECT600正式尚未开始，暂留60–90分钟；OBJECT整套训练+正式余95–135分钟，即今日15:30–16:10附近。GOAL三训练按两个波次留100–130分钟、600正式60–90分钟。全部六run训练及1200正式合计余255–355分钟，即约4小时15分–6小时，今日18:10–19:50附近。最终独立CPU验收、结果比较和发布另计。GOAL和正式尚未实测，不能将规划当完成保证；详细公式和来源见本快照TIMING_AUDIT.json。
-
-保持OBJECT三训练→600正式→GOAL三训练→600正式，最多两个训练；本次没有改科学代码、调度、训练或评估。已有S/q1及旧失败证据保持。后续仅v4/transport.py check_readonly.py检查，禁止重复launch/controller/完成轮。
+此前18:10–19:50估时已失效，当前队列已经停止，不能继续按原速度倒计时。恢复前需要版本化核验既有资产来源/路径、失败attempt与RNG边界，保留原失败及实际成本，再从未完成评估接续；OBJECT600正式完成后才允许GOAL，不能跳过该顺序或重新运行原controller。最终完成源也须按真实恢复工程适配，禁止伪造旧exit0。
