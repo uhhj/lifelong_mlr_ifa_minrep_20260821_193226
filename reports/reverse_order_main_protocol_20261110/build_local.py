@@ -2,6 +2,7 @@
 from pathlib import Path,PurePosixPath
 import ast,copy,difflib,hashlib,json,re,sys
 R=Path(__file__).resolve().parent
+assert not (R/'CONTRACT.json').exists(),'Already prepared and frozen: do not rebuild or replace accepted inputs'
 P=R.parent
 J=lambda p:json.loads(Path(p).read_text(encoding='utf-8-sig'))
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
