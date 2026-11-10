@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL_EXECUTION",
-  "observed": "2026-11-11T00:41:40.257744+08:00",
-  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_s_stripped_mlr_ifa_align\\check_readonly_20261111_004139",
+  "observed": "2026-11-11T02:51:42.149124+08:00",
+  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_s_stripped_mlr_ifa_align\\check_readonly_20261111_025141",
   "audit": "PASS_PROGRESS_NOT_FINAL",
   "contract": "b54b0c2d8d8b490d6f7c394f7f99fa6689222861240454b4dd4eca870158b598",
   "cases": {
@@ -15,7 +15,7 @@
         8,
         9
       ],
-      "formal": 30,
+      "formal": 200,
       "variant": "ALIGN"
     },
     "OBJECT_MLR_41": {
@@ -28,7 +28,7 @@
         8,
         9
       ],
-      "formal": 0,
+      "formal": 200,
       "variant": "MLR"
     },
     "OBJECT_ALIGN_42": {
@@ -41,7 +41,7 @@
         8,
         9
       ],
-      "formal": 0,
+      "formal": 200,
       "variant": "ALIGN"
     },
     "OBJECT_MLR_42": {
@@ -54,7 +54,7 @@
         8,
         9
       ],
-      "formal": 0,
+      "formal": 200,
       "variant": "MLR"
     },
     "OBJECT_ALIGN_43": {
@@ -67,7 +67,7 @@
         8,
         9
       ],
-      "formal": 0,
+      "formal": 200,
       "variant": "ALIGN"
     },
     "OBJECT_MLR_43": {
@@ -80,22 +80,32 @@
         8,
         9
       ],
-      "formal": 0,
+      "formal": 200,
       "variant": "MLR"
     },
     "GOAL_ALIGN_41": {
-      "epochs": 0,
-      "production": 0,
-      "admission": 0,
-      "admitted_stages": [],
+      "epochs": 333,
+      "production": 53521,
+      "admission": 20,
+      "admitted_stages": [
+        6,
+        7,
+        8,
+        9
+      ],
       "formal": 0,
       "variant": "ALIGN"
     },
     "GOAL_MLR_41": {
-      "epochs": 0,
-      "production": 0,
-      "admission": 0,
-      "admitted_stages": [],
+      "epochs": 333,
+      "production": 53521,
+      "admission": 20,
+      "admitted_stages": [
+        6,
+        7,
+        8,
+        9
+      ],
       "formal": 0,
       "variant": "MLR"
     },
@@ -133,10 +143,10 @@
     }
   },
   "totals": {
-    "epochs": 2400,
-    "production": 633000,
-    "admission": 120,
-    "formal": 30,
+    "epochs": 3066,
+    "production": 740042,
+    "admission": 160,
+    "formal": 1200,
     "training_collection": 0
   },
   "processes": [
@@ -146,8 +156,23 @@
       "state": "S"
     },
     {
-      "pid": 56970,
-      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_ALIGN_41/evaluate.py ",
+      "pid": 87723,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d0a928a51141483c9b542ddad623212c /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_ALIGN_41/train.py A ",
+      "state": "S"
+    },
+    {
+      "pid": 87725,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=1373225ddb40474a9511a71349fced05 /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_MLR_41/train.py A ",
+      "state": "S"
+    },
+    {
+      "pid": 87730,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_ALIGN_41/train.py A ",
+      "state": "S"
+    },
+    {
+      "pid": 87735,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_MLR_41/train.py A ",
       "state": "R"
     }
   ],
@@ -156,13 +181,13 @@
   "actual_final_cpu_acceptance": false,
   "checkpoint": {
     "status": "PARTIAL_CHECKPOINT_INTEGRITY_PASS",
-    "observed": "2026-11-11T00:41:40.257744+08:00",
+    "observed": "2026-11-11T02:51:42.149124+08:00",
     "checks": {
-      "admissions": 24,
-      "stage_records": 24,
+      "admissions": 32,
+      "stage_records": 30,
       "complete_train_records": 6,
-      "formal_records": 30,
-      "formal_vectors": 3
+      "formal_records": 1200,
+      "formal_vectors": 120
     },
     "recorded_initial_and_noise_pairing": true,
     "initial_physical_bytes_deferred_to_final": true,
@@ -198,17 +223,38 @@
         "pure_epoch_minutes": 72.41860181093216
       }
     ],
-    "phase": "ENTIRE_CURRENT_SUITE_FORMAL_EVALUATION",
+    "phase": "CURRENT_COMPLETE_TRAINING_WAVE",
     "eta": {
-      "suite": "OBJECT",
-      "completed_vectors": 3,
-      "own_mean_seconds": 55.88021938933525,
-      "borrowed_seconds": null,
-      "remaining_vectors": 117.0,
-      "linear_minutes_with_setup": 117.96642780920374,
-      "next_checkpoint_minutes": 130
+      "GOAL_ALIGN_41": {
+        "stages": {
+          "9": {
+            "complete": 33,
+            "source": "GOAL_ALIGN_41",
+            "seconds_per_batch": 0.03929726603476867,
+            "remaining_pure_minutes": 14.788216163317365,
+            "borrowed": false
+          }
+        },
+        "pure_minutes": 14.788216163317365,
+        "preparation_save_exit_allowance_minutes": 3.1422563996629584,
+        "total_minutes": 17.930472562980324
+      },
+      "GOAL_MLR_41": {
+        "stages": {
+          "9": {
+            "complete": 33,
+            "source": "GOAL_MLR_41",
+            "seconds_per_batch": 0.03926768055301745,
+            "remaining_pure_minutes": 14.777082653443017,
+            "borrowed": false
+          }
+        },
+        "pure_minutes": 14.777082653443017,
+        "preparation_save_exit_allowance_minutes": 3.1422563996629584,
+        "total_minutes": 17.919339053105976
+      }
     },
-    "next_checkpoint_CST": "2026-11-11T02:51:40.257744+08:00",
+    "next_checkpoint_CST": "2026-11-11T03:09:42.149124+08:00",
     "background_automation_created": false,
     "new_optimizer": 0,
     "new_environments": 0
