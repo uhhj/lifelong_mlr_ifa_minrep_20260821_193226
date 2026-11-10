@@ -1,3 +1,22 @@
+## 2026-11-10T19:25:24.376991+08:00 实际复查
+
+2026-11-10T19:25:24.376991+08:00，PARTIAL_EVALUATING_CACHED。
+
+|case|完整训练轮|正式/200|
+|---|---:|---:|
+|OBJECT_41|400|200|
+|OBJECT_42|400|200|
+|OBJECT_43|400|200|
+|GOAL_41|400|200|
+|GOAL_42|400|180|
+|GOAL_43|400|0|
+
+自然交接：True；实际缓存准入：{'GOAL_42': 9, 'OBJECT_43': 10, 'GOAL_41': 10}；合并环境锁：{'completed': 4, 'active': ['GOAL_42', 50564]}。
+
+科学合同及原模型/前缀验证通过。缓存容差1e-4，保留原global Normal与done处理，不声称逐位闭环等价。最终CPU仍待完整队列自然结束。
+
+证据 engineering_cached_eval_20261110_v1/check_readonly_20261110_192518。继续使用本cached工程check/audit_progress/record_progress；最终也用本工程final_readonly/audit_final_local/compare_baseline。不得重复controller、部署、已完成轮或正式回合。
+
 ## 2026-11-10T18:14:21.618312+08:00 实际复查
 
 2026-11-10T18:14:21.618312+08:00，PARTIAL_TRAINING。
