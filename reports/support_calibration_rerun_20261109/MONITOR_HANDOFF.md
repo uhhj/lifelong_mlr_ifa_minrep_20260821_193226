@@ -1,3 +1,7 @@
+## 2026-11-10 15:29 ALIGN评估故障已恢复
+
+q1接受保持。后续ALIGN OBJECT三训练已完成；新engineering_assets_resume_20261110_v2/controller40721已实际恢复OBJECT41正式10/200。资源链接补齐及原Python/NumPy/CPU/CUDA随机状态精确通过，旧失败exit1和两个attempt永久保留，训练未重跑。只读检查/最终包装改用ALIGN目录该新工程，详见ALIGN最新MONITOR_HANDOFF。旧v4只作历史，不恢复旧controller；OBJECT600正式后继续GOAL。
+
 ## 2026-11-10 12:33 ALIGN后续已实际启动
 
 q1两个套件最终接受与完整比较报告已经发布并核远端SHA。MLR+IFA+ALIGN唯一活动root为/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2，controller39717，合同ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f。OBJECT41/42各自初始化与五调用GPU准入通过，完整16/15轮、累计4867生产、10隔离、0环境。其余四run未启动。具体见../20261109_mlr_ifa_align_baseline/MONITOR_HANDOFF.md及engineering_startup_20261110_v4/check_readonly_20261110_123348/STARTUP_AUDIT.json。

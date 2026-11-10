@@ -1,15 +1,16 @@
 {
-  "status": "PARTIAL_STOPPED_EVALUATION_ASSET_FAILURE",
-  "observed": "2026-11-10T15:11:31.619770+08:00",
+  "status": "PARTIAL_RECOVERED_ACTUAL_FORMAL_ROLLOUT_CONFIRMED",
+  "observed": "2026-11-10T15:29:38.072208+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2",
+  "controller": 40721,
   "contract": "ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f",
-  "controller": null,
-  "former_controller": 39717,
+  "engineering_contract": "404ffb7e4a04f4d52091401e77df82e20086cfd2c7001f88c7c449642fd75e12",
+  "engineering": "engineering_assets_resume_20261110_v2",
   "counts": {
     "OBJECT_41": {
       "epochs": 400,
       "production_updates": 105500,
-      "formal_episodes": 0,
+      "formal_episodes": 10,
       "admissions": 4,
       "admission_updates": 20
     },
@@ -51,49 +52,15 @@
   },
   "epochs": 1200,
   "production_updates": 316500,
-  "formal_episodes": 0,
-  "own_admission_optimizer": 60,
-  "object_training_complete_time": "2026-11-10T14:25:47.379322+08:00",
-  "failure_time": "2026-11-10T14:26:04.991228+08:00",
-  "root_exit": 1,
-  "object41_evaluate_exit": 1,
-  "missing_asset": "cases/OBJECT_41/source/libero/libero/assets/scenes/libero_floor_base_style.xml",
-  "attempt": {
-    "stage": 6,
-    "task": 6,
-    "vector_group": 0,
-    "initial_indices": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9
-    ],
-    "events": [
-      "environment_construct_start",
-      "environment_construct_complete",
-      "vector_attempt_start",
-      "technical_exception"
-    ],
-    "completed_episodes": 0,
-    "note": "Construction/first-vector attempt exists. Do not report zero environment attempt cost or retry without an audited recovery."
-  },
-  "processes": [],
-  "gpu": {
-    "returncode": 0,
-    "stdout": "NVIDIA GeForce RTX 4080 SUPER, 0 %, 10 MiB\n",
-    "stderr": ""
-  },
-  "evidence_sha256": "523bf4abd797088ad8d02644b3472f4e694e2c1421daa8f0ab306bbb602e428a",
-  "failure_evidence_sha256": "51d43de8e81684c25e5a7ddf405d4ccc2a2f93e91c59624b3dcdd88184ea3121",
-  "snapshot": "D:\\论文课题研究\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\engineering_startup_20261110_v4\\check_readonly_20261110_151130",
-  "failure_snapshot": "D:\\论文课题研究\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\engineering_startup_20261110_v4\\capacity_readonly_20261110_151221",
-  "eta": "INVALIDATED_PENDING_AUDITED_ENGINEERING_RECOVERY",
-  "new_training": 0,
-  "new_rollouts": 0
+  "formal_episodes": 10,
+  "snapshot": "execution\\20261109_mlr_ifa_align_baseline\\engineering_assets_resume_20261110_v2\\check_readonly_20261110_152934",
+  "evidence_sha256": "020c5b9668afba3100805de8b7b0405a35b2736eed7127a6c1aa052f87e92943",
+  "old_failed_exits_preserved": true,
+  "rng_exact": true,
+  "completed_object_training_repeated": 0,
+  "new_optimizer_diagnostics": 0,
+  "queue": "OBJECT600formal then GOAL3train at most2parallel then GOAL600formal",
+  "final_wrappers": "engineering v2 final_readonly/audit_final_local; original base compare_baseline",
+  "final_wrapper_status": "STATIC_ONLY_NOT_EXECUTED",
+  "remaining_total_time": "Wait for more actual formal vectors; old stopped-queue ETA invalid"
 }

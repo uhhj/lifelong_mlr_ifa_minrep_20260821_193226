@@ -1,3 +1,18 @@
+## 2026-11-10T15:29:38.072208+08:00 故障已修复，实际评估恢复
+
+# ALIGN资源故障已修复并实际恢复评估
+
+实际观察2026-11-10T15:29:38.072208+08:00，PARTIAL_RECOVERED_ACTUAL_FORMAL_ROLLOUT_CONFIRMED。OBJECT41已完成10/200正式回合，首个完整vector记录已验真；controller40721及评估进程正常。OBJECT三seed原400轮/12阶段ALIGN准入和所有模型/恢复文件SHA保留，0已完成轮重跑、0新增optimizer诊断。GOAL未开始，仍在OBJECT600正式全部完成后启动。
+
+原故障为新source目录缺少libero/libero/assets。读取服务器既有/data/mlr_ifa/src/libero/libero/assets的585文件（422313213bytes）并冻结完整哈希，仅建立六个链接，没有复制大资产、下载模型或改评估源码。原10子进程在场景XML打开阶段失败，原日志/attempt/exit1/RNG文件永久保留。首个恢复包装缺少多进程main保护，spawn子进程在环境构造前断言退出，原失败也保留；v2增加main保护和run_module alter_sys=True，维持原评估模块的多进程启动语义。
+
+原首单元Python/NumPy/CPU/CUDA随机状态经两次恢复均逐项精确通过，最后guard在正式环境调用前核验；原模型、动作采样和评估函数不变。两个失败attempt独立保留，不计为已完成正式回合或训练收益；不抹去历史环境构造尝试。原总controller.exit1、OBJECT41 evaluate.exit1、恢复v1 exit1均保持，不伪造成功。
+
+唯一活动工程engineering_assets_resume_20261110_v2，合同404ffb7e4a04f4d52091401e77df82e20086cfd2c7001f88c7c449642fd75e12。禁止重复deploy/controller或恢复旧调度器。后续只用该工程transport.py check_readonly.py → audit_progress.py NEW PREVIOUS。最终仅该工程controller.exit0且无自身进程后，用该工程final_readonly.py→audit_final_local.py→基础compare_baseline.py；最终包装已静态适配真实完成源，仍待实际CPU执行。最初冻结科学合同ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f保持。
+
+没有改变OBJECT→GOAL的顺序，没有启动后台聊天定时监控。有限远端队列会继续OBJECT600正式→GOAL三seed训练（最多两并行）→GOAL600正式；出错保留现场并停止新增运行。当前只确认修复和实际评估进展，不从首个vector外推全套件稳定吞吐。
+
+
 ## 2026-11-10T15:11:31.619770+08:00 评估失败覆盖旧健康状态及ETA
 
 # ALIGN进度：OBJECT训练完成，评估工程故障
