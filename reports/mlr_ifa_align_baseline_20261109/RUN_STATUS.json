@@ -1,23 +1,23 @@
 {
-  "status": "PARTIAL_STARTED_OWN_TASK6_ADMISSION_PASS",
-  "observed": "2026-11-10T12:33:48.710397+08:00",
+  "status": "PARTIAL_TRAINING_OWN_TASK6_TASK7_ADMISSION_PASS",
+  "observed": "2026-11-10T12:46:50.419889+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2",
   "contract": "ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f",
   "controller": 39717,
   "counts": {
     "OBJECT_41": {
-      "epochs": 16,
-      "production_updates": 2512,
+      "epochs": 143,
+      "production_updates": 25461,
       "formal_episodes": 0,
-      "admissions": 1,
-      "admission_updates": 5
+      "admissions": 2,
+      "admission_updates": 10
     },
     "OBJECT_42": {
-      "epochs": 15,
-      "production_updates": 2355,
+      "epochs": 144,
+      "production_updates": 25688,
       "formal_episodes": 0,
-      "admissions": 1,
-      "admission_updates": 5
+      "admissions": 2,
+      "admission_updates": 10
     },
     "OBJECT_43": {
       "epochs": 0,
@@ -48,59 +48,59 @@
       "admission_updates": 0
     }
   },
-  "epochs": 31,
-  "production_updates": 4867,
+  "epochs": 287,
+  "production_updates": 51149,
   "formal_episodes": 0,
-  "own_admissions": {
-    "OBJECT_41": {
-      "initialization": {
-        "status": "PASS_ACTUAL_INITIALIZATION",
-        "initial_exact": true,
-        "device": "NVIDIA GeForce RTX 4080 SUPER",
-        "torch": "1.13.0+cu116",
-        "cuda": "11.6",
-        "baseline_gpu": "NVIDIA GeForce RTX 4090",
-        "hardware_controlled": false
-      },
-      "task6_admission": {
-        "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
-        "stage": 6,
-        "optimizer_calls": 5,
-        "disabled_original_random_full_state_exact": true,
-        "valid_mask_nll_exact": true,
-        "empty_mask_differentiable_zero": true,
-        "serialized_full_state_next_step_exact": true,
-        "initial_state_restored": true,
-        "production_calls_added": 0,
-        "environments": 0
-      }
+  "admissions": {
+    "OBJECT_41/ADMISSION_7.json": {
+      "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
+      "stage": 7,
+      "optimizer_calls": 5,
+      "disabled_original_random_full_state_exact": true,
+      "valid_mask_nll_exact": true,
+      "empty_mask_differentiable_zero": true,
+      "serialized_full_state_next_step_exact": true,
+      "initial_state_restored": true,
+      "production_calls_added": 0,
+      "environments": 0
     },
-    "OBJECT_42": {
-      "initialization": {
-        "status": "PASS_ACTUAL_INITIALIZATION",
-        "initial_exact": true,
-        "device": "NVIDIA GeForce RTX 4080 SUPER",
-        "torch": "1.13.0+cu116",
-        "cuda": "11.6",
-        "baseline_gpu": "NVIDIA GeForce RTX 3090",
-        "hardware_controlled": false
-      },
-      "task6_admission": {
-        "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
-        "stage": 6,
-        "optimizer_calls": 5,
-        "disabled_original_random_full_state_exact": true,
-        "valid_mask_nll_exact": true,
-        "empty_mask_differentiable_zero": true,
-        "serialized_full_state_next_step_exact": true,
-        "initial_state_restored": true,
-        "production_calls_added": 0,
-        "environments": 0
-      }
+    "OBJECT_41/ADMISSION_6.json": {
+      "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
+      "stage": 6,
+      "optimizer_calls": 5,
+      "disabled_original_random_full_state_exact": true,
+      "valid_mask_nll_exact": true,
+      "empty_mask_differentiable_zero": true,
+      "serialized_full_state_next_step_exact": true,
+      "initial_state_restored": true,
+      "production_calls_added": 0,
+      "environments": 0
+    },
+    "OBJECT_42/ADMISSION_7.json": {
+      "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
+      "stage": 7,
+      "optimizer_calls": 5,
+      "disabled_original_random_full_state_exact": true,
+      "valid_mask_nll_exact": true,
+      "empty_mask_differentiable_zero": true,
+      "serialized_full_state_next_step_exact": true,
+      "initial_state_restored": true,
+      "production_calls_added": 0,
+      "environments": 0
+    },
+    "OBJECT_42/ADMISSION_6.json": {
+      "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
+      "stage": 6,
+      "optimizer_calls": 5,
+      "disabled_original_random_full_state_exact": true,
+      "valid_mask_nll_exact": true,
+      "empty_mask_differentiable_zero": true,
+      "serialized_full_state_next_step_exact": true,
+      "initial_state_restored": true,
+      "production_calls_added": 0,
+      "environments": 0
     }
   },
-  "snapshot": "execution\\20261109_mlr_ifa_align_baseline\\engineering_startup_20261110_v4\\check_readonly_20261110_123348",
-  "evidence_sha256": "176d2ab06a8bca7e103c851ab5fd8523320fba3e051ec6defe22f33e21b24959",
   "processes": [
     {
       "pid": 39717,
@@ -128,7 +128,9 @@
       "state": "S"
     }
   ],
-  "q1_publication": "cc648e8629ea7476f59db30be240325edb288f69",
-  "remaining_stages": "NOT_YET_ADMITTED",
-  "queue": "OBJECT three train then600formal, GOAL three train then600formal; at most2trainers; existing baselines read-only"
+  "snapshot": "execution\\20261109_mlr_ifa_align_baseline\\engineering_startup_20261110_v4\\check_readonly_20261110_124649",
+  "evidence_sha256": "0a3674baa13ebcd74ef52ff04429b4f427e3aea950661519f57d8de9ff83651a",
+  "prefix_preserved_from": "execution\\20261109_mlr_ifa_align_baseline\\engineering_startup_20261110_v4\\check_readonly_20261110_123348",
+  "remaining_stages": "Task8/9 and other four runs not admitted yet",
+  "queue": "OBJECT train three then600formal; GOAL same; max2trainers"
 }

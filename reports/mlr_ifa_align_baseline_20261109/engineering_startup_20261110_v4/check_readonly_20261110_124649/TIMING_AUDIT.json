@@ -1,0 +1,95 @@
+{
+  "status": "CONDITIONAL_EARLY_STAGE_PLANNING_NOT_COMPLETION",
+  "observed": "2026-11-10T12:46:50.419889+08:00",
+  "evidence_sha256": "0a3674baa13ebcd74ef52ff04429b4f427e3aea950661519f57d8de9ff83651a",
+  "previous_sha256": "176d2ab06a8bca7e103c851ab5fd8523320fba3e051ec6defe22f33e21b24959",
+  "stage_stats": {
+    "OBJECT_41": {
+      "6": {
+        "epochs": 100,
+        "batches": 157,
+        "mean_seconds": 4.474286670684815,
+        "last10_seconds": 4.382146334648132
+      },
+      "7": {
+        "epochs": 43,
+        "batches": 227,
+        "mean_seconds": 6.99018943032553,
+        "last10_seconds": 6.835890078544617
+      }
+    },
+    "OBJECT_42": {
+      "6": {
+        "epochs": 100,
+        "batches": 157,
+        "mean_seconds": 4.484070174694061,
+        "last10_seconds": 4.334479665756225
+      },
+      "7": {
+        "epochs": 44,
+        "batches": 227,
+        "mean_seconds": 6.839401304721832,
+        "last10_seconds": 6.799666047096252
+      }
+    },
+    "OBJECT_43": {},
+    "GOAL_41": {},
+    "GOAL_42": {},
+    "GOAL_43": {}
+  },
+  "estimates": {
+    "OBJECT_41": {
+      "task7_remaining_minutes": 6.494095574617386,
+      "task8_unmeasured_scaled_seconds": 9.305242441719324,
+      "task9_unmeasured_scaled_seconds": 10.90128726182005,
+      "remaining_pure_epoch_minutes": 40.17164508051634,
+      "whole_object_pure_minutes": 52.52784408794801,
+      "whole_goal_unmeasured_pure_minutes": 38.19465748731611
+    },
+    "OBJECT_42": {
+      "task7_remaining_minutes": 6.3463549772898356,
+      "task8_unmeasured_scaled_seconds": 9.255933077324855,
+      "task9_unmeasured_scaled_seconds": 10.843520304179926,
+      "remaining_pure_epoch_minutes": 39.84544394646447,
+      "whole_object_pure_minutes": 52.305316005491825,
+      "whole_goal_unmeasured_pure_minutes": 37.99226036593427
+    }
+  },
+  "planning_minutes": {
+    "current_object_pair_minutes": [
+      45,
+      65
+    ],
+    "object43_minutes": [
+      55,
+      80
+    ],
+    "object600_formal_minutes": [
+      60,
+      90
+    ],
+    "goal_three_training_two_waves_minutes": [
+      100,
+      150
+    ],
+    "goal600_formal_minutes": [
+      60,
+      90
+    ]
+  },
+  "total_remaining_minutes": [
+    320,
+    475
+  ],
+  "finish_window": [
+    "2026-11-10T18:06:50.419889+08:00",
+    "2026-11-10T20:41:50.419889+08:00"
+  ],
+  "limits": [
+    "Task8/9 and all GOAL stages unmeasured; per-batch scaling is only a planning model.",
+    "Epoch seconds exclude checkpoint saves, stage input preparation, admission and dispatch.",
+    "Formal evaluation has not started: 60-90 minutes per suite is a planning allowance, not measured throughput.",
+    "Two parallel trainers followed by a single remaining seed per suite; no cross-suite overlap.",
+    "Final independent CPU acceptance, comparison and publication excluded."
+  ]
+}
