@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261029_support_gate_full_s_goal\seed43\evaluate.py
++++ cases/GOAL_DEBR_43/evaluate.py
+@@ -54,7 +54,7 @@
+        for j in range(10):
+         if not done[j] and success[j]:done[j]=True;end[j]=step+1
+        if done.all():break
+-      batch=[dict(arm=arm,stage=stage,task=taskid,initial_index=i,env_seed=SEED+group,initial_file_sha256=initial_sha,initial_sha256=ah(np.asarray(initials[i])),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp_sha,success=bool(done[j]),steps=int(end[j]),attempt=1,termination='success' if done[j] else 'timeout600') for j,i in enumerate(indices)]
++      batch=[dict(arm=arm,stage=stage,task=taskid,original_task=ORIGINAL_TASKS[taskid],initial_index=i,env_seed=SEED+group,initial_file_sha256=initial_sha,initial_sha256=ah(np.asarray(initials[i])),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp_sha,success=bool(done[j]),steps=int(end[j]),attempt=1,termination='success' if done[j] else 'timeout600') for j,i in enumerate(indices)]
+       records.extend(batch);write(R/'outcomes'/(run+'.json'),batch);write(R/'OUTCOMES.json',records)
+      finally:env.close()
+      event('complete',run=run,seconds=time.monotonic()-tic,episodes=len(records))

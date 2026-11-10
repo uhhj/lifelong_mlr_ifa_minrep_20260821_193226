@@ -1,0 +1,21 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261029_support_gate_full_s_goal\seed43\train.py
++++ cases/GOAL_DEBR_43/train.py
+@@ -118,9 +118,6 @@
+             target=model_path(arm,stage);assert not target.exists()
+             if stage==9:os.link(dest/'recovery.pth',target)
+             else:save(target,dict(state_dict=cpu(a.policy.state_dict()),stage=stage,epoch=99,steps=a.step,contract=verify(),memory_bindings=binding))
+-            if stage==6:
+-                baseline=torch.load(O/'ra_coreset/models/mlrifa_6_model_ep99.pth',map_location='cpu')['state_dict'];actual=cpu(a.policy.state_dict())
+-                write(R/('TASK6_PARITY_'+arm+'.json'),dict(historical_ALIGN_equal=equal(actual,baseline),historical_equality_gate=False,actual_sha256=sha(target),historical_ALIGN_sha256=sha(O/'ra_coreset/models/mlrifa_6_model_ep99.pth'),same_seed_new_arm_comparator='NOT_RUN_SINGLE_S'))
+             write(R/('STAGE_%s_%d.json'%(arm,stage)),dict(status='PASS_TRAINING_PENDING_FINAL',model=str(target),sha256=sha(target),steps=a.step,epochs=100,stage=stage,memory_bindings=binding))
+             before=capture(a);subenv=dict(os.environ)
+             for k in ['RANK','WORLD_SIZE','LOCAL_RANK','LOCAL_WORLD_SIZE','MASTER_ADDR','MASTER_PORT','GROUP_RANK','ROLE_RANK','ROLE_WORLD_SIZE']:subenv.pop(k,None)
+@@ -131,7 +128,7 @@
+             assert equal(before,capture(a)),'Collection changed parent training state/RNG'
+             write(R/('COLLECTION_STATE_PARITY_%s_%d.json'%(arm,stage)),dict(status='PASS',parent_all_state_exact=True,memory_sha256=sha(memory_path(arm,stage)),environments=10))
+             del before
+-        assert a.step==76100 and len(history)==400 and physical==142200 and len(gates)==6700
++        assert a.step==90700 and len(history)==400 and physical==161700 and len(gates)==7200
+         write(R/('TRAIN_'+arm+'.json'),dict(status='PASS_EXECUTION_PENDING_FINAL',epochs=400,steps=a.step,physical_optimizer_calls=physical,gate_blocks=len(gates),Q_accepts=sum(g['accepted']=='Q' for g in gates),summed_epoch_seconds=sum(x['seconds'] for x in history),gradient_autograd_calls=sum(x['extra_autograd_calls'] for x in gradients),training_collection_episodes=40,checkpoints={str(t):sha(model_path(arm,t)) for t in range(6,10)}))
+     finally:dist.destroy_process_group()
+ 

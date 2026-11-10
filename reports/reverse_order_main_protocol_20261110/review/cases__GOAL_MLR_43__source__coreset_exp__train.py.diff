@@ -1,0 +1,43 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261017_coreset_goal_three_seed\seed43\source\coreset_exp\train.py
++++ cases/GOAL_MLR_43/source/coreset_exp/train.py
+@@ -44,7 +44,7 @@
+         self.optimizer.step();self.scheduler.step()
+         self.step+=1;return float(loss.detach())
+ def build(c):
+-    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(0)
++    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(c.data.task_order_index)
+     b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))
+     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)
+     a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)
+@@ -54,7 +54,7 @@
+ def capture(a):
+     return dict(model=cpu(a.policy.state_dict()),optimizer=cpu(a.optimizer.state_dict()),scheduler=cpu(a.scheduler.state_dict()),
+         grads={n:cpu(p.grad) if p.grad is not None else None for n,p in a.policy.named_parameters()},
+-        modes={n:m.training for n,m in a.policy.named_modules()},rng=cpu(rng()),step=a.step)
++        modes={n:m.training for n,m in a.policy.named_modules()},requires={n:p.requires_grad for n,p in a.policy.named_parameters()},rng=cpu(rng()),step=a.step)
+ def restore(a,x):
+     a.policy.load_state_dict(x['model'],strict=True);a.optimizer.load_state_dict(x['optimizer']);a.scheduler.load_state_dict(x['scheduler']);a.step=x['step']
+     for n,p in a.policy.named_parameters():p.grad=None if x['grads'][n] is None else x['grads'][n].to(p.device)
+@@ -73,6 +73,7 @@
+     dist.init_process_group('nccl');torch.cuda.set_device(0);begin=time.time()
+     try:
+         a,b=build(c);history=[]
++        from reverse_admission import record_initial;record_initial(a)
+         if not resumed:
+             r=rng()
+             digest={k:hashlib.sha256(pickle.dumps(v) if k in ('python','numpy') else b''.join(x.cpu().numpy().tobytes() for x in (v if isinstance(v,list) else [v]))).hexdigest() for k,v in r.items()}
+@@ -102,12 +103,14 @@
+             sampler=DistributedSampler(dataset,num_replicas=1,rank=0,shuffle=True)
+             loader=DataLoader(dataset,batch_size=10,num_workers=c.train.num_workers,sampler=sampler,persistent_workers=False)
+             a.start_task(-1,loader)
++            from reverse_admission import admit;admit(a,dataset,t,info)
+             if resumed and t==resumed['task']:restore(a,resumed['state'])
+             for epoch in range(start,100):
+                 sampler.set_epoch(epoch);a.policy.train();loss=0.;tic=time.time();lr_first=a.optimizer.param_groups[0]['lr']
+                 for batch in loader:loss+=a.observe(batch,t,epoch,info)
+                 row=dict(task=t,epoch=epoch,batches=len(loader),steps=a.step,loss=loss/len(loader),
+                     lr_first=lr_first,lr_after=a.optimizer.param_groups[0]['lr'],seconds=time.time()-tic)
++                row['sampler_sha256']=hashlib.sha256(np.asarray(list(iter(sampler)),dtype=np.int64).tobytes()).hexdigest()
+                 history.append(row);write(root/'epochs.json',history)
+                 if epoch==99:
+                     final=root/'models'/f'mlrifa_{t}_model_ep99.pth'

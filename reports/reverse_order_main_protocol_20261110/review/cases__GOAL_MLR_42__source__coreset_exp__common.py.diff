@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261017_coreset_goal_three_seed\seed43\source\coreset_exp\common.py
++++ cases/GOAL_MLR_42/source/coreset_exp/common.py
+@@ -5,7 +5,7 @@
+ S=Path(__file__).resolve().parents[1]
+ O=Path(os.environ['CORESET_OUT'])
+ SEED=int(os.environ['CORESET_SEED'])
+-assert SEED in (42,43,44), 'Only explicitly authorized extension seeds'
++assert SEED in (41,42,43), 'Only authorized reverse-order seeds'
+ SELECTOR_SEED=42 # Frozen calibration/reference subset setting, not training RNG
+ def sha(p):
+     h=hashlib.sha256()

@@ -1,0 +1,11 @@
+--- D:\论文课题研究\MLR+IFA\execution\20261029_support_gate_full_s_goal\seed43\collect.py
++++ cases/GOAL_DEBR_43/collect_native.py
+@@ -61,7 +61,7 @@
+             for j in range(10):
+                 if not done[j] and success[j]:done[j]=True;end[j]=step+1
+             if done.all():break
+-        outcomes=[dict(arm=arm,task=taskid,initial_index=i,initial_sha256=ah(np.asarray(initials[i])),initial_file_sha256=sha(path),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp,success=bool(done[j]),steps=int(end[j]),env_seed=SEED+100,attempt=1,termination='success' if done[j] else 'timeout600',purpose='training_collection_not_formal_evaluation') for j,i in enumerate(indices)]
++        outcomes=[dict(arm=arm,task=taskid,original_task=ORIGINAL_TASKS[taskid],initial_index=i,initial_sha256=ah(np.asarray(initials[i])),initial_file_sha256=sha(path),noise_sha256=ah(eps[j]),action_stream_sha256=hashers[j].hexdigest(),cp_sha256=cp,success=bool(done[j]),steps=int(end[j]),env_seed=SEED+100,attempt=1,termination='success' if done[j] else 'timeout600',purpose='training_collection_not_formal_evaluation') for j,i in enumerate(indices)]
+         assert sum(seen)==sum(int(r['steps']) for r in outcomes)
+         write(R/('COLLECTION_OUTCOMES_'+key+'.json'),outcomes)
+     finally:env.close()

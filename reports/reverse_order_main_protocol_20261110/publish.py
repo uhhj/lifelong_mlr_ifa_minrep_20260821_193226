@@ -57,6 +57,16 @@ def main():
         relative = path.relative_to(R)
         if any(part in EXCLUDED_PARTS for part in relative.parts):
             continue
+        if len(relative.parts)>1 and relative.parts[0]=='prepare_remote_20261110_231804' and relative.parts[1]=='diagnostics':
+            # Exact transferred text is materialized once at its normal path;
+            # keep duplicate transport envelopes local with their original SHA.
+            evidence=json.loads((R/'prepare_remote_20261110_231804/EVIDENCE.json').read_text())
+            diagnostic_files={k.replace('\\','/'):v for k,v in evidence['diagnostic_files'].items()}
+            row=diagnostic_files[Path(*relative.parts[1:]).as_posix()]
+            assert hashlib.sha256(path.read_bytes()).hexdigest()==row['sha256']
+            item=json.loads(path.read_text())
+            assert hashlib.sha256((R/item['relative']).read_bytes()).hexdigest()==item['sha256']
+            continue
         if relative.as_posix() == 'preflight_readonly_20261110_224104/EVIDENCE.json':
             # Full nested historical selection inventories are 28 MB; publish the
             # exact audit/hash and concise counts, not this repeated raw inventory.
@@ -117,7 +127,10 @@ def main():
     assert set(git('diff', '--cached', '--name-only').splitlines()) <= set(paths)
     subprocess.run([GIT, '-C', str(G), '-c',
                     'core.whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof',
-                    'diff', '--cached', '--check', '--', PREFIX, ':(exclude)**/*.diff'], check=True)
+                    # Preserve inherited main-table source bytes and recorded SHA;
+                    # its original trailing spaces are not newly authored prose.
+                    'diff', '--cached', '--check', '--', PREFIX, ':(exclude)**/*.diff',
+                    ':(exclude)**/source/**'], check=True)
     committed = bool(git('diff', '--cached', '--name-only'))
     if committed:
         subprocess.run([GIT, '-C', str(G), 'commit', '-q', '-m', args.message], check=True)
