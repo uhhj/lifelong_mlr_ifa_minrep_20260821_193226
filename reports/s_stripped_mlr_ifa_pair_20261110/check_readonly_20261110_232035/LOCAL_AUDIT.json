@@ -1,0 +1,165 @@
+{
+  "status": "PASS_PROGRESS_NOT_FINAL",
+  "observed": 1794324036.4867418,
+  "cases": {
+    "OBJECT_ALIGN_41": {
+      "epochs": 400,
+      "production": 105500,
+      "admission": 20,
+      "admitted_stages": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "OBJECT_MLR_41": {
+      "epochs": 400,
+      "production": 105500,
+      "admission": 20,
+      "admitted_stages": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "OBJECT_ALIGN_42": {
+      "epochs": 400,
+      "production": 105500,
+      "admission": 20,
+      "admitted_stages": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "OBJECT_MLR_42": {
+      "epochs": 400,
+      "production": 105500,
+      "admission": 20,
+      "admitted_stages": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "OBJECT_ALIGN_43": {
+      "epochs": 8,
+      "production": 1256,
+      "admission": 5,
+      "admitted_stages": [
+        6
+      ],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "OBJECT_MLR_43": {
+      "epochs": 8,
+      "production": 1256,
+      "admission": 5,
+      "admitted_stages": [
+        6
+      ],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "GOAL_ALIGN_41": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "GOAL_MLR_41": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "GOAL_ALIGN_42": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "GOAL_MLR_42": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "GOAL_ALIGN_43": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "GOAL_MLR_43": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    }
+  },
+  "totals": {
+    "epochs": 1616,
+    "production": 424512,
+    "admission": 90,
+    "formal": 0,
+    "training_collection": 0
+  },
+  "complete_environment_intervals": 0,
+  "environment_lock_held": null,
+  "prefix_preserved": true,
+  "contract": "b54b0c2d8d8b490d6f7c394f7f99fa6689222861240454b4dd4eca870158b598",
+  "processes": [
+    {
+      "pid": 55246,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 56538,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=6fca96087a774de3b544ccd0e43e3497 /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_ALIGN_43/train.py A ",
+      "state": "S"
+    },
+    {
+      "pid": 56540,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=8a279c24108e4fd7aa393e479d13280f /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_MLR_43/train.py A ",
+      "state": "S"
+    },
+    {
+      "pid": 56558,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_MLR_43/train.py A ",
+      "state": "R"
+    },
+    {
+      "pid": 56561,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_ALIGN_43/train.py A ",
+      "state": "R"
+    }
+  ],
+  "controller_exit": null
+}
