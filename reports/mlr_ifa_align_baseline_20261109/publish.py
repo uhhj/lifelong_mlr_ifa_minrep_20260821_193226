@@ -21,8 +21,8 @@ exclude={'DEPLOY_TEXT_BUNDLE.json','ARMED_DEPLOY_TEXT_BUNDLE.json','PUBLICATION_
 files=[]
 for p in R.iterdir():
  if p.is_file() and p.name not in exclude and p.suffix in ['.py','.md','.json']:files.append(p)
-for folder in ['cases','templates','review','capacity_readonly_20261109_165910']:
- files += [p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ['.py','.yaml','.json','.diff'] and '__pycache__' not in p.parts]
+for folder in ['cases','templates','review','capacity_readonly_20261109_165910','engineering_completion_gate_20261110_v2']:
+ files += [p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ['.py','.yaml','.json','.diff'] and '__pycache__' not in p.parts and p.name not in exclude]
 manifest={};paths=[]
 def add(p,dest):
  raw=p.read_bytes();assert len(raw)<8*1024**2,p;text=raw.decode('utf-8-sig');assert not secret.search(text),p

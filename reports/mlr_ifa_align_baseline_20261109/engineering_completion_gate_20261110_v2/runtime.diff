@@ -1,0 +1,29 @@
+--- prepared/runtime.py
++++ completion_v2/runtime.py
+@@ -36,14 +36,23 @@
+ def previous_finished():
+  assert sha(OLD/'CONTRACT.json')==OLD_HASH
+  assert all(sha(path)==h for path,h in js(OLD/'CONTRACT.json')['files'].items())
+- assert (OLD/'controller.exit').read_text().strip()=='0'
++ eng=OLD/'engineering_reboot_resume_20261109_v1'
++ assert sha(eng/'CONTRACT.json')=='9c5b7e0b23e1beabb4bf28216f6a75f372d6d2f68b3f6515c27debdd8eda34bb'
++ assert all(sha(path)==h for path,h in js(eng/'CONTRACT.json')['files'].items())
++ assert not (OLD/'controller.exit').exists()
++ assert (eng/'controller.exit').read_text().strip()=='0'
+  roots=[OLD]
+  for suite in ['OBJECT','GOAL']:
+   root=OLD.parent/('S_Q1_'+suite+'41_42_43_20261109_rerun_v1');roots.append(root)
+-  assert (root/'controller.exit').read_text().strip()=='0'
++  exit_path=eng/'OBJECT_controller.exit' if suite=='OBJECT' else root/'controller.exit'
++  if suite=='OBJECT':assert not (root/'controller.exit').exists()
++  assert exit_path.read_text().strip()=='0'
+   assert js(root/'Q1_EVALUATION_COMPLETE.json')['episodes']==600
+   for seed in [41,42,43]:
+-   d=root/('Q1_'+str(seed));assert (d/'train_S.exit').read_text().strip()=='0' and (d/'evaluate.exit').read_text().strip()=='0'
++   d=root/('Q1_'+str(seed))
++   train_exit=eng/('Q1_'+str(seed)+'_train.exit') if suite=='OBJECT' and seed in [41,42] else d/'train_S.exit'
++   assert train_exit.read_text().strip()=='0' and (d/'evaluate.exit').read_text().strip()=='0'
++   assert len(js(d/'EPOCHS_S.json'))==400 and len(js(d/'OUTCOMES.json'))==200
+  assert not processes(roots),'Current q=1 still active; never interrupt it'
+ def acceptance_gate():
+  previous_finished();a=js(Q/'POST_Q1_ACCEPTANCE.json')
