@@ -1,3 +1,22 @@
+## 2026-11-10T17:13:25.004573+08:00 实际复查
+
+2026-11-10T17:13:25.004573+08:00，PARTIAL_ARMED_WAIT_ACTIVE_EVALUATOR_NATURAL_EXIT。
+
+|case|完整训练轮|正式/200|
+|---|---:|---:|
+|OBJECT_41|400|200|
+|OBJECT_42|400|150|
+|OBJECT_43|400|0|
+|GOAL_41|0|0|
+|GOAL_42|0|0|
+|GOAL_43|0|0|
+
+自然交接：False；实际缓存准入：{}；合并环境锁：{'completed': 1, 'active': ['OBJECT_42', 43573]}。
+
+科学合同及原模型/前缀验证通过。缓存容差1e-4，保留原global Normal与done处理，不声称逐位闭环等价。最终CPU仍待完整队列自然结束。
+
+证据 engineering_cached_eval_20261110_v1/check_readonly_20261110_171321。继续使用本cached工程check/audit_progress/record_progress；最终也用本工程final_readonly/audit_final_local/compare_baseline。不得重复controller、部署、已完成轮或正式回合。
+
 ## 2026-11-10 16:54 用户要求两轮协议复核；缓存工程等待自然边界
 
 先读TWO_ROUND_PROTOCOL_AUDIT_20261110.md、protocol_audit_20261110/LOCAL_PROTOCOL_AUDIT.json及新engineering_cached_eval_20261110_v1/SOURCE_REVIEW/FINAL_WRAPPER_REVIEW。q1六run实际评估/采集/loss/update与旧S完全一致；2400epoch预算、sampler和lr逐行相同，24manifest与6初始tensor/RNG/Task6模型相同。固定q函数按授权改为非空1/空0。实际发现OBJECT41Task7/42Task7/43Task9动作尺度各1ULP差，计算函数相同、原因未定位，不隐瞒或强称净因果。在线成功缓存也不同。此前q1完整接受保持，没有重跑。
@@ -6,7 +25,7 @@ ALIGN原评估与Random父源exact，但不同于S的单帧缓存/逐轨迹噪�
 
 唯一deploy_remote_20261110_165352，新owner44960/watchdog44963，合同a4c55102ff4f720ef9f1edac18c19104c771acb992efa26d3da460d89d84b28f。165405实际check/audit PASS、162039全部前缀保留：OBJECT三train各400轮、41正式200、42正式80、43正式0，GOAL未开始，共280正式。原40721仅等待调度器被SIGSTOP/T，当前OBJECT42 evaluator43573正常未收信号，新owner仅ARMED，HANDOFF_COMPLETE尚无，生产缓存未启用。禁止重复deploy/controller/validation或手动恢复40721。watchdog只在owner交接前失效时释放旧等待器；若失败先核现场，不盲恢复。
 
-新owner等OBJECT42自然内核Z/exit0、prefix与模型hash通过后结束旧等待器并取得同一根锁，记录真实旧case出口；旧恢复controller.exit保持不存在，原root/controller.exit1保留。OBJECT43及后续GOAL用缓存评估，已完成/正在进行旧评估不重跑。顺序仍OBJECT600正式→GOAL三train最多2→GOAL600正式。只用新cached工程check/audit_progress，最终仅新工程controller.exit0且无自身进程后该工程final_readonly/audit_final_local→base compare_baseline。包装STATIC_ONLY，需实际CPU24CP6恢复1200初态/RNG预算/合并锁以及每cachedcase10准入，不套未来PASS。缓存容差不等闭环逐位相同，最终须明确原全窗与缓存case边界。
+新owner等OBJECT42自然内核Z/exit0、prefix与模型hash通过后结束旧等待器并取得同一根锁，记录真实旧case出口；旧恢复controller.exit保持不存在，原root/controller.exit1保留。OBJECT43及后续GOAL用缓存评估，已完成/正在进行旧评估不重跑。顺序仍OBJECT600正式→GOAL三train最多2→GOAL600正式。只用新cached工程check/audit_progress，最终仅新工程controller.exit0且无自身进程后该工程final_readonly/audit_final_local/compare_baseline（本地比较器包装保留缓存边界）。包装STATIC_ONLY，需实际CPU24CP6恢复1200初态/RNG预算/合并锁以及每cachedcase10准入，不套未来PASS。缓存容差不等闭环逐位相同，最终须明确原全窗与缓存case边界。
 
 当前需要继续等实际交接及至少首个缓存正式vector，再实测速度，不能仅部署即宣称修复已生效。已审计两轮报告与新工程需按publish.py发布并核remote receipt；不上传模型/state/RNG/cachepayload。旧S/q1只读。没有新增自动定时任务。
 
