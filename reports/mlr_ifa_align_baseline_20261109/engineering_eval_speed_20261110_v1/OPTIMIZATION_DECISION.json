@@ -1,0 +1,21 @@
+{
+  "status": "DIAGNOSED_NO_SAFE_ACCELERATION_DEPLOYED",
+  "observed": "2026-11-10T16:20:42.939314+08:00",
+  "evidence": {
+    "engineering_assets_resume_20261110_v2\\check_readonly_20261110_162039\\EVIDENCE.json": "856bb4322db89b9405bf8800caf945b3476539d9747f17ceeca7b9fe66671343",
+    "engineering_assets_resume_20261110_v2\\check_readonly_20261110_162039\\ENGINEERING_AUDIT.json": "b7af1512d351595de25a8d79d9297dbf343a376305808e0438369c76e2dacb9d",
+    "engineering_eval_speed_20261110_v1\\PROFILE_SUMMARY.json": "570e6becefa9d9fa0160465f34c7f3b330a7b3e10ca91bf0d829e5787e05da46",
+    "engineering_eval_speed_20261110_v1\\capacity_readonly_20261110_161255\\EVIDENCE.json": "8c0267fb2477c80bd6655fe674a5a8f5ef82b8e950e56bf4def0d5da8e3db48c",
+    "engineering_eval_speed_20261110_v1\\capacity_readonly_20261110_161547\\EVIDENCE.json": "734cabb2426a6d1b8bad595f7a05af7f581271220b5d0199c368baba65bd32e7",
+    "engineering_eval_speed_20261110_v1\\capacity_readonly_20261110_161909\\EVIDENCE.json": "58a6fc12e9b9181c86df3f358c1e37ea95b2d6b951b143569c6fc3382d19ece8",
+    "engineering_eval_speed_20261110_v1\\capacity_readonly_20261110_162341\\EVIDENCE.json": "1d6122beceb0531a347dc90134d584b9fb9d36f8ea7319ed740ad5f7698efc04"
+  },
+  "frame_cache": "Rejected: different spatial features and sampled actions at identical CUDA RNG.",
+  "cuda_graph": "Rejected as not validated: isolated capture failed in text attention-mask/CUDA allocator path; not a production failure or proof all graph variants impossible.",
+  "production_source_changes": 0,
+  "production_signals": 0,
+  "optimizer_calls_added": 0,
+  "environment_calls_added": 0,
+  "diagnostic_cost": "Two cache probes, 48 full spatial encoder calls; 16 temporal and 16 head calls; 4 extra language and 4 extra vision calls. First used default benchmark flag; v2 explicitly matched production benchmark=True and deterministic=True, yielding the same differences. Graph probe completed 3 whole-path warmups then a partial failed capture. Construction/loading and partial capture work also occurred; not zero compute.",
+  "no_whole_run_speedup_claim": true
+}

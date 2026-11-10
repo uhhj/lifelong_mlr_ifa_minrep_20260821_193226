@@ -1,0 +1,41 @@
+{
+  "status": "READONLY_PROFILE_WITH_OFFLINE_CANDIDATES_NOT_DEPLOYED",
+  "samples": 799,
+  "categories": {
+    "vision": {
+      "samples": 276,
+      "percent": 34.54317897371715
+    },
+    "temporal": {
+      "samples": 261,
+      "percent": 32.66583229036296
+    },
+    "other": {
+      "samples": 72,
+      "percent": 9.011264080100124
+    },
+    "language": {
+      "samples": 21,
+      "percent": 2.6282853566958697
+    },
+    "action_other": {
+      "samples": 2,
+      "percent": 0.2503128911138924
+    },
+    "env_wait": {
+      "samples": 167,
+      "percent": 20.90112640801001
+    }
+  },
+  "gpu_steady_tail": {
+    "samples": 26,
+    "mean": 89.34615384615384,
+    "minimum": 77.0,
+    "maximum": 100.0
+  },
+  "caveat": "Python stack shares include asynchronous CUDA synchronization; not device operator timing. Window includes initial environment/model transition. GPU tail chosen after visible allocation stabilization, not an independent fixed-window sample.",
+  "production_signals": 0,
+  "production_source_changes": 0,
+  "extra_optimizer": 0,
+  "extra_environment": 0
+}
