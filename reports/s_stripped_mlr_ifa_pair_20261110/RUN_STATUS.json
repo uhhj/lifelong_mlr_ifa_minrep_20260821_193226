@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL_EXECUTION",
-  "observed": "2026-11-11T02:51:42.149124+08:00",
-  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_s_stripped_mlr_ifa_align\\check_readonly_20261111_025141",
+  "observed": "2026-11-11T03:09:44.007380+08:00",
+  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_s_stripped_mlr_ifa_align\\check_readonly_20261111_030943",
   "audit": "PASS_PROGRESS_NOT_FINAL",
   "contract": "b54b0c2d8d8b490d6f7c394f7f99fa6689222861240454b4dd4eca870158b598",
   "cases": {
@@ -84,8 +84,8 @@
       "variant": "MLR"
     },
     "GOAL_ALIGN_41": {
-      "epochs": 333,
-      "production": 53521,
+      "epochs": 400,
+      "production": 76100,
       "admission": 20,
       "admitted_stages": [
         6,
@@ -97,8 +97,8 @@
       "variant": "ALIGN"
     },
     "GOAL_MLR_41": {
-      "epochs": 333,
-      "production": 53521,
+      "epochs": 400,
+      "production": 76100,
       "admission": 20,
       "admitted_stages": [
         6,
@@ -110,18 +110,22 @@
       "variant": "MLR"
     },
     "GOAL_ALIGN_42": {
-      "epochs": 0,
-      "production": 0,
-      "admission": 0,
-      "admitted_stages": [],
+      "epochs": 23,
+      "production": 2300,
+      "admission": 5,
+      "admitted_stages": [
+        6
+      ],
       "formal": 0,
       "variant": "ALIGN"
     },
     "GOAL_MLR_42": {
-      "epochs": 0,
-      "production": 0,
-      "admission": 0,
-      "admitted_stages": [],
+      "epochs": 23,
+      "production": 2300,
+      "admission": 5,
+      "admitted_stages": [
+        6
+      ],
       "formal": 0,
       "variant": "MLR"
     },
@@ -143,9 +147,9 @@
     }
   },
   "totals": {
-    "epochs": 3066,
-    "production": 740042,
-    "admission": 160,
+    "epochs": 3246,
+    "production": 789800,
+    "admission": 170,
     "formal": 1200,
     "training_collection": 0
   },
@@ -156,24 +160,24 @@
       "state": "S"
     },
     {
-      "pid": 87723,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d0a928a51141483c9b542ddad623212c /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_ALIGN_41/train.py A ",
+      "pid": 87931,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=8ec69c561237427db6c8ba22e0d0cd4d /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_ALIGN_42/train.py A ",
       "state": "S"
     },
     {
-      "pid": 87725,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=1373225ddb40474a9511a71349fced05 /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_MLR_41/train.py A ",
+      "pid": 87933,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=53b8c43d326c4678a5f90521007d3630 /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_MLR_42/train.py A ",
       "state": "S"
     },
     {
-      "pid": 87730,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_ALIGN_41/train.py A ",
+      "pid": 87940,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_ALIGN_42/train.py A ",
       "state": "S"
     },
     {
-      "pid": 87735,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_MLR_41/train.py A ",
-      "state": "R"
+      "pid": 87942,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/GOAL_MLR_42/train.py A ",
+      "state": "S"
     }
   ],
   "controller_exit": null,
@@ -181,11 +185,11 @@
   "actual_final_cpu_acceptance": false,
   "checkpoint": {
     "status": "PARTIAL_CHECKPOINT_INTEGRITY_PASS",
-    "observed": "2026-11-11T02:51:42.149124+08:00",
+    "observed": "2026-11-11T03:09:44.007380+08:00",
     "checks": {
-      "admissions": 32,
-      "stage_records": 30,
-      "complete_train_records": 6,
+      "admissions": 34,
+      "stage_records": 32,
+      "complete_train_records": 8,
       "formal_records": 1200,
       "formal_vectors": 120
     },
@@ -221,40 +225,92 @@
         "case": "OBJECT_MLR_43",
         "wall_minutes": 79.06529645125072,
         "pure_epoch_minutes": 72.41860181093216
+      },
+      {
+        "case": "GOAL_ALIGN_41",
+        "wall_minutes": 55.719117844104765,
+        "pure_epoch_minutes": 49.65059928099314
+      },
+      {
+        "case": "GOAL_MLR_41",
+        "wall_minutes": 55.71796005964279,
+        "pure_epoch_minutes": 49.653103252251945
       }
     ],
     "phase": "CURRENT_COMPLETE_TRAINING_WAVE",
     "eta": {
-      "GOAL_ALIGN_41": {
+      "GOAL_ALIGN_42": {
         "stages": {
-          "9": {
-            "complete": 33,
+          "6": {
+            "complete": 23,
+            "source": "GOAL_ALIGN_42",
+            "seconds_per_batch": 0.03921600890159607,
+            "remaining_pure_minutes": 5.032721142371496,
+            "borrowed": false
+          },
+          "7": {
+            "complete": 0,
             "source": "GOAL_ALIGN_41",
-            "seconds_per_batch": 0.03929726603476867,
-            "remaining_pure_minutes": 14.788216163317365,
-            "borrowed": false
-          }
-        },
-        "pure_minutes": 14.788216163317365,
-        "preparation_save_exit_allowance_minutes": 3.1422563996629584,
-        "total_minutes": 17.930472562980324
-      },
-      "GOAL_MLR_41": {
-        "stages": {
+            "seconds_per_batch": 0.03802552754930455,
+            "remaining_pure_minutes": 8.809247215588888,
+            "borrowed": true
+          },
+          "8": {
+            "complete": 0,
+            "source": "GOAL_ALIGN_41",
+            "seconds_per_batch": 0.03939299828297383,
+            "remaining_pure_minutes": 12.146174470583597,
+            "borrowed": true
+          },
           "9": {
-            "complete": 33,
-            "source": "GOAL_MLR_41",
-            "seconds_per_batch": 0.03926768055301745,
-            "remaining_pure_minutes": 14.777082653443017,
-            "borrowed": false
+            "complete": 0,
+            "source": "GOAL_ALIGN_41",
+            "seconds_per_batch": 0.04015413200819881,
+            "remaining_pure_minutes": 22.553237477938335,
+            "borrowed": true
           }
         },
-        "pure_minutes": 14.777082653443017,
-        "preparation_save_exit_allowance_minutes": 3.1422563996629584,
-        "total_minutes": 17.919339053105976
+        "pure_minutes": 48.54138030648232,
+        "preparation_save_exit_allowance_minutes": 8.249955778444809,
+        "total_minutes": 56.791336084927124
+      },
+      "GOAL_MLR_42": {
+        "stages": {
+          "6": {
+            "complete": 23,
+            "source": "GOAL_MLR_42",
+            "seconds_per_batch": 0.03920132827758789,
+            "remaining_pure_minutes": 5.0308371289571125,
+            "borrowed": false
+          },
+          "7": {
+            "complete": 0,
+            "source": "GOAL_MLR_41",
+            "seconds_per_batch": 0.037989600099248,
+            "remaining_pure_minutes": 8.800924022992453,
+            "borrowed": true
+          },
+          "8": {
+            "complete": 0,
+            "source": "GOAL_MLR_41",
+            "seconds_per_batch": 0.039382263647543415,
+            "remaining_pure_minutes": 12.14286462465922,
+            "borrowed": true
+          },
+          "9": {
+            "complete": 0,
+            "source": "GOAL_MLR_41",
+            "seconds_per_batch": 0.040162099150592566,
+            "remaining_pure_minutes": 22.557712356249493,
+            "borrowed": true
+          }
+        },
+        "pure_minutes": 48.53233813285827,
+        "preparation_save_exit_allowance_minutes": 8.249955778444809,
+        "total_minutes": 56.78229391130308
       }
     },
-    "next_checkpoint_CST": "2026-11-11T03:09:42.149124+08:00",
+    "next_checkpoint_CST": "2026-11-11T04:06:44.007380+08:00",
     "background_automation_created": false,
     "new_optimizer": 0,
     "new_environments": 0
