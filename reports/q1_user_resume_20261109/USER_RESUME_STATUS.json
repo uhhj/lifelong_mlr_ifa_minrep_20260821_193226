@@ -1,15 +1,13 @@
 {
-  "status": "PARTIAL_RESUMED_AFTER_EXPANSION_REBOOT",
-  "observed": "2026-11-09T22:41:31.150910+08:00",
+  "status": "PARTIAL_NATURAL_COMPLETE_PENDING_INDEPENDENT_CPU_ACCEPTANCE",
+  "observed": "2026-11-10T12:03:23.295728+08:00",
   "engineering_root": "/data/mlr_ifa/experiment_workspaces/S_Q1_OBJECT_GOAL41_42_43_20261109_rerun_v1/engineering_reboot_resume_20261109_v1",
   "controller": 2416,
   "object_controller": 2417,
-  "training_pids": {
-    "Q1_43": 3049
-  },
+  "training_pids": {},
   "engineering_contract": "9c5b7e0b23e1beabb4bf28216f6a75f372d6d2f68b3f6515c27debdd8eda34bb",
   "scientific_contract": "fbbce2917380d1cde1025f0006b6fdd6bc7959f92226bb5588cc431ee0c8d96c",
-  "snapshot": "execution\\20261109_q1_user_resume\\check_readonly_20261109_224130",
+  "snapshot": "execution\\20261109_q1_user_resume\\check_readonly_20261110_120246",
   "audit_sha256": "6f90ab9f4886fb59ae7999d579513bdece41272d8bc8fcfec552179f17e18e40",
   "capacity": {
     "/": {
@@ -42,7 +40,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -63,7 +61,7 @@
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
       "training_collection_completed_episodes": 40,
-      "formal_episodes": 0,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
@@ -78,28 +76,25 @@
       "gate_Q_accepts_observed": 4437
     },
     "Q1_43": {
-      "epochs": 338,
-      "accepted_updates": 83056,
-      "physical_optimizer_calls": 150412,
+      "epochs": 400,
+      "accepted_updates": 105500,
+      "physical_optimizer_calls": 195300,
       "own_isolated_optimizer_calls": 91,
       "own_extra_autograd_calls": 41,
-      "training_collection_completed_episodes": 30,
-      "formal_episodes": 0,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 200,
       "current": {
         "arm": "S",
         "stage": 9,
-        "phase": "train",
-        "epoch_complete": 38,
-        "steps": 83056,
-        "physical_optimizer_calls": 150412,
-        "time": 1794235276.5112996,
+        "phase": "training_collection",
+        "time": 1794238739.1647527,
         "pid": 3049
       },
-      "current_stage_epochs": 38,
-      "recent_epoch_mean_seconds": 56.81892642974854,
-      "current_stage_compute_minutes_estimate": 58.71289064407349,
-      "gate_blocks_observed": 6814,
-      "gate_Q_accepts_observed": 3054
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 53.38054904937744,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 9100,
+      "gate_Q_accepts_observed": 3675
     }
   },
   "new_complete_epochs_observed": [
@@ -110,5 +105,76 @@
   "future_completion": "engineering controller.exit0 + no own process; OBJECT engineering OBJECT_controller.exit0; resumed train exits Q1_41_train.exit/Q1_42_train.exit; GOAL original controller.exit0",
   "followup": "MLR+IFA+ALIGN remains prepared, not started; adapt versioned completion gate before launch after q1 independent acceptance/publication",
   "timing_audit": "execution\\20261109_q1_user_resume\\check_readonly_20261109_224130\\TIMING_AUDIT.json",
-  "queue_order_audit": "execution\\20261109_q1_user_resume\\check_readonly_20261109_190024\\QUEUE_ORDER_AUDIT.json"
+  "queue_order_audit": "execution\\20261109_q1_user_resume\\check_readonly_20261109_190024\\QUEUE_ORDER_AUDIT.json",
+  "goal_snapshot": "execution\\20261109_q1_user_resume\\check_goal_readonly_20261110_120322",
+  "goal_counts": {
+    "Q1_41": {
+      "epochs": 400,
+      "accepted_updates": 76100,
+      "physical_optimizer_calls": 142200,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 200,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1794252454.9250352,
+        "pid": 19835
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 53.505193543434146,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 6700,
+      "gate_Q_accepts_observed": 3634
+    },
+    "Q1_42": {
+      "epochs": 400,
+      "accepted_updates": 76100,
+      "physical_optimizer_calls": 142200,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 200,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1794252590.7265754,
+        "pid": 19832
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 53.281937384605406,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 6700,
+      "gate_Q_accepts_observed": 2678
+    },
+    "Q1_43": {
+      "epochs": 400,
+      "accepted_updates": 76100,
+      "physical_optimizer_calls": 142200,
+      "own_isolated_optimizer_calls": 91,
+      "own_extra_autograd_calls": 41,
+      "training_collection_completed_episodes": 40,
+      "formal_episodes": 200,
+      "current": {
+        "arm": "S",
+        "stage": 9,
+        "phase": "training_collection",
+        "time": 1794262073.5595465,
+        "pid": 21915
+      },
+      "current_stage_epochs": 100,
+      "recent_epoch_mean_seconds": 47.252931118011475,
+      "current_stage_compute_minutes_estimate": null,
+      "gate_blocks_observed": 6700,
+      "gate_Q_accepts_observed": 2990
+    }
+  },
+  "suite_completed": {
+    "OBJECT": "2026-11-10T00:29:26.073418+08:00",
+    "GOAL": "2026-11-10T06:56:15.349241+08:00"
+  },
+  "independent_final_cpu_acceptance": "NOT_STARTED"
 }
