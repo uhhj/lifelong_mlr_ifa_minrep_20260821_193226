@@ -54,3 +54,5 @@
 核验18份实际阶段准入、16份阶段CP记录绑定、4份完整训练账；正式0条记录及0个完成vector。初态/噪声身份采用记录交叉比较与噪声独立重生成，真实初态文件字节和实际CP加载待全队列结束后的CPU验收。
 
 证据：check_readonly_20261110_232035。跟踪仅在当前会话执行，没有创建后台定时自动化。没有新增优化器更新、环境回合、服务器科学写入或重启已完成工作。每轮发布以PUBLICATION_RECEIPT为准。
+
+最终CPU外置兼容路径已准备：仅自然exit0无自身进程后transport.py final_readonly_engineering02.py→audit_final_local.py。保留冻结原包装不改；新包装只处理旧库EGL导入与CPU RNG读取，见FINAL_CPU_ENGINEERING02_REVIEW；尚未实际调用，不称PASS。

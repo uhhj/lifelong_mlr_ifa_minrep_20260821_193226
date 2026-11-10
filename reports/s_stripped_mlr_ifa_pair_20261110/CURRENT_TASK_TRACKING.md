@@ -13,3 +13,5 @@
 只有唯一controller真实自然退出0且无自身训练/评估进程，才实际执行final_readonly.py及audit_final_local.py。最终验收48CP、12完整恢复、1089600生产更新、240隔离更新和2400正式初态/noise/attempt；外置最终包装错误可留证版本化修复，不重训不重评。完成实际验收、比较解释和发布后结束跟踪；不自动扩seed或扫参。
 
 2026-11-10 21:53:47 CST实际检查通过：OBJECT_ALIGN_41和OBJECT_MLR_41各382/400轮，合计764轮197968生产更新，正式0。下一检查点约22:01 CST（当前这一对整run自然完成附近）；之后依据真实状态更新。
+
+最终CPU外置兼容路径已准备：仅自然exit0无自身进程后transport.py final_readonly_engineering02.py→audit_final_local.py。保留冻结原包装不改；新包装只处理旧库EGL导入与CPU RNG读取，见FINAL_CPU_ENGINEERING02_REVIEW；尚未实际调用，不称PASS。

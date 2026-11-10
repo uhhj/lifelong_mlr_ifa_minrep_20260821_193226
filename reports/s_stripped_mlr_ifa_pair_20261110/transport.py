@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parent
 sys.path.insert(0,str(R.parent/'20261027_support_gate_forks'))
 import remote
 from credential_store import load
-assert sys.argv[1] in {'preflight_readonly.py','capacity_readonly.py','deploy_remote.py','check_readonly.py','final_readonly.py'}
+assert sys.argv[1] in {'preflight_readonly.py','capacity_readonly.py','deploy_remote.py','check_readonly.py','final_readonly.py','final_readonly_engineering02.py'}
 remote.R=R
 secret=load();assert secret
 remote.getpass.getpass=lambda prompt:secret
