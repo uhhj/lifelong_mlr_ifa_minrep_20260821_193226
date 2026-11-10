@@ -1,3 +1,11 @@
+## 2026-11-10T12:33:48.710397+08:00 ALIGN六run队列已唯一启动
+
+q1两套件已实际独立接受、完整比较及FINAL_REPORT发布，启动门槛已核远端提交cc648e8629ea7476f59db30be240325edb288f69。唯一engineering_startup_20261110_v4/launch_after_q1.py部署成功，controller39717，合同ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f。修复旧q1完成源、LIBERO路径环境及算法类重复注册；训练损失/更新方法、选样输入和评估器保持。首次v1导入失败零更新/零环境的原证据永久保留。禁止重复任何launch/deploy/controller或完成轮。
+
+实际快照check_readonly_20261110_123348进度审计及STARTUP_AUDIT通过。OBJECT41/42各自初始化tensor/RNG与Random父源精确，Task6自己的5次隔离ALIGN准入通过；已完成轮分别16/15，累计4867生产更新、10隔离、0训练采集、0正式；未来Task7–9准入不得套PASS。其余四run未开始。既有q1与所有S只读。
+
+此后只用engineering_startup_20261110_v4/transport.py check_readonly.py获取实际新合同快照，再用基础目录audit_progress.py NEW PREVIOUS。最终用该工程目录final_readonly.py（已适配新合同）和基础目录audit_final_local.py/compare_baseline.py；仍须真实controller.exit0且无自身进程。没有定时监控或自动聊天验收服务，远端有限controller会按OBJECT三训练/600正式→GOAL三训练/600正式自然运行；失败停止新增运行并保留既有结果。
+
 ## 2026-11-10 两套件最终接受，继续已授权ALIGN
 
 OBJECT final_readonly_20261110_121750和GOAL final_goal_readonly_20261110_121810均实际远程CPU及本地PASS_COMPLETE_LOCAL_ACCEPTANCE。24CP/6完整恢复/24teacher缓存/1200初态noise/47400门控通过，验收前后科学轻量SHA完全相同，新增0optimizer/0环境。见execution/20261109_q1_user_resume/ACCEPTANCE.json、FINAL_REPORT.md、FULL_COMPARISON.json、FULL_METRICS.csv。六run全部独立接受，不重复任何q1训练、正式或最终CPU请求。

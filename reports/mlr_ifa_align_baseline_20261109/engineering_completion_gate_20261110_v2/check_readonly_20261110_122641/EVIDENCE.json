@@ -1,0 +1,31 @@
+{
+  "status": "READONLY_PROGRESS_NOT_FINAL",
+  "observed": 1794284802.1499474,
+  "contract_sha256": "db88ef7991d4cfd6e77b6897977779ed5d37a85682cd63c14441bb63bddcd7c3",
+  "processes": [
+    {
+      "pid": 39182,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261109_v1/controller.py ",
+      "state": "S"
+    }
+  ],
+  "light": {
+    "coordinator/STATUS.json": {
+      "text": "{\n  \"status\": \"TRAINING\",\n  \"suite\": \"OBJECT\",\n  \"active\": {\n    \"OBJECT_41\": 39184,\n    \"OBJECT_42\": 39185\n  },\n  \"pending\": [\n    \"OBJECT_43\"\n  ],\n  \"observed\": 1794284792.950616\n}\n",
+      "sha256": "c0a456f5b4ddfb1caec0dfb7fdf150278b055c2ec59569b65d9ac75220647d48",
+      "bytes": 183
+    },
+    "coordinator/EVENTS.jsonl": {
+      "text": "{\"kind\": \"launch\", \"time\": 1794284792.9397116, \"case\": \"OBJECT_41\", \"phase\": \"train\", \"pid\": 39184, \"command\": [\"/data/mlr_ifa/env/bin/python\", \"-B\", \"-m\", \"torch.distributed.run\", \"--nnodes=1\", \"--nproc_per_node=1\", \"--rdzv_backend=c10d\", \"--rdzv_endpoint=localhost:0\", \"--rdzv_id=6affe97a-e4ac-48c0-a951-279ee025e9ee\", \"--module\", \"coreset_exp.train\", \"random\"]}\n{\"kind\": \"launch\", \"time\": 1794284792.948643, \"case\": \"OBJECT_42\", \"phase\": \"train\", \"pid\": 39185, \"command\": [\"/data/mlr_ifa/env/bin/python\", \"-B\", \"-m\", \"torch.distributed.run\", \"--nnodes=1\", \"--nproc_per_node=1\", \"--rdzv_backend=c10d\", \"--rdzv_endpoint=localhost:0\", \"--rdzv_id=c7188003-4319-4675-bb15-fcd2cff46937\", \"--module\", \"coreset_exp.train\", \"random\"]}\n",
+      "sha256": "d709cbcee376bfa832333591e043e16fe4be740c1dd741cdf45280e58eb27cc5",
+      "bytes": 729
+    },
+    "coordinator/DEPLOYMENT.json": {
+      "text": "{\n  \"controller\": 39182,\n  \"observed\": 1794284792.796372,\n  \"contract_sha256\": \"db88ef7991d4cfd6e77b6897977779ed5d37a85682cd63c14441bb63bddcd7c3\",\n  \"capacity\": {\n    \"/data\": {\n      \"free\": 44848771072,\n      \"remaining\": 6442450944,\n      \"reserve\": 2147483648,\n      \"spare\": 36258836480\n    },\n    \"/root\": {\n      \"free\": 1412485120,\n      \"remaining\": 134217728,\n      \"reserve\": 1073741824,\n      \"spare\": 204525568\n    }\n  },\n  \"previous_q1_publication\": \"cc648e8629ea7476f59db30be240325edb288f69\"\n}\n",
+      "sha256": "337cbe92df1410deb35a17831ded759b8bf67cb8651f0cc6dbb1b5d643a8b133",
+      "bytes": 509
+    }
+  },
+  "new_optimizer": 0,
+  "new_environments": 0
+}

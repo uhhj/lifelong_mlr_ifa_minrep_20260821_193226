@@ -1,0 +1,9 @@
+# ALIGN启动工程修复
+
+q1两套件已接受并发布。第一次ALIGN部署v1/controller39182因缺LIBERO_CONFIG_PATH于模型初始化前EOF退出；两训练进程和controller均退出1、无残留，实际0optimizer/0环境/0完整轮，失败文件SHA和全部输入保留。此前静态准备未覆盖真实模块导入，这是准备检查的遗漏。
+
+补上既有/data/mlr_ifa/config及HF缓存/EGL/单线程环境。额外只导入预检曾因主动隐藏CUDA为空字符串导致EGL解析失败，随后真实导入进一步发现参考与新类同名PaperMLR重复注册。原失败均保留、没有模型初始化或优化更新。新类改名AlignPaperMLR及构造引用；六份observe方法AST逐项精确，无损失或更新顺序变化。六case实际只导入训练/原评估器预检全部通过，0模型初始化/0optimizer/0环境。
+
+新版本root为MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2；新合同ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f。原失败root不覆盖不删除。源码只改类注册名称，元数据只改新输出路径及对应哈希；所有外部数据、Random成员、标签、模型配置和原评估器保持。自己的GPU五调用准入必须实际通过后才开始生产，未来阶段不套PASS。
+
+engineering_startup_20261110_v4/launch_after_q1.py已唯一执行，controller39717；禁止重复该入口、已失败v1或原入口。12:33:48实际快照及STARTUP_AUDIT通过：OBJECT41/42各自初始化tensor/RNG和五调用GPU准入通过，已完整16/15轮，累计4867生产更新、10隔离调用、0环境回合。其余四run未启动，未来阶段不套PASS。最终使用v4 check/final入口（新合同）及基础目录本地audit/compare。

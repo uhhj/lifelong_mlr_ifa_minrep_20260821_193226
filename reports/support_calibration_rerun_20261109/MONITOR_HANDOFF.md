@@ -1,3 +1,9 @@
+## 2026-11-10 12:33 ALIGN后续已实际启动
+
+q1两个套件最终接受与完整比较报告已经发布并核远端SHA。MLR+IFA+ALIGN唯一活动root为/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2，controller39717，合同ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f。OBJECT41/42各自初始化与五调用GPU准入通过，完整16/15轮、累计4867生产、10隔离、0环境。其余四run未启动。具体见../20261109_mlr_ifa_align_baseline/MONITOR_HANDOFF.md及engineering_startup_20261110_v4/check_readonly_20261110_123348/STARTUP_AUDIT.json。
+
+第一次v1导入失败实际0更新/0环境/0初始化，原失败及hash保留；修复LIBERO配置环境和算法类重名后另建v2，生产损失/更新方法未改变。禁止重复launch/controller或任何q1验收与科学运行。未来仅v4/transport.py check_readonly.py；OBJECT三训练→600正式→GOAL三训练→600正式，最多两训练。下面“尚未部署”的内容为历史记录，已由本段覆盖。
+
 ## 2026-11-10 两套件最终接受，继续已授权ALIGN
 
 OBJECT final_readonly_20261110_121750和GOAL final_goal_readonly_20261110_121810均实际远程CPU及本地PASS_COMPLETE_LOCAL_ACCEPTANCE。24CP/6完整恢复/24teacher缓存/1200初态noise/47400门控通过，验收前后科学轻量SHA完全相同，新增0optimizer/0环境。见execution/20261109_q1_user_resume/ACCEPTANCE.json、FINAL_REPORT.md、FULL_COMPARISON.json、FULL_METRICS.csv。六run全部独立接受，不重复任何q1训练、正式或最终CPU请求。

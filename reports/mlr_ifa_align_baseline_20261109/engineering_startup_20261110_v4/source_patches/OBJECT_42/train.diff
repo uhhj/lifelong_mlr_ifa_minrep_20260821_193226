@@ -1,0 +1,20 @@
+--- prepared/train.py
++++ registration_fix/train.py
+@@ -32,7 +32,7 @@
+         assert dev<1e-4,('Non-stable language references: protocol decision needed',task,dev)
+         out[task]=ref.cuda();maxdev[task]=dev
+     return out,maxdev
+-class PaperMLR(MLR):
++class AlignPaperMLR(MLR):
+     def observe(self,data,current_task_id,epoch,ifa_info=None):
+         if getattr(self,"disable_align",False):return OriginalPaperMLR.observe(self,data,current_task_id,epoch,ifa_info)
+         data[0]=self.map_tensor_to_device(data[0]);self.optimizer.zero_grad()
+@@ -49,7 +49,7 @@
+     control_seed(42);b=get_benchmark('LIBERO_OBJECT')(0)
+     b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))
+     Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)
+-    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)
++    a=AlignPaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)
+     assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)
+     a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0
+     return a,b

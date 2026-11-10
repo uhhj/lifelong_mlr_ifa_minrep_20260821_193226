@@ -1,7 +1,134 @@
 {
-  "status": "NOT_DEPLOYED",
-  "observed": "2026-11-09T17:09:18.970265+08:00",
-  "epochs": 0,
+  "status": "PARTIAL_STARTED_OWN_TASK6_ADMISSION_PASS",
+  "observed": "2026-11-10T12:33:48.710397+08:00",
+  "root": "/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2",
+  "contract": "ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f",
+  "controller": 39717,
+  "counts": {
+    "OBJECT_41": {
+      "epochs": 16,
+      "production_updates": 2512,
+      "formal_episodes": 0,
+      "admissions": 1,
+      "admission_updates": 5
+    },
+    "OBJECT_42": {
+      "epochs": 15,
+      "production_updates": 2355,
+      "formal_episodes": 0,
+      "admissions": 1,
+      "admission_updates": 5
+    },
+    "OBJECT_43": {
+      "epochs": 0,
+      "production_updates": 0,
+      "formal_episodes": 0,
+      "admissions": 0,
+      "admission_updates": 0
+    },
+    "GOAL_41": {
+      "epochs": 0,
+      "production_updates": 0,
+      "formal_episodes": 0,
+      "admissions": 0,
+      "admission_updates": 0
+    },
+    "GOAL_42": {
+      "epochs": 0,
+      "production_updates": 0,
+      "formal_episodes": 0,
+      "admissions": 0,
+      "admission_updates": 0
+    },
+    "GOAL_43": {
+      "epochs": 0,
+      "production_updates": 0,
+      "formal_episodes": 0,
+      "admissions": 0,
+      "admission_updates": 0
+    }
+  },
+  "epochs": 31,
+  "production_updates": 4867,
   "formal_episodes": 0,
-  "production_optimizer": 0
+  "own_admissions": {
+    "OBJECT_41": {
+      "initialization": {
+        "status": "PASS_ACTUAL_INITIALIZATION",
+        "initial_exact": true,
+        "device": "NVIDIA GeForce RTX 4080 SUPER",
+        "torch": "1.13.0+cu116",
+        "cuda": "11.6",
+        "baseline_gpu": "NVIDIA GeForce RTX 4090",
+        "hardware_controlled": false
+      },
+      "task6_admission": {
+        "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
+        "stage": 6,
+        "optimizer_calls": 5,
+        "disabled_original_random_full_state_exact": true,
+        "valid_mask_nll_exact": true,
+        "empty_mask_differentiable_zero": true,
+        "serialized_full_state_next_step_exact": true,
+        "initial_state_restored": true,
+        "production_calls_added": 0,
+        "environments": 0
+      }
+    },
+    "OBJECT_42": {
+      "initialization": {
+        "status": "PASS_ACTUAL_INITIALIZATION",
+        "initial_exact": true,
+        "device": "NVIDIA GeForce RTX 4080 SUPER",
+        "torch": "1.13.0+cu116",
+        "cuda": "11.6",
+        "baseline_gpu": "NVIDIA GeForce RTX 3090",
+        "hardware_controlled": false
+      },
+      "task6_admission": {
+        "status": "PASS_OWN_GPU_ALIGN_ADMISSION",
+        "stage": 6,
+        "optimizer_calls": 5,
+        "disabled_original_random_full_state_exact": true,
+        "valid_mask_nll_exact": true,
+        "empty_mask_differentiable_zero": true,
+        "serialized_full_state_next_step_exact": true,
+        "initial_state_restored": true,
+        "production_calls_added": 0,
+        "environments": 0
+      }
+    }
+  },
+  "snapshot": "execution\\20261109_mlr_ifa_align_baseline\\engineering_startup_20261110_v4\\check_readonly_20261110_123348",
+  "evidence_sha256": "176d2ab06a8bca7e103c851ab5fd8523320fba3e051ec6defe22f33e21b24959",
+  "processes": [
+    {
+      "pid": 39717,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 39719,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=e456a7bc-636b-4e6d-a3a5-4e35398ded8a --module coreset_exp.train random ",
+      "state": "S"
+    },
+    {
+      "pid": 39720,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d83e45c9-f7a7-4553-bffd-8f6a0e9ddfba --module coreset_exp.train random ",
+      "state": "S"
+    },
+    {
+      "pid": 39728,
+      "cmd": "/data/mlr_ifa/env/bin/python -u -m coreset_exp.train random ",
+      "state": "R"
+    },
+    {
+      "pid": 39731,
+      "cmd": "/data/mlr_ifa/env/bin/python -u -m coreset_exp.train random ",
+      "state": "S"
+    }
+  ],
+  "q1_publication": "cc648e8629ea7476f59db30be240325edb288f69",
+  "remaining_stages": "NOT_YET_ADMITTED",
+  "queue": "OBJECT three train then600formal, GOAL three train then600formal; at most2trainers; existing baselines read-only"
 }

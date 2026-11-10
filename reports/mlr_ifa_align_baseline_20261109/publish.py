@@ -21,7 +21,7 @@ exclude={'DEPLOY_TEXT_BUNDLE.json','ARMED_DEPLOY_TEXT_BUNDLE.json','PUBLICATION_
 files=[]
 for p in R.iterdir():
  if p.is_file() and p.name not in exclude and p.suffix in ['.py','.md','.json']:files.append(p)
-for folder in ['cases','templates','review','capacity_readonly_20261109_165910','engineering_completion_gate_20261110_v2']:
+for folder in ['cases','templates','review','capacity_readonly_20261109_165910','engineering_completion_gate_20261110_v2','engineering_environment_20261110_v3','engineering_startup_20261110_v4']:
  files += [p for p in (R/folder).rglob('*') if p.is_file() and p.suffix in ['.py','.yaml','.json','.diff'] and '__pycache__' not in p.parts and p.name not in exclude]
 manifest={};paths=[]
 def add(p,dest):
@@ -37,8 +37,8 @@ subprocess.run([GIT,'-C',str(G),'add','-f','--pathspec-from-file=-','--pathspec-
 assert set(git('diff','--cached','--name-only').splitlines())<=set(paths)
 subprocess.run([GIT,'-C',str(G),'-c','core.whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof','diff','--cached','--check','--',PREFIX,OLDPREFIX,':(exclude)**/*.diff',':(exclude)'+PREFIX+'/cases/*/source/libero/**',':(exclude)'+PREFIX+'/cases/*/source/coreset_exp/eval_metric.py',':(exclude)'+PREFIX+'/cases/*/source/coreset_exp/reference_train.py'],check=True)
 if git('diff','--cached','--name-only'):
- subprocess.run([GIT,'-C',str(G),'commit','-q','-m','Prepare six Random MLR+IFA ALIGN runs with audited inputs and gated deployment'],check=True)
+ subprocess.run([GIT,'-C',str(G),'commit','-q','-m','Verify ALIGN startup admission and preserve zero-cost import failure evidence'],check=True)
  subprocess.run([GIT,'-C',str(G),'push','origin','MLR'],check=True)
 head=git('rev-parse','HEAD');remote=git('ls-remote','origin','refs/heads/MLR').split()[0];assert head==remote
-out=dict(status='PUSH_VERIFIED',observed=datetime.datetime.now().astimezone().isoformat(),commit=head,remote=remote,files=len(paths),bytes=sum(x['bytes'] for x in manifest.values()),scope='Prepared code only; no new scientific run or acceptance; no tensor/weight/demo/cache/RNG payload')
+out=dict(status='PUSH_VERIFIED',observed=datetime.datetime.now().astimezone().isoformat(),commit=head,remote=remote,files=len(paths),bytes=sum(x['bytes'] for x in manifest.values()),scope='Reviewed ALIGN code, startup PARTIAL evidence and preserved zero-cost import failures; no tensor/weight/demo/cache/RNG payload')
 (R/'PUBLICATION_RECEIPT.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf8');print(json.dumps(out))
