@@ -1,6 +1,6 @@
 # 完整 S 剥离后的 MLR+IFA / MLR+IFA+ALIGN 配对重跑
 
-实际观察：2026-11-10T21:47:57.125389+08:00。证据 `check_readonly_20261110_214756`，`LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL`。
+实际观察：2026-11-10T21:53:47.484247+08:00。证据 `check_readonly_20261110_215346`，`LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL`。
 
 用户最新授权两个套件、两种方案、seed41/42/43，共12run。旧结果和完整S只读保留。这次使用真实完整S的build/初始化、模型、优化器、每任务100轮与评估实现；Random样本顺序与Random的IFA任务对冻结。两组仅INPUT.variant不同：ALIGN用next_action与causal_valid；MLR用原窗口末动作和全有效掩码。E/R/q/RA/候选门控/训练采集均删除，不复用上一轮global Normal评估器。
 
@@ -8,8 +8,8 @@
 
 |case|完整轮|生产optimizer|已实际通过的stage准入|正式|
 |---|---:|---:|---|---:|
-|OBJECT_ALIGN_41|360/400|91020|6,7,8,9|0/200|
-|OBJECT_MLR_41|359/400|90658|6,7,8,9|0/200|
+|OBJECT_ALIGN_41|382/400|98984|6,7,8,9|0/200|
+|OBJECT_MLR_41|382/400|98984|6,7,8,9|0/200|
 |OBJECT_ALIGN_42|0/400|0|未开始|0/200|
 |OBJECT_MLR_42|0/400|0|未开始|0/200|
 |OBJECT_ALIGN_43|0/400|0|未开始|0/200|
@@ -29,6 +29,7 @@
 
 每次按根AGENTS用publish.py审查轻量证据并串行nonforce推MLR核remoteSHA与本地receipt。禁CP/model/state/RNG/latent/demo/cachepayload/凭据。服务器空间预算24GiB新峰+2GiB留存，root留1GiB+64MiB；不删除旧结果。无新的定时任务被创建；controller会自行运行完整有限队列。
 
-## 本次估时
 
-详见REPORT.md与check_readonly_20261110_214756/TIMING_AUDIT.json。全队列训练及2400正式剩余约8小时25分–10小时45分，参考11月11日06:13–08:33 CST；未实测GOAL及正式用不确定参考，CPU最终验收另计。当前seed41两run约22:00完成，不能当成全队列结束。
+# 当前跟踪检查
+
+2026-11-10T21:53:47.484247+08:00，PARTIAL。当前两run各382/400轮，21:53审计通过，上一快照前缀完整保留，合同及容量保护通过。正式0/2400。当前训练这一对预计22:00前后自然完成，当前任务下一检查点22:01 CST。全队列不确定估计沿用上一21:47报告的11月11日06:13–08:33，最终CPU验收另计。详见CHECKPOINT_PLAN.json与CURRENT_TASK_TRACKING.md。
