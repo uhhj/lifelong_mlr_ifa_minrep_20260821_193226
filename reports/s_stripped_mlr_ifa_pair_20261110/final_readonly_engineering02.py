@@ -25,4 +25,4 @@ for case in CASES:
     result=json.loads(p.stdout.strip().splitlines()[-1]);assert result['status']=='PASS_CPU_CASE_RECONSTRUCTION';results[case]=result
 verify(full=True);assert not processes()
 write(out/'CPU_RESULTS.json',dict(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',cases=results,new_optimizer=0,new_environments=0))
-s=snapshot();s.update(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',cpu=results,remote_cpu_directory=str(out),external_cpu_wrapper='engineering02',wrapper_change=js(out/'WRAPPER_CHANGE.json'));print(json.dumps(s))
+s=snapshot();s.update(status='PASS_REMOTE_CPU_PENDING_LOCAL_AUDIT',cpu=results,remote_cpu_directory=str(out),cpu_results_sha256=sha(out/'CPU_RESULTS.json'),external_cpu_wrapper='engineering02',wrapper_change=js(out/'WRAPPER_CHANGE.json'));print(json.dumps(s))
