@@ -1,3 +1,34 @@
+## 2026-11-10T19:56:27.596928+08:00 六run实际完成并接受
+
+自然结束2026-11-10T19:44:34.718863+08:00。24CP/6完整恢复/1200初态及保存RNG、预算与6次评估环境互斥均实际通过；本次CPU与本地复算0optimizer/0环境，所有既有轻量证据不变。最终证据engineering_cached_eval_20261110_v1/final_readonly_20261110_194859。
+
+ACCEPTANCE.json、FINAL_REPORT.md、FULL_RESULTS.json与FULL_METRICS.csv已生成；本轮发布状态以PUBLICATION_RECEIPT.json及远端提交覆盖这些文件为准。全部科学工作结束，不再运行controller/部署/训练/正式评估/最终CPU入口。用户明确不重跑，旧失败和比较执行差异均保留；此前PARTIAL记录只作历史。
+
+## 2026-11-10T19:55:46.834513+08:00 六run实际完成并接受
+
+自然结束2026-11-10T19:44:34.718863+08:00。24CP/6完整恢复/1200初态及保存RNG、预算与6次评估环境互斥均实际通过；本次CPU与本地复算0optimizer/0环境，所有既有轻量证据不变。最终证据engineering_cached_eval_20261110_v1/final_readonly_20261110_194859。
+
+ACCEPTANCE.json、FINAL_REPORT.md、FULL_RESULTS.json与FULL_METRICS.csv已生成，等待本轮publish.py核远端receipt。全部科学工作结束，不再运行controller/部署/训练/正式评估/最终CPU入口。用户明确不重跑，旧失败和比较执行差异均保留；此前PARTIAL记录只作历史。
+
+## 2026-11-10T19:47:56.369421+08:00 实际复查
+
+2026-11-10T19:47:56.369421+08:00，PARTIAL_NATURAL_COMPLETE_PENDING_CPU_ACCEPTANCE。
+
+|case|完整训练轮|正式/200|
+|---|---:|---:|
+|OBJECT_41|400|200|
+|OBJECT_42|400|200|
+|OBJECT_43|400|200|
+|GOAL_41|400|200|
+|GOAL_42|400|200|
+|GOAL_43|400|200|
+
+自然交接：True；实际缓存准入：{'GOAL_43': 10, 'GOAL_42': 10, 'OBJECT_43': 10, 'GOAL_41': 10}；合并环境锁：{'completed': 6, 'active': None}。
+
+科学合同及原模型/前缀验证通过。缓存容差1e-4，保留原global Normal与done处理，不声称逐位闭环等价。最终CPU仍待完整队列自然结束。
+
+证据 engineering_cached_eval_20261110_v1/check_readonly_20261110_194749。继续使用本cached工程check/audit_progress/record_progress；最终也用本工程final_readonly/audit_final_local/compare_baseline。不得重复controller、部署、已完成轮或正式回合。
+
 ## 2026-11-10T19:25:24.376991+08:00 实际复查
 
 2026-11-10T19:25:24.376991+08:00，PARTIAL_EVALUATING_CACHED。
