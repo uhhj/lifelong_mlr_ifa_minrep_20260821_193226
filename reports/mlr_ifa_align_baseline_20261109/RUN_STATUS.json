@@ -1,6 +1,6 @@
 {
-  "status": "PARTIAL_ARMED_WAIT_ACTIVE_EVALUATOR_NATURAL_EXIT",
-  "observed": "2026-11-10T17:13:25.004573+08:00",
+  "status": "PARTIAL_EVALUATING_CACHED",
+  "observed": "2026-11-10T17:23:10.548210+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2",
   "controller": 44960,
   "contract": "ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f",
@@ -18,14 +18,14 @@
     "OBJECT_42": {
       "epochs": 400,
       "production_updates": 105500,
-      "formal_episodes": 150,
+      "formal_episodes": 200,
       "admissions": 4,
       "admission_updates": 20
     },
     "OBJECT_43": {
       "epochs": 400,
       "production_updates": 105500,
-      "formal_episodes": 0,
+      "formal_episodes": 10,
       "admissions": 4,
       "admission_updates": 20
     },
@@ -53,19 +53,37 @@
   },
   "epochs": 1200,
   "production_updates": 316500,
-  "formal_episodes": 350,
-  "snapshot": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\engineering_cached_eval_20261110_v1\\check_readonly_20261110_171321",
-  "evidence_sha256": "9ca014de2a5b294c314d0533b932d71eac5d1dec5a923b2cdc68d1b66d6e5177",
-  "handoff_complete": false,
-  "handoff": null,
+  "formal_episodes": 410,
+  "snapshot": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\engineering_cached_eval_20261110_v1\\check_readonly_20261110_172304",
+  "evidence_sha256": "c8a2fcc62df41d73f9b4012fbf9da248adb19f052909e868adb315abf9e90dee",
+  "handoff_complete": true,
+  "handoff": {
+    "observed": 1794302462.527487,
+    "root_lock": true,
+    "adopted_natural_exit": {
+      "pid": 43573,
+      "state": "Z",
+      "start": "7790232",
+      "exit_code": 0
+    },
+    "returncode": 0,
+    "legacy_completed_cases": [
+      "OBJECT_41",
+      "OBJECT_42"
+    ],
+    "evaluation_signals": 0,
+    "old_controller_success_not_claimed": true
+  },
   "optimization_deployed": true,
-  "optimization_active": false,
-  "cache_admissions": {},
+  "optimization_active": true,
+  "cache_admissions": {
+    "OBJECT_43": 1
+  },
   "combined_environment_mutex": {
-    "completed": 1,
+    "completed": 2,
     "active": [
-      "OBJECT_42",
-      43573
+      "OBJECT_43",
+      46267
     ]
   },
   "old_failed_exits_preserved": true,

@@ -28,7 +28,14 @@ for suite in ['OBJECT','GOAL']:
    local=B/'20261109_support_calibration_rerun'/suite/f'Q1_{seed}'/f
    assert hashlib.sha256(local.read_text(encoding='utf8').encode()).hexdigest()==v['actual_sha256'],(key,f)
   hard=read(n,f'Q1_{seed}/HARDWARE_MIGRATION.json');par=read(n,f'Q1_{seed}/TASK6_HARDWARE_COMPARISON.json')
-  out[key]=dict(epochs=400,exact_matching_epoch_protocol_fields=cols,initial_tensors_rng_equal=True,recorded_hardware_equal=hard['hardware_equal'],Task6_all_tensors_exact=par['all_tensors_exact'],stages=stages,final_evidence_sha256=sha(Path(entry['current_final'])/'EVIDENCE.json'),S_evidence_sha256=sha(Path(entry['baseline']['final_path'])/'EVIDENCE.json'))
+  caches={}
+  for t in range(6,10):
+   cur=read(n,f'Q1_{seed}/MEMORY_S_{t}.json');bas=read(s,f'seed{seed}/MEMORY_S_{t}.json')
+   identity=lambda z:(z['trajectory'],z['initial_index'],z['step'],z['length'])
+   ci={identity(z):z for z in cur['rows']};bi={identity(z):z for z in bas['rows']};common=ci.keys()&bi.keys()
+   assert len(ci)==cur['count'] and len(bi)==bas['count']
+   caches[t]=dict(actual_successes=cur['collection_successes'],S_successes=bas['collection_successes'],actual_windows=len(ci),S_windows=len(bi),same_window_identity_set=ci.keys()==bi.keys(),common_window_identities=len(common),same_feature_hashes=sum(ci[z]['feature_sha256']==bi[z]['feature_sha256'] for z in common),same_teacher_mu_hashes=sum(ci[z]['mu_sha256']==bi[z]['mu_sha256'] for z in common),same_teacher_sd_hashes=sum(ci[z]['sd_sha256']==bi[z]['sd_sha256'] for z in common),identical_full_row_metadata=cur['rows']==bas['rows'],terminal_unused=t==9)
+  out[key]=dict(epochs=400,exact_matching_epoch_protocol_fields=cols,initial_tensors_rng_equal=True,recorded_hardware_equal=hard['hardware_equal'],Task6_all_tensors_exact=par['all_tensors_exact'],stages=stages,online_cache_content_comparison=caches,final_evidence_sha256=sha(Path(entry['current_final'])/'EVIDENCE.json'),S_evidence_sha256=sha(Path(entry['baseline']['final_path'])/'EVIDENCE.json'))
 review=j(R/'SOURCE_REVIEW.json');align={}
 for case,x in review['cases'].items():
  checked={}
