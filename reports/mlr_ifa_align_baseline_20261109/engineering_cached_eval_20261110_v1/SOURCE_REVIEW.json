@@ -1,0 +1,47 @@
+{
+  "status": "REVIEWED_BOUNDARY_ENGINEERING_WITH_ACTUAL_OFFLINE_CACHE_ADMISSION",
+  "observed": "2026-11-10T16:53:38.805684+08:00",
+  "source_files": {
+    "runtime_cached.py": "1f75922d1a261a0d2924b178fa204c11b902b1eb9dbad6d7ad78eb984dbf4c46",
+    "cache_policy.py": "98422cdd6a79f43fdce80f06d7cae1c62df78c124bbc32a5dfc4833068386a0e",
+    "evaluate_cached.py": "8f4c1a56843c1b655a8af1a0fd53dfbb8c43ee989a8ebf808847890996b7e9e8",
+    "controller.py": "741dce98b62e3acae3f593739f06ae6ec33a857cdbe107f75b9eba04c3697eed",
+    "watchdog.py": "69571eab6f98e0822d60dcd026b521676b7647a852c5f0af1924dfefd8539608",
+    "check_readonly.py": "13d82cbe82318e25c26da8b69abb766de98f122b09c6025e01d14569811a9f35",
+    "final_readonly.py": "a5296c272abb445438c1bffa96a4f7c6cf8007b048202ebd99bbb643af18fd20"
+  },
+  "signal_calls": [
+    {
+      "file": "controller.py",
+      "target": "g['old_controller']['pid']",
+      "signal": "signal.SIGSTOP"
+    },
+    {
+      "file": "controller.py",
+      "target": "g['old_controller']['pid']",
+      "signal": "signal.SIGKILL"
+    },
+    {
+      "file": "watchdog.py",
+      "target": "old['pid']",
+      "signal": "signal.SIGCONT"
+    }
+  ],
+  "validation_sha256": "1c2fa43921d90b733bdeb6f6a489eb9cd753d41dce9b6aa043a30469bf4e5792",
+  "actual_validation_cases": [
+    "OBJECT43 stages6-9",
+    "GOAL official initialization"
+  ],
+  "actual_model_load_admission_required": true,
+  "science_source_files_modified": 0,
+  "old_failures_preserved": true,
+  "old_owner_success_not_fabricated": true,
+  "only_future_unstarted_evaluations_cached": true,
+  "original_global_Normal_and_done_behavior": true,
+  "final_wrapper": "STATIC_ONLY_NOT_EXECUTED",
+  "limitations": [
+    "Numerical tolerance is the previously accepted S criterion, not bitwise equality or identical closed-loop success guarantee.",
+    "Future GOAL trained models require their own actual 1..8 admission; existing official initialization proof is not a future checkpoint PASS.",
+    "Within-round execution cache boundary is recorded explicitly; completed original evaluations are never repeated."
+  ]
+}

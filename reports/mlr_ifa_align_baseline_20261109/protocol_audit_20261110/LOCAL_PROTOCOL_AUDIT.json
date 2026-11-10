@@ -1,0 +1,776 @@
+{
+  "status": "AUDITED_PROTOCOL_MATCH_WITH_RECORDED_NUMERICAL_AND_ENGINEERING_DIFFERENCES",
+  "observed": "2026-11-10T16:57:45.612910+08:00",
+  "q1": {
+    "OBJECT_41": {
+      "epochs": 400,
+      "exact_matching_epoch_protocol_fields": [
+        "stage",
+        "epoch",
+        "steps",
+        "batches",
+        "lr_first",
+        "lr_after",
+        "sampler_sha256",
+        "physical_optimizer_calls",
+        "gate_blocks"
+      ],
+      "initial_tensors_rng_equal": true,
+      "recorded_hardware_equal": true,
+      "Task6_all_tensors_exact": true,
+      "stages": {
+        "6": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [],
+          "admission": "PASS"
+        },
+        "7": {
+          "same_manifest": true,
+          "same_action_scale": false,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.2,
+              "effective": 1.0,
+              "rows": 26,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "8": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.2,
+              "effective": 1.0,
+              "rows": 26,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 0.8,
+              "effective": 1.0,
+              "rows": 103,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "9": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.2,
+              "effective": 1.0,
+              "rows": 26,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 0.8,
+              "effective": 1.0,
+              "rows": 103,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "8",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        }
+      },
+      "final_evidence_sha256": "6a525742da470dbcfb57c33e7915ced69cf93e9fedb76da61abceb94c0ca92e2",
+      "S_evidence_sha256": "0835f5d08fa662f8b5d6cbc832bb2bfa279858181c4de26010247f682d978e38"
+    },
+    "OBJECT_42": {
+      "epochs": 400,
+      "exact_matching_epoch_protocol_fields": [
+        "stage",
+        "epoch",
+        "steps",
+        "batches",
+        "lr_first",
+        "lr_after",
+        "sampler_sha256",
+        "physical_optimizer_calls",
+        "gate_blocks"
+      ],
+      "initial_tensors_rng_equal": true,
+      "recorded_hardware_equal": true,
+      "Task6_all_tensors_exact": true,
+      "stages": {
+        "6": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [],
+          "admission": "PASS"
+        },
+        "7": {
+          "same_manifest": true,
+          "same_action_scale": false,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.2,
+              "effective": 1.0,
+              "rows": 26,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "8": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.2,
+              "effective": 1.0,
+              "rows": 26,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "9": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.2,
+              "effective": 1.0,
+              "rows": 26,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "8",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        }
+      },
+      "final_evidence_sha256": "6a525742da470dbcfb57c33e7915ced69cf93e9fedb76da61abceb94c0ca92e2",
+      "S_evidence_sha256": "0835f5d08fa662f8b5d6cbc832bb2bfa279858181c4de26010247f682d978e38"
+    },
+    "OBJECT_43": {
+      "epochs": 400,
+      "exact_matching_epoch_protocol_fields": [
+        "stage",
+        "epoch",
+        "steps",
+        "batches",
+        "lr_first",
+        "lr_after",
+        "sampler_sha256",
+        "physical_optimizer_calls",
+        "gate_blocks"
+      ],
+      "initial_tensors_rng_equal": true,
+      "recorded_hardware_equal": true,
+      "Task6_all_tensors_exact": true,
+      "stages": {
+        "6": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [],
+          "admission": "PASS"
+        },
+        "7": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.6,
+              "effective": 1.0,
+              "rows": 76,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "8": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.6,
+              "effective": 1.0,
+              "rows": 76,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "9": {
+          "same_manifest": true,
+          "same_action_scale": false,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.6,
+              "effective": 1.0,
+              "rows": 76,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "8",
+              "raw": 0.9,
+              "effective": 1.0,
+              "rows": 115,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        }
+      },
+      "final_evidence_sha256": "6a525742da470dbcfb57c33e7915ced69cf93e9fedb76da61abceb94c0ca92e2",
+      "S_evidence_sha256": "0835f5d08fa662f8b5d6cbc832bb2bfa279858181c4de26010247f682d978e38"
+    },
+    "GOAL_41": {
+      "epochs": 400,
+      "exact_matching_epoch_protocol_fields": [
+        "stage",
+        "epoch",
+        "steps",
+        "batches",
+        "lr_first",
+        "lr_after",
+        "sampler_sha256",
+        "physical_optimizer_calls",
+        "gate_blocks"
+      ],
+      "initial_tensors_rng_equal": true,
+      "recorded_hardware_equal": true,
+      "Task6_all_tensors_exact": true,
+      "stages": {
+        "6": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [],
+          "admission": "PASS"
+        },
+        "7": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "8": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "9": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "8",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        }
+      },
+      "final_evidence_sha256": "7e50a917836644d1c389a643908e96b454cd1db293e85c1d61811b5d766ef910",
+      "S_evidence_sha256": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78"
+    },
+    "GOAL_42": {
+      "epochs": 400,
+      "exact_matching_epoch_protocol_fields": [
+        "stage",
+        "epoch",
+        "steps",
+        "batches",
+        "lr_first",
+        "lr_after",
+        "sampler_sha256",
+        "physical_optimizer_calls",
+        "gate_blocks"
+      ],
+      "initial_tensors_rng_equal": true,
+      "recorded_hardware_equal": true,
+      "Task6_all_tensors_exact": true,
+      "stages": {
+        "6": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [],
+          "admission": "PASS"
+        },
+        "7": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.8,
+              "effective": 1.0,
+              "rows": 102,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "8": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.8,
+              "effective": 1.0,
+              "rows": 102,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 0.9,
+              "effective": 1.0,
+              "rows": 115,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "9": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 0.8,
+              "effective": 1.0,
+              "rows": 102,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 0.9,
+              "effective": 1.0,
+              "rows": 115,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "8",
+              "raw": 0.8,
+              "effective": 1.0,
+              "rows": 102,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        }
+      },
+      "final_evidence_sha256": "7e50a917836644d1c389a643908e96b454cd1db293e85c1d61811b5d766ef910",
+      "S_evidence_sha256": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78"
+    },
+    "GOAL_43": {
+      "epochs": 400,
+      "exact_matching_epoch_protocol_fields": [
+        "stage",
+        "epoch",
+        "steps",
+        "batches",
+        "lr_first",
+        "lr_after",
+        "sampler_sha256",
+        "physical_optimizer_calls",
+        "gate_blocks"
+      ],
+      "initial_tensors_rng_equal": true,
+      "recorded_hardware_equal": true,
+      "Task6_all_tensors_exact": true,
+      "stages": {
+        "6": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [],
+          "admission": "PASS"
+        },
+        "7": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "8": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 0.9,
+              "effective": 1.0,
+              "rows": 115,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        },
+        "9": {
+          "same_manifest": true,
+          "same_action_scale": true,
+          "lambda_R": 0.1,
+          "support": [
+            {
+              "task": "6",
+              "raw": 1.0,
+              "effective": 1.0,
+              "rows": 128,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "7",
+              "raw": 0.9,
+              "effective": 1.0,
+              "rows": 115,
+              "same_cache_as_S": false
+            },
+            {
+              "task": "8",
+              "raw": 0.7,
+              "effective": 1.0,
+              "rows": 89,
+              "same_cache_as_S": false
+            }
+          ],
+          "admission": "PASS_OWN_GPU_ADMISSION"
+        }
+      },
+      "final_evidence_sha256": "7e50a917836644d1c389a643908e96b454cd1db293e85c1d61811b5d766ef910",
+      "S_evidence_sha256": "d1086f929749f37b5df5d53a6d0a770d0fe204cb401560b5032fb0eab4ab1a78"
+    }
+  },
+  "action_scale_differences": [
+    {
+      "case": "OBJECT_41",
+      "stage": 7,
+      "actual": [
+        0.4423758089542389,
+        0.10000000149011612,
+        1.0
+      ],
+      "S": [
+        0.4423758387565613,
+        0.10000000149011612,
+        1.0
+      ],
+      "ulp": [
+        1,
+        0,
+        0
+      ],
+      "max_absolute": 2.9802322387695312e-08,
+      "same_scale_function": true,
+      "cause": "NOT_ESTABLISHED_BY_THIS_READONLY_AUDIT"
+    },
+    {
+      "case": "OBJECT_42",
+      "stage": 7,
+      "actual": [
+        0.4401625692844391,
+        0.10000000149011612,
+        1.0
+      ],
+      "S": [
+        0.4401625394821167,
+        0.10000000149011612,
+        1.0
+      ],
+      "ulp": [
+        1,
+        0,
+        0
+      ],
+      "max_absolute": 2.9802322387695312e-08,
+      "same_scale_function": true,
+      "cause": "NOT_ESTABLISHED_BY_THIS_READONLY_AUDIT"
+    },
+    {
+      "case": "OBJECT_43",
+      "stage": 9,
+      "actual": [
+        0.41727012395858765,
+        0.10000000149011612,
+        1.0
+      ],
+      "S": [
+        0.41727009415626526,
+        0.10000000149011612,
+        1.0
+      ],
+      "ulp": [
+        1,
+        0,
+        0
+      ],
+      "max_absolute": 2.9802322387695312e-08,
+      "same_scale_function": true,
+      "cause": "NOT_ESTABLISHED_BY_THIS_READONLY_AUDIT"
+    }
+  ],
+  "align_parent_files": {
+    "OBJECT_41": {
+      "coreset_exp/evaluate.py": {
+        "equal_normalized_text": true,
+        "sha256": "452fbd500e4f1719bca677c04647ec54f8b99605113ecca436e5bd8e2e6cf591",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_extension\\seed43\\source\\coreset_exp\\evaluate.py"
+      },
+      "coreset_exp/eval_metric.py": {
+        "equal_normalized_text": true,
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\eval_metric.py"
+      },
+      "coreset_exp/model.py": {
+        "equal_normalized_text": true,
+        "sha256": "49aa301355773c21fd8fdde301b9c5b066916326e7a699fa492ecf25b493e50a",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_extension\\seed43\\source\\coreset_exp\\model.py"
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "equal_normalized_text": true,
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\libero\\lifelong\\models\\complete_policy.py"
+      }
+    },
+    "OBJECT_42": {
+      "coreset_exp/evaluate.py": {
+        "equal_normalized_text": true,
+        "sha256": "b6f69d06178350f1e2ff1fdf92736997def4b3b55d317ce5fe0afd9c77a0eb33",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\evaluate.py"
+      },
+      "coreset_exp/eval_metric.py": {
+        "equal_normalized_text": true,
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\eval_metric.py"
+      },
+      "coreset_exp/model.py": {
+        "equal_normalized_text": true,
+        "sha256": "781cebf4917f5d60cc1ed7f52d776e21558feab940d10e1ab17da91a770afaf5",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\model.py"
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "equal_normalized_text": true,
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\libero\\lifelong\\models\\complete_policy.py"
+      }
+    },
+    "OBJECT_43": {
+      "coreset_exp/evaluate.py": {
+        "equal_normalized_text": true,
+        "sha256": "452fbd500e4f1719bca677c04647ec54f8b99605113ecca436e5bd8e2e6cf591",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_extension\\seed43\\source\\coreset_exp\\evaluate.py"
+      },
+      "coreset_exp/eval_metric.py": {
+        "equal_normalized_text": true,
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\eval_metric.py"
+      },
+      "coreset_exp/model.py": {
+        "equal_normalized_text": true,
+        "sha256": "49aa301355773c21fd8fdde301b9c5b066916326e7a699fa492ecf25b493e50a",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_extension\\seed43\\source\\coreset_exp\\model.py"
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "equal_normalized_text": true,
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\libero\\lifelong\\models\\complete_policy.py"
+      }
+    },
+    "GOAL_41": {
+      "coreset_exp/evaluate.py": {
+        "equal_normalized_text": true,
+        "sha256": "452fbd500e4f1719bca677c04647ec54f8b99605113ecca436e5bd8e2e6cf591",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_extension\\seed43\\source\\coreset_exp\\evaluate.py"
+      },
+      "coreset_exp/eval_metric.py": {
+        "equal_normalized_text": true,
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\eval_metric.py"
+      },
+      "coreset_exp/model.py": {
+        "equal_normalized_text": true,
+        "sha256": "8c3016abbaffd75116e66bc2f90c257b9f2389dd177a7dfd7c41621b94222818",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261017_coreset_goal_three_seed\\seed43\\source\\coreset_exp\\model.py"
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "equal_normalized_text": true,
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\libero\\lifelong\\models\\complete_policy.py"
+      }
+    },
+    "GOAL_42": {
+      "coreset_exp/evaluate.py": {
+        "equal_normalized_text": true,
+        "sha256": "452fbd500e4f1719bca677c04647ec54f8b99605113ecca436e5bd8e2e6cf591",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_extension\\seed43\\source\\coreset_exp\\evaluate.py"
+      },
+      "coreset_exp/eval_metric.py": {
+        "equal_normalized_text": true,
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\eval_metric.py"
+      },
+      "coreset_exp/model.py": {
+        "equal_normalized_text": true,
+        "sha256": "8c3016abbaffd75116e66bc2f90c257b9f2389dd177a7dfd7c41621b94222818",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261017_coreset_goal_three_seed\\seed43\\source\\coreset_exp\\model.py"
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "equal_normalized_text": true,
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\libero\\lifelong\\models\\complete_policy.py"
+      }
+    },
+    "GOAL_43": {
+      "coreset_exp/evaluate.py": {
+        "equal_normalized_text": true,
+        "sha256": "452fbd500e4f1719bca677c04647ec54f8b99605113ecca436e5bd8e2e6cf591",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_extension\\seed43\\source\\coreset_exp\\evaluate.py"
+      },
+      "coreset_exp/eval_metric.py": {
+        "equal_normalized_text": true,
+        "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\coreset_exp\\eval_metric.py"
+      },
+      "coreset_exp/model.py": {
+        "equal_normalized_text": true,
+        "sha256": "8c3016abbaffd75116e66bc2f90c257b9f2389dd177a7dfd7c41621b94222818",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261017_coreset_goal_three_seed\\seed43\\source\\coreset_exp\\model.py"
+      },
+      "libero/lifelong/models/complete_policy.py": {
+        "equal_normalized_text": true,
+        "sha256": "192c2344f3819d2a1be1fac56f2b144d96834390778239ba9e101bec4c8e0191",
+        "parent_path": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261013_coreset_object\\source\\libero\\lifelong\\models\\complete_policy.py"
+      }
+    }
+  },
+  "q1_actual_remote_source_sha256": "f933fe69780a9f9711845cea3e73babef41f261c1ceb13e6cc54ecc0349aaa20",
+  "align_input_audit_sha256": "2ea323e3b5d69524fce77d2b787bec5e0b6abea602fbe0288d2f9630cb4d3287",
+  "q1_acceptance_sha256": "73130ddb8db7ee665e0cc434606f13fe754cf64423e8e2aee77773a5167785da",
+  "new_training_or_environment_calls": 0
+}

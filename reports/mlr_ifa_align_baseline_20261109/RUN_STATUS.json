@@ -1,23 +1,23 @@
 {
-  "status": "PARTIAL_RECOVERED_OBJECT_EVALUATING",
-  "observed": "2026-11-10T16:20:42.939314+08:00",
+  "status": "PARTIAL_ARMED_CACHE_BOUNDARY_PENDING",
+  "observed": "2026-11-10T16:54:09.067470+08:00",
   "root": "/data/mlr_ifa/experiment_workspaces/MLR_IFA_ALIGN_RANDOM_OBJECT_GOAL41_42_43_20261110_v2",
-  "controller": 40721,
+  "controller": 44960,
   "contract": "ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f",
-  "engineering_contract": "404ffb7e4a04f4d52091401e77df82e20086cfd2c7001f88c7c449642fd75e12",
-  "engineering": "engineering_assets_resume_20261110_v2",
+  "engineering_contract": "a4c55102ff4f720ef9f1edac18c19104c771acb992efa26d3da460d89d84b28f",
+  "engineering": "engineering_cached_eval_20261110_v1",
   "counts": {
     "OBJECT_41": {
       "epochs": 400,
       "production_updates": 105500,
-      "formal_episodes": 180,
+      "formal_episodes": 200,
       "admissions": 4,
       "admission_updates": 20
     },
     "OBJECT_42": {
       "epochs": 400,
       "production_updates": 105500,
-      "formal_episodes": 0,
+      "formal_episodes": 80,
       "admissions": 4,
       "admission_updates": 20
     },
@@ -52,21 +52,29 @@
   },
   "epochs": 1200,
   "production_updates": 316500,
-  "formal_episodes": 180,
-  "snapshot": "D:\\论文课题研究\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\engineering_assets_resume_20261110_v2\\check_readonly_20261110_162039",
-  "evidence_sha256": "1425c569a713d0f66b1f3f6771bfee46af04340256d17d75517ad8033049c088",
+  "formal_episodes": 280,
+  "snapshot": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\engineering_cached_eval_20261110_v1\\check_readonly_20261110_165405",
+  "evidence_sha256": "bb2ef4bd1c6d56eb8e6526fdd0b7af36d2608c4f61ec4506633bdf93d1a3939a",
   "old_failed_exits_preserved": true,
   "rng_exact": true,
   "completed_object_training_repeated": 0,
   "new_optimizer_diagnostics": 0,
   "queue": "OBJECT600formal then GOAL3train at most2parallel then GOAL600formal",
-  "final_wrappers": "engineering v2 final_readonly/audit_final_local; original base compare_baseline",
+  "final_wrappers": "engineering_cached_eval_20261110_v1 final_readonly/audit_final_local; base compare_baseline",
   "final_wrapper_status": "STATIC_ONLY_NOT_EXECUTED",
-  "remaining_total_time": "Wait for more actual formal vectors; old stopped-queue ETA invalid",
-  "remaining_total_time_minutes": [
-    430,
-    560
-  ],
-  "speed_diagnosis": "D:\\论文课题研究\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\EVALUATION_SPEED_DIAGNOSIS_20261110.md",
-  "optimization_deployed": false
+  "remaining_total_time": "Re-estimate after actual cached rollout throughput; no speed guarantee from offline checks",
+  "speed_diagnosis": "D:\\\u8bba\u6587\u8bfe\u9898\u7814\u7a76\\MLR+IFA\\execution\\20261109_mlr_ifa_align_baseline\\EVALUATION_SPEED_DIAGNOSIS_20261110.md",
+  "optimization_deployed": true,
+  "old_waiting_controller": 40721,
+  "active_evaluator": 43573,
+  "root_lock_owner": "old waiting controller until HANDOFF_COMPLETE",
+  "previous_engineering_contract": "404ffb7e4a04f4d52091401e77df82e20086cfd2c7001f88c7c449642fd75e12",
+  "optimization_active": false,
+  "handoff_complete": false,
+  "cache_tolerance": {
+    "atol": 0.0001,
+    "rtol": 0.0001
+  },
+  "cache_bitwise_equivalence": false,
+  "protocol_audit": "TWO_ROUND_PROTOCOL_AUDIT_20261110.md"
 }

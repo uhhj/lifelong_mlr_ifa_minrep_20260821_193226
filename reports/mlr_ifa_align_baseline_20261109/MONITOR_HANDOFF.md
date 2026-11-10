@@ -1,3 +1,15 @@
+## 2026-11-10 16:54 用户要求两轮协议复核；缓存工程等待自然边界
+
+先读TWO_ROUND_PROTOCOL_AUDIT_20261110.md、protocol_audit_20261110/LOCAL_PROTOCOL_AUDIT.json及新engineering_cached_eval_20261110_v1/SOURCE_REVIEW/FINAL_WRAPPER_REVIEW。q1六run实际评估/采集/loss/update与旧S完全一致；2400epoch预算、sampler和lr逐行相同，24manifest与6初始tensor/RNG/Task6模型相同。固定q函数按授权改为非空1/空0。实际发现OBJECT41Task7/42Task7/43Task9动作尺度各1ULP差，计算函数相同、原因未定位，不隐瞒或强称净因果。在线成功缓存也不同。此前q1完整接受保持，没有重跑。
+
+ALIGN原评估与Random父源exact，但不同于S的单帧缓存/逐轨迹噪声/done置零。既有部署assets和main保护错误、原失败exit1及恢复RNG保持。旧“不允许缓存因为不逐位一致”的判断被用户要求复用先前协议覆盖：采用S已接受atol=rtol=1e-4，只替换重复图像编码，保留本轮原global Normal、seed/done/600步5zero。离线OBJECT43四模型及GOAL官方初态证明PASS，0optimizer/0环境，有前向成本；未来实际模型还须独立加载准入。
+
+唯一deploy_remote_20261110_165352，新owner44960/watchdog44963，合同a4c55102ff4f720ef9f1edac18c19104c771acb992efa26d3da460d89d84b28f。165405实际check/audit PASS、162039全部前缀保留：OBJECT三train各400轮、41正式200、42正式80、43正式0，GOAL未开始，共280正式。原40721仅等待调度器被SIGSTOP/T，当前OBJECT42 evaluator43573正常未收信号，新owner仅ARMED，HANDOFF_COMPLETE尚无，生产缓存未启用。禁止重复deploy/controller/validation或手动恢复40721。watchdog只在owner交接前失效时释放旧等待器；若失败先核现场，不盲恢复。
+
+新owner等OBJECT42自然内核Z/exit0、prefix与模型hash通过后结束旧等待器并取得同一根锁，记录真实旧case出口；旧恢复controller.exit保持不存在，原root/controller.exit1保留。OBJECT43及后续GOAL用缓存评估，已完成/正在进行旧评估不重跑。顺序仍OBJECT600正式→GOAL三train最多2→GOAL600正式。只用新cached工程check/audit_progress，最终仅新工程controller.exit0且无自身进程后该工程final_readonly/audit_final_local→base compare_baseline。包装STATIC_ONLY，需实际CPU24CP6恢复1200初态/RNG预算/合并锁以及每cachedcase10准入，不套未来PASS。缓存容差不等闭环逐位相同，最终须明确原全窗与缓存case边界。
+
+当前需要继续等实际交接及至少首个缓存正式vector，再实测速度，不能仅部署即宣称修复已生效。已审计两轮报告与新工程需按publish.py发布并核remote receipt；不上传模型/state/RNG/cachepayload。旧S/q1只读。没有新增自动定时任务。
+
 ## 2026-11-10T16:20:42.939314+08:00 用户要求慢速排查：已定位，安全优化尚未通过
 
 先读EVALUATION_SPEED_DIAGNOSIS_20261110.md及engineering_eval_speed_20261110_v1/OPTIMIZATION_DECISION.json。162039实际审计PASS，OBJECT41正式180/200、其他0，三OBJECT训练完成，所有前缀与合同保持。全窗重算8帧相对S/q1单帧缓存是主要计算路径差异；GPU稳定窗口77–100%、均89.35%，未见GPU报错或系统压力。单帧缓存离线四阶段动作不逐位相等，禁止当等价切换；CUDA Graph隔离捕获失败，原失败保留，不部署任何速度工程。当前生产仍原enginev2/controller40721，未收信号未改代码，未重训重评。三个诊断已经退出，0optimizer/0环境但有前向计算及短暂资源竞争。工程速度目录不是启动入口，不重复其已有三份诊断。全队列条件余430–560分钟，CPU接受另计；无生产提速保证。最终来源和队列顺序不变。

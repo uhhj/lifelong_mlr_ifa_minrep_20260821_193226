@@ -1,0 +1,955 @@
+{
+  "status": "READONLY_ACTUAL_PROTOCOL_SOURCE_AUDIT",
+  "observed": 1794299998.7128787,
+  "q1": {
+    "OBJECT_41": {
+      "contract_sha256": "6209d4a3021cb2c153de820c3f4b7ee8181812720315b54216632e7df87c7787",
+      "reference_hashes": {
+        "INITIAL_S.json": true,
+        "TRAIN_S.json": true,
+        "EPOCHS_S.json": true,
+        "STAGE_S_6.json": true,
+        "OUTCOMES.json": true,
+        "train_S.exit": true,
+        "evaluate.exit": true,
+        "stage6_checkpoint": true
+      },
+      "files": {
+        "evaluate.py": {
+          "actual_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/evaluate.py",
+          "historical_s_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "ah",
+            "encode",
+            "load",
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "collect.py": {
+          "actual_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/collect.py",
+          "historical_s_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "support_memory.py": {
+          "actual_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/support_memory.py",
+          "historical_s_sha256": "c9be701765a381d333296c152a4afb74499d236bc2d3ec67c8901b01592961c7",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "load_memory",
+            "from_selection",
+            "retention"
+          ],
+          "different_top_level_functions": [
+            "weights"
+          ],
+          "diff": "--- accepted_S/support_memory.py\n+++ q1/support_memory.py\n@@ -18,7 +18,7 @@\n     q={t:m['support'] for t,m in memory.items()}\n     if arm=='S':return {t:1. for t in q}\n     if arm=='U':return {t:sum(q.values())/len(q) for t in q}\n-    if arm in ['Q','G']:return q\n+    if arm in ['Q','G']:return {t:(1. if memory[t]['rows'] else 0.) for t in q}\n     assert arm=='C';return {t:0. for t in q}\n \n def from_selection(policy,memory,selection,ww,denominator):\n"
+        },
+        "losses.py": {
+          "actual_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/losses.py",
+          "historical_s_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "expert",
+            "retain"
+          ],
+          "different_top_level_functions": []
+        },
+        "updates.py": {
+          "actual_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/updates.py",
+          "historical_s_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "update"
+          ],
+          "different_top_level_functions": []
+        },
+        "train.py": {
+          "actual_sha256": "5cc63d25be912ae5c61d4853a24f5de974f0996e39ef5c2da3da4e50055e8730",
+          "prior_q1_sha256": "5cc63d25be912ae5c61d4853a24f5de974f0996e39ef5c2da3da4e50055e8730",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/train.py",
+          "historical_s_sha256": "2b9ee1dacbbc3e711f5c1a6f6bb22cb23148828fb54ed7d4a3b416bace2dbc34",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "scale_for",
+            "admit"
+          ],
+          "different_top_level_functions": [
+            "main"
+          ]
+        },
+        "runtime.py": {
+          "actual_sha256": "d26e55e5ca058b192cd602decdbb0b38d757765dfa75163dae0f5a068d254f1b",
+          "prior_q1_sha256": "391e9ca06aff795a80bd4b0da29664ffed387fd3d2d5131d2bd81f3164de9eed",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/runtime.py",
+          "historical_s_sha256": "2bc8f5ab4ed059e796ffedaada524c2e2baec098d62d5d1affe14953118c0b35",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "js",
+            "verify",
+            "make",
+            "restore",
+            "equal"
+          ],
+          "different_top_level_functions": [
+            "capacity",
+            "setup",
+            "capture",
+            "_counted_step",
+            "set_count_mode"
+          ]
+        },
+        "layout.py": {
+          "actual_sha256": "292d675067390d0490e70d553601779803b5ad29b94701a4518b652a5c1e5a99",
+          "prior_q1_sha256": "f24dea05b65cf18f3b14849fb835abbf55a14c6794a15f136f405df76284c02a",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/layout.py",
+          "historical_s_sha256": "99d5569ebe5f78b092c54827085db7814157ab9b26651d595ad4555227780573",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "model_path",
+            "memory_path"
+          ],
+          "different_top_level_functions": []
+        },
+        "initialization.py": {
+          "actual_sha256": "765a2ef1ef6d118063e23cf0d9350f7999058cc07937f97e78361aa1c2ae158d",
+          "prior_q1_sha256": "d9401bac8e5d26060ffa3ed4d6e545a72a027b605807b7a6fd5c005fddbae50d",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/initialization.py",
+          "historical_s_sha256": "756ed52326c693f99df812afbe5007957efe27eee5ab552bc1e46a0a0e6b247f",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [],
+          "different_top_level_functions": [
+            "initialization"
+          ]
+        },
+        "candidate.py": {
+          "actual_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed41/candidate.py",
+          "historical_s_exists": false
+        }
+      }
+    },
+    "OBJECT_42": {
+      "contract_sha256": "1cad7a0a23095407ee71ee1065f89267abe76dadc1404ee48ac88fb4b4808e28",
+      "reference_hashes": {
+        "INITIAL_S.json": true,
+        "TRAIN_S.json": true,
+        "EPOCHS_S.json": true,
+        "STAGE_S_6.json": true,
+        "OUTCOMES.json": true,
+        "train_S.exit": true,
+        "evaluate.exit": true,
+        "stage6_checkpoint": true
+      },
+      "files": {
+        "evaluate.py": {
+          "actual_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/evaluate.py",
+          "historical_s_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "ah",
+            "encode",
+            "load",
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "collect.py": {
+          "actual_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/collect.py",
+          "historical_s_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "support_memory.py": {
+          "actual_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/support_memory.py",
+          "historical_s_sha256": "c9be701765a381d333296c152a4afb74499d236bc2d3ec67c8901b01592961c7",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "load_memory",
+            "from_selection",
+            "retention"
+          ],
+          "different_top_level_functions": [
+            "weights"
+          ],
+          "diff": "--- accepted_S/support_memory.py\n+++ q1/support_memory.py\n@@ -18,7 +18,7 @@\n     q={t:m['support'] for t,m in memory.items()}\n     if arm=='S':return {t:1. for t in q}\n     if arm=='U':return {t:sum(q.values())/len(q) for t in q}\n-    if arm in ['Q','G']:return q\n+    if arm in ['Q','G']:return {t:(1. if memory[t]['rows'] else 0.) for t in q}\n     assert arm=='C';return {t:0. for t in q}\n \n def from_selection(policy,memory,selection,ww,denominator):\n"
+        },
+        "losses.py": {
+          "actual_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/losses.py",
+          "historical_s_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "expert",
+            "retain"
+          ],
+          "different_top_level_functions": []
+        },
+        "updates.py": {
+          "actual_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/updates.py",
+          "historical_s_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "update"
+          ],
+          "different_top_level_functions": []
+        },
+        "train.py": {
+          "actual_sha256": "5cc63d25be912ae5c61d4853a24f5de974f0996e39ef5c2da3da4e50055e8730",
+          "prior_q1_sha256": "5cc63d25be912ae5c61d4853a24f5de974f0996e39ef5c2da3da4e50055e8730",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/train.py",
+          "historical_s_sha256": "2b9ee1dacbbc3e711f5c1a6f6bb22cb23148828fb54ed7d4a3b416bace2dbc34",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "scale_for",
+            "admit"
+          ],
+          "different_top_level_functions": [
+            "main"
+          ]
+        },
+        "runtime.py": {
+          "actual_sha256": "ce93adba169a7c21730716f6a31098bcda96c48b070be450ab137240a7daa1be",
+          "prior_q1_sha256": "2eea7d17ea8b2c7c9c41cc18de191fcfe15546ca63594a2afbabe3c904059060",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/runtime.py",
+          "historical_s_sha256": "2b82396a053ee27eb2a12b4cad8fed855568ff297c58d0150bf040bc4389205a",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "js",
+            "verify",
+            "make",
+            "restore",
+            "equal"
+          ],
+          "different_top_level_functions": [
+            "capacity",
+            "setup",
+            "capture",
+            "_counted_step",
+            "set_count_mode"
+          ]
+        },
+        "layout.py": {
+          "actual_sha256": "67557724bdd4bfe016939c11b4e0932af1ec16ef3e37e97a50d4fe6e358e6fdf",
+          "prior_q1_sha256": "047f783f0e38fa57030e713dee061b783cf7292644cb8b1859cbb026e51db9f8",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/layout.py",
+          "historical_s_sha256": "4931a2b9beb46754ee88df5784719d605b416936a0d7be9f0ba8fa951a412a39",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "model_path",
+            "memory_path"
+          ],
+          "different_top_level_functions": []
+        },
+        "initialization.py": {
+          "actual_sha256": "765a2ef1ef6d118063e23cf0d9350f7999058cc07937f97e78361aa1c2ae158d",
+          "prior_q1_sha256": "d9401bac8e5d26060ffa3ed4d6e545a72a027b605807b7a6fd5c005fddbae50d",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/initialization.py",
+          "historical_s_sha256": "756ed52326c693f99df812afbe5007957efe27eee5ab552bc1e46a0a0e6b247f",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [],
+          "different_top_level_functions": [
+            "initialization"
+          ]
+        },
+        "candidate.py": {
+          "actual_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed42/candidate.py",
+          "historical_s_exists": false
+        }
+      }
+    },
+    "OBJECT_43": {
+      "contract_sha256": "aa99d518be40e581d040cafc8a90afe92fe02039ae2fcf4f6b26f87f800c25e5",
+      "reference_hashes": {
+        "INITIAL_S.json": true,
+        "TRAIN_S.json": true,
+        "EPOCHS_S.json": true,
+        "STAGE_S_6.json": true,
+        "OUTCOMES.json": true,
+        "train_S.exit": true,
+        "evaluate.exit": true,
+        "stage6_checkpoint": true
+      },
+      "files": {
+        "evaluate.py": {
+          "actual_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/evaluate.py",
+          "historical_s_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "ah",
+            "encode",
+            "load",
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "collect.py": {
+          "actual_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/collect.py",
+          "historical_s_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "support_memory.py": {
+          "actual_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/support_memory.py",
+          "historical_s_sha256": "c9be701765a381d333296c152a4afb74499d236bc2d3ec67c8901b01592961c7",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "load_memory",
+            "from_selection",
+            "retention"
+          ],
+          "different_top_level_functions": [
+            "weights"
+          ],
+          "diff": "--- accepted_S/support_memory.py\n+++ q1/support_memory.py\n@@ -18,7 +18,7 @@\n     q={t:m['support'] for t,m in memory.items()}\n     if arm=='S':return {t:1. for t in q}\n     if arm=='U':return {t:sum(q.values())/len(q) for t in q}\n-    if arm in ['Q','G']:return q\n+    if arm in ['Q','G']:return {t:(1. if memory[t]['rows'] else 0.) for t in q}\n     assert arm=='C';return {t:0. for t in q}\n \n def from_selection(policy,memory,selection,ww,denominator):\n"
+        },
+        "losses.py": {
+          "actual_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/losses.py",
+          "historical_s_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "expert",
+            "retain"
+          ],
+          "different_top_level_functions": []
+        },
+        "updates.py": {
+          "actual_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/updates.py",
+          "historical_s_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "update"
+          ],
+          "different_top_level_functions": []
+        },
+        "train.py": {
+          "actual_sha256": "5cc63d25be912ae5c61d4853a24f5de974f0996e39ef5c2da3da4e50055e8730",
+          "prior_q1_sha256": "5cc63d25be912ae5c61d4853a24f5de974f0996e39ef5c2da3da4e50055e8730",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/train.py",
+          "historical_s_sha256": "2b9ee1dacbbc3e711f5c1a6f6bb22cb23148828fb54ed7d4a3b416bace2dbc34",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "scale_for",
+            "admit"
+          ],
+          "different_top_level_functions": [
+            "main"
+          ]
+        },
+        "runtime.py": {
+          "actual_sha256": "45ce15e87ad8aba1e9a9a7705c2a8a6a694177e74a7baace850516f9700bfe03",
+          "prior_q1_sha256": "8cc92edb21da3a6214638c4d0cbb578d3b666a149ef8ef201899f482453872a9",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/runtime.py",
+          "historical_s_sha256": "c36a2530850ccd485f85e7b38abb32cc36ef34123f6d8b2c90fab26ff7d14b93",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "js",
+            "verify",
+            "make",
+            "restore",
+            "equal"
+          ],
+          "different_top_level_functions": [
+            "capacity",
+            "setup",
+            "capture",
+            "_counted_step",
+            "set_count_mode"
+          ]
+        },
+        "layout.py": {
+          "actual_sha256": "da7681f3a8be6b3686a9a51bb34fa22fd17ae43c10f74c87d7c5aef8af3c2498",
+          "prior_q1_sha256": "f09d864179273626eaa7a09659b1ee3fc82abc7ed0e67a686a248f7ca1685f2d",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/layout.py",
+          "historical_s_sha256": "667232e0b55dec9b49f2a2c8d1b31c03d9f0809e2b93eb4b9a2c3d51dbec472d",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "model_path",
+            "memory_path"
+          ],
+          "different_top_level_functions": []
+        },
+        "initialization.py": {
+          "actual_sha256": "765a2ef1ef6d118063e23cf0d9350f7999058cc07937f97e78361aa1c2ae158d",
+          "prior_q1_sha256": "d9401bac8e5d26060ffa3ed4d6e545a72a027b605807b7a6fd5c005fddbae50d",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/initialization.py",
+          "historical_s_sha256": "756ed52326c693f99df812afbe5007957efe27eee5ab552bc1e46a0a0e6b247f",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [],
+          "different_top_level_functions": [
+            "initialization"
+          ]
+        },
+        "candidate.py": {
+          "actual_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_OBJECT41_42_43_20261028_v1/seed43/candidate.py",
+          "historical_s_exists": false
+        }
+      }
+    },
+    "GOAL_41": {
+      "contract_sha256": "2d11493c828a9076d819c1e147129c2bd8d5c32ea0b5f6d6a7c97988ead42532",
+      "reference_hashes": {
+        "INITIAL_S.json": true,
+        "TRAIN_S.json": true,
+        "EPOCHS_S.json": true,
+        "STAGE_S_6.json": true,
+        "OUTCOMES.json": true,
+        "train_S.exit": true,
+        "evaluate.exit": true,
+        "stage6_checkpoint": true
+      },
+      "files": {
+        "evaluate.py": {
+          "actual_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/evaluate.py",
+          "historical_s_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "ah",
+            "encode",
+            "load",
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "collect.py": {
+          "actual_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/collect.py",
+          "historical_s_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "support_memory.py": {
+          "actual_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/support_memory.py",
+          "historical_s_sha256": "c9be701765a381d333296c152a4afb74499d236bc2d3ec67c8901b01592961c7",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "load_memory",
+            "from_selection",
+            "retention"
+          ],
+          "different_top_level_functions": [
+            "weights"
+          ],
+          "diff": "--- accepted_S/support_memory.py\n+++ q1/support_memory.py\n@@ -18,7 +18,7 @@\n     q={t:m['support'] for t,m in memory.items()}\n     if arm=='S':return {t:1. for t in q}\n     if arm=='U':return {t:sum(q.values())/len(q) for t in q}\n-    if arm in ['Q','G']:return q\n+    if arm in ['Q','G']:return {t:(1. if memory[t]['rows'] else 0.) for t in q}\n     assert arm=='C';return {t:0. for t in q}\n \n def from_selection(policy,memory,selection,ww,denominator):\n"
+        },
+        "losses.py": {
+          "actual_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/losses.py",
+          "historical_s_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "expert",
+            "retain"
+          ],
+          "different_top_level_functions": []
+        },
+        "updates.py": {
+          "actual_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/updates.py",
+          "historical_s_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "update"
+          ],
+          "different_top_level_functions": []
+        },
+        "train.py": {
+          "actual_sha256": "f0077d08fe5163198c3a03cc6aad7e96a4b9b375df4e41dbce4da674d699ae7c",
+          "prior_q1_sha256": "f0077d08fe5163198c3a03cc6aad7e96a4b9b375df4e41dbce4da674d699ae7c",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/train.py",
+          "historical_s_sha256": "13b1bfc71d3febdf8c4d06ed5958dd914161f0f2b2b99969ab4c8561a341f2bd",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "scale_for",
+            "admit"
+          ],
+          "different_top_level_functions": [
+            "main"
+          ]
+        },
+        "runtime.py": {
+          "actual_sha256": "8a66f6f2d5c9137ed72b7c4b0cd8359d070c7468f18e8d3e7062b3ab420e0886",
+          "prior_q1_sha256": "b69d074ebdeed786d7bcd6cf864e3ccb1fe30b319b58349bea141aa44c9e1f24",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/runtime.py",
+          "historical_s_sha256": "b24eaaa76b3ae4db4bd0ba7fd9d838221cbc799259da3b284b1091810fb91ea7",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "js",
+            "verify",
+            "make",
+            "restore",
+            "equal"
+          ],
+          "different_top_level_functions": [
+            "capacity",
+            "setup",
+            "capture",
+            "_counted_step",
+            "set_count_mode"
+          ]
+        },
+        "layout.py": {
+          "actual_sha256": "6640230894f26d56255361ce32b0d5a158d4a2ee38a0ba96620c2043d990ba8f",
+          "prior_q1_sha256": "551e81d670d3f279bdc3d555eb8b555bdfaa87806b77f5066b02027291608862",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/layout.py",
+          "historical_s_sha256": "47cc9b286ff2739d5a286541556c3925e66dce8361332e42d19cdad6956823a1",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "model_path",
+            "memory_path"
+          ],
+          "different_top_level_functions": []
+        },
+        "initialization.py": {
+          "actual_sha256": "765a2ef1ef6d118063e23cf0d9350f7999058cc07937f97e78361aa1c2ae158d",
+          "prior_q1_sha256": "d9401bac8e5d26060ffa3ed4d6e545a72a027b605807b7a6fd5c005fddbae50d",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/initialization.py",
+          "historical_s_sha256": "756ed52326c693f99df812afbe5007957efe27eee5ab552bc1e46a0a0e6b247f",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [],
+          "different_top_level_functions": [
+            "initialization"
+          ]
+        },
+        "candidate.py": {
+          "actual_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed41/candidate.py",
+          "historical_s_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "cpu_snapshot"
+          ],
+          "different_top_level_functions": []
+        }
+      }
+    },
+    "GOAL_42": {
+      "contract_sha256": "6f688c72c519fda95ecaab2f992b17d2d85d2eb87f901478aef2180152f477a1",
+      "reference_hashes": {
+        "INITIAL_S.json": true,
+        "TRAIN_S.json": true,
+        "EPOCHS_S.json": true,
+        "STAGE_S_6.json": true,
+        "OUTCOMES.json": true,
+        "train_S.exit": true,
+        "evaluate.exit": true,
+        "stage6_checkpoint": true
+      },
+      "files": {
+        "evaluate.py": {
+          "actual_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/evaluate.py",
+          "historical_s_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "ah",
+            "encode",
+            "load",
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "collect.py": {
+          "actual_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/collect.py",
+          "historical_s_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "support_memory.py": {
+          "actual_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/support_memory.py",
+          "historical_s_sha256": "c9be701765a381d333296c152a4afb74499d236bc2d3ec67c8901b01592961c7",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "load_memory",
+            "from_selection",
+            "retention"
+          ],
+          "different_top_level_functions": [
+            "weights"
+          ],
+          "diff": "--- accepted_S/support_memory.py\n+++ q1/support_memory.py\n@@ -18,7 +18,7 @@\n     q={t:m['support'] for t,m in memory.items()}\n     if arm=='S':return {t:1. for t in q}\n     if arm=='U':return {t:sum(q.values())/len(q) for t in q}\n-    if arm in ['Q','G']:return q\n+    if arm in ['Q','G']:return {t:(1. if memory[t]['rows'] else 0.) for t in q}\n     assert arm=='C';return {t:0. for t in q}\n \n def from_selection(policy,memory,selection,ww,denominator):\n"
+        },
+        "losses.py": {
+          "actual_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/losses.py",
+          "historical_s_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "expert",
+            "retain"
+          ],
+          "different_top_level_functions": []
+        },
+        "updates.py": {
+          "actual_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/updates.py",
+          "historical_s_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "update"
+          ],
+          "different_top_level_functions": []
+        },
+        "train.py": {
+          "actual_sha256": "f0077d08fe5163198c3a03cc6aad7e96a4b9b375df4e41dbce4da674d699ae7c",
+          "prior_q1_sha256": "f0077d08fe5163198c3a03cc6aad7e96a4b9b375df4e41dbce4da674d699ae7c",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/train.py",
+          "historical_s_sha256": "13b1bfc71d3febdf8c4d06ed5958dd914161f0f2b2b99969ab4c8561a341f2bd",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "scale_for",
+            "admit"
+          ],
+          "different_top_level_functions": [
+            "main"
+          ]
+        },
+        "runtime.py": {
+          "actual_sha256": "b04790c6820d4b2ebf4c57ca77000f1118ccc1c86f4ce8d18de667454476f5af",
+          "prior_q1_sha256": "5d362c8e799336a182373f5180fc6d779e09560096836b0415cae55c75d115ac",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/runtime.py",
+          "historical_s_sha256": "a08be7e63975b2347deaabae1083a361df9c0de88b927bfedc8dabbf238ccacd",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "js",
+            "verify",
+            "make",
+            "restore",
+            "equal"
+          ],
+          "different_top_level_functions": [
+            "capacity",
+            "setup",
+            "capture",
+            "_counted_step",
+            "set_count_mode"
+          ]
+        },
+        "layout.py": {
+          "actual_sha256": "8f30e7c38ca7261b2dfb4ced612c7851ae75dc535b4cd5c702192c809a5e58d4",
+          "prior_q1_sha256": "61e35c8715618583da603c4dedc0733cb3605bd2faa903fae24a40e938e90a4f",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/layout.py",
+          "historical_s_sha256": "1ef8e68876474ae68078e945fb667e44c5ff4ebd99d6e3bfba9e5c51a4f38473",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "model_path",
+            "memory_path"
+          ],
+          "different_top_level_functions": []
+        },
+        "initialization.py": {
+          "actual_sha256": "765a2ef1ef6d118063e23cf0d9350f7999058cc07937f97e78361aa1c2ae158d",
+          "prior_q1_sha256": "d9401bac8e5d26060ffa3ed4d6e545a72a027b605807b7a6fd5c005fddbae50d",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/initialization.py",
+          "historical_s_sha256": "756ed52326c693f99df812afbe5007957efe27eee5ab552bc1e46a0a0e6b247f",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [],
+          "different_top_level_functions": [
+            "initialization"
+          ]
+        },
+        "candidate.py": {
+          "actual_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed42/candidate.py",
+          "historical_s_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "cpu_snapshot"
+          ],
+          "different_top_level_functions": []
+        }
+      }
+    },
+    "GOAL_43": {
+      "contract_sha256": "8beb9761d1cfaf7fb767cdf88edacf2bd75a2675060af3799bdc010ec43a13c4",
+      "reference_hashes": {
+        "INITIAL_S.json": true,
+        "TRAIN_S.json": true,
+        "EPOCHS_S.json": true,
+        "STAGE_S_6.json": true,
+        "OUTCOMES.json": true,
+        "train_S.exit": true,
+        "evaluate.exit": true,
+        "stage6_checkpoint": true
+      },
+      "files": {
+        "evaluate.py": {
+          "actual_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/evaluate.py",
+          "historical_s_sha256": "a13aff2e6fd191d0b94140457eeeec7b34ed182973eaa754972249b2fbf9be45",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "ah",
+            "encode",
+            "load",
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "collect.py": {
+          "actual_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/collect.py",
+          "historical_s_sha256": "0eac8ee99a822504ae03d27c089061236cd51f8a5426f7df64ba29a91ae49c29",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "event",
+            "main"
+          ],
+          "different_top_level_functions": []
+        },
+        "support_memory.py": {
+          "actual_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_sha256": "beb26b5154ca2c839af628db092ec2eae9ccb45fe38c736cee998ba7eb0a8b2a",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/support_memory.py",
+          "historical_s_sha256": "c9be701765a381d333296c152a4afb74499d236bc2d3ec67c8901b01592961c7",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "load_memory",
+            "from_selection",
+            "retention"
+          ],
+          "different_top_level_functions": [
+            "weights"
+          ],
+          "diff": "--- accepted_S/support_memory.py\n+++ q1/support_memory.py\n@@ -18,7 +18,7 @@\n     q={t:m['support'] for t,m in memory.items()}\n     if arm=='S':return {t:1. for t in q}\n     if arm=='U':return {t:sum(q.values())/len(q) for t in q}\n-    if arm in ['Q','G']:return q\n+    if arm in ['Q','G']:return {t:(1. if memory[t]['rows'] else 0.) for t in q}\n     assert arm=='C';return {t:0. for t in q}\n \n def from_selection(policy,memory,selection,ww,denominator):\n"
+        },
+        "losses.py": {
+          "actual_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/losses.py",
+          "historical_s_sha256": "3db4a8f7e210db4ca2c557075cf41cc6fa5d7b70741c1c44b9365d511bc46e34",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "expert",
+            "retain"
+          ],
+          "different_top_level_functions": []
+        },
+        "updates.py": {
+          "actual_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/updates.py",
+          "historical_s_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "update"
+          ],
+          "different_top_level_functions": []
+        },
+        "train.py": {
+          "actual_sha256": "f0077d08fe5163198c3a03cc6aad7e96a4b9b375df4e41dbce4da674d699ae7c",
+          "prior_q1_sha256": "f0077d08fe5163198c3a03cc6aad7e96a4b9b375df4e41dbce4da674d699ae7c",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/train.py",
+          "historical_s_sha256": "13b1bfc71d3febdf8c4d06ed5958dd914161f0f2b2b99969ab4c8561a341f2bd",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "scale_for",
+            "admit"
+          ],
+          "different_top_level_functions": [
+            "main"
+          ]
+        },
+        "runtime.py": {
+          "actual_sha256": "990b38e22daee13e7518aa275f1524d6d00d5adf7085931a256069395dacb96c",
+          "prior_q1_sha256": "a0edcea1da9712ac8d03480fe45b1637eaa570c8aa380080b2e74d21a208f61e",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/runtime.py",
+          "historical_s_sha256": "bc9788c5a0daec8d3686fdc543d47cbe728c25dbe208deb7d921b37192eddbec",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "js",
+            "verify",
+            "make",
+            "restore",
+            "equal"
+          ],
+          "different_top_level_functions": [
+            "capacity",
+            "setup",
+            "capture",
+            "_counted_step",
+            "set_count_mode"
+          ]
+        },
+        "layout.py": {
+          "actual_sha256": "4ba10911b6e61987948715a771dc7bc6adf72d57ea1c8d08b4d38e4ca868099b",
+          "prior_q1_sha256": "6cb3199103b4e5a8d196188fc1562c7d58a94c726350de112070101d149a64c4",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/layout.py",
+          "historical_s_sha256": "22dc028d91eea7f2773a5b0f1593ba0ab1410e26437cf04a1bbb6a50c916c4bc",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [
+            "model_path",
+            "memory_path"
+          ],
+          "different_top_level_functions": []
+        },
+        "initialization.py": {
+          "actual_sha256": "765a2ef1ef6d118063e23cf0d9350f7999058cc07937f97e78361aa1c2ae158d",
+          "prior_q1_sha256": "d9401bac8e5d26060ffa3ed4d6e545a72a027b605807b7a6fd5c005fddbae50d",
+          "prior_q1_same_text": false,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/initialization.py",
+          "historical_s_sha256": "756ed52326c693f99df812afbe5007957efe27eee5ab552bc1e46a0a0e6b247f",
+          "historical_s_same_text": false,
+          "same_top_level_functions": [],
+          "different_top_level_functions": [
+            "initialization"
+          ]
+        },
+        "candidate.py": {
+          "actual_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "prior_q1_same_text": true,
+          "historical_s_path": "/data/mlr_ifa/experiment_workspaces/SUPPORT_GATE_FULL_S_GOAL41_42_43_20261029_v1/seed43/candidate.py",
+          "historical_s_sha256": "757023d8f2fdcb8110b3166d63d9cbec32f995d727917c83f715323e704f7a24",
+          "historical_s_same_text": true,
+          "same_top_level_functions": [
+            "cpu_snapshot"
+          ],
+          "different_top_level_functions": []
+        }
+      }
+    }
+  },
+  "align_contract": "ce307dca2bce082e36803d266067462cb35a95f421e371f74f7d20d42a5dda8f",
+  "align_engineering_contract": "404ffb7e4a04f4d52091401e77df82e20086cfd2c7001f88c7c449642fd75e12",
+  "new_optimizer": 0,
+  "new_environment": 0
+}
