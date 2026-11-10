@@ -1,55 +1,61 @@
 {
   "status": "PARTIAL_EXECUTION_PENDING_FINAL_ACCEPTANCE",
-  "observed": "2026-11-11T06:53:03.970889+08:00",
-  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_reverse_order_main_protocol\\check_readonly_20261111_065303",
+  "observed": "2026-11-11T07:45:06.106314+08:00",
+  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_reverse_order_main_protocol\\check_readonly_20261111_074504",
   "contract": "5d28905059a9afc15cc8175097eee4ce3af5599154bb980bc54dce53d220795c",
   "totals": {
-    "epochs": 64,
-    "accepted": 8448,
-    "production_physical": 8448,
-    "admission": 9,
-    "training_collection": 0,
+    "epochs": 643,
+    "accepted": 138946,
+    "production_physical": 150712,
+    "admission": 58,
+    "training_collection": 10,
     "formal": 0
   },
   "cases": {
     "OBJECT_MLR_41": {
-      "epochs": 43,
-      "accepted": 5676,
-      "production_physical": 5676,
+      "epochs": 400,
+      "accepted": 102100,
+      "production_physical": 102100,
+      "admission": 20,
+      "training_collection": 0,
+      "formal": 0,
+      "admitted_stages": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "gate_blocks_observed": 0,
+      "gate_Q_accepts_observed": 0,
+      "train_exit": "0",
+      "evaluate_exit": null
+    },
+    "OBJECT_DEBR_41": {
+      "epochs": 153,
+      "accepted": 24966,
+      "production_physical": 36732,
+      "admission": 33,
+      "training_collection": 10,
+      "formal": 0,
+      "admitted_stages": [
+        6,
+        7
+      ],
+      "gate_blocks_observed": 1236,
+      "gate_Q_accepts_observed": 779,
+      "train_exit": null,
+      "evaluate_exit": null
+    },
+    "OBJECT_MLR_42": {
+      "epochs": 90,
+      "accepted": 11880,
+      "production_physical": 11880,
       "admission": 5,
       "training_collection": 0,
       "formal": 0,
       "admitted_stages": [
         6
       ],
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0,
-      "train_exit": null,
-      "evaluate_exit": null
-    },
-    "OBJECT_DEBR_41": {
-      "epochs": 21,
-      "accepted": 2772,
-      "production_physical": 2772,
-      "admission": 4,
-      "training_collection": 0,
-      "formal": 0,
-      "admitted_stages": [
-        6
-      ],
-      "gate_blocks_observed": 0,
-      "gate_Q_accepts_observed": 0,
-      "train_exit": null,
-      "evaluate_exit": null
-    },
-    "OBJECT_MLR_42": {
-      "epochs": 0,
-      "accepted": 0,
-      "production_physical": 0,
-      "admission": 0,
-      "training_collection": 0,
-      "formal": 0,
-      "admitted_stages": [],
       "gate_blocks_observed": 0,
       "gate_Q_accepts_observed": 0,
       "train_exit": null,
@@ -182,18 +188,6 @@
       "state": "S"
     },
     {
-      "pid": 119468,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=dc6ae3f0fa83404997030fe26b0628ba /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_MLR_41 train ",
-      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_MLR_41",
-      "state": "S"
-    },
-    {
-      "pid": 119473,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_MLR_41 train ",
-      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_MLR_41",
-      "state": "R"
-    },
-    {
       "pid": 119475,
       "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d15e808c592b43afaf5fc57afe0cfc9e /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_DEBR_41 train ",
       "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_DEBR_41",
@@ -204,75 +198,87 @@
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_DEBR_41 train ",
       "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_DEBR_41",
       "state": "R"
+    },
+    {
+      "pid": 120137,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=f9bd822be7264bfdbf509681f9b7e2cd /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_MLR_42 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_MLR_42",
+      "state": "S"
+    },
+    {
+      "pid": 120142,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_MLR_42 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_MLR_42",
+      "state": "S"
     }
   ],
   "actual_final_cpu_acceptance": false,
   "phase": "CURRENT_WHOLE_RUN_TRAINING_AND_COLLECTION",
   "eta": {
-    "OBJECT_MLR_41": {
-      "minutes": 51.77572258718086,
-      "pure_epoch_minutes": 39.77572258718086,
-      "planning_allowance_minutes": 12,
+    "OBJECT_DEBR_41": {
+      "minutes": 266.6170780147769,
+      "pure_epoch_minutes": 246.61707801477687,
+      "planning_allowance_minutes": 20,
       "stages": {
         "6": {
-          "epochs": 43,
-          "seconds_per_epoch": 3.2588143587112426,
+          "epochs": 100,
+          "seconds_per_epoch": 5.228457140922546,
           "extrapolated": false,
           "borrowed": false
         },
         "7": {
-          "epochs": 0,
-          "seconds_per_epoch": 5.495788391069932,
-          "extrapolated": true,
+          "epochs": 53,
+          "seconds_per_epoch": 42.216558599472044,
+          "extrapolated": false,
           "borrowed": false
         },
         "8": {
           "epochs": 0,
-          "seconds_per_epoch": 7.228694640506397,
+          "seconds_per_epoch": 56.09222123837686,
           "extrapolated": true,
           "borrowed": false
         },
         "9": {
           "epochs": 0,
-          "seconds_per_epoch": 9.283426336266777,
+          "seconds_per_epoch": 72.0362430287374,
           "extrapolated": true,
           "borrowed": false
         }
       }
     },
-    "OBJECT_DEBR_41": {
-      "minutes": 143.74813802450595,
-      "pure_epoch_minutes": 123.74813802450595,
-      "planning_allowance_minutes": 20,
+    "OBJECT_MLR_42": {
+      "minutes": 50.16514501969019,
+      "pure_epoch_minutes": 38.16514501969019,
+      "planning_allowance_minutes": 12,
       "stages": {
         "6": {
-          "epochs": 21,
-          "seconds_per_epoch": 5.1958092212677,
+          "epochs": 90,
+          "seconds_per_epoch": 3.3635867834091187,
           "extrapolated": false,
           "borrowed": false
         },
         "7": {
           "epochs": 0,
-          "seconds_per_epoch": 17.51632279374383,
-          "extrapolated": true,
-          "borrowed": false
+          "seconds_per_epoch": 5.5416031122207645,
+          "extrapolated": false,
+          "borrowed": true
         },
         "8": {
           "epochs": 0,
-          "seconds_per_epoch": 23.039487638618006,
-          "extrapolated": true,
-          "borrowed": false
+          "seconds_per_epoch": 7.55729444026947,
+          "extrapolated": false,
+          "borrowed": true
         },
         "9": {
           "epochs": 0,
-          "seconds_per_epoch": 29.588383097540248,
-          "extrapolated": true,
-          "borrowed": false
+          "seconds_per_epoch": 9.46383078098297,
+          "extrapolated": false,
+          "borrowed": true
         }
       }
     }
   },
-  "next_checkpoint_CST": "2026-11-11T07:45:03.970889+08:00",
+  "next_checkpoint_CST": "2026-11-11T08:36:06.106314+08:00",
   "eta_is_not_a_guaranteed_bound": true,
   "background_automation_created": false
 }
