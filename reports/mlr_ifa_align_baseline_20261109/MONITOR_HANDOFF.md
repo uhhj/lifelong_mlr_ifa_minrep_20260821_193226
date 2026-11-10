@@ -1,3 +1,11 @@
+## 2026-11-10 两套件最终接受，继续已授权ALIGN
+
+OBJECT final_readonly_20261110_121750和GOAL final_goal_readonly_20261110_121810均实际远程CPU及本地PASS_COMPLETE_LOCAL_ACCEPTANCE。24CP/6完整恢复/24teacher缓存/1200初态noise/47400门控通过，验收前后科学轻量SHA完全相同，新增0optimizer/0环境。见execution/20261109_q1_user_resume/ACCEPTANCE.json、FINAL_REPORT.md、FULL_COMPARISON.json、FULL_METRICS.csv。六run全部独立接受，不重复任何q1训练、正式或最终CPU请求。
+
+本轮完整S/q1：OBJECT AUC86.4931/81.7361、FinalAll85/74.1667；GOAL AUC87.2569/82.9167、FinalAll85/82.0833。前次OBJECT q1最终87.9167高于旧S85，方向反转；两轮均保留，不挑有利结果。GOAL seed41有效保持权重均1，存在执行/缓存差异限制；不是校准净因果。
+
+用户明确验收报告发布后立即启动已准备MLR+IFA+ALIGN六run。新外置engineering_completion_gate_20261110_v2已仅适配真实q1工程出口，原准备合同保持，改runtime/CONTRACT，其余训练评估输入944文本中的科学部分逐项不变；新合同db88ef7991d4cfd6e77b6897977779ed5d37a85682cd63c14441bb63bddcd7c3。新鲜容量data可用44848771072B、GPU空闲。用该目录launch_after_q1.py带上述两个final路径唯一部署，必须先核两个接受和FINAL_REPORT已发布。不能运行旧launch或伪造旧exit。当前尚未部署；完成发布后接续。OBJECT三训练/600正式后GOAL同序，最多两个训练并行。
+
 ## 2026-11-09T22:41:31.150910+08:00 最新只读检查
 
 check_readonly_20261109_224130及进度审计PASS，215139全部前缀保持。OBJECT41/42完整400轮40采集退出0；43已338轮(Task9 38)，30采集，Task9自己的固定q1准入29/11、恢复重放和四阶段COPY_EQ/BRANCH_COPY_EQ/CHECK_EQ实际通过。总1138轮541012生产110采集0正式，GOAL未开始；148科学+7工程冻结项不变，controller2416/2417/GPU3049正常，11采集互斥完整。

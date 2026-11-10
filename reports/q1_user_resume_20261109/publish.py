@@ -13,7 +13,7 @@ def add(p,n):
  if p.suffix=='.py':ast.parse(s)
  d=G/n;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(raw);manifest[n]=dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 for p in sorted(R.rglob('*')):
- if p.is_file() and p.suffix in ['.py','.json','.md','.diff'] and 'light' not in p.relative_to(R).parts and p.name not in ['PUBLICATION_RECEIPT.json','PUBLICATION_MANIFEST.json']:add(p,PREFIX+'/'+p.relative_to(R).as_posix())
+ if p.is_file() and p.suffix in ['.py','.json','.md','.diff','.csv'] and 'light' not in p.relative_to(R).parts and p.name not in ['PUBLICATION_RECEIPT.json','PUBLICATION_MANIFEST.json']:add(p,PREFIX+'/'+p.relative_to(R).as_posix())
 for local,prefix in [('20261109_support_calibration_rerun','support_calibration_rerun_20261109'),('20261109_mlr_ifa_align_baseline','mlr_ifa_align_baseline_20261109')]:
  for name in ['MONITOR_HANDOFF.md','USER_RESUME_STATUS.json']:add(R.parent/local/name,'reports/'+prefix+'/'+name)
 n=PREFIX+'/PUBLICATION_MANIFEST.json';(G/n).write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf8');paths=list(manifest)+[n]
