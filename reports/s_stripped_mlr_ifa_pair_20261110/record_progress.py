@@ -1,0 +1,31 @@
+"""Persist actual local audit and handoff, never infer success from time."""
+from pathlib import Path
+import json,sys,datetime
+R=Path(__file__).resolve().parent;d=Path(sys.argv[1])
+J=lambda p:json.loads(Path(p).read_text(encoding='utf-8-sig'))
+a=J(d/'LOCAL_AUDIT.json');assert a['status']=='PASS_PROGRESS_NOT_FINAL'
+stamp=datetime.datetime.fromtimestamp(a['observed']).astimezone().isoformat()
+status=dict(status='PARTIAL_EXECUTION',observed=stamp,evidence_directory=str(d.resolve()),audit=a['status'],contract=a['contract'],cases=a['cases'],totals=a['totals'],processes=a['processes'],controller_exit=a['controller_exit'],scientific_scope='12 paired stripped-S MLR+IFA / MLR+IFA+ALIGN runs',actual_final_cpu_acceptance=False)
+(R/'RUN_STATUS.json').write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+rows='\n'.join('|%s|%d/400|%d|%s|%d/200|'%(case,x['epochs'],x['production'],','.join(map(str,x['admitted_stages'])) or '未开始',x['formal']) for case,x in a['cases'].items())
+body='''# 完整 S 剥离后的 MLR+IFA / MLR+IFA+ALIGN 配对重跑
+
+实际观察：%s。证据 `%s`，`LOCAL_AUDIT=PASS_PROGRESS_NOT_FINAL`。
+
+用户最新授权两个套件、两种方案、seed41/42/43，共12run。旧结果和完整S只读保留。这次使用真实完整S的build/初始化、模型、优化器、每任务100轮与评估实现；Random样本顺序与Random的IFA任务对冻结。两组仅INPUT.variant不同：ALIGN用next_action与causal_valid；MLR用原窗口末动作和全有效掩码。E/R/q/RA/候选门控/训练采集均删除，不复用上一轮global Normal评估器。
+
+唯一root `/data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1`；私有输出同NAME下experiments目录；合同 `%s`。禁止再次prepare/freeze/deploy/controller或已完成部分。每次先读ACTIVE_ROOT/RUN_STATUS/PROTOCOL/IMPLEMENTATION_NOTES/PARENT_BINDINGS/PREPARATION_VALIDATION和最新实际证据。初态tensor与nonCUDA RNG必须实际相等，CUDA实际比较记录。Task6对完整S仅观察（被删机制及硬件皆可能影响），不预称相等。
+
+|case|完整轮|生产optimizer|已实际通过的stage准入|正式|
+|---|---:|---:|---|---:|
+%s
+
+总预算4800轮、1089600生产、240独立准入optimizer、0额外autograd、0训练采集、2400正式。每stage准入5次独立BC/IFA公式和完整state/序列化下一步精确，通过后恢复原state/RNG才生产，不套未来PASS。OBJECT每run105500、GOAL76100。最多2训练，独立c10d localhost:0+UUID；OBJECT六run训练→1200正式串行→GOAL六run训练→1200正式串行。评估完全沿用完整S的缓存前端、600步/5zero、0–19初态、每轨迹固定Normal、done置零、每vector新环境及benchmark=False。
+
+只用本目录transport.py check_readonly.py取证→audit_progress.py NEW PREVIOUS→record_progress.py NEW。检查前核已有请求和root，不重复入口。任何异常先保留进程/原失败/冻结hash及已耗成本，不盲重启部分轮或环境attempt。当前现场更新不是科学接受。
+
+仅自然root/controller.exit0且无自身进程后，唯一final_readonly.py实际CPU48CP/12完整恢复/2400初态noise/预算→audit_final_local.py。最终包装STATIC_ONLY，尚未执行，不得提前称PASS；错误保留原证据后版本化修复，不重训重评。FULL_S_BASELINE_BINDING/OUTCOMES是已接受完整S1200条，每case200各给两variant配对一次，非2400独立S；BASELINE_BINDING/OUTCOMES是历史Random，仅背景，切勿混淆。之后报告三方案及MLR-vsALIGN配对、所有seed/任务和硬件/开发集复用/预训练来源边界，不按成绩选优。
+
+每次按根AGENTS用publish.py审查轻量证据并串行nonforce推MLR核remoteSHA与本地receipt。禁CP/model/state/RNG/latent/demo/cachepayload/凭据。服务器空间预算24GiB新峰+2GiB留存，root留1GiB+64MiB；不删除旧结果。无新的定时任务被创建；controller会自行运行完整有限队列。
+'''%(stamp,d.name,a['contract'],rows)
+(R/'MONITOR_HANDOFF.md').write_text(body,encoding='utf-8');print(json.dumps(dict(status=status['status'],observed=stamp,totals=a['totals'])))

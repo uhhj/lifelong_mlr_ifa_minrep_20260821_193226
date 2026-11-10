@@ -1,0 +1,106 @@
+{
+  "status": "STATIC_NOT_EXECUTED",
+  "observed": "2026-11-10T20:35:39.703555+08:00",
+  "scope": "Twelve new runs: OBJECT/GOAL x ALIGN/MLR x seed41/42/43",
+  "remote_name": "S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1",
+  "files": {
+    "train.py": {
+      "sha256": "8bc1dbbe2faa2e34dc29cd68d1da6dbb5314836aad39cf157686611ad52ad9a1",
+      "python38_parse": true
+    },
+    "updates.py": {
+      "sha256": "c01186fdd4f902cc29ba463053833fe9ebbb84f6a8475fc268cc606e731fdf44",
+      "python38_parse": true
+    },
+    "admission.py": {
+      "sha256": "8f4696ff3dbcdbaf814435fa6683094efea61f26b5d72ac443692d539907ca37",
+      "python38_parse": true
+    },
+    "case_runtime_template.py": {
+      "sha256": "70be2bd0bb933745101f92a6d1b12399b4576a87757c623ddffe39bb41c3889d",
+      "python38_parse": true
+    },
+    "PROTOCOL.md": {
+      "sha256": "3a6fdd5d2f15a13fe69f994205af4e5c72b09871b064bbdaa33ac284964e9fc7"
+    },
+    "IMPLEMENTATION_NOTES.md": {
+      "sha256": "4a815cbbdc56c3553c762f3e9e620aa71620d144aa3d8c58ded1063955667d0f"
+    },
+    "final_case_cpu.py": {
+      "sha256": "6e9f82c732c73d5d5e0cbd0eb2a4eeb794614faa740d691867d9a050d4524276",
+      "python38_parse": true
+    }
+  },
+  "static_checks": {
+    "python38_parse": true,
+    "single_optimizer_and_scheduler_step_per_batch": true,
+    "full_S_constructor_update_backbone": true,
+    "variant_only_changes_bc_target_and_validity": true,
+    "random_manifest_and_random_ifa_required_together": true,
+    "E_R_q_RA_gate_probe_collect_removed_from_update": true,
+    "oracle_is_direct_formula_not_full_observe": true,
+    "restore_includes_model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+    "counter_hook_accounts_direct_and_production_steps_separately": true,
+    "evaluator_must_match_full_S_except_three_path_arm_edits": true,
+    "task6_historical_tensor_difference_is_observation_not_gate": true
+  },
+  "budget": {
+    "cases": 12,
+    "epochs": 4800,
+    "production_optimizer": 1089600,
+    "admission_optimizer": 240,
+    "extra_autograd_grad": 0,
+    "training_collection": 0,
+    "formal_episodes": 2400,
+    "stages": 48,
+    "checkpoints": 48,
+    "full_recovery": 12
+  },
+  "dispatch": {
+    "max_training": 2,
+    "sequence": [
+      "OBJECT six train",
+      "OBJECT 1200 formal",
+      "GOAL six train",
+      "GOAL 1200 formal"
+    ],
+    "separate_rendezvous_per_train": true,
+    "no_old_scientific_runs": true
+  },
+  "actual_validation": {
+    "production_optimizer_performed_by_this_review": 0,
+    "admission_optimizer_performed_by_this_review": 0,
+    "new_forward_performed_by_this_review": 0,
+    "environment_performed_by_this_review": 0,
+    "GPU_admission_pass_claimed": false,
+    "deployed_claimed": false
+  },
+  "remaining_runtime_requirements": [
+    "Parent must regenerate all 12 per-case copies from the final shared files and bind variant/config/Random input hashes before freeze.",
+    "Fresh actual capacity and unique remote workspace/controller checks.",
+    "Each actual stage must pass its own five-update GPU admission; no future-stage PASS inheritance.",
+    "Actual initialized tensor/non-CUDA RNG check and hardware/CUDA RNG record.",
+    "Full S-derived evaluator cache admission and all 2400 initial/noise/attempt checks.",
+    "Natural new controller exit0/no own process before final CPU/full-local acceptance.",
+    "Historical Random BASELINE_* is not full S; full-S comparison must use explicit accepted source binding."
+  ],
+  "publication": "Parent coordinates reviewed lightweight nonforce MLR publication; this review does not push.",
+  "final_CPU_wrapper": {
+    "status": "STATIC_ONLY_NOT_EXECUTED",
+    "entry": "Q/final_case_cpu.py CASE",
+    "per_case_checkpoints": 4,
+    "per_case_recovery": 1,
+    "per_case_outcomes": 200,
+    "per_case_planned_model_forward_calls": 8,
+    "per_case_planned_forward_windows": 16,
+    "optimizer_steps": 0,
+    "environments": 0,
+    "no_make_setup_DDP": true,
+    "requires_natural_new_controller_exit0": true,
+    "success_status": "PASS_CPU_CASE_RECONSTRUCTION",
+    "case_exits": [
+      "train_A.exit",
+      "evaluate.exit"
+    ]
+  }
+}

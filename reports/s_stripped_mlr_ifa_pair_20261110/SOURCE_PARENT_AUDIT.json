@@ -1,0 +1,409 @@
+{
+  "status": "READONLY_PARENT_SOURCE_AUDIT_NOT_NEW_RUN_ACCEPTANCE",
+  "observed": "2026-11-10T20:19:19.374407+08:00",
+  "parent_object": "execution/20261028_support_gate_full_s_object/seed41..43",
+  "parent_goal": "execution/20261029_support_gate_full_s_goal/seed41..43",
+  "scientific_update": "L = masked_BC(next_action, causal_bc_valid) + 0.1 * IFA; one optimizer and scheduler step per batch",
+  "must_remove": [
+    "RA selection and RA manifest/IFA-info binding",
+    "expert loss and expert route",
+    "successful rollout memory and teacher retention",
+    "q weights",
+    "C/Q double candidate updates, probes and choose",
+    "training-stage collect subprocess"
+  ],
+  "critical_traps": [
+    "retain_weight=0 leaves execution-expert .1*extra active in S updates.py",
+    "ARMS=C or legacy=True does not remove E",
+    "Changing coefficient to zero while retaining auxiliary forwards is unnecessary and can preserve hidden dependencies; remove the calls",
+    "Random manifest must use Random IFA info; do not read RA ifa_task logs",
+    "No scale_for or scale exception is needed once E/R are removed",
+    "S own initialization can be checked, but Task6 final equality with Random is not expected because ALIGN changes BC",
+    "S eval includes trajectory-fixed eps, done action zeroing, new env per group, cached frontend and benchmark=False; copy this implementation, not old Random evaluator"
+  ],
+  "own_admission_suggestion": "Earlier alternative was V3MLR.observe ALIGN. Implemented and statically reviewed direct_reference explicitly composes surviving original hidden/BC/IFA operators; does not claim the legacy observe path was run.",
+  "source_sha256": {
+    "execution/20261028_support_gate_full_s_object/seed41/runtime.py": "5a0057585c3b8419185b211eff89371e1b503b5b2b54989a941b242673d4050d",
+    "execution/20261028_support_gate_full_s_object/seed41/train.py": "f35fa6678b40855969463be3c5e90167be0fdb50b5df41548df1dda44845f63c",
+    "execution/20261028_support_gate_full_s_object/seed41/updates.py": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+    "execution/20261028_support_gate_full_s_object/seed41/evaluate.py": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+    "execution/20261028_support_gate_full_s_object/seed41/initialization.py": "d2410bc5b89355aec3e87405dde606aa55d9563f6095e17da4450c2d15a2729d",
+    "execution/20261028_support_gate_full_s_object/seed41/layout.py": "fb059482950ade06a3e636f36a656263861cf09d1c3b398a5fa00fabad2463bd",
+    "execution/20261028_support_gate_full_s_object/seed42/runtime.py": "a39ed7e85129e408ad33ef997d21e3703c83245a31040e1f09cc76675891c09c",
+    "execution/20261028_support_gate_full_s_object/seed42/train.py": "f35fa6678b40855969463be3c5e90167be0fdb50b5df41548df1dda44845f63c",
+    "execution/20261028_support_gate_full_s_object/seed42/updates.py": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+    "execution/20261028_support_gate_full_s_object/seed42/evaluate.py": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+    "execution/20261028_support_gate_full_s_object/seed42/initialization.py": "d2410bc5b89355aec3e87405dde606aa55d9563f6095e17da4450c2d15a2729d",
+    "execution/20261028_support_gate_full_s_object/seed42/layout.py": "c8e442beb09540fabae5bafb769e0500b820747891685bd38d6ad990c74161ba",
+    "execution/20261028_support_gate_full_s_object/seed43/runtime.py": "71a1a7dec11c0eae2292ce84c3e692065b29f52f5bed1488013075e2efd7c3f6",
+    "execution/20261028_support_gate_full_s_object/seed43/train.py": "f35fa6678b40855969463be3c5e90167be0fdb50b5df41548df1dda44845f63c",
+    "execution/20261028_support_gate_full_s_object/seed43/updates.py": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+    "execution/20261028_support_gate_full_s_object/seed43/evaluate.py": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+    "execution/20261028_support_gate_full_s_object/seed43/initialization.py": "d2410bc5b89355aec3e87405dde606aa55d9563f6095e17da4450c2d15a2729d",
+    "execution/20261028_support_gate_full_s_object/seed43/layout.py": "6410084cf33ef2a1bfc5bb518302fbb32d6ca13a0233f1de13149fa85b675ff1",
+    "execution/20261029_support_gate_full_s_goal/seed41/runtime.py": "13ef5269bb8012041ad9738b83ebdca25a96f9cdb4deb529163b3f23881d9580",
+    "execution/20261029_support_gate_full_s_goal/seed41/train.py": "6fbc18c17a5769bdd7a158b4c37027ee5763ad7f23302c8875b9ca94a4c33d41",
+    "execution/20261029_support_gate_full_s_goal/seed41/updates.py": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+    "execution/20261029_support_gate_full_s_goal/seed41/evaluate.py": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+    "execution/20261029_support_gate_full_s_goal/seed41/initialization.py": "d2410bc5b89355aec3e87405dde606aa55d9563f6095e17da4450c2d15a2729d",
+    "execution/20261029_support_gate_full_s_goal/seed41/layout.py": "07a01fa633e50f664211e0a2c3a537747785bfd11a838e76e1a89deed2b9aa58",
+    "execution/20261029_support_gate_full_s_goal/seed42/runtime.py": "b597f9f4330a015514b261a3e73ca515c3a35c37e8da7693fb709413a3a739ff",
+    "execution/20261029_support_gate_full_s_goal/seed42/train.py": "6fbc18c17a5769bdd7a158b4c37027ee5763ad7f23302c8875b9ca94a4c33d41",
+    "execution/20261029_support_gate_full_s_goal/seed42/updates.py": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+    "execution/20261029_support_gate_full_s_goal/seed42/evaluate.py": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+    "execution/20261029_support_gate_full_s_goal/seed42/initialization.py": "d2410bc5b89355aec3e87405dde606aa55d9563f6095e17da4450c2d15a2729d",
+    "execution/20261029_support_gate_full_s_goal/seed42/layout.py": "cec1775561022c879adedc3fc7616ffbdce98dd42a014fffa922587100d640ca",
+    "execution/20261029_support_gate_full_s_goal/seed43/runtime.py": "8061890b15c5146b8d006cf274c8d7881d041bd9b3476cf78bfeff3fafa3b199",
+    "execution/20261029_support_gate_full_s_goal/seed43/train.py": "6fbc18c17a5769bdd7a158b4c37027ee5763ad7f23302c8875b9ca94a4c33d41",
+    "execution/20261029_support_gate_full_s_goal/seed43/updates.py": "421e0c07294aaccf858593a84cca61105536a6cd2b2a918dee09edf61a594663",
+    "execution/20261029_support_gate_full_s_goal/seed43/evaluate.py": "4684eef5edc5be6d8b25956a2f2204720f27f0ef902bd6332c9d83e5ef307d91",
+    "execution/20261029_support_gate_full_s_goal/seed43/initialization.py": "d2410bc5b89355aec3e87405dde606aa55d9563f6095e17da4450c2d15a2729d",
+    "execution/20261029_support_gate_full_s_goal/seed43/layout.py": "f6e5928fa491aa1a79f774eeda398f753fa7278283d762aeacbee152ea912409"
+  },
+  "new_optimizer": 0,
+  "new_environment": 0,
+  "old_files_changed": false,
+  "followup_observed": "2026-11-10T20:32:09.682851+08:00",
+  "new_implementation_review": {
+    "status": "STATIC_REVIEW_ONLY_12_RUN_PAIR_NO_GPU_ADMISSION",
+    "files": {
+      "train.py": {
+        "sha256": "8bc1dbbe2faa2e34dc29cd68d1da6dbb5314836aad39cf157686611ad52ad9a1",
+        "bytes": 8168,
+        "python38_parse": true
+      },
+      "updates.py": {
+        "sha256": "c01186fdd4f902cc29ba463053833fe9ebbb84f6a8475fc268cc606e731fdf44",
+        "bytes": 1433,
+        "python38_parse": true
+      },
+      "admission.py": {
+        "sha256": "8f4696ff3dbcdbaf814435fa6683094efea61f26b5d72ac443692d539907ca37",
+        "bytes": 5352,
+        "python38_parse": true
+      },
+      "case_runtime_template.py": {
+        "sha256": "70be2bd0bb933745101f92a6d1b12399b4576a87757c623ddffe39bb41c3889d",
+        "bytes": 7034,
+        "python38_parse": true
+      },
+      "publish.py": {
+        "sha256": "90d736e9c8314befd2dc3d0e4c541288c23ed871813935daffdb8ea8db3f3598",
+        "bytes": 6891,
+        "python38_parse": true
+      }
+    },
+    "findings": [
+      "Production update is exactly masked next_action BC + 0.1 IFA, one backward/AdamW/scheduler step; no E/R/q/gate/collect calls remain.",
+      "Actual admission uses independent explicit BC/IFA composition rather than invoking original V3MLR.observe; five isolated AdamW calls each stage and two-step save/load replay are pending actual GPU execution.",
+      "Full capture/restore covers model, optimizer, scheduler, gradients, modes, requires_grad, RNG and cumulative step.",
+      "FileTrajectoryDataset parses tN__ prefixes or current feature task directory; runtime asserts parsed task equals label task.",
+      "Runtime verifies random sample hash equals current-label sample hash and task/demo/u/bc_valid identity.",
+      "Runtime checks exact LambdaLR closure total_steps=100*len(loader), warmup_steps=500; sampler seed0 set_epoch per epoch.",
+      "Official initialization tensor and non-CUDA RNG equality is required; historical CUDA equality is observed separately.",
+      "Task6 comparison to S is observational: S execution expert can already be active in Task6; mismatch alone does not establish hardware, randomness or code error."
+    ]
+  },
+  "build_dependency_review": {
+    "evidence_path": "execution\\20261110_s_stripped_mlr_ifa_align\\capacity_readonly_20261110_202315\\EVIDENCE.json",
+    "evidence_sha256": "f0747a42ac53c1dd733a0d58cc0519b39ca5384631e229ec9d7fd0fd343be80c",
+    "old_paths_preserved": [
+      "CORESET_OUT=each_case_align_parent",
+      "sys.path=each_case_align_source",
+      "official c.pretrain",
+      "all model/data/optimizer/IFA configuration"
+    ],
+    "new_output_paths": [
+      "c.experiment_dir=OUTPUT/models",
+      "c.run_root=OUTPUT",
+      "c.buffer_dir=OUTPUT/logical_buffer_empty"
+    ],
+    "build_chain": "control_seed(SEED), task embeddings, V3MLR->PaperMLR->MLR->Sequential->BriefPolicy, strict_downstream, DDP, a.train, a.step=0",
+    "CORESET_OUT_dependency": "common binds O at import, but build uses explicit c; only its two mkdir calls write, to redirected experiment_dir and buffer_dir",
+    "forbidden_parent_entry_calls": [
+      "coreset_exp.cfg/main",
+      "ra_exp.storage.store",
+      "V3MLR.configure_effect",
+      "V3MLR.finish_epoch",
+      "parent capture/restore v2_state"
+    ],
+    "per_case": {
+      "OBJECT_41": {
+        "source_root": "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/ALIGN/source",
+        "align_parent": "/data/mlr_ifa/experiments/CAETv3_ALIGN_OBJECT_seed41_20261022_collate01",
+        "source_contract_sha256": "b97e169da55677bf3ed5e588d45a8d9dcbaa138a3925ba5f50029b735e883fb3",
+        "pretrain": "/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth",
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        }
+      },
+      "OBJECT_42": {
+        "source_root": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/OBJECT_42/source",
+        "align_parent": "/data/mlr_ifa/experiments/ALIGN_OBJECT_seed42_20261022",
+        "source_contract_sha256": "4fb14eee3d73b93fef856a8cd1474476af3da44dbdbbd31c287e3ea6f95b995a",
+        "pretrain": "/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth",
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        }
+      },
+      "OBJECT_43": {
+        "source_root": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/OBJECT_43/source",
+        "align_parent": "/data/mlr_ifa/experiments/ALIGN_OBJECT_seed43_20261022",
+        "source_contract_sha256": "11b3745da3bc732a79907752d8c2023619bf5dadecb3f2279bbd1027a636d6b6",
+        "pretrain": "/data/mlr_ifa/checkpoints/object_multitask_model_ep99.pth",
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        }
+      },
+      "GOAL_41": {
+        "source_root": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source",
+        "align_parent": "/data/mlr_ifa/experiments/ALIGN_GOAL_seed41_20261022",
+        "source_contract_sha256": "f556347a93aeeb17bfad177fc3088535bd03ae259e7198a40a805ac721b8bdc8",
+        "pretrain": "/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth",
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        }
+      },
+      "GOAL_42": {
+        "source_root": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_42/source",
+        "align_parent": "/data/mlr_ifa/experiments/ALIGN_GOAL_seed42_20261022",
+        "source_contract_sha256": "e82e52bb1a0fc1e64c9aedb2d05aaf38b08e2f7ede983c79505d859384bf7b40",
+        "pretrain": "/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth",
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        }
+      },
+      "GOAL_43": {
+        "source_root": "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_43/source",
+        "align_parent": "/data/mlr_ifa/experiments/ALIGN_GOAL_seed43_20261022",
+        "source_contract_sha256": "e054a3c9b9bb89b33f24c5a71567f51c52e7fe197ccfb5ef06d2ad76f7927a1b",
+        "pretrain": "/data/mlr_ifa/checkpoints/goal_multitask_model_ep96.pth",
+        "train": {
+          "optimizer": {
+            "name": "torch.optim.AdamW",
+            "kwargs": {
+              "lr": 0.0001,
+              "betas": [
+                0.9,
+                0.999
+              ],
+              "eps": 1e-08,
+              "weight_decay": 0.1
+            }
+          },
+          "scheduler": {
+            "name": "torch.optim.lr_scheduler.LambdaLR",
+            "kwargs": {
+              "warmup_steps": 500,
+              "last_epoch": -1
+            }
+          },
+          "n_epochs": 100,
+          "batch_size": 10,
+          "num_workers": 0,
+          "grad_clip": 100.0,
+          "loss_scale": 1.0,
+          "resume": false,
+          "resume_path": "",
+          "debug": false,
+          "use_augmentation": true
+        }
+      }
+    }
+  },
+  "new_optimizer_calls": 0,
+  "new_environment_calls": 0,
+  "latest_authorized_scope": {
+    "root": "S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1",
+    "cases": 12,
+    "variants": [
+      "MLR",
+      "ALIGN"
+    ],
+    "epochs": 4800,
+    "production_optimizer_calls": 1089600,
+    "planned_admission_optimizer_calls": 240,
+    "formal_episodes": 2400,
+    "training_environment_episodes": 0,
+    "old_S_unique_episodes": 1200
+  },
+  "paired_variant_static_review": {
+    "status": "PASS_STATIC_ONLY_ACTUAL_STAGE_ADMISSION_PENDING",
+    "checks": {
+      "OBJECT_41": {
+        "config_equal_except_output_paths": true,
+        "manifest_and_IFA_bytes_identical": true,
+        "official_init_and_label_binding_identical": true,
+        "update_train_admission_bytes_identical": true
+      },
+      "OBJECT_42": {
+        "config_equal_except_output_paths": true,
+        "manifest_and_IFA_bytes_identical": true,
+        "official_init_and_label_binding_identical": true,
+        "update_train_admission_bytes_identical": true
+      },
+      "OBJECT_43": {
+        "config_equal_except_output_paths": true,
+        "manifest_and_IFA_bytes_identical": true,
+        "official_init_and_label_binding_identical": true,
+        "update_train_admission_bytes_identical": true
+      },
+      "GOAL_41": {
+        "config_equal_except_output_paths": true,
+        "manifest_and_IFA_bytes_identical": true,
+        "official_init_and_label_binding_identical": true,
+        "update_train_admission_bytes_identical": true
+      },
+      "GOAL_42": {
+        "config_equal_except_output_paths": true,
+        "manifest_and_IFA_bytes_identical": true,
+        "official_init_and_label_binding_identical": true,
+        "update_train_admission_bytes_identical": true
+      },
+      "GOAL_43": {
+        "config_equal_except_output_paths": true,
+        "manifest_and_IFA_bytes_identical": true,
+        "official_init_and_label_binding_identical": true,
+        "update_train_admission_bytes_identical": true
+      }
+    },
+    "pure_mlr_reference": "BasePolicy.compute_loss -> BriefPolicy.forward -> GMMHead.loss_fn uses actions.squeeze(1)[:,-1] and full-batch NLL mean. S masked_bc(aligned=False) has the same target and all-true mask; loss_coef is 1. IFA unchanged.",
+    "alignment_difference": "ALIGN uses next_action and causal_bc_valid; MLR uses original last action and all samples.",
+    "scope_boundary": "Same S execution/evaluation code does not make results retrospectively identical to old Random baseline; original S evaluation differs from historical Random."
+  }
+}

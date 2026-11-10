@@ -1,0 +1,42 @@
+{
+  "status": "STATIC_REVIEW_NOT_GPU_VALIDATION",
+  "observed": "2026-11-10T20:31:55.351120+08:00",
+  "source_full_S_update_sha256": "3c9dedc50310d606ffcdad2ff841b2c83c7c0a7df186c19f43a7451b3a4d184b",
+  "source_full_S_update_path": "execution\\20261109_support_calibration_rerun\\OBJECT\\Q1_41\\updates.py",
+  "files": {
+    "train.py": {
+      "sha256": "8bc1dbbe2faa2e34dc29cd68d1da6dbb5314836aad39cf157686611ad52ad9a1",
+      "python38_parse": true
+    },
+    "updates.py": {
+      "sha256": "c01186fdd4f902cc29ba463053833fe9ebbb84f6a8475fc268cc606e731fdf44",
+      "python38_parse": true
+    },
+    "admission.py": {
+      "sha256": "8f4696ff3dbcdbaf814435fa6683094efea61f26b5d72ac443692d539907ca37",
+      "python38_parse": true
+    }
+  },
+  "surviving_objective": {
+    "ALIGN": "ALIGN_BC + 0.1*IFA",
+    "MLR": "ORIGINAL_BC + 0.1*IFA"
+  },
+  "single_optimizer_step_per_batch": true,
+  "admission_optimizer_per_stage": 5,
+  "new_optimizer": 0,
+  "new_environment": 0,
+  "future_actual_admission": "Required independently before each of 48 production stages",
+  "source_scope": "S update/clip/loss_scale/backward/scheduler ordering; mechanism calls removed; no inference that all S source bytes are unchanged",
+  "task6_comparison": "Read-only bound full-S checkpoint tensor comparison; no equality gate, no optimizer/forward/environment; full S current execution term is removed, so numerical differences cannot be attributed solely to hardware.",
+  "admission_optimizer_twelve_runs": 240,
+  "variant_bc": {
+    "ALIGN": {
+      "target": "next_action",
+      "mask": "causal_bc_valid"
+    },
+    "MLR": {
+      "target": "actions.squeeze(1)[:,-1]",
+      "mask": "all ones"
+    }
+  }
+}

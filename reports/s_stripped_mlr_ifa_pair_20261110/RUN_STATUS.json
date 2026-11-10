@@ -1,0 +1,146 @@
+{
+  "status": "PARTIAL_EXECUTION",
+  "observed": "2026-11-10T20:39:12.238323+08:00",
+  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_s_stripped_mlr_ifa_align\\check_readonly_20261110_203911",
+  "audit": "PASS_PROGRESS_NOT_FINAL",
+  "contract": "b54b0c2d8d8b490d6f7c394f7f99fa6689222861240454b4dd4eca870158b598",
+  "cases": {
+    "OBJECT_ALIGN_41": {
+      "epochs": 6,
+      "production": 942,
+      "admission": 5,
+      "admitted_stages": [
+        6
+      ],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "OBJECT_MLR_41": {
+      "epochs": 6,
+      "production": 942,
+      "admission": 5,
+      "admitted_stages": [
+        6
+      ],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "OBJECT_ALIGN_42": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "OBJECT_MLR_42": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "OBJECT_ALIGN_43": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "OBJECT_MLR_43": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "GOAL_ALIGN_41": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "GOAL_MLR_41": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "GOAL_ALIGN_42": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "GOAL_MLR_42": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    },
+    "GOAL_ALIGN_43": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "ALIGN"
+    },
+    "GOAL_MLR_43": {
+      "epochs": 0,
+      "production": 0,
+      "admission": 0,
+      "admitted_stages": [],
+      "formal": 0,
+      "variant": "MLR"
+    }
+  },
+  "totals": {
+    "epochs": 12,
+    "production": 1884,
+    "admission": 10,
+    "formal": 0,
+    "training_collection": 0
+  },
+  "processes": [
+    {
+      "pid": 55246,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/controller.py ",
+      "state": "S"
+    },
+    {
+      "pid": 55248,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d7c1e9155a3f4dabb1f9d9eb9c4b10b8 /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_ALIGN_41/train.py A ",
+      "state": "S"
+    },
+    {
+      "pid": 55250,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d4e78f2ae35240249757f2ed3572d676 /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_MLR_41/train.py A ",
+      "state": "S"
+    },
+    {
+      "pid": 55257,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_ALIGN_41/train.py A ",
+      "state": "R"
+    },
+    {
+      "pid": 55260,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1/cases/OBJECT_MLR_41/train.py A ",
+      "state": "S"
+    }
+  ],
+  "controller_exit": null,
+  "scientific_scope": "12 paired stripped-S MLR+IFA / MLR+IFA+ALIGN runs",
+  "actual_final_cpu_acceptance": false
+}
