@@ -63,7 +63,14 @@ def finish_old():
         run(OLD,'audit_final_local.py',d)
         run(OLD,'describe_final.py',d)
     assert J(OLD/'RUN_STATUS.json')['actual_final_cpu_acceptance']
-    commit=publish(OLD,'Accept twelve paired stripped-S runs and publish complete metrics')
+    status=J(OLD/'RUN_STATUS.json');receipt=J(OLD/'PUBLICATION_RECEIPT.json')
+    if status['status']=='COMPLETE_ACCEPTED_AND_PUBLISHED' and receipt['status']=='PUSH_VERIFIED':
+        # Resuming this observer must not manufacture a new predecessor round.
+        import hashlib
+        final=Path(status['evidence_directory']);name=str((final/'LOCAL_FINAL_AUDIT.json').relative_to(OLD)).replace('\\','/')
+        assert J(OLD/'PUBLICATION_REVIEW.json')['files_sha256'][name]['sha256']==hashlib.sha256((final/'LOCAL_FINAL_AUDIT.json').read_bytes()).hexdigest()
+        commit=receipt['commit']
+    else:commit=publish(OLD,'Accept twelve paired stripped-S runs and publish complete metrics')
     print(json.dumps(dict(status='PREDECESSOR_ACCEPTED_AND_PUBLISHED',commit=commit)),flush=True)
 def main():
     # Existing prepared outputs and current scientific queue are never repeated.
