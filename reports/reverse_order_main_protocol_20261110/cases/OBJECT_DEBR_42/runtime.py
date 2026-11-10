@@ -1,7 +1,7 @@
 import os,sys,json,hashlib,time,copy
 from pathlib import Path
 R=Path(__file__).resolve().parent
-O=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/OBJECT_DEBR_42/inputs')
+O=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/OBJECT_DEBR_42/inputs')
 S=Path('/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/OBJECT_42/source')
 from layout import *
 os.environ.update(CORESET_OUT=str(O),CORESET_SEED='42',CAET_VARIANT='ALIGN',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',TOKENIZERS_PARALLELISM='false',LIBERO_CONFIG_PATH='/data/mlr_ifa/config',HF_HOME='/data/mlr_ifa/cache/huggingface',MUJOCO_GL='egl',MPLBACKEND='Agg',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',PYTHONDONTWRITEBYTECODE='1')
@@ -12,7 +12,8 @@ import numpy as np
 import torch
 from easydict import EasyDict
 from coreset_exp.common import sha,write,save,rng,restore_rng
-from caet_v3_exp.train import cpu,build
+from caet_v3_exp.train import cpu
+from build_ordered import build
 from caet_v3_exp.model import hidden,masked_bc,params
 from coreset_exp.model import angular_mean
 from libero.lifelong.algos.mlr import FileTrajectoryDataset
@@ -47,7 +48,10 @@ class Dataset(torch.utils.data.Dataset):
   return x,t
 def make(arm):
  c=EasyDict(js(O/'resolved_ra_coreset.json'));c.experiment_dir=str(OUTPUT[arm]/'models');c.run_root=str(OUTPUT[arm]);c.buffer_dir=str(OUTPUT[arm]/'logical_buffer_empty')
- a,b=build(c);a.refs={};a.caet_epoch_statistics=[];a.disable_all=False
+ a,b=build(c)
+ from order import verify_built_mapping
+ verify_built_mapping(b,c,R)
+ a.refs={};a.caet_epoch_statistics=[];a.disable_all=False
  assert a.step==0
  return a
 def setup(a,ds):

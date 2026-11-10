@@ -22,7 +22,7 @@
      dist.init_process_group('nccl');torch.cuda.set_device(0);begin=time.time()
      try:
          a,b=build(c);history=[]
-+        from reverse_admission import record_initial;record_initial(a)
++        from reverse_admission import record_initial;record_initial(a,b)
          if not resumed:
              r=rng()
              digest={k:hashlib.sha256(pickle.dumps(v) if k in ('python','numpy') else b''.join(x.cpu().numpy().tobytes() for x in (v if isinstance(v,list) else [v]))).hexdigest() for k,v in r.items()}

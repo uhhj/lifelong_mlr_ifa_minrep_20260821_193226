@@ -29,7 +29,9 @@ def equal(a,b):
     if isinstance(a,dict):return a.keys()==b.keys() and all(equal(a[k],b[k]) for k in a)
     if isinstance(a,(tuple,list)):return len(a)==len(b) and all(equal(x,y) for x,y in zip(a,b))
     return a==b
-def record_initial(a):
+def record_initial(a,benchmark):
+    from order import verify_built_mapping
+    verify_built_mapping(benchmark,a.cfg,R)
     before=rng()
     digest={k:hashlib.sha256(pickle.dumps(v) if k in ('python','numpy') else b''.join(x.cpu().numpy().tobytes() for x in (v if isinstance(v,list) else [v]))).hexdigest() for k,v in before.items()}
     tensors={k:hashlib.sha256(v.detach().cpu().numpy().tobytes()).hexdigest() for k,v in a.policy.state_dict().items()}

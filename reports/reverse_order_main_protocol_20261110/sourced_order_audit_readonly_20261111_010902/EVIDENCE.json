@@ -1,0 +1,178 @@
+{
+  "status": "READONLY_EXACT_NATIVE_FACTORY_ORDER_AUDIT",
+  "observed": 1794330543.2715752,
+  "cases": {
+    "OBJECT_MLR_41": {
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/OBJECT_MLR_41/source/coreset_exp/train.py": {
+        "sha256": "7932e4d94d34956f444965d21bf9cfec5e84bb22f517352907fd2f742a1ecef0",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/OBJECT_MLR_41/source/coreset_exp/model.py": {
+        "sha256": "49aa301355773c21fd8fdde301b9c5b066916326e7a699fa492ecf25b493e50a",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "OBJECT_DEBR_41": {
+      "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/ALIGN/source/caet_v3_exp/train.py": {
+        "sha256": "8e6ae52166f00c06361e21d9ae422dc95d922ca2be41f64c11fc73ffcc30706f",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(0)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/CAETv3_TAC_EFTR_ALIGN_OBJECT41_20261022_collate01/ALIGN/source/coreset_exp/model.py": {
+        "sha256": "cde3437775950fa6065916464435cfa4aa523c29d853b80fb412382240f46446",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "OBJECT_MLR_42": {
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/OBJECT_MLR_42/source/coreset_exp/train.py": {
+        "sha256": "0b26195e426d2402a1d34a245cca714c1a4e1bbaddd0bc8a08e562c38f2e5061",
+        "functions": {
+          "build": "def build(c):\n    control_seed(42);b=get_benchmark('LIBERO_OBJECT')(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/OBJECT_MLR_42/source/coreset_exp/model.py": {
+        "sha256": "781cebf4917f5d60cc1ed7f52d776e21558feab940d10e1ab17da91a770afaf5",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "OBJECT_DEBR_42": {
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/OBJECT_42/source/caet_v3_exp/train.py": {
+        "sha256": "355f33bbd5f4ce309fb7c37d14cbf43873d0c1bee4da81e323bc77c017f641d2",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/OBJECT_42/source/coreset_exp/model.py": {
+        "sha256": "e96cca5b95aab584c04bd9dd2929ca7674bda3641af669238e4aea99744645cc",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "OBJECT_MLR_43": {
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/OBJECT_MLR_43/source/coreset_exp/train.py": {
+        "sha256": "7932e4d94d34956f444965d21bf9cfec5e84bb22f517352907fd2f742a1ecef0",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/OBJECT_MLR_43/source/coreset_exp/model.py": {
+        "sha256": "49aa301355773c21fd8fdde301b9c5b066916326e7a699fa492ecf25b493e50a",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "OBJECT_DEBR_43": {
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/OBJECT_43/source/caet_v3_exp/train.py": {
+        "sha256": "355f33bbd5f4ce309fb7c37d14cbf43873d0c1bee4da81e323bc77c017f641d2",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/OBJECT_43/source/coreset_exp/model.py": {
+        "sha256": "e96cca5b95aab584c04bd9dd2929ca7674bda3641af669238e4aea99744645cc",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "GOAL_MLR_41": {
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/GOAL_MLR_41/source/coreset_exp/train.py": {
+        "sha256": "fcb114303c3e23a23f842be8374b80df215df917d349b399a2468afa7e475d7a",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/GOAL_MLR_41/source/coreset_exp/model.py": {
+        "sha256": "8c3016abbaffd75116e66bc2f90c257b9f2389dd177a7dfd7c41621b94222818",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "GOAL_DEBR_41": {
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source/caet_v3_exp/train.py": {
+        "sha256": "355f33bbd5f4ce309fb7c37d14cbf43873d0c1bee4da81e323bc77c017f641d2",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_41/source/coreset_exp/model.py": {
+        "sha256": "e96cca5b95aab584c04bd9dd2929ca7674bda3641af669238e4aea99744645cc",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "GOAL_MLR_42": {
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/GOAL_MLR_42/source/coreset_exp/train.py": {
+        "sha256": "fcb114303c3e23a23f842be8374b80df215df917d349b399a2468afa7e475d7a",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/GOAL_MLR_42/source/coreset_exp/model.py": {
+        "sha256": "8c3016abbaffd75116e66bc2f90c257b9f2389dd177a7dfd7c41621b94222818",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "GOAL_DEBR_42": {
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_42/source/caet_v3_exp/train.py": {
+        "sha256": "355f33bbd5f4ce309fb7c37d14cbf43873d0c1bee4da81e323bc77c017f641d2",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_42/source/coreset_exp/model.py": {
+        "sha256": "e96cca5b95aab584c04bd9dd2929ca7674bda3641af669238e4aea99744645cc",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "GOAL_MLR_43": {
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/GOAL_MLR_43/source/coreset_exp/train.py": {
+        "sha256": "fcb114303c3e23a23f842be8374b80df215df917d349b399a2468afa7e475d7a",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_GOAL')(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=PaperMLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/cases/GOAL_MLR_43/source/coreset_exp/model.py": {
+        "sha256": "8c3016abbaffd75116e66bc2f90c257b9f2389dd177a7dfd7c41621b94222818",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    },
+    "GOAL_DEBR_43": {
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_43/source/caet_v3_exp/train.py": {
+        "sha256": "355f33bbd5f4ce309fb7c37d14cbf43873d0c1bee4da81e323bc77c017f641d2",
+        "functions": {
+          "build": "def build(c):\n    control_seed(SEED);b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b"
+        }
+      },
+      "/data/mlr_ifa/experiment_workspaces/ALIGN_OBJECT42_43_GOAL_conditional_20261022/GOAL_43/source/coreset_exp/model.py": {
+        "sha256": "e96cca5b95aab584c04bd9dd2929ca7674bda3641af669238e4aea99744645cc",
+        "functions": {
+          "data_setup": "def data_setup(c,all_datasets=False):\n    b=get_benchmark(c.benchmark_name)(c.data.task_order_index)\n    datasets=[];shape=None\n    # Same dataset and tokenization order as released exporter/evaluator.\n    for t in range(10 if all_datasets else 1):\n        d,shape=get_dataset(str(__import__('pathlib').Path(c.folder)/b.get_task_demonstration(t)),\n            c.data.obs.modality,initialize_obs_utils=(t==0),seq_len=8,demo_limit=10,train=c.training)\n        datasets.append(d)\n    embs=get_task_embs(c,[b.get_task(t).language for t in range(10)]);b.set_task_embs(embs)\n    return b,[SequenceVLDataset(d,embs['input_ids'][t],embs['attention_mask'][t]) for t,d in enumerate(datasets)],shape"
+        }
+      }
+    }
+  },
+  "new_import": 0,
+  "new_optimizer": 0,
+  "new_environment": 0,
+  "server_writes": 0
+}

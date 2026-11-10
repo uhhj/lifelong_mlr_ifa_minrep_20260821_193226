@@ -2,8 +2,8 @@ PARENTS={'OBJECT_41': {'suite': 'OBJECT', 'seed': 41, 'main_mlr_parent': '/root/
 """Metadata inventory only: no model construction, environment or server write."""
 import hashlib,json,os,subprocess,time
 from pathlib import Path
-Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
-P=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
+Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
+P=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
 ACTIVE=Path('/data/mlr_ifa/experiment_workspaces/S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1')
 assert not Q.exists() and not P.exists(),'New reverse root must be unique'
 J=lambda p:json.loads(Path(p).read_text())

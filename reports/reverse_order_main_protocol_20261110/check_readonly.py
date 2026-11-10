@@ -1,7 +1,7 @@
 """Read new-root lightweight progress; gate scalars are emitted as bounded shards."""
 from pathlib import Path
 import sys,json,time,subprocess
-Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
+Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
 sys.path.insert(0,str(Q))
 from reverse_common import read,sha,verify,capacity,processes
 verify();light={};diagnostics={}

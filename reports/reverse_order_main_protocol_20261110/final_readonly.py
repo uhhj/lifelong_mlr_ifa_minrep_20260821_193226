@@ -1,7 +1,7 @@
 """One actual final CPU request after all new scientific jobs exit naturally."""
 from pathlib import Path
 import contextlib,io,json,os,runpy,subprocess,sys,time
-Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
+Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
 sys.path.insert(0,str(Q))
 from reverse_common import *
 assert (Q/'controller.exit').read_text().strip()=='0' and not processes()

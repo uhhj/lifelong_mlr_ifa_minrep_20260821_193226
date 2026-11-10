@@ -1,6 +1,6 @@
 # 主表协议下的逆序实验准备
 
-PARTIAL，2026-11-10 23:25 CST。engineering04实际12个run的CPU输入准备、Python3.8完整方法导入与本地独立复算均通过，合同`b35b7dbfebdda85ef757fdd21956131025b4bb4b6b3a27045597caadfd3506b3`。尚未启动controller，GPU自身准入、训练与环境回合均为0。旧准备失败和源完整保留，见IMPLEMENTATION_NOTES与版本变更证据。
+PARTIAL，2026-11-11 01:17 CST。engineering05实际12个run的CPU输入准备、Python3.8完整方法导入与本地独立复算均通过，合同`5d28905059a9afc15cc8175097eee4ce3af5599154bb980bc54dce53d220795c`。尚未启动controller，GPU自身准入、训练与环境回合均为0。旧准备失败和源完整保留，见IMPLEMENTATION_NOTES与版本变更证据。
 
 基底任务0–5、官方权重保持；后续学习原9→8→7→6。两套件各MLR+IFA/完整DEBR、seed41/42/43，共12run。主表训练和评估源码已逐文件绑定。各任务的物理身份、语言/BDDL/初态与特征、Random/RA成员、逆序混合人口和IFA已实际核对。
 
@@ -12,3 +12,5 @@ PARTIAL，2026-11-10 23:25 CST。engineering04实际12个run的CPU输入准备�
 总4800epoch、1156800接受更新、1636500生产物理更新；隔离准入预计666单列。完整DEBR另有240训练采集回合，全部2400正式回合。预算和学习率终点按逆序人口重算，保持每任务100epoch及主表名义超参数。
 
 当前stripped-S配对队列保持原合同，23:20只读观察已完成4个OBJECT run并进入seed43。新GPU工作等待其自然完成、实际独立CPU验收、结果分析与发布后，再重新检查容量和唯一入口启动。两方法继承各自主表评估随机流，不称严格同噪声因果配对。
+
+01:17补充：真实native factory源码只读复查发现OBJECT_DEBR_41仍写死order0，04虽完成CPU输入准备但尚未任何训练，已退休保留。05通过case-local原函数全局变量与函数体复制，仅替换该一处benchmark索引。全部12实际CPU完整导入和factory配置索引证明、本地源函数唯一差异检查已通过；实际GPU构造返回的benchmark仍须在首个优化器调用前逐任务通过ACTUAL_BUILD_MAPPING，不能将CPU证明写成GPU已准入。所有科学超参数、模型/损失、预算及原初始化SHA保持。

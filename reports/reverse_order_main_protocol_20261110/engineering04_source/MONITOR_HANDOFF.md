@@ -1,0 +1,11 @@
+# 准备完成，待前序自然验收发布
+
+先读PROTOCOL/IMPLEMENTATION_NOTES/REPORT/ACTIVE_ROOT/RUN_STATUS和PREPARATION_LOCAL_AUDIT。新合同b35b7dbfebdda85ef757fdd21956131025b4bb4b6b3a27045597caadfd3506b3，12个CPU输入与完整Python3.8导入实际PASS；0GPU准入/0训练/0环境，新controller未启动。禁止重跑已完成prepare/deploy/build，不覆盖四版准备历史。
+
+当前先跟踪execution/20261110_s_stripped_mlr_ifa_align，其23:20审计下一整OBJECT训练波检查00:41:36 CST。前序实际最终验收、分析和发布后才调用launch_after_current.py，后者核真实CPU结果与已发布最终审计，远端再次核无旧进程、合同与容量后唯一派发。不得绕过门或将静态包装当验收。
+
+后续transport.py check_readonly.py→audit_progress.py NEW PREVIOUS→record_progress.py NEW→publish.py。全部自然exit0无自身进程后final_readonly.py→audit_final_local.py→describe_final.py，错误留证外置修、不重训重评。凭据Windows Credential Manager/内存，禁回显。只公开代码、标量、hash/outcomes，所有私有payload留服务器。
+
+当前任务执行worker已启动（非App定时自动化）：本机PID38504，exec会话2647，supervise_current_task.py，单实例文件锁保护。读CURRENT_TASK_WORKER.json后核PID，不重复启动。该worker按旧TRACKING_STATUS的完整阶段预计时间等待，执行只读检查/独立复算/发布；前序实际最终接受并发布后才唯一派发新12run，继而有限跟踪到最终CPU/分析/发布。任何未知错误保存CURRENT_TASK_WORKER_FAILURE并停给主agent工程审查，不自动重训重评。
+
+截至00:21，新增MAIN_INITIAL_IDENTITY_AUDIT实际证明六个主表MLR的100tensor与全部记录RNG SHA和冻结新输入初始化门一致；仅本地JSON/SHA比较，0模型/优化器/环境。最近发布70b618809a2a5ae1b0dd8507b2ec397855aa8da1。旧controller55246保持原合同；本轮最近远端实际观察仍23:20，下一00:41:36 CST，不把等待时间当新进度。最终旧CPU采用保留原冻结源的外置final_readonly_engineering02.py，并在实际成功后audit_final_local/describe_final再发布。

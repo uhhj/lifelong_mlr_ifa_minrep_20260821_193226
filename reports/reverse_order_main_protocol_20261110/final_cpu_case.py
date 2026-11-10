@@ -51,6 +51,7 @@ def lr(step,total):return step/500 if step<500 else max(0.,(total-step)/max(1,to
 cfg=EasyDict(copy.deepcopy(inp['train_config']));cfg.device='cpu'
 mapping=verify_mapping(cfg)
 assert J(R/'ACTUAL_ORDER.json')['mapping']==mapping
+assert J(R/'ACTUAL_BUILD_MAPPING.json')['mapping']==mapping
 assert sha(cfg.pretrain)==inp['parent']['official_pretrain_sha256']
 if method=='MLR':
     hist=J(out/'epochs.json');complete=J(out/'TRAINING_COMPLETE.json');initial=J(R/'INITIAL_BINDING.json')

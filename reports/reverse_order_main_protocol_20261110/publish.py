@@ -57,15 +57,15 @@ def main():
         relative = path.relative_to(R)
         if any(part in EXCLUDED_PARTS for part in relative.parts):
             continue
-        if len(relative.parts)>1 and relative.parts[0]=='prepare_remote_20261110_231804' and relative.parts[1]=='diagnostics':
+        if len(relative.parts)>1 and relative.parts[0].startswith('prepare_remote_') and relative.parts[1]=='diagnostics':
             # Exact transferred text is materialized once at its normal path;
             # keep duplicate transport envelopes local with their original SHA.
-            evidence=json.loads((R/'prepare_remote_20261110_231804/EVIDENCE.json').read_text())
+            evidence=json.loads((R/relative.parts[0]/'EVIDENCE.json').read_text())
             diagnostic_files={k.replace('\\','/'):v for k,v in evidence['diagnostic_files'].items()}
             row=diagnostic_files[Path(*relative.parts[1:]).as_posix()]
             assert hashlib.sha256(path.read_bytes()).hexdigest()==row['sha256']
             item=json.loads(path.read_text())
-            assert hashlib.sha256((R/item['relative']).read_bytes()).hexdigest()==item['sha256']
+            assert hashlib.sha256(item['text'].encode()).hexdigest()==item['sha256']
             continue
         if relative.as_posix() == 'preflight_readonly_20261110_224104/EVIDENCE.json':
             # Full nested historical selection inventories are 28 MB; publish the

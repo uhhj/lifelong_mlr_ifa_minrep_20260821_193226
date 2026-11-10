@@ -18,3 +18,13 @@ def verify_mapping(cfg):
     assert all(a.get_task(i)==b.get_task(i) for i in range(6))
     assert all(b.get_task(i)==a.get_task(ORIGINAL_TASKS[i]) for i in range(10))
     return {str(i):dict(original_task=ORIGINAL_TASKS[i],name=b.get_task(i).name,language=b.get_task(i).language,bddl=b.get_task(i).bddl_file,initial_file=b.get_task(i).init_states_file) for i in range(10)}
+
+def verify_built_mapping(benchmark,cfg,case_root):
+    from libero.libero.benchmark import get_benchmark
+    from pathlib import Path
+    import json
+    expected=get_benchmark(cfg.benchmark_name)(ORDER_INDEX)
+    assert all(benchmark.get_task(i)==expected.get_task(i) for i in range(10)),'Native returned benchmark does not implement the reverse physical order'
+    proof=dict(status='PASS_ACTUAL_NATIVE_BUILD_RETURNED_REVERSE_BENCHMARK',mapping=verify_mapping(cfg),base_unchanged=True,new_optimizer=0,new_environment=0)
+    Path(case_root,'ACTUAL_BUILD_MAPPING.json').write_text(json.dumps(proof,indent=2)+'\n')
+    return proof

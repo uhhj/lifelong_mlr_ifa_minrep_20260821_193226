@@ -10,7 +10,7 @@ pre=J(Path(sys.argv[1])/'EVIDENCE.json')
 binding=J(R/'MAIN_TABLE_BINDING.json')
 audit=J(R/'PREFLIGHT_LOCAL_AUDIT.json')
 assert sha(Path(sys.argv[1])/'EVIDENCE.json')==audit['sha256']
-NAME='REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04'
+NAME='REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05'
 Q=PurePosixPath('/data/mlr_ifa/experiment_workspaces')/NAME
 PRIVATE=PurePosixPath('/data/mlr_ifa/experiments')/NAME
 ORDER=[0,1,2,3,4,5,9,8,7,6]
@@ -85,7 +85,7 @@ for suite in ['OBJECT','GOAL']:
                         text=text.replace(needle,"get_benchmark('LIBERO_%s')(c.data.task_order_index)"%suite)
                         nl='\r\n' if '\r\n' in text else '\n'
                         needle='a,b=build(c);history=[]';assert text.count(needle)==1
-                        text=text.replace(needle,needle+nl+'        from reverse_admission import record_initial;record_initial(a)')
+                        text=text.replace(needle,needle+nl+'        from reverse_admission import record_initial;record_initial(a,b)')
                         needle='            a.start_task(-1,loader)';assert text.count(needle)==1
                         text=text.replace(needle,needle+nl+'            from reverse_admission import admit;admit(a,dataset,t,info)')
                         needle="                history.append(row);write(root/'epochs.json',history)";assert text.count(needle)==1
@@ -146,6 +146,29 @@ for suite in ['OBJECT','GOAL']:
                 rt=rt.replace(marker,marker+'\nfrom order import install,ORIGINAL_TASKS\ninstall()',1)
                 rt=replace_function(rt,'verify',"def verify():\n from reverse_common import verify_case\n return verify_case(R)")
                 rt=replace_function(rt,'capacity',"def capacity():\n from reverse_common import capacity as check\n return check()")
+                rt=rt.replace('from caet_v3_exp.train import cpu,build','from caet_v3_exp.train import cpu\nfrom build_ordered import build')
+                assert 'from build_ordered import build' in rt
+                needle='a,b=build(c);a.refs={};a.caet_epoch_statistics=[];a.disable_all=False'
+                assert rt.count(needle)==1
+                rt=rt.replace(needle,"a,b=build(c)\n from order import verify_built_mapping\n verify_built_mapping(b,c,R)\n a.refs={};a.caet_epoch_statistics=[];a.disable_all=False")
+                factory=Path(sys.argv[1]).parent/'sourced_order_audit_readonly_20261111_010902/EVIDENCE.json'
+                audit_factory=J(factory)['cases'][case]
+                native=next(v for k,v in audit_factory.items() if k.endswith('/caet_v3_exp/train.py'))
+                original=native['functions']['build']
+                changed=original.replace("get_benchmark('LIBERO_OBJECT')(0)","get_benchmark('LIBERO_OBJECT')(c.data.task_order_index)")
+                assert changed==original or case=='OBJECT_DEBR_41'
+                factory_code="""\"\"\"Exact native factory globals; only an explicit order argument is changed.\"\"\"
+import inspect,hashlib,ast
+from caet_v3_exp import train as _native
+assert hashlib.sha256(open(_native.__file__,'rb').read()).hexdigest()==%r
+_source=inspect.getsource(_native.build).strip()
+assert _source==%r
+_ordered=%r
+_globals=dict(vars(_native));exec(compile(_ordered,__file__,'exec'),_globals)
+build=_globals['build']
+FACTORY_PROOF=dict(parent_sha256=%r,parent_source=_source,ordered_source=_ordered,order_argument_from_configuration=True,model_loss_optimizer_unchanged=True,source_shared_file_modified=False)
+"""%(native['sha256'],original.strip(),changed,native['sha256'])
+                put(crs+'/build_ordered.py',factory_code)
                 # Replace inherited copy optimization guards with this order's actual stage starts.
                 suffix=rt.find('\n# Independent snapshots:')
                 if suffix>=0:rt=rt[:suffix]
@@ -166,7 +189,7 @@ def capture(a):
   write(R/'COPY_EQ.json',dict(status='PASS_OBSERVED_STAGE_STARTS',checked=_copy_checked,candidate_sha256=sha(R/'candidate.py')))
  return result
 '''
-                put(crs+'/runtime.py',rt,source/'runtime.py',['new input/output roots','explicit order installation','new frozen integrity and global capacity guard','actual-stage full-state CPU-copy oracle'])
+                put(crs+'/runtime.py',rt,source/'runtime.py',['new input/output roots','explicit order installation and exact case-local native factory order argument','actual returned benchmark mapping before optimizer updates','new frozen integrity and global capacity guard','actual-stage full-state CPU-copy oracle'])
                 layout="""from pathlib import Path
 import json
 R=Path(__file__).resolve().parent

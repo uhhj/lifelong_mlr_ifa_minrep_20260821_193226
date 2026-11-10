@@ -1,0 +1,14 @@
+{
+  "status": "PASS_ACTUAL_IMPORTED_FACTORY_ORDER_NO_MODEL",
+  "proof": {
+    "parent_sha256": "8e6ae52166f00c06361e21d9ae422dc95d922ca2be41f64c11fc73ffcc30706f",
+    "parent_source": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(0)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b",
+    "ordered_source": "def build(c):\n    control_seed(SEED);b=get_benchmark('LIBERO_OBJECT')(c.data.task_order_index)\n    b.set_task_embs(get_task_embs(c,[b.get_task(i).language for i in range(10)]))\n    Path(c.experiment_dir).mkdir(parents=True,exist_ok=True);Path(c.buffer_dir).mkdir(parents=True,exist_ok=True)\n    a=V3MLR(1,c).cuda();n=strict_downstream(a.policy,c.pretrain)\n    assert all(n.startswith(('temporal_transformer.','policy_head.')) for n,p in a.policy.named_parameters() if p.requires_grad)\n    a.policy=DDP(a.policy,device_ids=[0],output_device=0);a.train();a.step=0\n    return a,b",
+    "order_argument_from_configuration": true,
+    "model_loss_optimizer_unchanged": true,
+    "source_shared_file_modified": false
+  },
+  "new_model_forward": 0,
+  "new_optimizer": 0,
+  "new_environment": 0
+}

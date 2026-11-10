@@ -3,10 +3,10 @@ import json
 R=Path(__file__).resolve().parent
 ARMS='S'
 SEED=42
-NAME='REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04'
-ROOT_PRIVATE=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')/'unused_root_payload'
-DATA_PRIVATE=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
-OUTPUT={'S':Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04/GOAL_DEBR_42/S')}
+NAME='REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05'
+ROOT_PRIVATE=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')/'unused_root_payload'
+DATA_PRIVATE=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
+OUTPUT={'S':Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/GOAL_DEBR_42/S')}
 VOLUME_BOUND={'/root':0,'/data':14*1024**3}
 _counts=json.loads((R/'INPUT_COUNTS.json').read_text())
 POP={int(k):v for k,v in _counts['population'].items()}

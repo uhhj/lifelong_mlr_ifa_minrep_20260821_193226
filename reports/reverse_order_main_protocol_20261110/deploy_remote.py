@@ -1,8 +1,8 @@
 """One text-only staging upload. It never starts a scientific controller."""
 from pathlib import Path
 import ast,hashlib,json,os,time
-Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
-P=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
+Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
+P=Path('/data/mlr_ifa/experiments/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
 assert not Q.exists() and not P.exists(),'New staging must be unique'
 assert len(BUNDLE)>1000
 v=os.statvfs('/data');assert v.f_bavail*v.f_frsize>=2*1024**3+256*1024**2

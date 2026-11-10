@@ -8,7 +8,7 @@
 
 主表来源：MLR+IFA为20261107_mlr_ifa_reproduction_audit核定的六个Random+IFA run（OBJECT43使用主表repeat1来源）；完整DEBR为20261028_support_gate_full_s_object及20261029_support_gate_full_s_goal已接受的支持度加权与候选门控S。记录来源代码、配置、官方权重、初始化和结果文件SHA。主表数值只用于原顺序参考，不算新逆序run结果。
 
-唯一已准备根：/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04（仅准备完成，未启动）。当前正在执行的S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1保持原合同与队列；新GPU工作只在其自然完成、独立验收和发布后启动。准备阶段CPU输入组织不训练模型、不运行环境。未经实际部署/准入不得称已启动或PASS。
+唯一已准备根：/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05（仅准备完成，未启动）。当前正在执行的S_STRIPPED_MLR_IFA_PAIR_OBJECT_GOAL_20261110_v1保持原合同与队列；新GPU工作只在其自然完成、独立验收和发布后启动。准备阶段CPU输入组织不训练模型、不运行环境。未经实际部署/准入不得称已启动或PASS。
 
 ## 顺序、任务身份和输入
 

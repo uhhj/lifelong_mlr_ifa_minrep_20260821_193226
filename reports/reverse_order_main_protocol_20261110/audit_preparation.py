@@ -21,6 +21,15 @@ for case,entry in spec['cases'].items():
     assert not p['cuda_initialized'] and p['new_optimizer']==p['new_environments']==p['new_model_forward']==0
     assert J(r/'PREPARATION_ATTEMPT.json')['exit']==J(r/'IMPORT_ATTEMPT.json')['exit']==0
     assert J(r/'IMPORT_ADMISSION.json')['status']=='PASS_ACTUAL_CPU_IMPORT_NO_SCIENCE'
+    factory=J(r/'FACTORY_ORDER_ADMISSION.json')
+    assert factory['status']=='PASS_ACTUAL_IMPORTED_FACTORY_ORDER_NO_MODEL' and factory['proof']['order_argument_from_configuration']
+    assert 'c.data.task_order_index' in factory['proof']['ordered_source']
+    if inp['method']=='DEBR':
+        fp=factory['proof'];registry=J(r/'EXTERNAL_FILES.json')
+        parent_factory=str(inp['source_root'])+'/caet_v3_exp/train.py'
+        assert fp['parent_sha256']==registry[parent_factory]
+        assert fp['ordered_source']==fp['parent_source'].replace("get_benchmark('LIBERO_OBJECT')(0)","get_benchmark('LIBERO_OBJECT')(c.data.task_order_index)")
+        assert fp['ordered_source']==fp['parent_source'] or case=='OBJECT_DEBR_41'
     expected=([1319,2220,2920,3742],[132,222,292,375]) if inp['suite']=='OBJECT' else ([1969,1889,2326,2879],[197,189,233,288])
     assert [counts['population'][str(s)] for s in range(6,10)]==expected[0]
     assert [p['stages'][str(s)]['batches'] for s in range(6,10)]==expected[1]

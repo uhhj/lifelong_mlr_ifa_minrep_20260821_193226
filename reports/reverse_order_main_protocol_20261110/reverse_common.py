@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib,json,os,time
 Q=Path(__file__).resolve().parent
-NAME='REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04'
+NAME='REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05'
 P=Path('/data/mlr_ifa/experiments')/NAME
 PY='/data/mlr_ifa/env/bin/python'
 def read(p):return json.loads(Path(p).read_text())

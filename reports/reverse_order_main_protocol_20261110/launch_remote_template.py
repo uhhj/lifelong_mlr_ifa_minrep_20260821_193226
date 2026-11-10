@@ -1,7 +1,7 @@
 """Unique authorized launch after predecessor actual final acceptance and publication."""
 from pathlib import Path
 import hashlib,json,os,subprocess,sys,time
-Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
+Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
 sys.path.insert(0,str(Q))
 from reverse_common import verify,capacity,read,write,environment,processes,PY,sha
 assert AUTHORIZATION['predecessor_actual_final_status']=='PASS_COMPLETE_LOCAL_ACCEPTANCE'

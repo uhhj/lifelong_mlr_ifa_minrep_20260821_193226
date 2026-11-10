@@ -1,7 +1,7 @@
 """Finish staged CPU inputs and freeze once; does not launch the controller."""
 from pathlib import Path
 import hashlib,json,os,subprocess,sys,time
-Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering04')
+Q=Path('/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05')
 sys.path.insert(0,str(Q))
 from reverse_common import read,sha,write,environment,PY
 assert (Q/'STAGED.json').exists() and not (Q/'CONTRACT.json').exists() and not (Q/'LAUNCH.json').exists()
@@ -18,7 +18,10 @@ for case in spec['cases']:
     # Actual Python 3.8 imports of complete method paths, never their main().
     inp=read(r/'INPUT.json')
     modules=['coreset_exp.train','coreset_exp.evaluate'] if inp['method']=='MLR' else ['runtime','updates','train','evaluate','collect_native','gate_admission','support_memory']
-    code="import os,sys,json,importlib;from pathlib import Path;Q=Path(%r);R=Path(%r);sys.path[:0]=[str(R),%r,str(Q)];os.environ.update(REVERSE_CASE_ROOT=str(R),CORESET_OUT=%r,CORESET_SEED=%r,CAET_VARIANT='ALIGN');from order import install;install();import torch;torch.set_num_threads(1);[importlib.import_module(n) for n in %r];assert not torch.cuda.is_initialized();print(json.dumps(dict(status='PASS_ACTUAL_CPU_IMPORT_NO_SCIENCE',modules=%r,new_optimizer=0,new_environment=0,new_model_forward=0)))"%(str(Q),str(r),str(r/'source') if inp['method']=='MLR' else inp['source_root'],inp['input_root'],str(inp['seed']),modules,modules)
+    code="import os,sys,json,importlib;from pathlib import Path;Q=Path(%r);R=Path(%r);sys.path[:0]=[str(R),%r,str(Q)];os.environ.update(REVERSE_CASE_ROOT=str(R),CORESET_OUT=%r,CORESET_SEED=%r,CAET_VARIANT='ALIGN');from order import install;install();import torch;torch.set_num_threads(1);[importlib.import_module(n) for n in %r];assert not torch.cuda.is_initialized()\n"%(str(Q),str(r),str(r/'source') if inp['method']=='MLR' else inp['source_root'],inp['input_root'],str(inp['seed']),modules)
+    if inp['method']=='DEBR':code+="from build_ordered import FACTORY_PROOF as fp\nassert fp['order_argument_from_configuration'] and fp['model_loss_optimizer_unchanged']\nassert '(0)' not in fp['ordered_source']\n"
+    else:code+="import inspect\nfrom coreset_exp.train import build\nsource=inspect.getsource(build)\nassert 'c.data.task_order_index' in source\nfp=dict(ordered_source=source,order_argument_from_configuration=True,model_loss_optimizer_unchanged=True)\n"
+    code+="from reverse_common import write\nwrite(R/'FACTORY_ORDER_ADMISSION.json',dict(status='PASS_ACTUAL_IMPORTED_FACTORY_ORDER_NO_MODEL',proof=fp,new_model_forward=0,new_optimizer=0,new_environment=0))\nprint(json.dumps(dict(status='PASS_ACTUAL_CPU_IMPORT_NO_SCIENCE',modules=%r,new_optimizer=0,new_environment=0,new_model_forward=0)))"%modules
     check=subprocess.run([PY,'-B','-c',code],cwd=r,env=env,capture_output=True,text=True)
     write(r/'IMPORT_ATTEMPT.json',dict(exit=check.returncode,stdout=check.stdout,stderr=check.stderr))
     assert check.returncode==0,('Actual import failed; no training started',case,check.stderr[-3000:])

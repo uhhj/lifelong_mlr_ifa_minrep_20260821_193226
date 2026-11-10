@@ -11,3 +11,5 @@ CPU检查保留旧库导入时的EGL设备0编号，所有张量map_location=cpu
 训练计数通过AdamW.step包装累计物理调用，隔离准入单列且完整恢复原状态/RNG。逆序人口导致学习率终点和预算重算；实际科学停止条件不随结果修改。最多两个训练，采集与正式环境通过共同文件锁互斥。当前旧队列先自然完成并实际独立验收、分析和发布，新GPU入口才允许执行。
 
 最终外置CPU和本地复算路径先静态编写，只有实际调用成功才记接受。所有CP/动作/特征/初态/RNG/成功缓存payload留在服务器，只返回轻量代码、标量、身份与SHA、episode outcomes。
+
+engineering05补充：逐一读取真实冻结native build函数发现OBJECT_DEBR_41依赖仍写死order0（只验证独立benchmark对象不足以覆盖实际训练工厂）。已退休未启动的04完整源码/准备合同，旧root不覆盖。新case-local build_ordered使用原factory原全局变量，仅把该处order0改为cfg索引；其余五个DEBR工厂源函数不变。12个实际GPU初始化返回的benchmark必须再逐任务核对原9→8→7→6和基底0–5，且在任何优化器更新前写ACTUAL_BUILD_MAPPING。损失、模型、优化器、选样和预算不变。新的CPU导入proof尚待实际完成与本地审计，不能套04的PASS。

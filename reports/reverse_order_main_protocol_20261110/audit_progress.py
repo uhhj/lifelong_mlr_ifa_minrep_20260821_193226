@@ -64,6 +64,8 @@ def audit(directory,previous=None):
                     assert all(a[k] for k in ['q_one_original_S_exact','lambda_zero_original_C_exact','ten_step_C_replay_exact','accepted_and_rejected_full_state_restore','measurement_state_exact','probe_all_state_exact'])
                 ad.append(st);ad_calls+=a['optimizer_calls']
         assert not h or set(range(6,6+(len(h)+99)//100))<=set(ad)
+        if h:
+            assert obj[p+'ACTUAL_BUILD_MAPPING.json']['status']=='PASS_ACTUAL_NATIVE_BUILD_RETURNED_REVERSE_BENCHMARK'
         collected=0
         if method=='DEBR':
             for st in range(6,10):
