@@ -1,15 +1,15 @@
 {
   "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
   "status": "PARTIAL_EXECUTION_PENDING_FINAL_ACCEPTANCE",
-  "observed": "2026-11-11T16:40:27.501884+08:00",
-  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_reverse_order_main_protocol\\check_readonly_20261111_164025",
+  "observed": "2026-11-11T18:14:00.982940+08:00",
+  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_reverse_order_main_protocol\\check_readonly_20261111_181359",
   "contract": "167eb6d15fab4f6d9f7e4db396f826f546160edacb0e2b3049bfa60d5ee80216",
   "totals": {
-    "epochs": 2292,
-    "accepted": 572764,
-    "production_physical": 799628,
-    "admission": 304,
-    "training_collection": 100,
+    "epochs": 2363,
+    "accepted": 598547,
+    "production_physical": 850997,
+    "admission": 338,
+    "training_collection": 110,
     "formal": 0
   },
   "cases": {
@@ -104,30 +104,33 @@
       "evaluate_exit": null
     },
     "OBJECT_DEBR_43": {
-      "epochs": 292,
-      "accepted": 62264,
-      "production_physical": 111328,
-      "admission": 62,
-      "training_collection": 20,
+      "epochs": 362,
+      "accepted": 87850,
+      "production_physical": 162500,
+      "admission": 91,
+      "training_collection": 30,
       "formal": 0,
       "admitted_stages": [
         6,
         7,
-        8
+        8,
+        9
       ],
-      "gate_blocks_observed": 5086,
-      "gate_Q_accepts_observed": 2321,
+      "gate_blocks_observed": 7670,
+      "gate_Q_accepts_observed": 3680,
       "train_exit": null,
       "evaluate_exit": null
     },
     "GOAL_MLR_41": {
-      "epochs": 0,
-      "accepted": 0,
-      "production_physical": 0,
-      "admission": 0,
+      "epochs": 1,
+      "accepted": 197,
+      "production_physical": 197,
+      "admission": 5,
       "training_collection": 0,
       "formal": 0,
-      "admitted_stages": [],
+      "admitted_stages": [
+        6
+      ],
       "gate_blocks_observed": 0,
       "gate_Q_accepts_observed": 0,
       "train_exit": null,
@@ -205,7 +208,7 @@
       "pid": 119466,
       "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/controller.py ",
       "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05",
-      "state": "S"
+      "state": "T"
     },
     {
       "pid": 124366,
@@ -218,14 +221,63 @@
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_DEBR_43 train ",
       "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_DEBR_43",
       "state": "R"
+    },
+    {
+      "pid": 152917,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/parallel_dispatch_v2.py run ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05",
+      "state": "S"
+    },
+    {
+      "pid": 152921,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=70f388dd7c4048cd88549c324cee63db /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/goal_mlr_entry.py GOAL_MLR_41 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/GOAL_MLR_41",
+      "state": "S"
+    },
+    {
+      "pid": 152926,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/goal_mlr_entry.py GOAL_MLR_41 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/GOAL_MLR_41",
+      "state": "R"
     }
   ],
   "actual_final_cpu_acceptance": false,
   "phase": "CURRENT_WHOLE_RUN_TRAINING_AND_COLLECTION",
   "eta": {
+    "GOAL_MLR_41": {
+      "minutes": 51.86308553184551,
+      "pure_epoch_minutes": 39.86308553184551,
+      "planning_allowance_minutes": 12,
+      "stages": {
+        "6": {
+          "epochs": 1,
+          "seconds_per_epoch": 5.206254720687866,
+          "extrapolated": false,
+          "borrowed": false
+        },
+        "7": {
+          "epochs": 0,
+          "seconds_per_epoch": 4.994833209187851,
+          "extrapolated": true,
+          "borrowed": false
+        },
+        "8": {
+          "epochs": 0,
+          "seconds_per_epoch": 6.157651522437933,
+          "extrapolated": true,
+          "borrowed": false
+        },
+        "9": {
+          "epochs": 0,
+          "seconds_per_epoch": 7.611174414000535,
+          "extrapolated": true,
+          "borrowed": false
+        }
+      }
+    },
     "OBJECT_DEBR_43": {
-      "minutes": 168.94531337420148,
-      "pure_epoch_minutes": 148.94531337420148,
+      "minutes": 69.04808487812679,
+      "pure_epoch_minutes": 49.04808487812679,
       "planning_allowance_minutes": 20,
       "stages": {
         "6": {
@@ -241,21 +293,21 @@
           "borrowed": false
         },
         "8": {
-          "epochs": 92,
-          "seconds_per_epoch": 55.970094203948975,
+          "epochs": 100,
+          "seconds_per_epoch": 56.213105416297914,
           "extrapolated": false,
           "borrowed": false
         },
         "9": {
-          "epochs": 0,
-          "seconds_per_epoch": 84.88958048820496,
+          "epochs": 62,
+          "seconds_per_epoch": 77.44434454441071,
           "extrapolated": false,
-          "borrowed": true
+          "borrowed": false
         }
       }
     }
   },
-  "next_checkpoint_CST": "2026-11-11T19:29:27.501884+08:00",
+  "next_checkpoint_CST": "2026-11-11T19:06:00.982940+08:00",
   "eta_is_not_a_guaranteed_bound": true,
   "background_automation_created": false
 }

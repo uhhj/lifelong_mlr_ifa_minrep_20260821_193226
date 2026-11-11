@@ -1,0 +1,75 @@
+{
+  "status": "DISPATCHER_RELEASED",
+  "pid": 152645,
+  "observed": 1794387542.406831,
+  "handoff": {
+    "status": "USER_AUTHORIZED_PARALLEL_GOAL_TRAINING",
+    "observed": 1794387542.1028664,
+    "original_controller": {
+      "pid": 119466,
+      "state": "S",
+      "ppid": 1,
+      "starttime": "12978216",
+      "wait_status": 0
+    },
+    "inherited_launcher": {
+      "pid": 124366,
+      "state": "S",
+      "ppid": 119466,
+      "starttime": "15341889",
+      "wait_status": 0
+    },
+    "inherited_case": "OBJECT_DEBR_43",
+    "root_contract": "167eb6d15fab4f6d9f7e4db396f826f546160edacb0e2b3049bfa60d5ee80216",
+    "dispatcher_sha256": "1d7c26164e4daed3bde66ed69e3e0bad84bda916eca39c9565d7696511a16715",
+    "max_training_slots": 2,
+    "evaluation_order": [
+      "OBJECT",
+      "GOAL"
+    ],
+    "formal_evaluation_after_all_training": true
+  },
+  "release": {
+    "pid": 152645,
+    "observed": 1794387542.406475,
+    "handoff_sha256": "661b61e0752bfa50c57bf3fda3ea1505f7ab8c8fc94cdd6743ad94fd8410bbef"
+  },
+  "first_GOAL_dispatch": {
+    "time": 1794387544.808941,
+    "pid": 152647,
+    "cmd": [
+      "/data/mlr_ifa/env/bin/python",
+      "-B",
+      "-m",
+      "torch.distributed.run",
+      "--nnodes=1",
+      "--nproc_per_node=1",
+      "--rdzv_backend=c10d",
+      "--rdzv_endpoint=localhost:0",
+      "--rdzv_id=0527badcf26544c0b064761e43b13598",
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py",
+      "GOAL_MLR_41",
+      "train"
+    ],
+    "rdzv_id": "0527badcf26544c0b064761e43b13598"
+  },
+  "coordinator_status": {
+    "status": "PARTIAL_TRAINING",
+    "suite": "OBJECT+GOAL",
+    "controller": 152645,
+    "active": {
+      "GOAL_MLR_41": 152647,
+      "OBJECT_DEBR_43": 124366
+    },
+    "pending": [
+      "GOAL_DEBR_41",
+      "GOAL_MLR_42",
+      "GOAL_DEBR_42",
+      "GOAL_MLR_43",
+      "GOAL_DEBR_43"
+    ],
+    "failures": [],
+    "time": 1794387544.8093133
+  },
+  "failure": null
+}

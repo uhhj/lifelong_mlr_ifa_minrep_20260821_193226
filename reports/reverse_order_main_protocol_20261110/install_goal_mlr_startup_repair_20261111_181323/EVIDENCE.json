@@ -1,0 +1,127 @@
+{
+  "status": "REPAIRED_DISPATCHER_RELEASED",
+  "pid": 152917,
+  "observed": 1794392014.5005436,
+  "handoff": {
+    "status": "PREPARED_ZERO_UPDATE_STARTUP_REPAIR",
+    "observed": 1794392014.1963959,
+    "root_contract": "167eb6d15fab4f6d9f7e4db396f826f546160edacb0e2b3049bfa60d5ee80216",
+    "retired_dispatcher": {
+      "pid": 152645,
+      "state": "S",
+      "ppid": 1,
+      "starttime": "16634046",
+      "wait_status": 0
+    },
+    "inherited": {
+      "status": "USER_AUTHORIZED_PARALLEL_GOAL_TRAINING",
+      "observed": 1794387542.1028664,
+      "original_controller": {
+        "pid": 119466,
+        "state": "S",
+        "ppid": 1,
+        "starttime": "12978216",
+        "wait_status": 0
+      },
+      "inherited_launcher": {
+        "pid": 124366,
+        "state": "S",
+        "ppid": 119466,
+        "starttime": "15341889",
+        "wait_status": 0
+      },
+      "inherited_case": "OBJECT_DEBR_43",
+      "root_contract": "167eb6d15fab4f6d9f7e4db396f826f546160edacb0e2b3049bfa60d5ee80216",
+      "dispatcher_sha256": "1d7c26164e4daed3bde66ed69e3e0bad84bda916eca39c9565d7696511a16715",
+      "max_training_slots": 2,
+      "evaluation_order": [
+        "OBJECT",
+        "GOAL"
+      ],
+      "formal_evaluation_after_all_training": true
+    },
+    "preflight": {
+      "GOAL_MLR_41": {
+        "status": "PASS_ACTUAL_REVERSE_NAMESPACE_VERIFICATION",
+        "case": "GOAL_MLR_41",
+        "case_contract": "2780ac299e493760b929b0e5e8134439919694a984619a1e6eab61e041d631df",
+        "frozen_GOAL_source_sha256": "60dc81d8ebc17e17836106c0173154872c375a6e0f6062d7b448786d428b784a",
+        "reference_OBJECT_source_sha256": "92e6317a4f6d1af0e8a816d745013c99e62922f5b0af7aa300c706a6ebeb7ad4",
+        "legacy_orchestration_statements_removed": 3,
+        "new_optimizer": 0,
+        "new_environments": 0
+      },
+      "GOAL_MLR_42": {
+        "status": "PASS_ACTUAL_REVERSE_NAMESPACE_VERIFICATION",
+        "case": "GOAL_MLR_42",
+        "case_contract": "7eb4e7cd5d51387c94f139188897c63dccee1828f9f10d5a753f87491e7826fa",
+        "frozen_GOAL_source_sha256": "60dc81d8ebc17e17836106c0173154872c375a6e0f6062d7b448786d428b784a",
+        "reference_OBJECT_source_sha256": "92e6317a4f6d1af0e8a816d745013c99e62922f5b0af7aa300c706a6ebeb7ad4",
+        "legacy_orchestration_statements_removed": 3,
+        "new_optimizer": 0,
+        "new_environments": 0
+      },
+      "GOAL_MLR_43": {
+        "status": "PASS_ACTUAL_REVERSE_NAMESPACE_VERIFICATION",
+        "case": "GOAL_MLR_43",
+        "case_contract": "7c03b642e75229f3e76a14a10c367082037242793fcf79d5a16e1dedf9073caa",
+        "frozen_GOAL_source_sha256": "60dc81d8ebc17e17836106c0173154872c375a6e0f6062d7b448786d428b784a",
+        "reference_OBJECT_source_sha256": "92e6317a4f6d1af0e8a816d745013c99e62922f5b0af7aa300c706a6ebeb7ad4",
+        "legacy_orchestration_statements_removed": 3,
+        "new_optimizer": 0,
+        "new_environments": 0
+      }
+    },
+    "entry_sha256": "eea4a597ed320ec34361b03ce43c6679920e78f19937ce8c138315e85d53743f",
+    "dispatcher_sha256": "2a92bb4eb4d02c04ac8630ef0e421cb97ec63a21631f620593eaa1a3d75ce786",
+    "previous_dispatcher_sha256": "1d7c26164e4daed3bde66ed69e3e0bad84bda916eca39c9565d7696511a16715",
+    "failed_attempt_hashes": {
+      "train.log": "2e0e26da114c8a4856293882d0564323c4d69fc8b0d62e227da9cd177d046d51",
+      "train.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "TRAIN_DISPATCH.json": "4fce670be95f8e0c43dc0dcc33daa86e7b1d691b267ca3bb8823ca419d448966",
+      "OPTIMIZER_CALLS.json": "693efd49ea9029aa8a7264b0c0bc96185383d3f1c752c9a2328179cae7830a2d",
+      "ACTUAL_ORDER.json": "54f799c40315231b5ffeba8ea06954c7cf43e672825eaf663b97e2ec9a54459a"
+    },
+    "new_optimizer": 0,
+    "new_environments": 0
+  },
+  "GOAL_dispatch": {
+    "time": 1794392016.9301481,
+    "pid": 152921,
+    "cmd": [
+      "/data/mlr_ifa/env/bin/python",
+      "-B",
+      "-m",
+      "torch.distributed.run",
+      "--nnodes=1",
+      "--nproc_per_node=1",
+      "--rdzv_backend=c10d",
+      "--rdzv_endpoint=localhost:0",
+      "--rdzv_id=70f388dd7c4048cd88549c324cee63db",
+      "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/goal_mlr_entry.py",
+      "GOAL_MLR_41",
+      "train"
+    ],
+    "rdzv_id": "70f388dd7c4048cd88549c324cee63db",
+    "engineering_entry_sha256": "eea4a597ed320ec34361b03ce43c6679920e78f19937ce8c138315e85d53743f"
+  },
+  "coordinator_status": {
+    "status": "PARTIAL_TRAINING",
+    "suite": "OBJECT+GOAL",
+    "controller": 152917,
+    "active": {
+      "GOAL_MLR_41": 152921,
+      "OBJECT_DEBR_43": 124366
+    },
+    "pending": [
+      "GOAL_DEBR_41",
+      "GOAL_MLR_42",
+      "GOAL_DEBR_42",
+      "GOAL_MLR_43",
+      "GOAL_DEBR_43"
+    ],
+    "failures": [],
+    "time": 1794392016.930575
+  },
+  "failure": null
+}
