@@ -1,0 +1,104 @@
+{
+  "observed": "2026-11-11T16:40:27.501884+08:00",
+  "status": "PARTIAL_PLANNING_ESTIMATE",
+  "check": "check_readonly_20261111_164025",
+  "goal_single_run_estimates_minutes": {
+    "MLR": [
+      44.04228153593702,
+      50.64603862776237
+    ],
+    "DEBR": [
+      282.3422283108645,
+      348.1475625443733
+    ]
+  },
+  "evaluation_reference_minutes": {
+    "OBJECT": {
+      "mlr_200_vector_minutes": [
+        14.764944106516245,
+        14.188629839633359,
+        16.09699837638303
+      ],
+      "full_debr_200_vector_minutes": [
+        19.378349338083595,
+        19.911375362133064,
+        17.310452794350326
+      ]
+    },
+    "GOAL": {
+      "mlr_200_vector_minutes": [
+        15.069524621899957,
+        14.859459536800083,
+        14.223037842566798
+      ],
+      "full_debr_200_vector_minutes": [
+        19.625762960834255,
+        25.252465663884262,
+        31.462330549848655
+      ]
+    }
+  },
+  "stages": {
+    "OBJECT training and collection": {
+      "minutes": [
+        158.94531337420145,
+        198.41343382994333
+      ],
+      "finish_CST": [
+        "2026-11-11T19:19:24.220686+08:00",
+        "2026-11-11T19:58:52.307914+08:00"
+      ]
+    },
+    "OBJECT 1200 formal episodes": {
+      "minutes": [
+        110,
+        145
+      ],
+      "finish_CST": [
+        "2026-11-11T21:09:24.220686+08:00",
+        "2026-11-11T22:23:52.307914+08:00"
+      ]
+    },
+    "GOAL six training runs": {
+      "minutes": [
+        608.7267381576661,
+        746.941163716509
+      ],
+      "finish_CST": [
+        "2026-11-12T07:18:07.824976+08:00",
+        "2026-11-12T10:50:48.777737+08:00"
+      ]
+    },
+    "GOAL 1200 formal episodes": {
+      "minutes": [
+        120,
+        175
+      ],
+      "finish_CST": [
+        "2026-11-12T09:18:07.824976+08:00",
+        "2026-11-12T13:45:48.777737+08:00"
+      ]
+    },
+    "Reverse acceptance and publication": {
+      "minutes": [
+        25,
+        65
+      ],
+      "finish_CST": [
+        "2026-11-12T09:43:07.824976+08:00",
+        "2026-11-12T14:50:48.777737+08:00"
+      ]
+    },
+    "Appended 2400 episodes, acceptance and publication": {
+      "minutes": [
+        220,
+        310
+      ],
+      "finish_CST": [
+        "2026-11-12T13:23:07.824976+08:00",
+        "2026-11-12T20:00:48.777737+08:00"
+      ]
+    }
+  },
+  "method": "Use current DEBR stage timing and original-order evaluation logs. Scale OBJECT epochs by actual per-stage GOAL batch counts, retain observed overhead, and simulate the existing two-slot FIFO order. Evaluation intervals include startup and termination variability. Acceptance and publication times are planning allowances."
+}
