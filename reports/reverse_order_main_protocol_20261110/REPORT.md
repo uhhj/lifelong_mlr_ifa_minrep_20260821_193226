@@ -1,56 +1,24 @@
-# 主表协议逆序实验：派发暂停下的只读进度
+# 主表协议逆序实验
 
-实际观察2026-11-11T09:10:43.317711+08:00，PARTIAL。独立轻量审计PASS_PROGRESS_NOT_FINAL。controller119466实际状态T，未来派发保持暂停；在训子进程未停止，未自动恢复派发。
+原派发器已于2026-11-11T09:17:56.120026+08:00恢复，见DISPATCH_RESUME_RECORD.json。此前暂停为agent自行加上的审查措施，非用户停跑要求；本次仅恢复原有12run队列，合同、训练／评估配置均未改，完成训练不重启。
 
-基底任务与官方预训练不变，增量原物理任务9→8→7→6；两方法各自继承主表原生训练和评估实现，未在本次检查改协议。
+PARTIAL，实际观察2026-11-11T09:18:14.390486+08:00。只读审计PASS_PROGRESS_NOT_FINAL，不代表最终接受或局部性能结论。
 
-|case|实际运行状态|完整epoch|接受更新|训练采集|正式|
-|---|---|---:|---:|---:|---:|
-|OBJECT_MLR_41|TRAINING_COMPLETE|400|102100|0|0|
-|OBJECT_DEBR_41|ACTIVE_TRAINING|252|50584|20|0|
-|OBJECT_MLR_42|TRAINING_COMPLETE_DISPATCHER_EXIT_REAP_PENDING|400|102100|0|0|
-|OBJECT_DEBR_42|NOT_DISPATCHED|0|0|0|0|
-|OBJECT_MLR_43|NOT_DISPATCHED|0|0|0|0|
-|OBJECT_DEBR_43|NOT_DISPATCHED|0|0|0|0|
-|GOAL_MLR_41|NOT_DISPATCHED|0|0|0|0|
-|GOAL_DEBR_41|NOT_DISPATCHED|0|0|0|0|
-|GOAL_MLR_42|NOT_DISPATCHED|0|0|0|0|
-|GOAL_DEBR_42|NOT_DISPATCHED|0|0|0|0|
-|GOAL_MLR_43|NOT_DISPATCHED|0|0|0|0|
-|GOAL_DEBR_43|NOT_DISPATCHED|0|0|0|0|
+原基底0–5和官方检查点不变，增量物理任务9→8→7→6。MLR+IFA和完整DEBR分别继承主表训练与原生评估实现。
 
-训练完成记录与optimizer计数完整不等于最终科学验收。MLR42的父派发器退出回收尚待进行，不把未记录的launcher退出码伪称0。正式评估尚未启动。
+|case|完整epoch|接受更新|生产物理更新|训练采集|正式|
+|---|---:|---:|---:|---:|---:|
+|OBJECT_MLR_41|400|102100|102100|0|0|
+|OBJECT_DEBR_41|260|52920|92640|20|0|
+|OBJECT_MLR_42|400|102100|102100|0|0|
+|OBJECT_DEBR_42|0|0|0|0|0|
+|OBJECT_MLR_43|0|0|0|0|0|
+|OBJECT_DEBR_43|0|0|0|0|0|
+|GOAL_MLR_41|0|0|0|0|0|
+|GOAL_DEBR_41|0|0|0|0|0|
+|GOAL_MLR_42|0|0|0|0|0|
+|GOAL_DEBR_42|0|0|0|0|0|
+|GOAL_MLR_43|0|0|0|0|0|
+|GOAL_DEBR_43|0|0|0|0|0|
 
-在训任务ETA（仅当前子进程，未测阶段按最近实际每batch速度外推；含明确规划余量，不含正式评估／最终验收）：
-
-{
-  "OBJECT_DEBR_41": {
-    "pure_epoch_minutes": 158.10933963324925,
-    "planning_allowance_minutes": 20,
-    "minutes": 178.10933963324925,
-    "estimated_CST": "2026-11-11T12:08:49.878089+08:00",
-    "last_ten_seconds_per_epoch": 53.771170711517335,
-    "remaining_stages": [
-      {
-        "stage": 8,
-        "original_task": 7,
-        "complete_epochs": 52,
-        "remaining_epochs": 48,
-        "seconds_per_epoch": 53.771170711517335,
-        "unmeasured_stage_extrapolation": false
-      },
-      {
-        "stage": 9,
-        "original_task": 6,
-        "complete_epochs": 0,
-        "remaining_epochs": 100,
-        "seconds_per_epoch": 69.05544183842123,
-        "unmeasured_stage_extrapolation": true
-      }
-    ],
-    "not_guaranteed": true,
-    "excludes_formal_and_final_acceptance": true
-  }
-}
-
-GPU与容量见RUN_STATUS。无新失败记录，冻结源及旧证据前缀核验通过。本次0新增优化器调用／环境／恢复派发。没有设定下一自动查询；不重启本地观察器。
+下一检查2026-11-11T12:10:14.390486+08:00，范围CURRENT_WHOLE_RUN_TRAINING_AND_COLLECTION；估计含明确规划余量，不是全队列保证结束时间。最终48CP/12恢复/24缓存与240训练2400正式字节及预算尚待实际验收。

@@ -75,12 +75,18 @@ def finish_old():
 def main():
     # Existing prepared outputs and current scientific queue are never repeated.
     assert J(R/'PREPARATION_LOCAL_AUDIT.json')['status']=='PASS_PREPARED_NOT_LAUNCHED'
-    while not J(OLD/'RUN_STATUS.json').get('actual_final_cpu_acceptance'):
-        tracking=J(OLD/'TRACKING_STATUS.json')
-        if tracking['phase']=='READY_FINAL_CPU':break
-        wait_until(tracking['next_checkpoint_CST'],'PREDECESSOR_'+tracking['phase'])
-        checkpoint(OLD,old=True)
-    finish_old()
+    if '--running-queue-only' in sys.argv:
+        # Resume observation only. Do not revisit, republish or dispatch the
+        # completed predecessor, or enter any deployment/launch path.
+        assert J(R/'RUN_STATUS.json')['status']=='PARTIAL_EXECUTION_PENDING_FINAL_ACCEPTANCE'
+        assert (R/'LAUNCH_AUTHORIZATION.json').exists()
+    else:
+        while not J(OLD/'RUN_STATUS.json').get('actual_final_cpu_acceptance'):
+            tracking=J(OLD/'TRACKING_STATUS.json')
+            if tracking['phase']=='READY_FINAL_CPU':break
+            wait_until(tracking['next_checkpoint_CST'],'PREDECESSOR_'+tracking['phase'])
+            checkpoint(OLD,old=True)
+        finish_old()
     new=J(R/'RUN_STATUS.json')
     if new['status']=='PREPARED_FROZEN_NOT_LAUNCHED':
         assert not (R/'LAUNCH_AUTHORIZATION.json').exists(),'Review any previous launch result before continuing'

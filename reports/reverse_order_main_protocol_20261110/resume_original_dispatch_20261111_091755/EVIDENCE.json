@@ -1,0 +1,76 @@
+{
+  "status": "ORIGINAL_AUTHORIZED_DISPATCH_RESUMED",
+  "observed": 1794359876.1200256,
+  "signal_time": 1794359876.1199856,
+  "controller": 119466,
+  "controller_state": "R",
+  "contract_sha256": "5d28905059a9afc15cc8175097eee4ce3af5599154bb980bc54dce53d220795c",
+  "before": [
+    {
+      "pid": 119466,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/controller.py ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05",
+      "state": "T"
+    },
+    {
+      "pid": 119475,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d15e808c592b43afaf5fc57afe0cfc9e /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_DEBR_41 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_DEBR_41",
+      "state": "S"
+    },
+    {
+      "pid": 119484,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_DEBR_41 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_DEBR_41",
+      "state": "R"
+    }
+  ],
+  "after": [
+    {
+      "pid": 119466,
+      "cmd": "/data/mlr_ifa/env/bin/python -B /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/controller.py ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05",
+      "state": "S"
+    },
+    {
+      "pid": 119475,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=d15e808c592b43afaf5fc57afe0cfc9e /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_DEBR_41 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_DEBR_41",
+      "state": "S"
+    },
+    {
+      "pid": 119484,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py OBJECT_DEBR_41 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/OBJECT_DEBR_41",
+      "state": "R"
+    }
+  ],
+  "coordinator_before": {
+    "status": "PARTIAL_TRAINING",
+    "suite": "OBJECT",
+    "active": {
+      "OBJECT_DEBR_41": 119475,
+      "OBJECT_MLR_42": 120137
+    },
+    "pending": [
+      "OBJECT_DEBR_42",
+      "OBJECT_MLR_43",
+      "OBJECT_DEBR_43"
+    ],
+    "failures": [],
+    "time": 1794356840.4116983
+  },
+  "kernel_completed_child_exit_observations": [
+    {
+      "case": "OBJECT_MLR_42",
+      "pid": 120137,
+      "state": "Z",
+      "raw_exit_code": 0
+    }
+  ],
+  "scientific_source_changes": 0,
+  "new_controller_launched": false,
+  "completed_training_restarted": false,
+  "child_signals_sent": 0,
+  "note": "Only SIGCONT of the existing verified dispatcher. Removes the agent-imposed review hold; existing finite twelve-run authorization and frozen method-specific main-table protocols remain in force. Remaining authorized queue now proceeds normally."
+}
