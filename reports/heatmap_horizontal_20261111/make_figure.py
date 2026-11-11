@@ -33,7 +33,7 @@ plt.rcParams.update({'font.family':'Times New Roman','font.size':11,
                      'pdf.fonttype':42,'ps.fonttype':42,'svg.fonttype':'none',
                      'axes.unicode_minus':True})
 fig, axes = plt.subplots(1,4,figsize=(15.5,4.6))
-fig.subplots_adjust(left=.045,right=.985,bottom=.29,top=.9,wspace=.27)
+fig.subplots_adjust(left=.045,right=.985,bottom=.37,top=.98,wspace=.27)
 cmap = plt.get_cmap('RdBu').copy()
 cmap.set_bad('white')
 panels = []
@@ -58,7 +58,8 @@ for i,(suite, method) in enumerate([('OBJECT','C'),('OBJECT','Q'),('GOAL','C'),(
                     fontsize=11,color='white' if abs(v)>=15 else 'black')
     ax.set(xticks=range(4),xticklabels=[6,7,8,9],yticks=range(4),yticklabels=[6,7,8,9],
            xlabel='Task',ylabel='Training stage')
-    ax.set_title(f'({chr(97+i)}) {suite}',pad=8)
+    ax.text(.5,-.23,f'({chr(97+i)}) {suite}',transform=ax.transAxes,
+            ha='center',va='top',fontsize=13)
     ax.set_xticks(np.arange(-.5,4,1),minor=True)
     ax.set_yticks(np.arange(-.5,4,1),minor=True)
     ax.grid(which='minor',color='white',linewidth=1)
@@ -86,7 +87,7 @@ fig.savefig(OUT/'preview.png',dpi=150,facecolor='white')
 assert all(hashlib.sha256((EXEC/p).read_bytes()).hexdigest()==h for p,h in manifest.items())
 audit = dict(status='PASS_DATA_AND_LAYOUT',panels=panels,original_40_cells_unchanged=True,
              paired_outcomes_recomputed=True,all_text_font_verified=True,font='Times New Roman',
-             layout='1x4',colorbar_position='below_all_panels',color_range=[-25,25],
+             layout='1x4',panel_titles_position='below_each_panel',colorbar_position='below_all_panels',color_range=[-25,25],
              text_outside_canvas=outside,new_training_calls=0,new_environment_episodes=0)
 (HERE/'DATA_LAYOUT_AUDIT.json').write_text(json.dumps(audit,indent=2)+'\n',encoding='utf8')
 (HERE/'SOURCE_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf8')
