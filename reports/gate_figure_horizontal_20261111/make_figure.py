@@ -33,10 +33,11 @@ sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 manifest = {}
 audit = {'status': 'PASS_DATA_AND_LAYOUT', 'suites': {}, 'new_training_calls': 0,
          'new_environment_episodes': 0, 'font': 'Times New Roman', 'layout': '1x4',
-         'legend_and_description_position': 'below_all_panels'}
+         'legend_and_description_position': 'below_all_panels',
+         'panel_titles_position': 'below_each_panel'}
 fig, axes = plt.subplots(1, 4, figsize=(15.5, 4.5),
                          gridspec_kw={'width_ratios': [1, 1.05, 1, 1.05]})
-fig.subplots_adjust(left=.047, right=.987, top=.89, bottom=.31, wspace=.65)
+fig.subplots_adjust(left=.047, right=.987, top=.97, bottom=.39, wspace=.65)
 accept, reject = '#007F75', '#D66A46'
 order = [0, 1, 2, 4, 3, 5, 6, 7]
 names = ['All pass', 'BC', 'Exec', 'Ret.', 'BC + Exec', 'BC + Ret.', 'Exec + Ret.', 'All three']
@@ -79,7 +80,8 @@ for si, (suite, folder) in enumerate(sources.items()):
     ax.axvline(0, color='#6B7280', lw=.7)
     ax.set_xlabel('Relative Δ execution error (%)')
     ax.set_ylabel('Relative Δ retention error (%)')
-    ax.set_title(f'({chr(97+2*si)}) {suite} | Candidates', loc='left', pad=10)
+    ax.text(.5, -.24, f'({chr(97+2*si)}) {suite} | Candidates',
+            transform=ax.transAxes, ha='center', va='top', fontsize=12)
     ax.text(.025, .97, f'n = {len(rows):,} blocks', transform=ax.transAxes, va='top',
             bbox=dict(facecolor='white', alpha=.9, edgecolor='none', pad=2))
     ax = axes[2*si+1]
@@ -90,7 +92,8 @@ for si, (suite, folder) in enumerate(sources.items()):
     ax.set_yticks(range(8), names)
     ax.invert_yaxis()
     ax.set(xlim=(0, 60), xticks=[0, 20, 40, 60], xlabel='Share of all blocks (%)')
-    ax.set_title(f'({chr(98+2*si)}) Violated conditions', loc='left', pad=10)
+    ax.text(.5, -.24, f'({chr(98+2*si)}) Violated conditions',
+            transform=ax.transAxes, ha='center', va='top', fontsize=12)
     ax.grid(axis='x', color='#DCE2E5', lw=.55)
     ax.set_axisbelow(True)
     for j, v in enumerate(vals):
