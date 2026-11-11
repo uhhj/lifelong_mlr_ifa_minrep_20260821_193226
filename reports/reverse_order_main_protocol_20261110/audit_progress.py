@@ -76,15 +76,22 @@ def audit(directory,previous=None):
                     outcomes=obj[p+'COLLECTION_OUTCOMES_S_%d.json'%st];assert len(outcomes)==10
                     assert [(v['initial_index'],v['original_task'],v['attempt']) for v in outcomes]==[(i,inp['order'][st],1) for i in range(20,30)]
                     collected+=10
-        outcomes=obj.get(p+('NORMALIZED_OUTCOMES.json' if method=='MLR' else 'OUTCOMES.json'),[])
-        if method=='MLR' and not outcomes:
+        common=bool(obj.get('coordinator/EVALUATION_PROTOCOL_AMENDMENT.json'))
+        outcomes=obj.get(p+('NORMALIZED_OUTCOMES.json' if method=='MLR' else 'OUTCOMES.json'),obj.get(p+'OUTCOMES.json',[]) if common else [])
+        if method=='MLR' and not outcomes and not common:
             for st in range(6,10):
                 for t in range(6,st+1):
                     outcomes.extend(dict(stage=st,task=t,original_task=inp['order'][t],initial_index=v['initial_state_index'],attempt=1,success=v['success']) for v in obj.get(p+'native/evaluation/trials_stage%d_task%d.jsonl'%(st,t),[]))
         expected=[(s,t,i) for s in range(6,10) for t in range(6,s+1) for i in range(20)]
         assert [(x['stage'],x['task'],x['initial_index']) for x in outcomes]==expected[:len(outcomes)]
         assert all(x['attempt']==1 and x['original_task']==inp['order'][x['task']] and type(x['success']) is bool for x in outcomes)
-        if method=='DEBR':assert all(1<=x['steps']<=600 and x['termination']==('success' if x['success'] else 'timeout600') and (x['success'] or x['steps']==600) for x in outcomes)
+        if method=='DEBR' or common:
+            assert all(1<=x['steps']<=600 and x['termination']==('success' if x['success'] else 'timeout600') and (x['success'] or x['steps']==600) for x in outcomes)
+            assert all(len(x['noise_sha256'])==64 and x['env_seed']==inp['seed']+x['initial_index']//10 for x in outcomes)
+        if common and method=='MLR' and outcomes:
+            declared=obj[p+'EVALUATION_PROTOCOL_DECLARATION.json']
+            assert declared['protocol']=='COMMON_DEBR_EVALUATION_20261111_V1'
+            assert obj[p+'EVAL_ADMISSION.json']['status']=='PASS'
         for name in [p+'train.exit',p+'evaluate.exit']:
             if name in obj:assert obj[name]=='0',(name,obj[name])
         calls=obj.get(p+'OPTIMIZER_CALLS.json')

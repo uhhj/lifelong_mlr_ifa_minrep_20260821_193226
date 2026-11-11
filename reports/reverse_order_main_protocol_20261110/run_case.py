@@ -28,20 +28,9 @@ if inp['method']=='MLR':
             write(R/'OPTIMIZER_CALLS.json',dict(status='ACTUAL_CALLS_COMPLETED' if ok else 'ACTUAL_CALLS_FAILED_PARTIAL',calls=instrumentation.CALLS,extra_autograd=instrumentation.AUTOGRAD,environments=0))
         assert instrumentation.CALLS==dict(production=inp['physical_budget'],admission=20)
     else:
-        from coreset_exp import evaluate
-        sys.argv=['coreset_exp.evaluate','random'];evaluate.main()
-        records=[];base=Path(inp['output_root'])/'evaluation'
-        for stage in range(6,10):
-            for task in range(6,stage+1):
-                native=[json.loads(x) for x in (base/('trials_stage%d_task%d.jsonl'%(stage,task))).read_text().splitlines() if x]
-                assert len(native)==20
-                attempts=[json.loads(x) for x in (base/('attempts_stage%d_task%d.jsonl'%(stage,task))).read_text().splitlines() if x]
-                assert sum(x['event']=='vector_attempt_start' for x in attempts)==sum(x['event']=='vector_attempt_complete' for x in attempts)==2
-                assert not any(x['event']=='technical_exception' for x in attempts)
-                for row in native:
-                    # Preserve actual group-step semantics; never invent individual stopping times or per-trajectory noise.
-                    records.append(dict(method='MLR',stage=stage,task=task,original_task=inp['order'][task],initial_index=row['initial_state_index'],success=row['success'],vector_group_steps=row['vector_group_steps'],cp_sha256=row['checkpoint_sha256'],initial_file_sha256=row['initial_file_sha256'],initial_sha256=row['initial_state_sha256'],attempt=1,native_record_sha256=sha(base/('trials_stage%d_task%d.jsonl'%(stage,task))),cell_rng_sha256=sha(base/('rng_before_stage%d_task%d.pth'%(stage,task))),noise_definition='inherited_global_policy_Normal_not_independent_trajectory_Normal'))
-        assert len(records)==200;write(R/'NORMALIZED_OUTCOMES.json',records)
+        sys.path.insert(0,str(Q/'evaluation_unification_v1'))
+        from unified_mlr_entry import main as evaluate_common
+        evaluate_common()
 else:
     from easydict import EasyDict
     mapping=verify_mapping(EasyDict(inp['train_config'] if args.phase=='train' else inp['eval_config']))

@@ -18,13 +18,13 @@
     "collect_guard.py": "938e35a5fb986cb30b7b97a8b36d2b2c9f5f87707367e58724e42cd600176bca",
     "controller.py": "a5921691b1a979082fc471e7e738d4f1b9a3f76eece956f07b0a3271ae960a6e",
     "reverse_common.py": "364c6b3eb764dbbcf5c82857c0221f7cde27302a97bc9a098317a04cd231b1d1",
-    "check_readonly.py": "78d4960ebcce45a9a71f7c2229cac49567ab46542328cae1da0235ff174d0e20",
-    "final_cpu_case.py": "7c6280bb0f924d2d2e5073963ec6d0a85f1e0bb1427b5024f3707f215a71fad9",
+    "check_readonly.py": "ef1ba0a4ef1e37bf251151da398cc59ebf5b7937ea4dc2954cea8b0cd8f36b0a",
+    "final_cpu_case.py": "8d882e2d3f97267b84b880ee8191c5769771de96be26c0949b4b8d06acccb344",
     "instrumentation.py": "11e9183140eec712c0660c225ee4453769be1f1365805bc8263180b8d05e8f55",
     "SPEC.json": "02ab9903fbd0f7b622392df5258571ab1c6d7c6a4ca003817f71a41d4763aaa6",
     "SOURCE_REVIEW.json": "3489c46a4de08dbb4e46200cca348b1e8447a642ee26758cde970ae08c4073f9",
     "input_prepare_case.py": "46ac064edb808ea58e12b8ace5ee1c33219ba40d9f36684990338e5d0b0d51fe",
-    "run_case.py": "6c7b193becb4af3e1a8194c40efb8cfa1a3dbffa06f8281505325b075b0c9a90",
+    "run_case.py": "db9ea1b3bcf1213859a459868680296468815b10b37ed5cb44cc5459e14ca1a7",
     "reverse_admission.py": "87ee6307febd4fc986514cdb3f8e7f01c999e4a8f9593bc7ee6a51ae56a2b409",
     "cases/OBJECT_MLR_42/INPUT.json": "bad17b6d341d53865ed86e641c58fa1bd5018cd66bc67dad0bf35a506a8e6060",
     "cases/OBJECT_MLR_42/IMPORT_ATTEMPT.json": "6b4434d3bc14aa8b45ffebab490a776b4abd0089144c9a10363ac254b1190edc",
@@ -1243,7 +1243,16 @@
     "cases/GOAL_MLR_43/source/libero/libero/envs/regions/workspace_region_sampler.py": "66b8ce7f7eb18e316fdc1a44a4210ee0a25a24e9a9d49be88dde970960a58b75",
     "cases/GOAL_MLR_43/source/libero/libero/envs/regions/__init__.py": "64fd7ecbbb1b7fe04b0c2240e0f6c79419cba1b29db8f7f13a91ab2718cce5ed",
     "cases/GOAL_MLR_43/source/libero/libero/envs/regions/object_property_sampler.py": "051fbce5a9aadcdf26bd42b447c1b677e610e0e539132807a3ffb578b6feab60",
-    "cases/GOAL_MLR_43/source/libero/libero/envs/regions/base_region_sampler.py": "08c12685b443d723bdffc3e1820cfb1a9b54eeda54a261ccaeacb7f04f9ab88d"
+    "cases/GOAL_MLR_43/source/libero/libero/envs/regions/base_region_sampler.py": "08c12685b443d723bdffc3e1820cfb1a9b54eeda54a261ccaeacb7f04f9ab88d",
+    "evaluation_unification_v1/evaluate.py": "f7921b5bf392b69d8f5b1417bb6e019fbd07ab1ac03a05ff65ddef8382aa76f7",
+    "evaluation_unification_v1/unified_mlr_runtime.py": "b309e2fe23e4bc129f5e825efb96f8a0875f97ff1ce4de3533b6535b7129d25d",
+    "evaluation_unification_v1/unified_mlr_entry.py": "6292b4271c633e9f59c9c5e096e3f7482647d6000d62249c735a1e8cdf19c2c5",
+    "evaluation_unification_v1/probe_case.py": "ebf080570c4b4435dab4f0b829b365b177829c9b811999dc05cbeadde67ffcfa",
+    "evaluation_unification_v1/original/CONTRACT.json": "5d28905059a9afc15cc8175097eee4ce3af5599154bb980bc54dce53d220795c",
+    "evaluation_unification_v1/original/run_case.py": "6c7b193becb4af3e1a8194c40efb8cfa1a3dbffa06f8281505325b075b0c9a90",
+    "evaluation_unification_v1/original/final_cpu_case.py": "7c6280bb0f924d2d2e5073963ec6d0a85f1e0bb1427b5024f3707f215a71fad9",
+    "evaluation_unification_v1/original/check_readonly.py": "78d4960ebcce45a9a71f7c2229cac49567ab46542328cae1da0235ff174d0e20",
+    "EVALUATION_PROTOCOL_AMENDMENT.json": "b21afa3fe87e54f1f12d2cc3640f33c0443033177025fef3ba28ff0e7c125bc4"
   },
   "cases": {
     "OBJECT_MLR_41": {
@@ -1301,5 +1310,13 @@
   "production": 1636500,
   "admission": 666,
   "training_collection": 240,
-  "formal": 2400
+  "formal": 2400,
+  "evaluation_amendment": {
+    "id": "COMMON_DEBR_EVALUATION_20261111_V1",
+    "parent_contract_sha256": "5d28905059a9afc15cc8175097eee4ce3af5599154bb980bc54dce53d220795c",
+    "manifest": "EVALUATION_PROTOCOL_AMENDMENT.json",
+    "manifest_sha256": "b21afa3fe87e54f1f12d2cc3640f33c0443033177025fef3ba28ff0e7c125bc4",
+    "user_request": "MLR+IFA\u540c\u6837\u91c7\u7528\u5b8c\u6574\u65b9\u6848\u534f\u8bae",
+    "training_case_contracts_unchanged": true
+  }
 }

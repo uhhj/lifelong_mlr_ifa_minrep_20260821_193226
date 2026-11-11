@@ -1,5 +1,9 @@
 # 逆序输入与主表协议继承
 
+2026-11-11用户修订已实际应用：MLR的正式入口改为evaluation_unification_v1中由完整DEBR evaluator复制、仅适配runtime和arm名称的实现。run_case.py的MLR训练分支及整个DEBR分支AST不变，全部case训练合同保持原SHA；原root合同和三个替换的外置入口／检查器完整归档。下文“MLR原生global-Normal评估”是旧版本说明，现已由共同DEBR评估覆盖。最终CPU审计改核MLR逐轨迹noise和实际初态，最终本地审计及分析增加两方法真实配对SF／FS。共同正式评估仍未运行，实际接受以未来GPU准入、2400回合及最终独立CPU为准。
+
+兼容性探针第一版在CPU构造检查模型时漏传shape_meta，未触发更新或环境；服务器evaluation_unification_v1_failed_stage01和本地failed_stage01完整保留。修复仅给外置CPU构造器传真实元数据，未改策略／训练。修订提交用原派发器约0.342秒的事务暂停进行入口和root合同原子切换，在训子进程未停止，随后原controller119466继续执行。
+
 两种方法逐文件绑定主结果表实际来源。MLR+IFA保留原Random示范、窗口末动作、PaperMLR.observe、IFA与原生global-Normal评估；完整DEBR保留RA成员、合法next-action监督、执行专家项、固定获得时成功缓存、支持度校准、C/Q候选门控及其原生逐轨迹Normal评估。没有把当前stripped-S实现作为新MLR基线。
 
 顺序映射在新进程内注册index21，原order0和基底任务0–5不变。学习位置6/7/8/9对应物理任务9/8/7/6；特征只做路径别名，语言和物理初态随原任务，标签task只重编号；每个新阶段重新生成混合清单和IFA。Random成员按各主表seed的原规则核验，RA成员绑定原冻结前端选样。不复用正序模型、教师、成功缓存或阶段IFA。

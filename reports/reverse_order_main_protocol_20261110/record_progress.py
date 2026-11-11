@@ -43,26 +43,26 @@ elif state.get('status')=='PARTIAL_EVALUATING':
         if dispatch and count:
             seconds=(e['observed']-dispatch['time'])/count;known.append(seconds)
         else:seconds=None
-        # Native full-history MLR and cached DEBR have different measured speeds.
-        # Pending methods without evidence retain a conservative planning estimate.
+        # Following the user's amendment both use the full-DEBR evaluator.
+        common=(R/'EVALUATION_PROTOCOL_AMENDMENT_APPLIED.json').exists()
         peers=[]
         for other,meta in spec['cases'].items():
-            if meta['method']!=entry['method']:continue
+            if not common and meta['method']!=entry['method']:continue
             start=obj.get(other+'/EVAL_DISPATCH.json');n=a['cases'][other]['formal']
             if start and n:
                 end=obj.get(other+'/EVALUATION_COMPLETE.json',{}).get('time',e['observed'])
                 peers.append((end-start['time'])/n)
-        rate=seconds if seconds is not None else (sum(peers)/len(peers) if peers else (45 if entry['method']=='MLR' else 8))
+        rate=seconds if seconds is not None else (sum(peers)/len(peers) if peers else (8 if common else (45 if entry['method']=='MLR' else 8)))
         rem=(200-count)*rate/60+5;remaining+=rem
         eta[name]=dict(remaining_episodes=200-count,seconds_per_episode=rate,planning_only=seconds is None and not peers,minutes=rem)
     minutes=math.ceil(remaining)
 else:phase='REVIEW_STATUS';minutes=30
 next_time=stamp+datetime.timedelta(minutes=minutes)
-status=dict(status='PARTIAL_EXECUTION_PENDING_FINAL_ACCEPTANCE',observed=stamp.isoformat(),evidence_directory=str(d.resolve()),contract=a['contract'],totals=a['totals'],cases=a['cases'],controller_exit=a['controller_exit'],processes=a['processes'],actual_final_cpu_acceptance=False,phase=phase,eta=eta,next_checkpoint_CST=next_time.isoformat(),eta_is_not_a_guaranteed_bound=True,background_automation_created=False)
+status=dict(evaluation_protocol='COMMON_DEBR_EVALUATION_20261111_V1' if (R/'EVALUATION_PROTOCOL_AMENDMENT_APPLIED.json').exists() else 'METHOD_NATIVE_MAIN_TABLE',status='PARTIAL_EXECUTION_PENDING_FINAL_ACCEPTANCE',observed=stamp.isoformat(),evidence_directory=str(d.resolve()),contract=a['contract'],totals=a['totals'],cases=a['cases'],controller_exit=a['controller_exit'],processes=a['processes'],actual_final_cpu_acceptance=False,phase=phase,eta=eta,next_checkpoint_CST=next_time.isoformat(),eta_is_not_a_guaranteed_bound=True,background_automation_created=False)
 (R/'RUN_STATUS.json').write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 active=read(R/'ACTIVE_ROOT.json');active.update(status=status['status'],observed=stamp.isoformat(),contract=a['contract'],controller=obj.get('coordinator/LAUNCH.json',{}).get('pid',active.get('controller')))
 (R/'ACTIVE_ROOT.json').write_text(json.dumps(active,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 rows='\n'.join('|%s|%d|%d|%d|%d|%d|'%(n,v['epochs'],v['accepted'],v['production_physical'],v['training_collection'],v['formal']) for n,v in a['cases'].items())
-(R/'REPORT.md').write_text('# 主表协议逆序实验\n\nPARTIAL，实际观察%s。只读审计PASS_PROGRESS_NOT_FINAL，不代表最终接受或局部性能结论。\n\n原基底0–5和官方检查点不变，增量物理任务9→8→7→6。MLR+IFA和完整DEBR分别继承主表训练与原生评估实现。\n\n|case|完整epoch|接受更新|生产物理更新|训练采集|正式|\n|---|---:|---:|---:|---:|---:|\n%s\n\n下一检查%s，范围%s；估计含明确规划余量，不是全队列保证结束时间。最终48CP/12恢复/24缓存与240训练2400正式字节及预算尚待实际验收。\n'%(stamp.isoformat(),rows,next_time.isoformat(),phase),encoding='utf-8')
-(R/'MONITOR_HANDOFF.md').write_text('# 当前逆序任务交接\n\n先读PROTOCOL、IMPLEMENTATION_NOTES、ACTIVE_ROOT、RUN_STATUS和最新证据。唯一root见SPEC，禁止重复deploy/build/prepare/controller及完整epoch、采集或正式attempt。\n\n最新实际观察%s，证据%s。下一检查%s，范围%s。transport.py check_readonly.py → audit_progress.py NEW PREVIOUS → record_progress.py NEW → publish.py。最终自然exit0且无自身进程后才final_readonly.py → audit_final_local.py → describe_final.py。所有wrapper错误保留原attempt后外置修复，不重训重评；不自动扩seed调参。\n\n凭据仅Windows Credential Manager/内存；不得回显、写参数日志。公开仅代码报告/元数据SHA/标量/outcomes。\n'%(stamp.isoformat(),d.name,next_time.isoformat(),phase),encoding='utf-8')
+(R/'REPORT.md').write_text('# 主表协议逆序实验\n\nPARTIAL，实际观察%s。只读审计PASS_PROGRESS_NOT_FINAL，不代表最终接受或局部性能结论。\n\n原基底0–5和官方检查点不变，增量物理任务9→8→7→6。两方法保留各自主表训练；按11月11日用户修订，正式评估统一完整DEBR实现。原顺序历史MLR未重评。\n\n|case|完整epoch|接受更新|生产物理更新|训练采集|正式|\n|---|---:|---:|---:|---:|---:|\n%s\n\n下一检查%s，范围%s；估计含明确规划余量，不是全队列保证结束时间。最终48CP/12恢复/24缓存与240训练2400正式字节及预算尚待实际验收。\n'%(stamp.isoformat(),rows,next_time.isoformat(),phase),encoding='utf-8')
+(R/'MONITOR_HANDOFF.md').write_text('# 当前逆序任务交接\n\n先读PROTOCOL、IMPLEMENTATION_NOTES、ACTIVE_ROOT、RUN_STATUS和最新证据。唯一root见SPEC，禁止重复deploy/build/prepare/controller及完整epoch、采集或正式attempt。\n\n最新实际观察%s，证据%s。下一检查%s，范围%s。transport.py check_readonly.py → audit_progress.py NEW PREVIOUS → record_progress.py NEW → publish.py。最终自然exit0且无自身进程后才final_readonly.py → audit_final_local.py → describe_final.py。所有wrapper错误保留原attempt后外置修复，不重训重评；不自动扩seed调参。\n\n当前评估修订见EVALUATION_PROTOCOL_AMENDMENT.json：MLR与DEBR共同完整DEBR评估；训练case合同保持原样；原顺序历史MLR不重评。凭据仅Windows Credential Manager/内存；不得回显、写参数日志。公开仅代码报告/元数据SHA/标量/outcomes。\n'%(stamp.isoformat(),d.name,next_time.isoformat(),phase),encoding='utf-8')
 print(json.dumps(dict(status=status['status'],phase=phase,observed=stamp.isoformat(),totals=a['totals'],next_checkpoint_CST=next_time.isoformat())))

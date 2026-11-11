@@ -10,7 +10,7 @@ def add(path,name):
     if str(path).endswith('.jsonl'):raw=raw[:raw.rfind(b'\n')+1]
     import hashlib
     light[name]=dict(text=raw.decode(),sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw))
-for name in ['STATUS.json','EVENTS.jsonl','FAILURE.json','controller.exit','LAUNCH.json','OBJECT_COMPLETE.json','GOAL_COMPLETE.json','FINAL_CPU_REQUEST.json']:
+for name in ['STATUS.json','EVENTS.jsonl','FAILURE.json','controller.exit','LAUNCH.json','OBJECT_COMPLETE.json','GOAL_COMPLETE.json','FINAL_CPU_REQUEST.json','EVALUATION_PROTOCOL_AMENDMENT.json','EVALUATION_PROTOCOL_AMENDMENT_APPLIED.json']:
     if (Q/name).exists():add(Q/name,'coordinator/'+name)
 for case,spec in read(Q/'SPEC.json')['cases'].items():
     r=Q/'cases'/case;inp=read(r/'INPUT.json')

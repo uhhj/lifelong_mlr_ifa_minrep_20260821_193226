@@ -35,7 +35,8 @@ def finite(x):
 def ah(x):return hashlib.sha256(np.ascontiguousarray(np.asarray(x)).tobytes()).hexdigest()
 class Model(torch.nn.Module):
     def __init__(self,cfg):
-        super().__init__();self.module=BriefPolicy(copy.deepcopy(cfg),None)
+        super().__init__();shape=cfg.get('shape_meta') or inp['eval_config'].get('shape_meta') or J(Q/'cases'/('%s_MLR_%d'%(inp['suite'],inp['seed']))/'INPUT.json')['eval_config']['shape_meta']
+        self.module=BriefPolicy(copy.deepcopy(cfg),copy.deepcopy(shape))
 def construct(cfg,sd):
     with contextlib.redirect_stdout(io.StringIO()):m=Model(cfg)
     assert len(m.state_dict())==len(sd)==100
@@ -151,17 +152,21 @@ for x in records:
     assert x['attempt']==1 and type(x['success']) is bool and x['original_task']==ORIGINAL_TASKS[t]
     assert x['cp_sha256']==checkpoints[str(s)]['sha256']
     assert x['initial_file_sha256']==initials[t]['file_sha256'] and x['initial_sha256']==initials[t]['hashes'][i]
+    eps=np.random.RandomState(20261024+inp['seed']*1000+t*100+i).standard_normal((600,7)).astype(np.float32)
+    assert x['noise_sha256']==ah(eps) and x['env_seed']==inp['seed']+i//10
+    assert 1<=x['steps']<=600 and x['termination']==('success' if x['success'] else 'timeout600')
+    assert x['success'] or x['steps']==600
     if method=='MLR':
-        base=out/'evaluation';native=[json.loads(v) for v in (base/('trials_stage%d_task%d.jsonl'%(s,t))).read_text().splitlines() if v]
-        assert x['native_record_sha256']==sha(base/('trials_stage%d_task%d.jsonl'%(s,t)))
-        assert x['success']==native[i]['success'] and x['vector_group_steps']==native[i]['vector_group_steps']
-        assert x['cell_rng_sha256']==sha(base/('rng_before_stage%d_task%d.pth'%(s,t)))
-        assert 1<=x['vector_group_steps']<=600
-    else:
-        eps=np.random.RandomState(20261024+inp['seed']*1000+t*100+i).standard_normal((600,7)).astype(np.float32)
-        assert x['noise_sha256']==ah(eps) and x['env_seed']==inp['seed']+i//10
-        assert 1<=x['steps']<=600 and x['termination']==('success' if x['success'] else 'timeout600')
-        assert x['success'] or x['steps']==600
+        manifest=J(Q/'EVALUATION_PROTOCOL_AMENDMENT.json')
+        assert x['evaluation_protocol']==manifest['id']
+        assert x['source_outcomes_sha256']==sha(R/'OUTCOMES.json')
+        raw_records=J(R/'OUTCOMES.json')
+        raw=next(v for v in raw_records if (v['stage'],v['task'],v['initial_index'])==(s,t,i))
+        assert all(x[k]==v for k,v in raw.items())
+        declared=J(R/'EVALUATION_PROTOCOL_DECLARATION.json')
+        assert declared['manifest_sha256']==sha(Q/'EVALUATION_PROTOCOL_AMENDMENT.json') and declared['training_contract_sha256']==contract
+        assert J(R/'EVALUATION_PROTOCOL_COMPLETE.json')['episodes']==200
+
 cache_checks={};gate_count=0
 if method=='DEBR':
     gates=[json.loads(v) for v in (R/'GATES.jsonl').read_text().splitlines() if v]
@@ -206,5 +211,5 @@ if method=='DEBR':
         cache_checks[str(task)]=dict(rows=len(cache['rows']),successful_trajectories=len(success),support=len(success)/10,source_checkpoint_exact=True,cpu_teacher_replay_within_1e_minus4=True,max_abs_error=max_error,forward_calls=model_calls-calls_before)
 assert verify_case(R)==contract and not torch.cuda.is_initialized()
 result=dict(status='PASS_REVERSE_CPU_CASE',case=case,method=method,seed=inp['seed'],suite=inp['suite'],order=ORIGINAL_TASKS,contract=contract,checkpoints=checkpoints,recovery=dict(sha256=sha(recovery_path),model_optimizer_scheduler_grads_modes_requires_rng_step=True,accepted_steps=inp['accepted_budget'],saved_cuda_rng_preserved_not_executed=True),
-    epochs=400,accepted_updates=inp['accepted_budget'],physical_optimizer=calls['calls'],extra_autograd=calls['extra_autograd'],formal=200,training_collection=inp['training_collection'],initial_physical_bytes=True,noise_definition='native_saved_global_RNG' if method=='MLR' else 'native_per_trajectory_Normal',gates=gate_count,caches=cache_checks,model_forward_calls=model_calls,new_optimizer=0,new_environments=0,seconds=time.time()-tic)
+    epochs=400,accepted_updates=inp['accepted_budget'],physical_optimizer=calls['calls'],extra_autograd=calls['extra_autograd'],formal=200,training_collection=inp['training_collection'],initial_physical_bytes=True,noise_definition='common_full_DEBR_per_trajectory_Normal',evaluation_protocol='COMMON_DEBR_EVALUATION_20261111_V1',gates=gate_count,caches=cache_checks,model_forward_calls=model_calls,new_optimizer=0,new_environments=0,seconds=time.time()-tic)
 write(R/'FINAL_CPU.json',result);print(json.dumps(result))
