@@ -7,6 +7,7 @@ s=(p.parent/'20261111_gate_figure_horizontal/publish.py').read_text(encoding='ut
 s=s.replace('gate_figure_horizontal_20261111','debr_framework_A_refined_20261111')
 a=s.index('audit = ')
 b=s.index('manifest = {}')
-s=s[:a]+"files = ['DEBR_A_refined.png', 'PROMPTS.json', 'README.md', 'REVIEW.json', 'prepare_publication.py', 'publish.py']\n"+s[b:]
+s=s[:a]+"files = ['DEBR_A_refined.png', 'PROMPTS.json', 'README.md', 'REVIEW.json', 'prepare_publication.py', 'publish.py', 'make_svg.py', 'render_svg.cjs', 'DEBR_A_editable.svg', 'DEBR_A_editable_preview.png', 'VECTOR_REVIEW.json']\n"+s[b:]
+s=s.replace("['.py', '.md', '.json', '.svg']", "['.py', '.cjs', '.md', '.json', '.svg']")
 s=s.replace('Restyle gate figure in Times New Roman with horizontal panels and bottom legend','Refine selected DEBR dual-experience framework A and clarify memory and gate flows')
 (p/'publish.py').write_text(s,encoding='utf8')

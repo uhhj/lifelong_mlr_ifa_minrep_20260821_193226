@@ -7,3 +7,9 @@
 最终图删除原先混乱的虚线反馈，以“Used in task k + 1”明确下一阶段用途。末端学习策略由实际提交节点连接，不再从门控外框引出假输出。没有新增训练或实验数据。
 
 交付为PNG栅格图。字体提示要求Times New Roman，但栅格图不含可核验的字体嵌入，不将其宣称为可编辑矢量终稿。全部生成提示词见PROMPTS.json。
+
+## 可编辑SVG
+
+用户后续要求SVG版，已另行以原生SVG重绘DEBR_A_editable.svg，保留A版结构与内容，并简化为平面配色。不是将PNG装入SVG容器：文件含73个可编辑text元素、原生框线与箭头，image元素为零。字体显式设为Times New Roman，使用方需安装该字体才能保持一致显示。原PNG保留。
+
+make_svg.py为可复现矢量源，render_svg.cjs用Sharp渲染预览；已目视检查DEBR_A_editable_preview.png的文字、连线、三项不等式和阶段末记忆更新。矢量重绘未新增实验或改变科学协议。
