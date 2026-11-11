@@ -60,7 +60,10 @@ else:phase='REVIEW_STATUS';minutes=30
 next_time=stamp+datetime.timedelta(minutes=minutes)
 status=dict(evaluation_protocol='COMMON_DEBR_EVALUATION_20261111_V1' if (R/'EVALUATION_PROTOCOL_AMENDMENT_APPLIED.json').exists() else 'METHOD_NATIVE_MAIN_TABLE',status='PARTIAL_EXECUTION_PENDING_FINAL_ACCEPTANCE',observed=stamp.isoformat(),evidence_directory=str(d.resolve()),contract=a['contract'],totals=a['totals'],cases=a['cases'],controller_exit=a['controller_exit'],processes=a['processes'],actual_final_cpu_acceptance=False,phase=phase,eta=eta,next_checkpoint_CST=next_time.isoformat(),eta_is_not_a_guaranteed_bound=True,background_automation_created=False)
 (R/'RUN_STATUS.json').write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-active=read(R/'ACTIVE_ROOT.json');active.update(status=status['status'],observed=stamp.isoformat(),contract=a['contract'],controller=obj.get('coordinator/LAUNCH.json',{}).get('pid',active.get('controller')))
+active=read(R/'ACTIVE_ROOT.json')
+dispatchers=[row['pid'] for row in obj.get('coordinator/EVENTS.jsonl',[]) if row['kind']=='parallel_dispatch_started']
+controller=dispatchers[-1] if dispatchers else obj.get('coordinator/LAUNCH.json',{}).get('pid',active.get('controller'))
+active.update(status=status['status'],observed=stamp.isoformat(),contract=a['contract'],controller=controller)
 (R/'ACTIVE_ROOT.json').write_text(json.dumps(active,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 rows='\n'.join('|%s|%d|%d|%d|%d|%d|'%(n,v['epochs'],v['accepted'],v['production_physical'],v['training_collection'],v['formal']) for n,v in a['cases'].items())
 (R/'REPORT.md').write_text('# 主表协议逆序实验\n\nPARTIAL，实际观察%s。只读审计PASS_PROGRESS_NOT_FINAL，不代表最终接受或局部性能结论。\n\n原基底0–5和官方检查点不变，增量物理任务9→8→7→6。两方法保留各自主表训练；按11月11日用户修订，正式评估统一完整DEBR实现。原顺序历史MLR未重评。\n\n|case|完整epoch|接受更新|生产物理更新|训练采集|正式|\n|---|---:|---:|---:|---:|---:|\n%s\n\n下一检查%s，范围%s；估计含明确规划余量，不是全队列保证结束时间。最终48CP/12恢复/24缓存与240训练2400正式字节及预算尚待实际验收。\n'%(stamp.isoformat(),rows,next_time.isoformat(),phase),encoding='utf-8')
