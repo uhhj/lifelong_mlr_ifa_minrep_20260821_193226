@@ -1,0 +1,79 @@
+{
+  "status": "LOCAL_DOCUMENTED_RATIONALE_AND_INFERENCE_SEPARATED",
+  "observed": "2026-11-11T08:57:43.553206+08:00",
+  "sources": {
+    "execution/20261024_ra_align_paired/PROTOCOL.md": {
+      "sha256": "d4d7f9d77ae7b499fef9da8b86f3d261357d235573de87ecf063cf818fef3c6b",
+      "bytes": 1783,
+      "excerpts": []
+    },
+    "execution/20261024_ra_align_paired/IMPLEMENTATION_NOTES.md": {
+      "sha256": "463fd3acffeecb550d5e6d73ff885dbb3583e5ce9cb7b30710a495af5f531601",
+      "bytes": 2832,
+      "excerpts": [
+        {
+          "line": 5,
+          "text": "新闭环为有限240回合，12旧检查点，三seed×RA/ALIGN×两个驱动stage×20初态，Task8。工程01缺少LIBERO已有配置环境而在import阶段EOF，0模型前向/更新/环境；退出1、GPU空闲、原source/contract不变，证据与源码保存在engineering01_preserved及snapshot_20261024_185233。工程02仅补原环境路径，自己的GPU准入实际通过，模型12×100键、1–8长度、GMM选最大分量Normal、缓存对完整历史空间编码近似一致。准入参数路径208次、前端16次，无环境/优化器。最大缓存特征差9.298324584960938e-6、GMM参数差1.9073486328125e-6，来自不同前端batch形状，未声称逐位等同旧CUDA评估。正式两检查点在完全相同缓存FP32历史上比较，逐步SHA与private重建绑定。"
+        },
+        {
+          "line": 7,
+          "text": "实际运行采用共同逐轨迹噪声，与原global-RNG rollout不同，成功率仅本新协议内部配对。私有原始RGB只保留三首次事件前窗口及终止前16帧+终止后帧；全程精确Temporal输入和低维观测/双GMM参数/执行动作保存。没有全程RGB视频。存储预算3GiB且system普通余1GiB/data root余2GiB，运行逐vector抵扣已分配量检查，不删旧资产。"
+        }
+      ]
+    },
+    "execution/20261024_ccbp/PROTOCOL.md": {
+      "sha256": "4692851673f8040e8a1f26d2263130f904b85728cafb852b92237ec57cb9ee26",
+      "bytes": 4947,
+      "excerpts": [
+        {
+          "line": 20,
+          "text": "全部四组完成100epoch后评估各Task8/9，各20初态0–19，seed41/42两批，每轨迹最多600步+5个初始zero，10并行；共160正式回合16vector8cell。相同(task,index)四组用完全相同预生成600×7标准Normal噪声，argmax分量mean+std*noise，每步重新观测。噪声seed=20261024+41*1000+task*100+index；这是新配对诊断，不能直接拼成历史正式AUC。无中途评估选CP、无重试科学负结果、无额外环境准入rollout。"
+        }
+      ]
+    },
+    "execution/20261024_ccbp/IMPLEMENTATION_NOTES.md": {
+      "sha256": "c128cc1425d5ed1fb5a1a36a8538e7fe907089ed4f35127839954264b9283653",
+      "bytes": 2139,
+      "excerpts": []
+    },
+    "execution/20261024_ccbp/evaluate.py": {
+      "sha256": "321d9b38b010e933ac4c6009d96ecd7af0636f17397cb60f283695d765d23786",
+      "bytes": 5222,
+      "excerpts": [
+        {
+          "line": 40,
+          "text": "    eps=np.stack([np.random.RandomState(20261024+41*1000+taskid*100+i).standard_normal((600,7)).astype(np.float32) for i in indices])"
+        },
+        {
+          "line": 49,
+          "text": "      mu,sd,l=p.policy_head.forward_fn(p.temporal_encode(x)[:,-1]);k=l.argmax(-1);ix=torch.arange(10,device='cuda');act=(mu[ix,k]+sd[ix,k]*torch.from_numpy(eps[:,step]).cuda()).cpu().numpy();act[done]=0"
+        }
+      ]
+    },
+    "execution/20261024_ccbp_v2_full/PROTOCOL.md": {
+      "sha256": "36aeb70a2bc3a05b2e8fef2acf5e8f22172da43b58c2a34fd19526e058d14784",
+      "bytes": 6655,
+      "excerpts": [
+        {
+          "line": 16,
+          "text": "每组400epoch76100主更新，四组1600epoch304400主更新。105500是OBJECT预算，不能用于GOAL。FP32、batch10、sampler0、seed41、原AdamW1e-4 wd.1、各阶段重置优化器和500warmup原scheduler、clip100、Temporal modality0、5分量7D GMM、BC+0.1当前任务IFA/gamma.7保持。整个组内随机流连续，阶段之间不人为重置为41。每组初始tensor及全部RNG须与原官方初始化证据精确相等；Task6最终tensor应与原ALIGN Task6精确相等。原始RA和ALIGN的历史评估只作外部参考。"
+        }
+      ]
+    },
+    "execution/20261110_s_stripped_mlr_ifa_align/PROTOCOL.md": {
+      "sha256": "3a6fdd5d2f15a13fe69f994205af4e5c72b09871b064bbdaa33ac284964e9fc7",
+      "bytes": 10370,
+      "excerpts": [
+        {
+          "line": 60,
+          "text": "评估程序复制各 case 的完整 S `evaluate.py`，仅修改 runtime 导入名、模型 arm 名和本 case 冻结评估配置路径，具体父源 SHA 与限定差异见 `PARENT_BINDINGS.json`。保留完整 S 的单帧视觉 latent 缓存、最多 8 帧历史、argmax GMM 分量、逐轨迹配对 Normal、done 轨迹动作归零及每组环境生命周期；不使用上一轮 global-RNG Normal 的评估实现。"
+        }
+      ]
+    }
+  },
+  "new_training": 0,
+  "new_environment": 0,
+  "new_model_load": 0,
+  "remote_connections": 0,
+  "note": "Documented purpose: paired diagnostics. Efficiency is a direct code effect; reasons for done handling/environment recreation/benchmark flag are engineering interpretations, not independently demonstrated historical motives or causal benefits."
+}
