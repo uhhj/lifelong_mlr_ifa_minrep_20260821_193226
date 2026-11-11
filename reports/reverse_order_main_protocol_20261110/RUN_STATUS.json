@@ -1,14 +1,14 @@
 {
   "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
   "status": "PARTIAL_EXECUTION_PENDING_FINAL_ACCEPTANCE",
-  "observed": "2026-11-11T19:30:29.525647+08:00",
-  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_reverse_order_main_protocol\\check_readonly_20261111_193028",
+  "observed": "2026-11-11T20:11:32.966013+08:00",
+  "evidence_directory": "D:\\论文课题研究\\MLR+IFA\\execution\\20261110_reverse_order_main_protocol\\check_readonly_20261111_201130",
   "contract": "167eb6d15fab4f6d9f7e4db396f826f546160edacb0e2b3049bfa60d5ee80216",
   "totals": {
-    "epochs": 3069,
-    "accepted": 755741,
-    "production_physical": 1024331,
-    "admission": 396,
+    "epochs": 3412,
+    "accepted": 835260,
+    "production_physical": 1113867,
+    "admission": 410,
     "training_collection": 130,
     "formal": 0
   },
@@ -140,9 +140,9 @@
       "evaluate_exit": null
     },
     "GOAL_DEBR_41": {
-      "epochs": 110,
-      "accepted": 21590,
-      "production_physical": 23480,
+      "epochs": 163,
+      "accepted": 31607,
+      "production_physical": 43514,
       "admission": 33,
       "training_collection": 10,
       "formal": 0,
@@ -150,35 +150,39 @@
         6,
         7
       ],
-      "gate_blocks_observed": 193,
-      "gate_Q_accepts_observed": 97,
+      "gate_blocks_observed": 1199,
+      "gate_Q_accepts_observed": 625,
       "train_exit": null,
       "evaluate_exit": null
     },
     "GOAL_MLR_42": {
-      "epochs": 159,
-      "accepted": 30851,
-      "production_physical": 30851,
-      "admission": 10,
+      "epochs": 400,
+      "accepted": 90700,
+      "production_physical": 90700,
+      "admission": 20,
       "training_collection": 0,
       "formal": 0,
       "admitted_stages": [
         6,
-        7
+        7,
+        8,
+        9
       ],
       "gate_blocks_observed": 0,
       "gate_Q_accepts_observed": 0,
-      "train_exit": null,
+      "train_exit": "0",
       "evaluate_exit": null
     },
     "GOAL_DEBR_42": {
-      "epochs": 0,
-      "accepted": 0,
-      "production_physical": 0,
-      "admission": 0,
+      "epochs": 49,
+      "accepted": 9653,
+      "production_physical": 9653,
+      "admission": 4,
       "training_collection": 0,
       "formal": 0,
-      "admitted_stages": [],
+      "admitted_stages": [
+        6
+      ],
       "gate_blocks_observed": 0,
       "gate_Q_accepts_observed": 0,
       "train_exit": null,
@@ -229,18 +233,18 @@
       "pid": 153029,
       "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py GOAL_DEBR_41 train ",
       "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/GOAL_DEBR_41",
+      "state": "R"
+    },
+    {
+      "pid": 153792,
+      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=64dc69157c214b70b8603cf01cb8a4b8 /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py GOAL_DEBR_42 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/GOAL_DEBR_42",
       "state": "S"
     },
     {
-      "pid": 153326,
-      "cmd": "/data/mlr_ifa/env/bin/python -B -m torch.distributed.run --nnodes=1 --nproc_per_node=1 --rdzv_backend=c10d --rdzv_endpoint=localhost:0 --rdzv_id=8be981caa33141a381efd37fa96351a1 /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/goal_mlr_entry.py GOAL_MLR_42 train ",
-      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/GOAL_MLR_42",
-      "state": "S"
-    },
-    {
-      "pid": 153331,
-      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/goal_mlr_entry.py GOAL_MLR_42 train ",
-      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/GOAL_MLR_42",
+      "pid": 153797,
+      "cmd": "/data/mlr_ifa/env/bin/python -u /data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/run_case.py GOAL_DEBR_42 train ",
+      "cwd": "/data/mlr_ifa/experiment_workspaces/REVERSE_MAIN_MLR_DEBR_OBJECT_GOAL_20261110_v1_engineering05/cases/GOAL_DEBR_42",
       "state": "R"
     }
   ],
@@ -248,8 +252,8 @@
   "phase": "CURRENT_WHOLE_RUN_TRAINING_AND_COLLECTION",
   "eta": {
     "GOAL_DEBR_41": {
-      "minutes": 239.68990186839864,
-      "pure_epoch_minutes": 219.68990186839864,
+      "minutes": 241.97382588652707,
+      "pure_epoch_minutes": 221.97382588652707,
       "planning_allowance_minutes": 20,
       "stages": {
         "6": {
@@ -259,58 +263,58 @@
           "borrowed": false
         },
         "7": {
-          "epochs": 10,
-          "seconds_per_epoch": 43.1789510011673,
+          "epochs": 63,
+          "seconds_per_epoch": 42.235289859771726,
           "extrapolated": false,
           "borrowed": false
         },
         "8": {
           "epochs": 0,
-          "seconds_per_epoch": 41.57010029991813,
+          "seconds_per_epoch": 52.57358257221797,
           "extrapolated": true,
           "borrowed": false
         },
         "9": {
           "epochs": 0,
-          "seconds_per_epoch": 51.38278492007048,
+          "seconds_per_epoch": 64.98365571158273,
           "extrapolated": true,
           "borrowed": false
         }
       }
     },
-    "GOAL_MLR_42": {
-      "minutes": 40.244257591168086,
-      "pure_epoch_minutes": 28.244257591168086,
-      "planning_allowance_minutes": 12,
+    "GOAL_DEBR_42": {
+      "minutes": 161.9026526682752,
+      "pure_epoch_minutes": 141.9026526682752,
+      "planning_allowance_minutes": 20,
       "stages": {
         "6": {
-          "epochs": 100,
-          "seconds_per_epoch": 5.389587640762329,
+          "epochs": 49,
+          "seconds_per_epoch": 7.481511402130127,
           "extrapolated": false,
           "borrowed": false
         },
         "7": {
-          "epochs": 59,
-          "seconds_per_epoch": 5.327810168266296,
+          "epochs": 0,
+          "seconds_per_epoch": 42.235289859771726,
           "extrapolated": false,
-          "borrowed": false
+          "borrowed": true
         },
         "8": {
           "epochs": 0,
-          "seconds_per_epoch": 6.465166282653809,
-          "extrapolated": false,
-          "borrowed": true
+          "seconds_per_epoch": 17.482035135859764,
+          "extrapolated": true,
+          "borrowed": false
         },
         "9": {
           "epochs": 0,
-          "seconds_per_epoch": 8.296986103057861,
-          "extrapolated": false,
-          "borrowed": true
+          "seconds_per_epoch": 21.60869579024726,
+          "extrapolated": true,
+          "borrowed": false
         }
       }
     }
   },
-  "next_checkpoint_CST": "2026-11-11T20:11:29.525647+08:00",
+  "next_checkpoint_CST": "2026-11-11T22:53:32.966013+08:00",
   "eta_is_not_a_guaranteed_bound": true,
   "background_automation_created": false
 }
