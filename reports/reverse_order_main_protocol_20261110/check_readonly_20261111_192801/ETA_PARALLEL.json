@@ -1,0 +1,156 @@
+{
+  "status": "PARTIAL_PLANNING_ESTIMATE",
+  "observed": "2026-11-11T19:28:02.425077+08:00",
+  "contract": "167eb6d15fab4f6d9f7e4db396f826f546160edacb0e2b3049bfa60d5ee80216",
+  "evidence_sha256": "b82296eae48d08c74108a11450c71bb743633f2ea872b531a94e3315539f2a72",
+  "training_epochs": 3042,
+  "formal": 0,
+  "capacity": {
+    "data_available": 25354846208,
+    "unique_allocated": 6558306304,
+    "remaining_peak": 8474079232,
+    "root_available": 1300307968
+  },
+  "concurrency": 2,
+  "active": {
+    "GOAL_DEBR_41": 153023,
+    "GOAL_MLR_42": 153326
+  },
+  "pending": [
+    "GOAL_DEBR_42",
+    "GOAL_MLR_43",
+    "GOAL_DEBR_43"
+  ],
+  "estimated_active_minutes": {
+    "GOAL_DEBR_41": [
+      292.4129763734404,
+      359.3304164552447
+    ],
+    "GOAL_MLR_42": [
+      35.51931817332903,
+      43.57124999066194
+    ]
+  },
+  "estimated_future_run_minutes": {
+    "DEBR": [
+      314.7454287024402,
+      384.4127366335945
+    ],
+    "MLR": [
+      48.585915648937224,
+      56.84450721383095
+    ]
+  },
+  "goal_debr_later_stage_projection_s_per_epoch": {
+    "OBJECT_DEBR_41": {
+      "8": 52.18360468220235,
+      "9": 75.76012640060677
+    },
+    "OBJECT_DEBR_42": {
+      "8": 58.34489441970511,
+      "9": 74.7303971597818
+    },
+    "OBJECT_DEBR_43": {
+      "8": 56.577071418098924,
+      "9": 72.65768033335041
+    }
+  },
+  "goal_debr_projected_s_per_epoch_range": {
+    "6": [
+      8.003283164501191,
+      9.203775639176369
+    ],
+    "7": [
+      42.802689041410176,
+      49.2230923976217
+    ],
+    "8": [
+      52.18360468220235,
+      67.09662858266087
+    ],
+    "9": [
+      72.65768033335041,
+      87.12414536069777
+    ]
+  },
+  "slow_scenario_contention_multiplier": 1.15,
+  "sequence": {
+    "all_training_complete": {
+      "duration_minutes": [
+        655.7443207248178,
+        800.5876603026701
+      ],
+      "completion_CST": [
+        "2026-11-12T06:23:47.084320+08:00",
+        "2026-11-12T08:48:37.684695+08:00"
+      ]
+    },
+    "OBJECT_formal_1200": {
+      "duration_minutes": [
+        110,
+        145
+      ],
+      "completion_CST": [
+        "2026-11-12T08:13:47.084320+08:00",
+        "2026-11-12T11:13:37.684695+08:00"
+      ]
+    },
+    "GOAL_formal_1200": {
+      "duration_minutes": [
+        120,
+        175
+      ],
+      "completion_CST": [
+        "2026-11-12T10:13:47.084320+08:00",
+        "2026-11-12T14:08:37.684695+08:00"
+      ]
+    },
+    "reverse_accepted_published": {
+      "duration_minutes": [
+        25,
+        65
+      ],
+      "completion_CST": [
+        "2026-11-12T10:38:47.084320+08:00",
+        "2026-11-12T15:13:37.684695+08:00"
+      ]
+    },
+    "ablation_reevaluation_2400_accepted_published": {
+      "duration_minutes": [
+        220,
+        310
+      ],
+      "completion_CST": [
+        "2026-11-12T14:18:47.084320+08:00",
+        "2026-11-12T20:23:37.684695+08:00"
+      ]
+    }
+  },
+  "evaluation_reference_minutes": {
+    "OBJECT": {
+      "mlr_200_vector_minutes": [
+        14.764944106516245,
+        14.188629839633359,
+        16.09699837638303
+      ],
+      "full_debr_200_vector_minutes": [
+        19.378349338083595,
+        19.911375362133064,
+        17.310452794350326
+      ]
+    },
+    "GOAL": {
+      "mlr_200_vector_minutes": [
+        15.069524621899957,
+        14.859459536800083,
+        14.223037842566798
+      ],
+      "full_debr_200_vector_minutes": [
+        19.625762960834255,
+        25.252465663884262,
+        31.462330549848655
+      ]
+    }
+  },
+  "method": "Use measured GOAL MLR durations and GOAL DEBR stage-7 speed, scale later DEBR epochs from actual OBJECT timings by GOAL batch count and calibrate on stage 7. Simulate the live two-slot FIFO. The full-suite evaluation ranges derive from historical 200-episode vector logs; validation and publication use planning allowances. These are timing scenarios, not confidence bounds."
+}
