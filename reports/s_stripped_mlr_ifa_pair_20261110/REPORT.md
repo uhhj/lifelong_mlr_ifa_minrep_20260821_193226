@@ -1,5 +1,7 @@
 # 完整S实现剥离后的MLR/ALIGN配对实验最终报告
 
+> 2026-11-11协议范围更正：本轮是S实现下的剥离对照，不能作为历史主表MLR+IFA的同协议替代。执行验收已完成不表示协议变化获用户授权。详见[PROTOCOL_SCOPE_REVIEW.md](PROTOCOL_SCOPE_REVIEW.md)。
+
 12个新run通过实际48CP/12完整恢复与2400正式初态/噪声、预算独立验收。三seed均值±样本标准差，单位%。MLR与ALIGN均来自相同完整S实现，删除RA/E/R/q/gate/训练采集；两者仅监督动作与合法窗口定义不同。完整S使用已接受的1200条基线记录，无额外训练或补评。
 
 |套件|方法|FWT↑|NBT↓|AUC↑|OldFinal↑|NewFinal↑|FinalAll↑|

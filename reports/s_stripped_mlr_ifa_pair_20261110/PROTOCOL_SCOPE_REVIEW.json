@@ -1,0 +1,109 @@
+{
+  "status": "EXECUTION_VERIFIED_PROTOCOL_SCOPE_RESTRICTED",
+  "observed": "2026-11-11T08:30:02.655910+08:00",
+  "evidence": {
+    "executed_protocol": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\PROTOCOL.md",
+      "sha256": "3a6fdd5d2f15a13fe69f994205af4e5c72b09871b064bbdaa33ac284964e9fc7"
+    },
+    "implementation_notes": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\IMPLEMENTATION_NOTES.md",
+      "sha256": "4a815cbbdc56c3553c762f3e9e620aa71620d144aa3d8c58ded1063955667d0f"
+    },
+    "parent_audit": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\SOURCE_PARENT_AUDIT.md",
+      "sha256": "f35aeca7257e496852499bde873f5084f2a8e384821dee8208cba61aa9fa4953"
+    },
+    "stripped_update": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\updates.py",
+      "sha256": "c01186fdd4f902cc29ba463053833fe9ebbb84f6a8475fc268cc606e731fdf44"
+    },
+    "stripped_evaluator": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\cases\\OBJECT_MLR_41\\evaluate.py",
+      "sha256": "8801e155c79c0aba3f26d15376139f1c78f193787a03ac2ca267019f4429938a"
+    },
+    "stripped_runtime": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\case_runtime_template.py",
+      "sha256": "70be2bd0bb933745101f92a6d1b12399b4576a87757c623ddffe39bb41c3889d"
+    },
+    "main_evaluator": {
+      "path": "execution\\20261013_coreset_object\\source\\coreset_exp\\evaluate.py",
+      "sha256": "b6f69d06178350f1e2ff1fdf92736997def4b3b55d317ce5fe0afd9c77a0eb33"
+    },
+    "main_rollout": {
+      "path": "execution\\20261013_coreset_object\\source\\coreset_exp\\eval_metric.py",
+      "sha256": "646593252284fd2de5d14aefbce163e56e6ed19a9c59eba5f0d95a6ac3f29d68"
+    },
+    "main_metrics": {
+      "path": "execution\\20261107_mlr_ifa_reproduction_audit\\audit.py",
+      "sha256": "ce91a785a32be8c8bc986a614403b15ed1b5cdb4e85e168e48dde8bf92e22a64"
+    },
+    "stripped_metrics": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\describe_final.py",
+      "sha256": "be517ed1500a02f83ae4830e60466d0290781012a7d33f78442ee836a50aa335"
+    },
+    "final_analysis": {
+      "path": "execution\\20261110_s_stripped_mlr_ifa_align\\FINAL_ANALYSIS.json",
+      "sha256": "4224bb17fd7ce0b3832ef67d18525a32b7c2431fdd2fa5d8acd78cc7edeb3069"
+    }
+  },
+  "metric_formula_ast_equal": {
+    "AUC": true,
+    "FWT": true,
+    "NBT": true
+  },
+  "auc_percent": {
+    "OBJECT": {
+      "MLR": {
+        "mean_percent": 75.55555555555556,
+        "sample_sd_percent": 7.479959722732715
+      },
+      "ALIGN": {
+        "mean_percent": 82.1875,
+        "sample_sd_percent": 5.981198841648164
+      },
+      "FULL_S": {
+        "mean_percent": 86.49305555555556,
+        "sample_sd_percent": 2.1908043825482437
+      },
+      "HISTORICAL_MLR": {
+        "mean_percent": 68.29861111111111,
+        "sample_sd_percent": 3.1186277623933223
+      }
+    },
+    "GOAL": {
+      "MLR": {
+        "mean_percent": 75.83333333333333,
+        "sample_sd_percent": 0.47735163489123333
+      },
+      "ALIGN": {
+        "mean_percent": 81.21527777777777,
+        "sample_sd_percent": 3.0518048318137074
+      },
+      "FULL_S": {
+        "mean_percent": 87.25694444444444,
+        "sample_sd_percent": 2.64823818967616
+      },
+      "HISTORICAL_MLR": {
+        "mean_percent": 76.35416666666667,
+        "sample_sd_percent": 6.383980602518568
+      }
+    }
+  },
+  "confirmed_changes": [
+    "The new stripped MLR uses the full-S training lifecycle and a new BC+.1IFA update, rather than the historical PaperMLR.observe call chain.",
+    "The new evaluation uses per-trajectory NumPy Normal streams rather than the historical global Torch Normal stream.",
+    "The new evaluation caches single-frame spatial encodings rather than recomputing the full observation history.",
+    "The new evaluation zeros actions after individual success and constructs environments per vector, unlike the historical evaluator.",
+    "The S runtime disables cuDNN benchmark; the historical evaluation explicitly enabled it."
+  ],
+  "training_equivalence_limit": "Direct-reference BC/IFA and recovery admissions are not a full original-observe equivalence proof.",
+  "authorization_limit": "A self-authored frozen protocol and passed execution audit do not establish informed user approval for evaluator/training-entry changes.",
+  "timing_limit": "Reviewed frozen files specify these choices before the new stripped runs. This review does not establish the absence of protocol changes in every earlier experiment.",
+  "interpretation": "New MLR and ALIGN can be compared within their common stripped-S protocol. New MLR is not a drop-in historical main-table baseline; cross-protocol gains are not isolated mechanism effects.",
+  "result_policy": "Preserve all measured values and raw evidence. Do not adjust RA or any other outcome to follow a changed baseline. No additional training/evaluation authorized by this review.",
+  "reverse_dispatch_hold_evidence": "execution\\20261110_reverse_order_main_protocol\\hold_dispatch_protocol_review_20261111_082712\\EVIDENCE.json",
+  "new_optimizer_calls": 0,
+  "new_environments": 0,
+  "checkpoints_loaded": 0
+}
