@@ -1,5 +1,7 @@
 # 主表协议逆序实验
 
+> 协议审查暂停新增派发：controller119466已单独SIGSTOP；现有训练继续，本地观察器已停止，旧下一检查时间失效。不得自动CONT、重启或追加计算。详见PROTOCOL_REVIEW_HOLD.json及前序实验PROTOCOL_SCOPE_REVIEW.md。
+
 PARTIAL，实际观察2026-11-11T07:45:06.106314+08:00。只读审计PASS_PROGRESS_NOT_FINAL，不代表最终接受或局部性能结论。
 
 原基底0–5和官方检查点不变，增量物理任务9→8→7→6。MLR+IFA和完整DEBR分别继承主表训练与原生评估实现。
