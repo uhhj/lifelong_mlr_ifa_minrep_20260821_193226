@@ -1,0 +1,82 @@
+"""Journal refinement of selected C; notation follows the user's explicit spec."""
+from figkit import *
+from pathlib import Path
+
+def state(branch):return m('Ω',branch)
+def theta(branch):return m('θ',branch)
+def probe(base,subscript,branch):return m(base,subscript)+'('+theta(branch)+')'
+def policy():
+    return '<tspan font-style="italic">π</tspan><tspan baseline-shift="sub" font-size="75%"><tspan font-style="italic">θ</tspan><tspan baseline-shift="sub" font-size="76%">k</tspan></tspan>'
+
+s=Figure(1800,860)
+# Crop away the former global title areas while preserving the selected layout.
+s.add('<g transform="translate(0 -60)">')
+s.text(70,121,'Expert demonstrations',32,BLUE,True)
+s.film(70,160,160,'expert',BLUE,24)
+s.text(70,411,'Autonomous successful experience',32,TEAL,True)
+s.film(70,450,160,'success',TEAL,24)
+s.path('M610,240 H670',BLUE,3)
+s.path('M610,530 H670',TEAL,3)
+
+s.rect(675,160,295,200,'url(#blueWash)','#BED3E8',20,1.4,True)
+s.text(698,194,'CADL',32,BLUE,True)
+s.text(698,226,'BC + IFA +',23,INK)
+s.text(698,253,'execution supervision',23,INK)
+s.memory_pool(701,292,BLUE,'expert')
+s.text(823,291,'Expert memory',20,BLUE,True)
+s.text(823,318,'('+m('M','D')+')',23,BLUE,False,raw=True)
+s.text(823,345,'+ current demos',19,INK)
+
+s.rect(675,450,295,180,'url(#tealWash)','#B7DCD3',20,1.4,True)
+s.text(698,484,'SHBR',32,TEAL,True)
+s.text(698,515,'Support-weighted retention',22,INK)
+s.memory_pool(701,561,TEAL,'success')
+s.text(823,557,'Success history',20,TEAL,True)
+s.text(823,584,'('+m('M','S')+')',23,TEAL,False,raw=True)
+s.text(823,614,m('q','j')+' = '+m('n','j')+sup('+')+' / '+m('N','roll'),22,INK,False,raw=True)
+
+s.rect(1050,160,680,470,'url(#goldWash)','#DEC4A4',24,1.5,True)
+s.text(1080,201,'Candidate-update gate',33,INK,True)
+s.text(1080,235,'Same full state '+m('Ω')+' · Same batches · B = 10',23,MUTED,raw=True)
+s.line(1080,251,1700,251,'#E2CDB4',1.2)
+s.rect(1080,270,250,95,'white','#BDCEE1',13,1.4)
+s.text(1205,304,'Base Candidate '+state('C'),22.5,BLUE,True,'middle',True)
+s.text(1205,343,'('+m('L','C')+')',27,INK,False,'middle',True)
+s.rect(1370,270,330,95,'white','#B3D7CD',13,1.4)
+s.text(1535,304,'Retention Candidate '+state('Q'),23,TEAL,True,'middle',True)
+s.text(1535,343,'('+m('L','Q')+' = '+m('L','C')+' + '+m('λ','R')+m('L','SHBR')+')',26,INK,False,'middle',True)
+s.path('M970,250 H1010 Q1028,250 1028,268 V318 H1080',BLUE,2.8)
+s.path('M970,540 H1022 Q1035,540 1035,526 V382 H1535 V365',TEAL,2.8)
+s.text(1080,411,'Fixed training probes',24,INK,True)
+# Three full Eq.(20) expressions, aligned at the relation signs.
+for y,base,low,op in [(447,'L','BC,new','≤'),(485,'E','new','≤'),(523,'R','old','<')]:
+    s.text(1370,y,probe(base,low,'Q'),26,INK,False,'end',True)
+    s.text(1390,y,op,26,INK,False,'middle')
+    s.text(1410,y,probe(base,low,'C'),26,INK,False,'start',True)
+s.line(1080,543,1700,543,'#E2CDB4',1.2)
+s.text(1390,575,'All pass → '+state('Q')+'; otherwise → '+state('C'),25,INK,True,'middle',True)
+s.text(1390,605,'Commit the selected full training state',22,INK,False,'middle')
+s.text(1080,662,'First task: base updates only',20,MUTED)
+s.path('M1500,630 V681',GOLD,2.6)
+s.rect(1320,687,410,86,'white','#9EB1C2',18,1.5,True)
+s.text(1525,722,'Policy '+policy(),30,INK,True,'middle',True)
+s.text(1525,755,'Deployment: original inference',23,MUTED,False,'middle')
+
+s.text(70,678,'AT TASK END',20,MUTED,True)
+s.rect(70,703,540,102,'#F7FAFE','#BED3E8',17,1.4)
+s.text(340,734,'Demonstrations → RA-Coreset',22,BLUE,True,'middle')
+s.text(340,764,'Expert memory ('+m('M','D')+')',22,BLUE,True,'middle',True)
+s.text(340,791,'Protected random anchors + coverage-aware exchange',18,MUTED,False,'middle')
+s.path('M70,240 H40 V754 H70',BLUE,2)
+s.rect(675,703,590,102,'#F4FBF8','#B7DCD3',17,1.4)
+s.text(970,734,'Policy rollouts → Successes',23,TEAL,True,'middle')
+s.text(970,764,'History memory ('+m('M','S')+')',23,TEAL,True,'middle',True)
+s.text(970,791,'Fixed attempts; histories + Gaussian references',18,MUTED,False,'middle')
+s.path('M1320,730 H1295 V754 H1265',TEAL,2.3)
+s.path('M340,805 V878 H1708',BLUE,2.3,True)
+s.path('M1245,805 V891 H1708',TEAL,2.3,True)
+s.text(70,848,'Task k',26,INK,True)
+s.text(1040,848,'Two memories, carried forward',25,INK,True,'middle')
+s.text(1730,848,'Task k + 1',26,INK,True,'end')
+s.add('</g>')
+s.finish(Path(__file__).with_name('DEBR_C_journal.svg'))
