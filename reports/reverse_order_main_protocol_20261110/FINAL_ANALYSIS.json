@@ -1,0 +1,3221 @@
+{
+  "status": "PASS_ACCEPTED_REVERSE_ORDER_ANALYSIS",
+  "observed": "2026-11-12T15:55:16.860007+08:00",
+  "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+  "user_authorized_amendment": "EVALUATION_PROTOCOL_AMENDMENT.json",
+  "order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    9,
+    8,
+    7,
+    6
+  ],
+  "new_final_original_task": 6,
+  "old_final_original_tasks": [
+    9,
+    8,
+    7
+  ],
+  "metric_definition": "Same per-task temporal AUC and NBT as manuscript audit; NBT lower is better",
+  "results": {
+    "OBJECT_MLR_41": {
+      "matrix": {
+        "6_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 7,
+          "episodes": 20,
+          "percent": 35.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 16,
+          "episodes": 20,
+          "percent": 80.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 8,
+          "episodes": 20,
+          "percent": 40.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "31/40",
+          "percent": 77.5
+        },
+        "NBT": {
+          "fraction": "13/360",
+          "percent": 3.611111111111111
+        },
+        "AUC": {
+          "fraction": "713/960",
+          "percent": 74.27083333333333
+        },
+        "OldFinal": {
+          "fraction": "29/30",
+          "percent": 96.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "2/5",
+          "percent": 40.0
+        },
+        "FinalAll": {
+          "fraction": "33/40",
+          "percent": 82.5
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "OBJECT_MLR_41",
+        "method": "MLR",
+        "seed": 41,
+        "suite": "OBJECT",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "5787ab067947ce9936cb656d0c6157122f45f8ebb0804f178f3971b4b611262f",
+        "checkpoints": {
+          "6": {
+            "sha256": "9dd6c4d1cc7f9b09ae4305f525ca77ed1e256d5199206a072469d985435eca79",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "c2d3c475e98a57d7652edd0449682362009102bcd074b7ccb6de08438060f6de",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "0bacacf9685ca7554afe8073310b9d27694fb0359dbeab0e3bc21965bb45768d",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "05b740990fb3d99a793d536f76deadd8a3ae8ae150edb174e848903148edf677",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "0697fd5481eded409036e5b6e7bc2fe2a4ecdf3b369674ecbcce8624abb41dd5",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 102100,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 102100,
+        "physical_optimizer": {
+          "production": 102100,
+          "admission": 20
+        },
+        "extra_autograd": {
+          "production": 0,
+          "admission": 0
+        },
+        "formal": 200,
+        "training_collection": 0,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 0,
+        "caches": {},
+        "model_forward_calls": 8,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 10.106890439987183
+      }
+    },
+    "OBJECT_DEBR_41": {
+      "matrix": {
+        "6_6": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 13,
+          "episodes": 20,
+          "percent": 65.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 13,
+          "episodes": 20,
+          "percent": 65.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "9/10",
+          "percent": 90.0
+        },
+        "NBT": {
+          "fraction": "1/36",
+          "percent": 2.7777777777777777
+        },
+        "AUC": {
+          "fraction": "283/320",
+          "percent": 88.4375
+        },
+        "OldFinal": {
+          "fraction": "13/15",
+          "percent": 86.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "19/20",
+          "percent": 95.0
+        },
+        "FinalAll": {
+          "fraction": "71/80",
+          "percent": 88.75
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "OBJECT_DEBR_41",
+        "method": "DEBR",
+        "seed": 41,
+        "suite": "OBJECT",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "d14a277910efe9e73326169d56cc2b6ff994b43795a084b6907c467f41c22d1b",
+        "checkpoints": {
+          "6": {
+            "sha256": "3f7e34fa1fdc7849395113c99d7032effab368cbf844905988abc08790fe8470",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "c2c81a79c4cc7affc2b95f47e9bf04bdcdf004521efb90953733a271b6f092e9",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "b0fd1a15efaec0dd342bae04dbdbff354e26ec37718ccee0a025050070844fe4",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "a4fba628505d6084ba1b1f478daa71cd8b2dc078923f7dec9fd2976c9404c7f0",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "a4fba628505d6084ba1b1f478daa71cd8b2dc078923f7dec9fd2976c9404c7f0",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 102100,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 102100,
+        "physical_optimizer": {
+          "production": 191000,
+          "admission": 91
+        },
+        "extra_autograd": {
+          "production": 36,
+          "admission": 41
+        },
+        "formal": 200,
+        "training_collection": 40,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 9100,
+        "caches": {
+          "6": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 14
+          },
+          "7": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 12
+          },
+          "8": {
+            "rows": 50,
+            "successful_trajectories": 4,
+            "support": 0.4,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 1.7881393432617188e-07,
+            "forward_calls": 4
+          },
+          "9": {
+            "rows": 103,
+            "successful_trajectories": 8,
+            "support": 0.8,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 9
+          }
+        },
+        "model_forward_calls": 47,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 14.13333535194397
+      }
+    },
+    "OBJECT_MLR_42": {
+      "matrix": {
+        "6_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 16,
+          "episodes": 20,
+          "percent": 80.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 5,
+          "episodes": 20,
+          "percent": 25.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "63/80",
+          "percent": 78.75
+        },
+        "NBT": {
+          "fraction": "1/18",
+          "percent": 5.555555555555555
+        },
+        "AUC": {
+          "fraction": "121/160",
+          "percent": 75.625
+        },
+        "OldFinal": {
+          "fraction": "5/6",
+          "percent": 83.33333333333333
+        },
+        "NewFinal": {
+          "fraction": "1/4",
+          "percent": 25.0
+        },
+        "FinalAll": {
+          "fraction": "11/16",
+          "percent": 68.75
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "OBJECT_MLR_42",
+        "method": "MLR",
+        "seed": 42,
+        "suite": "OBJECT",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "474b551a473c83a8a150c464eda98ac4ca28c303ad3ad5d012fbc981a153dce6",
+        "checkpoints": {
+          "6": {
+            "sha256": "c7c82d3a245fff68b1425aa46f321231c1e4f18da6f411ee7386908806d27f85",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "3011c3b5aca8f5017308e8732e6e646bbe1237ac890fd4f682a091c94d8904e5",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "bc299da6fe5c8b5c3c58f3f02d254c260b128853dc8b36cad505d5ceeeea4bb1",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "2246f26dffdc396a23adced6af62295d207762a00a4dfb247fcd94b6c5c28fdd",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "b7384b5ec497332a11e43fbdfaddf280263bc9887d8df4f78fc61f6e55fe4174",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 102100,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 102100,
+        "physical_optimizer": {
+          "production": 102100,
+          "admission": 20
+        },
+        "extra_autograd": {
+          "production": 0,
+          "admission": 0
+        },
+        "formal": 200,
+        "training_collection": 0,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 0,
+        "caches": {},
+        "model_forward_calls": 8,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 8.433644533157349
+      }
+    },
+    "OBJECT_DEBR_42": {
+      "matrix": {
+        "6_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 16,
+          "episodes": 20,
+          "percent": 80.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 15,
+          "episodes": 20,
+          "percent": 75.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "9/10",
+          "percent": 90.0
+        },
+        "NBT": {
+          "fraction": "-1/90",
+          "percent": -1.1111111111111112
+        },
+        "AUC": {
+          "fraction": "29/32",
+          "percent": 90.625
+        },
+        "OldFinal": {
+          "fraction": "29/30",
+          "percent": 96.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "3/4",
+          "percent": 75.0
+        },
+        "FinalAll": {
+          "fraction": "73/80",
+          "percent": 91.25
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "OBJECT_DEBR_42",
+        "method": "DEBR",
+        "seed": 42,
+        "suite": "OBJECT",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "92e4e44a3cd7fcc546539eb25258d3b21af22ff57c287487ff65a2648e90b3d9",
+        "checkpoints": {
+          "6": {
+            "sha256": "fb8acc5793c7a6512b080880ab9f53e5f0f9e94de4e5c2d76304c297a564195c",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "45bae5f5680897779f947fd352f71178603f6d0788895e06f4d8ab3c7b82bf79",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "3ef043ee8eb128da5021b6d19a18c6be181499d5fba6f7d29563ecff94b9d046",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "2c92e4ca1367627b2f33645dccd1721bd4ca2a24639d6d7e068325b265ec3521",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "2c92e4ca1367627b2f33645dccd1721bd4ca2a24639d6d7e068325b265ec3521",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 102100,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 102100,
+        "physical_optimizer": {
+          "production": 191000,
+          "admission": 91
+        },
+        "extra_autograd": {
+          "production": 36,
+          "admission": 41
+        },
+        "formal": 200,
+        "training_collection": 40,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 9100,
+        "caches": {
+          "6": {
+            "rows": 115,
+            "successful_trajectories": 9,
+            "support": 0.9,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 13
+          },
+          "7": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 1.7881393432617188e-07,
+            "forward_calls": 12
+          },
+          "8": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 11
+          },
+          "9": {
+            "rows": 78,
+            "successful_trajectories": 6,
+            "support": 0.6,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 6
+          }
+        },
+        "model_forward_calls": 50,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 14.125604391098022
+      }
+    },
+    "OBJECT_MLR_43": {
+      "matrix": {
+        "6_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 7,
+          "episodes": 20,
+          "percent": 35.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 4,
+          "episodes": 20,
+          "percent": 20.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 16,
+          "episodes": 20,
+          "percent": 80.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 5,
+          "episodes": 20,
+          "percent": 25.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "4/5",
+          "percent": 80.0
+        },
+        "NBT": {
+          "fraction": "19/90",
+          "percent": 21.11111111111111
+        },
+        "AUC": {
+          "fraction": "219/320",
+          "percent": 68.4375
+        },
+        "OldFinal": {
+          "fraction": "2/3",
+          "percent": 66.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "1/4",
+          "percent": 25.0
+        },
+        "FinalAll": {
+          "fraction": "9/16",
+          "percent": 56.25
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "OBJECT_MLR_43",
+        "method": "MLR",
+        "seed": 43,
+        "suite": "OBJECT",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "ff55b315533d944f6e7423d1869cb347b5aa4e7634cb0d8163b23210d5750693",
+        "checkpoints": {
+          "6": {
+            "sha256": "4ecdabfe19231a34307406d854790f6a23b306811adad0f897d076aeb20644bf",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "eb814139a9f325e411cd4735191473f2c5578cf7abe46bcf8e9f1f3d3e56d41a",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "5462c0e28c09d6c9871c76fdcdd22ab164545d14ea66047ee7a799535e012728",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "164f4fb7f0f73b6e5c53a0122fe800d417cac8946344cae4b3bcb5e90b632a88",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "6d8facec1ab410fae21687f97362eae67d8b8adea7df9f985ca963bb37780338",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 102100,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 102100,
+        "physical_optimizer": {
+          "production": 102100,
+          "admission": 20
+        },
+        "extra_autograd": {
+          "production": 0,
+          "admission": 0
+        },
+        "formal": 200,
+        "training_collection": 0,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 0,
+        "caches": {},
+        "model_forward_calls": 8,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 7.466436862945557
+      }
+    },
+    "OBJECT_DEBR_43": {
+      "matrix": {
+        "6_6": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 9,
+          "episodes": 20,
+          "percent": 45.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "17/20",
+          "percent": 85.0
+        },
+        "NBT": {
+          "fraction": "1/180",
+          "percent": 0.5555555555555556
+        },
+        "AUC": {
+          "fraction": "27/32",
+          "percent": 84.375
+        },
+        "OldFinal": {
+          "fraction": "29/30",
+          "percent": 96.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "9/20",
+          "percent": 45.0
+        },
+        "FinalAll": {
+          "fraction": "67/80",
+          "percent": 83.75
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "OBJECT_DEBR_43",
+        "method": "DEBR",
+        "seed": 43,
+        "suite": "OBJECT",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "7b7b636339c95390eb394b3a1b64414abba2252c7ae1800d37c16eb94f852386",
+        "checkpoints": {
+          "6": {
+            "sha256": "baa529776d826e32ebf4f20b1ad85aad4bdf270c35940459671c67969f2b5ea6",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "4c09d4388510505c26bcd78dfc0cbd3152c54ebd8bed0b8a414e15997c3cd2a7",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "e930a2cc7d89fbde822b255d6fa495e9f14cae7d71e6e7bf4ff0f4cbc06fa6fa",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "6c73f624c105bd96a2149873f1c447c6a7490b2c5442e6699b2d5beeda0849f3",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "6c73f624c105bd96a2149873f1c447c6a7490b2c5442e6699b2d5beeda0849f3",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 102100,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 102100,
+        "physical_optimizer": {
+          "production": 191000,
+          "admission": 91
+        },
+        "extra_autograd": {
+          "production": 36,
+          "admission": 41
+        },
+        "formal": 200,
+        "training_collection": 40,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 9100,
+        "caches": {
+          "6": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 13
+          },
+          "7": {
+            "rows": 115,
+            "successful_trajectories": 9,
+            "support": 0.9,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 11
+          },
+          "8": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 1.4901161193847656e-07,
+            "forward_calls": 11
+          },
+          "9": {
+            "rows": 52,
+            "successful_trajectories": 4,
+            "support": 0.4,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 1.7881393432617188e-07,
+            "forward_calls": 4
+          }
+        },
+        "model_forward_calls": 47,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 13.909782409667969
+      }
+    },
+    "GOAL_MLR_41": {
+      "matrix": {
+        "6_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 14,
+          "episodes": 20,
+          "percent": 70.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 15,
+          "episodes": 20,
+          "percent": 75.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 16,
+          "episodes": 20,
+          "percent": 80.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "63/80",
+          "percent": 78.75
+        },
+        "NBT": {
+          "fraction": "-11/360",
+          "percent": -3.0555555555555554
+        },
+        "AUC": {
+          "fraction": "77/96",
+          "percent": 80.20833333333333
+        },
+        "OldFinal": {
+          "fraction": "9/10",
+          "percent": 90.0
+        },
+        "NewFinal": {
+          "fraction": "3/5",
+          "percent": 60.0
+        },
+        "FinalAll": {
+          "fraction": "33/40",
+          "percent": 82.5
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "GOAL_MLR_41",
+        "method": "MLR",
+        "seed": 41,
+        "suite": "GOAL",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "2780ac299e493760b929b0e5e8134439919694a984619a1e6eab61e041d631df",
+        "checkpoints": {
+          "6": {
+            "sha256": "3ac3e935dbb6c38c07d41bb8c2bbd31d44eb1c697c639cb0bed3e1c6390627a1",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "29408245d3d648c60a6a9defc7688cc6551233adb29daba9ee4fefe4e4dbf2ff",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "25f3122b0fd8131e5bcee07ddfd97470bef38eadf62e4880255427e9f681b2ae",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "e8e6d37a237d82efe5cc55f1eecd3c226620e8da57a7d2aad0c07b913deef919",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "6f6ebc07f5eabcd4a1e162380aa90c5095aaecb7cfd874aed5ef6f20cf2e2f01",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 90700,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 90700,
+        "physical_optimizer": {
+          "production": 90700,
+          "admission": 20
+        },
+        "extra_autograd": {
+          "production": 0,
+          "admission": 0
+        },
+        "formal": 200,
+        "training_collection": 0,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 0,
+        "caches": {},
+        "model_forward_calls": 8,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 7.5151801109313965
+      }
+    },
+    "GOAL_DEBR_41": {
+      "matrix": {
+        "6_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 16,
+          "episodes": 20,
+          "percent": 80.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 15,
+          "episodes": 20,
+          "percent": 75.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 13,
+          "episodes": 20,
+          "percent": 65.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "17/20",
+          "percent": 85.0
+        },
+        "NBT": {
+          "fraction": "1/45",
+          "percent": 2.2222222222222223
+        },
+        "AUC": {
+          "fraction": "161/192",
+          "percent": 83.85416666666667
+        },
+        "OldFinal": {
+          "fraction": "9/10",
+          "percent": 90.0
+        },
+        "NewFinal": {
+          "fraction": "13/20",
+          "percent": 65.0
+        },
+        "FinalAll": {
+          "fraction": "67/80",
+          "percent": 83.75
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "GOAL_DEBR_41",
+        "method": "DEBR",
+        "seed": 41,
+        "suite": "GOAL",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "82a86c29d9b6d90026ccc48fc3f7a050eb17aadc1bb981c0c7545173e52831a3",
+        "checkpoints": {
+          "6": {
+            "sha256": "79858a6baf4f3ef6a5ca794c6fa049a9a54599122d6a64b7b368dd51fd730a32",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "6b9faf39cac82d72f88fd9ce1c3f4291c0cb7020852d204ff863cfef726ae807",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "ce04d6c906c16aba4a4f344ed009b7a085a461c4c1b57dd18d9bbda17b9a1c3c",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "689430099b3ac831e70885b174aeafaa9d64a2e0458d8f76662b58aed9846784",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "689430099b3ac831e70885b174aeafaa9d64a2e0458d8f76662b58aed9846784",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 90700,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 90700,
+        "physical_optimizer": {
+          "production": 161700,
+          "admission": 91
+        },
+        "extra_autograd": {
+          "production": 36,
+          "admission": 41
+        },
+        "formal": 200,
+        "training_collection": 40,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 7200,
+        "caches": {
+          "6": {
+            "rows": 102,
+            "successful_trajectories": 8,
+            "support": 0.8,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 11
+          },
+          "7": {
+            "rows": 115,
+            "successful_trajectories": 9,
+            "support": 0.9,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 13
+          },
+          "8": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 12
+          },
+          "9": {
+            "rows": 115,
+            "successful_trajectories": 9,
+            "support": 0.9,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 12
+          }
+        },
+        "model_forward_calls": 56,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 14.5539870262146
+      }
+    },
+    "GOAL_MLR_42": {
+      "matrix": {
+        "6_6": {
+          "successes": 16,
+          "episodes": 20,
+          "percent": 80.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 13,
+          "episodes": 20,
+          "percent": 65.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 9,
+          "episodes": 20,
+          "percent": 45.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "4/5",
+          "percent": 80.0
+        },
+        "NBT": {
+          "fraction": "1/30",
+          "percent": 3.3333333333333335
+        },
+        "AUC": {
+          "fraction": "251/320",
+          "percent": 78.4375
+        },
+        "OldFinal": {
+          "fraction": "49/60",
+          "percent": 81.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "3/5",
+          "percent": 60.0
+        },
+        "FinalAll": {
+          "fraction": "61/80",
+          "percent": 76.25
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "GOAL_MLR_42",
+        "method": "MLR",
+        "seed": 42,
+        "suite": "GOAL",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "7eb4e7cd5d51387c94f139188897c63dccee1828f9f10d5a753f87491e7826fa",
+        "checkpoints": {
+          "6": {
+            "sha256": "576e3615a638c6f4290d0a199d0146b6789649fb1fbdb0182dbb9d675b76296c",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "2699eafc32a06be6851f621abd5f10e0ea105b90b28ea8c0b4de66d3ece348e3",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "4ea3484ddcbd3cd4563196ee40fa5674d4a29e338405c2252301cfa8e9d96d98",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "73926d0feb837f4b23a7e75cdb98c20a4c888feba8b00f8304dc727ee1d4c3ce",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "b62586cb88a65ab7cb9c1ccf4520eb17e10bfce12083642080dfc6b303e2ae3d",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 90700,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 90700,
+        "physical_optimizer": {
+          "production": 90700,
+          "admission": 20
+        },
+        "extra_autograd": {
+          "production": 0,
+          "admission": 0
+        },
+        "formal": 200,
+        "training_collection": 0,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 0,
+        "caches": {},
+        "model_forward_calls": 8,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 7.608050584793091
+      }
+    },
+    "GOAL_DEBR_42": {
+      "matrix": {
+        "6_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 13,
+          "episodes": 20,
+          "percent": 65.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 14,
+          "episodes": 20,
+          "percent": 70.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "69/80",
+          "percent": 86.25
+        },
+        "NBT": {
+          "fraction": "7/120",
+          "percent": 5.833333333333333
+        },
+        "AUC": {
+          "fraction": "267/320",
+          "percent": 83.4375
+        },
+        "OldFinal": {
+          "fraction": "13/15",
+          "percent": 86.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "7/10",
+          "percent": 70.0
+        },
+        "FinalAll": {
+          "fraction": "33/40",
+          "percent": 82.5
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "GOAL_DEBR_42",
+        "method": "DEBR",
+        "seed": 42,
+        "suite": "GOAL",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "1cdff20725e2a58648e11d8d6c0f000d7ea55771ad4316fb6a451ca04f3d7f9d",
+        "checkpoints": {
+          "6": {
+            "sha256": "97b5f37c9b22dae4cd019bac3d83b0996c4358be63a9e42697719d3064efe33d",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "2a0a2aaaa77893bc778a2c178119503b9d1eefa34a2674049f8447977dc39f75",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "71aba3304154d3683d5111d3232a9b96b93eb375b7b068f02110bb923d98a072",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "b06d1388ddb188119375159926f94e7ab4e59764774cd04b02e9b78a1f377f0e",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "b06d1388ddb188119375159926f94e7ab4e59764774cd04b02e9b78a1f377f0e",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 90700,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 90700,
+        "physical_optimizer": {
+          "production": 161700,
+          "admission": 91
+        },
+        "extra_autograd": {
+          "production": 36,
+          "admission": 41
+        },
+        "formal": 200,
+        "training_collection": 40,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 7200,
+        "caches": {
+          "6": {
+            "rows": 115,
+            "successful_trajectories": 9,
+            "support": 0.9,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 12
+          },
+          "7": {
+            "rows": 102,
+            "successful_trajectories": 8,
+            "support": 0.8,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 11
+          },
+          "8": {
+            "rows": 128,
+            "successful_trajectories": 10,
+            "support": 1.0,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 13
+          },
+          "9": {
+            "rows": 90,
+            "successful_trajectories": 7,
+            "support": 0.7,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.980232238769531e-07,
+            "forward_calls": 11
+          }
+        },
+        "model_forward_calls": 55,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 13.980487585067749
+      }
+    },
+    "GOAL_MLR_43": {
+      "matrix": {
+        "6_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 11,
+          "episodes": 20,
+          "percent": 55.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 14,
+          "episodes": 20,
+          "percent": 70.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 14,
+          "episodes": 20,
+          "percent": 70.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 15,
+          "episodes": 20,
+          "percent": 75.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "31/40",
+          "percent": 77.5
+        },
+        "NBT": {
+          "fraction": "-1/90",
+          "percent": -1.1111111111111112
+        },
+        "AUC": {
+          "fraction": "25/32",
+          "percent": 78.125
+        },
+        "OldFinal": {
+          "fraction": "49/60",
+          "percent": 81.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "3/4",
+          "percent": 75.0
+        },
+        "FinalAll": {
+          "fraction": "4/5",
+          "percent": 80.0
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "GOAL_MLR_43",
+        "method": "MLR",
+        "seed": 43,
+        "suite": "GOAL",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "7c03b642e75229f3e76a14a10c367082037242793fcf79d5a16e1dedf9073caa",
+        "checkpoints": {
+          "6": {
+            "sha256": "939ed1faaddead80734b5e1773fb7b18ebeae393ddaacc60acffda6a0fd91f88",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "da61c4f3b8856cda119010e7346b5bdd751cf40e6be99256089ec243743614f3",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "4f28e32386d6db6400e130fc722ef479e2d090975984509672273c31848aaa3e",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "f6aa060a3c3f64aa73f9aaf0d709d4a284cf16bb6816119ebcc508083cbff579",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "cbe5315c1c6402aa8746bad7707e507ea15af82b39390b7ba107702970596d8e",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 90700,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 90700,
+        "physical_optimizer": {
+          "production": 90700,
+          "admission": 20
+        },
+        "extra_autograd": {
+          "production": 0,
+          "admission": 0
+        },
+        "formal": 200,
+        "training_collection": 0,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 0,
+        "caches": {},
+        "model_forward_calls": 8,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 7.684349060058594
+      }
+    },
+    "GOAL_DEBR_43": {
+      "matrix": {
+        "6_6": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 9,
+          "current_original_task": 9
+        },
+        "7_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 8
+        },
+        "7_7": {
+          "successes": 19,
+          "episodes": 20,
+          "percent": 95.0,
+          "original_task": 8,
+          "current_original_task": 8
+        },
+        "8_6": {
+          "successes": 13,
+          "episodes": 20,
+          "percent": 65.0,
+          "original_task": 9,
+          "current_original_task": 7
+        },
+        "8_7": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 8,
+          "current_original_task": 7
+        },
+        "8_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 7
+        },
+        "9_6": {
+          "successes": 17,
+          "episodes": 20,
+          "percent": 85.0,
+          "original_task": 9,
+          "current_original_task": 6
+        },
+        "9_7": {
+          "successes": 18,
+          "episodes": 20,
+          "percent": 90.0,
+          "original_task": 8,
+          "current_original_task": 6
+        },
+        "9_8": {
+          "successes": 20,
+          "episodes": 20,
+          "percent": 100.0,
+          "original_task": 7,
+          "current_original_task": 6
+        },
+        "9_9": {
+          "successes": 12,
+          "episodes": 20,
+          "percent": 60.0,
+          "original_task": 6,
+          "current_original_task": 6
+        }
+      },
+      "metrics": {
+        "FWT": {
+          "fraction": "63/80",
+          "percent": 78.75
+        },
+        "NBT": {
+          "fraction": "-11/180",
+          "percent": -6.111111111111111
+        },
+        "AUC": {
+          "fraction": "263/320",
+          "percent": 82.1875
+        },
+        "OldFinal": {
+          "fraction": "11/12",
+          "percent": 91.66666666666667
+        },
+        "NewFinal": {
+          "fraction": "3/5",
+          "percent": 60.0
+        },
+        "FinalAll": {
+          "fraction": "67/80",
+          "percent": 83.75
+        }
+      },
+      "cost": {
+        "status": "PASS_REVERSE_CPU_CASE",
+        "case": "GOAL_DEBR_43",
+        "method": "DEBR",
+        "seed": 43,
+        "suite": "GOAL",
+        "order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          8,
+          7,
+          6
+        ],
+        "contract": "c260e9443120919fb8d11006f85892cd70c63f5c014e070f4b0b219bf2bf096f",
+        "checkpoints": {
+          "6": {
+            "sha256": "ec07eca228c7a81fd80f216dd42e2ce120aaa9425e7ef37b5fc424a7ce454ba6",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 9
+          },
+          "7": {
+            "sha256": "7fd2cb9e59e7b4a975e6c89823aad7e115400696bde5ebe634f4755474db5c97",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 8
+          },
+          "8": {
+            "sha256": "42e789e24a7229fbd23a35cbd9d267a1824aac5e46930be474593146a19235bc",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 7
+          },
+          "9": {
+            "sha256": "da28edf8c9b6c2e167dd492568efa2ba33e8529a053f5b2d3e4384e6b4ed0b6c",
+            "strict_keys": 100,
+            "parameters": 21633611,
+            "strict_load": true,
+            "cpu_serialization_and_forward_exact": true,
+            "original_current_task": 6
+          }
+        },
+        "recovery": {
+          "sha256": "da28edf8c9b6c2e167dd492568efa2ba33e8529a053f5b2d3e4384e6b4ed0b6c",
+          "model_optimizer_scheduler_grads_modes_requires_rng_step": true,
+          "accepted_steps": 90700,
+          "saved_cuda_rng_preserved_not_executed": true
+        },
+        "epochs": 400,
+        "accepted_updates": 90700,
+        "physical_optimizer": {
+          "production": 161700,
+          "admission": 91
+        },
+        "extra_autograd": {
+          "production": 36,
+          "admission": 41
+        },
+        "formal": 200,
+        "training_collection": 40,
+        "initial_physical_bytes": true,
+        "noise_definition": "common_full_DEBR_per_trajectory_Normal",
+        "evaluation_protocol": "COMMON_DEBR_EVALUATION_20261111_V1",
+        "gates": 7200,
+        "caches": {
+          "6": {
+            "rows": 89,
+            "successful_trajectories": 7,
+            "support": 0.7,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.682209014892578e-07,
+            "forward_calls": 9
+          },
+          "7": {
+            "rows": 90,
+            "successful_trajectories": 7,
+            "support": 0.7,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 12
+          },
+          "8": {
+            "rows": 115,
+            "successful_trajectories": 9,
+            "support": 0.9,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 1.7881393432617188e-07,
+            "forward_calls": 12
+          },
+          "9": {
+            "rows": 115,
+            "successful_trajectories": 9,
+            "support": 0.9,
+            "source_checkpoint_exact": true,
+            "cpu_teacher_replay_within_1e_minus4": true,
+            "max_abs_error": 2.384185791015625e-07,
+            "forward_calls": 12
+          }
+        },
+        "model_forward_calls": 53,
+        "new_optimizer": 0,
+        "new_environments": 0,
+        "seconds": 13.944805145263672
+      }
+    }
+  },
+  "summary": {
+    "OBJECT": {
+      "MLR": {
+        "FWT": {
+          "mean_percent": 78.75,
+          "sample_sd_percent": 1.25
+        },
+        "NBT": {
+          "mean_percent": 10.092592592592592,
+          "sample_sd_percent": 9.591716676726037
+        },
+        "AUC": {
+          "mean_percent": 72.77777777777777,
+          "sample_sd_percent": 3.8192866129005654
+        },
+        "OldFinal": {
+          "mean_percent": 82.22222222222223,
+          "sample_sd_percent": 15.030832509409647
+        },
+        "NewFinal": {
+          "mean_percent": 30.0,
+          "sample_sd_percent": 8.660254037844387
+        },
+        "FinalAll": {
+          "mean_percent": 69.16666666666667,
+          "sample_sd_percent": 13.12995938049061
+        }
+      },
+      "DEBR": {
+        "FWT": {
+          "mean_percent": 88.33333333333333,
+          "sample_sd_percent": 2.8867513459481287
+        },
+        "NBT": {
+          "mean_percent": 0.7407407407407407,
+          "sample_sd_percent": 1.9510469912690256
+        },
+        "AUC": {
+          "mean_percent": 87.8125,
+          "sample_sd_percent": 3.1715286140913186
+        },
+        "OldFinal": {
+          "mean_percent": 93.33333333333334,
+          "sample_sd_percent": 5.773502691896257
+        },
+        "NewFinal": {
+          "mean_percent": 71.66666666666667,
+          "sample_sd_percent": 25.166114784235834
+        },
+        "FinalAll": {
+          "mean_percent": 87.91666666666667,
+          "sample_sd_percent": 3.8188130791298667
+        }
+      }
+    },
+    "GOAL": {
+      "MLR": {
+        "FWT": {
+          "mean_percent": 78.75,
+          "sample_sd_percent": 1.25
+        },
+        "NBT": {
+          "mean_percent": -0.2777777777777777,
+          "sample_sd_percent": 3.2749517007087765
+        },
+        "AUC": {
+          "mean_percent": 78.92361111111111,
+          "sample_sd_percent": 1.1235201171780136
+        },
+        "OldFinal": {
+          "mean_percent": 84.44444444444444,
+          "sample_sd_percent": 4.811252243246878
+        },
+        "NewFinal": {
+          "mean_percent": 65.0,
+          "sample_sd_percent": 8.660254037844387
+        },
+        "FinalAll": {
+          "mean_percent": 79.58333333333333,
+          "sample_sd_percent": 3.1457643480294792
+        }
+      },
+      "DEBR": {
+        "FWT": {
+          "mean_percent": 83.33333333333333,
+          "sample_sd_percent": 4.018187817080398
+        },
+        "NBT": {
+          "mean_percent": 0.6481481481481483,
+          "sample_sd_percent": 6.125824039638181
+        },
+        "AUC": {
+          "mean_percent": 83.15972222222223,
+          "sample_sd_percent": 0.8673608331108905
+        },
+        "OldFinal": {
+          "mean_percent": 89.44444444444444,
+          "sample_sd_percent": 2.5458753860865775
+        },
+        "NewFinal": {
+          "mean_percent": 65.0,
+          "sample_sd_percent": 5.0
+        },
+        "FinalAll": {
+          "mean_percent": 83.33333333333333,
+          "sample_sd_percent": 0.7216878364870322
+        }
+      }
+    }
+  },
+  "DEBR_minus_MLR": {
+    "OBJECT": {
+      "41": {
+        "metric_delta_pp": {
+          "FWT": 12.5,
+          "NBT": -0.8333333333333335,
+          "AUC": 14.166666666666671,
+          "OldFinal": -10.0,
+          "NewFinal": 55.0,
+          "FinalAll": 6.25
+        },
+        "cell_delta_pp": {
+          "6_6": 10.0,
+          "7_6": 55.0,
+          "7_7": 0.0,
+          "8_6": 30.0,
+          "8_7": 5.0,
+          "8_8": -15.0,
+          "9_6": 5.0,
+          "9_7": 0.0,
+          "9_8": -35.0,
+          "9_9": 55.0
+        },
+        "paired_discordance": {
+          "6_6": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 18,
+            "both_failure": 0
+          },
+          "7_6": {
+            "DEBR_success_MLR_failure": 11,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 7,
+            "both_failure": 2
+          },
+          "7_7": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "8_6": {
+            "DEBR_success_MLR_failure": 7,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 11,
+            "both_failure": 1
+          },
+          "8_7": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 19,
+            "both_failure": 0
+          },
+          "8_8": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 4,
+            "both_success": 12,
+            "both_failure": 3
+          },
+          "9_6": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 18,
+            "both_failure": 1
+          },
+          "9_7": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 7,
+            "both_success": 13,
+            "both_failure": 0
+          },
+          "9_9": {
+            "DEBR_success_MLR_failure": 11,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 8,
+            "both_failure": 1
+          }
+        },
+        "comparison": "Common full-DEBR evaluation with verified identical initial-state and per-trajectory Normal inputs; method-specific training compute/interactions retained"
+      },
+      "42": {
+        "metric_delta_pp": {
+          "FWT": 11.25,
+          "NBT": -6.666666666666666,
+          "AUC": 15.0,
+          "OldFinal": 13.333333333333343,
+          "NewFinal": 50.0,
+          "FinalAll": 22.5
+        },
+        "cell_delta_pp": {
+          "6_6": -10.0,
+          "7_6": 0.0,
+          "7_7": 5.0,
+          "8_6": 0.0,
+          "8_7": 0.0,
+          "8_8": 0.0,
+          "9_6": 30.0,
+          "9_7": 10.0,
+          "9_8": 0.0,
+          "9_9": 50.0
+        },
+        "paired_discordance": {
+          "6_6": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 16,
+            "both_failure": 0
+          },
+          "7_6": {
+            "DEBR_success_MLR_failure": 3,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 13,
+            "both_failure": 1
+          },
+          "7_7": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 19,
+            "both_failure": 0
+          },
+          "8_6": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 18,
+            "both_failure": 0
+          },
+          "8_7": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "8_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_6": {
+            "DEBR_success_MLR_failure": 7,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 11,
+            "both_failure": 1
+          },
+          "9_7": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 18,
+            "both_failure": 0
+          },
+          "9_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_9": {
+            "DEBR_success_MLR_failure": 11,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 4,
+            "both_failure": 4
+          }
+        },
+        "comparison": "Common full-DEBR evaluation with verified identical initial-state and per-trajectory Normal inputs; method-specific training compute/interactions retained"
+      },
+      "43": {
+        "metric_delta_pp": {
+          "FWT": 5.0,
+          "NBT": -20.555555555555554,
+          "AUC": 15.9375,
+          "OldFinal": 30.0,
+          "NewFinal": 20.0,
+          "FinalAll": 27.5
+        },
+        "cell_delta_pp": {
+          "6_6": 5.0,
+          "7_6": 60.0,
+          "7_7": 0.0,
+          "8_6": 10.0,
+          "8_7": 10.0,
+          "8_8": -5.0,
+          "9_6": 70.0,
+          "9_7": 20.0,
+          "9_8": 0.0,
+          "9_9": 20.0
+        },
+        "paired_discordance": {
+          "6_6": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 19,
+            "both_failure": 0
+          },
+          "7_6": {
+            "DEBR_success_MLR_failure": 12,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 7,
+            "both_failure": 1
+          },
+          "7_7": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "8_6": {
+            "DEBR_success_MLR_failure": 3,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 16,
+            "both_failure": 0
+          },
+          "8_7": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 18,
+            "both_failure": 0
+          },
+          "8_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 19,
+            "both_failure": 0
+          },
+          "9_6": {
+            "DEBR_success_MLR_failure": 14,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 4,
+            "both_failure": 2
+          },
+          "9_7": {
+            "DEBR_success_MLR_failure": 4,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 16,
+            "both_failure": 0
+          },
+          "9_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_9": {
+            "DEBR_success_MLR_failure": 7,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 2,
+            "both_failure": 8
+          }
+        },
+        "comparison": "Common full-DEBR evaluation with verified identical initial-state and per-trajectory Normal inputs; method-specific training compute/interactions retained"
+      }
+    },
+    "GOAL": {
+      "41": {
+        "metric_delta_pp": {
+          "FWT": 6.25,
+          "NBT": 5.277777777777778,
+          "AUC": 3.645833333333343,
+          "OldFinal": 0.0,
+          "NewFinal": 5.0,
+          "FinalAll": 1.25
+        },
+        "cell_delta_pp": {
+          "6_6": 5.0,
+          "7_6": 5.0,
+          "7_7": 15.0,
+          "8_6": 5.0,
+          "8_7": 5.0,
+          "8_8": 0.0,
+          "9_6": 10.0,
+          "9_7": -10.0,
+          "9_8": 0.0,
+          "9_9": 5.0
+        },
+        "paired_discordance": {
+          "6_6": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 16,
+            "both_failure": 1
+          },
+          "7_6": {
+            "DEBR_success_MLR_failure": 3,
+            "MLR_success_DEBR_failure": 2,
+            "both_success": 15,
+            "both_failure": 0
+          },
+          "7_7": {
+            "DEBR_success_MLR_failure": 6,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 11,
+            "both_failure": 0
+          },
+          "8_6": {
+            "DEBR_success_MLR_failure": 4,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 12,
+            "both_failure": 1
+          },
+          "8_7": {
+            "DEBR_success_MLR_failure": 4,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 13,
+            "both_failure": 0
+          },
+          "8_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_6": {
+            "DEBR_success_MLR_failure": 3,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 16,
+            "both_failure": 0
+          },
+          "9_7": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 4,
+            "both_success": 13,
+            "both_failure": 1
+          },
+          "9_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_9": {
+            "DEBR_success_MLR_failure": 6,
+            "MLR_success_DEBR_failure": 5,
+            "both_success": 7,
+            "both_failure": 2
+          }
+        },
+        "comparison": "Common full-DEBR evaluation with verified identical initial-state and per-trajectory Normal inputs; method-specific training compute/interactions retained"
+      },
+      "42": {
+        "metric_delta_pp": {
+          "FWT": 6.25,
+          "NBT": 2.4999999999999996,
+          "AUC": 5.0,
+          "OldFinal": 5.0,
+          "NewFinal": 10.0,
+          "FinalAll": 6.25
+        },
+        "cell_delta_pp": {
+          "6_6": 10.0,
+          "7_6": 5.0,
+          "7_7": 0.0,
+          "8_6": -5.0,
+          "8_7": 0.0,
+          "8_8": 5.0,
+          "9_6": 0.0,
+          "9_7": 15.0,
+          "9_8": 0.0,
+          "9_9": 10.0
+        },
+        "paired_discordance": {
+          "6_6": {
+            "DEBR_success_MLR_failure": 4,
+            "MLR_success_DEBR_failure": 2,
+            "both_success": 14,
+            "both_failure": 0
+          },
+          "7_6": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 17,
+            "both_failure": 0
+          },
+          "7_7": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 2,
+            "both_success": 15,
+            "both_failure": 1
+          },
+          "8_6": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 2,
+            "both_success": 17,
+            "both_failure": 0
+          },
+          "8_7": {
+            "DEBR_success_MLR_failure": 4,
+            "MLR_success_DEBR_failure": 4,
+            "both_success": 9,
+            "both_failure": 3
+          },
+          "8_8": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 19,
+            "both_failure": 0
+          },
+          "9_6": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_7": {
+            "DEBR_success_MLR_failure": 6,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 6,
+            "both_failure": 5
+          },
+          "9_8": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 20,
+            "both_failure": 0
+          },
+          "9_9": {
+            "DEBR_success_MLR_failure": 4,
+            "MLR_success_DEBR_failure": 2,
+            "both_success": 10,
+            "both_failure": 4
+          }
+        },
+        "comparison": "Common full-DEBR evaluation with verified identical initial-state and per-trajectory Normal inputs; method-specific training compute/interactions retained"
+      },
+      "43": {
+        "metric_delta_pp": {
+          "FWT": 1.25,
+          "NBT": -5.0,
+          "AUC": 4.0625,
+          "OldFinal": 10.0,
+          "NewFinal": -15.0,
+          "FinalAll": 3.75
+        },
+        "cell_delta_pp": {
+          "6_6": -25.0,
+          "7_6": -5.0,
+          "7_7": 40.0,
+          "8_6": 5.0,
+          "8_7": 30.0,
+          "8_8": 5.0,
+          "9_6": 0.0,
+          "9_7": 20.0,
+          "9_8": 10.0,
+          "9_9": -15.0
+        },
+        "paired_discordance": {
+          "6_6": {
+            "DEBR_success_MLR_failure": 0,
+            "MLR_success_DEBR_failure": 5,
+            "both_success": 12,
+            "both_failure": 3
+          },
+          "7_6": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 15,
+            "both_failure": 0
+          },
+          "7_7": {
+            "DEBR_success_MLR_failure": 8,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 11,
+            "both_failure": 1
+          },
+          "8_6": {
+            "DEBR_success_MLR_failure": 5,
+            "MLR_success_DEBR_failure": 4,
+            "both_success": 8,
+            "both_failure": 3
+          },
+          "8_7": {
+            "DEBR_success_MLR_failure": 6,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 14,
+            "both_failure": 0
+          },
+          "8_8": {
+            "DEBR_success_MLR_failure": 1,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 19,
+            "both_failure": 0
+          },
+          "9_6": {
+            "DEBR_success_MLR_failure": 3,
+            "MLR_success_DEBR_failure": 3,
+            "both_success": 14,
+            "both_failure": 0
+          },
+          "9_7": {
+            "DEBR_success_MLR_failure": 5,
+            "MLR_success_DEBR_failure": 1,
+            "both_success": 13,
+            "both_failure": 1
+          },
+          "9_8": {
+            "DEBR_success_MLR_failure": 2,
+            "MLR_success_DEBR_failure": 0,
+            "both_success": 18,
+            "both_failure": 0
+          },
+          "9_9": {
+            "DEBR_success_MLR_failure": 3,
+            "MLR_success_DEBR_failure": 6,
+            "both_success": 9,
+            "both_failure": 2
+          }
+        },
+        "comparison": "Common full-DEBR evaluation with verified identical initial-state and per-trajectory Normal inputs; method-specific training compute/interactions retained"
+      }
+    }
+  },
+  "negative_cells": [
+    {
+      "suite": "OBJECT",
+      "seed": 41,
+      "cell": "8_8",
+      "original_task": 7,
+      "DEBR_minus_MLR_pp": -15.0
+    },
+    {
+      "suite": "OBJECT",
+      "seed": 41,
+      "cell": "9_8",
+      "original_task": 7,
+      "DEBR_minus_MLR_pp": -35.0
+    },
+    {
+      "suite": "OBJECT",
+      "seed": 42,
+      "cell": "6_6",
+      "original_task": 9,
+      "DEBR_minus_MLR_pp": -10.0
+    },
+    {
+      "suite": "OBJECT",
+      "seed": 43,
+      "cell": "8_8",
+      "original_task": 7,
+      "DEBR_minus_MLR_pp": -5.0
+    },
+    {
+      "suite": "GOAL",
+      "seed": 41,
+      "cell": "9_7",
+      "original_task": 8,
+      "DEBR_minus_MLR_pp": -10.0
+    },
+    {
+      "suite": "GOAL",
+      "seed": 42,
+      "cell": "8_6",
+      "original_task": 9,
+      "DEBR_minus_MLR_pp": -5.0
+    },
+    {
+      "suite": "GOAL",
+      "seed": 43,
+      "cell": "6_6",
+      "original_task": 9,
+      "DEBR_minus_MLR_pp": -25.0
+    },
+    {
+      "suite": "GOAL",
+      "seed": 43,
+      "cell": "7_6",
+      "original_task": 9,
+      "DEBR_minus_MLR_pp": -5.0
+    },
+    {
+      "suite": "GOAL",
+      "seed": 43,
+      "cell": "9_9",
+      "original_task": 6,
+      "DEBR_minus_MLR_pp": -15.0
+    }
+  ],
+  "original_order_main_reference": {
+    "MLR": {
+      "OBJECT": {
+        "FWT": {
+          "mean_percent": 66.66666666666667,
+          "sample_sd_percent": 3.1457643480294792
+        },
+        "NBT": {
+          "mean_percent": -2.7777777777777777,
+          "sample_sd_percent": 1.9444444444444446
+        },
+        "AUC": {
+          "mean_percent": 68.29861111111111,
+          "sample_sd_percent": 3.1186277623933223
+        },
+        "OldFinal": {
+          "mean_percent": 67.77777777777777,
+          "sample_sd_percent": 8.552669065744805
+        },
+        "FinalAll": {
+          "mean_percent": 65.41666666666667,
+          "sample_sd_percent": 5.204164998665332
+        }
+      },
+      "GOAL": {
+        "FWT": {
+          "mean_percent": 76.66666666666667,
+          "sample_sd_percent": 5.636562191028617
+        },
+        "NBT": {
+          "mean_percent": 0.18518518518518517,
+          "sample_sd_percent": 5.992107291616088
+        },
+        "AUC": {
+          "mean_percent": 76.35416666666667,
+          "sample_sd_percent": 6.383980602518568
+        },
+        "OldFinal": {
+          "mean_percent": 77.22222222222223,
+          "sample_sd_percent": 10.844011831079515
+        },
+        "FinalAll": {
+          "mean_percent": 76.66666666666667,
+          "sample_sd_percent": 9.213893494789993
+        }
+      }
+    },
+    "DEBR": {
+      "OBJECT": {
+        "AUC": {
+          "mean": 86.49305555555556,
+          "sample_sd": 2.1908043825482437
+        },
+        "FWT": {
+          "mean": 80.41666666666667,
+          "sample_sd": 8.508574106942557
+        },
+        "NBT": {
+          "mean": -11.018518518518519,
+          "sample_sd": 11.56814663033389
+        },
+        "OldFinal": {
+          "mean": 81.11111111111111,
+          "sample_sd": 6.735753140545636
+        },
+        "NewFinal": {
+          "mean": 96.66666666666667,
+          "sample_sd": 5.773502691896257
+        },
+        "FinalAll": {
+          "mean": 85.0,
+          "sample_sd": 4.5069390943299865
+        }
+      },
+      "GOAL": {
+        "AUC": {
+          "mean": 87.25694444444444,
+          "sample_sd": 2.64823818967616
+        },
+        "FWT": {
+          "mean": 89.58333333333333,
+          "sample_sd": 1.9094065395649333
+        },
+        "NBT": {
+          "mean": 5.277777777777778,
+          "sample_sd": 5.204164998665331
+        },
+        "OldFinal": {
+          "mean": 83.88888888888889,
+          "sample_sd": 2.545875386086579
+        },
+        "NewFinal": {
+          "mean": 88.33333333333333,
+          "sample_sd": 7.637626158259733
+        },
+        "FinalAll": {
+          "mean": 85.0,
+          "sample_sd": 2.5
+        }
+      }
+    }
+  },
+  "main_table_binding": "MAIN_TABLE_BINDING.json",
+  "limitations": [
+    "Same development seeds and benchmark initial states reused",
+    "User unified the new reverse-order formal evaluations before the first episode; historical original-order MLR still uses its earlier native evaluator and is not a pure order-only comparator",
+    "Reverse order changes task populations and accepted update totals at fixed100 epochs/task",
+    "DEBR incurs acquisition interactions and candidate compute; resource differences itemized"
+  ]
+}

@@ -20,7 +20,8 @@ GIT = 'C:/Users/Lenovo/.cache/codex-runtimes/codex-primary-runtime/dependencies/
 ALLOWED = {'.py', '.md', '.json', '.csv', '.yaml', '.yml', '.diff', '.sh'}
 EXCLUDED_NAMES = {'DEPLOY_TEXT_BUNDLE.json', 'ARMED_DEPLOY_TEXT_BUNDLE.json',
                   'PUBLICATION_RECEIPT.json', 'PUBLICATION_MANIFEST.json',
-                  'PUBLICATION_REVIEW.json'}
+                  'PUBLICATION_REVIEW.json', 'CURRENT_TASK_WORKER.json', 'MONITOR_HANDOFF.md',
+                  'PARALLEL_DISPATCH_LOCAL_STATUS.json'}
 EXCLUDED_PARTS = {'__pycache__', '.git', '.session_control'}
 MAX_FILE_BYTES = 16 * 1024**2
 SECRET = re.compile(r'BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY|'
@@ -44,6 +45,9 @@ def main():
     parser.add_argument('--offline-commit', action='store_true', help='Commit reviewed files locally after a recorded network failure; do not claim remote publication')
     parser.add_argument('--message', default='Publish main-table-protocol reverse-order MLR+IFA and DEBR evidence')
     args = parser.parse_args()
+    if not args.review_only:
+        status = json.loads((R / 'RUN_STATUS.json').read_text(encoding='utf-8'))
+        assert status.get('actual_final_cpu_acceptance'), 'Keep unfinished progress and estimates local'
     assert git('branch', '--show-current') == 'MLR'
     assert git('remote', 'get-url', 'origin') == DESTINATION
     staged_before = git('diff', '--cached', '--name-only').splitlines()
@@ -55,6 +59,8 @@ def main():
         if not path.is_file() or path.is_symlink():
             continue
         relative = path.relative_to(R)
+        if relative.parts[0].startswith('check_readonly_') or path.name.startswith('ETA'):
+            continue
         if any(part in EXCLUDED_PARTS for part in relative.parts):
             continue
         if len(relative.parts)>1 and relative.parts[0].startswith('prepare_remote_') and relative.parts[1]=='diagnostics':

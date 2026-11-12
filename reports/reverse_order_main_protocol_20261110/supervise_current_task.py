@@ -1,7 +1,7 @@
 """Finite current-task supervision; no app schedule, retries or extra experiments.
 
-Wait for predicted whole-run/suite checkpoints, audit/publish, accept the existing
-queue, then dispatch and supervise exactly the authorized twelve reverse runs.
+Wait for predicted whole-run/suite checkpoints and audit them locally. Publish
+the final acceptance for the authorized reverse runs.
 Any unexpected failure stops this worker for agent engineering review.
 """
 from pathlib import Path
@@ -53,8 +53,7 @@ def checkpoint(folder,old=False):
     status=J(folder/'RUN_STATUS.json')
     if old:next_info=J(folder/'TRACKING_STATUS.json')
     else:next_info=status
-    commit=publish(folder,'Record audited whole-phase experiment progress')
-    print(json.dumps(dict(status='CHECKPOINT_AUDITED_AND_PUBLISHED',directory=str(folder),observed=status['observed'],totals=status.get('totals'),commit=commit,next_checkpoint_CST=next_info.get('next_checkpoint_CST')),ensure_ascii=False),flush=True)
+    print(json.dumps(dict(status='CHECKPOINT_AUDITED_LOCALLY',directory=str(folder),observed=status['observed'],totals=status.get('totals'),next_checkpoint_CST=next_info.get('next_checkpoint_CST')),ensure_ascii=False),flush=True)
     return d
 def finish_old():
     status=J(OLD/'RUN_STATUS.json')
