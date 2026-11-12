@@ -44,6 +44,9 @@ def main():
     parser.add_argument('--offline-commit', action='store_true', help='Commit reviewed files locally after a recorded network failure; do not claim remote publication')
     parser.add_argument('--message', default='Publish main-table-protocol reverse-order MLR+IFA and DEBR evidence')
     args = parser.parse_args()
+    if not args.review_only:
+        final = json.loads((R / 'FINAL_RESULTS.json').read_text(encoding='utf-8'))
+        assert final['status'] == 'COMPLETE_ACCEPTED' and final['formal'] == 2400, 'Publish only accepted re-evaluation results'
     assert git('branch', '--show-current') == 'MLR'
     assert git('remote', 'get-url', 'origin') == DESTINATION
     staged_before = git('diff', '--cached', '--name-only').splitlines()
@@ -55,6 +58,8 @@ def main():
         if not path.is_file() or path.is_symlink():
             continue
         relative = path.relative_to(R)
+        if relative.parts[0].startswith('request_snapshot_') or path.name.startswith('ETA'):
+            continue
         if any(part in EXCLUDED_PARTS for part in relative.parts):
             continue
         if len(relative.parts)>1 and relative.parts[0].startswith('prepare_remote_') and relative.parts[1]=='diagnostics':

@@ -115,7 +115,6 @@ def main():
     launch = read(launch_file)
     assert launch['status'] == 'DISPATCHED_AFTER_REVERSE_ACCEPTANCE'
     state('PARTIAL_EVALUATING', formal=0, contract=contract, controller=launch['pid'], evidence=launch_file.relative_to(ROOT).as_posix())
-    publish('Launch queued component ablation re-evaluation after reverse experiment acceptance')
 
     previous = None
     counts = {case: 0 for case in spec['evaluation_cases']}
@@ -138,7 +137,6 @@ def main():
         if snapshot['controller_exit'] == '0' and not snapshot['processes']:
             break
         previous = snapshot
-        publish('Record audited progress for queued component ablation re-evaluation')
 
     evidence = request('final')
     finalize(evidence, contract)
