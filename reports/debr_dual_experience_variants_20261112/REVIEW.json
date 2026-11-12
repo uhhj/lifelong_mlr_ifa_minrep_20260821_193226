@@ -1,0 +1,125 @@
+{
+  "status": "PASS_VECTOR_AND_VISUAL_REVIEW",
+  "observed": "2026-11-12T14:06:23.801205+08:00",
+  "authoring": "Native SVG master; refined PNG is a 2x export of the identical master, not an independent AI-generated image.",
+  "comparison": "Left: SVG raster preview. Right: downsampled high-resolution PNG. Both panels derive from the same SVG.",
+  "source_sha256": "1741b4355b4b8ca11145091649dd951db6e250dc9c1d2904996b9457198221d1",
+  "variants": {
+    "A": {
+      "svg_sha256": "92fd3085db7e35e6b104923e9cbb7e4e6f5908a751668d5bd03cc24b760743ad",
+      "native_text_elements": 53,
+      "embedded_rasters": 0,
+      "images": {
+        "preview": {
+          "pixels": [
+            1800,
+            940
+          ],
+          "sha256": "1cbe1457c4a4dffa8dd2659fbcad6088adca83565e8475075365e64ee1ff8212",
+          "bytes": 263238
+        },
+        "refined": {
+          "pixels": [
+            3600,
+            1880
+          ],
+          "sha256": "425065d3b2c5ecea2bb87607804c58a760c0f222752a77fa971bb1c02eecf4d6",
+          "bytes": 637181
+        },
+        "comparison": {
+          "pixels": [
+            3660,
+            1040
+          ],
+          "sha256": "0bd5a1a8aeada797bbedbb09e7a2f65868143a5468f6297955e27aeea0dc623f",
+          "bytes": 740276
+        }
+      }
+    },
+    "B": {
+      "svg_sha256": "991e096dc8649a12c6c44834c2d23f46879777f2e0e853f7b91cdb0f31c4a7b6",
+      "native_text_elements": 39,
+      "embedded_rasters": 0,
+      "images": {
+        "preview": {
+          "pixels": [
+            1800,
+            940
+          ],
+          "sha256": "03a31056d814f2e3f8a6a00d6435be7659d2bb474dc2c32433cdcf0fb87c82dc",
+          "bytes": 238053
+        },
+        "refined": {
+          "pixels": [
+            3600,
+            1880
+          ],
+          "sha256": "2f2d6903ca328fb852a656e0536e02fa8759731e1dabff44b56de2fc083aa29f",
+          "bytes": 578847
+        },
+        "comparison": {
+          "pixels": [
+            3660,
+            1040
+          ],
+          "sha256": "f287e5503a0868ebf058b0333387a17de36a2bd6089ec33f8296609c6c25d1e6",
+          "bytes": 672140
+        }
+      }
+    },
+    "C": {
+      "svg_sha256": "ad66c0f18f72fa51275dbc68479f5a93bc2fb87305652ee1ba4937feb6eadb1f",
+      "native_text_elements": 53,
+      "embedded_rasters": 0,
+      "images": {
+        "preview": {
+          "pixels": [
+            1800,
+            940
+          ],
+          "sha256": "aa1fab666408468ff48faea128c69e5cca94874e4d38e5e457541b4f4cb94a2c",
+          "bytes": 262063
+        },
+        "refined": {
+          "pixels": [
+            3600,
+            1880
+          ],
+          "sha256": "801591e6d4af73310c20e04827670fb17feae37628fcfc4de8a646b5bf32a343",
+          "bytes": 630939
+        },
+        "comparison": {
+          "pixels": [
+            3660,
+            1040
+          ],
+          "sha256": "628eb4781459514254ce90375d79f87861c6d00255271a3cc85ac91f6efa51c6",
+          "bytes": 745826
+        }
+      }
+    }
+  },
+  "semantic_review": [
+    "Complementary expert and autonomous-success experience",
+    "CADL execution supervision and stage-end RA-Coreset",
+    "SHBR fixed references, task support and fixed retention denominator",
+    "Same-state same-main-batch C/Q comparison",
+    "BC <= C; execution <= C; retention strictly < C; all pass selects Q else C",
+    "Stage-end memories used in next task; original inference at deployment"
+  ],
+  "visual_review": [
+    "All final previews inspected",
+    "A source-label widths and Q-arrow input/output separation corrected",
+    "B balanced wings independently reviewed",
+    "C long subtitles and independent formula positions corrected",
+    "No observed text cropping or unintended overlap"
+  ],
+  "reviewers": [
+    "root",
+    "variant_b independent A/B reviewer",
+    "variant_c C visual correction"
+  ],
+  "experiments_modified": false,
+  "word_modified": false,
+  "prior_artifacts_preserved": true
+}
