@@ -1,0 +1,521 @@
+diff --git a/teleop_binding/core.py b/teleop_binding/core.py
+--- a/teleop_binding/core.py
++++ b/teleop_binding/core.py
+@@ -113,37 +113,60 @@
+ 
+ class NativeInput:
+     """An unchanged native target is valid only while query replies remain fresh."""
++
++    GROUP_SPAN = .003
++    PARTIAL_TIMEOUT = .05
++
+     def __init__(self, limits):
+         self.wire = Wire()
+         self.limits = limits
+-        self.pending = {}
++        self.pending = []
+         self.pending_since = None
++        self.group_start = None
++        self.last_joint_time = None
+         self.q = None
+         self.last_complete = None
+ 
+     def put(self, cid, data, now):
+         self.wire.put(cid, data, now)
+-        if cid in JIDS:
+-            if self.pending_since is None:
+-                self.pending_since = now
+-            require(now-self.pending_since <= .05, 'incomplete native joint packet')
+-            self.pending[cid] = (bytes(data), now)
+-            if all(i in self.pending for i in JIDS):
+-                ts = [self.pending[i][1] for i in JIDS]
+-                require(max(ts)-min(ts) <= .025, 'incoherent native joint packet')
+-                q = tuple(v for i in JIDS for v in struct.unpack('>ii', self.pending[i][0]))
+-                self.q = joints_ok(q, self.limits)
+-                self.last_complete = now
+-                self.pending.clear()
+-                self.pending_since = None
++        if cid not in JIDS:
++            return
++        self.check_partial(now)
++        require(self.last_joint_time is None or now >= self.last_joint_time,
++                'native joint timestamp moved backwards')
++        self.last_joint_time = now
++        if self.pending_since is None:
++            self.pending_since = now
++
++        # The first ID delimits a native burst. Never carry a fragment across it.
++        # The firmware provides no group sequence number, so timeout also bounds
++        # a missing start ID, which cannot be detected from order alone.
++        if cid == JIDS[0]:
++            self.pending = [bytes(data)]
++            self.group_start = now
++            return
++        if (not self.pending or cid != JIDS[len(self.pending)]
++                or now > self.group_start + self.GROUP_SPAN):
++            self.pending.clear()
++            return
++        self.pending.append(bytes(data))
++        if len(self.pending) == len(JIDS):
++            q = tuple(v for fragment in self.pending for v in struct.unpack('>ii', fragment))
++            self.q = joints_ok(q, self.limits)
++            self.last_complete = now
++            self.pending.clear()
++            self.pending_since = None
++
++    def check_partial(self, now):
++        if self.pending_since is not None:
++            require(now <= self.pending_since + self.PARTIAL_TIMEOUT,
++                    'incomplete native joint packet')
+ 
+     def get(self, now):
+         heartbeat = self.wire.get(0x473, now, .3)
+         require(heartbeat[0] == 1, 'unexpected leader liveness response')
+         require(self.q is not None, 'waiting for new complete leader pose')
+-        if self.pending:
+-            require(now-self.pending_since <= .05,
+-                    'incomplete native joint packet')
++        self.check_partial(now)
+         data = self.wire.get(0x151, now, 86400)
+         require(data[:2] == b'\x01\x01' and data[2] <= 100 and data[3] == 0xAD
+                 and data[4:] == bytes(4), 'leader is not in expected native teaching mode')
+diff --git a/teleop_binding/transport_base.py b/teleop_binding/transport_base.py
+--- a/teleop_binding/transport_base.py
++++ b/teleop_binding/transport_base.py
+@@ -2,6 +2,7 @@
+ No code in this program can enable, reset, calibrate or change arm roles.
+ """
+ import argparse
++from contextlib import ExitStack
+ import fcntl
+ import json
+ import multiprocessing as mp
+@@ -22,6 +23,7 @@
+ HERE = Path(__file__).resolve().parent
+ COMMAND_IDS = (*range(0x150,0x160), 0x470, 0x471, 0x475)
+ READ_IDS = (*FIDS, 0x2A1, 0x2A8, *range(0x261, 0x267), 0x473)
++FOLLOWER_TARGET_IDS = (0x151, *JIDS, 0x159)
+ 
+ 
+ def atomic(path, obj):
+@@ -30,9 +32,16 @@
+     os.replace(temp, path)
+ 
+ 
+-def open_bus(port):
++def open_bus(port, filters=None):
+     import can
+-    return can.Bus(interface='socketcan', channel=port, receive_own_messages=False)
++    return can.Bus(interface='socketcan', channel=port, receive_own_messages=False,
++                   can_filters=filters)
++
++
++def open_target_echo():
++    # Separate receive socket leaves the control socket's writer guard intact.
++    filters = [dict(can_id=cid, can_mask=0x7FF, extended=False) for cid in FOLLOWER_TARGET_IDS]
++    return open_bus('can0', filters)
+ 
+ 
+ def raw_send(bus, cid, data):
+@@ -85,30 +94,46 @@
+ 
+ 
+ class Recorder:
+-    def __init__(self, run):
++    def __init__(self, run, trace_can=False):
+         self.run = run; self.pending = queue.Queue(maxsize=4000)
+         self.error = None; self.quit = threading.Event(); self.status = {}
++        self.trace_can = trace_can
+         self.last_progress = time.monotonic()
+         self.thread = threading.Thread(target=self.work, daemon=True); self.thread.start()
+ 
+     def record(self, data):
++        self.enqueue('sample', data)
++
++    def trace(self, data):
++        self.enqueue('can', data)
++
++    def enqueue(self, stream, data):
+         require(self.error is None, f'recorder error: {self.error}')
+         require(time.monotonic()-self.last_progress < .5, 'recorder stalled')
+-        try: self.pending.put_nowait(data)
++        try: self.pending.put_nowait((stream, data))
+         except queue.Full: raise Abort('recorder queue full')
+ 
+     def work(self):
+         try:
+-            with (self.run/'samples.jsonl').open('w') as log:
++            with ExitStack() as files:
++                sample_log = files.enter_context((self.run/'samples.jsonl').open('w'))
++                can_log = (files.enter_context((self.run/'can_timeline.jsonl').open('w'))
++                           if self.trace_can else None)
+                 last = 0
+                 while not self.quit.is_set() or not self.pending.empty():
+                     try: item = self.pending.get(timeout=.02)
+                     except queue.Empty: item = None
+-                    if item is not None: log.write(json.dumps(item)+'\n')
++                    if item is not None:
++                        stream, data = item
++                        log = can_log if stream == 'can' else sample_log
++                        log.write(json.dumps(data, separators=(',', ':'))+'\n')
+                     now = time.monotonic()
+                     if now-last > .1:
+                         atomic(self.run/'status.json', dict(self.status, time=time.time()))
+-                        log.flush(); last = now
++                        sample_log.flush()
++                        if can_log is not None:
++                            can_log.flush()
++                        last = now
+                     self.last_progress = now
+                 atomic(self.run/'status.json', dict(self.status, time=time.time()))
+         except BaseException as exc: self.error = repr(exc)
+@@ -118,22 +143,63 @@
+ 
+ 
+ class Session:
+-    def __init__(self, args, run):
++    def __init__(self, args, run, trace_can=False):
+         self.args = args; self.run = run; self.buses = {}
+         self.src = NativeInput(EXPECTED); self.fw = Wire(); self.observed = {'can0': Wire(), 'can1': Wire()}
+         self.limits = EXPECTED; self.active = False; self.stopping = False
+         self.panel = None; self.wd = None; self.pipe = None; self.halted = None
+         self.last_beat = 0; self.last_query = 0; self.tx = 0
+-        self.rec = Recorder(run); self.command = None; self.target = None
++        self.trace_can = trace_can
++        self.target_echo = None
++        self.rec = Recorder(run, trace_can); self.command = None; self.target = None
+         self.phase = 'observe' if not args.follow else 'preflight'
+ 
+-    def send(self, port, cid, data):
++    def send(self, port, cid, data, source_mono=None):
+         require(self.args.follow, 'read-only session cannot transmit')
+         allowed_tx(port, cid, data, self.limits)
+         if cid in (0x151, *JIDS):
+             require(not self.stopping and self.active, 'movement not armed')
+             self.safety()
+-        raw_send(self.buses[port], cid, data); self.tx += 1
++        self.transmit(port, cid, data, source_mono)
++
++    def transmit(self, port, cid, data, source_mono):
++        trace = self.trace_can and port == 'can0' and cid in FOLLOWER_TARGET_IDS
++        began = time.monotonic_ns() if trace else None
++        try:
++            raw_send(self.buses[port], cid, data)
++        except Exception:
++            if trace:
++                # Preserve the transport failure if the recorder is also failing.
++                try:
++                    self.trace_target('follower_target_tx_failed', cid, data, began, source_mono)
++                except Abort:
++                    pass
++            raise
++        self.tx += 1
++        if trace:
++            self.trace_target('follower_target_tx_accepted', cid, data, began, source_mono)
++
++    def trace_target(self, kind, cid, data, began, source_mono):
++        self.rec.trace(dict(kind=kind, channel='can0', can_id=cid, data_hex=data.hex(),
++                            mono_ns=time.monotonic_ns(), send_begin_mono_ns=began,
++                            source_mono_ns=None if source_mono is None else round(source_mono*1e9)))
++
++    def drain_target_echo(self):
++        for _ in range(256):
++            msg = self.target_echo.recv(0)
++            if msg is None:
++                return
++            if (msg.is_rx or msg.is_error_frame or msg.is_extended_id
++                    or msg.is_remote_frame or msg.arbitration_id not in FOLLOWER_TARGET_IDS):
++                continue
++            wall = time.time()
++            now = time.monotonic()
++            self.rec.trace(dict(kind='can0_tx_echo', channel='can0', can_id=msg.arbitration_id,
++                                data_hex=bytes(msg.data).hex(),
++                                mono_ns=round((now-(wall-msg.timestamp))*1e9),
++                                kernel_time_ns=round(msg.timestamp*1e9),
++                                observed_mono_ns=round(now*1e9)))
++        raise Abort('CAN target echo queue not drained')
+ 
+     def safety(self):
+         require(not (self.run/'STOP').exists(), 'onsite STOP requested')
+@@ -145,8 +211,14 @@
+                     'watchdog not available')
+ 
+     def drain(self, timeout=.005):
+-        ready = select.select(list(self.buses.values()), [], [], timeout)[0]
++        readers = list(self.buses.values())
++        if self.target_echo is not None:
++            readers.append(self.target_echo)
++        ready = select.select(readers, [], [], timeout)[0]
+         for bus in ready:
++            if bus is self.target_echo:
++                self.drain_target_echo()
++                continue
+             port = next(k for k, v in self.buses.items() if v is bus)
+             began = time.monotonic()
+             for _ in range(4096):
+@@ -165,6 +237,13 @@
+                 wall = time.time(); now = time.monotonic()
+                 age = wall-msg.timestamp
+                 data = bytes(msg.data)
++                timestamp = now-max(0, age)
++                if self.trace_can and msg.is_rx:
++                    self.rec.trace(dict(kind='master_rx' if port == 'can1' else 'follower_rx',
++                                        channel=port, can_id=cid, data_hex=data.hex(),
++                                        mono_ns=round(timestamp*1e9),
++                                        kernel_time_ns=round(msg.timestamp*1e9),
++                                        observed_mono_ns=round(now*1e9)))
+                 if self.args.follow:
+                     if cid == 0x150 and data[0] == 1:
+                         raise Abort(f'external STOP on {port}')
+@@ -180,7 +259,6 @@
+                     # BEFORE arming; it cannot authorize motion or populate source cache.
+                     continue
+                 require(age <= .1, 'stale CAN backlog while active')
+-                timestamp = now-max(0, age)
+                 self.observed[port].put(cid, data, timestamp)
+                 if port == 'can0': self.fw.put(cid, data, timestamp)
+                 elif self.args.follow and msg.is_rx: self.src.put(cid, data, timestamp)
+@@ -320,6 +398,13 @@
+         result = dict(phase='finished', reason=reason, activated=self.active, tx=self.tx,
+                       stop_feedback_confirmed=stopped_feedback, stop_send_errors=errors,
+                       gripper_output=getattr(self,'gripper_enabled',False), run=str(self.run))
++        if self.target_echo is not None:
++            try:
++                self.drain_target_echo()
++            except Exception as exc:
++                result['target_echo_error'] = repr(exc)
++            finally:
++                self.target_echo.shutdown()
+         self.rec.status = result; self.rec.close()
+         if self.rec.error: result['recorder_error'] = self.rec.error
+         for bus in self.buses.values(): bus.shutdown()
+diff --git a/teleop_binding/worker.py b/teleop_binding/worker.py
+--- a/teleop_binding/worker.py
++++ b/teleop_binding/worker.py
+@@ -41,7 +41,7 @@
+ 
+ class Binding(base.Session):
+     def __init__(self, args, run):
+-        super().__init__(args, run)
++        super().__init__(args, run, trace_can=True)
+         self.gripper_enabled = True
+         self.gripper_max = None
+         self.gripper_command = None
+@@ -62,7 +62,7 @@
+             require(self.wd is not None and self.wd.is_alive() and not self.halted.is_set(),
+                     'watchdog unavailable')
+ 
+-    def send(self, port, cid, data):
++    def send(self, port, cid, data, source_mono=None):
+         require(self.args.follow, 'binding not explicitly authorized')
+         if cid == 0x477:
+             require(port in ('can0','can1') and data == PARAM_QUERY, 'only read-only gripper parameter query allowed')
+@@ -77,8 +77,8 @@
+                     'outbound gripper must already be inside configured range')
+             self.safety()
+         else:
+-            return super().send(port,cid,data)
+-        base.raw_send(self.buses[port],cid,data); self.tx += 1
++            return super().send(port,cid,data,source_mono)
++        self.transmit(port,cid,data,source_mono)
+ 
+     def progress(self):
+         now = time.monotonic(); self.safety()
+@@ -165,6 +165,7 @@
+     def run_loop(self):
+         base.identities()
+         for port in ('can0','can1'):self.buses[port]=base.open_bus(port)
++        self.target_echo = base.open_target_echo()
+         initial=self.arm()
+         began=last_loop=last_log=time.monotonic()
+         joint_generation=None;grip_generation=0
+@@ -173,6 +174,7 @@
+             require(now-last_loop < .1,'control loop exceeded 100 ms');last_loop=now
+             self.measured=self.fw.follower(now)
+             self.gripper_measured=gripper_feedback(self.fw,now,self.gripper_max)
++            self.src.check_partial(now)
+             if now-began >= .3:
+                 hb=self.src.wire.get(0x473,now,.3)
+                 require(hb[0]==1,'leader liveness reply mismatch')
+@@ -184,19 +186,16 @@
+                 q=self.src.get(now)
+                 self.target=q
+                 if self.src.last_complete != joint_generation:
+-                    for cid,data in pack_joints(q,self.limits):self.send('can0',cid,data)
++                    for cid,data in pack_joints(q,self.limits):
++                        self.send('can0',cid,data,source_mono=self.src.last_complete)
+                     self.command=q;joint_generation=self.src.last_complete;self.joint_packets+=1
+                     self.phase='following'
+-            else:
+-                # Even before the first full pose, partial packets may not persist.
+-                if self.src.pending_since is not None:
+-                    require(now-self.src.pending_since <= .05,'incomplete initial native packet')
+             self.tracking.update(self.command,self.measured,now)
+             count=self.src.wire.counts.get(0x159,0)
+             if count!=grip_generation:
+                 original=self.src.wire.get(0x159,now,.2)
+                 data=normalize_gripper(original,self.gripper_max)
+-                self.send('can0',0x159,data)
++                self.send('can0',0x159,data,source_mono=self.src.wire.values[0x159][1])
+                 self.gripper_command=struct.unpack('>i',data[:4])[0]
+                 self.endpoint_clamps+=int(data[:4]!=original[:4])
+                 grip_generation=count;self.gripper_packets+=1
+diff --git a/teleop_binding/test_core.py b/teleop_binding/test_core.py
+--- a/teleop_binding/test_core.py
++++ b/teleop_binding/test_core.py
+@@ -74,8 +74,46 @@
+         with self.assertRaises(Abort): n.put(0x155,bytes(8),10.07)
+ 
+     def test_incoherent_packet_rejected(self):
+-        n=native(); n.put(0x155,bytes(8),10.01); n.put(0x156,bytes(8),10.02)
+-        with self.assertRaises(Abort): n.put(0x157,bytes(8),10.04)
++        n=native()
++        for (cid,data), at in zip(pack_joints((1000,)*2+(0,)*4, EXPECTED),
++                                  (10.01,10.011,10.014)):
++            n.put(cid,data,at)
++        self.assertEqual(n.q,ZERO); self.assertEqual(n.last_complete,10)
++        with self.assertRaisesRegex(Abort,'incomplete'): n.get(10.061)
++
++    def test_native_loss_never_uses_fragments_from_previous_burst(self):
++        old = pack_joints((1000,1000,-1000,1000,1000,1000), EXPECTED)
++        new_target = (2000,2000,-2000,2000,2000,2000)
++        new = pack_joints(new_target, EXPECTED)
++        for missing in range(3):
++            with self.subTest(missing=missing):
++                n = native()
++                for index,(cid,data) in enumerate(old):
++                    if index != missing:
++                        n.put(cid,data,10.01+index*.0004)
++                self.assertEqual(n.get(10.013),ZERO)
++                for index,(cid,data) in enumerate(new):
++                    n.put(cid,data,10.02+index*.0004)
++                self.assertEqual(n.get(10.022),new_target)
++
++    def test_missing_next_start_and_duplicate_middle_cannot_complete_group(self):
++        n = native()
++        for cid, at in ((0x155,10.01),(0x156,10.0104),(0x157,10.0204)):
++            n.put(cid,bytes(8),at)
++        self.assertEqual(n.last_complete,10)
++        for cid, at in ((0x155,10.03),(0x156,10.0304),(0x156,10.0308),(0x157,10.031)):
++            n.put(cid,bytes(8),at)
++        self.assertEqual(n.last_complete,10)
++        with self.assertRaisesRegex(Abort,'incomplete'): n.get(10.061)
++
++    def test_replaced_group_start_cannot_reuse_previous_middle(self):
++        n = native()
++        n.put(0x155, struct.pack('>ii',1000,1000), 10.01)
++        n.put(0x156, struct.pack('>ii',-1000,1000), 10.0104)
++        n.put(0x155, struct.pack('>ii',2000,2000), 10.02)
++        n.put(0x157, struct.pack('>ii',2000,2000), 10.0204)
++        self.assertEqual(n.q, ZERO)
++        self.assertEqual(n.last_complete, 10)
+ 
+     def test_source_mode_change_rejected(self):
+         n=native(); n.put(0x151,bytes.fromhex('0101010000000000'),10.01)
+diff --git a/teleop_binding/test_runtime.py b/teleop_binding/test_runtime.py
+--- a/teleop_binding/test_runtime.py
++++ b/teleop_binding/test_runtime.py
+@@ -1,4 +1,5 @@
+ import multiprocessing as mp
++import json
+ from pathlib import Path
+ import tempfile
+ import threading
+@@ -16,6 +17,56 @@
+ 
+ 
+ class RuntimeChecks(unittest.TestCase):
++    def test_raw_rx_tx_echo_and_failed_tx_share_monotonic_timeline(self):
++        with tempfile.TemporaryDirectory() as directory:
++            path = Path(directory)
++            session = Session(SimpleNamespace(follow=True), path, trace_can=True)
++            session.active = True
++            session.safety = lambda: None
++
++            def message(cid, timestamp, data, is_rx=True):
++                return SimpleNamespace(arbitration_id=cid, data=data, timestamp=timestamp,
++                                       is_error_frame=False, is_extended_id=False,
++                                       is_remote_frame=False, is_rx=is_rx)
++
++            def bus(*messages):
++                pending = iter(messages)
++                return SimpleNamespace(recv=lambda timeout: next(pending, None))
++
++            target = struct.pack('>ii', -2000, 1000)
++            wall = time.time()
++            mono = time.monotonic()
++            leader = bus(message(0x157,wall-.001,target))
++            follower = bus(message(0x2A7,wall+.002,target))
++            echo = bus(message(0x157,wall+.001,target,False),
++                       message(0x157,wall+.001,target))
++            session.buses = {'can0': follower, 'can1': leader}
++            session.target_echo = echo
++            with patch('transport_base.select.select',return_value=([leader],[],[])), \
++                 patch('transport_base.time.time',return_value=wall), \
++                 patch('transport_base.time.monotonic',return_value=mono):
++                session.drain()
++            with patch('transport_base.raw_send') as send:
++                session.send('can0',0x157,target,source_mono=session.src.wire.values[0x157][1])
++                send.assert_called_once_with(follower,0x157,target)
++                send.side_effect = OSError('simulated transmit failure')
++                with self.assertRaisesRegex(OSError,'simulated'):
++                    session.send('can0',0x157,bytes(8))
++            with patch('transport_base.select.select',return_value=([follower,echo],[],[])), \
++                 patch('transport_base.time.time',return_value=wall+.003), \
++                 patch('transport_base.time.monotonic',return_value=mono+.003):
++                session.drain()
++            session.rec.close()
++            events = [json.loads(line) for line in (path/'can_timeline.jsonl').read_text().splitlines()]
++            self.assertEqual([e['kind'] for e in events],[
++                'master_rx','follower_target_tx_accepted','follower_target_tx_failed',
++                'follower_rx','can0_tx_echo'])
++            self.assertEqual([events[i]['data_hex'] for i in (0,1,3,4)],[target.hex()]*4)
++            self.assertEqual(events[0]['mono_ns'],events[1]['source_mono_ns'])
++            self.assertLessEqual(events[1]['send_begin_mono_ns'],events[1]['mono_ns'])
++            self.assertLess(events[4]['mono_ns'],events[3]['mono_ns'])
++            self.assertEqual(session.tx,1)
++
+     def test_simulated_direct_loop_preserves_targets_without_delay(self):
+         s=Session.__new__(Session)
+         s.args=SimpleNamespace(follow=True);s.buses={};s.active=True
+diff --git a/teleop_binding/test_binding.py b/teleop_binding/test_binding.py
+--- a/teleop_binding/test_binding.py
++++ b/teleop_binding/test_binding.py
+@@ -29,7 +29,7 @@
+ 
+     def make(self, root):
+         s=Binding(SimpleNamespace(follow=True,owner_pid=99999),Path(root))
+-        s.rec.close();s.rec=SimpleNamespace(status={},record=lambda x:None)
++        s.rec.close();s.rec=SimpleNamespace(status={},record=lambda x:None,trace=Mock())
+         s.buses={'can0':object(),'can1':object()};s.safety=lambda:None
+         s.gripper_max=100000
+         return s
+@@ -169,13 +169,16 @@
+                     s.src.put(0x159,bytes.fromhex('00019af0fffc0100'),clock[0])
+                 if ticks[0]==3:s.src.put(0x159,struct.pack('>iHBB',-400,1000,1,0),clock[0])
+             s.drain=drain
+-            with patch('transport_base.identities'),patch('transport_base.open_bus',side_effect=lambda p:p),patch('worker.time.monotonic',side_effect=lambda:clock[0]),patch('transport_base.raw_send',side_effect=lambda bus,cid,data:sent.append((bus,cid,data))):
++            with patch('transport_base.identities'),patch('transport_base.open_bus',side_effect=lambda p:p),patch('transport_base.open_target_echo'),patch('worker.time.monotonic',side_effect=lambda:clock[0]),patch('transport_base.raw_send',side_effect=lambda bus,cid,data:sent.append((bus,cid,data))):
+                 with self.assertRaisesRegex(Abort,'simulation complete'):s.run_loop()
+             self.assertEqual(s.command,target)  # First manual move need not return to zero.
+             self.assertEqual(s.joint_packets,1);self.assertEqual(s.gripper_packets,2)
+             self.assertEqual([cid for _,cid,_ in sent],[0x155,0x156,0x157,0x159,0x159])
+             self.assertEqual([struct.unpack('>i',data[:4])[0] for _,cid,data in sent if cid==0x159],[100000,0])
+             self.assertEqual(s.endpoint_clamps,2)
++            trace = [call.args[0] for call in s.rec.trace.call_args_list]
++            self.assertEqual([e['data_hex'] for e in trace],[data.hex() for _,_,data in sent])
++            self.assertEqual(len({e['source_mono_ns'] for e in trace[:3]}),1)
+ 
+     def test_role_change_is_not_implicit_in_constructor(self):
+         with tempfile.TemporaryDirectory() as d:
+diff --git a/README_BINDING.md b/README_BINDING.md
+--- a/README_BINDING.md
++++ b/README_BINDING.md
+@@ -28,3 +28,7 @@
+ `cd teleop_binding && .../venv/bin/python -m unittest -v test_binding test_core test_runtime`
+ 
+ 诊断记录写入本目录binding_runs下，包括状态、源/目标报文、六轴目标及反馈、夹爪目标及反馈、退出原因。没有自动开启相机或训练数据录制。
++
++六轴转发从组首帧重新同步，三个分包必须按序在 3 ms 内到齐。新首帧会丢弃未齐的旧组，异常分包不会更新已完成目标。超过原有 50 ms 补齐期限会触发原停止路径。协议没有组序号，实机仍需验证组内时间窗口。
++
++每次绑定另写 `can_timeline.jsonl`。按 `mono_ns` 对齐主臂与从臂原始接收报文、发送成功进入 SocketCAN 的目标、发送失败及从臂 CAN 口收到的本机发送回显。目标发送记录的 `source_mono_ns` 指向对应主臂组尾帧或夹爪帧。回显用于核对总线发送，执行结果由从臂反馈给出。原 20 Hz 状态快照仍写入 `samples.jsonl`。
