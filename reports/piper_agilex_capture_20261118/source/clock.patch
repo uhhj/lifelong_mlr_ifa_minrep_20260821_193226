@@ -1,0 +1,103 @@
+--- a/teleop_binding/transport_base.py
++++ b/teleop_binding/transport_base.py
+@@ -24,6 +24,34 @@
+ COMMAND_IDS = (*range(0x150,0x160), 0x470, 0x471, 0x475)
+ READ_IDS = (*FIDS, 0x2A1, 0x2A8, *range(0x261, 0x267), 0x473)
+ FOLLOWER_TARGET_IDS = (0x151, *JIDS, 0x159)
++NS_PER_SECOND = 1_000_000_000
++CAN_CLOCK_TOLERANCE_NS = 20_000_000
++CAN_MAX_AGE_NS = 100_000_000
++
++
++class CanClock:
++    """Project SocketCAN realtime stamps onto one monotonic axis per session."""
++
++    def __init__(self, realtime_offset_ns=None):
++        if realtime_offset_ns is None:
++            anchors = []
++            for _ in range(5):
++                before = time.monotonic_ns()
++                wall = time.time_ns()
++                after = time.monotonic_ns()
++                anchors.append((after - before, wall - (before + after) // 2))
++            _, realtime_offset_ns = min(anchors)
++        self.realtime_offset_ns = realtime_offset_ns
++
++    def project(self, kernel_ns, observed_ns):
++        return min(kernel_ns - self.realtime_offset_ns, observed_ns)
++
++    def age(self, kernel_ns, wall_ns, observed_ns):
++        wall_age = wall_ns - kernel_ns
++        clock_error = wall_ns - self.realtime_offset_ns - observed_ns
++        require(abs(clock_error) <= CAN_CLOCK_TOLERANCE_NS
++                and wall_age >= -CAN_CLOCK_TOLERANCE_NS, 'CAN clock discontinuity')
++        return max(wall_age, observed_ns - self.project(kernel_ns, observed_ns))
+ 
+ 
+ def atomic(path, obj):
+@@ -154,6 +182,7 @@
+         self.last_beat = 0; self.last_query = 0; self.tx = 0
+         self.trace_can = trace_can
+         self.target_echo = None
++        self.can_clock = CanClock()
+         self.rec = Recorder(run, trace_can); self.command = None; self.target = None
+         self.phase = 'observe' if not args.follow else 'preflight'
+ 
+@@ -195,13 +224,12 @@
+             if (msg.is_rx or msg.is_error_frame or msg.is_extended_id
+                     or msg.is_remote_frame or msg.arbitration_id not in FOLLOWER_TARGET_IDS):
+                 continue
+-            wall = time.time()
+-            now = time.monotonic()
++            observed_ns = time.monotonic_ns()
++            kernel_ns = round(msg.timestamp * NS_PER_SECOND)
+             self.rec.trace(dict(kind='can0_tx_echo', channel='can0', can_id=msg.arbitration_id,
+                                 data_hex=bytes(msg.data).hex(),
+-                                mono_ns=round((now-(wall-msg.timestamp))*1e9),
+-                                kernel_time_ns=round(msg.timestamp*1e9),
+-                                observed_mono_ns=round(now*1e9)))
++                                mono_ns=self.can_clock.project(kernel_ns, observed_ns),
++                                kernel_time_ns=kernel_ns, observed_mono_ns=observed_ns))
+         raise Abort('CAN target echo queue not drained')
+ 
+     def safety(self):
+@@ -237,16 +265,16 @@
+                 if cid not in (*READ_IDS, *COMMAND_IDS): continue
+                 require(not msg.is_extended_id and not msg.is_remote_frame and len(msg.data) == 8,
+                         'invalid relevant CAN frame')
+-                wall = time.time(); now = time.monotonic()
+-                age = wall-msg.timestamp
++                wall_ns = time.time_ns()
++                observed_ns = time.monotonic_ns()
++                kernel_ns = round(msg.timestamp * NS_PER_SECOND)
+                 data = bytes(msg.data)
+-                timestamp = now-max(0, age)
++                mono_ns = self.can_clock.project(kernel_ns, observed_ns)
+                 if self.trace_can and msg.is_rx:
+                     self.rec.trace(dict(kind='master_rx' if port == 'can1' else 'follower_rx',
+                                         channel=port, can_id=cid, data_hex=data.hex(),
+-                                        mono_ns=round(timestamp*1e9),
+-                                        kernel_time_ns=round(msg.timestamp*1e9),
+-                                        observed_mono_ns=round(now*1e9)))
++                                        mono_ns=mono_ns, kernel_time_ns=kernel_ns,
++                                        observed_mono_ns=observed_ns))
+                 if self.args.follow:
+                     if cid == 0x150 and data[0] == 1:
+                         raise Abort(f'external STOP on {port}')
+@@ -256,12 +284,13 @@
+                         raise Abort(f'another controller writes can0 {cid:#x}')
+                     if port == 'can1' and cid in COMMAND_IDS and not msg.is_rx:
+                         raise Abort(f'another controller writes can1 {cid:#x}')
+-                require(age >= -.02, 'CAN clock discontinuity')
+-                if age > .1 and not self.active:
++                age = self.can_clock.age(kernel_ns, wall_ns, observed_ns)
++                if age > CAN_MAX_AGE_NS and not self.active:
+                     # UI/process startup can accumulate old feedback. Discard it only
+                     # BEFORE arming; it cannot authorize motion or populate source cache.
+                     continue
+-                require(age <= .1, 'stale CAN backlog while active')
++                require(age <= CAN_MAX_AGE_NS, 'stale CAN backlog while active')
++                timestamp = mono_ns / NS_PER_SECOND
+                 self.observed[port].put(cid, data, timestamp)
+                 if port == 'can0': self.fw.put(cid, data, timestamp)
+                 elif self.args.follow and msg.is_rx: self.src.put(cid, data, timestamp)
