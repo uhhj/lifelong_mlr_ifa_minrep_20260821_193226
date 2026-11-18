@@ -1,0 +1,462 @@
+diff --git a/teleop_binding/heartbeat.py b/teleop_binding/heartbeat.py
+new file mode 100644
+--- /dev/null
++++ b/teleop_binding/heartbeat.py
+@@ -0,0 +1,77 @@
++"""Nonblocking receive side of the GUI-owned heartbeat pipe."""
++
++import os
++import select
++import time
++
++from core import Abort
++
++
++HEARTBEAT_TIMEOUT_NS = 500_000_000
++
++
++def milliseconds(nanoseconds):
++    return None if nanoseconds is None else nanoseconds / 1_000_000
++
++
++class PipeHeartbeat:
++    def __init__(self, fd, record):
++        self.fd = fd
++        self.record = record
++        self.buffer = b''
++        self.last_sent = None
++        self.last_received = None
++        os.set_blocking(fd, False)
++
++    def abort(self, detail, now):
++        self.record(dict(kind='heartbeat_failure', detail=detail, mono_ns=now,
++                         last_gui_mono_ns=self.last_sent,
++                         last_received_mono_ns=self.last_received,
++                         age_ms=milliseconds(None if self.last_sent is None else now-self.last_sent)))
++        raise Abort(f'upper-computer heartbeat {detail}')
++
++    def receive(self):
++        # Bound the work even if a malfunctioning sender floods the pipe.
++        for _ in range(4):
++            try:
++                data = os.read(self.fd, 4096)
++            except BlockingIOError:
++                return
++            now = time.monotonic_ns()
++            if not data:
++                self.abort('pipe closed', now)
++            *lines, self.buffer = (self.buffer+data).split(b'\n')
++            if len(self.buffer) > 20:
++                self.abort('invalid pipe message', now)
++            for line in lines:
++                if not 1 <= len(line) <= 20 or not line.isdigit():
++                    self.abort('invalid pipe message', now)
++                sent = int(line)
++                if sent > now or (self.last_sent is not None and sent <= self.last_sent):
++                    self.abort('invalid timestamp', now)
++                gap = None if self.last_sent is None else sent-self.last_sent
++                receive_gap = None if self.last_received is None else now-self.last_received
++                self.record(dict(kind='heartbeat', mono_ns=now, gui_mono_ns=sent,
++                                 interval_ms=milliseconds(gap),
++                                 receive_interval_ms=milliseconds(receive_gap),
++                                 pipe_delay_ms=milliseconds(now-sent)))
++                if gap is not None and gap >= HEARTBEAT_TIMEOUT_NS:
++                    self.abort('lost', now)
++                self.last_sent = sent
++                self.last_received = now
++        self.abort('pipe backlog', time.monotonic_ns())
++
++    def check(self):
++        self.receive()
++        now = time.monotonic_ns()
++        if self.last_sent is None or now-self.last_sent >= HEARTBEAT_TIMEOUT_NS:
++            self.abort('lost', now)
++
++    def wait_ready(self):
++        deadline = time.monotonic_ns()+HEARTBEAT_TIMEOUT_NS
++        while self.last_sent is None:
++            remaining = (deadline-time.monotonic_ns()) / 1e9
++            if remaining <= 0 or not select.select([self.fd], [], [], remaining)[0]:
++                self.abort('not received before startup', time.monotonic_ns())
++            self.receive()
++        self.check()
+diff --git a/teleop_binding/transport_base.py b/teleop_binding/transport_base.py
+--- a/teleop_binding/transport_base.py
++++ b/teleop_binding/transport_base.py
+@@ -107,6 +107,9 @@
+     def trace(self, data):
+         self.enqueue('can', data)
+ 
++    def record_heartbeat(self, data):
++        self.enqueue('heartbeat', data)
++
+     def enqueue(self, stream, data):
+         require(self.error is None, f'recorder error: {self.error}')
+         require(time.monotonic()-self.last_progress < .5, 'recorder stalled')
+@@ -116,23 +119,23 @@
+     def work(self):
+         try:
+             with ExitStack() as files:
+-                sample_log = files.enter_context((self.run/'samples.jsonl').open('w'))
+-                can_log = (files.enter_context((self.run/'can_timeline.jsonl').open('w'))
+-                           if self.trace_can else None)
++                streams = {'sample': 'samples.jsonl'}
++                if self.trace_can:
++                    streams.update(can='can_timeline.jsonl', heartbeat='heartbeat.jsonl')
++                logs = {stream: files.enter_context((self.run/name).open('w'))
++                        for stream, name in streams.items()}
+                 last = 0
+                 while not self.quit.is_set() or not self.pending.empty():
+                     try: item = self.pending.get(timeout=.02)
+                     except queue.Empty: item = None
+                     if item is not None:
+                         stream, data = item
+-                        log = can_log if stream == 'can' else sample_log
+-                        log.write(json.dumps(data, separators=(',', ':'))+'\n')
++                        logs[stream].write(json.dumps(data, separators=(',', ':'))+'\n')
+                     now = time.monotonic()
+                     if now-last > .1:
+                         atomic(self.run/'status.json', dict(self.status, time=time.time()))
+-                        sample_log.flush()
+-                        if can_log is not None:
+-                            can_log.flush()
++                        for log in logs.values():
++                            log.flush()
+                         last = now
+                     self.last_progress = now
+                 atomic(self.run/'status.json', dict(self.status, time=time.time()))
+diff --git a/teleop_binding/worker.py b/teleop_binding/worker.py
+--- a/teleop_binding/worker.py
++++ b/teleop_binding/worker.py
+@@ -7,9 +7,11 @@
+ from pathlib import Path
+ import signal
+ import struct
++import sys
+ import time
+ 
+ import transport_base as base
++from heartbeat import PipeHeartbeat
+ from tracking import TrackingGuard
+ from core import (Abort, EXPECTED, FIDS, JIDS, MODE, STOP, NativeInput,
+                   allowed_tx, gap, pack_joints, require, startup)
+@@ -40,8 +42,9 @@
+ 
+ 
+ class Binding(base.Session):
+-    def __init__(self, args, run):
++    def __init__(self, args, run, heartbeat_fd):
+         super().__init__(args, run, trace_can=True)
++        self.heartbeat = PipeHeartbeat(heartbeat_fd, self.rec.record_heartbeat)
+         self.gripper_enabled = True
+         self.gripper_max = None
+         self.gripper_command = None
+@@ -56,8 +59,7 @@
+         require(not (self.run/'STOP').exists(), 'onsite STOP/unbind requested')
+         try: os.kill(self.args.owner_pid, 0)
+         except OSError: raise Abort('upper-computer process exited')
+-        heart = json.loads((self.run/'panel.json').read_text())
+-        require(0 <= time.monotonic()-heart['mono'] < .5, 'upper-computer heartbeat lost')
++        self.heartbeat.check()
+         if self.active or self.wd is not None:
+             require(self.wd is not None and self.wd.is_alive() and not self.halted.is_set(),
+                     'watchdog unavailable')
+@@ -163,6 +165,7 @@
+         return f
+ 
+     def run_loop(self):
++        self.heartbeat.wait_ready()
+         base.identities()
+         for port in ('can0','can1'):self.buses[port]=base.open_bus(port)
+         self.target_echo = base.open_target_echo()
+@@ -227,6 +230,7 @@
+     p.add_argument('--bind',action='store_true',required=True)
+     p.add_argument('--owner-pid',type=int,required=True)
+     p.add_argument('--run-dir',type=Path,required=True)
++    p.add_argument('--heartbeat-pipe',action='store_true',required=True)
+     args=p.parse_args();args.follow=True
+     require(args.owner_pid>1,'invalid upper-computer PID')
+     lock=(Path(__file__).resolve().parents[2]/'teleop_control.lock').open('a')
+@@ -238,7 +242,7 @@
+         except OSError:continue
+         require(not any(a.endswith(b'/teleop.py') for a in argv),'old standalone teleop is still running')
+     require(args.run_dir.is_dir(),'GUI session directory missing')
+-    session=Binding(args,args.run_dir)
++    session=Binding(args,args.run_dir,sys.stdin.fileno())
+     def interrupt(*_):raise Abort('process interrupted')
+     for sig in (signal.SIGINT,signal.SIGTERM):signal.signal(sig,interrupt)
+     reason='finished'
+diff --git a/scripts/teleop_binding_dialog.py b/scripts/teleop_binding_dialog.py
+--- a/scripts/teleop_binding_dialog.py
++++ b/scripts/teleop_binding_dialog.py
+@@ -58,6 +58,8 @@
+         self.run.mkdir(parents=True,exist_ok=False)
+         self.worker=root/'teleop_binding/worker.py'
+         self.process=QProcess(self);self.process.setProcessChannelMode(QProcess.MergedChannels)
++        self.process.setInputChannelMode(QProcess.ManagedInputChannel)
++        self.process.started.connect(self.start_heartbeat)
+         self.process.finished.connect(self.on_finished)
+         self.process.errorOccurred.connect(self.on_error)
+         self.process.readyReadStandardOutput.connect(self.read_output)
+@@ -79,21 +81,34 @@
+         self.close_button=QPushButton('返回上位机');self.close_button.setEnabled(False)
+         self.close_button.clicked.connect(self.reject);layout.addWidget(self.close_button)
+         self.timer=QTimer(self);self.timer.timeout.connect(self.poll)
++        self.heartbeat_timer=QTimer(self);self.heartbeat_timer.setTimerType(Qt.PreciseTimer)
++        self.heartbeat_timer.setInterval(100)
++        self.heartbeat_timer.timeout.connect(self.send_heartbeat)
+ 
+     def begin(self):
+         if self.started:return
+         self.started=True;self.start_time=time.monotonic()
+-        atomic(self.run/'panel.json',{'mono':time.monotonic()})
+         self.timer.start(100)
+         self.process.setWorkingDirectory(str(self.worker.parent))
+-        self.process.start(sys.executable,['-B',str(self.worker),'--bind','--owner-pid',str(os.getpid()),'--run-dir',str(self.run)])
++        self.process.start(sys.executable,['-B',str(self.worker),'--bind','--owner-pid',str(os.getpid()),'--run-dir',str(self.run),'--heartbeat-pipe'])
++
++    def start_heartbeat(self):
++        self.heartbeat_timer.start()
++        self.send_heartbeat()
++
++    def send_heartbeat(self):
++        if self.process.state() != QProcess.Running or self.process.bytesToWrite():
++            return
++        message = f'{time.monotonic_ns()}\n'.encode('ascii')
++        if self.process.write(message) != len(message):
++            self.heartbeat_timer.stop()
++            self.process.closeWriteChannel()
+ 
+     def read_output(self):
+         self.output=(self.output+bytes(self.process.readAllStandardOutput()).decode(errors='replace'))[-12000:]
+ 
+     def poll(self):
+         try:
+-            atomic(self.run/'panel.json',{'mono':time.monotonic()})
+             p=self.run/'status.json'
+             if not p.exists():
+                 if self.process.state()==QProcess.Running and time.monotonic()-self.start_time>5:
+@@ -136,6 +151,8 @@
+             text='CAN 端口与已确认的机械臂对应不符，请先核对接线。'
+         elif 'stale frame' in text or 'pre-binding feedback timeout' in text:
+             text='未及时收到完整的新反馈，绑定已中止。诊断：'+text
++        elif 'upper-computer heartbeat' in text:
++            text='上位机心跳中断，已进入保护停止。诊断见 heartbeat.jsonl。'
+         elif 'stationary error exceeds' in text:
+             text='静止时关节跟随偏差超过 1°，程序已触发保护停止。'
+         elif 'stationary tracking error' in text:
+@@ -187,10 +204,12 @@
+     def on_error(self,error):
+         if error==QProcess.FailedToStart:
+             self.finished=True;self.timer.stop();self.close_button.setEnabled(True)
++            self.heartbeat_timer.stop()
+             self.state.setText('控制程序未能启动：'+self.process.errorString())
+ 
+     def on_finished(self,*_):
+         self.read_output();self.finished=True;self.timer.stop()
++        self.heartbeat_timer.stop()
+         p=self.run/'result.json'
+         if p.exists():self.show_result(json.loads(p.read_text()))
+         else:
+@@ -205,10 +224,10 @@
+         if self.started and not self.finished:
+             self.want_close=True;self.request_stop();return
+         if self.verifying_stop():self.want_close=True;return
+-        self.timer.stop();super().reject()
++        self.timer.stop();self.heartbeat_timer.stop();super().reject()
+ 
+     def closeEvent(self,event):
+         if self.started and not self.finished:
+             self.want_close=True;self.request_stop();event.ignore()
+         elif self.verifying_stop():self.want_close=True;event.ignore()
+-        else:self.timer.stop();event.accept()
++        else:self.timer.stop();self.heartbeat_timer.stop();event.accept()
+diff --git a/teleop_binding/test_heartbeat.py b/teleop_binding/test_heartbeat.py
+new file mode 100644
+--- /dev/null
++++ b/teleop_binding/test_heartbeat.py
+@@ -0,0 +1,99 @@
++import json
++import os
++from pathlib import Path
++import tempfile
++import time
++import unittest
++from unittest.mock import patch
++
++from core import Abort
++from heartbeat import PipeHeartbeat
++from transport_base import Recorder
++
++
++class HeartbeatChecks(unittest.TestCase):
++    def setUp(self):
++        self.reader, self.writer = os.pipe()
++        self.addCleanup(os.close, self.reader)
++        self.addCleanup(self.close_writer)
++        self.events = []
++        self.heartbeat = PipeHeartbeat(self.reader, self.events.append)
++
++    def close_writer(self):
++        if self.writer is not None:
++            os.close(self.writer)
++            self.writer = None
++
++    def send(self, stamp):
++        os.write(self.writer, f'{stamp}\n'.encode('ascii'))
++
++    def test_partial_messages_preserve_interval_and_pipe_delay(self):
++        self.send(1_000_000_000)
++        with patch('heartbeat.time.monotonic_ns', return_value=1_005_000_000):
++            self.heartbeat.wait_ready()
++        os.write(self.writer, b'1100')
++        with patch('heartbeat.time.monotonic_ns', return_value=1_102_000_000):
++            self.heartbeat.check()
++        self.assertEqual(len(self.events), 1)
++        os.write(self.writer, b'000000\n')
++        with patch('heartbeat.time.monotonic_ns', return_value=1_107_000_000):
++            self.heartbeat.check()
++        self.assertEqual(self.events[-1]['interval_ms'], 100)
++        self.assertEqual(self.events[-1]['receive_interval_ms'], 102)
++        self.assertEqual(self.events[-1]['pipe_delay_ms'], 7)
++
++    def test_timeout_at_exactly_500_ms(self):
++        self.send(1_000_000_000)
++        with patch('heartbeat.time.monotonic_ns', return_value=1_499_999_999):
++            self.heartbeat.check()
++        with patch('heartbeat.time.monotonic_ns', return_value=1_500_000_000):
++            with self.assertRaisesRegex(Abort, 'heartbeat lost'):
++                self.heartbeat.check()
++        self.assertEqual(self.events[-1]['age_ms'], 500)
++
++    def test_late_heartbeat_in_pipe_cannot_mask_missing_interval(self):
++        self.send(1_000_000_000)
++        self.send(1_500_000_000)
++        with patch('heartbeat.time.monotonic_ns', return_value=1_505_000_000):
++            with self.assertRaisesRegex(Abort, 'heartbeat lost'):
++                self.heartbeat.check()
++        self.assertEqual(self.events[-2]['interval_ms'], 500)
++        self.assertEqual(self.events[-1]['last_gui_mono_ns'], 1_000_000_000)
++
++    def test_pipe_closed_even_with_a_buffered_fresh_heartbeat(self):
++        self.send(1_000_000_000)
++        self.close_writer()
++        with patch('heartbeat.time.monotonic_ns', return_value=1_005_000_000):
++            with self.assertRaisesRegex(Abort, 'pipe closed'):
++                self.heartbeat.check()
++
++    def test_startup_wait_is_bounded_before_first_heartbeat(self):
++        with patch('heartbeat.select.select', return_value=([], [], [])):
++            with self.assertRaisesRegex(Abort, 'not received before startup'):
++                self.heartbeat.wait_ready()
++
++    def test_future_timestamp_does_not_extend_protection_deadline(self):
++        self.send(1_005_000_001)
++        with patch('heartbeat.time.monotonic_ns', return_value=1_005_000_000):
++            with self.assertRaisesRegex(Abort, 'invalid timestamp'):
++                self.heartbeat.check()
++
++    def test_intervals_and_stop_reason_are_written_to_the_run_log(self):
++        with tempfile.TemporaryDirectory() as directory:
++            recorder = Recorder(Path(directory), trace_can=True)
++            self.heartbeat.record = recorder.record_heartbeat
++            now = time.monotonic_ns()
++            try:
++                self.send(now - 500_000_000)
++                self.send(now - 400_000_000)
++                self.heartbeat.check()
++                self.close_writer()
++                with self.assertRaisesRegex(Abort, 'pipe closed'):
++                    self.heartbeat.check()
++            finally:
++                recorder.close()
++            path = Path(directory)/'heartbeat.jsonl'
++            entries = [json.loads(line) for line in path.read_text().splitlines()]
++            self.assertIsNone(entries[0]['interval_ms'])
++            self.assertEqual(entries[1]['interval_ms'], 100)
++            self.assertEqual(entries[2]['detail'], 'pipe closed')
+diff --git a/teleop_binding/test_binding.py b/teleop_binding/test_binding.py
+--- a/teleop_binding/test_binding.py
++++ b/teleop_binding/test_binding.py
+@@ -1,3 +1,4 @@
++import os
+ import struct
+ import tempfile
+ import threading
+@@ -28,7 +29,10 @@
+         self.assertFalse(base.read_only_external(0x152,bytes(8)))
+ 
+     def make(self, root):
+-        s=Binding(SimpleNamespace(follow=True,owner_pid=99999),Path(root))
++        reader,writer=os.pipe()
++        self.addCleanup(os.close,reader);self.addCleanup(os.close,writer)
++        s=Binding(SimpleNamespace(follow=True,owner_pid=99999),Path(root),reader)
++        s.heartbeat=Mock()
+         s.rec.close();s.rec=SimpleNamespace(status={},record=lambda x:None,trace=Mock())
+         s.buses={'can0':object(),'can1':object()};s.safety=lambda:None
+         s.gripper_max=100000
+@@ -151,6 +155,15 @@
+             s.progress()
+             s.pipe.send.assert_called_once_with('alive')
+ 
++    def test_no_can_socket_is_opened_without_the_gui_pipe_heartbeat(self):
++        with tempfile.TemporaryDirectory() as d:
++            s=self.make(d)
++            s.heartbeat.wait_ready.side_effect=Abort('upper-computer heartbeat not received before startup')
++            with patch('transport_base.open_bus') as open_bus:
++                with self.assertRaisesRegex(Abort,'not received before startup'):
++                    s.run_loop()
++                open_bus.assert_not_called()
++
+     def test_full_loop_first_motion_and_independent_gripper(self):
+         with tempfile.TemporaryDirectory() as d:
+             s=self.make(d);s.active=True;s.source_configured=True;s.command=(0,)*6
+diff --git a/test_gui.py b/test_gui.py
+--- a/test_gui.py
++++ b/test_gui.py
+@@ -87,10 +87,35 @@
+             start=Mock();dialog.process.start=start
+             dialog.begin();self.assertTrue(dialog.started);self.assertEqual(start.call_count,1)
+             self.assertIn('--bind',start.call_args.args[1])
+-            self.assertTrue((dialog.run/'panel.json').exists())
++            self.assertIn('--heartbeat-pipe',start.call_args.args[1])
++            self.assertFalse((dialog.run/'panel.json').exists())
+             dialog.begin();self.assertEqual(start.call_count,1)
+             stop.assert_not_called()
+             dialog.finished=True;dialog.reject()
++
++    def test_real_qprocess_pipe_sends_periodic_monotonic_heartbeats(self):
++        with tempfile.TemporaryDirectory() as d,patch('scripts.teleop_binding_dialog.send_stop') as stop:
++            folder=Path(d)
++            dialog=TeleopBindingDialog(run_dir=folder/'session')
++            stub=folder/'stdin_probe.py'
++            stub.write_text(
++                'import json, sys\nfrom pathlib import Path\n'
++                'run=Path(sys.argv[sys.argv.index("--run-dir")+1])\n'
++                'beats=[int(sys.stdin.readline()) for _ in range(3)]\n'
++                '(run/"received.json").write_text(json.dumps(beats))\n'
++                '(run/"result.json").write_text(json.dumps({"reason":"offline finished",'
++                '"stop_feedback_confirmed":True}))\n')
++            dialog.worker=stub
++            dialog.begin()
++            deadline=time.monotonic()+3
++            while not dialog.finished and time.monotonic()<deadline:
++                QTest.qWait(10)
++            self.assertTrue(dialog.finished)
++            beats=json.loads((dialog.run/'received.json').read_text())
++            self.assertTrue(all(0 < b-a < 500_000_000 for a,b in zip(beats,beats[1:])))
++            self.assertFalse(dialog.heartbeat_timer.isActive())
++            self.assertFalse((dialog.run/'panel.json').exists())
++            stop.assert_not_called();dialog.reject()
+ 
+     def test_stop_is_latched_and_does_not_unlock_parent_until_worker_ends(self):
+         with tempfile.TemporaryDirectory() as d,patch('scripts.teleop_binding_dialog.send_stop') as stop,patch('scripts.teleop_binding_dialog.StopVerifier') as verifier:
+diff --git a/README_BINDING.md b/README_BINDING.md
+--- a/README_BINDING.md
++++ b/README_BINDING.md
+@@ -32,3 +32,5 @@
+ 六轴转发从组首帧重新同步，三个分包必须按序在 3 ms 内到齐。新首帧会丢弃未齐的旧组，异常分包不会更新已完成目标。超过原有 50 ms 补齐期限会触发原停止路径。协议没有组序号，实机仍需验证组内时间窗口。
+ 
+ 每次绑定另写 `can_timeline.jsonl`。按 `mono_ns` 对齐主臂与从臂原始接收报文、发送成功进入 SocketCAN 的目标、发送失败及从臂 CAN 口收到的本机发送回显。目标发送记录的 `source_mono_ns` 指向对应主臂组尾帧或夹爪帧。回显用于核对总线发送，执行结果由从臂反馈给出。原 20 Hz 状态快照仍写入 `samples.jsonl`。
++
++绑定窗口由 Qt 主线程每 100 ms 通过 QProcess 标准输入管道发送单调时间戳。转发进程非阻塞读取，缺失达 500 ms 或管道断开时沿用保护停止。每轮 `heartbeat.jsonl` 记录发出间隔 `interval_ms`、接收间隔 `receive_interval_ms`、管道延迟 `pipe_delay_ms` 和超时事件。安装后需重新打开上位机才能加载新版窗口。
