@@ -1,0 +1,9 @@
+--- a/capture.py
++++ b/capture.py
+@@ -22 +22,2 @@
+-from direct_can import DirectTail, check_listen_only
++from direct_can import DirectTail
++from capture_replug import prepare_capture_link
+@@ -205 +206 @@
+-        check_listen_only('can0')
++        prepare_capture_link('can0')
