@@ -2,7 +2,13 @@
 
 2026-11-19 20:27 北京时间，已通过原桌面入口核对新版窗口“PiPER 操作臂软件急停与复位”可见。部署文件的 SHA-256 为 `947d13b7a107bb604c589158112dc615fca0d9e44e9ed9e6c3b774d850c83c3d`，旧面板已备份。核查时接口为 UP、1 Mbit/s 硬件只听（速率沿用本轮监听配置），主机发送计数为 0。此次没有实机复位、使能或运动测试。
 
-## 现场操作
+## 现场共用一条 CAN 总线时
+
+现场确认主从臂线束合在一起，共用一个 CAN 接口。保持现有接线即可使用红色 STOP 和被动监听。重新绑定后已核实 STOP 按钮可用。复位按钮要求现场人员确认主臂已隔离。现有接线不满足该条件，请保留急停，勿勾选确认。[接口核验](can0_rebind.md)
+
+松灵给出的先从臂、后主臂上电顺序适用于建立直连遥操。文档中断开主臂的要求出现在上位机单独控制从臂的示例里。已查阅的 S-V1.9-1 资料未给出保持两臂上电、共线时解除软件急停并恢复跟随的操作顺序。现场曾记录到从臂确认 STOP 后主臂仍在发送关节目标。使用共线复位前，需由松灵确认适用于这个固件和接法的操作步骤及反馈判据。[松灵双臂说明](https://github.com/agilexrobotics/piper_sdk/blob/b847e5393a7ce6ff8508d713eca7bdd3a42421b4/assets/double_piper.MD) · [现场记录](../piper_direct_resume_offline_20261119/evening_follow.md) · [固件与 SDK 核查](../piper_direct_resume_offline_20261119/sdk_review.md)
+
+## 上位机单独连接从臂时
 
 红色 STOP 下方有独立的“解除软件急停（复位）”按钮。现场使用复位前，应按设备流程隔离主臂的 CAN 连接，让上位机单独连接从臂，可靠支撑从臂并清空其运动范围。复位可能使从臂失去保持力并下落。[松灵双臂直连说明](https://github.com/agilexrobotics/piper_sdk/blob/b847e5393a7ce6ff8508d713eca7bdd3a42421b4/assets/double_piper.MD#L99) · [官方复位说明](https://github.com/agilexrobotics/piper_sdk/issues/20)
 
