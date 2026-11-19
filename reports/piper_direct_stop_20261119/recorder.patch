@@ -1,0 +1,54 @@
+--- a/direct_can.py
++++ b/direct_can.py
+@@ -2,7 +2,7 @@
+ from collections import deque
+ import socket
+ import struct
+-import subprocess
++from stop_link import PORT, check_path
+ import time
+
+ from timeline import JOINT_RX, JOINT_TX, Timeline, decode_joints, last_at
+@@ -15,14 +15,14 @@
+ GROUP_NS = 3_000_000
+
+
+-def check_listen_only(port):
+-    ip = ['/usr/sbin/ip', '-details', 'link', 'show', 'dev', port]
+-    report = subprocess.run(ip, capture_output=True, text=True, check=True).stdout
+-    flags = report.split('<', 1)[1].split('>', 1)[0].split(',') if '<' in report else []
+-    if ('UP' not in flags or 'LOWER_UP' not in flags or
+-            not any('LISTEN-ONLY' in s for s in report.splitlines() if s.strip().startswith('can ')) or
+-            'bitrate 1000000 ' not in report):
+-        raise RuntimeError(f'{port} 需要处于 UP、1 Mbit/s、硬件 LISTEN-ONLY 才能旁听官方直连')
++def check_capture_link(port):
++    if port != PORT:
++        raise RuntimeError('直连数据来源不是本轮现场选定的接口')
++    check_path(allow_listen_only=True)
++
++
++# The installed capture entry and older callers import this function by its original name.
++check_listen_only = check_capture_link
+
+
+ class DirectTimeline(Timeline):
+@@ -111,7 +111,7 @@
+         self.sock = None
+
+     def open(self):
+-        check_listen_only(self.port)
++        check_capture_link(self.port)
+         anchors = []
+         for _ in range(7):
+             before = time.monotonic_ns()
+@@ -144,6 +144,10 @@
+                 raw,anc,flags,_ = self.sock.recvmsg(WIRE.size,128)
+             except BlockingIOError:
+                 return
++            if flags & socket.MSG_DONTROUTE and len(raw) == WIRE.size:
++                local_id, local_size, local_data = WIRE.unpack(raw)
++                if local_id == 0x150 and local_size == 8 and local_data[0] == 1:
++                    raise RuntimeError('现场操作臂 STOP 已提交，结束本条录制')
+             if flags & (socket.MSG_DONTROUTE|socket.MSG_CTRUNC|socket.MSG_TRUNC):
+                 raise RuntimeError('直连监听发现本机发送回显或截断帧')
+             cid,dlc,data=WIRE.unpack(raw)
