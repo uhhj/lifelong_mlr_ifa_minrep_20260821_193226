@@ -1,0 +1,16 @@
+--- a/reports/piper_intermittent_motion_watch_20261118/piper_watch.py
++++ b/reports/piper_intermittent_motion_watch_20261118/piper_watch.py
+@@ -14,5 +14,5 @@
+
+
+-PORTS = ('can0', 'can1')
++PORTS = ('can0',)
+ CAN_IDS = (0x150,0x151,0x155,0x156,0x157,0x159,0x2A1,0x2A2,0x2A3,0x2A4,0x2A5,0x2A6,0x2A7,0x2A8,
+            0x470,0x471,0x472,0x473,0x475,0x477,0x47E, *range(0x251,0x257), *range(0x261,0x267))
+@@ -160,6 +160,4 @@
+         try:
+             sync_links()
+-            if set(sockets) != set(PORTS):
+-                raise RuntimeError('Both CAN interfaces must bind before readiness')
+             start_wall = time.time_ns()
+             ready=dict(pid=os.getpid(), interfaces=sorted(sockets), started_wall_ns=start_wall,
