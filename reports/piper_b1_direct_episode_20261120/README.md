@@ -13,3 +13,18 @@
 动作监督从零基第 119 帧开始使用。最后一次关节或夹爪目标变化在 16.345 s，之后目标保持约 6.77 s，原始记录完整保留。[独立 CAN 复算脚本](check_can.py)
 
 复算使用 607 个在所检时间窗内具有唯一载荷的主臂关节指令作时钟锚点，全部得出同一偏移。以此从独立监听中定位目标和反馈的各个组成帧。同步索引 SHA-256 为 `4452aeb8bcf6c21810f88b016db5e4e1884dcaa229ef411cfe88549d7f3f92b1`。
+
+## 与 MLR+IFA 训练输入的兼容性
+
+本条满足 PiPER 关节空间行为克隆的原始示范要求。现有 MLR+IFA 的示范读取入口使用 robomimic 的 HDF5 序列数据集；AgileX 录制目录还需离线转换。默认配置取两路 RGB、关节与夹爪状态，序列长 8，任务语言在数据集外由任务表绑定。[数据读取入口](../../libero/lifelong/datasets.py) · [默认观测与时序配置](../../libero/configs/data/default.yaml) · [任务语言绑定](../../libero/lifelong/save_feature.py)
+
+| 录制内容 | PiPER 训练副本中的用途 |
+|---|---|
+| 顶视、腕视，源图 640 × 480 | 分别映射到 `obs/agentview_rgb`、`obs/eye_in_hand_rgb`。按训练预处理约定转 RGB 和缩放；仓库默认图像尺寸为 128 × 128。 |
+| 从臂反馈，6 个关节角（rad）和 1 个夹爪开度（mm） | 按字段拆成 `obs/joint_states`、`obs/gripper_states`，按 PiPER 的 6+1 维处理状态输入。 |
+| 直连总线上的关节和夹爪目标 | 写入每条示范的 `actions`，用同一时间基准与观测配对。PiPER 动作定义为六轴绝对目标角和夹爪目标开度，需确定逐维尺度和部署时的逆变换。仓库 GMM 动作头对均值施加 tanh；本条夹爪命令为 8.8–68.6 mm，原数值不适合作为该头的直接标签。[策略代码](../../libero/lifelong/models/complete_policy.py) · [动作头](../../libero/lifelong/models/policy_head.py) |
+| 任务与结果 | B1 与 `success` 已保存，应在任务表绑定固定指令“夹起木块，放进左侧蓝碟”。生成动作监督窗口时取零基 119–693，排除开头 119 个空目标。 |
+
+LIBERO 预训练策略使用末端位姿控制，七维输出与本条 PiPER 七维关节目标的物理含义不同。视觉和语言模块可评估复用，PiPER 的状态输入与动作头需相应适配；包装成 HDF5 本身不能解决这个差异。[项目已有实机预训练核查](../piper_pretraining_readiness_20261118/README.md)
+
+本次完成了采集数据与读取器源码的逐项核对，未生成训练 HDF5，亦未执行读取器批次或训练试跑。
