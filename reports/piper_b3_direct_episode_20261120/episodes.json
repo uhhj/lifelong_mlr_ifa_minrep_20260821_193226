@@ -1,0 +1,2289 @@
+{
+  "task": "B3",
+  "description": "把木块推到左侧黄色区域",
+  "inventory_at": "2026-11-20T21:18:43.564331+08:00",
+  "confirmed_at": "2026-11-20T21:28:52.732489+08:00",
+  "field_counts": {
+    "success": 63,
+    "failed": 2,
+    "aborted": 2
+  },
+  "decisions": {
+    "candidate": 51,
+    "exclude_failed": 2,
+    "review_boundary": 10,
+    "exclude_aborted": 2,
+    "review_partial_start": 1,
+    "review_obscured_finish": 1
+  },
+  "all": {
+    "episodes": 67,
+    "pairs": 17577,
+    "actions": 16894,
+    "leading_null_targets": 683,
+    "skipped": {
+      "overhead": 1,
+      "wrist": 18
+    },
+    "gapless_episodes": 48,
+    "max_gap_ms": 66.979,
+    "max_camera_skew_ms": 19.935
+  },
+  "candidate": {
+    "episodes": 51,
+    "pairs": 14229,
+    "actions": 13879,
+    "leading_null_targets": 350,
+    "skipped": {
+      "overhead": 1,
+      "wrist": 13
+    },
+    "gapless_episodes": 38,
+    "max_gap_ms": 66.979,
+    "max_camera_skew_ms": 19.909
+  },
+  "independent_passive_can_coverage": false,
+  "episodes": [
+    {
+      "episode_id": "20261120_205307_57431",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 359,
+      "valid_actions": 349,
+      "valid_feedback": 359,
+      "alignment_sha256": "915483e03b4bcf30b4efc3dc8fe2d388d5624a34fe5e84082686f33a4107132b",
+      "duration_s": 11.935,
+      "leading_null_targets": 10,
+      "max_gap_ms": 36.582,
+      "max_camera_skew_ms": 18.176,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 8,
+      "max_held_step": {
+        "row": 17,
+        "axis": 2,
+        "degrees": 0.09,
+        "interval_ms": 33.696
+      },
+      "review_frames": [
+        0,
+        150,
+        221,
+        291,
+        323,
+        358,
+        358
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "additional_review_frames": [
+        313,
+        316,
+        319,
+        322
+      ],
+      "valid_action_range_inclusive": [
+        10,
+        358
+      ]
+    },
+    {
+      "episode_id": "20261120_205341_60430",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 347,
+      "valid_actions": 321,
+      "valid_feedback": 347,
+      "alignment_sha256": "5eaaf44e2390f7b6eae3361b5dc9beae22a64d114f3281659485f4e45b9a0ab8",
+      "duration_s": 11.534,
+      "leading_null_targets": 26,
+      "max_gap_ms": 35.159,
+      "max_camera_skew_ms": 19.718,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        145,
+        214,
+        283,
+        319,
+        327,
+        346
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        26,
+        346
+      ]
+    },
+    {
+      "episode_id": "20261120_205403_60744",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 293,
+      "valid_actions": 282,
+      "valid_feedback": 293,
+      "alignment_sha256": "ba92983dac00a53426cde1b6d18610bae8f4a6384436471ee74b9dabd24fc55d",
+      "duration_s": 9.752,
+      "leading_null_targets": 11,
+      "max_gap_ms": 47.626,
+      "max_camera_skew_ms": 19.759,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 11,
+      "max_held_step": {
+        "row": 24,
+        "axis": 5,
+        "degrees": 0.112,
+        "interval_ms": 34.237
+      },
+      "review_frames": [
+        0,
+        122,
+        181,
+        181,
+        181,
+        253,
+        292
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        11,
+        292
+      ]
+    },
+    {
+      "episode_id": "20261120_205422_61035",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 301,
+      "valid_actions": 281,
+      "valid_feedback": 301,
+      "alignment_sha256": "2f4bbe22362447a86b1b2e341e9f6c658eb5215081fbab2bcebbf4326cbabed0",
+      "duration_s": 10.005,
+      "leading_null_targets": 20,
+      "max_gap_ms": 37.976,
+      "max_camera_skew_ms": 3.686,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        126,
+        186,
+        196,
+        272,
+        280,
+        300
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        20,
+        300
+      ]
+    },
+    {
+      "episode_id": "20261120_205441_61327",
+      "field_outcome": "failed",
+      "assessment": "exclude_failed",
+      "pairs": 108,
+      "valid_actions": 31,
+      "valid_feedback": 108,
+      "alignment_sha256": "8ad9e444fadcc9c6f8ff7eb036abccb97d43d4f711e88c49907f40faa4c79dd8",
+      "duration_s": 3.567,
+      "leading_null_targets": 77,
+      "max_gap_ms": 34.562,
+      "max_camera_skew_ms": 17.497,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 26,
+      "max_held_step": {
+        "row": 82,
+        "axis": 1,
+        "degrees": 0.042,
+        "interval_ms": 33.607
+      },
+      "review_frames": [
+        0,
+        44,
+        66,
+        68,
+        88,
+        100,
+        107
+      ],
+      "gripper_feedback_span_mm": 0.0
+    },
+    {
+      "episode_id": "20261120_205455_61576",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 234,
+      "valid_actions": 234,
+      "valid_feedback": 234,
+      "alignment_sha256": "1294c7913c708aeb214e120ab19cd68e69665f3e3c21300f2ffd136f8c287671",
+      "duration_s": 7.785,
+      "leading_null_targets": 0,
+      "max_gap_ms": 48.114,
+      "max_camera_skew_ms": 19.87,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        97,
+        144,
+        138,
+        230,
+        230,
+        233
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        233
+      ]
+    },
+    {
+      "episode_id": "20261120_205513_61859",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 218,
+      "valid_actions": 218,
+      "valid_feedback": 218,
+      "alignment_sha256": "71fdac54a555f477ddd82d5e27067caaf2cfb8ee21d108dc478d5bc76fd05358",
+      "duration_s": 7.25,
+      "leading_null_targets": 0,
+      "max_gap_ms": 48.036,
+      "max_camera_skew_ms": 19.435,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        91,
+        134,
+        156,
+        180,
+        188,
+        217
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        217
+      ]
+    },
+    {
+      "episode_id": "20261120_205531_62135",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 422,
+      "valid_actions": 422,
+      "valid_feedback": 422,
+      "alignment_sha256": "0885d70b5bd99bbade09cabf46f647c2dedd671435ba65b508b9036ce3308930",
+      "duration_s": 14.052,
+      "leading_null_targets": 0,
+      "max_gap_ms": 50.581,
+      "max_camera_skew_ms": 18.035,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        176,
+        261,
+        376,
+        412,
+        420,
+        421
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        421
+      ]
+    },
+    {
+      "episode_id": "20261120_205557_62463",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 241,
+      "valid_actions": 241,
+      "valid_feedback": 241,
+      "alignment_sha256": "27af60b17e6fb2c51d2005caabad39a82b6778e552f8c2af6c3316b061b55d9e",
+      "duration_s": 8.018,
+      "leading_null_targets": 0,
+      "max_gap_ms": 48.039,
+      "max_camera_skew_ms": 19.647,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        100,
+        148,
+        156,
+        200,
+        208,
+        240
+      ],
+      "gripper_feedback_span_mm": 0.3,
+      "valid_action_range_inclusive": [
+        0,
+        240
+      ]
+    },
+    {
+      "episode_id": "20261120_205614_62756",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 284,
+      "valid_actions": 282,
+      "valid_feedback": 284,
+      "alignment_sha256": "48a3f1951577880f06f8f611246403779c89c1c4535139d127177ca5d1c7afe6",
+      "duration_s": 9.435,
+      "leading_null_targets": 2,
+      "max_gap_ms": 35.504,
+      "max_camera_skew_ms": 14.489,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        118,
+        175,
+        230,
+        274,
+        282,
+        283
+      ],
+      "gripper_feedback_span_mm": 0.0,
+      "valid_action_range_inclusive": [
+        2,
+        283
+      ]
+    },
+    {
+      "episode_id": "20261120_205642_63142",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 226,
+      "valid_actions": 226,
+      "valid_feedback": 226,
+      "alignment_sha256": "ef8cd4100dab7731074f010e7b2cc1216926cdee50c8213812c360e76cdfb337",
+      "duration_s": 7.504,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.568,
+      "max_camera_skew_ms": 6.131,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        94,
+        139,
+        119,
+        191,
+        199,
+        225
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        225
+      ]
+    },
+    {
+      "episode_id": "20261120_205700_63423",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 241,
+      "valid_actions": 241,
+      "valid_feedback": 241,
+      "alignment_sha256": "7e9bb572066f7a5085238ef7ec4ea7f7dfaf265f707fcb4bc12dc080c6f41f18",
+      "duration_s": 8.004,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.257,
+      "max_camera_skew_ms": 9.481,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        100,
+        148,
+        168,
+        212,
+        220,
+        240
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        240
+      ]
+    },
+    {
+      "episode_id": "20261120_205719_63710",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 329,
+      "valid_actions": 328,
+      "valid_feedback": 329,
+      "alignment_sha256": "990918e91e5261e1c965e3c60199a22af7935867b07fa3bd676d56c6fe06fe85",
+      "duration_s": 10.941,
+      "leading_null_targets": 1,
+      "max_gap_ms": 35.987,
+      "max_camera_skew_ms": 11.111,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        137,
+        203,
+        197,
+        328,
+        328,
+        328
+      ],
+      "gripper_feedback_span_mm": 0.3,
+      "additional_overhead_frame": 328
+    },
+    {
+      "episode_id": "20261120_205738_64015",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 269,
+      "valid_actions": 269,
+      "valid_feedback": 269,
+      "alignment_sha256": "8589d45abf6bd034f92b018504717f6e946810f4ea92c465237bedc34691e767",
+      "duration_s": 8.937,
+      "leading_null_targets": 0,
+      "max_gap_ms": 39.372,
+      "max_camera_skew_ms": 4.801,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 5,
+      "max_held_step": {
+        "row": 267,
+        "axis": 5,
+        "degrees": 0.062,
+        "interval_ms": 33.093
+      },
+      "review_frames": [
+        0,
+        112,
+        166,
+        145,
+        241,
+        249,
+        268
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        268
+      ]
+    },
+    {
+      "episode_id": "20261120_205908_64656",
+      "field_outcome": "aborted",
+      "assessment": "exclude_aborted",
+      "pairs": 0,
+      "valid_actions": 0,
+      "valid_feedback": 0,
+      "alignment_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "episode_id": "20261120_210004_65123",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 247,
+      "valid_actions": 228,
+      "valid_feedback": 247,
+      "alignment_sha256": "0239b8cf0e05c98a9417ed3e4be50de09f12f63f1cd97d54988798eb502ae5d3",
+      "duration_s": 8.203,
+      "leading_null_targets": 19,
+      "max_gap_ms": 37.176,
+      "max_camera_skew_ms": 3.885,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        103,
+        152,
+        182,
+        214,
+        246,
+        246
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        19,
+        246
+      ]
+    },
+    {
+      "episode_id": "20261120_210023_65413",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 264,
+      "valid_actions": 264,
+      "valid_feedback": 264,
+      "alignment_sha256": "c98744afe72ed87d86ddeb9cd7be47eb12e160b34f5f1bf9756c3e5106baa7fb",
+      "duration_s": 8.773,
+      "leading_null_targets": 0,
+      "max_gap_ms": 36.547,
+      "max_camera_skew_ms": 10.693,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 3,
+      "max_held_step": {
+        "row": 208,
+        "axis": 1,
+        "degrees": 0.0,
+        "interval_ms": 33.299
+      },
+      "review_frames": [
+        0,
+        110,
+        163,
+        196,
+        236,
+        244,
+        263
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        263
+      ]
+    },
+    {
+      "episode_id": "20261120_210041_65699",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 187,
+      "valid_actions": 187,
+      "valid_feedback": 187,
+      "alignment_sha256": "4c7238e7438097c7f88af70c866a16f4811f07d431e565819d2f51451e0b8f7c",
+      "duration_s": 6.199,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.049,
+      "max_camera_skew_ms": 14.797,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        78,
+        115,
+        78,
+        154,
+        162,
+        186
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        186
+      ]
+    },
+    {
+      "episode_id": "20261120_210056_65964",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 290,
+      "valid_actions": 290,
+      "valid_feedback": 290,
+      "alignment_sha256": "b9f60d5721b82fa6e9adc6fa35d11cd70b3f133913dab9a0b2aadd4a5807e6bf",
+      "duration_s": 9.635,
+      "leading_null_targets": 0,
+      "max_gap_ms": 34.984,
+      "max_camera_skew_ms": 13.321,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        121,
+        179,
+        196,
+        196,
+        264,
+        289
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        289
+      ]
+    },
+    {
+      "episode_id": "20261120_210114_66254",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 267,
+      "valid_actions": 267,
+      "valid_feedback": 267,
+      "alignment_sha256": "2317a7af2de157c282e9876bc275ef3e635a72655505ad02ac0eef10516c95ec",
+      "duration_s": 8.884,
+      "leading_null_targets": 0,
+      "max_gap_ms": 47.645,
+      "max_camera_skew_ms": 19.539,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        111,
+        164,
+        221,
+        265,
+        265,
+        266
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_overhead_frame": 266
+    },
+    {
+      "episode_id": "20261120_210131_66540",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 240,
+      "valid_actions": 240,
+      "valid_feedback": 240,
+      "alignment_sha256": "cb0dd32799691e4138b6ab4ab54c15fde77104feecc1664e1e9b5960abfa4323",
+      "duration_s": 8.001,
+      "leading_null_targets": 0,
+      "max_gap_ms": 50.237,
+      "max_camera_skew_ms": 19.774,
+      "camera_skips": {
+        "overhead": 1,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        100,
+        148,
+        196,
+        224,
+        239,
+        239
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        239
+      ]
+    },
+    {
+      "episode_id": "20261120_210147_66809",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 195,
+      "valid_actions": 195,
+      "valid_feedback": 195,
+      "alignment_sha256": "3d24dd0cc5c96854c40676bfc7ea9ff488816378127ad888ab667ae6dfab7437",
+      "duration_s": 6.47,
+      "leading_null_targets": 0,
+      "max_gap_ms": 36.214,
+      "max_camera_skew_ms": 8.911,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 2,
+      "max_held_step": {
+        "row": 193,
+        "axis": 1,
+        "degrees": 0.0,
+        "interval_ms": 34.457
+      },
+      "review_frames": [
+        0,
+        81,
+        120,
+        101,
+        161,
+        169,
+        194
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_overhead_frame": 166
+    },
+    {
+      "episode_id": "20261120_210202_67076",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 205,
+      "valid_actions": 205,
+      "valid_feedback": 205,
+      "alignment_sha256": "e8429f97ee90d8be8068b9a9096134e50aa0fcb0e855098a7f2fe80af5e30b04",
+      "duration_s": 6.804,
+      "leading_null_targets": 0,
+      "max_gap_ms": 36.477,
+      "max_camera_skew_ms": 10.085,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        85,
+        126,
+        116,
+        180,
+        188,
+        204
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_overhead_frame": 175
+    },
+    {
+      "episode_id": "20261120_210216_67338",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 178,
+      "valid_actions": 178,
+      "valid_feedback": 178,
+      "alignment_sha256": "8f7828515a234b5b4a26996c89945ae5cb7dd34373bc823bbe100829aa9b9bcb",
+      "duration_s": 5.9,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.291,
+      "max_camera_skew_ms": 18.196,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 3,
+      "max_held_step": {
+        "row": 129,
+        "axis": 1,
+        "degrees": 0.0,
+        "interval_ms": 32.594
+      },
+      "review_frames": [
+        0,
+        74,
+        109,
+        95,
+        155,
+        163,
+        177
+      ],
+      "gripper_feedback_span_mm": 0.0,
+      "additional_overhead_frame": 152
+    },
+    {
+      "episode_id": "20261120_210230_67589",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 237,
+      "valid_actions": 237,
+      "valid_feedback": 237,
+      "alignment_sha256": "79c1415bcecef6a2ddc7764440819eef31de2925a51f690acfabcd28c39e331f",
+      "duration_s": 7.885,
+      "leading_null_targets": 0,
+      "max_gap_ms": 47.961,
+      "max_camera_skew_ms": 19.465,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        99,
+        146,
+        135,
+        211,
+        219,
+        236
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        236
+      ]
+    },
+    {
+      "episode_id": "20261120_210245_67859",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 209,
+      "valid_actions": 209,
+      "valid_feedback": 209,
+      "alignment_sha256": "51e07cefb43105733d3f865e694d6147830f6f74bfce2250feeaa7aa4350fdc8",
+      "duration_s": 6.936,
+      "leading_null_targets": 0,
+      "max_gap_ms": 37.534,
+      "max_camera_skew_ms": 2.42,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        87,
+        128,
+        173,
+        208,
+        208,
+        208
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        208
+      ]
+    },
+    {
+      "episode_id": "20261120_210301_68122",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 179,
+      "valid_actions": 179,
+      "valid_feedback": 179,
+      "alignment_sha256": "0f42c3ba307c44557dfd8b895f1df38f622b036c0b772fc3a56ad7a0c600e2fc",
+      "duration_s": 5.934,
+      "leading_null_targets": 0,
+      "max_gap_ms": 36.663,
+      "max_camera_skew_ms": 19.044,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        74,
+        110,
+        123,
+        147,
+        155,
+        178
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_overhead_frame": 151
+    },
+    {
+      "episode_id": "20261120_210326_68407",
+      "field_outcome": "failed",
+      "assessment": "exclude_failed",
+      "pairs": 194,
+      "valid_actions": 12,
+      "valid_feedback": 194,
+      "alignment_sha256": "d8b385aa7909df76e1f3c6d050b78e8e68ff38e4179cee52e79c0c627e73e8b3",
+      "duration_s": 6.436,
+      "leading_null_targets": 182,
+      "max_gap_ms": 39.545,
+      "max_camera_skew_ms": 4.42,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        81,
+        119,
+        68,
+        168,
+        180,
+        193
+      ],
+      "gripper_feedback_span_mm": 0.2
+    },
+    {
+      "episode_id": "20261120_210345_68715",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 236,
+      "valid_actions": 226,
+      "valid_feedback": 236,
+      "alignment_sha256": "53972235704683f14fecf4923c4a5bc134732c3dff8765993d4b21ae86827f9f",
+      "duration_s": 7.84,
+      "leading_null_targets": 10,
+      "max_gap_ms": 37.531,
+      "max_camera_skew_ms": 6.599,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        98,
+        145,
+        162,
+        206,
+        235,
+        235
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        10,
+        235
+      ]
+    },
+    {
+      "episode_id": "20261120_210406_69002",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 334,
+      "valid_actions": 324,
+      "valid_feedback": 334,
+      "alignment_sha256": "e874b45ede057f0f891b40fadf861478c091e7ad3bd3569f59ce1e2725c245e8",
+      "duration_s": 11.101,
+      "leading_null_targets": 10,
+      "max_gap_ms": 35.892,
+      "max_camera_skew_ms": 17.752,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 25,
+      "max_held_step": {
+        "row": 309,
+        "axis": 4,
+        "degrees": 0.115,
+        "interval_ms": 33.509
+      },
+      "review_frames": [
+        0,
+        139,
+        206,
+        179,
+        279,
+        287,
+        333
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        10,
+        333
+      ]
+    },
+    {
+      "episode_id": "20261120_210425_69323",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 237,
+      "valid_actions": 224,
+      "valid_feedback": 237,
+      "alignment_sha256": "ae7e0e3c92cd8181889bd84c2fe6f926b76e5cec0cd983819419ff2211f0d48e",
+      "duration_s": 7.885,
+      "leading_null_targets": 13,
+      "max_gap_ms": 48.64,
+      "max_camera_skew_ms": 18.706,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        99,
+        146,
+        163,
+        211,
+        219,
+        236
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "additional_overhead_frame": 215
+    },
+    {
+      "episode_id": "20261120_210441_69594",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 316,
+      "valid_actions": 316,
+      "valid_feedback": 316,
+      "alignment_sha256": "90f44ba8211c99f6b2850a414356dcf0146709ebb6fbd5199e8d15e6d75a5a3c",
+      "duration_s": 10.502,
+      "leading_null_targets": 0,
+      "max_gap_ms": 34.742,
+      "max_camera_skew_ms": 17.462,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        132,
+        195,
+        185,
+        297,
+        305,
+        315
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        315
+      ]
+    },
+    {
+      "episode_id": "20261120_210500_69886",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 287,
+      "valid_actions": 287,
+      "valid_feedback": 287,
+      "alignment_sha256": "200bee83a740848297aacca5c4bb30fa746e648c58fbc87870bd302c1752ca43",
+      "duration_s": 9.539,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.882,
+      "max_camera_skew_ms": 10.264,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        120,
+        177,
+        163,
+        271,
+        279,
+        286
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        286
+      ]
+    },
+    {
+      "episode_id": "20261120_210521_70191",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 366,
+      "valid_actions": 348,
+      "valid_feedback": 366,
+      "alignment_sha256": "5ecffe95cd2e0a33a3f3d5c1b7be1c6f3eb71732d4b73758e70360d72c88668a",
+      "duration_s": 12.168,
+      "leading_null_targets": 18,
+      "max_gap_ms": 37.163,
+      "max_camera_skew_ms": 18.905,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        153,
+        226,
+        298,
+        354,
+        362,
+        365
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        18,
+        365
+      ]
+    },
+    {
+      "episode_id": "20261120_210542_70491",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 303,
+      "valid_actions": 285,
+      "valid_feedback": 303,
+      "alignment_sha256": "80a45f060d0eecf52c92f12a35454f41f4c8ff6d115c584db370606ca98f1de6",
+      "duration_s": 10.069,
+      "leading_null_targets": 18,
+      "max_gap_ms": 34.946,
+      "max_camera_skew_ms": 13.869,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        126,
+        187,
+        233,
+        301,
+        301,
+        302
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        18,
+        302
+      ]
+    },
+    {
+      "episode_id": "20261120_210559_70779",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 368,
+      "valid_actions": 368,
+      "valid_feedback": 368,
+      "alignment_sha256": "64dcca4aab138fe2d918cc70fea7b677d41475e2185bb148869b75182df8be85",
+      "duration_s": 12.252,
+      "leading_null_targets": 0,
+      "max_gap_ms": 47.24,
+      "max_camera_skew_ms": 19.699,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 2,
+      "max_held_step": {
+        "row": 7,
+        "axis": 1,
+        "degrees": 0.0,
+        "interval_ms": 33.417
+      },
+      "review_frames": [
+        0,
+        154,
+        227,
+        310,
+        350,
+        358,
+        367
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        367
+      ]
+    },
+    {
+      "episode_id": "20261120_210619_71079",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 303,
+      "valid_actions": 303,
+      "valid_feedback": 303,
+      "alignment_sha256": "edcd0cd4378eb09bf5284a449ad84f4ff313b816116431fe0398e84c4b4ab11c",
+      "duration_s": 10.073,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.93,
+      "max_camera_skew_ms": 10.695,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 3,
+      "max_held_step": {
+        "row": 18,
+        "axis": 4,
+        "degrees": 0.097,
+        "interval_ms": 33.107
+      },
+      "review_frames": [
+        0,
+        126,
+        187,
+        241,
+        281,
+        289,
+        302
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        302
+      ]
+    },
+    {
+      "episode_id": "20261120_210638_71368",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 368,
+      "valid_actions": 348,
+      "valid_feedback": 368,
+      "alignment_sha256": "a42d7e25b983274b39329ec9bb83681044b7dcef2642a3eb4a2b48e267657bd0",
+      "duration_s": 12.242,
+      "leading_null_targets": 20,
+      "max_gap_ms": 36.503,
+      "max_camera_skew_ms": 10.974,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 13,
+      "max_held_step": {
+        "row": 355,
+        "axis": 4,
+        "degrees": 0.115,
+        "interval_ms": 33.185
+      },
+      "review_frames": [
+        0,
+        154,
+        227,
+        210,
+        306,
+        314,
+        367
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        20,
+        367
+      ]
+    },
+    {
+      "episode_id": "20261120_210659_71669",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 298,
+      "valid_actions": 280,
+      "valid_feedback": 298,
+      "alignment_sha256": "de62f8a6a2606b6ccd4298496507b32b0fff17bb7d4f81584bae14170ad4ff56",
+      "duration_s": 9.902,
+      "leading_null_targets": 18,
+      "max_gap_ms": 35.319,
+      "max_camera_skew_ms": 12.95,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        124,
+        184,
+        151,
+        239,
+        247,
+        297
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        18,
+        297
+      ]
+    },
+    {
+      "episode_id": "20261120_210717_71958",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 281,
+      "valid_actions": 280,
+      "valid_feedback": 281,
+      "alignment_sha256": "37374e71d68d5efb30bd8f300eba3b2edebf35090bce82dff451dab458ae9d8d",
+      "duration_s": 9.336,
+      "leading_null_targets": 1,
+      "max_gap_ms": 36.851,
+      "max_camera_skew_ms": 3.535,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 1,
+      "max_held_step": {
+        "row": 10,
+        "axis": 4,
+        "degrees": 0.063,
+        "interval_ms": 33.538
+      },
+      "review_frames": [
+        0,
+        117,
+        173,
+        189,
+        273,
+        280,
+        280
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        1,
+        280
+      ]
+    },
+    {
+      "episode_id": "20261120_210734_72237",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 266,
+      "valid_actions": 250,
+      "valid_feedback": 266,
+      "alignment_sha256": "dbb393247756cfccaed68c47d57ec7fed083acdbf0928952c9eb9005c2330737",
+      "duration_s": 8.835,
+      "leading_null_targets": 16,
+      "max_gap_ms": 36.865,
+      "max_camera_skew_ms": 18.799,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        111,
+        164,
+        192,
+        244,
+        252,
+        265
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        16,
+        265
+      ]
+    },
+    {
+      "episode_id": "20261120_210750_72518",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 228,
+      "valid_actions": 228,
+      "valid_feedback": 228,
+      "alignment_sha256": "995e75a010b6e6ae828928189e0aeda5eb4edd0e51da1b42a765c04faf03f835",
+      "duration_s": 7.567,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.013,
+      "max_camera_skew_ms": 17.711,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 4,
+      "max_held_step": {
+        "row": 16,
+        "axis": 4,
+        "degrees": 0.043,
+        "interval_ms": 32.566
+      },
+      "review_frames": [
+        0,
+        95,
+        140,
+        144,
+        224,
+        224,
+        227
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        0,
+        227
+      ]
+    },
+    {
+      "episode_id": "20261120_210807_72791",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 319,
+      "valid_actions": 319,
+      "valid_feedback": 319,
+      "alignment_sha256": "fb123494ab130423a98d89bc3791b88407bdda5e57784f9e89c6e15ddc9935c7",
+      "duration_s": 10.602,
+      "leading_null_targets": 0,
+      "max_gap_ms": 34.763,
+      "max_camera_skew_ms": 14.701,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 2,
+      "max_held_step": {
+        "row": 25,
+        "axis": 4,
+        "degrees": 0.15,
+        "interval_ms": 33.013
+      },
+      "review_frames": [
+        0,
+        133,
+        197,
+        270,
+        306,
+        314,
+        318
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        318
+      ]
+    },
+    {
+      "episode_id": "20261120_210826_73085",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 287,
+      "valid_actions": 266,
+      "valid_feedback": 287,
+      "alignment_sha256": "b57cb542d3ebd471f5143ef2ec1c3a3965cbc50b7c32ff79020f35fcc3eceb0f",
+      "duration_s": 9.534,
+      "leading_null_targets": 21,
+      "max_gap_ms": 35.683,
+      "max_camera_skew_ms": 17.545,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        120,
+        177,
+        183,
+        183,
+        195,
+        286
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_review_frames": [
+        271,
+        274,
+        278
+      ],
+      "valid_action_range_inclusive": [
+        21,
+        286
+      ]
+    },
+    {
+      "episode_id": "20261120_210844_73374",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 235,
+      "valid_actions": 234,
+      "valid_feedback": 235,
+      "alignment_sha256": "cadfe7df10fa877efa73886105c22530224ac82b0ca8b47c5a2ace8c2cf4014b",
+      "duration_s": 7.817,
+      "leading_null_targets": 1,
+      "max_gap_ms": 47.253,
+      "max_camera_skew_ms": 19.909,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        98,
+        145,
+        174,
+        214,
+        222,
+        234
+      ],
+      "gripper_feedback_span_mm": 0.0,
+      "valid_action_range_inclusive": [
+        1,
+        234
+      ]
+    },
+    {
+      "episode_id": "20261120_210900_73645",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 238,
+      "valid_actions": 238,
+      "valid_feedback": 238,
+      "alignment_sha256": "22423e6e2d2ad6e731890ad1825707397df81bc4ab8ab7fb0da527d980a606fe",
+      "duration_s": 7.901,
+      "leading_null_targets": 0,
+      "max_gap_ms": 34.763,
+      "max_camera_skew_ms": 12.98,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        99,
+        146,
+        159,
+        219,
+        231,
+        237
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        237
+      ]
+    },
+    {
+      "episode_id": "20261120_210916_73916",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 287,
+      "valid_actions": 275,
+      "valid_feedback": 287,
+      "alignment_sha256": "df7e10bd0a974845326b28587e852632ac1cb96155e4847985a650bf8f588e41",
+      "duration_s": 9.551,
+      "leading_null_targets": 12,
+      "max_gap_ms": 48.948,
+      "max_camera_skew_ms": 18.914,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        120,
+        177,
+        247,
+        283,
+        283,
+        286
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        12,
+        286
+      ]
+    },
+    {
+      "episode_id": "20261120_210934_74204",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 241,
+      "valid_actions": 240,
+      "valid_feedback": 241,
+      "alignment_sha256": "bc6416cedec2aaa8459fef9d9c3ec2e49b2209e13408e55188fb956792a96b88",
+      "duration_s": 8.005,
+      "leading_null_targets": 1,
+      "max_gap_ms": 37.26,
+      "max_camera_skew_ms": 5.66,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        100,
+        148,
+        156,
+        212,
+        240,
+        240
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        1,
+        240
+      ]
+    },
+    {
+      "episode_id": "20261120_210950_74476",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 294,
+      "valid_actions": 293,
+      "valid_feedback": 294,
+      "alignment_sha256": "5ba9d5fd2b489227ab0e805fc1ec5b8a3f729428f90b6a90ad0405f96702d338",
+      "duration_s": 9.773,
+      "leading_null_targets": 1,
+      "max_gap_ms": 36.504,
+      "max_camera_skew_ms": 11.353,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        123,
+        181,
+        250,
+        293,
+        293,
+        293
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        1,
+        293
+      ]
+    },
+    {
+      "episode_id": "20261120_211008_74767",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 305,
+      "valid_actions": 283,
+      "valid_feedback": 305,
+      "alignment_sha256": "24b4b4e4d757ff161ce7c3c47ebc06d09e0108ab3f841750cdcc57fb3c6bdeac",
+      "duration_s": 10.152,
+      "leading_null_targets": 22,
+      "max_gap_ms": 48.866,
+      "max_camera_skew_ms": 18.386,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        127,
+        188,
+        257,
+        293,
+        301,
+        304
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        22,
+        304
+      ]
+    },
+    {
+      "episode_id": "20261120_211027_75062",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 394,
+      "valid_actions": 390,
+      "valid_feedback": 394,
+      "alignment_sha256": "cfc1fb0322146cdb742aba86c5915e39ce8262de6a08c37961491a1b8b32d16b",
+      "duration_s": 13.108,
+      "leading_null_targets": 4,
+      "max_gap_ms": 40.584,
+      "max_camera_skew_ms": 13.659,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 2,
+      "max_held_step": {
+        "row": 14,
+        "axis": 6,
+        "degrees": 0.114,
+        "interval_ms": 33.108
+      },
+      "review_frames": [
+        0,
+        165,
+        243,
+        299,
+        393,
+        393,
+        393
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        4,
+        393
+      ]
+    },
+    {
+      "episode_id": "20261120_211049_75368",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 301,
+      "valid_actions": 301,
+      "valid_feedback": 301,
+      "alignment_sha256": "aff5d52c5c35848725e34332826e357448ceacef10480b54069eda98c8629dc2",
+      "duration_s": 10.017,
+      "leading_null_targets": 0,
+      "max_gap_ms": 49.583,
+      "max_camera_skew_ms": 18.547,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        126,
+        186,
+        256,
+        288,
+        296,
+        300
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_overhead_frame": 288
+    },
+    {
+      "episode_id": "20261120_211109_75663",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 215,
+      "valid_actions": 204,
+      "valid_feedback": 215,
+      "alignment_sha256": "fb0695a1c64ee4ad4941e816c4af78febb4f9ba3a416bcb9c9dae615d8b8ced8",
+      "duration_s": 7.137,
+      "leading_null_targets": 11,
+      "max_gap_ms": 37.691,
+      "max_camera_skew_ms": 6.275,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        89,
+        132,
+        147,
+        203,
+        211,
+        214
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        11,
+        214
+      ]
+    },
+    {
+      "episode_id": "20261120_211139_75934",
+      "field_outcome": "success",
+      "assessment": "review_partial_start",
+      "pairs": 108,
+      "valid_actions": 108,
+      "valid_feedback": 108,
+      "alignment_sha256": "e9e5bb60cb8971cabcb5d276eb3986173ea2987464562732a2ae2dcbe7b40e9c",
+      "duration_s": 3.569,
+      "leading_null_targets": 0,
+      "max_gap_ms": 35.05,
+      "max_camera_skew_ms": 6.702,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        44,
+        66,
+        36,
+        92,
+        100,
+        107
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_review_frames": [
+        0,
+        9,
+        22,
+        91
+      ]
+    },
+    {
+      "episode_id": "20261120_211152_76252",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 314,
+      "valid_actions": 297,
+      "valid_feedback": 314,
+      "alignment_sha256": "2559cc02eace585bec74bd986446ece1c93dbcceb33a332ec6288c3fbca5c8c0",
+      "duration_s": 10.44,
+      "leading_null_targets": 17,
+      "max_gap_ms": 34.738,
+      "max_camera_skew_ms": 10.965,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        131,
+        194,
+        272,
+        304,
+        312,
+        313
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        17,
+        313
+      ]
+    },
+    {
+      "episode_id": "20261120_211211_76551",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 324,
+      "valid_actions": 315,
+      "valid_feedback": 324,
+      "alignment_sha256": "c50edf47f9e39f7e44c066e7b29760c0a34d52acf3e60272f842f192f11c33f7",
+      "duration_s": 10.783,
+      "leading_null_targets": 9,
+      "max_gap_ms": 47.001,
+      "max_camera_skew_ms": 19.935,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        135,
+        200,
+        220,
+        308,
+        316,
+        323
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "additional_overhead_frame": 304
+    },
+    {
+      "episode_id": "20261120_211230_76843",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 232,
+      "valid_actions": 231,
+      "valid_feedback": 232,
+      "alignment_sha256": "2e2f602bb6f9c2aea7d27e5842aca323c2f89e01ea1fb04408122759b0827d48",
+      "duration_s": 7.704,
+      "leading_null_targets": 1,
+      "max_gap_ms": 36.835,
+      "max_camera_skew_ms": 9.134,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        97,
+        143,
+        157,
+        225,
+        231,
+        231
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        1,
+        231
+      ]
+    },
+    {
+      "episode_id": "20261120_211246_77113",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 224,
+      "valid_actions": 224,
+      "valid_feedback": 224,
+      "alignment_sha256": "5fd02f185bd5f3b0257b124a5bd8a9504dd2b74b468ed7a68f56d700a5bd6b58",
+      "duration_s": 7.436,
+      "leading_null_targets": 0,
+      "max_gap_ms": 40.573,
+      "max_camera_skew_ms": 3.038,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        93,
+        138,
+        138,
+        138,
+        210,
+        223
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        0,
+        223
+      ]
+    },
+    {
+      "episode_id": "20261120_211302_77384",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 265,
+      "valid_actions": 248,
+      "valid_feedback": 265,
+      "alignment_sha256": "2044078777066711ca3d35b1e1ac489088ddba45f2f5234d0c43825f8fe69d8a",
+      "duration_s": 8.836,
+      "leading_null_targets": 17,
+      "max_gap_ms": 66.979,
+      "max_camera_skew_ms": 15.941,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        110,
+        163,
+        220,
+        256,
+        264,
+        264
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        17,
+        264
+      ]
+    },
+    {
+      "episode_id": "20261120_211319_77664",
+      "field_outcome": "success",
+      "assessment": "review_boundary",
+      "pairs": 199,
+      "valid_actions": 199,
+      "valid_feedback": 199,
+      "alignment_sha256": "ac02813a8dcc66009a2fa2a503b90d31c75042fdbe485d33af342b9a8f189799",
+      "duration_s": 6.604,
+      "leading_null_targets": 0,
+      "max_gap_ms": 37.833,
+      "max_camera_skew_ms": 7.222,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        83,
+        122,
+        126,
+        174,
+        182,
+        198
+      ],
+      "gripper_feedback_span_mm": 0.0,
+      "additional_overhead_frame": 173
+    },
+    {
+      "episode_id": "20261120_211334_77932",
+      "field_outcome": "success",
+      "assessment": "review_obscured_finish",
+      "pairs": 267,
+      "valid_actions": 250,
+      "valid_feedback": 267,
+      "alignment_sha256": "5e230d8ddbbbcb53bc7b1c1c9f82fbcb4646bc02fd8ef1655f52d1f589ed0c27",
+      "duration_s": 8.874,
+      "leading_null_targets": 17,
+      "max_gap_ms": 37.01,
+      "max_camera_skew_ms": 10.62,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        111,
+        164,
+        137,
+        137,
+        169,
+        266
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "additional_review_frames": [
+        165,
+        185,
+        210,
+        240,
+        266
+      ]
+    },
+    {
+      "episode_id": "20261120_211350_78207",
+      "field_outcome": "aborted",
+      "assessment": "exclude_aborted",
+      "pairs": 257,
+      "valid_actions": 223,
+      "valid_feedback": 257,
+      "alignment_sha256": "eab6b0cd07964d34e83f8235535217b68ea7c076d00a91c57fbd6ecd260977cf",
+      "duration_s": 8.551,
+      "leading_null_targets": 34,
+      "max_gap_ms": 49.688,
+      "max_camera_skew_ms": 18.431,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        107,
+        158,
+        209,
+        245,
+        253,
+        256
+      ],
+      "gripper_feedback_span_mm": 0.2
+    },
+    {
+      "episode_id": "20261120_211408_78491",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 255,
+      "valid_actions": 239,
+      "valid_feedback": 255,
+      "alignment_sha256": "7ad36b6d93bd7de9df6bf2a2608afc16cac7bf721042000488db76f942f14a3c",
+      "duration_s": 8.484,
+      "leading_null_targets": 16,
+      "max_gap_ms": 48.489,
+      "max_camera_skew_ms": 18.474,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 1
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        106,
+        157,
+        153,
+        237,
+        245,
+        254
+      ],
+      "gripper_feedback_span_mm": 0.0,
+      "valid_action_range_inclusive": [
+        16,
+        254
+      ]
+    },
+    {
+      "episode_id": "20261120_211426_78776",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 260,
+      "valid_actions": 257,
+      "valid_feedback": 260,
+      "alignment_sha256": "7317eaee65212f3ab1a23bb58bec62c2207a57f52221409dc8a433dd9997cdae",
+      "duration_s": 8.639,
+      "leading_null_targets": 3,
+      "max_gap_ms": 37.076,
+      "max_camera_skew_ms": 6.107,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 7,
+      "max_held_step": {
+        "row": 14,
+        "axis": 6,
+        "degrees": 0.116,
+        "interval_ms": 33.857
+      },
+      "review_frames": [
+        0,
+        108,
+        160,
+        174,
+        242,
+        250,
+        259
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        3,
+        259
+      ]
+    },
+    {
+      "episode_id": "20261120_211443_79053",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 299,
+      "valid_actions": 295,
+      "valid_feedback": 299,
+      "alignment_sha256": "7b4788465de05e32dd26f0812d5fbfd543d08307a137c035ad4a1221ac61ceef",
+      "duration_s": 9.935,
+      "leading_null_targets": 4,
+      "max_gap_ms": 35.331,
+      "max_camera_skew_ms": 18.347,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        125,
+        184,
+        259,
+        298,
+        298,
+        298
+      ],
+      "gripper_feedback_span_mm": 0.1,
+      "valid_action_range_inclusive": [
+        4,
+        298
+      ]
+    },
+    {
+      "episode_id": "20261120_211501_79339",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 245,
+      "valid_actions": 244,
+      "valid_feedback": 245,
+      "alignment_sha256": "6fdec25c49a41336cb8a92f2446f76544e2898d4e961707ee0489f4ba8f6aaa6",
+      "duration_s": 8.135,
+      "leading_null_targets": 1,
+      "max_gap_ms": 37.61,
+      "max_camera_skew_ms": 5.764,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        102,
+        151,
+        157,
+        225,
+        233,
+        244
+      ],
+      "gripper_feedback_span_mm": 0.0,
+      "valid_action_range_inclusive": [
+        1,
+        244
+      ]
+    },
+    {
+      "episode_id": "20261120_211519_79614",
+      "field_outcome": "success",
+      "assessment": "candidate",
+      "pairs": 257,
+      "valid_actions": 238,
+      "valid_feedback": 257,
+      "alignment_sha256": "6e1e4a36af362c25b06afa1fbb51ce7b81fa7627cd16d08e95a994d3f671ae68",
+      "duration_s": 8.536,
+      "leading_null_targets": 19,
+      "max_gap_ms": 35.873,
+      "max_camera_skew_ms": 3.239,
+      "camera_skips": {
+        "overhead": 0,
+        "wrist": 0
+      },
+      "six_axis_hold_sample_count": 0,
+      "max_held_step": null,
+      "review_frames": [
+        0,
+        107,
+        158,
+        185,
+        233,
+        256,
+        256
+      ],
+      "gripper_feedback_span_mm": 0.2,
+      "valid_action_range_inclusive": [
+        19,
+        256
+      ]
+    }
+  ]
+}
