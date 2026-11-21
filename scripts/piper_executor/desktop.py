@@ -96,7 +96,11 @@ class Panel:
         else: self.root.destroy()
 
     def show(self,msg):
-        if "log" in msg: self.log.set("本轮日志  "+msg["log"])
+        if "log" in msg:
+            label="本轮日志  "+msg["log"]
+            if "capture_dir" in msg:
+                label+="\n双相机同步记录  "+msg["capture_dir"]+"/inputs.jsonl"
+            self.log.set(label)
         if "active" in msg:
             self.active=msg["active"]
             if self.active: self.pending=False

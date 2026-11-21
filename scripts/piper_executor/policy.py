@@ -10,6 +10,17 @@ from tokenizers import Tokenizer
 BEST = "cadfb14f1ee513f42ad7b68169f1a12f23dfcd675273a15387c572eb3b840d22"
 
 
+def prepare_views(images):
+    if len(images) != 2 or any(im.shape != (480,640,3) or im.dtype != np.uint8 for im in images):
+        raise ValueError("需要 640×480 的俯视和腕部 BGR 图像")
+    pixels = []
+    for image in images:
+        small = cv2.resize(image, (224,168), interpolation=cv2.INTER_AREA)
+        rgb = cv2.cvtColor(small, cv2.COLOR_BGR2RGB)
+        pixels.append(cv2.copyMakeBorder(rgb,28,28,0,0,cv2.BORDER_CONSTANT,value=(123,117,104)))
+    return np.stack(pixels)
+
+
 class Predictor:
     def __init__(self, work, task):
         run = work / "offline_training/b123_goal_v1"
@@ -33,18 +44,14 @@ class Predictor:
         self.tag = torch.tensor([task], device="cuda")
         self.history = deque(maxlen=HISTORY)
 
-    @torch.inference_mode()
     def predict(self, images, feedback):
-        if len(images) != 2 or any(im.shape != (480,640,3) or im.dtype != np.uint8 for im in images):
-            raise ValueError("需要 640×480 的俯视和腕部 BGR 图像")
+        return self.predict_pixels(prepare_views(images),feedback)
+
+    @torch.inference_mode()
+    def predict_pixels(self, pixels, feedback):
         if len(feedback) != 7 or not np.isfinite(feedback).all():
             raise ValueError("反馈无效")
-        pixels = []
-        for image in images:
-            small = cv2.resize(image, (224,168), interpolation=cv2.INTER_AREA)
-            rgb = cv2.cvtColor(small, cv2.COLOR_BGR2RGB)
-            pixels.append(cv2.copyMakeBorder(rgb,28,28,0,0,cv2.BORDER_CONSTANT,value=(123,117,104)))
-        x = torch.from_numpy(np.stack(pixels)).cuda().permute(0,3,1,2).float()/255
+        x = torch.from_numpy(pixels).cuda().permute(0,3,1,2).float()/255
         f = self.front
         with torch.autocast("cuda", dtype=torch.bfloat16):
             v = f.vision(pixel_values=(x-f.mean)/f.std).pooler_output

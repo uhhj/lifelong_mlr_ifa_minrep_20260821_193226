@@ -108,11 +108,14 @@ class State:
                 self.pending = []
 
     def observation(self, stamp):
+        return self.observation_sample(stamp)[0]
+
+    def observation_sample(self, stamp):
         j=next((x for x in reversed(self.joints) if x[0]<=stamp),None)
         g=next((x for x in reversed(self.widths) if x[0]<=stamp),None)
         if j and g and stamp-min(j[1],g[0])<=60_000_000:
-            return j[2]+[g[1]]
-        return None
+            return j[2]+[g[1]],dict(joint_first_ns=j[1],joint_last_ns=j[0],gripper_ns=g[0])
+        return None,None
 
     def mode_ok(self):
         if not self.status: return False

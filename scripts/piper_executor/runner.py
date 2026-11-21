@@ -42,7 +42,7 @@ def next_pair(cameras, previous):
     return None
 
 
-def infer(link, task):
+def infer(link, task, capture_dir):
     sys.path.insert(0,str(SYNC))
     from cameras import CameraStream, configured_cameras
     from policy import Predictor
@@ -56,30 +56,46 @@ def infer(link, task):
             cam=CameraStream(conf[role])
             clean.callback(cam.close)
             cameras.append(cam)
-        previous=(0,0)
-        last=0
+        archive=None
+        if task==0:
+            from capture import FrameArchive
+            archive=clean.enter_context(FrameArchive(capture_dir))
+        infer_loop(link,cameras,model,archive)
+
+
+def infer_loop(link,cameras,model,archive):
+    from policy import prepare_views
+    previous=(0,0)
+    last=0
+    last_pair=time.monotonic()
+    while True:
+        pair=next_pair(cameras,previous)
+        if not pair:
+            if time.monotonic()-last_pair>3:
+                raise RuntimeError("双相机连续 3 秒无同步图像，请关闭占用相机的录制台")
+            time.sleep(.002)
+            continue
         last_pair=time.monotonic()
-        while True:
-            pair=next_pair(cameras,previous)
-            if not pair:
-                if time.monotonic()-last_pair>3:
-                    raise RuntimeError("双相机连续 3 秒无同步图像，请关闭占用相机的录制台")
-                time.sleep(.002)
-                continue
-            last_pair=time.monotonic()
-            previous=tuple(f["sequence"] for f in pair)
-            stamp=max(f["host_monotonic_ns"] for f in pair)
-            if not 0<=time.monotonic_ns()-stamp<=FRESH_NS:
-                continue
-            send(link,dict(op="query",stamp=stamp))
-            q=receive(link)["q"]
-            if q is None:
-                model.history.clear()
-                continue
-            if stamp-last>70_000_000: model.history.clear()
-            last=stamp
+        previous=tuple(f["sequence"] for f in pair)
+        stamp=max(f["host_monotonic_ns"] for f in pair)
+        if not 0<=time.monotonic_ns()-stamp<=FRESH_NS:
+            continue
+        send(link,dict(op="query",stamp=stamp))
+        query=receive(link)
+        q=query["q"]
+        if q is None:
+            model.history.clear()
+            continue
+        if stamp-last>70_000_000: model.history.clear()
+        last=stamp
+        refs={}
+        if archive:
+            pixels=prepare_views([f["image"] for f in pair])
+            pred,paths=archive.predict(model,pair,pixels,query,stamp)
+            refs=dict(images=paths,feedback_ns=query["feedback_ns"])
+        else:
             pred=model.predict([f["image"] for f in pair],q)
-            send(link,dict(op="predict",stamp=stamp,q=q,p=pred,full=len(model.history)==8))
+        send(link,dict(op="predict",stamp=stamp,q=q,p=pred,full=len(model.history)==8,**refs))
 
 
 class Session:
@@ -92,6 +108,7 @@ class Session:
         self.started=0
         self.last_sent=0
         self.previous=None
+        self.interrupted_send=None
 
     def watchdog(self,now):
         if not self.state.active: return
@@ -126,9 +143,23 @@ class Session:
             self.watchdog(now)
             if stamp < self.started:
                 return
-            measured=self.state.observation(now)
+            measured,measured_ns=self.state.observation_sample(now)
             target=bounded_target(msg["p"],measured,self.previous,(now-self.last_sent)/NS)
-            for cid,data in target_frames(target): self.send_frame(cid,data)
+            if "images" in msg:
+                dispatch=dict(measured_at_send_ns=measured_ns,send_started_ns=time.monotonic_ns(),sent_ids=[])
+                self.interrupted_send=dict(row,event="send_interrupted",mode="execute",attempted=target,
+                                           measured_at_send=measured,**dispatch)
+            try:
+                for cid,data in target_frames(target):
+                    self.send_frame(cid,data)
+                    if self.interrupted_send: dispatch["sent_ids"].append(cid)
+            except OSError:
+                if self.interrupted_send:
+                    self.interrupted_send["send_failed_ns"]=time.monotonic_ns()
+                raise
+            if self.interrupted_send:
+                row.update(dispatch,send_finished_ns=time.monotonic_ns())
+                self.interrupted_send=None
             self.previous=target
             self.last_sent=now
             row.update(mode="execute",sent=target,measured_at_send=measured)
@@ -154,11 +185,20 @@ def guard(ui, task, python):
         def log(row):
             file.write(json.dumps(row,ensure_ascii=False,allow_nan=False)+"\n")
         session=Session(state,bus.send,log,now)
-        log(dict(event="preview",task=TASKS[task],wall_ns=time.time_ns(),mono_ns=now))
+        capture_dir=path.with_suffix("") if task==0 else None
+        capture_info=dict(capture_dir=capture_dir.name) if capture_dir else {}
+        header=dict(event="preview",task=TASKS[task],wall_ns=time.time_ns(),mono_ns=now,**capture_info)
+        if capture_dir:
+            header["capture_format"]=dict(version=1,clock="CLOCK_MONOTONIC",camera_stamp="host_delivery",
+                                          view_order=["external","wrist"],model_view="224x224 RGB uint8 PNG",
+                                          scene_view="640x480 JPEG",joint_unit="rad",gripper_unit="mm")
+        log(header)
         a,b=socket.socketpair(type=socket.SOCK_SEQPACKET)
         clean.callback(a.close)
         with b:
-            proc=subprocess.Popen([python,"-B",str(HERE/"runner.py"),"infer",str(b.fileno()),str(task)],
+            args=[python,"-B",str(HERE/"runner.py"),"infer",str(b.fileno()),str(task)]
+            if capture_dir: args.extend(["--capture-dir",str(capture_dir)])
+            proc=subprocess.Popen(args,
                                   pass_fds=(b.fileno(),),env=dict(os.environ,HF_HUB_OFFLINE="1",TRANSFORMERS_OFFLINE="1"))
         def reap():
             if proc.poll() is None:
@@ -174,7 +214,7 @@ def guard(ui, task, python):
         last_wait=0
         ui.setblocking(False)
         try:
-            send(ui,dict(text="正在载入模型，等待双相机及从臂反馈",log=path.name))
+            send(ui,dict(text="正在载入模型，等待双相机及从臂反馈",log=path.name,**capture_info))
             while True:
                 ready=select.select([ui,a,bus.sock],[],[],.015)[0]
                 bus.drain(state)
@@ -203,8 +243,8 @@ def guard(ui, task, python):
                     if msg["op"]=="query":
                         stamp=msg["stamp"]
                         session.requested=stamp
-                        q=state.observation(stamp) if 0<=now-stamp<=FRESH_NS else None
-                        send(a,dict(q=q))
+                        q,feedback_ns=state.observation_sample(stamp) if 0<=now-stamp<=FRESH_NS else (None,None)
+                        send(a,dict(q=q,feedback_ns=feedback_ns,mode_at_query="execute" if state.active else "preview"))
                         if q is None and not state.active and now-last_wait>NS:
                             send(ui,dict(text="已收到双相机画面，等待同期的六轴和夹爪反馈"))
                             last_wait=now
@@ -233,6 +273,7 @@ def guard(ui, task, python):
                 except Exception as e:
                     result+=f"；STOP 未确认，请现场立即使用独立急停：{e}"
                     outcome="aborted"
+            if session.interrupted_send: log(session.interrupted_send)
             log(dict(event="end",outcome=outcome if was_active else "preview",detail=result,mono_ns=time.monotonic_ns()))
             try: send(ui,dict(done=True,text=result))
             except OSError: pass
@@ -244,10 +285,11 @@ if __name__=="__main__":
     parser.add_argument("fd",type=int)
     parser.add_argument("task",type=int,choices=range(3))
     parser.add_argument("python",nargs="?")
+    parser.add_argument("--capture-dir",type=Path)
     args=parser.parse_args()
     with socket.socket(fileno=args.fd) as link:
         try:
-            if args.role=="infer": infer(link,args.task)
+            if args.role=="infer": infer(link,args.task,args.capture_dir)
             else: guard(link,args.task,args.python)
         except Exception as e:
             try: send(link,dict(op="error",text=str(e),done=True))
