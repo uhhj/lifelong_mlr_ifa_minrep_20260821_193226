@@ -1,0 +1,434 @@
+{
+  "task": "B1 左侧蓝碟抓放",
+  "start": "2026-11-21T16:04:14.621+08:00",
+  "end": "2026-11-21T16:04:28.216+08:00",
+  "seconds": 13.595,
+  "count": 406,
+  "field_outcome": "failure",
+  "runner_outcome": "aborted",
+  "detail": "CAN 错误帧或截断；STOP 未确认，请现场立即使用独立急停：CAN 错误帧或截断",
+  "matched_commands_by_id": {
+    "0x155": {
+      "count": 406,
+      "match": true
+    },
+    "0x156": {
+      "count": 406,
+      "match": true
+    },
+    "0x157": {
+      "count": 406,
+      "match": true
+    },
+    "0x159": {
+      "count": 406,
+      "match": true
+    }
+  },
+  "gripper_mm": [
+    65.8,
+    68.9,
+    69.2
+  ],
+  "max_pair_gap_ms": 34.579,
+  "max_prediction_age_ms": 38.032,
+  "negative_j1_prediction_residual_frames": 385,
+  "crossings_s": {
+    "1": {
+      "p": 0.353,
+      "sent": 0.353,
+      "measured_at_send": 0.421
+    },
+    "5": {
+      "p": 1.819,
+      "sent": 1.819,
+      "measured_at_send": 1.885
+    },
+    "10": {
+      "p": 2.42,
+      "sent": 2.42,
+      "measured_at_send": 2.456
+    },
+    "30": {
+      "p": 5.357,
+      "sent": 5.357,
+      "measured_at_send": 5.389
+    },
+    "60": {
+      "p": 10.827,
+      "sent": 10.827,
+      "measured_at_send": 10.861
+    }
+  },
+  "xyz_limits_mm": {
+    "x": [
+      26.421,
+      225.425
+    ],
+    "y": [
+      -350.081,
+      0.0
+    ],
+    "z": [
+      199.359,
+      362.155
+    ]
+  },
+  "xyz_initial_mm": {
+    "x": 72.508,
+    "y": 0.0,
+    "z": 270.688
+  },
+  "xyz_final_mm": {
+    "x": 26.544,
+    "y": -349.945,
+    "z": 200.817
+  },
+  "examples": [
+    {
+      "t_s": 0.053,
+      "xyz_mm": {
+        "x": 72.508,
+        "y": 0.0,
+        "z": 270.688
+      },
+      "raw_j1_deg": -0.059,
+      "sent_j1_deg": -0.059,
+      "measured_j1_deg": 0.0,
+      "raw_grip_mm": 66.695
+    },
+    {
+      "t_s": 3.019,
+      "xyz_mm": {
+        "x": 88.31,
+        "y": -22.852,
+        "z": 330.579
+      },
+      "raw_j1_deg": -10.761,
+      "sent_j1_deg": -10.761,
+      "measured_j1_deg": -10.809,
+      "raw_grip_mm": 67.961
+    },
+    {
+      "t_s": 5.02,
+      "xyz_mm": {
+        "x": 160.217,
+        "y": -75.023,
+        "z": 310.204
+      },
+      "raw_j1_deg": -26.75,
+      "sent_j1_deg": -26.75,
+      "measured_j1_deg": -25.666,
+      "raw_grip_mm": 69.861
+    },
+    {
+      "t_s": 10.025,
+      "xyz_mm": {
+        "x": 178.908,
+        "y": -271.567,
+        "z": 234.511
+      },
+      "raw_j1_deg": -54.26,
+      "sent_j1_deg": -54.26,
+      "measured_j1_deg": -54.051,
+      "raw_grip_mm": 69.04
+    },
+    {
+      "t_s": 13.561,
+      "xyz_mm": {
+        "x": 27.207,
+        "y": -349.948,
+        "z": 201.402
+      },
+      "raw_j1_deg": -83.835,
+      "sent_j1_deg": -83.835,
+      "measured_j1_deg": -83.298,
+      "raw_grip_mm": 67.205
+    }
+  ],
+  "b1_reference": {
+    "n": 50,
+    "per_episode_min_j1": [
+      -59.865,
+      -27.057,
+      0.21
+    ],
+    "per_episode_max_j1": [
+      6.068,
+      16.507,
+      29.068
+    ],
+    "per_episode_min_grip": [
+      29.5,
+      38.6,
+      42.8
+    ],
+    "final_j1": [
+      -15.743,
+      0.329,
+      15.894
+    ],
+    "grip_drop_from_start": [
+      0.0,
+      28.5,
+      50.3
+    ],
+    "field_first_below_all_j1_s": 10.861,
+    "min_expert_target_j1": -60.128,
+    "field_target_first_below_all_target_j1_s": 10.827,
+    "phase": {
+      "1": {
+        "delta_j1": [
+          -31.872,
+          -0.021,
+          9.761
+        ],
+        "negative": 25,
+        "n": 50
+      },
+      "2": {
+        "delta_j1": [
+          -46.337,
+          -13.273,
+          13.045
+        ],
+        "negative": 41,
+        "n": 50
+      },
+      "3": {
+        "delta_j1": [
+          -55.79,
+          -21.006,
+          11.622
+        ],
+        "negative": 41,
+        "n": 50
+      },
+      "5": {
+        "delta_j1": [
+          -56.965,
+          5.939,
+          32.705
+        ],
+        "negative": 22,
+        "n": 50
+      }
+    },
+    "five_nearest_start_phase": {
+      "1": {
+        "delta_j1": [
+          -13.619,
+          0.0,
+          0.0
+        ],
+        "negative": 2,
+        "n": 5
+      },
+      "2": {
+        "delta_j1": [
+          -25.052,
+          -9.536,
+          -1.327
+        ],
+        "negative": 5,
+        "n": 5
+      },
+      "3": {
+        "delta_j1": [
+          -25.052,
+          -11.028,
+          -10.409
+        ],
+        "negative": 5,
+        "n": 5
+      },
+      "5": {
+        "delta_j1": [
+          -17.569,
+          6.842,
+          13.179
+        ],
+        "negative": 1,
+        "n": 5
+      }
+    }
+  },
+  "b2_reference": {
+    "n": 50,
+    "per_episode_min_j1": [
+      -61.72,
+      -40.434,
+      -30.369
+    ],
+    "per_episode_max_j1": [
+      -19.41,
+      -2.768,
+      14.727
+    ],
+    "per_episode_min_grip": [
+      1.1,
+      8.1,
+      40.4
+    ],
+    "final_j1": [
+      -38.348,
+      -16.111,
+      7.374
+    ],
+    "grip_drop_from_start": [
+      0.0,
+      43.35,
+      82.9
+    ],
+    "field_first_below_all_j1_s": 11.062,
+    "min_expert_target_j1": -61.971,
+    "field_target_first_below_all_target_j1_s": 11.062,
+    "phase": {
+      "1": {
+        "delta_j1": [
+          -53.799,
+          -13.846,
+          10.938
+        ],
+        "negative": 35,
+        "n": 50
+      },
+      "2": {
+        "delta_j1": [
+          -58.524,
+          -31.004,
+          20.026
+        ],
+        "negative": 39,
+        "n": 50
+      },
+      "3": {
+        "delta_j1": [
+          -59.761,
+          -33.889,
+          26.102
+        ],
+        "negative": 39,
+        "n": 50
+      },
+      "5": {
+        "delta_j1": [
+          -62.923,
+          -32.989,
+          27.799
+        ],
+        "negative": 47,
+        "n": 50
+      }
+    },
+    "five_nearest_start_phase": {
+      "1": {
+        "delta_j1": [
+          -13.002,
+          -0.95,
+          0.318
+        ],
+        "negative": 4,
+        "n": 5
+      },
+      "2": {
+        "delta_j1": [
+          -52.908,
+          -30.106,
+          0.318
+        ],
+        "negative": 4,
+        "n": 5
+      },
+      "3": {
+        "delta_j1": [
+          -59.761,
+          -31.513,
+          0.318
+        ],
+        "negative": 4,
+        "n": 5
+      },
+      "5": {
+        "delta_j1": [
+          -62.923,
+          -31.513,
+          -27.544
+        ],
+        "negative": 5,
+        "n": 5
+      }
+    }
+  },
+  "held_out_teacher_forced": {
+    "episodes": 10,
+    "frames": 3145,
+    "j1_cut_deg": 0.5,
+    "grip_cut_mm": 5,
+    "joint_mae_deg": 0.6679,
+    "gripper_mae_mm": 5.9967,
+    "classes": {
+      "j1_positive": {
+        "selected_frames": 361,
+        "same_direction": 335,
+        "reaches_cut": 289,
+        "median_expert": 2.206,
+        "median_predicted": 1.779
+      },
+      "j1_negative": {
+        "selected_frames": 391,
+        "same_direction": 375,
+        "reaches_cut": 312,
+        "median_expert": -1.942,
+        "median_predicted": -1.384
+      },
+      "close_grip": {
+        "selected_frames": 1231,
+        "same_direction": 1017,
+        "reaches_cut": 854,
+        "median_expert": -13.0,
+        "median_predicted": -16.535
+      },
+      "open_grip": {
+        "selected_frames": 179,
+        "same_direction": 116,
+        "reaches_cut": 40,
+        "median_expert": 12.5,
+        "median_predicted": 0.829
+      }
+    }
+  },
+  "stop": {
+    "first_error": "2026-11-21T16:04:28.212+08:00",
+    "first_error_class_data": [
+      "0xc",
+      "0000040000000001"
+    ],
+    "local_stop_echo": "2026-11-21T16:04:28.213+08:00",
+    "first_status_after_stop": "2026-11-21T16:04:39.302+08:00",
+    "stop_feedback_within_60s": null,
+    "first_drive_status_after_return": {
+      "5": 0,
+      "4": 0,
+      "3": 0,
+      "2": 0,
+      "1": 0,
+      "6": 0
+    },
+    "error_classes_pre_run_during_run_first_500ms_rest_60s": [
+      {},
+      {
+        "0xc": 1,
+        "0x24": 10,
+        "0x4": 5
+      },
+      {
+        "0x24": 2524
+      },
+      {
+        "0x24": 2511,
+        "0x4": 2
+      }
+    ]
+  }
+}
