@@ -1,0 +1,64 @@
+--- a/agilex_arm.py
++++ b/agilex_arm.py
+@@ -131 +131 @@
+-            state.widths.append((stamp, g.grippers_val/1000, code))
++            state.widths.append((stamp, g.grippers_val/1000, code, g.grippers_effort/1000))
+--- a/bus.py
++++ b/bus.py
+@@ -71 +71 @@
+-def bounded_target(prediction, measured, previous, dt, *, b3_tracking=False, reductions=None):
++def bounded_target(prediction, measured, previous, dt, *, b3_tracking=False, reductions=None, supervised_close=False):
+@@ -82 +82,2 @@
+-        if outside or gap > tracking:
++        supervised = i == 6 and supervised_close and 0 <= q - last <= 14
++        if outside or (gap > tracking and not supervised):
+--- a/runner.py
++++ b/runner.py
+@@ -17,0 +18 @@
++from grip_window import BUNDLE, GripWindow, telemetry_at
+@@ -117,0 +119,2 @@
++            if "gripper_feedback" in query:
++                refs["gripper_at_image"] = query["gripper_feedback"]
+@@ -119,0 +123,2 @@
++        if getattr(model, 'trace', None):
++            refs['grip_plan_phase'] = model.trace.get('alignment', {}).get('phase')
+@@ -137,0 +143,2 @@
++        self.grip_window = GripWindow() if profile and profile.get('sha256') == BUNDLE else None
++        self.grip_diagnostics = None
+@@ -145,0 +153,2 @@
++        if self.grip_window:
++            self.grip_window.check_time(now)
+@@ -189,0 +199,11 @@
++            request = msg["p"]
++            supervised = False
++            if self.grip_window:
++                stamp_at_send = measured_ns["gripper_ns"]
++                frame = telemetry_at(self.state.widths, stamp_at_send)
++                self.grip_diagnostics = dict(feedback=frame, mono_ns=now, prediction_mm=request[6],
++                                             previous_sent_mm=self.previous[6], phase=self.grip_window.phase)
++                request, supervised = self.grip_window.resolve(
++                    now, stamp_at_send, self.state.widths, request, self.previous, msg.get("grip_plan_phase"))
++                self.grip_diagnostics.update(phase=self.grip_window.phase, deadline_ns=self.grip_window.deadline)
++                row["gripper_control"] = self.grip_diagnostics
+@@ -191,2 +211,2 @@
+-                target=bounded_target(msg["p"],measured,self.previous,(now-self.last_sent)/NS,
+-                                      b3_tracking=self.b3_tracking,reductions=reductions)
++                target=bounded_target(request,measured,self.previous,(now-self.last_sent)/NS,
++                                      b3_tracking=self.b3_tracking,reductions=reductions,supervised_close=supervised)
+@@ -251,0 +272,2 @@
++        if session.grip_window:
++            header["gripper_control"] = "B1 bounded close v1"
+@@ -331,0 +354,2 @@
++                        if session.grip_window and feedback_ns:
++                            query["gripper_feedback"] = telemetry_at(state.widths,feedback_ns["gripper_ns"])
+@@ -357,0 +382,6 @@
++                            if state.active and session.grip_window:
++                                label = {"waiting":"保持六轴，等待夹爪闭合或接触",
++                                         "holding":"夹持反馈已确认",
++                                         "releasing":"正在张开夹爪"}.get(session.grip_window.phase)
++                                if label:
++                                    display["text"] = label
+@@ -387,0 +418,3 @@
++            if was_active and session.grip_diagnostics:
++                log(dict(event="gripper_end", last_check=session.grip_diagnostics,
++                         final_phase=session.grip_window.phase, detail=result))
