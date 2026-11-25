@@ -1,0 +1,126 @@
+{
+ "training": {
+  "B1": {
+   "episodes": 50,
+   "action_rows": 9731
+  },
+  "B2": {
+   "episodes": 50,
+   "action_rows": 15074
+  },
+  "B3": {
+   "episodes": 50,
+   "action_rows": 13631
+  }
+ },
+ "training_episodes": 150,
+ "validation_episodes": 0,
+ "recapture_success_count": 84,
+ "recapture_selected_count": 50,
+ "recapture_failures": 7,
+ "old_base_sha256": "cadfb14f1ee513f42ad7b68169f1a12f23dfcd675273a15387c572eb3b840d22",
+ "manifest_sha256": "be50f341070318e450b62e861ff6a2a56580a69d467a59b1847a83892826e9a5",
+ "finished": {
+  "epochs": 12,
+  "rows_per_epoch": 38436,
+  "updates": 3612,
+  "checkpoint_sha256": "753253dddc07136462b3b6f8ba5dac612106611b8dff1b1ddae6095570183300",
+  "selection": "fixed final epoch",
+  "validation_episodes": 0
+ },
+ "verification": {
+  "final_sha256": "753253dddc07136462b3b6f8ba5dac612106611b8dff1b1ddae6095570183300",
+  "raw_training_windows": [
+   {
+    "task": "B1",
+    "episode": "20261123_210315_1378679",
+    "row": 135,
+    "joint_mae_deg": 0.23342503607273102,
+    "gripper_mae_mm": 4.3359527587890625
+   },
+   {
+    "task": "B2",
+    "episode": "20261120_165700_4177037",
+    "row": 140,
+    "joint_mae_deg": 0.6162059903144836,
+    "gripper_mae_mm": 1.598358154296875
+   },
+   {
+    "task": "B3",
+    "episode": "20261120_205307_57431",
+    "row": 174,
+    "joint_mae_deg": 0.3422664403915405,
+    "gripper_mae_mm": 0.605902373790741
+   }
+  ],
+  "training_metrics": {
+   "B1": {
+    "rows": 9731,
+    "nll": -5.044172913868176,
+    "normalized_mae": 0.13322356146955622,
+    "joint_mae_deg": 0.23614858244767353,
+    "gripper_mae_mm": 3.6101383459726053,
+    "hold_joint_mae_deg": 0.7473596071680877,
+    "hold_gripper_mae_mm": 9.12089180076567
+   },
+   "B2": {
+    "rows": 15074,
+    "nll": -2.240697464165391,
+    "normalized_mae": 0.22358345026930052,
+    "joint_mae_deg": 0.4341143626372665,
+    "gripper_mae_mm": 4.3420541322213895,
+    "hold_joint_mae_deg": 1.2741990234630831,
+    "hold_gripper_mae_mm": 20.06162297796852
+   },
+   "B3": {
+    "rows": 13631,
+    "nll": -2.386409719467303,
+    "normalized_mae": 0.22005653930562197,
+    "joint_mae_deg": 0.49998382963872423,
+    "gripper_mae_mm": 0.2999161033302941,
+    "hold_joint_mae_deg": 1.500159509822214,
+    "hold_gripper_mae_mm": 8.289818525926513
+   }
+  },
+  "training_macro_normalized_mae": 0.19228785034815957,
+  "scope": "training-set fit and checkpoint reload"
+ },
+ "smoke": [
+  {
+   "task": "B1",
+   "nll": 7.502778053283691,
+   "gradient_norm": 27.368356704711914,
+   "head_update": 0.00010004639625549316,
+   "examples": [
+    "20261123_210315_1378679",
+    "20261123_210337_1378679"
+   ],
+   "history": 8,
+   "views": 2
+  },
+  {
+   "task": "B2",
+   "nll": 12.326238632202148,
+   "gradient_norm": 52.96535873413086,
+   "head_update": 0.00010017678141593933,
+   "examples": [
+    "20261120_165700_4177037",
+    "20261120_170424_4180130"
+   ],
+   "history": 8,
+   "views": 2
+  },
+  {
+   "task": "B3",
+   "nll": 5.204545974731445,
+   "gradient_norm": 17.235652923583984,
+   "head_update": 0.00010034441947937012,
+   "examples": [
+    "20261120_205307_57431",
+    "20261120_205341_60430"
+   ],
+   "history": 8,
+   "views": 2
+  }
+ ]
+}

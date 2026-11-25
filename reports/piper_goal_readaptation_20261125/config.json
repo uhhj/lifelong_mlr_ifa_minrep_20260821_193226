@@ -1,0 +1,63 @@
+{
+ "seed": 42,
+ "history": 8,
+ "epochs": 12,
+ "batch_size": 128,
+ "learning_rate": 0.0001,
+ "checkpoint_sha256": "241d3370acfc04d694df04256956a97aa13cfdc2e651cf258d338f8e72988be7",
+ "tokenizer_sha256": "a83e0809aa4c3af7208b2df632a7a69668c6d48775b3c3fe4e1b1199d1f8b8f4",
+ "script_sha256": "652142c7c2efcf4060c328ef46a26073fa6e5abcd841bfc5d4a25d791f4bf358",
+ "adapter_sha256": "928fdb775859b103e9738c7c4cd9a571388e7e1bc0ba05f47e244b4eadc0c8cc",
+ "manifest_sha256": "be50f341070318e450b62e861ff6a2a56580a69d467a59b1847a83892826e9a5",
+ "normalization": {
+  "q_mean": [
+   -0.35567523866144085,
+   1.3722048403290013,
+   -0.9847823985864217,
+   0.011033881097981695,
+   0.9398873375951962,
+   -0.27886304146500096,
+   33.12831994570161
+  ],
+  "q_std": [
+   0.45530366590873395,
+   0.5171330626821146,
+   0.4082059363235112,
+   0.36697362091500324,
+   0.27060910926810816,
+   0.596958499173516,
+   24.327175332296623
+  ],
+  "delta_mean": [
+   0.00027421133211521863,
+   -0.0027008125808093654,
+   -0.0035577441307600753,
+   0.002545205361067044,
+   -0.007629795725575033,
+   -0.0026731330766590214,
+   -10.616109994059734
+  ],
+  "delta_std": [
+   0.023683446447203167,
+   0.03961050710232959,
+   0.03535380282103328,
+   0.033285500807916715,
+   0.03806747566693461,
+   0.0375036268947844,
+   16.093627764261118
+  ]
+ },
+ "checkpoint_rule": "fixed final epoch, all selected examples train",
+ "validation_episodes": 0,
+ "split_sha256": "5afe6a749f1b2e69cb66b2badefc98ee57fb5eb046ccf918085e705bd3dc933f",
+ "language": [
+  "pick up the wooden block and place it in the blue dish on the left",
+  "pick up the wooden block and place it in the light-colored dish on the right",
+  "push the wooden block into the yellow area on the left"
+ ],
+ "lora_scale": 1.0,
+ "observations": "overhead,wrist,feedback joints (radians),gripper (mm)",
+ "action": "absolute recorded joint and gripper target via standardized target minus feedback",
+ "readout": "last state token after both current camera tokens",
+ "device": "NVIDIA GeForce RTX 3090"
+}
