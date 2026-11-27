@@ -1,0 +1,197 @@
+diff --git a/ode_alignment.py b/ode_alignment.py
+--- a/ode_alignment.py
++++ b/ode_alignment.py
+@@ -12,0 +13 @@
++from b1_alignment_gate import OVERHEAD_TOLERANCE_MM, wrist_block, wrist_centered
+@@ -21,0 +23 @@
++    acknowledged_axes = 6
+@@ -38,0 +41,3 @@
++        for name, expected in bundle['station_files'].items():
++            if digest(Path(__file__).with_name(name)) != expected:
++                raise ValueError('B1 门控组件校验失败：' + name)
+@@ -54 +58,0 @@
+-        self.close_mm=bundle['close_mm']
+@@ -55,0 +60 @@
++        self.guiding=False
+@@ -95 +100 @@
+-    def plan(self,anchor):
++    def base_forecast(self,anchor):
+@@ -98 +102,0 @@
+-        q=np.stack([joints for _,joints in self.history])
+@@ -106,0 +111,6 @@
++        return base
++
++    @torch.inference_mode()
++    def plan(self,anchor):
++        q=np.stack([joints for _,joints in self.history])
++        base=self.base_forecast(anchor)
+@@ -108,2 +118,2 @@
+-        self.details={'applied':False,'phase':'after_close' if self.closed else 'closing_chunk'}
+-        if self.closed or min(float(np.min(base[:,6])),float(q[-1,6]),float(anchor[6]))<=self.close_mm:
++        self.details={'applied':False,'phase':'after_close'}
++        if self.closed:
+@@ -111,7 +121,4 @@
+-        logits=torch.stack(tuple(self.heat)).mean(0)
+-        uv=self.aligner.det.positions(logits)[0].cpu().numpy()
+-        mapped=np.r_[uv,1.]@self.aligner.par['matrix']
+-        distance=float(np.linalg.norm(mapped-self.aligner.fk(q[-1])))
+-        if not np.isfinite(distance):raise ValueError('B1 木块位置无效')
+-        self.details.update(block_uv=uv.tolist(),distance_mm=distance)
+-        if distance>self.radius:
++        # Enter in the original calibrated approach region. Once acquired, keep
++        # the bounded planar correction until the actuator accepts the close.
++        self.guiding = self.guiding or self.visual['distance_mm'] <= self.radius
++        if not self.guiding:
+@@ -119,0 +127 @@
++        uv=np.asarray(self.visual['block_uv'])
+@@ -134,0 +143 @@
++            self.guiding=False
+@@ -136,5 +145,5 @@
+-            self.closed=False
+-        previous=query.get('previous_sent')
+-        if query['q'][6]<=self.close_mm or (previous is not None and previous[6]<=self.close_mm):
+-            if not self.closed:self.chunk=None
+-            self.closed=True
++            self.guiding=False
++        phase=query['gripper_phase']
++        if phase not in ('approach','closing','carrying','released'):
++            raise ValueError('B1 夹爪执行阶段无效')
++        self.closed=phase!='approach'
+@@ -143,0 +153,10 @@
++        self.visual={'stamp':stamp,'distance_mm':None,'block_uv':None,'wrist_box':None,'aligned':False}
++        if not self.closed and len(self.heat)==8:
++            logits=torch.stack(tuple(self.heat)).mean(0)
++            uv=self.aligner.det.positions(logits)[0].cpu().numpy()
++            mapped=np.r_[uv,1.]@self.aligner.par['matrix']
++            distance=float(np.linalg.norm(mapped-self.aligner.fk(query['q'])))
++            if not np.isfinite(distance):raise ValueError('B1 木块位置无效')
++            box=wrist_block(self.wrist)
++            self.visual.update(block_uv=uv.tolist(),distance_mm=distance,wrist_box=box,
++                               aligned=distance<=OVERHEAD_TOLERANCE_MM and wrist_centered(box,query['q'][6]))
+@@ -148,0 +168,12 @@
++            self.trace['alignment'].update(self.visual)
++            if not self.closed:
++                # Keep the three independent width forecasts even when the arm
++                # legitimately consumes steps 2–8 from an earlier plan.
++                anchor=query['previous_sent'] if query['execution'] else query['q']
++                forecast=(self.base_plan if self.trace['chunk_stamp']==stamp else
++                          self.base_forecast(np.asarray(anchor,dtype=np.float32)))
++                self.intent_widths=forecast[:,6]
++            else:
++                self.intent_widths=()
++        else:
++            self.intent_widths=()
+diff --git a/ode_live.py b/ode_live.py
+--- a/ode_live.py
++++ b/ode_live.py
+@@ -36,0 +37 @@
++    acknowledged_axes = 7
+@@ -104 +105,2 @@
+-                if np.any(np.abs(anchor - self.last_result) > tolerance):
++                n = self.acknowledged_axes
++                if np.any(np.abs(anchor[:n] - self.last_result[:n]) > tolerance[:n]):
+diff --git a/b1_alignment_gate.py b/b1_alignment_gate.py
+new file mode 100644
+--- /dev/null
++++ b/b1_alignment_gate.py
+@@ -0,0 +1,43 @@
++"""Alignment evidence for the installed B1 wrist view (640 x 480), in pixels."""
++import cv2
++import numpy as np
++
++
++# This coarse overhead estimate has a measured 21.3 mm 90th-percentile
++# registration error. The wrist checks the cube between the fingers directly.
++OVERHEAD_TOLERANCE_MM = 20.
++
++
++def wrist_block(wrist):
++    # Grey-brown front face of the wooden cube. Use its silhouette as well as
++    # colour so a yellow marker or a dark finger cannot stand in for the cube.
++    small = cv2.resize(wrist[200:480, 160:560], (200, 140), interpolation=cv2.INTER_AREA)
++    lab = cv2.cvtColor(small, cv2.COLOR_BGR2LAB)
++    # The block's left and right edges can meet paper of similar colour.
++    # An edge-bounded region stays separate from that paper in the mask.
++    mask = cv2.inRange(lab, (28, 113, 132), (172, 150, 152))
++    kernel = np.ones((3, 3), np.uint8)
++    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
++    edges = cv2.Canny(small, 25, 65)
++    mask[cv2.dilate(edges, kernel) != 0] = 0
++    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
++    components = cv2.connectedComponentsWithStats(mask, connectivity=8)[2][1:]
++    boxes = []
++    for left, top, width, height, area in components:
++        if (left <= 1 or left + width >= 199 or top < 2 or
++                not 46 <= width <= 99 or not 34 <= height <= 105 or
++                not .58 <= width / height <= 2.1 or area < .60 * width * height):
++            continue
++        boxes.append((int(160 + 2*left), int(200 + 2*top), int(2*width), int(2*height)))
++    return boxes[0] if len(boxes) == 1 else None
++
++
++def wrist_centered(box, opening):
++    if box is None:
++        return False
++    left, top, width, height = box
++    # The finger pads bracket the front face in successful B1 wrist images.
++    # Requiring the face to reach their depth excludes blocks at the far edge.
++    clearance_px = max(0., (opening - 35.)/2 - 2.) * width/35.
++    return (clearance_px > 0 and abs(left + width/2 - 355) <= min(42.,clearance_px)
++            and 276 <= top <= 372 and top + height >= 405)
+diff --git a/b1_placement.py b/b1_placement.py
+--- a/b1_placement.py
++++ b/b1_placement.py
+@@ -19,0 +20 @@
++        self.aligned_ticks = 0
+@@ -21 +22 @@
+-    def next_goal(self, stamp, close_intent, xyz, width):
++    def next_goal(self, stamp, close_intent, xyz, width, *, vision):
+@@ -28,0 +30,2 @@
++            if stamp - self.last_stamp > 50_000_000:
++                self.aligned_ticks = 0
+@@ -32 +35,3 @@
+-            if close_intent:
++            centered = vision.get('stamp') == stamp and vision.get('aligned') is True
++            self.aligned_ticks = self.aligned_ticks + 1 if centered else 0
++            if close_intent and self.aligned_ticks >= 3:
+diff --git a/runner.py b/runner.py
+--- a/runner.py
++++ b/runner.py
+@@ -179,3 +179 @@
+-            trace = model.trace
+-            widths = model.chunk[trace["offset"]:, 6] if trace["ready"] else ()
+-            refs["grasp_intent_text"] = detector.observe(stamp, q[6], trace.get("chunk_stamp"), widths)
++            refs["grasp_intent_text"] = detector.observe(stamp, q[6], stamp, model.intent_widths)
+@@ -182,0 +181,3 @@
++            refs["grasp_alignment"] = model.visual
++            if detector.fired and query["gripper_phase"] == "approach" and not model.visual["aligned"]:
++                refs["grasp_intent_text"] = "已出现收爪意图，等待双相机确认对准"
+@@ -361 +362,2 @@
+-                        goal = self.placement.next_goal(stamp, msg["close_intent"], msg["tip_xyz_mm"], measured[6])
++                        goal = self.placement.next_goal(stamp, msg["close_intent"], msg["tip_xyz_mm"], measured[6],
++                                                        vision=msg["grasp_alignment"])
+@@ -526,0 +529,2 @@
++                        if session.aligned_b1:
++                            query["gripper_phase"] = session.placement.phase if state.active else "approach"
+diff --git a/grip_window.py b/grip_window.py
+--- a/grip_window.py
++++ b/grip_window.py
+@@ -5 +5 @@
+-BUNDLE = "905c4a8df5ace11ff547a8bfbb3a938a98749827097da100b9309a30a6a555fe"
++BUNDLE = "4e995bc1fdc9e56b2219edb30702a5d18e788d05ff7c6ad10925755c029b3a8e"
+diff --git a/profiles.json b/profiles.json
+--- a/profiles.json
++++ b/profiles.json
+@@ -441 +441 @@
+-  "sha256": "905c4a8df5ace11ff547a8bfbb3a938a98749827097da100b9309a30a6a555fe",
++  "sha256": "4e995bc1fdc9e56b2219edb30702a5d18e788d05ff7c6ad10925755c029b3a8e",
+@@ -447 +447 @@
+-   "backend_sha256": "8517a5d9c23013e20de430731174f97028d0f4fdd10edb5ed94c09e60f3dd0cf",
++   "backend_sha256": "6b94985016507fead46e2be2a68c9688d4316a060d84d41543a7f0601097eb16",
+@@ -465 +465,5 @@
+-   "ode_inference": "zero perturbation"
++   "ode_inference": "zero perturbation",
++   "station_files": {
++    "ode_live.py": "596effa2e63818904d484e42a900a149281aa795d4b455dbbc888714b68b85a9",
++    "b1_alignment_gate.py": "75f56926476f91ab34b14ab1a7f1b3c68b8d60fd4e0d68244355e2a5ad4c6131"
++   }
