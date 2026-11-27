@@ -1,0 +1,46 @@
+diff --git a/runner.py b/runner.py
+--- a/runner.py
++++ b/runner.py
+@@ -210 +210,2 @@
+-        self.finish = B1Finish() if self.aligned_b1 else None
++        self.stop_at_end = self.aligned_b1 and profile.get('end_mode') == 'stop'
++        self.finish = B1Finish() if self.aligned_b1 and not self.stop_at_end else None
+@@ -232 +233 @@
+-            if self.aligned_b1 and not self.grip_settling:
++            if self.finish is not None and not self.grip_settling:
+@@ -249 +250 @@
+-        if self.aligned_b1:
++        if self.finish is not None:
+@@ -337,0 +339,2 @@
++                if self.stop_at_end:
++                    raise RuntimeError("B1 已收到放置松开反馈，本轮结束，请现场判定结果")
+@@ -339 +342 @@
+-            finishing = self.aligned_b1 and self.finish.phase != "policy"
++            finishing = self.finish is not None and self.finish.phase != "policy"
+@@ -444,0 +448 @@
++            header["end_mode"] = "stop" if session.stop_at_end else "return_pending"
+@@ -510 +514 @@
+-                    elif cmd == "success" and state.active and session.aligned_b1:
++                    elif cmd == "success" and state.active and session.finish is not None:
+@@ -584,3 +588,10 @@
+-                                ending = {"hold":"原位保持 3 秒", "needs_operator":"原位保持，等待现场处理",
+-                                          "return":"沿已验证示教回位", "home":"已到起始位，保持中"}
+-                                detail = ending.get(session.finish.phase,detail)
++                                if session.stop_at_end:
++                                    detail += " · 本轮结束 STOP，现场接管"
++                                    if not state.active and display["ready"]:
++                                        display["text"] = "就绪，可在现场确认执行"
++                                else:
++                                    ending = {"hold":"原位保持 3 秒", "needs_operator":"原位保持，等待现场处理",
++                                              "return":"沿已验证示教回位", "home":"已到起始位，保持中"}
++                                    detail = ending.get(session.finish.phase,detail)
++                                    if not state.active:
++                                        display.update(ready=False,text=B1_RETURN_PENDING)
+@@ -588,2 +598,0 @@
+-                                if not state.active:
+-                                    display.update(ready=False,text=B1_RETURN_PENDING)
+diff --git a/profiles.json b/profiles.json
+--- a/profiles.json
++++ b/profiles.json
+@@ -402,0 +403 @@
++  "end_mode": "stop",
