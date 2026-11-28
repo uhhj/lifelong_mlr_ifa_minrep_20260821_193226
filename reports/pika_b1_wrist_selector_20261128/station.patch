@@ -1,0 +1,108 @@
+--- a/runner.py
++++ b/runner.py
+@@ -52,7 +52,12 @@
+
+ def load_policy(profile):
+     if profile['family'] == 'ODE' and 'alignment' in profile:
+-        from ode_alignment import GroundedODE
++        if profile['sha256'] == WRIST_BUNDLE:
++            from ode_wrist_alignment import GroundedODE
++        elif profile['sha256'] == BUNDLE:
++            from ode_alignment import GroundedODE
++        else:
++            raise ValueError('B1 纠偏版本未注册')
+         return GroundedODE(profile)
+     if profile['family'] == 'ODE':
+         from ode_live import B1Predictor
+@@ -69,8 +74,19 @@
+
+
+ B1_FIXED_GRIP = "B1-ode50-aligned-20261125"
++B1_WRIST_GRIP = "B1-ode50-wrist-20261127"
++WRIST_BUNDLE = "27fca3b2b3252827076d08aff0a122e3ec12004e07959ce7992c0b74e0b3d88d"
++FIXED_B1_PROFILES = {B1_FIXED_GRIP: BUNDLE, B1_WRIST_GRIP: WRIST_BUNDLE}
+ B1_RETURN_PENDING = "B1 回位路径待现场验证，只读预览可用"
+
++
++def uses_fixed_grip(task, profile):
++    if task not in FIXED_B1_PROFILES and 'alignment' not in profile:
++        return False
++    if (FIXED_B1_PROFILES.get(task) != profile['sha256'] or 'alignment' not in profile
++            or profile['task'] != 'B1' or profile['family'] != 'ODE'):
++        raise ValueError('B1 任务与纠偏版本不匹配')
++    return True
+
+ class GraspIntent:
+     """Read-only detector. Timestamps and plan identifiers use the camera clock."""
+@@ -118,6 +134,7 @@
+     cv2.setNumThreads(1)
+     torch.set_num_threads(4)
+     from capture import FrameArchive, start_preview
++    fixed_grip = uses_fixed_grip(task, PROFILES[task])
+     model = load_policy(PROFILES[task])
+     with ExitStack() as clean:
+         conf=configured_cameras()
+@@ -128,7 +145,7 @@
+             cameras.append(cam)
+         archive=clean.enter_context(FrameArchive(capture_dir))
+         start_preview(cameras, capture_dir, clean)
+-        infer_loop(link,cameras,model,archive,task == B1_FIXED_GRIP)
++        infer_loop(link,cameras,model,archive,fixed_grip)
+
+
+ def infer_loop(link,cameras,model,archive,fixed_grip=False):
+@@ -203,7 +220,7 @@
+         self.b3_tracking=b3_tracking
+         self.target_fault=None
+         self.profile=profile
+-        self.aligned_b1 = bool(profile and profile.get('sha256') == BUNDLE)
++        self.aligned_b1 = bool(profile and profile.get('sha256') in FIXED_B1_PROFILES.values())
+         self.gripper = None
+         self.grip_settling = False
+         self.placement = B1Placement() if self.aligned_b1 else None
+@@ -403,6 +420,7 @@
+
+ def guard(ui, task, python):
+     profile=PROFILES[task]
++    fixed_grip=uses_fixed_grip(task,profile)
+     evidence=json.loads((HERE/f'verified-{task}.json').read_text())
+     if evidence['profile']!=task or evidence['sha256']!=profile['sha256'] or len(evidence['windows'])<3:
+         raise ValueError('本权重尚未完成示教回放验证')
+@@ -414,7 +432,7 @@
+         except BlockingIOError: raise RuntimeError("相机已被录制台或另一执行窗口占用")
+         check_path(allow_listen_only=True)
+         gripper = None
+-        if profile.get('sha256') == BUNDLE:
++        if fixed_grip:
+             # The native USB handshake waits for initial telemetry. Open CAN
+             # afterwards so its receive queue is serviced from the first frame.
+             from b1_gripper import B1Gripper
+@@ -582,7 +600,7 @@
+                                 ("六轴 CAN 在线" if state.joints and now-state.joints[-1][0] <= 60_000_000 else "六轴 CAN 等待反馈")
+                                 + " / " + ("夹爪 Pika USB 在线" if state.widths and now-state.widths[-1][0] <= 60_000_000 else "夹爪 Pika USB 等待反馈")
+                             )
+-                            if task == B1_FIXED_GRIP:
++                            if fixed_grip:
+                                 phases = {"approach":"接近", "closing":"已发闭合目标", "carrying":"搬运", "released":"已发松开目标"}
+                                 detail = phases[session.placement.phase] if state.active else "只读 · " + msg["grasp_intent_text"]
+                                 if session.stop_at_end:
+--- a/desktop.py
++++ b/desktop.py
+@@ -13,7 +13,7 @@
+ from tkinter import filedialog, ttk
+ from PIL import Image, ImageTk
+ from catalog import HERE, WORK, catalog, outside_start
+-from runner import SYNC, receive, send
++from runner import FIXED_B1_PROFILES, SYNC, receive, send
+
+
+ class Console:
+@@ -176,7 +176,7 @@
+     def finish(self,op):
+         self.confirm.pack_forget()
+         self.command(op)
+-        if op=="success" and self.mode=="active" and self.key=="B1-ode50-aligned-20261125":
++        if op=="success" and self.mode=="active" and self.key in FIXED_B1_PROFILES:
+             self.status.set("正在结束策略，等待收尾反馈")
+             return
+         self.mode='stopping'
