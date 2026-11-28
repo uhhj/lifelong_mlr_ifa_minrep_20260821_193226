@@ -1,0 +1,77 @@
+{
+  "observed": "2026-11-28T14:21:12.842155+08:00",
+  "denied_seconds": [
+    "2026-11-28T14:17:29+0800",
+    "2026-11-28T14:17:35+0800",
+    "2026-11-28T14:17:37+0800",
+    "2026-11-28T14:17:38+0800",
+    "2026-11-28T14:17:39+0800",
+    "2026-11-28T14:17:40+0800",
+    "2026-11-28T14:17:47+0800"
+  ],
+  "error": "SerialException / EACCES (13)",
+  "prior_node_grant": {
+    "time": "2026-11-26T17:22:43.961813+0800",
+    "tool": "setfacl",
+    "scope": "one ttyUSB0 node",
+    "permission": "rw"
+  },
+  "successful_usb_session": {
+    "start": "2026-11-28T13:51:14.238+08:00",
+    "end": "2026-11-28T13:51:44.567+08:00",
+    "matching_grip_samples": 532,
+    "transport": "USB serial"
+  },
+  "serial_disconnect": "2026-11-28T13:51:54.449505+0800",
+  "serial_reattach": "2026-11-28T13:51:55.761260+0800",
+  "node_ctime": "2026-11-28T13:51:55.796+08:00",
+  "stack": [
+    "runner.guard",
+    "B1Gripper.__init__",
+    "open_gripper",
+    "serial.Serial.open"
+  ],
+  "device": "/dev/ttyUSB0",
+  "mode": "0o660",
+  "owner": "root",
+  "group": "dialout",
+  "acl": "user::rw-\ngroup::rw-\nother::---",
+  "account_in_dialout": false,
+  "desktop_in_dialout": false,
+  "pre_repair_read_write_access": [
+    false,
+    false
+  ],
+  "visible_owners_of_devices": false,
+  "candidate": {
+    "version": "11-27 腕部纠偏",
+    "hash": "27fca3b2b325",
+    "receipt": true,
+    "windows": 33
+  },
+  "last_run": "20261128_135114_1209855_B1-ode50-aligned-20261125",
+  "can_sample": {
+    "start": "2026-11-28T14:18:55.066+08:00",
+    "end": "2026-11-28T14:18:58.066+08:00",
+    "state": "ERROR-ACTIVE",
+    "controller_frames": {
+      "0000000000000000": 600
+    },
+    "six_enable_bits": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "can_errors": 0
+  },
+  "input_hashes": {
+    "logs": "9b8e481279c2fb51834c9bfef69d3fb977751b0651ddc9da059890f337a5f87a",
+    "details": "9a60366d1d1b13fdcf7bcf54cf794a8baaf4ae965f4352fcce8d1ab4c98928e9",
+    "ui_journal": "4c263b7c242bf98f6db1da8eb5fdbe24d1a3150f78edf1e5986991857db50310",
+    "snapshot": "e4687aa406cc96df41aa8bd539004f5b58bd97a3b626d74e44ddf6cf96cbb557",
+    "archive": "74646b631a2660127575a2b894ec74346a358d0f2e412f252c9a6a08dce98212"
+  }
+}
